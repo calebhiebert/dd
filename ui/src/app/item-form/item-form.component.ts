@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Item } from '../item';
+import { AttributeEditorComponent } from '../attribute-editor/attribute-editor.component';
 
 @Component({
   selector: 'dd-item-form',
@@ -7,15 +9,28 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./item-form.component.css'],
 })
 export class ItemFormComponent implements OnInit {
+  @Input()
+  public inputItem: Item;
+
   public formGroup: FormGroup;
 
   constructor() {}
 
   ngOnInit() {
-    this.formGroup = new FormGroup({
-      name: new FormControl('null', Validators.required),
-      description: new FormControl(null, Validators.required),
-    });
+    if (this.inputItem !== undefined) {
+      this.formGroup = new FormGroup({
+        name: new FormControl(this.inputItem.name, Validators.required),
+        description: new FormControl(this.inputItem.description, Validators.required),
+        imageId: new FormControl(this.inputItem.imageId),
+        attributes: AttributeEditorComponent.createAttributesControl(this.inputItem.attributes),
+      });
+    } else {
+      this.formGroup = new FormGroup({
+        name: new FormControl(null, Validators.required),
+        description: new FormControl(null, Validators.required),
+        imageId: new FormControl('cvgvysrwdivcxjfipjry'),
+      });
+    }
 
     this.formGroup.valueChanges.subscribe((v) => console.log(v));
   }

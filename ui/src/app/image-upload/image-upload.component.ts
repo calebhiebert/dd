@@ -17,7 +17,6 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
 
   public isUploading = false;
   public uploadProgress: number = null;
-  public imagePreviewURL: string = null;
 
   @Input()
   public formGroup: FormGroup;
@@ -68,6 +67,14 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
     }
   }
 
+  public get imageURL() {
+    if (this.formGroup.get('imageId').value != null) {
+      return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${this.formGroup.get('imageId').value}.png`;
+    } else {
+      return null;
+    }
+  }
+
   public handleFileUpload(file: File) {
     this.fileError = null;
     this.uploadProgress = null;
@@ -89,8 +96,8 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
     xhr.onload = (e) => {
       const image = JSON.parse(xhr.responseText);
       this.isUploading = false;
-      this.imagePreviewURL = image.secure_url;
-      this.formGroup.setValue({ imageId: '' });
+      this.file = null;
+      this.formGroup.get('imageId').setValue(image.public_id);
     };
 
     xhr.upload.addEventListener('progress', (e) => {

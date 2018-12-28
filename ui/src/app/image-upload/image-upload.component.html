@@ -6,7 +6,7 @@
   <div class="bar bar-sm" *ngIf="isUploading">
     <div class="bar-item" role="progressbar" [style.width]="uploadProgress + '%'"></div>
   </div>
-  <img class="image-preview" *ngIf="imagePreviewURL !== null" [src]="imagePreviewURL" />
+  <img class="image-preview img-fit-contain" *ngIf="imageURL !== null" [src]="imageURL" />
 </div>
 <div class="toast toast-error" *ngIf="fileError !== null">
   <button class="btn btn-clear float-right" (click)="clearError()"></button> {{ fileError }}

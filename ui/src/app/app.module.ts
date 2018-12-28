@@ -8,6 +8,9 @@ import { ItemFormComponent } from './item-form/item-form.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AttributeEditorComponent } from './attribute-editor/attribute-editor.component';
+import { NavComponent } from './nav/nav.component';
+import { CampaignModule } from './campaign/campaign.module';
+import { ItemManagerComponent } from './item-manager/item-manager.component';
 
 @NgModule({
   declarations: [
@@ -16,8 +19,10 @@ import { AttributeEditorComponent } from './attribute-editor/attribute-editor.co
     ItemFormComponent,
     ImageUploadComponent,
     AttributeEditorComponent,
+    NavComponent,
+    ItemManagerComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, CampaignModule],
   providers: [],
   bootstrap: [AppComponent],
 })

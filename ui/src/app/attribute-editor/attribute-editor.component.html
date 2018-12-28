@@ -1,6 +1,6 @@
 <div [formGroup]="formGroup">
   <button class="btn" (click)="addAttribute()">Add Attribute</button>
-  <div formArrayName="attributes" *ngFor="let item of formGroup.get('attributes').controls; let i = index">
+  <div formArrayName="attributes" *ngFor="let item of attributeControls; let i = index">
     <div class="columns" [formGroupName]="i">
       <div class="column">
         <div class="form-group">

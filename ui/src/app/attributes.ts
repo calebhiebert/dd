@@ -14,6 +14,10 @@ export class AttributeCollection {
 
     return null;
   }
+
+  public addAttribute(attribute: Attribute) {
+    this.attributes.push(attribute);
+  }
 }
 
 export interface Attributes {

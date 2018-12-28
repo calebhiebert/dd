@@ -13,13 +13,21 @@ export class AttributeEditorComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder) {}
 
-  ngOnInit() {
-    this.formGroup.addControl('attributes', this.formBuilder.array([]));
+  public static createAttributesControl(attributes: AttributeCollection): FormArray {
+    const controls: FormGroup[] = [];
 
-    this.addAttribute('Weight', AttributeType.NUMBER, '10');
+    for (const attr of attributes.attributes) {
+      controls.push(this.createAttributeFormItem(attr.name, attr.type, attr.data));
+    }
+
+    return new FormArray(controls);
   }
 
-  private createAttributeFormItem(presetName?: string, presetType?: AttributeType, presetValue?: string): FormGroup {
+  private static createAttributeFormItem(
+    presetName?: string,
+    presetType?: AttributeType,
+    presetValue?: string,
+  ): FormGroup {
     return new FormGroup({
       name: new FormControl(presetName, [Validators.required, Validators.minLength(3), Validators.maxLength(255)]),
       data: new FormControl(presetValue),
@@ -27,13 +35,24 @@ export class AttributeEditorComponent implements OnInit {
     });
   }
 
+  ngOnInit() {
+    if (!this.formGroup.contains('attributes')) {
+      this.formGroup.addControl('attributes', this.formBuilder.array([]));
+      this.addAttribute('Weight', AttributeType.NUMBER, '10');
+    }
+  }
+
   public addAttribute(presetName?: string, presetType?: AttributeType, presetValue?: string) {
     const attributes = this.formGroup.get('attributes') as FormArray;
-    attributes.push(this.createAttributeFormItem(presetName, presetType, presetValue));
+    attributes.push(AttributeEditorComponent.createAttributeFormItem(presetName, presetType, presetValue));
   }
 
   public removeAttribute(i: number) {
     const attributes = this.formGroup.get('attributes') as FormArray;
     attributes.removeAt(i);
+  }
+
+  public get attributeControls() {
+    return (<FormArray>this.formGroup.get('attributes')).controls;
   }
 }

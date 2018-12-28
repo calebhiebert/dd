@@ -1,0 +1,19 @@
+<div class="container grid-xl">
+  <header class="navbar">
+    <section class="navbar-section">
+      <a href="#" class="btn btn-link">Characters</a>
+      <a [routerLink]="['campaigns', 'list']" class="btn btn-link">Campaigns</a>
+    </section>
+    <section class="navbar-center"><img src="/assets/logo.svg" width="32" /></section>
+    <section class="navbar-section" *ngIf="campaign !== null">
+      <span class="mx-1">{{ campaign.name }}</span>
+      <a [routerLink]="['campaigns', campaign.id, 'items']" class="btn btn-link">Items</a>
+      <a href="#" class="btn btn-link">Places</a> <a href="#" class="btn btn-link">Quests</a>
+      <a href="#" class="btn btn-link">Sessions</a>
+    </section>
+    <section class="navbar-section" *ngIf="campaign === null">
+      <div class="loading" *ngIf="loadingCampaign"></div>
+      <span class="text-grey text-italic mr-2" *ngIf="!loadingCampaign">No campaign selected</span>
+    </section>
+  </header>
+</div>

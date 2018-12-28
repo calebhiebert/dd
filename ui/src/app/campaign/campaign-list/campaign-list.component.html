@@ -1,0 +1,19 @@
+<div class="container grid-xl">
+  <h3>Campaigns</h3>
+  <div class="loading loading-lg" *ngIf="loading"></div>
+
+  <!-- Display Campaings -->
+  <div *ngFor="let c of campaigns">
+    <div class="card hoverable p-2 mb-2" (click)="selectCampaign(c)">
+      <div class="columns">
+        <div class="column col-auto">
+          <figure class="avatar avatar-lg"><img src="https://placeimg.com/64/64/tech/sepia" /></figure>
+        </div>
+        <div class="column">
+          <h4 class="mb-1">{{ c.name }}</h4>
+          <span class="text-gray">{{ c.description }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
