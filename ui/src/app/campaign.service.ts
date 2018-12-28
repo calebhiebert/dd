@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Campaign } from '../campaign';
-import { User } from '../user';
-import { ItemService } from '../item.service';
+import { Campaign } from './campaign';
+import { User } from './user';
+import { ItemService } from './item.service';
 
 @Injectable({
   providedIn: 'root',
@@ -35,7 +35,7 @@ export class CampaignService {
     return Promise.all(
       ['1', '23', '54'].map((id) => {
         return this.getCampaign(id);
-      }),
+      })
     );
   }
 
@@ -47,13 +47,14 @@ export class CampaignService {
 
     campaign.id = id;
     campaign.name = 'Dungeons of Time';
-    campaign.description = 'A campaign set in the second age of the Wheel of Time. Happens during the war of power.';
+    campaign.description =
+      'A campaign set in the second age of the Wheel of Time. Happens during the war of power.';
     campaign.user = user;
 
     campaign.items = await Promise.all(
       ['1', '2', '3'].map((itemId) => {
         return this.itemService.getItem(itemId);
-      }),
+      })
     );
 
     await simulateDelay(250);

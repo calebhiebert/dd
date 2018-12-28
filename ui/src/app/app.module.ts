@@ -9,8 +9,10 @@ import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AttributeEditorComponent } from './attribute-editor/attribute-editor.component';
 import { NavComponent } from './nav/nav.component';
-import { CampaignModule } from './campaign/campaign.module';
 import { ItemManagerComponent } from './item-manager/item-manager.component';
+import { CampaignComponent } from './campaign.component';
+import { CampaignListComponent } from './campaign-list/campaign-list.component';
+import { CampaignLandingComponent } from './campaign-landing/campaign-landing.component';
 
 @NgModule({
   declarations: [
@@ -21,8 +23,11 @@ import { ItemManagerComponent } from './item-manager/item-manager.component';
     AttributeEditorComponent,
     NavComponent,
     ItemManagerComponent,
+    CampaignComponent,
+    CampaignListComponent,
+    CampaignLandingComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, CampaignModule],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })

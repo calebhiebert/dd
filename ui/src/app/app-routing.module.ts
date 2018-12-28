@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CampaignListComponent } from './campaign/campaign-list/campaign-list.component';
-import { CampaignLandingComponent } from './campaign/campaign-landing/campaign-landing.component';
-import { CampaignComponent } from './campaign/campaign.component';
+import { CampaignComponent } from './campaign.component';
 import { ItemManagerComponent } from './item-manager/item-manager.component';
+import { CampaignListComponent } from './campaign-list/campaign-list.component';
+import { CampaignLandingComponent } from './campaign-landing/campaign-landing.component';
 
 const routes: Routes = [
   { path: 'campaigns/list', component: CampaignListComponent },

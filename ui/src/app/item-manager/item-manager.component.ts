@@ -1,5 +1,11 @@
-import { Component, OnInit, QueryList, ViewChildren, ViewChild } from '@angular/core';
-import { CampaignService } from '../campaign/campaign.service';
+import {
+  Component,
+  OnInit,
+  QueryList,
+  ViewChildren,
+  ViewChild,
+} from '@angular/core';
+import { CampaignService } from '../campaign.service';
 import { Item } from '../item';
 import { ItemFormComponent } from '../item-form/item-form.component';
 import { debounceTime } from 'rxjs/operators';
@@ -27,7 +33,10 @@ export class ItemManagerComponent implements OnInit {
     }
   }
 
-  constructor(private campaignService: CampaignService, private itemService: ItemService) {}
+  constructor(
+    private campaignService: CampaignService,
+    private itemService: ItemService
+  ) {}
 
   ngOnInit() {}
 
