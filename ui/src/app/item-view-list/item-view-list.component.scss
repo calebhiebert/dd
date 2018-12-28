@@ -1,0 +1,15 @@
+@import '../../variables.scss';
+
+$hover-scale: 1.005;
+
+.hoverable {
+  transition: 0.25s transform;
+}
+
+.hoverable:hover,
+.hoverable:active {
+  background: $secondary-color;
+  cursor: pointer;
+  outline: 2px solid $primary-color;
+  transform: scale($hover-scale, $hover-scale);
+}

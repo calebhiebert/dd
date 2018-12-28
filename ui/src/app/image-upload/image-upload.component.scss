@@ -1,0 +1,34 @@
+@import '../../variables.scss';
+
+.photo-picker {
+  border: 2px dashed $primary-color;
+  width: 20vw;
+  height: 20vw;
+  max-height: 150px;
+  max-width: 150px;
+  border-radius: $border-width-lg;
+
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.photo-picker:hover,
+.drag-over {
+  cursor: pointer;
+
+  background: $secondary-color;
+}
+
+.photo-input {
+  width: 0;
+  height: 0;
+}
+
+.photo-picker > .icon {
+  // z-index: -1;
+}
+
+.photo-picker {
+  z-index: 1;
+}

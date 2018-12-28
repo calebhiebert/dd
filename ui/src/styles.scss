@@ -1,0 +1,12 @@
+/* You can add global styles to this file, and also import other style files */
+@import './variables.scss';
+@import 'spectre.css';
+@import 'spectre.css/dist/spectre-icons.css';
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column;
+}

@@ -1,0 +1,17 @@
+<label
+  class="photo-picker flex-col"
+  [ngClass]="{ 'drag-over': isDragOver }"
+  for="file"
+  *ngIf="!isUploading"
+  #fupload
+>
+  <i class="icon icon-3x icon-photo"></i> Upload Image
+</label>
+<input
+  class="photo-input"
+  *ngIf="!isUploading"
+  type="file"
+  name="file"
+  id="file"
+  (change)="onFileChange($event)"
+/>
