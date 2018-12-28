@@ -1,6 +1,6 @@
 @import '../../variables.scss';
 
-.photo-picker {
+#drop-area {
   border: 2px dashed $primary-color;
   width: 20vw;
   height: 20vw;
@@ -8,27 +8,21 @@
   max-width: 150px;
   border-radius: $border-width-lg;
 
-  align-items: center;
-  justify-content: center;
   display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
-.photo-picker:hover,
-.drag-over {
+#drop-area.drag-over {
   cursor: pointer;
-
   background: $secondary-color;
 }
 
-.photo-input {
-  width: 0;
-  height: 0;
+#file-input {
+  display: none;
 }
 
-.photo-picker > .icon {
-  // z-index: -1;
-}
-
-.photo-picker {
-  z-index: 1;
+.image-preview {
+  height: 10vh;
 }

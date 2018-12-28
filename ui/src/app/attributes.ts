@@ -1,16 +1,32 @@
+export class AttributeCollection {
+  public attributes: Attribute[];
+
+  constructor() {
+    this.attributes = [];
+  }
+
+  public getAttribute(name: string): Attribute {
+    for (const attr of this.attributes) {
+      if (attr.name === name) {
+        return attr;
+      }
+    }
+
+    return null;
+  }
+}
+
 export interface Attributes {
-  [key: string]: Attribute;
+  attributes: Attribute[];
 }
 
 export interface Attribute {
   name: string;
   type: AttributeType;
-  sData: string;
-  nData: number;
+  data: string;
 }
 
 export enum AttributeType {
   STRING,
   NUMBER,
-  ENUM,
 }
