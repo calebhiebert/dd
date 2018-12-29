@@ -40,9 +40,12 @@ export class AttributeEditorComponent implements OnInit {
       name: new FormControl(presetName, [
         Validators.required,
         Validators.minLength(3),
+        Validators.maxLength(50),
+      ]),
+      data: new FormControl(presetValue, [
+        Validators.required,
         Validators.maxLength(255),
       ]),
-      data: new FormControl(presetValue),
       type: new FormControl(
         presetType ? presetType.toString() : AttributeType.STRING.toString(),
         Validators.required
@@ -55,6 +58,8 @@ export class AttributeEditorComponent implements OnInit {
       this.formGroup.addControl('attributes', this.formBuilder.array([]));
       this.addAttribute('Weight', AttributeType.NUMBER, '10');
     }
+
+    console.log(this.formGroup);
   }
 
   public addAttribute(
@@ -75,6 +80,22 @@ export class AttributeEditorComponent implements OnInit {
   public removeAttribute(i: number) {
     const attributes = this.formGroup.get('attributes') as FormArray;
     attributes.removeAt(i);
+  }
+
+  public getNameErrors(i: number) {
+    return this.formGroup.get(['attributes', i, 'name']).errors;
+  }
+
+  public getDataErrors(i: number) {
+    return this.formGroup.get(['attributes', i, 'data']).errors;
+  }
+
+  public getTypeErrors(i: number) {
+    return this.formGroup.get(['attributes', i, 'type']).errors;
+  }
+
+  public attributeRowHasError(i: number): boolean {
+    return this.formGroup.get(['attributes', i]).valid;
   }
 
   public get attributeControls() {
