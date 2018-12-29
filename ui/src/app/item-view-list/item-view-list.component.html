@@ -1,11 +1,9 @@
 <div class="columns hoverable p-1">
   <div class="column col-auto">
-    <figure class="avatar avatar-lg">
-      <img src="https://placeimg.com/64/64/tech/sepia" />
-    </figure>
+    <figure class="avatar avatar-lg"><img [src]="imageURL" /></figure>
   </div>
   <div class="column d-flex flex-col">
     <h5 class="mb-0">{{ item.name }}</h5>
-    <span class="text-gray">{{ item.description }}</span>
+    <span class="text-gray">{{ item.description | truncate: 150 }}</span>
   </div>
 </div>

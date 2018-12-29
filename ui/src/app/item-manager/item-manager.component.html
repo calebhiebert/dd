@@ -1,11 +1,47 @@
-<div class="container grid-xl">
-  <h3>Items</h3>
-  <div *ngFor="let item of items">
+<div class="container grid-xl mt-2">
+  <div class="columns col-oneline">
+    <!-- Title -->
+    <div class="column col-auto"><h3>Items</h3></div>
+
+    <div class="column">
+      <button
+        class="btn"
+        (click)="addItem()"
+        [ngClass]="{ loading: creatingItem }"
+      >
+        <i class="icon icon-plus"></i>
+      </button>
+    </div>
+
+    <!-- Search -->
+    <div class="column col-6 col-ml-auto">
+      <div class="has-icon-left">
+        <input
+          class="form-input"
+          type="text"
+          name="search"
+          id="search"
+          placeholder="Search"
+          [formControl]="searchControl"
+        />
+        <i class="form-icon icon icon-search"></i>
+      </div>
+    </div>
+  </div>
+
+  <div *ngFor="let item of filteredItems">
     <dd-item-view-list
       [item]="item"
       (click)="selectItem(item)"
     ></dd-item-view-list>
   </div>
+
+  <dd-paginator
+    [totalItems]="searchedItems.length"
+    [itemsPerPage]="itemsPerPage"
+    [page]="page"
+    (pageChange)="page = $event"
+  ></dd-paginator>
 
   <div class="empty" *ngIf="items.length === 0">
     <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>

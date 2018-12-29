@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  ElementRef,
+  Input,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
@@ -36,7 +43,7 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
         e.stopPropagation();
 
         this.isDragOver = true;
-      }),
+      })
     );
 
     ['dragleave', 'dragend', 'drop'].forEach((evt) =>
@@ -45,7 +52,7 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
         e.stopPropagation();
 
         this.isDragOver = false;
-      }),
+      })
     );
 
     this.fupload.nativeElement.addEventListener('drop', (e) => {
@@ -53,6 +60,10 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
         this.handleFileUpload(e.dataTransfer.files[0]);
       }
     });
+  }
+
+  public clearImage() {
+    this.formGroup.get('imageId').reset();
   }
 
   public clearError() {
@@ -69,7 +80,9 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
 
   public get imageURL() {
     if (this.formGroup.get('imageId').value != null) {
-      return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${this.formGroup.get('imageId').value}.png`;
+      return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${
+        this.formGroup.get('imageId').value
+      }.png`;
     } else {
       return null;
     }
@@ -91,7 +104,11 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
     form.append('upload_preset', 'gvmyptoo');
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://api.cloudinary.com/v1_1/dqhk8k6iv/auto/upload', true);
+    xhr.open(
+      'POST',
+      'https://api.cloudinary.com/v1_1/dqhk8k6iv/auto/upload',
+      true
+    );
 
     xhr.onload = (e) => {
       const image = JSON.parse(xhr.responseText);

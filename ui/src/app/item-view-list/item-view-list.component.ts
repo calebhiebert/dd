@@ -13,4 +13,14 @@ export class ItemViewListComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  public get imageURL() {
+    if (this.item.imageId) {
+      return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${
+        this.item.imageId
+      }.png`;
+    } else {
+      return 'https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/uncertainty.png';
+    }
+  }
 }

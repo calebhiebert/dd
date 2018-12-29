@@ -55,7 +55,7 @@ export class CampaignService {
     };
 
     campaign.items = await Promise.all(
-      ['1', '2', '3'].map((itemId) => {
+      ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].map((itemId) => {
         return this.itemService.getItem(itemId);
       })
     );

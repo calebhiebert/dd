@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { TruncateModule } from 'ng2-truncate';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +15,7 @@ import { CampaignComponent } from './campaign.component';
 import { CampaignListComponent } from './campaign-list/campaign-list.component';
 import { CampaignLandingComponent } from './campaign-landing/campaign-landing.component';
 import { ItemEditComponent } from './item-edit/item-edit.component';
+import { PaginatorComponent } from './paginator/paginator.component';
 
 @NgModule({
   declarations: [
@@ -28,8 +30,14 @@ import { ItemEditComponent } from './item-edit/item-edit.component';
     CampaignListComponent,
     CampaignLandingComponent,
     ItemEditComponent,
+    PaginatorComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    TruncateModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
