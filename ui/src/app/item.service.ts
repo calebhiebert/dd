@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Item } from './item';
-import { AttributeCollection, AttributeType } from './attributes';
+import { AttributeType } from './attributes';
 
 @Injectable({
   providedIn: 'root',
@@ -19,17 +19,13 @@ export class ItemService {
   }
 
   public async getItem(id: string): Promise<Item> {
-    const item = new Item();
-    item.name = 'Sword of Agatha';
-    item.description = 'A really sharp metal sword';
-    item.id = id;
-    item.imageId = 'cvgvysrwdivcxjfipjry';
-    item.attributes = new AttributeCollection();
-    item.attributes.addAttribute({
-      name: 'Weight',
-      data: '6',
-      type: AttributeType.NUMBER,
-    });
+    const item: Item = {
+      id: id,
+      name: 'Sword of Agatha',
+      description: 'A really sharp metal sword',
+      imageId: 'cvgvysrwdivcxjfipjry',
+      attributes: [{ name: 'Weight', data: '6', type: AttributeType.NUMBER }],
+    };
 
     return item;
   }

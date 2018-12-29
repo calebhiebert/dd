@@ -40,16 +40,19 @@ export class CampaignService {
   }
 
   public async getCampaign(id: string): Promise<Campaign> {
-    const campaign = new Campaign();
-    const user = new User();
-    user.id = '1';
-    user.name = 'Panchem';
-
-    campaign.id = id;
-    campaign.name = 'Dungeons of Time';
-    campaign.description =
-      'A campaign set in the second age of the Wheel of Time. Happens during the war of power.';
-    campaign.user = user;
+    const campaign: Campaign = {
+      id,
+      name: 'Dungeons of Time',
+      description:
+        'A campaign set in the second age of the Wheel of Time. Happens during the war of power.',
+      user: {
+        id: '1',
+        name: 'Panchem',
+      },
+      items: [],
+      sessions: [],
+      characters: [],
+    };
 
     campaign.items = await Promise.all(
       ['1', '2', '3'].map((itemId) => {

@@ -1,20 +1,18 @@
 <div class="container grid-xl">
   <h3>Items</h3>
   <div *ngFor="let item of items">
-    <dd-item-view-list [item]="item" (click)="selectItem(item)"></dd-item-view-list>
-    <div *ngIf="expandedItemId === item.id">
-      <hr />
-      <span class="text-gray text-italic" *ngIf="savedTime !== null">Saved {{ savedTime | date }}</span>
-      <div class="loading" *ngIf="saving"></div>
-      <dd-item-form [inputItem]="item" #iform></dd-item-form>
-      <hr />
-    </div>
+    <dd-item-view-list
+      [item]="item"
+      (click)="selectItem(item)"
+    ></dd-item-view-list>
   </div>
 
   <div class="empty" *ngIf="items.length === 0">
     <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
     <p class="empty-title h5">There are no items</p>
     <p class="empty-subtitle">Click the button to create one</p>
-    <div class="empty-action"><button class="btn btn-primary">Create Item</button></div>
+    <div class="empty-action">
+      <button class="btn btn-primary">Create Item</button>
+    </div>
   </div>
 </div>

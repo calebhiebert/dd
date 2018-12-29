@@ -20,9 +20,14 @@ export class ItemFormComponent implements OnInit {
     if (this.inputItem !== undefined) {
       this.formGroup = new FormGroup({
         name: new FormControl(this.inputItem.name, Validators.required),
-        description: new FormControl(this.inputItem.description, Validators.required),
+        description: new FormControl(
+          this.inputItem.description,
+          Validators.required
+        ),
         imageId: new FormControl(this.inputItem.imageId),
-        attributes: AttributeEditorComponent.createAttributesControl(this.inputItem.attributes),
+        attributes: AttributeEditorComponent.createAttributesControl(
+          this.inputItem.attributes
+        ),
       });
     } else {
       this.formGroup = new FormGroup({
@@ -31,7 +36,5 @@ export class ItemFormComponent implements OnInit {
         imageId: new FormControl('cvgvysrwdivcxjfipjry'),
       });
     }
-
-    this.formGroup.valueChanges.subscribe((v) => console.log(v));
   }
 }

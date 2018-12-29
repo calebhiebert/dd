@@ -13,6 +13,7 @@ import { ItemManagerComponent } from './item-manager/item-manager.component';
 import { CampaignComponent } from './campaign.component';
 import { CampaignListComponent } from './campaign-list/campaign-list.component';
 import { CampaignLandingComponent } from './campaign-landing/campaign-landing.component';
+import { ItemEditComponent } from './item-edit/item-edit.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { CampaignLandingComponent } from './campaign-landing/campaign-landing.co
     CampaignComponent,
     CampaignListComponent,
     CampaignLandingComponent,
+    ItemEditComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
   providers: [],

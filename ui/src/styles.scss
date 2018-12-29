@@ -11,6 +11,14 @@
   flex-direction: column;
 }
 
+.flex-row-rev {
+  flex-direction: row-reverse;
+}
+
+.flex-col-rev {
+  flex-direction: column-reverse;
+}
+
 $hover-scale: 1.005;
 
 .hoverable {

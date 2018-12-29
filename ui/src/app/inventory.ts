@@ -1,7 +1,7 @@
 import { Item } from './item';
 
-export class Inventory {
-  public items: InventoryItem[];
+export interface Inventory {
+  items: InventoryItem[];
 }
 
 export interface InventoryItem {
