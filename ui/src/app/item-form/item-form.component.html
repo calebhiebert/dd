@@ -1,8 +1,10 @@
 <div [formGroup]="formGroup">
   <div class="columns">
-    <div class="column col-auto"><dd-image-upload [formGroup]="formGroup"></dd-image-upload></div>
+    <div class="column col-auto">
+      <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
+    </div>
     <div class="column">
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{ 'has-error': name.invalid }">
         <label class="form-label label-lg" for="item-name">Name</label>
         <input
           class="form-input input-lg"
@@ -11,9 +13,24 @@
           id="item-name"
           placeholder="Sword of Agatha"
         />
+        <p class="form-input-hint" *ngIf="name.invalid && name.errors.required">
+          The item needs a name
+        </p>
+        <p
+          class="form-input-hint"
+          *ngIf="name.invalid && name.errors.minlength"
+        >
+          The name is too short
+        </p>
+        <p
+          class="form-input-hint"
+          *ngIf="name.invalid && name.errors.maxlength"
+        >
+          The name can't be more than 60 characters long
+        </p>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{ 'has-error': description.invalid }">
         <label class="form-label" for="item-description">Description</label>
         <textarea
           class="form-input"
@@ -22,6 +39,12 @@
           rows="5"
           placeholder="Sharp sword made of metal"
         ></textarea>
+        <p
+          class="form-input-hint"
+          *ngIf="description.invalid && description.errors.required"
+        >
+          The item needs a description
+        </p>
       </div>
 
       <dd-attribute-editor [formGroup]="formGroup"></dd-attribute-editor>

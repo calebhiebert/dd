@@ -19,7 +19,11 @@ export class ItemFormComponent implements OnInit {
   ngOnInit() {
     if (this.inputItem !== undefined) {
       this.formGroup = new FormGroup({
-        name: new FormControl(this.inputItem.name, Validators.required),
+        name: new FormControl(this.inputItem.name, [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(60),
+        ]),
         description: new FormControl(
           this.inputItem.description,
           Validators.required
@@ -36,5 +40,13 @@ export class ItemFormComponent implements OnInit {
         imageId: new FormControl('cvgvysrwdivcxjfipjry'),
       });
     }
+  }
+
+  public get name() {
+    return this.formGroup.controls.name;
+  }
+
+  public get description() {
+    return this.formGroup.controls.description;
   }
 }
