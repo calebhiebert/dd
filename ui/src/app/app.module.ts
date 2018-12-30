@@ -16,6 +16,9 @@ import { CampaignListComponent } from './campaign-list/campaign-list.component';
 import { CampaignLandingComponent } from './campaign-landing/campaign-landing.component';
 import { ItemEditComponent } from './item-edit/item-edit.component';
 import { PaginatorComponent } from './paginator/paginator.component';
+import { CampaignSettingsComponent } from './campaign-settings/campaign-settings.component';
+import { EntityTypesComponent } from './campaign-settings/entity-types/entity-types.component';
+import { EntityAttributeRowEditorComponent } from './entity-attribute-row-editor/entity-attribute-row-editor.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,9 @@ import { PaginatorComponent } from './paginator/paginator.component';
     CampaignLandingComponent,
     ItemEditComponent,
     PaginatorComponent,
+    CampaignSettingsComponent,
+    EntityTypesComponent,
+    EntityAttributeRowEditorComponent,
   ],
   imports: [
     BrowserModule,

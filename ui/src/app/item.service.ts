@@ -21,6 +21,19 @@ export class ItemService {
   }
 
   public async getItem(id: string): Promise<Item> {
+    if (id === '1') {
+      const c = new Chance();
+
+      const item: Item = {
+        id: id,
+        name: '--_blank_--',
+        description: '--_blank_--',
+        imageId: 'uncertainty',
+        attributes: [{ name: 'Weight', data: '6', type: AttributeType.NUMBER }],
+      };
+
+      return item;
+    }
     const c = new Chance();
 
     const item: Item = {

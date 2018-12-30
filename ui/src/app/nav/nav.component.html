@@ -20,6 +20,9 @@
         <a href="#" class="btn btn-link">Places</a>
         <a href="#" class="btn btn-link">Quests</a>
         <a href="#" class="btn btn-link">Sessions</a>
+        <a [routerLink]="['campaigns', campaign.id, 'settings']"
+          ><i class="icon icon-menu"></i
+        ></a>
       </section>
       <section class="navbar-section" *ngIf="campaign === null">
         <div class="loading" *ngIf="loadingCampaign"></div>

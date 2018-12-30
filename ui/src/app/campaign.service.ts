@@ -51,7 +51,7 @@ export class CampaignService {
       },
       items: [],
       sessions: [],
-      characters: [],
+      entities: [],
     };
 
     campaign.items = await Promise.all(

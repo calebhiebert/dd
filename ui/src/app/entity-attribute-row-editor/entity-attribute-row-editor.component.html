@@ -1,0 +1,135 @@
+<div [formGroup]="formGroup">
+  <div class="columns">
+    <div class="column col-auto">
+      <label class="form-label">Icon</label>
+      <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
+
+      <div class="form-group">
+        <label for="type" class="form-label">Type</label>
+        <select class="form-input" name="type" id="type" formControlName="type">
+          <option [value]="0">Word</option>
+          <option [value]="1">Number</option>
+          <option [value]="2">Selection</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Name -->
+    <div class="column">
+      <div
+        class="form-group"
+        [ngClass]="{ 'has-error': name.invalid && name.dirty }"
+      >
+        <label for="name" class="form-label">Name</label>
+        <input
+          class="form-input"
+          formControlName="name"
+          type="text"
+          name="name"
+          id="name"
+          placeholder="Name"
+        />
+        <p
+          class="form-input-hint"
+          *ngIf="name.invalid && name.dirty && name.errors.required"
+        >
+          This attribute needs a name
+        </p>
+        <p
+          class="form-input-hint"
+          *ngIf="name.invalid && name.dirty && name.errors.maxlength"
+        >
+          Attribute names must be below 20 characters in length
+        </p>
+      </div>
+
+      <div
+        class="form-group"
+        [ngClass]="{ 'has-error': description.invalid && description.dirty }"
+      >
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          name="description"
+          id="description"
+          class="form-input"
+          placeholder="Description"
+          formControlName="description"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div class="form-group" *ngIf="type.value === '2'">
+        <label for="options" class="form-label">Options</label>
+        <input
+          class="form-input"
+          type="text"
+          name="options"
+          formControlName="options"
+          id="options"
+          placeholder="Big, Medium, Small"
+        />
+        <p class="form-input-hint mb-1">
+          Comma separated list of possible values the user can choose from
+        </p>
+        <div>
+          <div class="chip bg-primary" *ngFor="let o of optionsList">
+            {{ o }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-checkbox">
+          <input type="checkbox" name="required" formControlName="required" />
+          <i class="form-icon"></i> Required attribute
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label class="form-checkbox">
+          <input type="checkbox" name="required" [formControl]="minControl" />
+          <i class="form-icon"></i> Validate minimum
+        </label>
+      </div>
+
+      <div class="form-group" *ngIf="validateMin">
+        <label for="min" class="form-label">Minimum</label>
+        <input
+          class="form-input"
+          type="number"
+          name="min"
+          id="min"
+          formControlName="min"
+        />
+        <p class="form-input-hint">
+          If the attribute type is word, this will validate the minimum number
+          of characters in the word. If it is a number, this will be the
+          smallest amount
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-checkbox">
+          <input type="checkbox" name="required" [formControl]="maxControl" />
+          <i class="form-icon"></i> Validate maximum
+        </label>
+      </div>
+
+      <div class="form-group" *ngIf="validateMax">
+        <label for="max" class="form-label">Maximum</label>
+        <input
+          class="form-input"
+          type="number"
+          name="max"
+          id="max"
+          formControlName="max"
+        />
+        <p class="form-input-hint">
+          If the attribute type is word, this will validate the maximum number
+          of characters in the word (up to 255). If it is a number, this will be
+          the largest amount
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
