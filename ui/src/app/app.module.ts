@@ -19,6 +19,7 @@ import { PaginatorComponent } from './paginator/paginator.component';
 import { CampaignSettingsComponent } from './campaign-settings/campaign-settings.component';
 import { EntityTypesComponent } from './campaign-settings/entity-types/entity-types.component';
 import { EntityAttributeRowEditorComponent } from './entity-attribute-row-editor/entity-attribute-row-editor.component';
+import { DynamicAttributeFormComponent } from './dynamic-attribute-form/dynamic-attribute-form.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { EntityAttributeRowEditorComponent } from './entity-attribute-row-editor
     CampaignSettingsComponent,
     EntityTypesComponent,
     EntityAttributeRowEditorComponent,
+    DynamicAttributeFormComponent,
   ],
   imports: [
     BrowserModule,

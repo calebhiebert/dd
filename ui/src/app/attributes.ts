@@ -1,7 +1,3 @@
-export interface Attributes {
-  attributes: Attribute[];
-}
-
 export interface Attribute {
   name: string;
   type: AttributeType;
@@ -11,4 +7,5 @@ export interface Attribute {
 export enum AttributeType {
   STRING,
   NUMBER,
+  ENUM,
 }

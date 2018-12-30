@@ -1,6 +1,6 @@
 import { User } from './user';
-import { Attributes } from './attributes';
 import { Inventory } from './inventory';
+import { Attribute, AttributeType } from './attributes';
 
 export interface EntityType {
   id: string;
@@ -13,7 +13,7 @@ export interface EntityAttribute {
   description?: string;
   imageId?: string;
   defaultValue?: string;
-  type: EntityAttributeType;
+  type: AttributeType;
   options?: string[];
 
   required: boolean;
@@ -21,17 +21,11 @@ export interface EntityAttribute {
   min?: number;
 }
 
-export enum EntityAttributeType {
-  STRING,
-  NUMBER,
-  ENUM,
-}
-
 export interface Entity {
   id: string;
   user: User;
   name: string;
-  attributes: Attributes;
+  attributes: Attribute[];
   inventory: Inventory;
   health: Health;
 }

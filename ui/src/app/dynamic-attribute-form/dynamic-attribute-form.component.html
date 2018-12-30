@@ -1,0 +1,108 @@
+<div [formGroup]="formGroup">
+  <div class="columns">
+    <div
+      class="column"
+      *ngFor="let att of attributes"
+      [ngClass]="{
+        'col-4': att.type === 1 || att.type === 2,
+        'col-6': att.type === 0
+      }"
+    >
+      <div
+        class="form-group"
+        [ngClass]="{
+          'has-error': control(att.name).invalid && control(att.name).dirty,
+          'has-success': control(att.name).valid && control(att.name).dirty
+        }"
+      >
+        <label class="form-label">{{ att.name }}</label>
+        <div [ngClass]="{ 'has-icon-left': att.imageId }" [ngSwitch]="att.type">
+          <!-- Text Input -->
+          <input
+            type="text"
+            name="attr"
+            class="form-input"
+            [placeholder]="att.name"
+            [formControlName]="att.name"
+            *ngSwitchCase="0"
+          />
+
+          <!-- Number Input -->
+          <input
+            type="number"
+            name="attr"
+            class="form-input"
+            [placeholder]="att.name"
+            [formControlName]="att.name"
+            *ngSwitchCase="1"
+          />
+
+          <!-- Enum input -->
+          <select
+            class="form-input"
+            name="attr"
+            [formControlName]="att.name"
+            *ngSwitchCase="2"
+          >
+            <option *ngFor="let o of att.options">{{ o }}</option>
+          </select>
+
+          <figure class="form-icon avatar" *ngIf="att.imageId">
+            <img [src]="imageSource(att.imageId)" />
+          </figure>
+        </div>
+        <p class="form-input-hint mb-0">{{ att.description }}</p>
+        <p
+          class="form-input-hint mb-1"
+          *ngIf="
+            control(att.name).invalid &&
+            control(att.name).dirty &&
+            control(att.name).errors.required
+          "
+        >
+          {{ att.name }} is required
+        </p>
+        <p
+          class="form-input-hint mb-1"
+          *ngIf="
+            control(att.name).invalid &&
+            control(att.name).dirty &&
+            control(att.name).errors.min
+          "
+        >
+          {{ att.name }} can't be lower than {{ att.min }}
+        </p>
+        <p
+          class="form-input-hint mb-1"
+          *ngIf="
+            control(att.name).invalid &&
+            control(att.name).dirty &&
+            control(att.name).errors.max
+          "
+        >
+          {{ att.name }} can't be higher than {{ att.max }}
+        </p>
+        <p
+          class="form-input-hint mb-1"
+          *ngIf="
+            control(att.name).invalid &&
+            control(att.name).dirty &&
+            control(att.name).errors.minlength
+          "
+        >
+          {{ att.name }} cannot have less than {{ att.min }} characters
+        </p>
+        <p
+          class="form-input-hint mb-1"
+          *ngIf="
+            control(att.name).invalid &&
+            control(att.name).dirty &&
+            control(att.name).errors.maxlength
+          "
+        >
+          {{ att.name }} cannot have more than {{ att.max }} characters
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
