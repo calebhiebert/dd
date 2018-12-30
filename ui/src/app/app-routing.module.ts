@@ -6,6 +6,7 @@ import { CampaignListComponent } from './campaign-list/campaign-list.component';
 import { CampaignLandingComponent } from './campaign-landing/campaign-landing.component';
 import { ItemEditComponent } from './item-edit/item-edit.component';
 import { CampaignSettingsComponent } from './campaign-settings/campaign-settings.component';
+import { EntityFormComponent } from './entity-form/entity-form.component';
 
 const routes: Routes = [
   { path: 'campaigns/list', component: CampaignListComponent },
@@ -33,6 +34,10 @@ const routes: Routes = [
       {
         path: 'items/:item_id/edit',
         component: ItemEditComponent,
+      },
+      {
+        path: 'entities/:id/edit',
+        component: EntityFormComponent,
       },
     ],
   },

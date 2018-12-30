@@ -20,6 +20,7 @@ import { CampaignSettingsComponent } from './campaign-settings/campaign-settings
 import { EntityTypesComponent } from './campaign-settings/entity-types/entity-types.component';
 import { EntityAttributeRowEditorComponent } from './entity-attribute-row-editor/entity-attribute-row-editor.component';
 import { DynamicAttributeFormComponent } from './dynamic-attribute-form/dynamic-attribute-form.component';
+import { EntityFormComponent } from './entity-form/entity-form.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { DynamicAttributeFormComponent } from './dynamic-attribute-form/dynamic-
     EntityTypesComponent,
     EntityAttributeRowEditorComponent,
     DynamicAttributeFormComponent,
+    EntityFormComponent,
   ],
   imports: [
     BrowserModule,
