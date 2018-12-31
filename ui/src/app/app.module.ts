@@ -21,6 +21,8 @@ import { EntityTypesComponent } from './campaign-settings/entity-types/entity-ty
 import { EntityAttributeRowEditorComponent } from './entity-attribute-row-editor/entity-attribute-row-editor.component';
 import { DynamicAttributeFormComponent } from './dynamic-attribute-form/dynamic-attribute-form.component';
 import { EntityFormComponent } from './entity-form/entity-form.component';
+import { ModalComponent } from './modal/modal.component';
+import { InventorySelectorComponent } from './inventory-selector/inventory-selector.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,8 @@ import { EntityFormComponent } from './entity-form/entity-form.component';
     EntityAttributeRowEditorComponent,
     DynamicAttributeFormComponent,
     EntityFormComponent,
+    ModalComponent,
+    InventorySelectorComponent,
   ],
   imports: [
     BrowserModule,
