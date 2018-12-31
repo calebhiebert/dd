@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { EntityAttribute } from '../entity';
+import { EntityAttribute, EntityPreset } from '../entity';
 import { AttributeType } from '../attributes';
+import { CampaignService } from '../campaign.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { EntityService } from '../entity.service';
 
 @Component({
   selector: 'dd-campaign-settings',
@@ -8,54 +11,43 @@ import { AttributeType } from '../attributes';
   styleUrls: ['./campaign-settings.component.css'],
 })
 export class CampaignSettingsComponent implements OnInit {
-  public attributes: EntityAttribute[] = [
-    {
-      name: 'AC',
-      description: 'Armor',
-      imageId: 'armor-upgrade',
-      type: AttributeType.NUMBER,
-      required: true,
-      min: 0,
-      max: 30,
-    },
+  public creatingEntityPreset = false;
 
-    {
-      name: 'RE',
-      description: 'Reflex',
-      type: AttributeType.NUMBER,
-      required: true,
-      min: 0,
-      max: 30,
-    },
-    {
-      name: 'CH',
-      description: 'Charisma',
-      imageId: 'uncertainty',
-      type: AttributeType.NUMBER,
-      required: true,
-      min: 0,
-      max: 30,
-    },
-    {
-      name: 'Class',
-      description: 'The class of your character',
-      imageId: 'uncertainty',
-      type: AttributeType.ENUM,
-      required: true,
-      options: ['Barbarian', 'Aes Sedai', 'Construct'],
-    },
-    {
-      name: 'Faction',
-      description: 'Which faction your character belongs to',
-      imageId: 'uncertainty',
-      type: AttributeType.STRING,
-      required: true,
-      min: 3,
-      max: 30,
-    },
-  ];
-
-  constructor() {}
+  constructor(
+    private campaignService: CampaignService,
+    private entityService: EntityService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {}
+
+  public selectEntityPreset(preset: EntityPreset) {
+    this.router.navigate(['../', 'entities', preset.id, 'edit'], {
+      relativeTo: this.route,
+    });
+  }
+
+  public async createEntityPreset() {
+    this.creatingEntityPreset = true;
+
+    try {
+      const id = await this.entityService.createEntityPreset();
+      this.router.navigate(['..', 'entities', id, 'edit'], {
+        relativeTo: this.route,
+      });
+    } catch (err) {
+      console.log('CREATE ERR', err);
+    }
+
+    this.creatingEntityPreset = false;
+  }
+
+  public get campaign() {
+    return this.campaignService.campaign;
+  }
+
+  public imageSource(id: string): string {
+    return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${id}.png`;
+  }
 }

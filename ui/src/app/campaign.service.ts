@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Campaign } from './campaign';
 import { User } from './user';
 import { ItemService } from './item.service';
+import { HealthMode } from './entity';
+import { AttributeType } from './attributes';
+import { EntityService } from './entity.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +13,10 @@ export class CampaignService {
   public campaign: Campaign = null;
   public loadingCampaign = false;
 
-  constructor(private itemService: ItemService) {}
+  constructor(
+    private itemService: ItemService,
+    private entityService: EntityService
+  ) {}
 
   public async setSelection(campaignId: string) {
     this.campaign = null;
@@ -51,12 +57,18 @@ export class CampaignService {
       },
       items: [],
       sessions: [],
-      entities: [],
+      entityPresets: [],
     };
 
     campaign.items = await Promise.all(
       ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].map((itemId) => {
         return this.itemService.getItem(itemId);
+      })
+    );
+
+    campaign.entityPresets = await Promise.all(
+      ['1', '2', '3'].map((entId) => {
+        return this.entityService.getEntityPreset(campaign.id, entId);
       })
     );
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
@@ -13,6 +13,7 @@ export class EntityAttributeRowEditorComponent implements OnInit {
   public validateMin = false;
   public validateMax = false;
 
+  @Input()
   public formGroup: FormGroup;
 
   constructor() {}
@@ -29,23 +30,50 @@ export class EntityAttributeRowEditorComponent implements OnInit {
       this.validateMax = v;
     });
 
-    this.formGroup = new FormGroup({
-      name: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(20),
-      ]),
-      description: new FormControl(null, [Validators.required]),
-      type: new FormControl(0, [Validators.required]),
-      required: new FormControl(true, [Validators.required]),
-      min: new FormControl(null),
-      max: new FormControl(null),
-      options: new FormControl(null, [
-        Validators.pattern(/([A-Za-z0-9._]+)/gi),
-      ]),
+    this.formGroup.valueChanges.subscribe((v) => {
+      if (this.formGroup.value.min) {
+        this.minControl.setValue(true);
+      }
+
+      if (this.formGroup.value.max) {
+        this.maxControl.setValue(true);
+      }
     });
 
-    this.formGroup.valueChanges.subscribe(console.log);
+    // this should mean that the form group is empty
+    if (!this.formGroup.contains('name')) {
+      this.formGroup.addControl(
+        'name',
+        new FormControl(null, [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(20),
+        ])
+      );
+
+      this.formGroup.addControl(
+        'description',
+        new FormControl(null, [Validators.required])
+      );
+
+      this.formGroup.addControl(
+        'type',
+        new FormControl('0', [Validators.required])
+      );
+
+      this.formGroup.addControl(
+        'required',
+        new FormControl(true, [Validators.required])
+      );
+
+      this.formGroup.addControl('min', new FormControl());
+      this.formGroup.addControl('max', new FormControl());
+
+      this.formGroup.addControl(
+        'options',
+        new FormControl(null, [Validators.pattern(/([A-Za-z0-9._]+)/gi)])
+      );
+    }
   }
 
   public get name() {

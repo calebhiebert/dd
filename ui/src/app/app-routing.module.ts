@@ -36,7 +36,7 @@ const routes: Routes = [
         component: ItemEditComponent,
       },
       {
-        path: 'entities/:id/edit',
+        path: 'entities/:ent_id/edit',
         component: EntityFormComponent,
       },
     ],

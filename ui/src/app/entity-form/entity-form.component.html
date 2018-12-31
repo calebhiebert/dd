@@ -1,1 +1,175 @@
-<div class="container grid-xl"><h3>Create Entity Preset</h3></div>
+<div class="container grid-xl" [formGroup]="formGroup">
+  <div class="columns">
+    <div class="column"><h3>Create Entity Preset</h3></div>
+    <div class="column col-auto col-ml-auto">
+      <button
+        class="btn btn-error mr-2"
+        (click)="delete()"
+        [ngClass]="{ loading: deleting }"
+      >
+        Delete
+      </button>
+      <button
+        class="btn"
+        (click)="save()"
+        [ngClass]="{ loading: saving }"
+        [disabled]="formGroup.invalid"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+
+  <div class="columns">
+    <!-- Image Upload -->
+    <div class="column col-auto">
+      <label class="form-label">Icon</label>
+      <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
+    </div>
+
+    <div class="column">
+      <!-- Name -->
+      <div
+        class="form-group"
+        [ngClass]="{
+          'has-error': name.invalid && (name.dirty || name.touched)
+        }"
+      >
+        <label for="name" class="form-label">Name</label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          formControlName="name"
+          class="form-input"
+          placeholder="Name"
+        />
+        <p
+          class="form-input-hint"
+          *ngIf="name.invalid && name.dirty && name.errors.required"
+        >
+          A name is required
+        </p>
+        <p
+          class="form-input-hint"
+          *ngIf="name.invalid && name.dirty && name.errors.minlength"
+        >
+          Name should not have less than 3 characters
+        </p>
+        <p
+          class="form-input-hint"
+          *ngIf="name.invalid && name.dirty && name.errors.maxlength"
+        >
+          Name should not have more than 30 characters
+        </p>
+      </div>
+
+      <!-- Description -->
+      <div
+        class="form-group"
+        [ngClass]="{
+          'has-error':
+            description.invalid && (description.dirty || description.touched)
+        }"
+      >
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          class="form-input"
+          name="description"
+          id="description"
+          rows="4"
+          formControlName="description"
+          placeholder="Description"
+        ></textarea>
+        <p
+          class="form-input-hint"
+          *ngIf="
+            description.invalid &&
+            description.dirty &&
+            description.errors.required
+          "
+        >
+          A description is required
+        </p>
+        <p
+          class="form-input-hint"
+          *ngIf="
+            description.invalid &&
+            description.dirty &&
+            description.errors.minlength
+          "
+        >
+          The description should not have less than 3 characters
+        </p>
+      </div>
+
+      <h5 class="mt-2">Health</h5>
+      <!-- Health -->
+      <div formGroupName="health" class="columns">
+        <div class="column">
+          <div class="form-group">
+            <label for="health-mode" class="form-label">Health Mode</label>
+            <select
+              name="health-mode"
+              id="health-mode"
+              class="form-input"
+              formControlName="mode"
+            >
+              <option value="0">Normal</option>
+              <option value="1">Multi Bar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="column">
+          <!-- Default Max -->
+          <div class="form-group">
+            <label for="hp-max" class="form-label">Default Max HP</label>
+            <input
+              formControlName="max"
+              type="number"
+              name="hp-max"
+              id="hp-max"
+              class="form-input"
+              placeholder="Default Max HP"
+            />
+          </div>
+        </div>
+      </div>
+
+      <h5 class="mt-2">Misc</h5>
+      <!-- Misc Options -->
+      <div class="columns">
+        <div class="column">
+          <!-- Player Creatable -->
+          <div class="form-group">
+            <label class="form-checkbox">
+              <input type="checkbox" formControlName="playerCreatable" />
+              <i class="form-icon"></i> Players can create this type of entity
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attributes -->
+      <div>
+        <div class="columns">
+          <div class="column"><h5 class="mt-2">Attributes</h5></div>
+          <div class="column col-auto">
+            <button class="btn btn-sm" (click)="addAttribute()">
+              <i class="icon icon-plus"></i> Add Attribute
+            </button>
+          </div>
+        </div>
+
+        <!-- Attribute Array -->
+        <div>
+          <dd-entity-attribute-row-editor
+            *ngFor="let attr of attributeControls"
+            [formGroup]="attr"
+          ></dd-entity-attribute-row-editor>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

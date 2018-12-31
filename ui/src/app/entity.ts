@@ -21,16 +21,24 @@ export interface EntityAttribute {
   min?: number;
 }
 
-export interface Entity {
+export interface EntityPreset {
   id: string;
   user: User;
   name: string;
-  attributes: Attribute[];
+  description: string;
+  imageId?: string;
+  attributes: EntityAttribute[];
   inventory: Inventory;
   health: Health;
+  playerCreatable: boolean;
 }
 
 export interface Health {
-  max: number;
-  current: number;
+  mode: HealthMode;
+  max?: number;
+}
+
+export enum HealthMode {
+  NORMAL,
+  MULTI_BAR,
 }
