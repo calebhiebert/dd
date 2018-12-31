@@ -1,6 +1,6 @@
 import { User } from './user';
 import { Inventory } from './inventory';
-import { Attribute, AttributeType } from './attributes';
+import { AttributeType } from './attributes';
 
 export interface EntityType {
   id: string;

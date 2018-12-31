@@ -11,7 +11,12 @@
         <img src="/assets/logo.svg" width="32" />
       </section>
       <section class="navbar-section" *ngIf="campaign !== null">
-        <span class="mx-1">{{ campaign.name }}</span>
+        <a
+          class="btn btn-link"
+          [routerLink]="['campaigns', campaign.id, 'landing']"
+        >
+          {{ campaign.name }}
+        </a>
         <a
           [routerLink]="['campaigns', campaign.id, 'items']"
           class="btn btn-link"
