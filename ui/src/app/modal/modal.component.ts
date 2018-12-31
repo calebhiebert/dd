@@ -1,20 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'dd-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css'],
 })
-export class ModalComponent implements OnInit {
-  private openPromise: Promise<void>;
+export class ModalComponent<T> implements OnInit {
+  @Input()
+  public size = 'normal';
 
-  private resolve: any;
+  protected openPromise: Promise<T>;
+
+  protected resolve: any;
 
   constructor() {}
 
   ngOnInit() {}
 
-  public open(): Promise<void> {
+  public open(): Promise<T> {
     if (this.openPromise !== undefined) {
       throw new Error('Cannot open modal when it is already open');
     }
@@ -26,14 +29,14 @@ export class ModalComponent implements OnInit {
     return this.openPromise;
   }
 
-  public close(): Promise<void> {
+  public close(val: T): Promise<T> {
     if (this.openPromise === undefined) {
       throw new Error('Cannot close modal when it has not been opened');
     }
 
     const prom = this.openPromise;
 
-    this.resolve();
+    this.resolve(val);
     this.openPromise = undefined;
     this.resolve = undefined;
 

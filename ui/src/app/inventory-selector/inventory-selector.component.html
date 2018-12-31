@@ -1,6 +1,55 @@
+<dd-confirmation-modal #confirm></dd-confirmation-modal>
 <dd-modal #itemselector>
-  <div class="modal-title h5" modal-header>Hi</div>
+  <div class="modal-title h5" modal-header>Select an Item</div>
+
+  <div modal-body>
+    <dd-item-view-list
+      *ngFor="let i of items"
+      [item]="i"
+      (click)="itemselector.close(i)"
+    ></dd-item-view-list>
+  </div>
+</dd-modal>
+
+<dd-modal size="small" #itemedit>
+  <div class="modal-title h5" modal-header>Edit Item</div>
+  <div [formGroup]="itemEditorGroup" modal-body>
+    <div class="form-group">
+      <label for="quantity" class="form-label">Quantity</label>
+      <input
+        type="number"
+        class="form-input"
+        name="quantity"
+        id="quantity"
+        formControlName="quantity"
+        placeholder="Quantity"
+      />
+    </div>
+  </div>
+  <div modal-footer>
+    <button class="btn btn-error mr-2" (click)="removeItem()">
+      Remove Item
+    </button>
+    <button class="btn" (click)="itemedit.close()">Done</button>
+  </div>
 </dd-modal>
 
 <!-- Item display -->
-<div class="card"><div class="card-body"></div></div>
+<div class="card">
+  <div class="card-body">
+    <button class="btn btn-sm" (click)="addItem()">
+      <i class="icon icon-plus"></i> Add Item
+    </button>
+  </div>
+  <div class="card-body d-flex item-container">
+    <!-- Repeat Cards -->
+    <div
+      class="item mr-1"
+      *ngFor="let i of selectedItems"
+      [style.background-image]="backgroundCSS(i.item.imageId)"
+      (click)="selectItem(i)"
+    >
+      <h6 class="text-center">{{ i.item.name }} ({{ i.quantity }})</h6>
+    </div>
+  </div>
+</div>

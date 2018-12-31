@@ -23,6 +23,7 @@ import { DynamicAttributeFormComponent } from './dynamic-attribute-form/dynamic-
 import { EntityFormComponent } from './entity-form/entity-form.component';
 import { ModalComponent } from './modal/modal.component';
 import { InventorySelectorComponent } from './inventory-selector/inventory-selector.component';
+import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { InventorySelectorComponent } from './inventory-selector/inventory-selec
     EntityFormComponent,
     ModalComponent,
     InventorySelectorComponent,
+    ConfirmationModalComponent,
   ],
   imports: [
     BrowserModule,

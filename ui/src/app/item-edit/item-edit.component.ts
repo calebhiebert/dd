@@ -4,6 +4,7 @@ import { Item } from '../item';
 import { ItemService } from '../item.service';
 import { FormGroup } from '@angular/forms';
 import { ItemFormComponent } from '../item-form/item-form.component';
+import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'dd-item-edit',
@@ -14,6 +15,10 @@ export class ItemEditComponent implements OnInit {
   public loading = false;
   public item: Item = null;
   public saving = false;
+  public deleting = false;
+
+  @ViewChild('confirmmodal')
+  public confirmModal: ConfirmationModalComponent;
 
   @ViewChild('iform')
   public form: ItemFormComponent;
@@ -55,14 +60,20 @@ export class ItemEditComponent implements OnInit {
   }
 
   public async delete() {
-    if (confirm('Are you sure?')) {
+    if (
+      await this.confirmModal.getConfirmation(
+        'Are you sure you want to delete this item? This cannot be undone.'
+      )
+    ) {
+      this.deleting = true;
       try {
         await this.itemService.deleteItem(this.item.id);
+        this.router.navigate(['../..'], { relativeTo: this.route });
       } catch (err) {
         console.log('DEL ERR', err);
       }
 
-      this.router.navigate(['../..'], { relativeTo: this.route });
+      this.deleting = false;
     }
   }
 

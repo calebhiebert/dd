@@ -1,3 +1,4 @@
+<dd-confirmation-modal #confirmmodal></dd-confirmation-modal>
 <div class="container grid-xl">
   <div class="loading loading-lg" *ngIf="loading"></div>
 
@@ -8,7 +9,12 @@
       >
     </div>
     <div class="column col-ml-auto col-auto">
-      <button class="btn btn-error mr-2" [disabled]="saving" (click)="delete()">
+      <button
+        class="btn btn-error mr-2"
+        [ngClass]="{ loading: deleting }"
+        [disabled]="saving"
+        (click)="delete()"
+      >
         Delete
       </button>
       <button

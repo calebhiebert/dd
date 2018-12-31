@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { EntityService } from '../entity.service';
 import { Campaign } from '../campaign';
 import { CampaignService } from '../campaign.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'dd-entity-form',
@@ -16,6 +17,9 @@ export class EntityFormComponent implements OnInit {
   public loading = false;
 
   public formGroup: FormGroup;
+
+  @ViewChild('confirmmodal')
+  public confirmModal: ConfirmationModalComponent;
 
   constructor(
     private entityService: EntityService,
@@ -113,7 +117,11 @@ export class EntityFormComponent implements OnInit {
   }
 
   public async delete() {
-    if (confirm('Are you sure?')) {
+    if (
+      await this.confirmModal.getConfirmation(
+        'Are you sure you want to delete this entity? This cannot be undone'
+      )
+    ) {
       this.deleting = true;
       this.formGroup.disable();
       try {

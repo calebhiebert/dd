@@ -1,4 +1,11 @@
-<div class="modal" [ngClass]="{ active: isOpen }">
+<div
+  class="modal"
+  [ngClass]="{
+    active: isOpen,
+    'modal-sm': size === 'small',
+    'modal-lg': size === 'large'
+  }"
+>
   <a (click)="close()" class="modal-overlay" aria-label="Close"></a>
   <div class="modal-container">
     <div class="modal-header">
