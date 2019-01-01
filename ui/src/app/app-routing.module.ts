@@ -7,12 +7,25 @@ import { CampaignLandingComponent } from './campaign-landing/campaign-landing.co
 import { ItemEditComponent } from './item-edit/item-edit.component';
 import { CampaignSettingsComponent } from './campaign-settings/campaign-settings.component';
 import { EntityFormComponent } from './entity-form/entity-form.component';
+import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './home/home.component';
+import { LoggedInGuard } from './logged-in.guard';
+import { LoginPageGuard } from './login-page.guard';
 
 const routes: Routes = [
-  { path: 'campaigns/list', component: CampaignListComponent },
+  { path: 'login', component: LoginComponent, canActivate: [LoginPageGuard] },
+  { path: 'callback', component: LoginComponent },
+  {
+    path: 'campaigns/list',
+    component: CampaignListComponent,
+    canActivate: [LoggedInGuard],
+  },
+  { path: 'home', component: HomeComponent, canActivate: [LoggedInGuard] },
   {
     path: 'campaigns/:id',
     component: CampaignComponent,
+    canActivate: [LoggedInGuard],
+    canActivateChild: [LoggedInGuard],
     children: [
       {
         path: '',

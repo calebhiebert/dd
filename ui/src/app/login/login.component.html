@@ -1,0 +1,27 @@
+<div class="container grid-xl">
+  <div class="columns">
+    <div class="column col-5 col-md-8 col-sm-11 col-mx-auto">
+      <!-- Login Buttons -->
+      <div class="card text-center" *ngIf="!processing">
+        <div class="card-header"><h2>Login</h2></div>
+        <div class="card-body">
+          <button class="btn btn-lg btn-primary wide" (click)="authGoog()">
+            Google
+          </button>
+          <div class="divider" data-content="OR"></div>
+          <button class="btn btn-lg btn-primary wide" (click)="authFb()">
+            Facebook
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div class="card text-center" *ngIf="processing">
+        <div class="card-body">
+          <h6>Processing Information...</h6>
+          <div class="loading"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

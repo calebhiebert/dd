@@ -1,11 +1,15 @@
 <div class="bg-gray mb-2">
   <div class="container grid-xl py-2">
     <header class="navbar">
-      <section class="navbar-section">
+      <section class="navbar-section" *ngIf="!loggedIn && !loginInProgress">
+        <a [routerLink]="['login']" class="btn btn-link">Login</a>
+      </section>
+      <section class="navbar-section" *ngIf="loggedIn || loginInProgress">
         <a href="#" class="btn btn-link">Characters</a>
         <a [routerLink]="['campaigns', 'list']" class="btn btn-link"
           >Campaigns</a
         >
+        <button (click)="logOut()" class="btn btn-link">Logout</button>
       </section>
       <section class="navbar-center">
         <img src="/assets/logo.svg" width="32" />
@@ -29,12 +33,19 @@
           ><i class="icon icon-menu"></i
         ></a>
       </section>
-      <section class="navbar-section" *ngIf="campaign === null">
+      <section
+        class="navbar-section"
+        *ngIf="campaign === null && (loggedIn || loginInProgress)"
+      >
         <div class="loading" *ngIf="loadingCampaign"></div>
         <span class="text-grey text-italic mr-2" *ngIf="!loadingCampaign"
           >No campaign selected</span
         >
       </section>
+      <section
+        class="navbar-section"
+        *ngIf="!loggedIn && !loginInProgress"
+      ></section>
     </header>
   </div>
 </div>
