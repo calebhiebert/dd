@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Campaign } from './campaign';
-import { User } from './user';
 import { ItemService } from './item.service';
-import { HealthMode } from './entity';
-import { AttributeType } from './attributes';
 import { EntityService } from './entity.service';
+import { Chance } from 'chance';
 
 @Injectable({
   providedIn: 'root',
@@ -46,18 +44,22 @@ export class CampaignService {
   }
 
   public async getCampaign(id: string): Promise<Campaign> {
+    const c = new Chance();
+
     const campaign: Campaign = {
       id,
-      name: 'Dungeons of Time',
-      description:
-        'A campaign set in the second age of the Wheel of Time. Happens during the war of power.',
+      name: c.word(),
+      description: c.paragraph(),
+      imageId: 'uncertainty',
       user: {
         id: '1',
-        name: 'Panchem',
+        name: c.word(),
+        imageURL: `https://api.adorable.io/avatars/285/${c.word()}`,
       },
       items: [],
       sessions: [],
       entityPresets: [],
+      users: [],
     };
 
     campaign.items = await Promise.all(
@@ -71,6 +73,17 @@ export class CampaignService {
         return this.entityService.getEntityPreset(campaign.id, entId);
       })
     );
+
+    for (let i = 0; i < 7; i++) {
+      campaign.users.push({
+        user: {
+          id: i.toString(),
+          name: c.word(),
+          imageURL: `https://api.adorable.io/avatars/285/${c.word()}`,
+        },
+        isAdmin: false,
+      });
+    }
 
     await simulateDelay(250);
     return campaign;

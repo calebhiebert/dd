@@ -1,0 +1,12 @@
+<div class="container grid-xl">
+  <!-- Loader -->
+  <div class="loading loading-lg" *ngIf="loading"></div>
+
+  <!-- Form -->
+  <div [formGroup]="formGroup" *ngIf="!loading">
+    <dd-dynamic-attribute-form
+      [formGroup]="attributesFormGroup"
+      [attributes]="entity.preset.attributes"
+    ></dd-dynamic-attribute-form>
+  </div>
+</div>

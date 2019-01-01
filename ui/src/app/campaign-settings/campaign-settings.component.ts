@@ -23,7 +23,7 @@ export class CampaignSettingsComponent implements OnInit {
   ngOnInit() {}
 
   public selectEntityPreset(preset: EntityPreset) {
-    this.router.navigate(['../', 'entities', preset.id, 'edit'], {
+    this.router.navigate(['../', 'entityp', preset.id, 'edit'], {
       relativeTo: this.route,
     });
   }
@@ -33,7 +33,7 @@ export class CampaignSettingsComponent implements OnInit {
 
     try {
       const id = await this.entityService.createEntityPreset();
-      this.router.navigate(['..', 'entities', id, 'edit'], {
+      this.router.navigate(['..', 'entityp', id, 'edit'], {
         relativeTo: this.route,
       });
     } catch (err) {

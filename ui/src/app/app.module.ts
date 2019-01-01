@@ -26,6 +26,8 @@ import { InventorySelectorComponent } from './inventory-selector/inventory-selec
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
+import { EntityTypeSelectorComponent } from './entity-form/entity-type-selector/entity-type-selector.component';
+import { EntityCreationFormComponent } from './entity-form/entity-creation-form/entity-creation-form.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { HomeComponent } from './home/home.component';
     ConfirmationModalComponent,
     LoginComponent,
     HomeComponent,
+    EntityTypeSelectorComponent,
+    EntityCreationFormComponent,
   ],
   imports: [
     BrowserModule,

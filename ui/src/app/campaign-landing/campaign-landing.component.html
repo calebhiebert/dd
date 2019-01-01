@@ -1,3 +1,24 @@
 <div class="container grid-xl" *ngIf="campaign">
-  <h1>{{ campaign.name }}</h1>
+  <div class="columns">
+    <div class="column col-auto">
+      <h1>{{ campaign.name }}</h1>
+    </div>
+    <div class="column col-auto col-ml-auto">
+      <div class="dropdown">
+        <button class="btn btn-link dropdown-toggle">
+          Menu <i class="icon icon-caret"></i>
+        </button>
+
+        <ul class="menu">
+          <li class="menu-item"><a href="#"> Manage Players </a></li>
+          <li class="menu-item">
+            <a [routerLink]="['..', 'entities', 'selecttype']">
+              Create Entity
+            </a>
+          </li>
+          <li class="menu-item"><a href="#"> Manage Items </a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

@@ -8,8 +8,15 @@ export interface Campaign {
   user: User;
   name: string;
   description: string;
+  imageId?: string;
 
+  users: CampaignUser[];
   items: Item[];
   sessions: Session[];
   entityPresets: EntityPreset[];
+}
+
+export interface CampaignUser {
+  user: User;
+  isAdmin: boolean;
 }

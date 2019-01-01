@@ -11,8 +11,11 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { LoggedInGuard } from './logged-in.guard';
 import { LoginPageGuard } from './login-page.guard';
+import { EntityTypeSelectorComponent } from './entity-form/entity-type-selector/entity-type-selector.component';
+import { EntityCreationFormComponent } from './entity-form/entity-creation-form/entity-creation-form.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [LoginPageGuard] },
   { path: 'callback', component: LoginComponent },
   {
@@ -48,8 +51,16 @@ const routes: Routes = [
         component: ItemEditComponent,
       },
       {
-        path: 'entities/:ent_id/edit',
+        path: 'entityp/:ent_id/edit',
         component: EntityFormComponent,
+      },
+      {
+        path: 'entities/:ent_id/edit',
+        component: EntityCreationFormComponent,
+      },
+      {
+        path: 'entities/selecttype',
+        component: EntityTypeSelectorComponent,
       },
     ],
   },

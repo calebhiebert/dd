@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EntityPreset, HealthMode } from './entity';
+import { EntityPreset, HealthMode, Entity } from './entity';
 import { AttributeType } from './attributes';
 import { Chance } from 'chance';
 
@@ -38,6 +38,7 @@ export class EntityService {
       user: {
         id: '1',
         name: 'Panchem',
+        imageURL: 'https://api.adorable.io/avatars/285/abott@adorable.png',
       },
       name: c.word(),
       imageId: 'shrug',
@@ -66,10 +67,10 @@ export class EntityService {
         name: c.word(),
         description: c.paragraph({ sentences: 1 }),
         imageId: 'uncertainty',
-        type: AttributeType.NUMBER,
+        type: c.integer({ min: 0, max: 1 }) as AttributeType,
         required: c.bool(),
-        min: c.integer(),
-        max: c.integer(),
+        min: c.integer({ min: -20, max: 250 }),
+        max: c.integer({ min: 250, max: 60000 }),
       });
     }
 
@@ -80,6 +81,50 @@ export class EntityService {
     campaignId: string,
     entityPresetId: string
   ): Promise<void> {
+    await simulateDelay(250);
+  }
+
+  public async getEntity(campaignId: string, entId: string): Promise<Entity> {
+    await simulateDelay(250);
+
+    const c = new Chance();
+
+    const ent: Entity = {
+      id: entId,
+      name: c.word(),
+      description: c.paragraph(),
+      imageId: 'uncertainty',
+      attributes: [],
+      inventory: { items: [] },
+      health: {
+        mode: HealthMode.NORMAL,
+        normal: {
+          max: 36,
+          current: 36,
+          temp: 0,
+        },
+      },
+    };
+
+    ent.preset = await this.getEntityPreset(campaignId, '1');
+
+    return ent;
+  }
+
+  public async createEntity(
+    campaignId: string,
+    entityPresetId: string
+  ): Promise<string> {
+    await simulateDelay(250);
+    return '1';
+  }
+
+  public async editEntity(campaignId: string, entity: Entity): Promise<Entity> {
+    await simulateDelay(250);
+    return entity;
+  }
+
+  public async deleteEntity(campaignId: string, entity: Entity): Promise<void> {
     await simulateDelay(250);
   }
 }
