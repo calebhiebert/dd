@@ -2,8 +2,41 @@
   <!-- Loader -->
   <div class="loading loading-lg" *ngIf="loading"></div>
 
+  <h3 *ngIf="entity">Create {{ entity.preset.name }}</h3>
   <!-- Form -->
-  <div [formGroup]="formGroup" *ngIf="!loading">
+  <div [formGroup]="formGroup" *ngIf="entity">
+    <div class="columns">
+      <div class="column col-auto">
+        <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
+      </div>
+
+      <!-- Standard form inputs -->
+      <div class="column">
+        <!-- Name -->
+        <div class="form-group">
+          <label for="name" class="form-lable">Name</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            class="form-input"
+            placeholder="Name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            name="description"
+            id="description"
+            rows="5"
+            class="form-input"
+            placeholder="Description"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
     <dd-dynamic-attribute-form
       [formGroup]="attributesFormGroup"
       [attributes]="entity.preset.attributes"

@@ -4,8 +4,10 @@
       class="column"
       *ngFor="let att of attributes"
       [ngClass]="{
-        'col-4': att.type === 1 || att.type === 2,
-        'col-6': att.type === 0
+        'col-3': att.type === 1 || att.type === 2,
+        'col-sm-6': att.type === 1 || att.type === 2,
+        'col-6': att.type === 0,
+        'col-sm-12': att.type === 0
       }"
     >
       <div
