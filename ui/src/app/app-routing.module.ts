@@ -25,7 +25,6 @@ const routes: Routes = [
     path: 'campaigns/:id',
     component: CampaignComponent,
     canActivate: [LoggedInGuard],
-    canActivateChild: [LoggedInGuard],
     children: [
       {
         path: '',
