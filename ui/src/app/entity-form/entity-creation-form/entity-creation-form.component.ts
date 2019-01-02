@@ -47,6 +47,11 @@ export class EntityCreationFormComponent implements OnInit {
         Validators.required,
         Validators.minLength(3),
       ]),
+      xp: new FormControl(null, [
+        Validators.required,
+        Validators.min(0),
+        Validators.max(2147483647),
+      ]),
       imageId: new FormControl('uncertainty'),
     });
 
@@ -122,5 +127,9 @@ export class EntityCreationFormComponent implements OnInit {
 
   public get description() {
     return this.formGroup.get('description');
+  }
+
+  public get xp() {
+    return this.formGroup.get('xp');
   }
 }

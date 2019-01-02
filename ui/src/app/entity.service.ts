@@ -97,6 +97,7 @@ export class EntityService {
       imageId: 'uncertainty',
       attributes: [],
       inventory: { items: [] },
+      xp: c.integer({ min: 0, max: 80000 }),
       health: {
         mode: HealthMode.NORMAL,
         normal: {

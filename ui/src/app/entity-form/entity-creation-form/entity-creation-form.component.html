@@ -22,6 +22,42 @@
     <div class="columns">
       <div class="column col-auto">
         <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
+
+        <div
+          class="form-group"
+          [ngClass]="{
+            'has-error': xp.invalid && (xp.touched || xp.dirty),
+            'has-success': xp.valid && (xp.touched || xp.dirty)
+          }"
+        >
+          <label for="xp" class="form-label">XP</label>
+          <input
+            type="number"
+            name="xp"
+            id="xp"
+            class="form-input"
+            placeholder="XP"
+            formControlName="xp"
+          />
+          <p
+            class="form-input-hint"
+            *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.required"
+          >
+            An XP value is required
+          </p>
+          <p
+            class="form-input-hint"
+            *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.min"
+          >
+            XP must be more than 0
+          </p>
+          <p
+            class="form-input-hint"
+            *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.max"
+          >
+            Too many XP!!
+          </p>
+        </div>
       </div>
 
       <!-- Standard form inputs -->
@@ -75,6 +111,7 @@
           </p>
         </div>
 
+        <!-- Description -->
         <div
           class="form-group"
           [ngClass]="{

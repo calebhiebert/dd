@@ -64,6 +64,7 @@ export interface Entity {
   description: string;
   imageId?: string;
   attributes: Attribute[];
+  xp: number;
   inventory: Inventory;
   health: Health;
   preset?: EntityPreset;
