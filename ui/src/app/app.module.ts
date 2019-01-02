@@ -29,6 +29,7 @@ import { HomeComponent } from './home/home.component';
 import { EntityTypeSelectorComponent } from './entity-form/entity-type-selector/entity-type-selector.component';
 import { EntityCreationFormComponent } from './entity-form/entity-creation-form/entity-creation-form.component';
 import { ExperienceTableEditorComponent } from './campaign-settings/experience-table-editor/experience-table-editor.component';
+import { QuestManagerComponent } from './quest-manager/quest-manager.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { ExperienceTableEditorComponent } from './campaign-settings/experience-t
     EntityTypeSelectorComponent,
     EntityCreationFormComponent,
     ExperienceTableEditorComponent,
+    QuestManagerComponent,
   ],
   imports: [
     BrowserModule,

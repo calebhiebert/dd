@@ -13,6 +13,7 @@ import { LoggedInGuard } from './logged-in.guard';
 import { LoginPageGuard } from './login-page.guard';
 import { EntityTypeSelectorComponent } from './entity-form/entity-type-selector/entity-type-selector.component';
 import { EntityCreationFormComponent } from './entity-form/entity-creation-form/entity-creation-form.component';
+import { QuestManagerComponent } from './quest-manager/quest-manager.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -36,6 +37,10 @@ const routes: Routes = [
       {
         path: 'settings',
         component: CampaignSettingsComponent,
+      },
+      {
+        path: 'quests',
+        component: QuestManagerComponent,
       },
       {
         path: 'items/:item_id/edit',
