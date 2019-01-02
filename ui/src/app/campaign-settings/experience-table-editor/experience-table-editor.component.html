@@ -11,6 +11,11 @@
     class="form-group"
     *ngFor="let c of controls; let i = index"
     formArrayName="rows"
+    [ngClass]="{
+      'has-error':
+        hasOrderError(i) ||
+        (controls[i].invalid && (controls[i].dirty || controls[i].touched))
+    }"
   >
     <div class="col-1 col-lg-2 col-sm-12">
       <label class="form-label text-bold">Level {{ i + 2 }}</label>
@@ -22,6 +27,49 @@
         placeholder="XP"
         [formControlName]="i"
       />
+      <p class="form-input-hint" *ngIf="hasOrderError(i)">
+        XP value must be more than the previous level
+      </p>
+      <p
+        class="form-input-hint"
+        *ngIf="
+          controls[i].invalid &&
+          (controls[i].dirty || controls[i].touched) &&
+          controls[i].errors.required
+        "
+      >
+        XP value is required
+      </p>
+      <p
+        class="form-input-hint"
+        *ngIf="
+          controls[i].invalid &&
+          (controls[i].dirty || controls[i].touched) &&
+          controls[i].errors.min
+        "
+      >
+        XP value must be more than 0
+      </p>
+      <p
+        class="form-input-hint"
+        *ngIf="
+          controls[i].invalid &&
+          (controls[i].dirty || controls[i].touched) &&
+          controls[i].errors.max
+        "
+      >
+        The max xp value is 2,147,483,647
+      </p>
     </div>
   </div>
 </div>
+<button class="btn btn-sm" (click)="addRow()">
+  <i class="icon icon-plus"></i> Add Level
+</button>
+<button
+  class="btn btn-sm btn-error ml-2"
+  (click)="removeRow()"
+  [disabled]="controls.length === 0"
+>
+  <i class="icon icon-cross"></i> Remove Level
+</button>

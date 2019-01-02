@@ -13,6 +13,10 @@ import { EntityService } from '../entity.service';
 export class CampaignSettingsComponent implements OnInit {
   public creatingEntityPreset = false;
 
+  public saving = false;
+
+  public expandXPTable = false;
+
   constructor(
     private campaignService: CampaignService,
     private entityService: EntityService,
@@ -41,6 +45,20 @@ export class CampaignSettingsComponent implements OnInit {
     }
 
     this.creatingEntityPreset = false;
+  }
+
+  public async save() {
+    this.saving = true;
+
+    try {
+      const newCampaign = { ...this.campaign };
+
+      await this.campaignService.saveCampaign(newCampaign);
+    } catch (err) {
+      console.log('SAVE ERR', err);
+    }
+
+    this.saving = false;
   }
 
   public get campaign() {

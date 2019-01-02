@@ -3,7 +3,9 @@
   <div class="columns">
     <div class="column"><h2>Settings</h2></div>
     <div class="column col-auto col-ml-auto">
-      <button class="btn">Save</button>
+      <button class="btn" (click)="save()" [ngClass]="{ loading: saving }">
+        Save
+      </button>
     </div>
   </div>
 
@@ -41,11 +43,32 @@
   </div>
 
   <!-- Experience Table -->
-  <h3 class="mt-2 mb-0">Experience Table</h3>
-  <span class="text-gray"
+  <div class="columns">
+    <div class="column"><h3 class="mt-2 mb-0">Experience Table</h3></div>
+    <div class="column col-auto col-ml-auto">
+      <button
+        class="btn btn-sm"
+        *ngIf="!expandXPTable"
+        (click)="expandXPTable = !expandXPTable"
+      >
+        Expand <i class="icon icon-arrow-down"></i>
+      </button>
+      <button
+        class="btn btn-sm"
+        *ngIf="expandXPTable"
+        (click)="expandXPTable = !expandXPTable"
+      >
+        Collapse <i class="icon icon-arrow-up"></i>
+      </button>
+    </div>
+  </div>
+  <span class="text-gray" *ngIf="expandXPTable"
     >This is the experience table. This will determine entities' levels based on
     the amount of XP they have. For example, if level 2 was set to 30 XP, an
     entity would be level 2 when they reach 30 or above XP.</span
   >
-  <dd-experience-table-editor></dd-experience-table-editor>
+  <dd-experience-table-editor
+    [experienceTable]="campaign.experienceTable"
+    *ngIf="expandXPTable"
+  ></dd-experience-table-editor>
 </div>

@@ -56,6 +56,18 @@ export class CampaignService {
       sessions: [],
       entityPresets: [],
       users: [],
+      experienceTable: [
+        300,
+        900,
+        2700,
+        6500,
+        14000,
+        23000,
+        34000,
+        48000,
+        64000,
+        85000,
+      ],
     };
 
     campaign.items = await Promise.all(
@@ -83,6 +95,12 @@ export class CampaignService {
 
     await simulateDelay(250);
     return campaign;
+  }
+
+  public async saveCampaign(campaign: Campaign): Promise<Campaign> {
+    await simulateDelay(250);
+
+    return { ...campaign };
   }
 }
 

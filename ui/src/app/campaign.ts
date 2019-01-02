@@ -14,6 +14,7 @@ export interface Campaign {
   items: Item[];
   sessions: Session[];
   entityPresets: EntityPreset[];
+  experienceTable: number[];
 }
 
 export interface CampaignUser {
