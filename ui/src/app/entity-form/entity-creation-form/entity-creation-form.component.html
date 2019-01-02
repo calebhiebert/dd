@@ -2,7 +2,21 @@
   <!-- Loader -->
   <div class="loading loading-lg" *ngIf="loading"></div>
 
-  <h3 *ngIf="entity">Create {{ entity.preset.name }}</h3>
+  <div class="columns" *ngIf="entity">
+    <div class="column">
+      <h3>Edit {{ entity.preset.name }}</h3>
+    </div>
+    <div class="column col-auto col-ml-auto">
+      <button
+        class="btn"
+        (click)="save()"
+        [ngClass]="{ loading: saving }"
+        [disabled]="formGroup.invalid || attributesFormGroup.invalid"
+      >
+        Save
+      </button>
+    </div>
+  </div>
   <!-- Form -->
   <div [formGroup]="formGroup" *ngIf="entity">
     <div class="columns">
@@ -13,30 +27,97 @@
       <!-- Standard form inputs -->
       <div class="column">
         <!-- Name -->
-        <div class="form-group">
+        <div
+          class="form-group"
+          [ngClass]="{
+            'has-error': name.invalid && (name.touched || name.dirty),
+            'has-success': name.valid && (name.touched || name.dirty)
+          }"
+        >
           <label for="name" class="form-lable">Name</label>
           <input
             type="text"
             name="name"
             id="name"
+            formControlName="name"
             class="form-input"
             placeholder="Name"
           />
+          <p
+            class="form-input-hint"
+            *ngIf="
+              name.invalid &&
+              (name.touched || name.dirty) &&
+              name.errors.required
+            "
+          >
+            A name is required
+          </p>
+          <p
+            class="form-input-hint"
+            *ngIf="
+              name.invalid &&
+              (name.touched || name.dirty) &&
+              name.errors.minlength
+            "
+          >
+            The name can't be shorter than 2 characters
+          </p>
+          <p
+            class="form-input-hint"
+            *ngIf="
+              name.invalid &&
+              (name.touched || name.dirty) &&
+              name.errors.maxlength
+            "
+          >
+            The name can't be longer than 30 characters
+          </p>
         </div>
 
-        <div class="form-group">
+        <div
+          class="form-group"
+          [ngClass]="{
+            'has-error':
+              description.invalid && (description.touched || description.dirty),
+            'has-success':
+              description.valid && (description.touched || description.dirty)
+          }"
+        >
           <label for="description" class="form-label">Description</label>
           <textarea
             name="description"
             id="description"
+            formControlName="description"
             rows="5"
             class="form-input"
             placeholder="Description"
           ></textarea>
+          <p
+            class="form-input-hint"
+            *ngIf="
+              description.invalid &&
+              (description.touched || description.dirty) &&
+              description.errors.minlength
+            "
+          >
+            The description can't be shorter than 3 characters
+          </p>
+          <p
+            class="form-input-hint"
+            *ngIf="
+              description.invalid &&
+              (description.touched || description.dirty) &&
+              description.errors.required
+            "
+          >
+            The description is required
+          </p>
         </div>
       </div>
     </div>
 
+    <h3 class="mt-2">Custom Attributes</h3>
     <dd-dynamic-attribute-form
       [formGroup]="attributesFormGroup"
       [attributes]="entity.preset.attributes"

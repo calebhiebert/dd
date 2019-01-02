@@ -28,6 +28,7 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { EntityTypeSelectorComponent } from './entity-form/entity-type-selector/entity-type-selector.component';
 import { EntityCreationFormComponent } from './entity-form/entity-creation-form/entity-creation-form.component';
+import { ExperienceTableEditorComponent } from './campaign-settings/experience-table-editor/experience-table-editor.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { EntityCreationFormComponent } from './entity-form/entity-creation-form/
     HomeComponent,
     EntityTypeSelectorComponent,
     EntityCreationFormComponent,
+    ExperienceTableEditorComponent,
   ],
   imports: [
     BrowserModule,

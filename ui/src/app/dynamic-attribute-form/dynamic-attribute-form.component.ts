@@ -18,13 +18,12 @@ export class DynamicAttributeFormComponent implements OnInit {
   @Input()
   public attributes: EntityAttribute[];
 
+  @Input()
   public formGroup: FormGroup;
 
   constructor() {}
 
   ngOnInit() {
-    this.formGroup = new FormGroup({});
-
     for (const attr of this.attributes) {
       const validators: ValidatorFn[] = [];
 
@@ -50,15 +49,22 @@ export class DynamicAttributeFormComponent implements OnInit {
         validators.push(Validators.required);
       }
 
-      this.formGroup.addControl(
-        attr.name,
-        new FormControl(attr.defaultValue, validators)
-      );
+      if (attr.type === AttributeType.ENUM && attr.defaultValue === undefined) {
+        this.formGroup.addControl(
+          attr.name,
+          new FormControl(attr.options[0], validators)
+        );
+      } else {
+        this.formGroup.addControl(
+          attr.name,
+          new FormControl(attr.defaultValue, validators)
+        );
+      }
     }
 
-    this.formGroup.valueChanges.subscribe((v) => {
-      console.log(v, this.formGroup);
-    });
+    // this.formGroup.valueChanges.subscribe((v) => {
+    //   console.log(v, this.formGroup);
+    // });
   }
 
   public constructAttributes(): Attribute[] {

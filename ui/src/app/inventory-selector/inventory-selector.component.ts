@@ -68,10 +68,12 @@ export class InventorySelectorComponent implements OnInit, AfterContentInit {
 
   public async addItem() {
     this.itemSelector.open().then((item: Item) => {
-      this.selectedItems.push({
-        quantity: 1,
-        item: item,
-      });
+      if (item !== undefined) {
+        this.selectedItems.push({
+          quantity: 1,
+          item: item,
+        });
+      }
     });
   }
 

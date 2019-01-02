@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Entity } from 'src/app/entity';
 import { EntityService } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
+import { Attribute } from 'src/app/attributes';
 
 @Component({
   selector: 'dd-entity-creation-form',
@@ -12,6 +13,8 @@ import { CampaignService } from 'src/app/campaign.service';
 })
 export class EntityCreationFormComponent implements OnInit {
   public loading = false;
+
+  public saving = false;
 
   public formGroup: FormGroup;
 
@@ -46,6 +49,53 @@ export class EntityCreationFormComponent implements OnInit {
       ]),
       imageId: new FormControl('uncertainty'),
     });
+
+    this.formGroup.valueChanges.subscribe((v) => {
+      console.log(v, this.formGroup);
+    });
+  }
+
+  public async save() {
+    console.log(this.attributesFormGroup);
+
+    this.saving = true;
+    this.formGroup.disable();
+    this.attributesFormGroup.disable();
+
+    try {
+      const res = await this.entityService.saveEntity(
+        this.campaignService.campaign.id,
+        this.constructEntity()
+      );
+    } catch (err) {
+      console.log('SAVE ERR', err);
+    }
+
+    this.formGroup.enable();
+    this.attributesFormGroup.enable();
+    this.saving = false;
+  }
+
+  private constructEntity(): Entity {
+    const ent: Entity = {
+      ...this.formGroup.value,
+    };
+
+    const attributes: Attribute[] = [];
+
+    for (let [k, v] of Object.entries(this.attributesFormGroup.value)) {
+      const preset = this.entity.preset.attributes.find((p) => p.name === k);
+
+      attributes.push({
+        name: preset.name,
+        data: v as string,
+        type: preset.type,
+      });
+    }
+
+    ent.attributes = attributes;
+
+    return ent;
   }
 
   private async loadEntity(id: string) {
@@ -58,10 +108,19 @@ export class EntityCreationFormComponent implements OnInit {
       );
 
       this.entity = ent;
+      this.formGroup.get('id').setValue(ent.id);
     } catch (err) {
       console.log('LOAD ERR', err);
     }
 
     this.loading = false;
+  }
+
+  public get name() {
+    return this.formGroup.get('name');
+  }
+
+  public get description() {
+    return this.formGroup.get('description');
   }
 }

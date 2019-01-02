@@ -68,8 +68,9 @@ export class EntityService {
         description: c.paragraph({ sentences: 1 }),
         imageId: 'uncertainty',
         type: c.integer({ min: 0, max: 1 }) as AttributeType,
+        defaultValue: c.integer({ min: 0, max: 249 }).toString(),
         required: c.bool(),
-        min: c.integer({ min: -20, max: 250 }),
+        min: c.integer({ min: -20, max: 20 }),
         max: c.integer({ min: 250, max: 60000 }),
       });
     }
@@ -119,7 +120,7 @@ export class EntityService {
     return '1';
   }
 
-  public async editEntity(campaignId: string, entity: Entity): Promise<Entity> {
+  public async saveEntity(campaignId: string, entity: Entity): Promise<Entity> {
     await simulateDelay(250);
     return entity;
   }
