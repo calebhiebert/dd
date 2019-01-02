@@ -9,10 +9,9 @@ import { Chance } from 'chance';
 export class ItemService {
   constructor() {}
 
-  public async createItem(item: Item): Promise<Item> {
+  public async createItem(): Promise<string> {
     await simulateDelay(250);
-    item.id = '1';
-    return item;
+    return '1';
   }
 
   public async saveItem(item: Item): Promise<Item> {

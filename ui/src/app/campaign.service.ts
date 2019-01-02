@@ -32,10 +32,6 @@ export class CampaignService {
    * Returns a list of campaigns the user can access
    */
   public async getCampaigns(): Promise<Campaign[]> {
-    const campaigns: Campaign[] = [];
-
-    await simulateDelay(250);
-
     return Promise.all(
       ['1', '23', '54'].map((id) => {
         return this.getCampaign(id);

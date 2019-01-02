@@ -12,7 +12,16 @@
           </figure>
         </div>
         <div class="column">
-          <h4 class="mb-1">{{ c.name }}</h4>
+          <div class="columns">
+            <div class="column">
+              <h4 class="mb-1">{{ c.name }}</h4>
+            </div>
+            <div class="column col-auto col-ml-auto">
+              <span class="text-gray text-italic">
+                {{ c.users.length }} Players
+              </span>
+            </div>
+          </div>
           <span class="text-gray">{{ c.description | truncate: 150 }}</span>
         </div>
       </div>

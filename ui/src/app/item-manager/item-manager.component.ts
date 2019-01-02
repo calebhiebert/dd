@@ -50,8 +50,8 @@ export class ItemManagerComponent implements OnInit {
         attributes: [],
       };
 
-      const result = await this.itemService.createItem(item);
-      this.router.navigate([result.id, 'edit'], { relativeTo: this.route });
+      const id = await this.itemService.createItem();
+      this.router.navigate([id, 'edit'], { relativeTo: this.route });
     } catch (err) {
       console.log('ADD ERR', err);
     }
@@ -60,13 +60,7 @@ export class ItemManagerComponent implements OnInit {
   }
 
   public selectItem(item: Item) {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'items',
-      item.id,
-      'edit',
-    ]);
+    this.router.navigate([item.id, 'edit'], { relativeTo: this.route });
   }
 
   public get items() {

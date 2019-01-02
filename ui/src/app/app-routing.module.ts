@@ -25,19 +25,10 @@ const routes: Routes = [
   },
   { path: 'home', component: HomeComponent, canActivate: [LoggedInGuard] },
   {
-    path: 'campaigns/:id',
+    path: 'campaign/manage/:id',
     component: CampaignComponent,
     canActivate: [LoggedInGuard],
     children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'landing',
-      },
-      {
-        path: 'landing',
-        component: CampaignLandingComponent,
-      },
       {
         path: 'items',
         component: ItemManagerComponent,
@@ -51,8 +42,24 @@ const routes: Routes = [
         component: ItemEditComponent,
       },
       {
-        path: 'entityp/:ent_id/edit',
+        path: 'entities/:ent_id/edit',
         component: EntityFormComponent,
+      },
+    ],
+  },
+  {
+    path: 'campaigns/:id',
+    component: CampaignComponent,
+    canActivate: [LoggedInGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'landing',
+      },
+      {
+        path: 'landing',
+        component: CampaignLandingComponent,
       },
       {
         path: 'entities/:ent_id/edit',

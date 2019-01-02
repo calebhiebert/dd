@@ -22,14 +22,14 @@
           {{ campaign.name }}
         </a>
         <a
-          [routerLink]="['campaigns', campaign.id, 'items']"
+          [routerLink]="['campaign', 'manage', campaign.id, 'items']"
           class="btn btn-link"
           >Items</a
         >
         <a href="#" class="btn btn-link">Places</a>
         <a href="#" class="btn btn-link">Quests</a>
         <a href="#" class="btn btn-link">Sessions</a>
-        <a [routerLink]="['campaigns', campaign.id, 'settings']"
+        <a [routerLink]="['campaign', 'manage', campaign.id, 'settings']"
           ><i class="icon icon-menu"></i
         ></a>
       </section>
