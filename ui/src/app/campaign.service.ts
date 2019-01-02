@@ -56,6 +56,7 @@ export class CampaignService {
       sessions: [],
       entityPresets: [],
       users: [],
+      entities: [],
       experienceTable: [
         300,
         900,
@@ -79,6 +80,12 @@ export class CampaignService {
     campaign.entityPresets = await Promise.all(
       ['1', '2', '3'].map((entId) => {
         return this.entityService.getEntityPreset(campaign.id, entId);
+      })
+    );
+
+    campaign.entities = await Promise.all(
+      ['1', '2', '3', '2', '2', '2', '2', '2'].map((entId) => {
+        return this.entityService.getEntity(campaign.id, entId);
       })
     );
 

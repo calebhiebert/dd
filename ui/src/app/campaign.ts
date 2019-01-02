@@ -1,7 +1,7 @@
 import { Session } from './session';
 import { Item } from './item';
 import { User } from './user';
-import { EntityPreset } from './entity';
+import { EntityPreset, Entity } from './entity';
 
 export interface Campaign {
   id: string;
@@ -14,6 +14,7 @@ export interface Campaign {
   items: Item[];
   sessions: Session[];
   entityPresets: EntityPreset[];
+  entities: Entity[];
   experienceTable: number[];
 }
 

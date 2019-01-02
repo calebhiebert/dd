@@ -60,6 +60,7 @@ export interface Health {
 
 export interface Entity {
   id: string;
+  user: User;
   name: string;
   description: string;
   imageId?: string;

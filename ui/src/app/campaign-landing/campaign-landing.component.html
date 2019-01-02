@@ -15,12 +15,13 @@
     </div>
   </div>
 
+  <!-- Header -->
   <div class="columns">
     <div class="column col-auto">
       <h1>{{ campaign.name }}</h1>
     </div>
     <div class="column col-auto col-ml-auto">
-      <div class="dropdown">
+      <div class="dropdown dropdown-right">
         <button class="btn btn-link dropdown-toggle">
           Menu <i class="icon icon-caret"></i>
         </button>
@@ -32,6 +33,45 @@
             </a>
           </li>
         </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="columns">
+    <!-- Description -->
+    <div class="column col-9 col-xl-8 col-md-12">
+      <p>{{ campaign.description }}</p>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="column col-3 col-md-12 col-xl-4 col-ml-auto">
+      <!-- Members Listing -->
+      <div class="card">
+        <div class="card-header"><h5>Members</h5></div>
+
+        <div class="card-body">
+          <div class="tile tile-centered mb-2" *ngFor="let u of campaign.users">
+            <div class="tile-icon">
+              <figure class="avatar"><img [src]="u.user.imageURL" /></figure>
+            </div>
+            <div class="tile-content">
+              <div class="tile-title">{{ u.user.name }}</div>
+              <div class="d-flex">
+                <span
+                  class="chip hoverable-chip"
+                  (click)="selectEntity(e)"
+                  *ngFor="let e of userEntities(u.user.id)"
+                >
+                  <img
+                    [src]="imageSource(e.imageId)"
+                    class="avatar avatar-sm"
+                  />
+                  {{ e.name }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

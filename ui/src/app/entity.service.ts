@@ -98,6 +98,11 @@ export class EntityService {
       attributes: [],
       inventory: { items: [] },
       xp: c.integer({ min: 0, max: 80000 }),
+      user: {
+        id: entId,
+        name: c.word(),
+        imageURL: `https://api.adorable.io/avatars/285/${c.word()}`,
+      },
       health: {
         mode: HealthMode.NORMAL,
         normal: {
