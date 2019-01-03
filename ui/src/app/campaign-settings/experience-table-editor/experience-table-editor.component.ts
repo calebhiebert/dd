@@ -8,6 +8,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
+import { numberValidator } from 'src/app/dynamic-attribute-form/dynamic-attribute-form.component';
 
 @Component({
   selector: 'dd-experience-table-editor',
@@ -39,18 +40,12 @@ export class ExperienceTableEditorComponent implements OnInit {
       rows: this.experienceTable,
     });
 
-    this.formGroup.valueChanges.subscribe(
-      (v) => (this.experienceTable = v.rows)
-    );
+    this.formGroup.valueChanges.subscribe((v) => (this.experienceTable = v.rows));
   }
 
   public addRow() {
     this.formArray.push(
-      new FormControl(0, [
-        Validators.required,
-        Validators.min(0),
-        Validators.max(2147483647),
-      ])
+      new FormControl(0, [Validators.required, Validators.min(0), Validators.max(2147483647), numberValidator]),
     );
   }
 
@@ -71,9 +66,7 @@ export class ExperienceTableEditorComponent implements OnInit {
   }
 }
 
-export const xpTest: ValidatorFn = (
-  control: FormArray
-): ValidationErrors | null => {
+export const xpTest: ValidatorFn = (control: FormArray): ValidationErrors | null => {
   let lastXP = 0;
   const errObj = {};
 

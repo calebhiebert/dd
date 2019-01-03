@@ -5,6 +5,7 @@ import { Entity } from 'src/app/entity';
 import { EntityService } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { Attribute } from 'src/app/attributes';
+import { numberValidator } from 'src/app/dynamic-attribute-form/dynamic-attribute-form.component';
 
 @Component({
   selector: 'dd-entity-creation-form',
@@ -40,7 +41,7 @@ export class EntityCreationFormComponent implements OnInit {
       id: new FormControl(null, Validators.required),
       name: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
       description: new FormControl(null, [Validators.required, Validators.minLength(3)]),
-      xp: new FormControl(null, [Validators.required, Validators.min(0), Validators.max(2147483647)]),
+      xp: new FormControl(null, [Validators.required, numberValidator, Validators.min(0), Validators.max(2147483647)]),
       imageId: new FormControl('uncertainty'),
     });
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { EntityAttribute } from '../entity';
-import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Attribute, AttributeType } from '../attributes';
 
 @Component({
@@ -37,6 +37,8 @@ export class DynamicAttributeFormComponent implements OnInit {
         if (attr.max !== undefined && attr.max !== null) {
           validators.push(Validators.max(attr.max));
         }
+
+        validators.push(numberValidator);
       }
 
       if (attr.required) {
@@ -73,3 +75,15 @@ export class DynamicAttributeFormComponent implements OnInit {
     return this.formGroup.get(name);
   }
 }
+
+export const numberValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  if (control.value !== null && control.value !== undefined && control.value !== '') {
+    try {
+      parseFloat(control.value);
+    } catch (err) {
+      return {
+        number: true,
+      };
+    }
+  }
+};

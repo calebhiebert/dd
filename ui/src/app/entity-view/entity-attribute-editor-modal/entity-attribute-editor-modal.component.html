@@ -12,7 +12,6 @@
           'has-success': control.valid && (control.dirty || control.touched)
         }"
       >
-        <label class="form-label"> {{ attribute.name }} </label>
         <div [ngClass]="{ 'has-icon-left': attribute.imageId }" [ngSwitch]="attribute.type">
           <!-- Text Input -->
           <input

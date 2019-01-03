@@ -7,6 +7,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
 import { Item } from '../item';
 import { CampaignService } from '../campaign.service';
+import { numberValidator } from '../dynamic-attribute-form/dynamic-attribute-form.component';
 
 @Component({
   selector: 'dd-inventory-selector',
@@ -37,7 +38,7 @@ export class InventorySelectorComponent implements OnInit, AfterContentInit {
 
   ngOnInit() {
     this.itemEditorGroup = new FormGroup({
-      quantity: new FormControl(1, Validators.required),
+      quantity: new FormControl(1, [Validators.required, numberValidator]),
     });
 
     this.selectedItems = [];

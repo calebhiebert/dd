@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormControlDirective } from '@angular/forms';
+import { numberValidator } from '../dynamic-attribute-form/dynamic-attribute-form.component';
 
 @Component({
   selector: 'dd-entity-attribute-row-editor',
@@ -55,8 +56,8 @@ export class EntityAttributeRowEditorComponent implements OnInit {
 
       this.formGroup.addControl('required', new FormControl(true, [Validators.required]));
 
-      this.formGroup.addControl('min', new FormControl());
-      this.formGroup.addControl('max', new FormControl());
+      this.formGroup.addControl('min', new FormControl(null, [numberValidator]));
+      this.formGroup.addControl('max', new FormControl(null, [numberValidator]));
 
       this.formGroup.addControl('options', new FormControl(null, [Validators.pattern(/([A-Za-z0-9._]+)/gi)]));
     }

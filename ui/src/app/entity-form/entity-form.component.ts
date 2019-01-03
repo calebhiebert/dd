@@ -5,6 +5,7 @@ import { Campaign } from '../campaign';
 import { CampaignService } from '../campaign.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
+import { numberValidator } from '../dynamic-attribute-form/dynamic-attribute-form.component';
 
 @Component({
   selector: 'dd-entity-form',
@@ -25,25 +26,18 @@ export class EntityFormComponent implements OnInit {
     private entityService: EntityService,
     private campaignService: CampaignService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
       id: new FormControl(),
-      name: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(30),
-      ]),
-      description: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
+      name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+      description: new FormControl(null, [Validators.required, Validators.minLength(3)]),
       health: new FormGroup({
         mode: new FormControl('0'),
-        max: new FormControl(null, [Validators.min(0)]),
-        current: new FormControl(null, [Validators.min(0)]),
+        max: new FormControl(null, [Validators.min(0), numberValidator]),
+        current: new FormControl(null, [Validators.min(0), numberValidator]),
       }),
       playerCreatable: new FormControl(false),
       imageId: new FormControl('shrug', Validators.required),
@@ -62,10 +56,7 @@ export class EntityFormComponent implements OnInit {
     this.formGroup.disable();
 
     try {
-      const preset = await this.entityService.getEntityPreset(
-        this.campaignService.campaign.id,
-        id
-      );
+      const preset = await this.entityService.getEntityPreset(this.campaignService.campaign.id, id);
 
       console.log(preset);
 
@@ -101,7 +92,7 @@ export class EntityFormComponent implements OnInit {
       try {
         const preset = await this.entityService.saveEntityPreset(
           this.campaignService.campaign.id,
-          this.formGroup.value
+          this.formGroup.value,
         );
 
         this.router.navigate(['../../..', 'settings'], {
@@ -117,18 +108,11 @@ export class EntityFormComponent implements OnInit {
   }
 
   public async delete() {
-    if (
-      await this.confirmModal.getConfirmation(
-        'Are you sure you want to delete this entity? This cannot be undone'
-      )
-    ) {
+    if (await this.confirmModal.getConfirmation('Are you sure you want to delete this entity? This cannot be undone')) {
       this.deleting = true;
       this.formGroup.disable();
       try {
-        await this.entityService.deleteEntityPreset(
-          this.campaignService.campaign.id,
-          '1'
-        );
+        await this.entityService.deleteEntityPreset(this.campaignService.campaign.id, '1');
         this.router.navigate(['../../..', 'settings'], {
           relativeTo: this.route,
         });

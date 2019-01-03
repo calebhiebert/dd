@@ -52,7 +52,13 @@ export class EntityViewComponent implements OnInit {
     const attrValue = await this.attributeModal.editAttribute({ ...attr.pattr }, attr.attr.data);
 
     if (attrValue !== null && attrValue !== undefined) {
-      // this.entity.name = attrValue;
+      for (const attribute of this.entity.attributes) {
+        if (attribute.name === attr.attr.name) {
+          attribute.data = attrValue;
+          break;
+        }
+      }
+
       this.updateEntity();
     }
   }

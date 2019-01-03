@@ -3,6 +3,7 @@ import { EntityAttribute } from 'src/app/entity';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl, Validators, ValidatorFn } from '@angular/forms';
 import { AttributeType } from 'src/app/attributes';
+import { numberValidator } from 'src/app/dynamic-attribute-form/dynamic-attribute-form.component';
 
 @Component({
   selector: 'dd-entity-attribute-editor-modal',
@@ -58,6 +59,8 @@ export class EntityAttributeEditorModalComponent implements OnInit {
       if (this.attribute.max !== undefined && this.attribute.max !== null) {
         validators.push(Validators.max(this.attribute.max));
       }
+
+      validators.push(numberValidator);
     }
 
     if (this.attribute.required) {
