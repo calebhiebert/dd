@@ -19,6 +19,22 @@
   flex-direction: column-reverse;
 }
 
+.mt-auto {
+  margin-top: auto;
+}
+
+.justify-end {
+  justify-content: end;
+}
+
+.align-end {
+  align-content: end;
+}
+
+.align-items-end {
+  align-items: end;
+}
+
 $hover-scale: 1.005;
 
 .hoverable {

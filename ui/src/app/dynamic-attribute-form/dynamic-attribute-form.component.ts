@@ -1,12 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { EntityAttribute } from '../entity';
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  ValidatorFn,
-  AbstractControl,
-} from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Attribute, AttributeType } from '../attributes';
 
 @Component({
@@ -50,15 +44,9 @@ export class DynamicAttributeFormComponent implements OnInit {
       }
 
       if (attr.type === AttributeType.ENUM && attr.defaultValue === undefined) {
-        this.formGroup.addControl(
-          attr.name,
-          new FormControl(attr.options[0], validators)
-        );
+        this.formGroup.addControl(attr.name, new FormControl(attr.options[0], validators));
       } else {
-        this.formGroup.addControl(
-          attr.name,
-          new FormControl(attr.defaultValue, validators)
-        );
+        this.formGroup.addControl(attr.name, new FormControl(attr.defaultValue, validators));
       }
     }
 
@@ -70,7 +58,7 @@ export class DynamicAttributeFormComponent implements OnInit {
   public constructAttributes(): Attribute[] {
     const attributes: Attribute[] = [];
 
-    for (let attr of this.attributes) {
+    for (const attr of this.attributes) {
       attributes.push({
         name: attr.name,
         type: attr.type,

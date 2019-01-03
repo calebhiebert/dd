@@ -1,0 +1,22 @@
+<div class="loading loading-lg" *ngIf="loading"></div>
+
+<dd-entity-attribute-editor-modal #attributemodal></dd-entity-attribute-editor-modal>
+
+<!-- Background container -->
+<div class="player-bg d-flex" *ngIf="entity">
+  <div id="head-container">
+    <div class="container grid-xl">
+      <div class="columns text-light">
+        <div class="column text-light mb-1">
+          <h3 class="mb-0 text-bold c-hand" (click)="editName()">{{ entity.name }}</h3>
+          <span class="text-italic">{{ entity.preset.name }}</span>
+        </div>
+        <div class="column d-flex justify-end align-items-end col-ml-auto">
+          <span>
+            <span class="h5">LV. </span> <span class="h3 text-bold">{{ level }}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

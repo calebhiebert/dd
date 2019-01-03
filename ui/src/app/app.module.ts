@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { ItemViewListComponent } from './item-view-list/item-view-list.component';
 import { ItemFormComponent } from './item-form/item-form.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AttributeEditorComponent } from './attribute-editor/attribute-editor.component';
 import { NavComponent } from './nav/nav.component';
 import { ItemManagerComponent } from './item-manager/item-manager.component';
@@ -30,6 +30,8 @@ import { EntityTypeSelectorComponent } from './entity-form/entity-type-selector/
 import { EntityCreationFormComponent } from './entity-form/entity-creation-form/entity-creation-form.component';
 import { ExperienceTableEditorComponent } from './campaign-settings/experience-table-editor/experience-table-editor.component';
 import { QuestManagerComponent } from './quest-manager/quest-manager.component';
+import { EntityViewComponent } from './entity-view/entity-view.component';
+import { EntityAttributeEditorModalComponent } from './entity-view/entity-attribute-editor-modal/entity-attribute-editor-modal.component';
 
 @NgModule({
   declarations: [
@@ -59,13 +61,10 @@ import { QuestManagerComponent } from './quest-manager/quest-manager.component';
     EntityCreationFormComponent,
     ExperienceTableEditorComponent,
     QuestManagerComponent,
+    EntityViewComponent,
+    EntityAttributeEditorModalComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    TruncateModule,
-  ],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, FormsModule, TruncateModule],
   providers: [],
   bootstrap: [AppComponent],
 })

@@ -11,10 +11,7 @@ export class CampaignService {
   public campaign: Campaign = null;
   public loadingCampaign = false;
 
-  constructor(
-    private itemService: ItemService,
-    private entityService: EntityService
-  ) {}
+  constructor(private itemService: ItemService, private entityService: EntityService) {}
 
   public async setSelection(campaignId: string) {
     this.campaign = null;
@@ -35,7 +32,7 @@ export class CampaignService {
     return Promise.all(
       ['1', '23', '54'].map((id) => {
         return this.getCampaign(id);
-      })
+      }),
     );
   }
 
@@ -57,36 +54,25 @@ export class CampaignService {
       entityPresets: [],
       users: [],
       entities: [],
-      experienceTable: [
-        300,
-        900,
-        2700,
-        6500,
-        14000,
-        23000,
-        34000,
-        48000,
-        64000,
-        85000,
-      ],
+      experienceTable: [300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000],
     };
 
     campaign.items = await Promise.all(
       ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].map((itemId) => {
         return this.itemService.getItem(itemId);
-      })
+      }),
     );
 
     campaign.entityPresets = await Promise.all(
       ['1', '2', '3'].map((entId) => {
         return this.entityService.getEntityPreset(campaign.id, entId);
-      })
+      }),
     );
 
     campaign.entities = await Promise.all(
       ['1', '2', '3', '2', '2', '2', '2', '2'].map((entId) => {
         return this.entityService.getEntity(campaign.id, entId);
-      })
+      }),
     );
 
     for (let i = 0; i < 7; i++) {
@@ -108,6 +94,28 @@ export class CampaignService {
     await simulateDelay(250);
 
     return { ...campaign };
+  }
+
+  public calculateLevel(xp: number): number {
+    if (!this.campaign) {
+      throw new Error('No campaign present');
+    }
+
+    const xpTable = this.campaign.experienceTable;
+
+    let level = 1;
+
+    for (let i = 0; i < xpTable.length; i++) {
+      const xpRequired = xpTable[i];
+
+      if (xp >= xpRequired) {
+        level++;
+      } else {
+        break;
+      }
+    }
+
+    return level;
   }
 }
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CampaignService } from '../campaign.service';
 import { Entity } from '../entity';
+import { Route, Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'dd-campaign-landing',
@@ -8,7 +9,7 @@ import { Entity } from '../entity';
   styleUrls: ['./campaign-landing.component.scss'],
 })
 export class CampaignLandingComponent implements OnInit {
-  constructor(private campaignService: CampaignService) {}
+  constructor(private campaignService: CampaignService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit() {}
 
@@ -17,7 +18,7 @@ export class CampaignLandingComponent implements OnInit {
   }
 
   public selectEntity(entity: Entity) {
-    console.log(entity);
+    this.router.navigate(['..', 'entities', entity.id], { relativeTo: this.route });
   }
 
   public get campaign() {

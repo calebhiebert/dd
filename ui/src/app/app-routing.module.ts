@@ -14,6 +14,7 @@ import { LoginPageGuard } from './login-page.guard';
 import { EntityTypeSelectorComponent } from './entity-form/entity-type-selector/entity-type-selector.component';
 import { EntityCreationFormComponent } from './entity-form/entity-creation-form/entity-creation-form.component';
 import { QuestManagerComponent } from './quest-manager/quest-manager.component';
+import { EntityViewComponent } from './entity-view/entity-view.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -65,6 +66,10 @@ const routes: Routes = [
       {
         path: 'landing',
         component: CampaignLandingComponent,
+      },
+      {
+        path: 'entities/:ent_id',
+        component: EntityViewComponent,
       },
       {
         path: 'entities/:ent_id/edit',
