@@ -24,8 +24,4 @@ export class CampaignLandingComponent implements OnInit {
   public get campaign() {
     return this.campaignService.campaign;
   }
-
-  public imageSource(id: string): string {
-    return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${id}.png`;
-  }
 }

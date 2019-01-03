@@ -16,7 +16,7 @@ export class EntityTypeSelectorComponent implements OnInit {
     private campaignService: CampaignService,
     private router: Router,
     private route: ActivatedRoute,
-    private entityService: EntityService
+    private entityService: EntityService,
   ) {}
 
   ngOnInit() {}
@@ -25,10 +25,7 @@ export class EntityTypeSelectorComponent implements OnInit {
     this.creating = true;
 
     try {
-      const entId = await this.entityService.createEntity(
-        this.campaignService.campaign.id,
-        preset.id
-      );
+      const entId = await this.entityService.createEntity(this.campaignService.campaign.id, preset.id);
       this.router.navigate(['..', entId, 'edit'], { relativeTo: this.route });
     } catch (err) {
       console.log('CREATE ERR', err);
@@ -39,9 +36,5 @@ export class EntityTypeSelectorComponent implements OnInit {
 
   public get presets() {
     return this.campaignService.campaign.entityPresets;
-  }
-
-  public imageSource(id: string): string {
-    return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${id}.png`;
   }
 }

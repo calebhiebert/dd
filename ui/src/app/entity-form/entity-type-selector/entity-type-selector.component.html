@@ -3,16 +3,11 @@
   <div class="empty" *ngIf="presets.length === 0">
     <div class="empty-icon"><i class="icon icon-search icon-3x"></i></div>
     <p class="empty-title h5">There's nothing here!</p>
-    <p class="empty-subtitle">
-      This campaign has not defined any entity types! Please bug your DM for
-      this.
-    </p>
+    <p class="empty-subtitle">This campaign has not defined any entity types! Please bug your DM for this.</p>
   </div>
 
   <h3 class="mb-0">Please choose a type</h3>
-  <span class="text-gray mb-2">
-    These are the available types of entities the DM has allowed you to create
-  </span>
+  <span class="text-gray mb-2"> These are the available types of entities the DM has allowed you to create </span>
 
   <div class="spacer"></div>
 
@@ -24,14 +19,12 @@
   </div>
 
   <div *ngIf="!creating">
-    <div
-      class="card hoverable mb-2 p-2"
-      *ngFor="let e of presets"
-      (click)="selectEntityType(e)"
-    >
+    <div class="card hoverable mb-2 p-2" *ngFor="let e of presets" (click)="selectEntityType(e)">
       <div class="columns">
         <div class="column col-auto" *ngIf="e.imageId">
-          <figure class="avatar"><img [src]="imageSource(e.imageId)" /></figure>
+          <figure class="avatar">
+            <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}.png" />
+          </figure>
         </div>
         <div class="column">
           <h4>{{ e.name }}</h4>

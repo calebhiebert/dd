@@ -32,7 +32,7 @@ export class InventorySelectorComponent implements OnInit, AfterContentInit {
   constructor(
     private itemService: ItemService,
     private sanitizer: DomSanitizer,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
   ) {}
 
   ngOnInit() {
@@ -42,16 +42,14 @@ export class InventorySelectorComponent implements OnInit, AfterContentInit {
 
     this.selectedItems = [];
 
-    Promise.all(['3', '2', '3'].map((id) => this.itemService.getItem(id))).then(
-      (items) => {
-        items.forEach((i) => {
-          this.selectedItems.push({
-            quantity: 1,
-            item: i,
-          });
+    Promise.all(['3', '2', '3'].map((id) => this.itemService.getItem(id))).then((items) => {
+      items.forEach((i) => {
+        this.selectedItems.push({
+          quantity: 1,
+          item: i,
         });
-      }
-    );
+      });
+    });
 
     this.itemEditorGroup.valueChanges.subscribe((v) => {
       this.currentItem.quantity = v.quantity;
@@ -81,15 +79,9 @@ export class InventorySelectorComponent implements OnInit, AfterContentInit {
     const currentItem = this.currentItem;
     this.itemEditor.close(null);
 
-    if (
-      await this.confirmation.getConfirmation(
-        'Are you sure you want to remove this item?'
-      )
-    ) {
+    if (await this.confirmation.getConfirmation('Are you sure you want to remove this item?')) {
       console.log('removing item', this.currentItem);
-      this.selectedItems = this.selectedItems.filter(
-        (i) => i !== this.currentItem
-      );
+      this.selectedItems = this.selectedItems.filter((i) => i !== this.currentItem);
     } else {
       this.selectItem(currentItem);
     }
@@ -101,9 +93,7 @@ export class InventorySelectorComponent implements OnInit, AfterContentInit {
 
   public backgroundCSS(imageId: string) {
     return this.sanitizer.bypassSecurityTrustStyle(
-      `url("${this.imageSource(
-        imageId
-      )}"), linear-gradient(to top, black 0%, black 100%)`
+      `url("${this.imageSource(imageId)}"), linear-gradient(to top, black 0%, black 100%)`,
     );
   }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EntityPreset, HealthMode, Entity } from './entity';
+import { EntityPreset, HealthMode, Entity, AttributeClass } from './entity';
 import { AttributeType } from './attributes';
 import { Chance } from 'chance';
 
@@ -9,10 +9,7 @@ import { Chance } from 'chance';
 export class EntityService {
   constructor() {}
 
-  public async saveEntityPreset(
-    campaignId: string,
-    entityPreset: EntityPreset
-  ): Promise<EntityPreset> {
+  public async saveEntityPreset(campaignId: string, entityPreset: EntityPreset): Promise<EntityPreset> {
     await simulateDelay(250);
 
     entityPreset.id = '1';
@@ -25,10 +22,7 @@ export class EntityService {
     return '1';
   }
 
-  public async getEntityPreset(
-    campaignId: string,
-    entityPresetId: string
-  ): Promise<EntityPreset> {
+  public async getEntityPreset(campaignId: string, entityPresetId: string): Promise<EntityPreset> {
     await simulateDelay(250);
 
     const c = new Chance();
@@ -54,6 +48,7 @@ export class EntityService {
           type: AttributeType.ENUM,
           required: true,
           options: ['Barbarian', 'Aes Sedai', 'Construct'],
+          class: AttributeClass.MAJOR,
         },
       ],
       health: {
@@ -72,16 +67,14 @@ export class EntityService {
         required: c.bool(),
         min: c.integer({ min: -20, max: 20 }),
         max: c.integer({ min: 250, max: 60000 }),
+        class: c.integer({ min: 0, max: 3 }),
       });
     }
 
     return preset;
   }
 
-  public async deleteEntityPreset(
-    campaignId: string,
-    entityPresetId: string
-  ): Promise<void> {
+  public async deleteEntityPreset(campaignId: string, entityPresetId: string): Promise<void> {
     await simulateDelay(250);
   }
 
@@ -115,13 +108,18 @@ export class EntityService {
 
     ent.preset = await this.getEntityPreset(campaignId, '1');
 
+    for (const pattr of ent.preset.attributes) {
+      ent.attributes.push({
+        name: pattr.name,
+        type: pattr.type,
+        data: pattr.type === AttributeType.NUMBER ? c.integer({ min: 0, max: 50 }).toString() : c.word(),
+      });
+    }
+
     return ent;
   }
 
-  public async createEntity(
-    campaignId: string,
-    entityPresetId: string
-  ): Promise<string> {
+  public async createEntity(campaignId: string, entityPresetId: string): Promise<string> {
     await simulateDelay(250);
     return '1';
   }

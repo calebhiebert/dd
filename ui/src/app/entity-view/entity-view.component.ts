@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EntityService } from '../entity.service';
 import { CampaignService } from '../campaign.service';
-import { Entity } from '../entity';
+import { Entity, AttributeClass, EntityAttribute } from '../entity';
 import { EntityAttributeEditorModalComponent } from './entity-attribute-editor-modal/entity-attribute-editor-modal.component';
-import { AttributeType } from '../attributes';
+import { AttributeType, Attribute } from '../attributes';
 
 @Component({
   selector: 'dd-entity-view',
@@ -39,11 +39,22 @@ export class EntityViewComponent implements OnInit {
     try {
       const ent = await this.entityService.getEntity(this.campaignService.campaign.id, id);
       this.entity = ent;
+
+      console.log(this.entity);
     } catch (err) {
       console.log('LOAD ERR', err);
     }
 
     this.loading = false;
+  }
+
+  public async editAttribute(attr: { attr: Attribute; pattr: EntityAttribute }) {
+    const attrValue = await this.attributeModal.editAttribute({ ...attr.pattr }, attr.attr.data);
+
+    if (attrValue !== null && attrValue !== undefined) {
+      // this.entity.name = attrValue;
+      this.updateEntity();
+    }
   }
 
   public async editName() {
@@ -55,12 +66,33 @@ export class EntityViewComponent implements OnInit {
         required: true,
         min: 2,
         max: 30,
+        class: AttributeClass.NORMAL,
       },
       this.entity.name,
     );
 
-    if (attrValue !== null) {
+    if (attrValue !== null && attrValue !== undefined) {
       this.entity.name = attrValue;
+      this.updateEntity();
+    }
+  }
+
+  public async editXP() {
+    const attrValue = await this.attributeModal.editAttribute(
+      {
+        name: 'XP',
+        description: `Experience points that this ${this.entity.preset.name} has`,
+        type: AttributeType.NUMBER,
+        required: true,
+        min: 0,
+        max: 2147483647,
+        class: AttributeClass.NORMAL,
+      },
+      this.entity.xp.toString(),
+    );
+
+    if (attrValue !== null && attrValue !== undefined) {
+      this.entity.xp = parseInt(attrValue, 10);
       this.updateEntity();
     }
   }
@@ -77,7 +109,35 @@ export class EntityViewComponent implements OnInit {
     this.saving = false;
   }
 
+  private getEntityAttribute(name: string) {
+    return this.entity.preset.attributes.find((e) => e.name === name);
+  }
+
+  public get processedAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
+    return this.entity.attributes.map((a) => {
+      return {
+        attr: a,
+        pattr: this.getEntityAttribute(a.name),
+      };
+    });
+  }
+
+  public get majorAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
+    return this.entity.attributes
+      .map((a) => {
+        return {
+          attr: a,
+          pattr: this.getEntityAttribute(a.name),
+        };
+      })
+      .filter((a) => a.pattr && a.pattr.class === 0);
+  }
+
   public get level() {
     return this.campaignService.calculateLevel(this.entity.xp);
+  }
+
+  public get editable() {
+    return true;
   }
 }

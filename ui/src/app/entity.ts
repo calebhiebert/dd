@@ -2,12 +2,6 @@ import { User } from './user';
 import { Inventory } from './inventory';
 import { AttributeType, Attribute } from './attributes';
 
-export interface EntityType {
-  id: string;
-  user: User;
-  name: string;
-}
-
 export interface EntityAttribute {
   name: string;
   description?: string;
@@ -15,10 +9,18 @@ export interface EntityAttribute {
   defaultValue?: string;
   type: AttributeType;
   options?: string[];
+  class: AttributeClass;
 
   required: boolean;
   max?: number;
   min?: number;
+}
+
+export enum AttributeClass {
+  MAJOR,
+  NORMAL,
+  MINOR,
+  UNIMPORTANT,
 }
 
 export interface EntityPreset {

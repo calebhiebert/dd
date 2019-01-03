@@ -8,7 +8,7 @@
       <div class="columns">
         <div class="column col-auto" *ngIf="c.imageId">
           <figure class="avatar avatar-lg">
-            <img [src]="imageSource(c.imageId)" />
+            <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ c.imageId }}.png" />
           </figure>
         </div>
         <div class="column">
@@ -17,9 +17,7 @@
               <h4 class="mb-1">{{ c.name }}</h4>
             </div>
             <div class="column col-auto col-ml-auto">
-              <span class="text-gray text-italic">
-                {{ c.users.length }} Players
-              </span>
+              <span class="text-gray text-italic"> {{ c.users.length }} Players </span>
             </div>
           </div>
           <span class="text-gray">{{ c.description | truncate: 150 }}</span>

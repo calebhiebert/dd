@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { EntityAttribute, EntityPreset } from '../entity';
-import { AttributeType } from '../attributes';
 import { CampaignService } from '../campaign.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EntityService } from '../entity.service';
@@ -21,7 +20,7 @@ export class CampaignSettingsComponent implements OnInit {
     private campaignService: CampaignService,
     private entityService: EntityService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {}
@@ -63,9 +62,5 @@ export class CampaignSettingsComponent implements OnInit {
 
   public get campaign() {
     return this.campaignService.campaign;
-  }
-
-  public imageSource(id: string): string {
-    return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${id}.png`;
   }
 }

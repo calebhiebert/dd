@@ -72,8 +72,4 @@ export class DynamicAttributeFormComponent implements OnInit {
   public control(name: string): AbstractControl {
     return this.formGroup.get(name);
   }
-
-  public imageSource(id: string): string {
-    return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${id}.png`;
-  }
 }

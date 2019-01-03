@@ -1,6 +1,8 @@
 <div class="columns hoverable p-1">
   <div class="column col-auto">
-    <figure class="avatar avatar-lg"><img [src]="imageURL" /></figure>
+    <figure class="avatar avatar-lg">
+      <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ image.id }}.png" />
+    </figure>
   </div>
   <div class="column d-flex flex-col">
     <h5 class="mb-0">{{ item.name }}</h5>

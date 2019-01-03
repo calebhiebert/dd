@@ -12,10 +12,7 @@ export class CampaignListComponent implements OnInit {
   public loading = false;
   public campaigns: Campaign[] = null;
 
-  constructor(
-    private campaignService: CampaignService,
-    private router: Router
-  ) {}
+  constructor(private campaignService: CampaignService, private router: Router) {}
 
   ngOnInit() {
     this.loadCampaigns();
@@ -36,9 +33,5 @@ export class CampaignListComponent implements OnInit {
     }
 
     this.loading = false;
-  }
-
-  public imageSource(id: string): string {
-    return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${id}.png`;
   }
 }
