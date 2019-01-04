@@ -5,7 +5,6 @@ import (
 	"dd-api/rpc"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -14,6 +13,7 @@ import (
 	"github.com/twitchtv/twirp"
 )
 
+// Auth0Response is the response returned when asking auth0 for user info
 type Auth0Response struct {
 	EmailVerified bool      `json:"email_verified"`
 	Email         string    `json:"email"`
@@ -66,8 +66,6 @@ func (d *DD) Auth(ctx context.Context, auth *dd.AuthRequest) (*dd.AuthResponse, 
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(authResponse)
 
 	return &dd.AuthResponse{
 		Id:       authResponse.Sub,

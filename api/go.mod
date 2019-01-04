@@ -2,6 +2,7 @@ module dd-api
 
 require (
 	github.com/golang/protobuf v1.2.0
+	github.com/matoous/go-nanoid v0.0.0-20181114085210-eab626deece6
 	github.com/pkg/errors v0.8.0 // indirect
 	github.com/twitchtv/twirp v5.5.1+incompatible
 	go.larrymyers.com/protoc-gen-twirp_typescript v0.0.0-20181217144457-12a739755090 // indirect

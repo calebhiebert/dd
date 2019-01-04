@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   auth0Domain: 'panch-dd.auth0.com',
   auth0ClientId: '9vKGU44oDoiGxliIyFL7hjWQQSdmvWEz',
+  rpcURL: 'http://localhost:8080',
 };
 
 /*

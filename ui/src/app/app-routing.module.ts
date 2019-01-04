@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CampaignComponent } from './campaign.component';
-import { ItemManagerComponent } from './item-manager/item-manager.component';
-import { CampaignListComponent } from './campaign-list/campaign-list.component';
-import { CampaignLandingComponent } from './campaign-landing/campaign-landing.component';
-import { ItemEditComponent } from './item-edit/item-edit.component';
-import { CampaignSettingsComponent } from './campaign-settings/campaign-settings.component';
-import { EntityFormComponent } from './entity-form/entity-form.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { LoggedInGuard } from './logged-in.guard';
 import { LoginPageGuard } from './login-page.guard';
-import { EntityTypeSelectorComponent } from './entity-form/entity-type-selector/entity-type-selector.component';
-import { EntityCreationFormComponent } from './entity-form/entity-creation-form/entity-creation-form.component';
-import { QuestManagerComponent } from './quest-manager/quest-manager.component';
-import { EntityViewComponent } from './entity-view/entity-view.component';
+import { EntityFormComponent } from './entity/entity-form/entity-form.component';
+import { EntityViewComponent } from './entity/entity-view/entity-view.component';
+import { EntityCreationFormComponent } from './entity/entity-form/entity-creation-form/entity-creation-form.component';
+import { EntityTypeSelectorComponent } from './entity/entity-form/entity-type-selector/entity-type-selector.component';
+import { CampaignListComponent } from './campaign/campaign-list/campaign-list.component';
+import { ItemManagerComponent } from './items/item-manager/item-manager.component';
+import { CampaignSettingsComponent } from './campaign/campaign-settings/campaign-settings.component';
+import { QuestManagerComponent } from './quest/quest-manager/quest-manager.component';
+import { ItemEditComponent } from './items/item-edit/item-edit.component';
+import { CampaignLandingComponent } from './campaign/campaign-landing/campaign-landing.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },

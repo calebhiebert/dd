@@ -1,5 +1,7 @@
 github.com/golang/protobuf v1.2.0 h1:P3YflyNX/ehuJFLhxviNdFxQPkGK5cDcApsge1SqnvM=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
+github.com/matoous/go-nanoid v0.0.0-20181114085210-eab626deece6 h1:elv0VC5n2owefO3RvtKvS3i3/rw9LCrs0+tVFLbBlmQ=
+github.com/matoous/go-nanoid v0.0.0-20181114085210-eab626deece6/go.mod h1:soqXi4beH2aAljcVvgIDqekDtnM2UZkGl47fniwq3J4=
 github.com/pkg/errors v0.8.0 h1:WdK/asTD0HN+q6hsWO3/vpuAkAr+tw6aNJNDFFf0+qw=
 github.com/pkg/errors v0.8.0/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/rs/cors v1.6.0/go.mod h1:gFx+x8UowdsKA9AchylcLynDq+nNFfI8FkUZdN/jGCU=

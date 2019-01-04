@@ -34,6 +34,14 @@ import url "net/url"
 
 type DD interface {
 	Auth(context.Context, *AuthRequest) (*AuthResponse, error)
+
+	GetQuest(context.Context, *GetQuestRequest) (*Quest, error)
+
+	GetQuests(context.Context, *GetQuestsRequest) (*GetQuestsResponse, error)
+
+	CreateQuest(context.Context, *CreateQuestRequest) (*CreateQuestResponse, error)
+
+	EditQuest(context.Context, *EditQuestRequest) (*Quest, error)
 }
 
 // ==================
@@ -42,15 +50,19 @@ type DD interface {
 
 type dDProtobufClient struct {
 	client HTTPClient
-	urls   [1]string
+	urls   [5]string
 }
 
 // NewDDProtobufClient creates a Protobuf client that implements the DD interface.
 // It communicates using Protobuf and can be configured with a custom HTTPClient.
 func NewDDProtobufClient(addr string, client HTTPClient) DD {
 	prefix := urlBase(addr) + DDPathPrefix
-	urls := [1]string{
+	urls := [5]string{
 		prefix + "Auth",
+		prefix + "GetQuest",
+		prefix + "GetQuests",
+		prefix + "CreateQuest",
+		prefix + "EditQuest",
 	}
 	if httpClient, ok := client.(*http.Client); ok {
 		return &dDProtobufClient{
@@ -76,21 +88,73 @@ func (c *dDProtobufClient) Auth(ctx context.Context, in *AuthRequest) (*AuthResp
 	return out, nil
 }
 
+func (c *dDProtobufClient) GetQuest(ctx context.Context, in *GetQuestRequest) (*Quest, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "GetQuest")
+	out := new(Quest)
+	err := doProtobufRequest(ctx, c.client, c.urls[1], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDProtobufClient) GetQuests(ctx context.Context, in *GetQuestsRequest) (*GetQuestsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "GetQuests")
+	out := new(GetQuestsResponse)
+	err := doProtobufRequest(ctx, c.client, c.urls[2], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDProtobufClient) CreateQuest(ctx context.Context, in *CreateQuestRequest) (*CreateQuestResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "CreateQuest")
+	out := new(CreateQuestResponse)
+	err := doProtobufRequest(ctx, c.client, c.urls[3], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDProtobufClient) EditQuest(ctx context.Context, in *EditQuestRequest) (*Quest, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "EditQuest")
+	out := new(Quest)
+	err := doProtobufRequest(ctx, c.client, c.urls[4], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ==============
 // DD JSON Client
 // ==============
 
 type dDJSONClient struct {
 	client HTTPClient
-	urls   [1]string
+	urls   [5]string
 }
 
 // NewDDJSONClient creates a JSON client that implements the DD interface.
 // It communicates using JSON and can be configured with a custom HTTPClient.
 func NewDDJSONClient(addr string, client HTTPClient) DD {
 	prefix := urlBase(addr) + DDPathPrefix
-	urls := [1]string{
+	urls := [5]string{
 		prefix + "Auth",
+		prefix + "GetQuest",
+		prefix + "GetQuests",
+		prefix + "CreateQuest",
+		prefix + "EditQuest",
 	}
 	if httpClient, ok := client.(*http.Client); ok {
 		return &dDJSONClient{
@@ -110,6 +174,54 @@ func (c *dDJSONClient) Auth(ctx context.Context, in *AuthRequest) (*AuthResponse
 	ctx = ctxsetters.WithMethodName(ctx, "Auth")
 	out := new(AuthResponse)
 	err := doJSONRequest(ctx, c.client, c.urls[0], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDJSONClient) GetQuest(ctx context.Context, in *GetQuestRequest) (*Quest, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "GetQuest")
+	out := new(Quest)
+	err := doJSONRequest(ctx, c.client, c.urls[1], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDJSONClient) GetQuests(ctx context.Context, in *GetQuestsRequest) (*GetQuestsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "GetQuests")
+	out := new(GetQuestsResponse)
+	err := doJSONRequest(ctx, c.client, c.urls[2], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDJSONClient) CreateQuest(ctx context.Context, in *CreateQuestRequest) (*CreateQuestResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "CreateQuest")
+	out := new(CreateQuestResponse)
+	err := doJSONRequest(ctx, c.client, c.urls[3], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDJSONClient) EditQuest(ctx context.Context, in *EditQuestRequest) (*Quest, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "EditQuest")
+	out := new(Quest)
+	err := doJSONRequest(ctx, c.client, c.urls[4], in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -166,6 +278,18 @@ func (s *dDServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	switch req.URL.Path {
 	case "/twirp/dd.DD/Auth":
 		s.serveAuth(ctx, resp, req)
+		return
+	case "/twirp/dd.DD/GetQuest":
+		s.serveGetQuest(ctx, resp, req)
+		return
+	case "/twirp/dd.DD/GetQuests":
+		s.serveGetQuests(ctx, resp, req)
+		return
+	case "/twirp/dd.DD/CreateQuest":
+		s.serveCreateQuest(ctx, resp, req)
+		return
+	case "/twirp/dd.DD/EditQuest":
+		s.serveEditQuest(ctx, resp, req)
 		return
 	default:
 		msg := fmt.Sprintf("no handler for path %q", req.URL.Path)
@@ -296,6 +420,582 @@ func (s *dDServer) serveAuthProtobuf(ctx context.Context, resp http.ResponseWrit
 	}
 	if respContent == nil {
 		s.writeError(ctx, resp, twirp.InternalError("received a nil *AuthResponse and nil error while calling Auth. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		err = wrapErr(err, "failed to marshal proto response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveGetQuest(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveGetQuestJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveGetQuestProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *dDServer) serveGetQuestJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "GetQuest")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(GetQuestRequest)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request json")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *Quest
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.GetQuest(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Quest and nil error while calling GetQuest. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		err = wrapErr(err, "failed to marshal json response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.WriteHeader(http.StatusOK)
+
+	respBytes := buf.Bytes()
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveGetQuestProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "GetQuest")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		err = wrapErr(err, "failed to read request body")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+	reqContent := new(GetQuestRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request proto")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *Quest
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.GetQuest(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Quest and nil error while calling GetQuest. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		err = wrapErr(err, "failed to marshal proto response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveGetQuests(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveGetQuestsJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveGetQuestsProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *dDServer) serveGetQuestsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "GetQuests")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(GetQuestsRequest)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request json")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *GetQuestsResponse
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.GetQuests(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *GetQuestsResponse and nil error while calling GetQuests. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		err = wrapErr(err, "failed to marshal json response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.WriteHeader(http.StatusOK)
+
+	respBytes := buf.Bytes()
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveGetQuestsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "GetQuests")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		err = wrapErr(err, "failed to read request body")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+	reqContent := new(GetQuestsRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request proto")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *GetQuestsResponse
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.GetQuests(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *GetQuestsResponse and nil error while calling GetQuests. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		err = wrapErr(err, "failed to marshal proto response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveCreateQuest(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveCreateQuestJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveCreateQuestProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *dDServer) serveCreateQuestJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "CreateQuest")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(CreateQuestRequest)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request json")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *CreateQuestResponse
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.CreateQuest(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *CreateQuestResponse and nil error while calling CreateQuest. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		err = wrapErr(err, "failed to marshal json response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.WriteHeader(http.StatusOK)
+
+	respBytes := buf.Bytes()
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveCreateQuestProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "CreateQuest")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		err = wrapErr(err, "failed to read request body")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+	reqContent := new(CreateQuestRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request proto")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *CreateQuestResponse
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.CreateQuest(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *CreateQuestResponse and nil error while calling CreateQuest. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		err = wrapErr(err, "failed to marshal proto response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveEditQuest(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveEditQuestJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveEditQuestProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *dDServer) serveEditQuestJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "EditQuest")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(EditQuestRequest)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request json")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *Quest
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.EditQuest(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Quest and nil error while calling EditQuest. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		err = wrapErr(err, "failed to marshal json response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.WriteHeader(http.StatusOK)
+
+	respBytes := buf.Bytes()
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveEditQuestProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "EditQuest")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		err = wrapErr(err, "failed to read request body")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+	reqContent := new(EditQuestRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request proto")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *Quest
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.EditQuest(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Quest and nil error while calling EditQuest. nil responses are not supported"))
 		return
 	}
 
@@ -748,16 +1448,31 @@ func callError(ctx context.Context, h *twirp.ServerHooks, err twirp.Error) conte
 }
 
 var twirpFileDescriptor0 = []byte{
-	// 167 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x29, 0x2a, 0x48, 0xd6,
-	0x4f, 0x49, 0xd1, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x4a, 0x49, 0x51, 0x52, 0xe6, 0xe2,
-	0x76, 0x2c, 0x2d, 0xc9, 0x08, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0x11, 0x12, 0xe1, 0x62, 0x2d,
-	0xc9, 0xcf, 0x4e, 0xcd, 0x93, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c, 0x82, 0x70, 0x94, 0xfc, 0xb8,
-	0x78, 0x20, 0x8a, 0x8a, 0x0b, 0xf2, 0xf3, 0x8a, 0x53, 0x85, 0xf8, 0xb8, 0x98, 0x32, 0x53, 0xa0,
-	0x4a, 0x98, 0x32, 0x53, 0x84, 0x84, 0xb8, 0x58, 0xf2, 0x12, 0x73, 0x53, 0x25, 0x98, 0xc0, 0x22,
-	0x60, 0xb6, 0x90, 0x14, 0x17, 0x47, 0x66, 0x6e, 0x62, 0x7a, 0x6a, 0x68, 0x90, 0x8f, 0x04, 0x33,
-	0x58, 0x1c, 0xce, 0x37, 0xd2, 0xe7, 0x62, 0x72, 0x71, 0x11, 0xd2, 0xe4, 0x62, 0x01, 0x99, 0x2a,
-	0xc4, 0xaf, 0x97, 0x92, 0xa2, 0x87, 0xe4, 0x08, 0x29, 0x01, 0x84, 0x00, 0xc4, 0x42, 0x27, 0x96,
-	0x28, 0xa6, 0x94, 0x94, 0x24, 0x36, 0xb0, 0xb3, 0x8d, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0xee,
-	0x2b, 0x15, 0xbe, 0xc6, 0x00, 0x00, 0x00,
+	// 412 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x53, 0xcb, 0x6e, 0xda, 0x40,
+	0x14, 0x15, 0x06, 0x2c, 0x7c, 0x0d, 0xc5, 0x1d, 0x28, 0xb5, 0xbc, 0x29, 0x4c, 0x55, 0x89, 0x56,
+	0x15, 0x95, 0xe8, 0xa6, 0x8b, 0xaa, 0x52, 0x0b, 0x55, 0x37, 0x34, 0x0a, 0x8e, 0xb2, 0xc9, 0xce,
+	0x61, 0x86, 0x30, 0x0a, 0x7e, 0xc4, 0x33, 0x7c, 0x41, 0x7e, 0x3c, 0x9a, 0x87, 0x61, 0x78, 0x64,
+	0xe7, 0x7b, 0xee, 0xeb, 0xdc, 0x33, 0xc7, 0xd0, 0x2e, 0x8b, 0xd5, 0x37, 0x42, 0x26, 0x45, 0x99,
+	0x8b, 0x1c, 0x39, 0x84, 0xe0, 0x8f, 0xe0, 0xff, 0xde, 0x89, 0x4d, 0x4c, 0x9f, 0x76, 0x94, 0x0b,
+	0xd4, 0x87, 0xa6, 0xc8, 0x1f, 0x69, 0x16, 0xd6, 0x86, 0xb5, 0xb1, 0x17, 0xeb, 0x00, 0x5f, 0x41,
+	0x5b, 0x17, 0xf1, 0x22, 0xcf, 0x38, 0x45, 0x6f, 0xc0, 0x61, 0xc4, 0x94, 0x38, 0x8c, 0x20, 0x04,
+	0x8d, 0x2c, 0x49, 0x69, 0xe8, 0x28, 0x44, 0x7d, 0xa3, 0x08, 0x5a, 0x2c, 0x4d, 0x1e, 0xe8, 0x6d,
+	0xbc, 0x08, 0xeb, 0x0a, 0xdf, 0xc7, 0xb8, 0x0f, 0x68, 0x56, 0xd2, 0x44, 0xd0, 0xa5, 0x5c, 0x6a,
+	0x76, 0xe3, 0x4f, 0xd0, 0x3b, 0x42, 0x2f, 0x2f, 0xc3, 0x33, 0x08, 0xfe, 0x12, 0x26, 0xec, 0xd6,
+	0x33, 0x42, 0x1f, 0xa0, 0xa9, 0x12, 0x8a, 0x91, 0x3f, 0xf5, 0x26, 0x84, 0x4c, 0x74, 0x83, 0xc6,
+	0xf1, 0x4f, 0x08, 0xfe, 0x51, 0x3d, 0x83, 0x57, 0x43, 0xc6, 0xe0, 0x72, 0x9a, 0x94, 0xab, 0x8d,
+	0x1a, 0xe4, 0x4f, 0x03, 0xd9, 0x75, 0xa3, 0x90, 0xeb, 0xa4, 0x4c, 0x52, 0x1e, 0x9b, 0x3c, 0x5e,
+	0xc0, 0x5b, 0xab, 0xdb, 0xf0, 0x1c, 0x81, 0xab, 0xe6, 0xf0, 0xb0, 0x36, 0xac, 0x1f, 0x2f, 0x35,
+	0x09, 0xad, 0xae, 0x48, 0xb6, 0x8a, 0x56, 0x27, 0xd6, 0x01, 0x1e, 0x41, 0xb7, 0x9a, 0xf6, 0xca,
+	0x3d, 0xf8, 0x3f, 0x34, 0x97, 0x17, 0x0f, 0xbd, 0xa4, 0xfc, 0x10, 0x7c, 0x42, 0xf9, 0xaa, 0x64,
+	0x85, 0x60, 0x79, 0x66, 0xc4, 0xb7, 0x21, 0xf9, 0x9e, 0xf6, 0x5d, 0x28, 0x80, 0x3a, 0x23, 0x9a,
+	0xb7, 0x17, 0xcb, 0x4f, 0xc9, 0x74, 0xcb, 0x52, 0x26, 0x2a, 0xa6, 0x2a, 0x40, 0x03, 0x70, 0xf3,
+	0xf5, 0x9a, 0x53, 0xa1, 0x86, 0x76, 0x62, 0x13, 0x4d, 0x9f, 0x1d, 0x70, 0xe6, 0x73, 0xf4, 0x19,
+	0x1a, 0xd2, 0x26, 0xa8, 0x2b, 0x2f, 0xb7, 0x5c, 0x15, 0x05, 0x07, 0xc0, 0x88, 0xf5, 0x05, 0x5a,
+	0xd5, 0xcd, 0xa8, 0x27, 0xb3, 0x27, 0x0a, 0x44, 0x07, 0xf5, 0xd0, 0x0f, 0xf0, 0xf6, 0x6a, 0xa3,
+	0xbe, 0x5d, 0x5c, 0x3d, 0x5d, 0xf4, 0xee, 0x04, 0x35, 0x5b, 0x7e, 0x81, 0x6f, 0x39, 0x0a, 0x0d,
+	0x64, 0xd5, 0xb9, 0xf1, 0xa2, 0xf7, 0x67, 0xb8, 0xe9, 0xff, 0x0a, 0xde, 0xde, 0x6a, 0x7a, 0xf3,
+	0xa9, 0xf3, 0x2c, 0x9e, 0x7f, 0x1a, 0x77, 0x0e, 0x21, 0xf7, 0xae, 0xfa, 0xb7, 0xbe, 0xbf, 0x04,
+	0x00, 0x00, 0xff, 0xff, 0x18, 0xb0, 0x60, 0xa9, 0x6b, 0x03, 0x00, 0x00,
 }

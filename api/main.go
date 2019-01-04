@@ -8,8 +8,10 @@ import (
 	"github.com/twitchtv/twirp"
 )
 
+// DD is the main twirp instance
 type DD struct{}
 
+// CorsResponder is a custom implimentation of cors over twirp
 type CorsResponder struct {
 	passthrough dd.TwirpServer
 }

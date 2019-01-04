@@ -1,0 +1,12 @@
+<div class="loading loading-lg" *ngIf="loading"></div>
+<div class="container grid-xl" *ngIf="quests">
+  <h3>Quests</h3>
+
+  <!-- Quest List -->
+  <div *ngFor="let q of quests">
+    <div class="card p-2 hoverable mb-2">
+      <h4 class="mb-0">{{ q.name }}</h4>
+      <span class="text-gray">{{ q.description | truncate: 150 }}</span>
+    </div>
+  </div>
+</div>
