@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { WebAuth, Auth0DecodedHash, Auth0UserProfile } from 'auth0-js';
 import { environment } from 'src/environments/environment';
+import { createDD } from 'src/dd.twirp';
+import { User } from './user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
   private auth: WebAuth;
-  private userData: Auth0UserProfile;
+  private userData: User;
 
   public loginCompleted = false;
   public loginInProgress = false;
@@ -42,7 +44,8 @@ export class LoginService {
         }
 
         try {
-          const user = await this.getInfo(token);
+          const dd = createDD('http://localhost:8080');
+          const user = await dd.auth({ token });
           this.userData = user;
           this.loginCompleted = true;
           resolve(true);
@@ -79,20 +82,6 @@ export class LoginService {
     this.loginCompleted = false;
     this.loginInProgress = false;
     this.loginPromise = undefined;
-  }
-
-  public getInfo(token: string): Promise<Auth0UserProfile> {
-    const auth = this.getAuth();
-
-    return new Promise((resolve, reject) => {
-      auth.client.userInfo(token, (err, user) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(user);
-        }
-      });
-    });
   }
 
   public process(hash: string, state: string): Promise<Auth0DecodedHash> {
