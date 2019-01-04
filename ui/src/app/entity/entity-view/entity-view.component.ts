@@ -139,6 +139,39 @@ export class EntityViewComponent implements OnInit {
       .filter((a) => a.pattr && a.pattr.class === 0);
   }
 
+  public get normalAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
+    return this.entity.attributes
+      .map((a) => {
+        return {
+          attr: a,
+          pattr: this.getEntityAttribute(a.name),
+        };
+      })
+      .filter((a) => a.pattr && a.pattr.class === 1);
+  }
+
+  public get minorAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
+    return this.entity.attributes
+      .map((a) => {
+        return {
+          attr: a,
+          pattr: this.getEntityAttribute(a.name),
+        };
+      })
+      .filter((a) => a.pattr && a.pattr.class === 2);
+  }
+
+  public get unimportantAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
+    return this.entity.attributes
+      .map((a) => {
+        return {
+          attr: a,
+          pattr: this.getEntityAttribute(a.name),
+        };
+      })
+      .filter((a) => a.pattr && a.pattr.class === 3);
+  }
+
   public get level() {
     return this.campaignService.calculateLevel(this.entity.xp);
   }

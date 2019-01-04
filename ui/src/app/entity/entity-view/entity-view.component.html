@@ -1,36 +1,25 @@
 <div class="loading loading-lg" *ngIf="loading"></div>
 
-<dd-entity-attribute-editor-modal
-  #attributemodal
-></dd-entity-attribute-editor-modal>
+<dd-entity-attribute-editor-modal #attributemodal></dd-entity-attribute-editor-modal>
 
 <!-- Background container -->
 <div class="player-bg d-flex" *ngIf="entity">
   <div id="head-container">
     <!-- Top row -->
     <div class="container grid-xl mb-auto">
-      <div class="columns text-gray">
-        <div class="column" *ngIf="saving">Saving...</div>
-      </div>
+      <div class="columns text-gray"><div class="column" *ngIf="saving">Saving...</div></div>
     </div>
 
     <!-- Bottom Row -->
     <div class="container grid-xl">
       <div class="columns text-light">
         <div class="column text-light mb-1">
-          <h3
-            class="mb-0 text-bold"
-            [ngClass]="{ 'c-hand': editable }"
-            (click)="editName()"
-          >
-            {{ entity.name }}
-          </h3>
+          <h3 class="mb-0 text-bold" [ngClass]="{ 'c-hand': editable }" (click)="editName()">{{ entity.name }}</h3>
           <span class="text-italic">{{ entity.preset.name }}</span>
         </div>
         <div class="column d-flex justify-end align-items-end col-ml-auto">
           <span [ngClass]="{ 'c-hand': editable }" (click)="editXP()">
-            <span class="h5">LV. </span>
-            <span class="h3 text-bold">{{ level }}</span>
+            <span class="h5">LV. </span> <span class="h3 text-bold">{{ level }}</span>
           </span>
         </div>
       </div>
@@ -38,26 +27,68 @@
   </div>
 </div>
 
-<div class="container grid-xl">
+<div class="container grid-xl" *ngIf="entity">
   <!-- Major attributes -->
-  <div class="columns" *ngIf="entity">
+  <div class="columns" *ngIf="majorAttributes.length > 0">
     <div
-      class="column col-3 col-md-4 col-sm-6 col-mx-auto text-center"
+      class="column col-2 col-md-3 col-sm-5 col-mx-auto text-center"
       [ngClass]="{ 'c-hand': editable }"
       *ngFor="let a of majorAttributes"
       (click)="editAttribute(a)"
     >
-      <div class="h4">
+      <div class="h5">
         <figure class="avatar avatar-sm" *ngIf="a.pattr && a.pattr.imageId">
-          <img
-            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-              a.pattr.imageId
-            }}.png"
-          />
+          <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ a.pattr.imageId }}.png" />
         </figure>
         {{ a.attr.name }}
       </div>
-      <div class="h3 text-bold">{{ a.attr.data }}</div>
+      <div class="h4 text-bold">{{ a.attr.data }}</div>
+    </div>
+  </div>
+
+  <div class="divider" *ngIf="majorAttributes.length > 0"></div>
+
+  <!-- Normal Attributes -->
+  <div class="columns" *ngIf="normalAttributes.length > 0">
+    <div
+      class="column col-1 col-md-2 col-sm-3 col-mx-auto text-center"
+      [ngClass]="{ 'c-hand': editable }"
+      *ngFor="let a of normalAttributes"
+      (click)="editAttribute(a)"
+    >
+      <div class="h6">
+        <figure class="avatar avatar-xs" *ngIf="a.pattr && a.pattr.imageId">
+          <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ a.pattr.imageId }}.png" />
+        </figure>
+        {{ a.attr.name }}
+      </div>
+      <div class="h5">{{ a.attr.data }}</div>
+    </div>
+  </div>
+  <div class="divider" *ngIf="normalAttributes.length > 0"></div>
+
+  <div class="columns">
+    <!-- Sidebar -->
+    <div class="column col-auto col-ml-auto" *ngIf="minorAttributes.length > 0">
+      <div class="table table-striped" [ngClass]="{ 'table-hover': editable }">
+        <thead>
+          <tr>
+            <th>Minor Attributes</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr [ngClass]="{ 'c-hand': editable }" *ngFor="let attr of minorAttributes" (click)="editAttribute(attr)">
+            <td>
+              <figure class="avatar avatar-xs" *ngIf="attr.pattr && attr.pattr.imageId">
+                <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ attr.pattr.imageId }}.png" />
+              </figure>
+              {{ attr.attr.name }}
+            </td>
+            <td class="text-bold">{{ attr.attr.data }}</td>
+          </tr>
+        </tbody>
+      </div>
     </div>
   </div>
 </div>
