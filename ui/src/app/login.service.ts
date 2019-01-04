@@ -2,21 +2,23 @@ import { Injectable } from '@angular/core';
 import { WebAuth, Auth0DecodedHash, Auth0UserProfile } from 'auth0-js';
 import { environment } from 'src/environments/environment';
 import { createDD } from 'src/dd.twirp';
-import { User } from './user';
+import { dd } from 'src/dd.pb';
+import { RpcService } from './rpc.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
   private auth: WebAuth;
-  private userData: User;
+  private userData: dd.IUser;
 
+  public registrationRequired = false;
   public loginCompleted = false;
   public loginInProgress = false;
 
   private loginPromise: Promise<boolean>;
 
-  constructor() {}
+  constructor(private rpc: RpcService) {}
 
   private getAuth(): WebAuth {
     if (this.auth === undefined) {
@@ -44,9 +46,9 @@ export class LoginService {
         }
 
         try {
-          const dd = createDD('http://localhost:8080');
-          const user = await dd.auth({ token });
-          this.userData = user;
+          const authResult = await this.rpc.dd.auth({ token });
+          this.userData = authResult.user;
+          this.registrationRequired = authResult.reigstrationRequired;
           this.loginCompleted = true;
           resolve(true);
         } catch (err) {
@@ -99,7 +101,7 @@ export class LoginService {
           } else {
             resolve(result);
           }
-        }
+        },
       );
     });
   }

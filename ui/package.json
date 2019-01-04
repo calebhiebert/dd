@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "genproto": "pbjs -t static-module -w commonjs -o src/dd.pb.js ../api/rpc/dd.proto && pbts -o src/dd.pb.d.ts src/dd.pb.js && protoc --proto_path ../api --twirp_typescript_out=library=pbjs:src/ ../api/rpc/dd.proto"
+    "gen": "pbjs -t static-module -w commonjs -o src/dd.pb.js ../api/rpc/dd.proto && pbts -o src/dd.pb.d.ts src/dd.pb.js && protoc --proto_path ../api --twirp_typescript_out=library=pbjs:src/ ../api/rpc/dd.proto"
   },
   "private": true,
   "dependencies": {
@@ -42,6 +42,7 @@
     "@types/chance": "^1.0.1",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/long": "^4.0.0",
     "@types/node": "~8.9.4",
     "codelyzer": "~4.3.0",
     "jasmine-core": "~2.99.1",

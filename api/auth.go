@@ -28,7 +28,38 @@ type Auth0Response struct {
 
 // Auth will return the auth things
 func (d *DD) Auth(ctx context.Context, auth *dd.AuthRequest) (*dd.AuthResponse, error) {
-	if strings.TrimSpace(auth.Token) == "" {
+	userData, err := getUserDataFromToken(auth.Token)
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := d.GetUser(ctx, &dd.GetUserRequest{
+		Id: userData.Sub,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if user == nil {
+		return &dd.AuthResponse{
+			User: &dd.User{
+				Id:        userData.Sub,
+				Name:      userData.Name,
+				ImageURL:  userData.Picture,
+				CreatedAt: uint64(time.Now().Unix()),
+			},
+			ReigstrationRequired: true,
+		}, nil
+	} else {
+		return &dd.AuthResponse{
+			User:                 user,
+			ReigstrationRequired: false,
+		}, nil
+	}
+}
+
+func getUserDataFromToken(token string) (*Auth0Response, error) {
+	if strings.TrimSpace(token) == "" {
 		err := twirp.NewError(twirp.InvalidArgument, "Missing token")
 		return nil, err
 	}
@@ -38,7 +69,7 @@ func (d *DD) Auth(ctx context.Context, auth *dd.AuthRequest) (*dd.AuthResponse, 
 		return nil, err
 	}
 
-	req.Header.Add("Authorization", "Bearer "+auth.Token)
+	req.Header.Add("Authorization", "Bearer "+token)
 
 	client := &http.Client{
 		Timeout: 6 * time.Second,
@@ -67,9 +98,5 @@ func (d *DD) Auth(ctx context.Context, auth *dd.AuthRequest) (*dd.AuthResponse, 
 		return nil, err
 	}
 
-	return &dd.AuthResponse{
-		Id:       authResponse.Sub,
-		Name:     authResponse.Name,
-		ImageURL: authResponse.Picture,
-	}, nil
+	return &authResponse, nil
 }

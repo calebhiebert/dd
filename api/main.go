@@ -5,8 +5,11 @@ import (
 	"dd-api/rpc"
 	"net/http"
 
+	packr "github.com/gobuffalo/packr/v2"
 	"github.com/twitchtv/twirp"
 )
+
+var fileBox *packr.Box
 
 // DD is the main twirp instance
 type DD struct{}
@@ -30,6 +33,13 @@ func (c *CorsResponder) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	server := &DD{}
+
+	fileBox = packr.New("FileBox", "./assets")
+
+	err := connectDB()
+	if err != nil {
+		panic(err)
+	}
 
 	twirpHandler := dd.NewDDServer(server, &twirp.ServerHooks{
 		RequestReceived: func(ctx context.Context) (context.Context, error) {

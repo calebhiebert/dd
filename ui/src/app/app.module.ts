@@ -33,6 +33,7 @@ import { ExperienceTableEditorComponent } from './campaign/campaign-settings/exp
 import { QuestManagerComponent } from './quest/quest-manager/quest-manager.component';
 import { EntityAttributeEditorModalComponent } from './entity/entity-view/entity-attribute-editor-modal/entity-attribute-editor-modal.component';
 import { QuestFormComponent } from './quest/quest-form/quest-form.component';
+import { RegisterComponent } from './login/register/register.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { QuestFormComponent } from './quest/quest-form/quest-form.component';
     EntityViewComponent,
     EntityAttributeEditorModalComponent,
     QuestFormComponent,
+    RegisterComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, FormsModule, TruncateModule],
   providers: [],

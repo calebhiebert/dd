@@ -84,6 +84,72 @@ $root.dd = (function() {
          */
 
         /**
+         * Callback as used by {@link dd.DD#getUser}.
+         * @memberof dd.DD
+         * @typedef GetUserCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {dd.User} [response] User
+         */
+
+        /**
+         * Calls GetUser.
+         * @function getUser
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IGetUserRequest} request GetUserRequest message or plain object
+         * @param {dd.DD.GetUserCallback} callback Node-style callback called with the error, if any, and User
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(DD.prototype.getUser = function getUser(request, callback) {
+            return this.rpcCall(getUser, $root.dd.GetUserRequest, $root.dd.User, request, callback);
+        }, "name", { value: "GetUser" });
+
+        /**
+         * Calls GetUser.
+         * @function getUser
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IGetUserRequest} request GetUserRequest message or plain object
+         * @returns {Promise<dd.User>} Promise
+         * @variation 2
+         */
+
+        /**
+         * Callback as used by {@link dd.DD#createUser}.
+         * @memberof dd.DD
+         * @typedef CreateUserCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {dd.User} [response] User
+         */
+
+        /**
+         * Calls CreateUser.
+         * @function createUser
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.ICreateUserRequest} request CreateUserRequest message or plain object
+         * @param {dd.DD.CreateUserCallback} callback Node-style callback called with the error, if any, and User
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(DD.prototype.createUser = function createUser(request, callback) {
+            return this.rpcCall(createUser, $root.dd.CreateUserRequest, $root.dd.User, request, callback);
+        }, "name", { value: "CreateUser" });
+
+        /**
+         * Calls CreateUser.
+         * @function createUser
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.ICreateUserRequest} request CreateUserRequest message or plain object
+         * @returns {Promise<dd.User>} Promise
+         * @variation 2
+         */
+
+        /**
          * Callback as used by {@link dd.DD#getQuest}.
          * @memberof dd.DD
          * @typedef GetQuestCallback
@@ -216,6 +282,671 @@ $root.dd = (function() {
          */
 
         return DD;
+    })();
+
+    dd.GetUserRequest = (function() {
+
+        /**
+         * Properties of a GetUserRequest.
+         * @memberof dd
+         * @interface IGetUserRequest
+         * @property {string|null} [id] GetUserRequest id
+         */
+
+        /**
+         * Constructs a new GetUserRequest.
+         * @memberof dd
+         * @classdesc Represents a GetUserRequest.
+         * @implements IGetUserRequest
+         * @constructor
+         * @param {dd.IGetUserRequest=} [properties] Properties to set
+         */
+        function GetUserRequest(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GetUserRequest id.
+         * @member {string} id
+         * @memberof dd.GetUserRequest
+         * @instance
+         */
+        GetUserRequest.prototype.id = "";
+
+        /**
+         * Creates a new GetUserRequest instance using the specified properties.
+         * @function create
+         * @memberof dd.GetUserRequest
+         * @static
+         * @param {dd.IGetUserRequest=} [properties] Properties to set
+         * @returns {dd.GetUserRequest} GetUserRequest instance
+         */
+        GetUserRequest.create = function create(properties) {
+            return new GetUserRequest(properties);
+        };
+
+        /**
+         * Encodes the specified GetUserRequest message. Does not implicitly {@link dd.GetUserRequest.verify|verify} messages.
+         * @function encode
+         * @memberof dd.GetUserRequest
+         * @static
+         * @param {dd.IGetUserRequest} message GetUserRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetUserRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified GetUserRequest message, length delimited. Does not implicitly {@link dd.GetUserRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.GetUserRequest
+         * @static
+         * @param {dd.IGetUserRequest} message GetUserRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetUserRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a GetUserRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.GetUserRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.GetUserRequest} GetUserRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetUserRequest.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.GetUserRequest();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a GetUserRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.GetUserRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.GetUserRequest} GetUserRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetUserRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a GetUserRequest message.
+         * @function verify
+         * @memberof dd.GetUserRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GetUserRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a GetUserRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.GetUserRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.GetUserRequest} GetUserRequest
+         */
+        GetUserRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.GetUserRequest)
+                return object;
+            var message = new $root.dd.GetUserRequest();
+            if (object.id != null)
+                message.id = String(object.id);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GetUserRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.GetUserRequest
+         * @static
+         * @param {dd.GetUserRequest} message GetUserRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GetUserRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults)
+                object.id = "";
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            return object;
+        };
+
+        /**
+         * Converts this GetUserRequest to JSON.
+         * @function toJSON
+         * @memberof dd.GetUserRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GetUserRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GetUserRequest;
+    })();
+
+    dd.CreateUserRequest = (function() {
+
+        /**
+         * Properties of a CreateUserRequest.
+         * @memberof dd
+         * @interface ICreateUserRequest
+         * @property {string|null} [token] CreateUserRequest token
+         * @property {string|null} [username] CreateUserRequest username
+         */
+
+        /**
+         * Constructs a new CreateUserRequest.
+         * @memberof dd
+         * @classdesc Represents a CreateUserRequest.
+         * @implements ICreateUserRequest
+         * @constructor
+         * @param {dd.ICreateUserRequest=} [properties] Properties to set
+         */
+        function CreateUserRequest(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * CreateUserRequest token.
+         * @member {string} token
+         * @memberof dd.CreateUserRequest
+         * @instance
+         */
+        CreateUserRequest.prototype.token = "";
+
+        /**
+         * CreateUserRequest username.
+         * @member {string} username
+         * @memberof dd.CreateUserRequest
+         * @instance
+         */
+        CreateUserRequest.prototype.username = "";
+
+        /**
+         * Creates a new CreateUserRequest instance using the specified properties.
+         * @function create
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {dd.ICreateUserRequest=} [properties] Properties to set
+         * @returns {dd.CreateUserRequest} CreateUserRequest instance
+         */
+        CreateUserRequest.create = function create(properties) {
+            return new CreateUserRequest(properties);
+        };
+
+        /**
+         * Encodes the specified CreateUserRequest message. Does not implicitly {@link dd.CreateUserRequest.verify|verify} messages.
+         * @function encode
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {dd.ICreateUserRequest} message CreateUserRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CreateUserRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.token != null && message.hasOwnProperty("token"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.token);
+            if (message.username != null && message.hasOwnProperty("username"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.username);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified CreateUserRequest message, length delimited. Does not implicitly {@link dd.CreateUserRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {dd.ICreateUserRequest} message CreateUserRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CreateUserRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a CreateUserRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.CreateUserRequest} CreateUserRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CreateUserRequest.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.CreateUserRequest();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.token = reader.string();
+                    break;
+                case 2:
+                    message.username = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a CreateUserRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.CreateUserRequest} CreateUserRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CreateUserRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a CreateUserRequest message.
+         * @function verify
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        CreateUserRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.token != null && message.hasOwnProperty("token"))
+                if (!$util.isString(message.token))
+                    return "token: string expected";
+            if (message.username != null && message.hasOwnProperty("username"))
+                if (!$util.isString(message.username))
+                    return "username: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a CreateUserRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.CreateUserRequest} CreateUserRequest
+         */
+        CreateUserRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.CreateUserRequest)
+                return object;
+            var message = new $root.dd.CreateUserRequest();
+            if (object.token != null)
+                message.token = String(object.token);
+            if (object.username != null)
+                message.username = String(object.username);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a CreateUserRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {dd.CreateUserRequest} message CreateUserRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        CreateUserRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.token = "";
+                object.username = "";
+            }
+            if (message.token != null && message.hasOwnProperty("token"))
+                object.token = message.token;
+            if (message.username != null && message.hasOwnProperty("username"))
+                object.username = message.username;
+            return object;
+        };
+
+        /**
+         * Converts this CreateUserRequest to JSON.
+         * @function toJSON
+         * @memberof dd.CreateUserRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        CreateUserRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CreateUserRequest;
+    })();
+
+    dd.User = (function() {
+
+        /**
+         * Properties of a User.
+         * @memberof dd
+         * @interface IUser
+         * @property {string|null} [id] User id
+         * @property {string|null} [name] User name
+         * @property {string|null} [imageURL] User imageURL
+         * @property {number|Long|null} [createdAt] User createdAt
+         */
+
+        /**
+         * Constructs a new User.
+         * @memberof dd
+         * @classdesc Represents a User.
+         * @implements IUser
+         * @constructor
+         * @param {dd.IUser=} [properties] Properties to set
+         */
+        function User(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * User id.
+         * @member {string} id
+         * @memberof dd.User
+         * @instance
+         */
+        User.prototype.id = "";
+
+        /**
+         * User name.
+         * @member {string} name
+         * @memberof dd.User
+         * @instance
+         */
+        User.prototype.name = "";
+
+        /**
+         * User imageURL.
+         * @member {string} imageURL
+         * @memberof dd.User
+         * @instance
+         */
+        User.prototype.imageURL = "";
+
+        /**
+         * User createdAt.
+         * @member {number|Long} createdAt
+         * @memberof dd.User
+         * @instance
+         */
+        User.prototype.createdAt = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * Creates a new User instance using the specified properties.
+         * @function create
+         * @memberof dd.User
+         * @static
+         * @param {dd.IUser=} [properties] Properties to set
+         * @returns {dd.User} User instance
+         */
+        User.create = function create(properties) {
+            return new User(properties);
+        };
+
+        /**
+         * Encodes the specified User message. Does not implicitly {@link dd.User.verify|verify} messages.
+         * @function encode
+         * @memberof dd.User
+         * @static
+         * @param {dd.IUser} message User message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        User.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+            if (message.imageURL != null && message.hasOwnProperty("imageURL"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.imageURL);
+            if (message.createdAt != null && message.hasOwnProperty("createdAt"))
+                writer.uint32(/* id 4, wireType 0 =*/32).uint64(message.createdAt);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified User message, length delimited. Does not implicitly {@link dd.User.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.User
+         * @static
+         * @param {dd.IUser} message User message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        User.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a User message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.User
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.User} User
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        User.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.User();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                case 2:
+                    message.name = reader.string();
+                    break;
+                case 3:
+                    message.imageURL = reader.string();
+                    break;
+                case 4:
+                    message.createdAt = reader.uint64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a User message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.User
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.User} User
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        User.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a User message.
+         * @function verify
+         * @memberof dd.User
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        User.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.imageURL != null && message.hasOwnProperty("imageURL"))
+                if (!$util.isString(message.imageURL))
+                    return "imageURL: string expected";
+            if (message.createdAt != null && message.hasOwnProperty("createdAt"))
+                if (!$util.isInteger(message.createdAt) && !(message.createdAt && $util.isInteger(message.createdAt.low) && $util.isInteger(message.createdAt.high)))
+                    return "createdAt: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a User message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.User
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.User} User
+         */
+        User.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.User)
+                return object;
+            var message = new $root.dd.User();
+            if (object.id != null)
+                message.id = String(object.id);
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.imageURL != null)
+                message.imageURL = String(object.imageURL);
+            if (object.createdAt != null)
+                if ($util.Long)
+                    (message.createdAt = $util.Long.fromValue(object.createdAt)).unsigned = true;
+                else if (typeof object.createdAt === "string")
+                    message.createdAt = parseInt(object.createdAt, 10);
+                else if (typeof object.createdAt === "number")
+                    message.createdAt = object.createdAt;
+                else if (typeof object.createdAt === "object")
+                    message.createdAt = new $util.LongBits(object.createdAt.low >>> 0, object.createdAt.high >>> 0).toNumber(true);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a User message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.User
+         * @static
+         * @param {dd.User} message User
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        User.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.id = "";
+                object.name = "";
+                object.imageURL = "";
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.createdAt = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.createdAt = options.longs === String ? "0" : 0;
+            }
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.imageURL != null && message.hasOwnProperty("imageURL"))
+                object.imageURL = message.imageURL;
+            if (message.createdAt != null && message.hasOwnProperty("createdAt"))
+                if (typeof message.createdAt === "number")
+                    object.createdAt = options.longs === String ? String(message.createdAt) : message.createdAt;
+                else
+                    object.createdAt = options.longs === String ? $util.Long.prototype.toString.call(message.createdAt) : options.longs === Number ? new $util.LongBits(message.createdAt.low >>> 0, message.createdAt.high >>> 0).toNumber(true) : message.createdAt;
+            return object;
+        };
+
+        /**
+         * Converts this User to JSON.
+         * @function toJSON
+         * @memberof dd.User
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        User.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return User;
     })();
 
     dd.AuthRequest = (function() {
@@ -411,9 +1142,8 @@ $root.dd = (function() {
          * Properties of an AuthResponse.
          * @memberof dd
          * @interface IAuthResponse
-         * @property {string|null} [id] AuthResponse id
-         * @property {string|null} [name] AuthResponse name
-         * @property {string|null} [imageURL] AuthResponse imageURL
+         * @property {dd.IUser|null} [user] AuthResponse user
+         * @property {boolean|null} [reigstrationRequired] AuthResponse reigstrationRequired
          */
 
         /**
@@ -432,28 +1162,20 @@ $root.dd = (function() {
         }
 
         /**
-         * AuthResponse id.
-         * @member {string} id
+         * AuthResponse user.
+         * @member {dd.IUser|null|undefined} user
          * @memberof dd.AuthResponse
          * @instance
          */
-        AuthResponse.prototype.id = "";
+        AuthResponse.prototype.user = null;
 
         /**
-         * AuthResponse name.
-         * @member {string} name
+         * AuthResponse reigstrationRequired.
+         * @member {boolean} reigstrationRequired
          * @memberof dd.AuthResponse
          * @instance
          */
-        AuthResponse.prototype.name = "";
-
-        /**
-         * AuthResponse imageURL.
-         * @member {string} imageURL
-         * @memberof dd.AuthResponse
-         * @instance
-         */
-        AuthResponse.prototype.imageURL = "";
+        AuthResponse.prototype.reigstrationRequired = false;
 
         /**
          * Creates a new AuthResponse instance using the specified properties.
@@ -479,12 +1201,10 @@ $root.dd = (function() {
         AuthResponse.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.id != null && message.hasOwnProperty("id"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
-            if (message.name != null && message.hasOwnProperty("name"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
-            if (message.imageURL != null && message.hasOwnProperty("imageURL"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.imageURL);
+            if (message.user != null && message.hasOwnProperty("user"))
+                $root.dd.User.encode(message.user, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.reigstrationRequired != null && message.hasOwnProperty("reigstrationRequired"))
+                writer.uint32(/* id 2, wireType 0 =*/16).bool(message.reigstrationRequired);
             return writer;
         };
 
@@ -520,13 +1240,10 @@ $root.dd = (function() {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
-                    message.id = reader.string();
+                    message.user = $root.dd.User.decode(reader, reader.uint32());
                     break;
                 case 2:
-                    message.name = reader.string();
-                    break;
-                case 3:
-                    message.imageURL = reader.string();
+                    message.reigstrationRequired = reader.bool();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -563,15 +1280,14 @@ $root.dd = (function() {
         AuthResponse.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.imageURL != null && message.hasOwnProperty("imageURL"))
-                if (!$util.isString(message.imageURL))
-                    return "imageURL: string expected";
+            if (message.user != null && message.hasOwnProperty("user")) {
+                var error = $root.dd.User.verify(message.user);
+                if (error)
+                    return "user." + error;
+            }
+            if (message.reigstrationRequired != null && message.hasOwnProperty("reigstrationRequired"))
+                if (typeof message.reigstrationRequired !== "boolean")
+                    return "reigstrationRequired: boolean expected";
             return null;
         };
 
@@ -587,12 +1303,13 @@ $root.dd = (function() {
             if (object instanceof $root.dd.AuthResponse)
                 return object;
             var message = new $root.dd.AuthResponse();
-            if (object.id != null)
-                message.id = String(object.id);
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.imageURL != null)
-                message.imageURL = String(object.imageURL);
+            if (object.user != null) {
+                if (typeof object.user !== "object")
+                    throw TypeError(".dd.AuthResponse.user: object expected");
+                message.user = $root.dd.User.fromObject(object.user);
+            }
+            if (object.reigstrationRequired != null)
+                message.reigstrationRequired = Boolean(object.reigstrationRequired);
             return message;
         };
 
@@ -610,16 +1327,13 @@ $root.dd = (function() {
                 options = {};
             var object = {};
             if (options.defaults) {
-                object.id = "";
-                object.name = "";
-                object.imageURL = "";
+                object.user = null;
+                object.reigstrationRequired = false;
             }
-            if (message.id != null && message.hasOwnProperty("id"))
-                object.id = message.id;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.imageURL != null && message.hasOwnProperty("imageURL"))
-                object.imageURL = message.imageURL;
+            if (message.user != null && message.hasOwnProperty("user"))
+                object.user = $root.dd.User.toObject(message.user, options);
+            if (message.reigstrationRequired != null && message.hasOwnProperty("reigstrationRequired"))
+                object.reigstrationRequired = message.reigstrationRequired;
             return object;
         };
 

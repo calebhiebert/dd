@@ -1,0 +1,43 @@
+<div class="container grid-xl">
+  <div class="columns">
+    <div class="column col-6 col-md-8 col-sm-12 col-mx-auto">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="mb-0">Username</h3>
+          <span class="text-gray text-italic">What should we call you?</span>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="submit()">
+            <div
+              class="form-group"
+              [ngClass]="{
+                'has-error': usernameControl.invalid && (usernameControl.touched || usernameControl.dirty),
+                'has-success': usernameControl.valid
+              }"
+            >
+              <input
+                type="text"
+                name="username"
+                id="username"
+                [formControl]="usernameControl"
+                class="form-input"
+                placeholder="Jimbo"
+              />
+            </div>
+          </form>
+        </div>
+
+        <div class="card-footer">
+          <button
+            class="btn btn-primary float-right"
+            [ngClass]="{ loading: loading }"
+            [disabled]="usernameControl.invalid"
+            (click)="submit()"
+          >
+            Done <i class="icon icon-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

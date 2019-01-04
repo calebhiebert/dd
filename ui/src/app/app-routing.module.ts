@@ -15,10 +15,12 @@ import { CampaignSettingsComponent } from './campaign/campaign-settings/campaign
 import { QuestManagerComponent } from './quest/quest-manager/quest-manager.component';
 import { ItemEditComponent } from './items/item-edit/item-edit.component';
 import { CampaignLandingComponent } from './campaign/campaign-landing/campaign-landing.component';
+import { RegisterComponent } from './login/register/register.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [LoginPageGuard] },
+  { path: 'register', component: RegisterComponent },
   { path: 'callback', component: LoginComponent },
   {
     path: 'campaigns/list',

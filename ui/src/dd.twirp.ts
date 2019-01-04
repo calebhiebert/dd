@@ -7,6 +7,12 @@ const getServiceMethodName = (fn: any): string => {
 	if (fn === dd.DD.prototype.auth) {
 		return 'Auth';
     }
+	if (fn === dd.DD.prototype.getUser) {
+		return 'GetUser';
+    }
+	if (fn === dd.DD.prototype.createUser) {
+		return 'CreateUser';
+    }
 	if (fn === dd.DD.prototype.getQuest) {
 		return 'GetQuest';
     }

@@ -7,10 +7,29 @@ option go_package = "dd";
 service DD {
   rpc Auth (AuthRequest) returns (AuthResponse);
 
+  rpc GetUser (GetUserRequest) returns (User);
+  rpc CreateUser (CreateUserRequest) returns (User);
+
   rpc GetQuest (GetQuestRequest) returns (Quest);
   rpc GetQuests (GetQuestsRequest) returns (GetQuestsResponse);
   rpc CreateQuest(CreateQuestRequest) returns (CreateQuestResponse);
   rpc EditQuest(EditQuestRequest) returns (Quest);
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message CreateUserRequest {
+  string token = 1;
+  string username = 2;
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string imageURL = 3;
+  uint64 createdAt = 4;
 }
 
 message AuthRequest {
@@ -18,9 +37,8 @@ message AuthRequest {
 }
 
 message AuthResponse {
-  string id = 1;
-  string name = 2;
-  string imageURL = 3;
+  User user = 1;
+  bool reigstrationRequired = 2;
 }
 
 message CreateQuestRequest { }
