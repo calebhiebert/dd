@@ -13,6 +13,18 @@ const getServiceMethodName = (fn: any): string => {
 	if (fn === dd.DD.prototype.createUser) {
 		return 'CreateUser';
     }
+	if (fn === dd.DD.prototype.getCampaign) {
+		return 'GetCampaign';
+    }
+	if (fn === dd.DD.prototype.getCampaigns) {
+		return 'GetCampaigns';
+    }
+	if (fn === dd.DD.prototype.createCampaign) {
+		return 'CreateCampaign';
+    }
+	if (fn === dd.DD.prototype.editCampaign) {
+		return 'EditCampaign';
+    }
 	if (fn === dd.DD.prototype.getQuest) {
 		return 'GetQuest';
     }

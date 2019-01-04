@@ -33,7 +33,7 @@ func (d *DD) Auth(ctx context.Context, auth *dd.AuthRequest) (*dd.AuthResponse, 
 		return nil, err
 	}
 
-	user, err := d.GetUser(ctx, &dd.GetUserRequest{
+	user, err := d.GetUser(ctx, &dd.GetByIdRequest{
 		Id: userData.Sub,
 	})
 	if err != nil {

@@ -33,13 +33,24 @@ import url "net/url"
 // ============
 
 type DD interface {
+	// User/Auth
 	Auth(context.Context, *AuthRequest) (*AuthResponse, error)
 
-	GetUser(context.Context, *GetUserRequest) (*User, error)
+	GetUser(context.Context, *GetByIdRequest) (*User, error)
 
 	CreateUser(context.Context, *CreateUserRequest) (*User, error)
 
-	GetQuest(context.Context, *GetQuestRequest) (*Quest, error)
+	// Campaigns
+	GetCampaign(context.Context, *GetByIdRequest) (*Campaign, error)
+
+	GetCampaigns(context.Context, *GetCampaignsRequest) (*GetCampaignsResponse, error)
+
+	CreateCampaign(context.Context, *CreateCampaignRequest) (*CreateCampaignResponse, error)
+
+	EditCampaign(context.Context, *EditCampaignRequest) (*CampaignCore, error)
+
+	// Quests
+	GetQuest(context.Context, *GetByIdRequest) (*Quest, error)
 
 	GetQuests(context.Context, *GetQuestsRequest) (*GetQuestsResponse, error)
 
@@ -54,17 +65,21 @@ type DD interface {
 
 type dDProtobufClient struct {
 	client HTTPClient
-	urls   [7]string
+	urls   [11]string
 }
 
 // NewDDProtobufClient creates a Protobuf client that implements the DD interface.
 // It communicates using Protobuf and can be configured with a custom HTTPClient.
 func NewDDProtobufClient(addr string, client HTTPClient) DD {
 	prefix := urlBase(addr) + DDPathPrefix
-	urls := [7]string{
+	urls := [11]string{
 		prefix + "Auth",
 		prefix + "GetUser",
 		prefix + "CreateUser",
+		prefix + "GetCampaign",
+		prefix + "GetCampaigns",
+		prefix + "CreateCampaign",
+		prefix + "EditCampaign",
 		prefix + "GetQuest",
 		prefix + "GetQuests",
 		prefix + "CreateQuest",
@@ -94,7 +109,7 @@ func (c *dDProtobufClient) Auth(ctx context.Context, in *AuthRequest) (*AuthResp
 	return out, nil
 }
 
-func (c *dDProtobufClient) GetUser(ctx context.Context, in *GetUserRequest) (*User, error) {
+func (c *dDProtobufClient) GetUser(ctx context.Context, in *GetByIdRequest) (*User, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "dd")
 	ctx = ctxsetters.WithServiceName(ctx, "DD")
 	ctx = ctxsetters.WithMethodName(ctx, "GetUser")
@@ -118,12 +133,60 @@ func (c *dDProtobufClient) CreateUser(ctx context.Context, in *CreateUserRequest
 	return out, nil
 }
 
-func (c *dDProtobufClient) GetQuest(ctx context.Context, in *GetQuestRequest) (*Quest, error) {
+func (c *dDProtobufClient) GetCampaign(ctx context.Context, in *GetByIdRequest) (*Campaign, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "GetCampaign")
+	out := new(Campaign)
+	err := doProtobufRequest(ctx, c.client, c.urls[3], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDProtobufClient) GetCampaigns(ctx context.Context, in *GetCampaignsRequest) (*GetCampaignsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "GetCampaigns")
+	out := new(GetCampaignsResponse)
+	err := doProtobufRequest(ctx, c.client, c.urls[4], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDProtobufClient) CreateCampaign(ctx context.Context, in *CreateCampaignRequest) (*CreateCampaignResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "CreateCampaign")
+	out := new(CreateCampaignResponse)
+	err := doProtobufRequest(ctx, c.client, c.urls[5], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDProtobufClient) EditCampaign(ctx context.Context, in *EditCampaignRequest) (*CampaignCore, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "EditCampaign")
+	out := new(CampaignCore)
+	err := doProtobufRequest(ctx, c.client, c.urls[6], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDProtobufClient) GetQuest(ctx context.Context, in *GetByIdRequest) (*Quest, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "dd")
 	ctx = ctxsetters.WithServiceName(ctx, "DD")
 	ctx = ctxsetters.WithMethodName(ctx, "GetQuest")
 	out := new(Quest)
-	err := doProtobufRequest(ctx, c.client, c.urls[3], in, out)
+	err := doProtobufRequest(ctx, c.client, c.urls[7], in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +198,7 @@ func (c *dDProtobufClient) GetQuests(ctx context.Context, in *GetQuestsRequest) 
 	ctx = ctxsetters.WithServiceName(ctx, "DD")
 	ctx = ctxsetters.WithMethodName(ctx, "GetQuests")
 	out := new(GetQuestsResponse)
-	err := doProtobufRequest(ctx, c.client, c.urls[4], in, out)
+	err := doProtobufRequest(ctx, c.client, c.urls[8], in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +210,7 @@ func (c *dDProtobufClient) CreateQuest(ctx context.Context, in *CreateQuestReque
 	ctx = ctxsetters.WithServiceName(ctx, "DD")
 	ctx = ctxsetters.WithMethodName(ctx, "CreateQuest")
 	out := new(CreateQuestResponse)
-	err := doProtobufRequest(ctx, c.client, c.urls[5], in, out)
+	err := doProtobufRequest(ctx, c.client, c.urls[9], in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +222,7 @@ func (c *dDProtobufClient) EditQuest(ctx context.Context, in *EditQuestRequest) 
 	ctx = ctxsetters.WithServiceName(ctx, "DD")
 	ctx = ctxsetters.WithMethodName(ctx, "EditQuest")
 	out := new(Quest)
-	err := doProtobufRequest(ctx, c.client, c.urls[6], in, out)
+	err := doProtobufRequest(ctx, c.client, c.urls[10], in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -172,17 +235,21 @@ func (c *dDProtobufClient) EditQuest(ctx context.Context, in *EditQuestRequest) 
 
 type dDJSONClient struct {
 	client HTTPClient
-	urls   [7]string
+	urls   [11]string
 }
 
 // NewDDJSONClient creates a JSON client that implements the DD interface.
 // It communicates using JSON and can be configured with a custom HTTPClient.
 func NewDDJSONClient(addr string, client HTTPClient) DD {
 	prefix := urlBase(addr) + DDPathPrefix
-	urls := [7]string{
+	urls := [11]string{
 		prefix + "Auth",
 		prefix + "GetUser",
 		prefix + "CreateUser",
+		prefix + "GetCampaign",
+		prefix + "GetCampaigns",
+		prefix + "CreateCampaign",
+		prefix + "EditCampaign",
 		prefix + "GetQuest",
 		prefix + "GetQuests",
 		prefix + "CreateQuest",
@@ -212,7 +279,7 @@ func (c *dDJSONClient) Auth(ctx context.Context, in *AuthRequest) (*AuthResponse
 	return out, nil
 }
 
-func (c *dDJSONClient) GetUser(ctx context.Context, in *GetUserRequest) (*User, error) {
+func (c *dDJSONClient) GetUser(ctx context.Context, in *GetByIdRequest) (*User, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "dd")
 	ctx = ctxsetters.WithServiceName(ctx, "DD")
 	ctx = ctxsetters.WithMethodName(ctx, "GetUser")
@@ -236,12 +303,60 @@ func (c *dDJSONClient) CreateUser(ctx context.Context, in *CreateUserRequest) (*
 	return out, nil
 }
 
-func (c *dDJSONClient) GetQuest(ctx context.Context, in *GetQuestRequest) (*Quest, error) {
+func (c *dDJSONClient) GetCampaign(ctx context.Context, in *GetByIdRequest) (*Campaign, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "GetCampaign")
+	out := new(Campaign)
+	err := doJSONRequest(ctx, c.client, c.urls[3], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDJSONClient) GetCampaigns(ctx context.Context, in *GetCampaignsRequest) (*GetCampaignsResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "GetCampaigns")
+	out := new(GetCampaignsResponse)
+	err := doJSONRequest(ctx, c.client, c.urls[4], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDJSONClient) CreateCampaign(ctx context.Context, in *CreateCampaignRequest) (*CreateCampaignResponse, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "CreateCampaign")
+	out := new(CreateCampaignResponse)
+	err := doJSONRequest(ctx, c.client, c.urls[5], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDJSONClient) EditCampaign(ctx context.Context, in *EditCampaignRequest) (*CampaignCore, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "dd")
+	ctx = ctxsetters.WithServiceName(ctx, "DD")
+	ctx = ctxsetters.WithMethodName(ctx, "EditCampaign")
+	out := new(CampaignCore)
+	err := doJSONRequest(ctx, c.client, c.urls[6], in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dDJSONClient) GetQuest(ctx context.Context, in *GetByIdRequest) (*Quest, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "dd")
 	ctx = ctxsetters.WithServiceName(ctx, "DD")
 	ctx = ctxsetters.WithMethodName(ctx, "GetQuest")
 	out := new(Quest)
-	err := doJSONRequest(ctx, c.client, c.urls[3], in, out)
+	err := doJSONRequest(ctx, c.client, c.urls[7], in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -253,7 +368,7 @@ func (c *dDJSONClient) GetQuests(ctx context.Context, in *GetQuestsRequest) (*Ge
 	ctx = ctxsetters.WithServiceName(ctx, "DD")
 	ctx = ctxsetters.WithMethodName(ctx, "GetQuests")
 	out := new(GetQuestsResponse)
-	err := doJSONRequest(ctx, c.client, c.urls[4], in, out)
+	err := doJSONRequest(ctx, c.client, c.urls[8], in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -265,7 +380,7 @@ func (c *dDJSONClient) CreateQuest(ctx context.Context, in *CreateQuestRequest) 
 	ctx = ctxsetters.WithServiceName(ctx, "DD")
 	ctx = ctxsetters.WithMethodName(ctx, "CreateQuest")
 	out := new(CreateQuestResponse)
-	err := doJSONRequest(ctx, c.client, c.urls[5], in, out)
+	err := doJSONRequest(ctx, c.client, c.urls[9], in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -277,7 +392,7 @@ func (c *dDJSONClient) EditQuest(ctx context.Context, in *EditQuestRequest) (*Qu
 	ctx = ctxsetters.WithServiceName(ctx, "DD")
 	ctx = ctxsetters.WithMethodName(ctx, "EditQuest")
 	out := new(Quest)
-	err := doJSONRequest(ctx, c.client, c.urls[6], in, out)
+	err := doJSONRequest(ctx, c.client, c.urls[10], in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -340,6 +455,18 @@ func (s *dDServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 		return
 	case "/twirp/dd.DD/CreateUser":
 		s.serveCreateUser(ctx, resp, req)
+		return
+	case "/twirp/dd.DD/GetCampaign":
+		s.serveGetCampaign(ctx, resp, req)
+		return
+	case "/twirp/dd.DD/GetCampaigns":
+		s.serveGetCampaigns(ctx, resp, req)
+		return
+	case "/twirp/dd.DD/CreateCampaign":
+		s.serveCreateCampaign(ctx, resp, req)
+		return
+	case "/twirp/dd.DD/EditCampaign":
+		s.serveEditCampaign(ctx, resp, req)
 		return
 	case "/twirp/dd.DD/GetQuest":
 		s.serveGetQuest(ctx, resp, req)
@@ -532,7 +659,7 @@ func (s *dDServer) serveGetUserJSON(ctx context.Context, resp http.ResponseWrite
 		return
 	}
 
-	reqContent := new(GetUserRequest)
+	reqContent := new(GetByIdRequest)
 	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
 	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
 		err = wrapErr(err, "failed to parse request json")
@@ -600,7 +727,7 @@ func (s *dDServer) serveGetUserProtobuf(ctx context.Context, resp http.ResponseW
 		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
 		return
 	}
-	reqContent := new(GetUserRequest)
+	reqContent := new(GetByIdRequest)
 	if err = proto.Unmarshal(buf, reqContent); err != nil {
 		err = wrapErr(err, "failed to parse request proto")
 		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
@@ -793,6 +920,582 @@ func (s *dDServer) serveCreateUserProtobuf(ctx context.Context, resp http.Respon
 	callResponseSent(ctx, s.hooks)
 }
 
+func (s *dDServer) serveGetCampaign(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveGetCampaignJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveGetCampaignProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *dDServer) serveGetCampaignJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "GetCampaign")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(GetByIdRequest)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request json")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *Campaign
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.GetCampaign(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Campaign and nil error while calling GetCampaign. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		err = wrapErr(err, "failed to marshal json response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.WriteHeader(http.StatusOK)
+
+	respBytes := buf.Bytes()
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveGetCampaignProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "GetCampaign")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		err = wrapErr(err, "failed to read request body")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+	reqContent := new(GetByIdRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request proto")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *Campaign
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.GetCampaign(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Campaign and nil error while calling GetCampaign. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		err = wrapErr(err, "failed to marshal proto response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveGetCampaigns(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveGetCampaignsJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveGetCampaignsProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *dDServer) serveGetCampaignsJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "GetCampaigns")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(GetCampaignsRequest)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request json")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *GetCampaignsResponse
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.GetCampaigns(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *GetCampaignsResponse and nil error while calling GetCampaigns. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		err = wrapErr(err, "failed to marshal json response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.WriteHeader(http.StatusOK)
+
+	respBytes := buf.Bytes()
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveGetCampaignsProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "GetCampaigns")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		err = wrapErr(err, "failed to read request body")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+	reqContent := new(GetCampaignsRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request proto")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *GetCampaignsResponse
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.GetCampaigns(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *GetCampaignsResponse and nil error while calling GetCampaigns. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		err = wrapErr(err, "failed to marshal proto response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveCreateCampaign(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveCreateCampaignJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveCreateCampaignProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *dDServer) serveCreateCampaignJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "CreateCampaign")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(CreateCampaignRequest)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request json")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *CreateCampaignResponse
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.CreateCampaign(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *CreateCampaignResponse and nil error while calling CreateCampaign. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		err = wrapErr(err, "failed to marshal json response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.WriteHeader(http.StatusOK)
+
+	respBytes := buf.Bytes()
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveCreateCampaignProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "CreateCampaign")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		err = wrapErr(err, "failed to read request body")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+	reqContent := new(CreateCampaignRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request proto")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *CreateCampaignResponse
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.CreateCampaign(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *CreateCampaignResponse and nil error while calling CreateCampaign. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		err = wrapErr(err, "failed to marshal proto response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveEditCampaign(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveEditCampaignJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveEditCampaignProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *dDServer) serveEditCampaignJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "EditCampaign")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(EditCampaignRequest)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request json")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *CampaignCore
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.EditCampaign(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *CampaignCore and nil error while calling EditCampaign. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		err = wrapErr(err, "failed to marshal json response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/json")
+	resp.WriteHeader(http.StatusOK)
+
+	respBytes := buf.Bytes()
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *dDServer) serveEditCampaignProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "EditCampaign")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		err = wrapErr(err, "failed to read request body")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+	reqContent := new(EditCampaignRequest)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		err = wrapErr(err, "failed to parse request proto")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	// Call service method
+	var respContent *CampaignCore
+	func() {
+		defer func() {
+			// In case of a panic, serve a 500 error and then panic.
+			if r := recover(); r != nil {
+				s.writeError(ctx, resp, twirp.InternalError("Internal service panic"))
+				panic(r)
+			}
+		}()
+		respContent, err = s.DD.EditCampaign(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *CampaignCore and nil error while calling EditCampaign. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		err = wrapErr(err, "failed to marshal proto response")
+		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
 func (s *dDServer) serveGetQuest(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	header := req.Header.Get("Content-Type")
 	i := strings.Index(header, ";")
@@ -820,7 +1523,7 @@ func (s *dDServer) serveGetQuestJSON(ctx context.Context, resp http.ResponseWrit
 		return
 	}
 
-	reqContent := new(GetQuestRequest)
+	reqContent := new(GetByIdRequest)
 	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
 	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
 		err = wrapErr(err, "failed to parse request json")
@@ -888,7 +1591,7 @@ func (s *dDServer) serveGetQuestProtobuf(ctx context.Context, resp http.Response
 		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
 		return
 	}
-	reqContent := new(GetQuestRequest)
+	reqContent := new(GetByIdRequest)
 	if err = proto.Unmarshal(buf, reqContent); err != nil {
 		err = wrapErr(err, "failed to parse request proto")
 		s.writeError(ctx, resp, twirp.InternalErrorWith(err))
@@ -1798,38 +2501,50 @@ func callError(ctx context.Context, h *twirp.ServerHooks, err twirp.Error) conte
 }
 
 var twirpFileDescriptor0 = []byte{
-	// 522 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x54, 0x4d, 0x6f, 0xd3, 0x40,
-	0x10, 0x55, 0x1c, 0x27, 0xc4, 0xe3, 0xb4, 0x75, 0xa7, 0x69, 0xb1, 0xac, 0x4a, 0xb8, 0x8b, 0x10,
-	0x01, 0x41, 0x90, 0xc2, 0x85, 0x03, 0x42, 0x2a, 0x6d, 0xd5, 0x4b, 0x41, 0xd4, 0xa8, 0x17, 0x4e,
-	0x98, 0xec, 0xb6, 0x5d, 0xd1, 0xc4, 0x61, 0x77, 0xf3, 0x6b, 0xf9, 0x33, 0x68, 0x3f, 0x1c, 0x6f,
-	0x3e, 0xe8, 0xcd, 0xf3, 0x66, 0xe6, 0xed, 0x9b, 0xd9, 0xb7, 0x86, 0xbe, 0x98, 0x4f, 0xde, 0x51,
-	0x3a, 0x9a, 0x8b, 0x4a, 0x55, 0x18, 0x50, 0x4a, 0x72, 0xd8, 0xbd, 0x64, 0xea, 0x46, 0x32, 0x51,
-	0xb0, 0x3f, 0x0b, 0x26, 0x15, 0xee, 0x42, 0xc0, 0x69, 0xda, 0xca, 0x5b, 0xc3, 0xa8, 0x08, 0x38,
-	0x25, 0x17, 0xb0, 0x7f, 0x26, 0x58, 0xa9, 0x98, 0x5f, 0x34, 0x80, 0x8e, 0xaa, 0x7e, 0xb3, 0x99,
-	0xab, 0xb3, 0x01, 0x66, 0xd0, 0x5b, 0x48, 0x26, 0x66, 0xe5, 0x94, 0xa5, 0x81, 0x49, 0x2c, 0x63,
-	0x42, 0x21, 0xd4, 0x04, 0xeb, 0xf4, 0x88, 0x10, 0x7a, 0xf5, 0xe6, 0x5b, 0xf3, 0xf0, 0x69, 0x79,
-	0xc7, 0x6e, 0x8a, 0xab, 0xb4, 0x6d, 0x79, 0xea, 0x18, 0x8f, 0x21, 0x9a, 0x18, 0x39, 0xf4, 0x54,
-	0xa5, 0x61, 0xde, 0x1a, 0x86, 0x45, 0x03, 0x90, 0xe7, 0x10, 0x9f, 0x2e, 0xd4, 0xfd, 0xa3, 0x32,
-	0xc9, 0x4f, 0xe8, 0xdb, 0x22, 0x39, 0xaf, 0x66, 0x92, 0xe1, 0x31, 0x84, 0x5a, 0xa6, 0x29, 0x8a,
-	0xc7, 0xbd, 0x11, 0xa5, 0x23, 0x33, 0xab, 0x41, 0x71, 0x0c, 0x03, 0xc1, 0xf8, 0x9d, 0x54, 0xa2,
-	0x54, 0xbc, 0x9a, 0x69, 0x6a, 0x2e, 0x18, 0x35, 0x82, 0x7b, 0xc5, 0xd6, 0x1c, 0x19, 0x00, 0xda,
-	0x9d, 0x5d, 0x6b, 0x19, 0x4e, 0x0d, 0x79, 0x01, 0x07, 0x2b, 0xa8, 0x3b, 0x7e, 0x7d, 0xe1, 0x67,
-	0x90, 0x5c, 0x50, 0xae, 0xfc, 0xd6, 0x8d, 0xad, 0x3d, 0x83, 0x8e, 0x49, 0x18, 0x15, 0xf1, 0x38,
-	0xd2, 0x9a, 0x6d, 0x83, 0xc5, 0xc9, 0x47, 0x48, 0x2e, 0x99, 0xe5, 0x90, 0x35, 0xc9, 0x10, 0xba,
-	0x92, 0x95, 0x62, 0x72, 0xef, 0x26, 0x4d, 0x74, 0xd7, 0x77, 0x83, 0x7c, 0x2b, 0x45, 0x39, 0x95,
-	0x85, 0xcb, 0x93, 0x2b, 0xd8, 0xf7, 0xba, 0x9d, 0xce, 0x13, 0xe8, 0x1a, 0x1e, 0x99, 0xb6, 0xf2,
-	0xf6, 0xea, 0xa1, 0x2e, 0x61, 0xf7, 0xad, 0xca, 0x07, 0x23, 0x6b, 0xa7, 0xb0, 0x01, 0x39, 0x81,
-	0xbd, 0x9a, 0xed, 0x7f, 0x26, 0xfb, 0x02, 0x9d, 0xeb, 0xad, 0x83, 0x6e, 0xb3, 0x47, 0x0e, 0x31,
-	0x65, 0x72, 0x22, 0xf8, 0x5c, 0x2f, 0xdd, 0x39, 0xc4, 0x87, 0xc8, 0x57, 0xe8, 0xfb, 0x73, 0x61,
-	0x02, 0x6d, 0x4e, 0xad, 0xee, 0xa8, 0xd0, 0x9f, 0x5a, 0xe9, 0x03, 0x9f, 0x72, 0x55, 0x2b, 0x35,
-	0x01, 0x1e, 0x41, 0xb7, 0xba, 0xbd, 0x95, 0x4c, 0x19, 0xd2, 0x9d, 0xc2, 0x45, 0xe3, 0xbf, 0x01,
-	0x04, 0xe7, 0xe7, 0xf8, 0x0a, 0x42, 0x6d, 0x1c, 0xdc, 0xd3, 0x93, 0x7b, 0x3e, 0xcb, 0x92, 0x06,
-	0x70, 0xcb, 0x7a, 0x09, 0x4f, 0xdc, 0xbb, 0x42, 0xd4, 0xc9, 0xd5, 0x47, 0x96, 0x2d, 0x4d, 0x86,
-	0x6f, 0x01, 0x9a, 0xe7, 0x85, 0x87, 0x1a, 0xdf, 0x78, 0x6e, 0x5e, 0xf9, 0x6b, 0xe8, 0xd5, 0xbb,
-	0xc4, 0x03, 0x47, 0xec, 0x6f, 0x36, 0x6b, 0x6e, 0x05, 0x3f, 0x40, 0xb4, 0xbc, 0x45, 0x1c, 0xf8,
-	0xc5, 0xb5, 0x25, 0xb2, 0xc3, 0x35, 0xd4, 0xa9, 0xff, 0x04, 0xb1, 0xe7, 0x54, 0x3c, 0x6a, 0x54,
-	0xad, 0x9c, 0xf5, 0x74, 0x03, 0x77, 0xfd, 0x6f, 0x20, 0x5a, 0x5a, 0xd8, 0x9e, 0xbc, 0xee, 0x68,
-	0x4f, 0xe7, 0xe7, 0xf0, 0x47, 0x40, 0xe9, 0xaf, 0xae, 0xf9, 0x29, 0xbd, 0xff, 0x17, 0x00, 0x00,
-	0xff, 0xff, 0x74, 0xc2, 0xef, 0x14, 0xa4, 0x04, 0x00, 0x00,
+	// 718 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x55, 0xdd, 0x4e, 0xd4, 0x40,
+	0x14, 0x4e, 0xbb, 0xdd, 0xa5, 0x3d, 0x5b, 0x61, 0x39, 0x2c, 0x50, 0x1b, 0x12, 0x6b, 0x8d, 0xb1,
+	0x24, 0xb8, 0x24, 0x78, 0xa3, 0x89, 0xd1, 0xc0, 0x42, 0x36, 0x24, 0x68, 0x64, 0x90, 0x1b, 0xe3,
+	0x85, 0x65, 0x67, 0x80, 0x46, 0x76, 0xbb, 0xb6, 0x43, 0xa2, 0xef, 0xe1, 0x85, 0xcf, 0xe5, 0x13,
+	0x99, 0x4e, 0xa7, 0xed, 0xb4, 0xbb, 0x18, 0x63, 0xbc, 0xf0, 0xae, 0xe7, 0xef, 0x3b, 0xdf, 0x9c,
+	0x39, 0xf3, 0x15, 0xec, 0x64, 0x36, 0xde, 0xa5, 0x74, 0x30, 0x4b, 0x62, 0x1e, 0xa3, 0x4e, 0xa9,
+	0xef, 0xc1, 0xf2, 0x88, 0xf1, 0x83, 0x6f, 0xc7, 0x94, 0xb0, 0x2f, 0xb7, 0x2c, 0xe5, 0xb8, 0x0c,
+	0x7a, 0x44, 0x1d, 0xcd, 0xd3, 0x02, 0x8b, 0xe8, 0x11, 0xf5, 0xdf, 0x82, 0x7d, 0xc6, 0xc2, 0x64,
+	0x7c, 0xfd, 0x2e, 0x4c, 0xc2, 0x49, 0x8a, 0x3d, 0x68, 0x45, 0x34, 0x75, 0x34, 0xaf, 0x15, 0x58,
+	0x24, 0xfb, 0xc4, 0x3e, 0xb4, 0x6f, 0xa2, 0x49, 0xc4, 0x1d, 0xdd, 0xd3, 0x82, 0x7b, 0x24, 0x37,
+	0x70, 0x03, 0x3a, 0xf1, 0xe5, 0x65, 0xca, 0xb8, 0xd3, 0x12, 0x6e, 0x69, 0xf9, 0x8f, 0xa0, 0xbb,
+	0x7f, 0xcb, 0xaf, 0x8b, 0x76, 0x7d, 0x68, 0xf3, 0xf8, 0x33, 0x9b, 0xca, 0x8e, 0xb9, 0xe1, 0x7f,
+	0x02, 0x3b, 0x4f, 0x4a, 0x67, 0xf1, 0x34, 0x65, 0xb8, 0x05, 0xc6, 0x6d, 0xca, 0x12, 0x91, 0xd4,
+	0xdd, 0x33, 0x07, 0x94, 0x0e, 0xce, 0x53, 0x96, 0x10, 0xe1, 0xc5, 0x3d, 0xe8, 0x27, 0x2c, 0xba,
+	0x4a, 0x79, 0x12, 0xf2, 0x28, 0x9e, 0x66, 0xd0, 0x51, 0xc2, 0xa8, 0xe0, 0x63, 0x92, 0x85, 0x31,
+	0xff, 0x08, 0x56, 0x87, 0x09, 0x0b, 0x39, 0x13, 0x38, 0xbf, 0x23, 0x83, 0x2e, 0x98, 0x59, 0x9b,
+	0x69, 0x38, 0x61, 0x02, 0xd2, 0x22, 0xa5, 0xed, 0xbf, 0x86, 0xb5, 0x11, 0xe3, 0xc3, 0x70, 0x32,
+	0x0b, 0xa3, 0xab, 0x69, 0x5a, 0x00, 0x05, 0xd0, 0x49, 0xc5, 0xd0, 0x24, 0xe3, 0x5e, 0xc6, 0x58,
+	0x1d, 0x23, 0x91, 0x71, 0xff, 0x23, 0xf4, 0xeb, 0x00, 0xf2, 0xc4, 0x03, 0xb0, 0xc6, 0x85, 0x53,
+	0x0c, 0x5b, 0x82, 0x14, 0x99, 0xc3, 0x38, 0x61, 0xa4, 0x4a, 0xc9, 0xa9, 0xf3, 0xf0, 0xa6, 0xb8,
+	0x04, 0x61, 0xf8, 0x9b, 0xb0, 0x9e, 0x9f, 0xb2, 0x28, 0x93, 0x04, 0xfd, 0x00, 0x36, 0x9a, 0x01,
+	0xd9, 0xb8, 0x79, 0xff, 0x67, 0xb0, 0x76, 0x44, 0x23, 0xde, 0x00, 0xc0, 0x1d, 0x30, 0x8b, 0xe6,
+	0xea, 0x19, 0x6b, 0xf4, 0xca, 0x0c, 0x09, 0xaa, 0x97, 0xa0, 0x2f, 0xa1, 0x37, 0x62, 0xfc, 0x34,
+	0x43, 0xfa, 0x8b, 0x99, 0x9d, 0xc0, 0xaa, 0x52, 0x2d, 0x79, 0x3f, 0x84, 0x8e, 0xc0, 0x29, 0xa6,
+	0x65, 0x65, 0xe5, 0x22, 0x87, 0xc8, 0xc0, 0x1d, 0x33, 0xea, 0x03, 0xe6, 0xa3, 0xc8, 0x93, 0xe5,
+	0x80, 0x1e, 0xc3, 0x5a, 0xcd, 0x7b, 0xc7, 0x74, 0x86, 0xd0, 0xcb, 0xa6, 0xa3, 0x96, 0x36, 0x73,
+	0xf0, 0x01, 0xb4, 0x45, 0x40, 0xb4, 0xad, 0x11, 0xcb, 0xfd, 0xfe, 0x1b, 0x68, 0x9f, 0x2e, 0xac,
+	0x44, 0x30, 0x94, 0xad, 0x13, 0xdf, 0xe8, 0x41, 0x97, 0xb2, 0x74, 0x9c, 0x44, 0xb3, 0x6c, 0x9f,
+	0xc5, 0xe3, 0xb2, 0x88, 0xea, 0xf2, 0x29, 0x18, 0xd9, 0x52, 0xff, 0x11, 0x9a, 0x0b, 0x66, 0x34,
+	0x09, 0xaf, 0xd8, 0x39, 0x39, 0x91, 0x50, 0xa5, 0x8d, 0x5b, 0x60, 0x8d, 0xc5, 0x08, 0xe8, 0x3e,
+	0x77, 0x0c, 0x4f, 0x0b, 0x0c, 0x52, 0x39, 0xfc, 0x1f, 0x1a, 0xd8, 0xea, 0x6d, 0xff, 0x1b, 0xf2,
+	0xe8, 0xc0, 0x92, 0x20, 0x70, 0x4c, 0x45, 0x4b, 0x8b, 0x14, 0x26, 0x06, 0xb0, 0xc2, 0xbe, 0xce,
+	0x58, 0x12, 0xb1, 0xe9, 0x98, 0xbd, 0x0f, 0x2f, 0x6e, 0x98, 0x03, 0x5e, 0x2b, 0x30, 0x48, 0xd3,
+	0xed, 0x7f, 0xd7, 0xc0, 0x1c, 0xd6, 0x57, 0xef, 0x3f, 0xa0, 0xb5, 0xf7, 0xd3, 0x00, 0xfd, 0xf0,
+	0x10, 0xb7, 0xc1, 0xc8, 0xb4, 0x0d, 0x57, 0xb2, 0x3d, 0x50, 0xa4, 0xd0, 0xed, 0x55, 0x0e, 0xb9,
+	0x6d, 0x4f, 0x60, 0x69, 0xc4, 0xb8, 0xb8, 0x4c, 0xcc, 0x82, 0x75, 0xa9, 0x76, 0x4b, 0x1d, 0xc4,
+	0xa7, 0x00, 0x95, 0x9a, 0xe1, 0xba, 0x78, 0x89, 0x4d, 0x75, 0x53, 0xd2, 0x77, 0xa1, 0xab, 0x88,
+	0xce, 0x42, 0x6c, 0x5b, 0x7d, 0xcd, 0xb8, 0x0f, 0xb6, 0xaa, 0x52, 0xb8, 0x29, 0x2b, 0x9a, 0xc2,
+	0xe7, 0x3a, 0xf3, 0x01, 0x79, 0x96, 0x11, 0x2c, 0xd7, 0x15, 0x07, 0xef, 0x57, 0x34, 0x1b, 0xea,
+	0xe2, 0xba, 0x8b, 0x42, 0x12, 0xe8, 0x05, 0xd8, 0xaa, 0x20, 0xe5, 0x5c, 0x16, 0x48, 0x94, 0x3b,
+	0x27, 0x48, 0xb8, 0x0d, 0x66, 0x21, 0x1c, 0x0b, 0x0f, 0x5d, 0x3d, 0x4d, 0x7c, 0x0e, 0x56, 0xa9,
+	0x31, 0xd8, 0x97, 0xb9, 0x35, 0xc1, 0x72, 0xd7, 0x1b, 0x5e, 0xc9, 0xef, 0x15, 0x74, 0x15, 0xe5,
+	0xc0, 0x8d, 0xea, 0x28, 0xaa, 0x4a, 0xb8, 0x9b, 0x73, 0x7e, 0x59, 0xbf, 0x03, 0x56, 0x29, 0x29,
+	0x79, 0xe7, 0xa6, 0xc2, 0x28, 0x3c, 0x0f, 0x8c, 0x0f, 0x3a, 0xa5, 0x17, 0x1d, 0xf1, 0x47, 0x7f,
+	0xf6, 0x2b, 0x00, 0x00, 0xff, 0xff, 0x50, 0x2d, 0xb8, 0xd7, 0xe1, 0x07, 0x00, 0x00,
 }

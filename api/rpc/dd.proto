@@ -5,33 +5,36 @@ package dd;
 option go_package = "dd";
 
 service DD {
+  // User/Auth
   rpc Auth (AuthRequest) returns (AuthResponse);
-
-  rpc GetUser (GetUserRequest) returns (User);
+  rpc GetUser (GetByIdRequest) returns (User);
   rpc CreateUser (CreateUserRequest) returns (User);
 
-  rpc GetQuest (GetQuestRequest) returns (Quest);
+  // Campaigns
+  rpc GetCampaign (GetByIdRequest) returns (Campaign);
+  rpc GetCampaigns (GetCampaignsRequest) returns (GetCampaignsResponse);
+  rpc CreateCampaign (CreateCampaignRequest) returns (CreateCampaignResponse);
+  rpc EditCampaign (EditCampaignRequest) returns (CampaignCore);
+
+  // Quests
+  rpc GetQuest (GetByIdRequest) returns (Quest);
   rpc GetQuests (GetQuestsRequest) returns (GetQuestsResponse);
   rpc CreateQuest(CreateQuestRequest) returns (CreateQuestResponse);
   rpc EditQuest(EditQuestRequest) returns (Quest);
 }
 
-message GetUserRequest {
+// COMMON
+message GetByIdRequest {
   string id = 1;
 }
 
-message CreateUserRequest {
-  string token = 1;
-  string username = 2;
+message SearchParams {
+  repeated string ids = 1;
+  uint32 limit = 2;
+  uint32 offset = 3;
 }
 
-message User {
-  string id = 1;
-  string name = 2;
-  string imageURL = 3;
-  uint64 createdAt = 4;
-}
-
+// AUTH
 message AuthRequest {
   string token = 1;
 }
@@ -39,6 +42,49 @@ message AuthRequest {
 message AuthResponse {
   User user = 1;
   bool reigstrationRequired = 2;
+}
+
+message CreateUserRequest {
+  string token = 1;
+  string username = 2;
+}
+
+
+// *************************************
+//              CAMPAIGNS
+// *************************************
+message GetCampaignsRequest {
+  SearchParams search = 1;
+}
+
+message GetCampaignsResponse {
+  repeated CampaignCore campaigns = 1;
+  uint32 total = 2;
+}
+
+message CreateCampaignRequest { }
+
+message CreateCampaignResponse {
+  string id = 1;
+}
+
+message EditCampaignRequest {
+  CampaignCore campaign = 1;
+  string id = 2;
+}
+
+
+// *************************************
+//                QUESTS
+// *************************************
+
+message GetQuestsRequest {
+  SearchParams search = 1;
+}
+
+message GetQuestsResponse {
+  repeated Quest quests = 1;
+  uint32 total = 2;
 }
 
 message CreateQuestRequest { }
@@ -52,18 +98,9 @@ message EditQuestRequest {
   Quest quest = 2;
 }
 
-message GetQuestsRequest {
-  SearchParams search = 1;
-}
-
-message GetQuestsResponse {
-  repeated Quest quests = 1;
-  uint32 total = 2;
-}
-
-message GetQuestRequest {
-  string id = 1;
-}
+// *************************************
+//                MODELS
+// *************************************
 
 message Quest {
   string id = 1;
@@ -71,8 +108,26 @@ message Quest {
   string description = 3;
 }
 
-message SearchParams {
-  repeated string ids = 1;
-  uint32 limit = 2;
-  uint32 offset = 3;
+message User {
+  string id = 1;
+  string name = 2;
+  string imageURL = 3;
+  uint64 createdAt = 4;
+}
+
+message CampaignCore {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string imageId = 4;
+
+  repeated uint64 experienceTable = 10;
+}
+
+message Campaign {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string imageId = 4;
+  repeated uint64 experienceTable = 10;
 }

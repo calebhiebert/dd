@@ -34,6 +34,7 @@ import { QuestManagerComponent } from './quest/quest-manager/quest-manager.compo
 import { EntityAttributeEditorModalComponent } from './entity/entity-view/entity-attribute-editor-modal/entity-attribute-editor-modal.component';
 import { QuestFormComponent } from './quest/quest-form/quest-form.component';
 import { RegisterComponent } from './login/register/register.component';
+import { CampaignFormComponent } from './campaign/campaign-form/campaign-form.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { RegisterComponent } from './login/register/register.component';
     EntityAttributeEditorModalComponent,
     QuestFormComponent,
     RegisterComponent,
+    CampaignFormComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, FormsModule, TruncateModule],
   providers: [],

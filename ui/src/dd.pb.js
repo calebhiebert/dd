@@ -97,13 +97,13 @@ $root.dd = (function() {
          * @function getUser
          * @memberof dd.DD
          * @instance
-         * @param {dd.IGetUserRequest} request GetUserRequest message or plain object
+         * @param {dd.IGetByIdRequest} request GetByIdRequest message or plain object
          * @param {dd.DD.GetUserCallback} callback Node-style callback called with the error, if any, and User
          * @returns {undefined}
          * @variation 1
          */
         Object.defineProperty(DD.prototype.getUser = function getUser(request, callback) {
-            return this.rpcCall(getUser, $root.dd.GetUserRequest, $root.dd.User, request, callback);
+            return this.rpcCall(getUser, $root.dd.GetByIdRequest, $root.dd.User, request, callback);
         }, "name", { value: "GetUser" });
 
         /**
@@ -111,7 +111,7 @@ $root.dd = (function() {
          * @function getUser
          * @memberof dd.DD
          * @instance
-         * @param {dd.IGetUserRequest} request GetUserRequest message or plain object
+         * @param {dd.IGetByIdRequest} request GetByIdRequest message or plain object
          * @returns {Promise<dd.User>} Promise
          * @variation 2
          */
@@ -150,6 +150,138 @@ $root.dd = (function() {
          */
 
         /**
+         * Callback as used by {@link dd.DD#getCampaign}.
+         * @memberof dd.DD
+         * @typedef GetCampaignCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {dd.Campaign} [response] Campaign
+         */
+
+        /**
+         * Calls GetCampaign.
+         * @function getCampaign
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IGetByIdRequest} request GetByIdRequest message or plain object
+         * @param {dd.DD.GetCampaignCallback} callback Node-style callback called with the error, if any, and Campaign
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(DD.prototype.getCampaign = function getCampaign(request, callback) {
+            return this.rpcCall(getCampaign, $root.dd.GetByIdRequest, $root.dd.Campaign, request, callback);
+        }, "name", { value: "GetCampaign" });
+
+        /**
+         * Calls GetCampaign.
+         * @function getCampaign
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IGetByIdRequest} request GetByIdRequest message or plain object
+         * @returns {Promise<dd.Campaign>} Promise
+         * @variation 2
+         */
+
+        /**
+         * Callback as used by {@link dd.DD#getCampaigns}.
+         * @memberof dd.DD
+         * @typedef GetCampaignsCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {dd.GetCampaignsResponse} [response] GetCampaignsResponse
+         */
+
+        /**
+         * Calls GetCampaigns.
+         * @function getCampaigns
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IGetCampaignsRequest} request GetCampaignsRequest message or plain object
+         * @param {dd.DD.GetCampaignsCallback} callback Node-style callback called with the error, if any, and GetCampaignsResponse
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(DD.prototype.getCampaigns = function getCampaigns(request, callback) {
+            return this.rpcCall(getCampaigns, $root.dd.GetCampaignsRequest, $root.dd.GetCampaignsResponse, request, callback);
+        }, "name", { value: "GetCampaigns" });
+
+        /**
+         * Calls GetCampaigns.
+         * @function getCampaigns
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IGetCampaignsRequest} request GetCampaignsRequest message or plain object
+         * @returns {Promise<dd.GetCampaignsResponse>} Promise
+         * @variation 2
+         */
+
+        /**
+         * Callback as used by {@link dd.DD#createCampaign}.
+         * @memberof dd.DD
+         * @typedef CreateCampaignCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {dd.CreateCampaignResponse} [response] CreateCampaignResponse
+         */
+
+        /**
+         * Calls CreateCampaign.
+         * @function createCampaign
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.ICreateCampaignRequest} request CreateCampaignRequest message or plain object
+         * @param {dd.DD.CreateCampaignCallback} callback Node-style callback called with the error, if any, and CreateCampaignResponse
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(DD.prototype.createCampaign = function createCampaign(request, callback) {
+            return this.rpcCall(createCampaign, $root.dd.CreateCampaignRequest, $root.dd.CreateCampaignResponse, request, callback);
+        }, "name", { value: "CreateCampaign" });
+
+        /**
+         * Calls CreateCampaign.
+         * @function createCampaign
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.ICreateCampaignRequest} request CreateCampaignRequest message or plain object
+         * @returns {Promise<dd.CreateCampaignResponse>} Promise
+         * @variation 2
+         */
+
+        /**
+         * Callback as used by {@link dd.DD#editCampaign}.
+         * @memberof dd.DD
+         * @typedef EditCampaignCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {dd.CampaignCore} [response] CampaignCore
+         */
+
+        /**
+         * Calls EditCampaign.
+         * @function editCampaign
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IEditCampaignRequest} request EditCampaignRequest message or plain object
+         * @param {dd.DD.EditCampaignCallback} callback Node-style callback called with the error, if any, and CampaignCore
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(DD.prototype.editCampaign = function editCampaign(request, callback) {
+            return this.rpcCall(editCampaign, $root.dd.EditCampaignRequest, $root.dd.CampaignCore, request, callback);
+        }, "name", { value: "EditCampaign" });
+
+        /**
+         * Calls EditCampaign.
+         * @function editCampaign
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IEditCampaignRequest} request EditCampaignRequest message or plain object
+         * @returns {Promise<dd.CampaignCore>} Promise
+         * @variation 2
+         */
+
+        /**
          * Callback as used by {@link dd.DD#getQuest}.
          * @memberof dd.DD
          * @typedef GetQuestCallback
@@ -163,13 +295,13 @@ $root.dd = (function() {
          * @function getQuest
          * @memberof dd.DD
          * @instance
-         * @param {dd.IGetQuestRequest} request GetQuestRequest message or plain object
+         * @param {dd.IGetByIdRequest} request GetByIdRequest message or plain object
          * @param {dd.DD.GetQuestCallback} callback Node-style callback called with the error, if any, and Quest
          * @returns {undefined}
          * @variation 1
          */
         Object.defineProperty(DD.prototype.getQuest = function getQuest(request, callback) {
-            return this.rpcCall(getQuest, $root.dd.GetQuestRequest, $root.dd.Quest, request, callback);
+            return this.rpcCall(getQuest, $root.dd.GetByIdRequest, $root.dd.Quest, request, callback);
         }, "name", { value: "GetQuest" });
 
         /**
@@ -177,7 +309,7 @@ $root.dd = (function() {
          * @function getQuest
          * @memberof dd.DD
          * @instance
-         * @param {dd.IGetQuestRequest} request GetQuestRequest message or plain object
+         * @param {dd.IGetByIdRequest} request GetByIdRequest message or plain object
          * @returns {Promise<dd.Quest>} Promise
          * @variation 2
          */
@@ -284,24 +416,24 @@ $root.dd = (function() {
         return DD;
     })();
 
-    dd.GetUserRequest = (function() {
+    dd.GetByIdRequest = (function() {
 
         /**
-         * Properties of a GetUserRequest.
+         * Properties of a GetByIdRequest.
          * @memberof dd
-         * @interface IGetUserRequest
-         * @property {string|null} [id] GetUserRequest id
+         * @interface IGetByIdRequest
+         * @property {string|null} [id] GetByIdRequest id
          */
 
         /**
-         * Constructs a new GetUserRequest.
+         * Constructs a new GetByIdRequest.
          * @memberof dd
-         * @classdesc Represents a GetUserRequest.
-         * @implements IGetUserRequest
+         * @classdesc Represents a GetByIdRequest.
+         * @implements IGetByIdRequest
          * @constructor
-         * @param {dd.IGetUserRequest=} [properties] Properties to set
+         * @param {dd.IGetByIdRequest=} [properties] Properties to set
          */
-        function GetUserRequest(properties) {
+        function GetByIdRequest(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -309,35 +441,35 @@ $root.dd = (function() {
         }
 
         /**
-         * GetUserRequest id.
+         * GetByIdRequest id.
          * @member {string} id
-         * @memberof dd.GetUserRequest
+         * @memberof dd.GetByIdRequest
          * @instance
          */
-        GetUserRequest.prototype.id = "";
+        GetByIdRequest.prototype.id = "";
 
         /**
-         * Creates a new GetUserRequest instance using the specified properties.
+         * Creates a new GetByIdRequest instance using the specified properties.
          * @function create
-         * @memberof dd.GetUserRequest
+         * @memberof dd.GetByIdRequest
          * @static
-         * @param {dd.IGetUserRequest=} [properties] Properties to set
-         * @returns {dd.GetUserRequest} GetUserRequest instance
+         * @param {dd.IGetByIdRequest=} [properties] Properties to set
+         * @returns {dd.GetByIdRequest} GetByIdRequest instance
          */
-        GetUserRequest.create = function create(properties) {
-            return new GetUserRequest(properties);
+        GetByIdRequest.create = function create(properties) {
+            return new GetByIdRequest(properties);
         };
 
         /**
-         * Encodes the specified GetUserRequest message. Does not implicitly {@link dd.GetUserRequest.verify|verify} messages.
+         * Encodes the specified GetByIdRequest message. Does not implicitly {@link dd.GetByIdRequest.verify|verify} messages.
          * @function encode
-         * @memberof dd.GetUserRequest
+         * @memberof dd.GetByIdRequest
          * @static
-         * @param {dd.IGetUserRequest} message GetUserRequest message or plain object to encode
+         * @param {dd.IGetByIdRequest} message GetByIdRequest message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        GetUserRequest.encode = function encode(message, writer) {
+        GetByIdRequest.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
             if (message.id != null && message.hasOwnProperty("id"))
@@ -346,33 +478,33 @@ $root.dd = (function() {
         };
 
         /**
-         * Encodes the specified GetUserRequest message, length delimited. Does not implicitly {@link dd.GetUserRequest.verify|verify} messages.
+         * Encodes the specified GetByIdRequest message, length delimited. Does not implicitly {@link dd.GetByIdRequest.verify|verify} messages.
          * @function encodeDelimited
-         * @memberof dd.GetUserRequest
+         * @memberof dd.GetByIdRequest
          * @static
-         * @param {dd.IGetUserRequest} message GetUserRequest message or plain object to encode
+         * @param {dd.IGetByIdRequest} message GetByIdRequest message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        GetUserRequest.encodeDelimited = function encodeDelimited(message, writer) {
+        GetByIdRequest.encodeDelimited = function encodeDelimited(message, writer) {
             return this.encode(message, writer).ldelim();
         };
 
         /**
-         * Decodes a GetUserRequest message from the specified reader or buffer.
+         * Decodes a GetByIdRequest message from the specified reader or buffer.
          * @function decode
-         * @memberof dd.GetUserRequest
+         * @memberof dd.GetByIdRequest
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
          * @param {number} [length] Message length if known beforehand
-         * @returns {dd.GetUserRequest} GetUserRequest
+         * @returns {dd.GetByIdRequest} GetByIdRequest
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        GetUserRequest.decode = function decode(reader, length) {
+        GetByIdRequest.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.GetUserRequest();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.GetByIdRequest();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
@@ -388,30 +520,30 @@ $root.dd = (function() {
         };
 
         /**
-         * Decodes a GetUserRequest message from the specified reader or buffer, length delimited.
+         * Decodes a GetByIdRequest message from the specified reader or buffer, length delimited.
          * @function decodeDelimited
-         * @memberof dd.GetUserRequest
+         * @memberof dd.GetByIdRequest
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {dd.GetUserRequest} GetUserRequest
+         * @returns {dd.GetByIdRequest} GetByIdRequest
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        GetUserRequest.decodeDelimited = function decodeDelimited(reader) {
+        GetByIdRequest.decodeDelimited = function decodeDelimited(reader) {
             if (!(reader instanceof $Reader))
                 reader = new $Reader(reader);
             return this.decode(reader, reader.uint32());
         };
 
         /**
-         * Verifies a GetUserRequest message.
+         * Verifies a GetByIdRequest message.
          * @function verify
-         * @memberof dd.GetUserRequest
+         * @memberof dd.GetByIdRequest
          * @static
          * @param {Object.<string,*>} message Plain object to verify
          * @returns {string|null} `null` if valid, otherwise the reason why it is not
          */
-        GetUserRequest.verify = function verify(message) {
+        GetByIdRequest.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.id != null && message.hasOwnProperty("id"))
@@ -421,32 +553,32 @@ $root.dd = (function() {
         };
 
         /**
-         * Creates a GetUserRequest message from a plain object. Also converts values to their respective internal types.
+         * Creates a GetByIdRequest message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
-         * @memberof dd.GetUserRequest
+         * @memberof dd.GetByIdRequest
          * @static
          * @param {Object.<string,*>} object Plain object
-         * @returns {dd.GetUserRequest} GetUserRequest
+         * @returns {dd.GetByIdRequest} GetByIdRequest
          */
-        GetUserRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.dd.GetUserRequest)
+        GetByIdRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.GetByIdRequest)
                 return object;
-            var message = new $root.dd.GetUserRequest();
+            var message = new $root.dd.GetByIdRequest();
             if (object.id != null)
                 message.id = String(object.id);
             return message;
         };
 
         /**
-         * Creates a plain object from a GetUserRequest message. Also converts values to other types if specified.
+         * Creates a plain object from a GetByIdRequest message. Also converts values to other types if specified.
          * @function toObject
-         * @memberof dd.GetUserRequest
+         * @memberof dd.GetByIdRequest
          * @static
-         * @param {dd.GetUserRequest} message GetUserRequest
+         * @param {dd.GetByIdRequest} message GetByIdRequest
          * @param {$protobuf.IConversionOptions} [options] Conversion options
          * @returns {Object.<string,*>} Plain object
          */
-        GetUserRequest.toObject = function toObject(message, options) {
+        GetByIdRequest.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
             var object = {};
@@ -458,38 +590,40 @@ $root.dd = (function() {
         };
 
         /**
-         * Converts this GetUserRequest to JSON.
+         * Converts this GetByIdRequest to JSON.
          * @function toJSON
-         * @memberof dd.GetUserRequest
+         * @memberof dd.GetByIdRequest
          * @instance
          * @returns {Object.<string,*>} JSON object
          */
-        GetUserRequest.prototype.toJSON = function toJSON() {
+        GetByIdRequest.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        return GetUserRequest;
+        return GetByIdRequest;
     })();
 
-    dd.CreateUserRequest = (function() {
+    dd.SearchParams = (function() {
 
         /**
-         * Properties of a CreateUserRequest.
+         * Properties of a SearchParams.
          * @memberof dd
-         * @interface ICreateUserRequest
-         * @property {string|null} [token] CreateUserRequest token
-         * @property {string|null} [username] CreateUserRequest username
+         * @interface ISearchParams
+         * @property {Array.<string>|null} [ids] SearchParams ids
+         * @property {number|null} [limit] SearchParams limit
+         * @property {number|null} [offset] SearchParams offset
          */
 
         /**
-         * Constructs a new CreateUserRequest.
+         * Constructs a new SearchParams.
          * @memberof dd
-         * @classdesc Represents a CreateUserRequest.
-         * @implements ICreateUserRequest
+         * @classdesc Represents a SearchParams.
+         * @implements ISearchParams
          * @constructor
-         * @param {dd.ICreateUserRequest=} [properties] Properties to set
+         * @param {dd.ISearchParams=} [properties] Properties to set
          */
-        function CreateUserRequest(properties) {
+        function SearchParams(properties) {
+            this.ids = [];
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -497,326 +631,104 @@ $root.dd = (function() {
         }
 
         /**
-         * CreateUserRequest token.
-         * @member {string} token
-         * @memberof dd.CreateUserRequest
+         * SearchParams ids.
+         * @member {Array.<string>} ids
+         * @memberof dd.SearchParams
          * @instance
          */
-        CreateUserRequest.prototype.token = "";
+        SearchParams.prototype.ids = $util.emptyArray;
 
         /**
-         * CreateUserRequest username.
-         * @member {string} username
-         * @memberof dd.CreateUserRequest
+         * SearchParams limit.
+         * @member {number} limit
+         * @memberof dd.SearchParams
          * @instance
          */
-        CreateUserRequest.prototype.username = "";
+        SearchParams.prototype.limit = 0;
 
         /**
-         * Creates a new CreateUserRequest instance using the specified properties.
+         * SearchParams offset.
+         * @member {number} offset
+         * @memberof dd.SearchParams
+         * @instance
+         */
+        SearchParams.prototype.offset = 0;
+
+        /**
+         * Creates a new SearchParams instance using the specified properties.
          * @function create
-         * @memberof dd.CreateUserRequest
+         * @memberof dd.SearchParams
          * @static
-         * @param {dd.ICreateUserRequest=} [properties] Properties to set
-         * @returns {dd.CreateUserRequest} CreateUserRequest instance
+         * @param {dd.ISearchParams=} [properties] Properties to set
+         * @returns {dd.SearchParams} SearchParams instance
          */
-        CreateUserRequest.create = function create(properties) {
-            return new CreateUserRequest(properties);
+        SearchParams.create = function create(properties) {
+            return new SearchParams(properties);
         };
 
         /**
-         * Encodes the specified CreateUserRequest message. Does not implicitly {@link dd.CreateUserRequest.verify|verify} messages.
+         * Encodes the specified SearchParams message. Does not implicitly {@link dd.SearchParams.verify|verify} messages.
          * @function encode
-         * @memberof dd.CreateUserRequest
+         * @memberof dd.SearchParams
          * @static
-         * @param {dd.ICreateUserRequest} message CreateUserRequest message or plain object to encode
+         * @param {dd.ISearchParams} message SearchParams message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        CreateUserRequest.encode = function encode(message, writer) {
+        SearchParams.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.token != null && message.hasOwnProperty("token"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.token);
-            if (message.username != null && message.hasOwnProperty("username"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.username);
+            if (message.ids != null && message.ids.length)
+                for (var i = 0; i < message.ids.length; ++i)
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.ids[i]);
+            if (message.limit != null && message.hasOwnProperty("limit"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.limit);
+            if (message.offset != null && message.hasOwnProperty("offset"))
+                writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.offset);
             return writer;
         };
 
         /**
-         * Encodes the specified CreateUserRequest message, length delimited. Does not implicitly {@link dd.CreateUserRequest.verify|verify} messages.
+         * Encodes the specified SearchParams message, length delimited. Does not implicitly {@link dd.SearchParams.verify|verify} messages.
          * @function encodeDelimited
-         * @memberof dd.CreateUserRequest
+         * @memberof dd.SearchParams
          * @static
-         * @param {dd.ICreateUserRequest} message CreateUserRequest message or plain object to encode
+         * @param {dd.ISearchParams} message SearchParams message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        CreateUserRequest.encodeDelimited = function encodeDelimited(message, writer) {
+        SearchParams.encodeDelimited = function encodeDelimited(message, writer) {
             return this.encode(message, writer).ldelim();
         };
 
         /**
-         * Decodes a CreateUserRequest message from the specified reader or buffer.
+         * Decodes a SearchParams message from the specified reader or buffer.
          * @function decode
-         * @memberof dd.CreateUserRequest
+         * @memberof dd.SearchParams
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
          * @param {number} [length] Message length if known beforehand
-         * @returns {dd.CreateUserRequest} CreateUserRequest
+         * @returns {dd.SearchParams} SearchParams
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        CreateUserRequest.decode = function decode(reader, length) {
+        SearchParams.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.CreateUserRequest();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.SearchParams();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
-                    message.token = reader.string();
+                    if (!(message.ids && message.ids.length))
+                        message.ids = [];
+                    message.ids.push(reader.string());
                     break;
                 case 2:
-                    message.username = reader.string();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a CreateUserRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof dd.CreateUserRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {dd.CreateUserRequest} CreateUserRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        CreateUserRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a CreateUserRequest message.
-         * @function verify
-         * @memberof dd.CreateUserRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        CreateUserRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.token != null && message.hasOwnProperty("token"))
-                if (!$util.isString(message.token))
-                    return "token: string expected";
-            if (message.username != null && message.hasOwnProperty("username"))
-                if (!$util.isString(message.username))
-                    return "username: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a CreateUserRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof dd.CreateUserRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {dd.CreateUserRequest} CreateUserRequest
-         */
-        CreateUserRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.dd.CreateUserRequest)
-                return object;
-            var message = new $root.dd.CreateUserRequest();
-            if (object.token != null)
-                message.token = String(object.token);
-            if (object.username != null)
-                message.username = String(object.username);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a CreateUserRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof dd.CreateUserRequest
-         * @static
-         * @param {dd.CreateUserRequest} message CreateUserRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        CreateUserRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.defaults) {
-                object.token = "";
-                object.username = "";
-            }
-            if (message.token != null && message.hasOwnProperty("token"))
-                object.token = message.token;
-            if (message.username != null && message.hasOwnProperty("username"))
-                object.username = message.username;
-            return object;
-        };
-
-        /**
-         * Converts this CreateUserRequest to JSON.
-         * @function toJSON
-         * @memberof dd.CreateUserRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        CreateUserRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return CreateUserRequest;
-    })();
-
-    dd.User = (function() {
-
-        /**
-         * Properties of a User.
-         * @memberof dd
-         * @interface IUser
-         * @property {string|null} [id] User id
-         * @property {string|null} [name] User name
-         * @property {string|null} [imageURL] User imageURL
-         * @property {number|Long|null} [createdAt] User createdAt
-         */
-
-        /**
-         * Constructs a new User.
-         * @memberof dd
-         * @classdesc Represents a User.
-         * @implements IUser
-         * @constructor
-         * @param {dd.IUser=} [properties] Properties to set
-         */
-        function User(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * User id.
-         * @member {string} id
-         * @memberof dd.User
-         * @instance
-         */
-        User.prototype.id = "";
-
-        /**
-         * User name.
-         * @member {string} name
-         * @memberof dd.User
-         * @instance
-         */
-        User.prototype.name = "";
-
-        /**
-         * User imageURL.
-         * @member {string} imageURL
-         * @memberof dd.User
-         * @instance
-         */
-        User.prototype.imageURL = "";
-
-        /**
-         * User createdAt.
-         * @member {number|Long} createdAt
-         * @memberof dd.User
-         * @instance
-         */
-        User.prototype.createdAt = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-
-        /**
-         * Creates a new User instance using the specified properties.
-         * @function create
-         * @memberof dd.User
-         * @static
-         * @param {dd.IUser=} [properties] Properties to set
-         * @returns {dd.User} User instance
-         */
-        User.create = function create(properties) {
-            return new User(properties);
-        };
-
-        /**
-         * Encodes the specified User message. Does not implicitly {@link dd.User.verify|verify} messages.
-         * @function encode
-         * @memberof dd.User
-         * @static
-         * @param {dd.IUser} message User message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        User.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.id != null && message.hasOwnProperty("id"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
-            if (message.name != null && message.hasOwnProperty("name"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
-            if (message.imageURL != null && message.hasOwnProperty("imageURL"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.imageURL);
-            if (message.createdAt != null && message.hasOwnProperty("createdAt"))
-                writer.uint32(/* id 4, wireType 0 =*/32).uint64(message.createdAt);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified User message, length delimited. Does not implicitly {@link dd.User.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof dd.User
-         * @static
-         * @param {dd.IUser} message User message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        User.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a User message from the specified reader or buffer.
-         * @function decode
-         * @memberof dd.User
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {dd.User} User
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        User.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.User();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.id = reader.string();
-                    break;
-                case 2:
-                    message.name = reader.string();
+                    message.limit = reader.uint32();
                     break;
                 case 3:
-                    message.imageURL = reader.string();
-                    break;
-                case 4:
-                    message.createdAt = reader.uint64();
+                    message.offset = reader.uint32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -827,126 +739,117 @@ $root.dd = (function() {
         };
 
         /**
-         * Decodes a User message from the specified reader or buffer, length delimited.
+         * Decodes a SearchParams message from the specified reader or buffer, length delimited.
          * @function decodeDelimited
-         * @memberof dd.User
+         * @memberof dd.SearchParams
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {dd.User} User
+         * @returns {dd.SearchParams} SearchParams
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        User.decodeDelimited = function decodeDelimited(reader) {
+        SearchParams.decodeDelimited = function decodeDelimited(reader) {
             if (!(reader instanceof $Reader))
                 reader = new $Reader(reader);
             return this.decode(reader, reader.uint32());
         };
 
         /**
-         * Verifies a User message.
+         * Verifies a SearchParams message.
          * @function verify
-         * @memberof dd.User
+         * @memberof dd.SearchParams
          * @static
          * @param {Object.<string,*>} message Plain object to verify
          * @returns {string|null} `null` if valid, otherwise the reason why it is not
          */
-        User.verify = function verify(message) {
+        SearchParams.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.imageURL != null && message.hasOwnProperty("imageURL"))
-                if (!$util.isString(message.imageURL))
-                    return "imageURL: string expected";
-            if (message.createdAt != null && message.hasOwnProperty("createdAt"))
-                if (!$util.isInteger(message.createdAt) && !(message.createdAt && $util.isInteger(message.createdAt.low) && $util.isInteger(message.createdAt.high)))
-                    return "createdAt: integer|Long expected";
+            if (message.ids != null && message.hasOwnProperty("ids")) {
+                if (!Array.isArray(message.ids))
+                    return "ids: array expected";
+                for (var i = 0; i < message.ids.length; ++i)
+                    if (!$util.isString(message.ids[i]))
+                        return "ids: string[] expected";
+            }
+            if (message.limit != null && message.hasOwnProperty("limit"))
+                if (!$util.isInteger(message.limit))
+                    return "limit: integer expected";
+            if (message.offset != null && message.hasOwnProperty("offset"))
+                if (!$util.isInteger(message.offset))
+                    return "offset: integer expected";
             return null;
         };
 
         /**
-         * Creates a User message from a plain object. Also converts values to their respective internal types.
+         * Creates a SearchParams message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
-         * @memberof dd.User
+         * @memberof dd.SearchParams
          * @static
          * @param {Object.<string,*>} object Plain object
-         * @returns {dd.User} User
+         * @returns {dd.SearchParams} SearchParams
          */
-        User.fromObject = function fromObject(object) {
-            if (object instanceof $root.dd.User)
+        SearchParams.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.SearchParams)
                 return object;
-            var message = new $root.dd.User();
-            if (object.id != null)
-                message.id = String(object.id);
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.imageURL != null)
-                message.imageURL = String(object.imageURL);
-            if (object.createdAt != null)
-                if ($util.Long)
-                    (message.createdAt = $util.Long.fromValue(object.createdAt)).unsigned = true;
-                else if (typeof object.createdAt === "string")
-                    message.createdAt = parseInt(object.createdAt, 10);
-                else if (typeof object.createdAt === "number")
-                    message.createdAt = object.createdAt;
-                else if (typeof object.createdAt === "object")
-                    message.createdAt = new $util.LongBits(object.createdAt.low >>> 0, object.createdAt.high >>> 0).toNumber(true);
+            var message = new $root.dd.SearchParams();
+            if (object.ids) {
+                if (!Array.isArray(object.ids))
+                    throw TypeError(".dd.SearchParams.ids: array expected");
+                message.ids = [];
+                for (var i = 0; i < object.ids.length; ++i)
+                    message.ids[i] = String(object.ids[i]);
+            }
+            if (object.limit != null)
+                message.limit = object.limit >>> 0;
+            if (object.offset != null)
+                message.offset = object.offset >>> 0;
             return message;
         };
 
         /**
-         * Creates a plain object from a User message. Also converts values to other types if specified.
+         * Creates a plain object from a SearchParams message. Also converts values to other types if specified.
          * @function toObject
-         * @memberof dd.User
+         * @memberof dd.SearchParams
          * @static
-         * @param {dd.User} message User
+         * @param {dd.SearchParams} message SearchParams
          * @param {$protobuf.IConversionOptions} [options] Conversion options
          * @returns {Object.<string,*>} Plain object
          */
-        User.toObject = function toObject(message, options) {
+        SearchParams.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
             var object = {};
+            if (options.arrays || options.defaults)
+                object.ids = [];
             if (options.defaults) {
-                object.id = "";
-                object.name = "";
-                object.imageURL = "";
-                if ($util.Long) {
-                    var long = new $util.Long(0, 0, true);
-                    object.createdAt = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.createdAt = options.longs === String ? "0" : 0;
+                object.limit = 0;
+                object.offset = 0;
             }
-            if (message.id != null && message.hasOwnProperty("id"))
-                object.id = message.id;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.imageURL != null && message.hasOwnProperty("imageURL"))
-                object.imageURL = message.imageURL;
-            if (message.createdAt != null && message.hasOwnProperty("createdAt"))
-                if (typeof message.createdAt === "number")
-                    object.createdAt = options.longs === String ? String(message.createdAt) : message.createdAt;
-                else
-                    object.createdAt = options.longs === String ? $util.Long.prototype.toString.call(message.createdAt) : options.longs === Number ? new $util.LongBits(message.createdAt.low >>> 0, message.createdAt.high >>> 0).toNumber(true) : message.createdAt;
+            if (message.ids && message.ids.length) {
+                object.ids = [];
+                for (var j = 0; j < message.ids.length; ++j)
+                    object.ids[j] = message.ids[j];
+            }
+            if (message.limit != null && message.hasOwnProperty("limit"))
+                object.limit = message.limit;
+            if (message.offset != null && message.hasOwnProperty("offset"))
+                object.offset = message.offset;
             return object;
         };
 
         /**
-         * Converts this User to JSON.
+         * Converts this SearchParams to JSON.
          * @function toJSON
-         * @memberof dd.User
+         * @memberof dd.SearchParams
          * @instance
          * @returns {Object.<string,*>} JSON object
          */
-        User.prototype.toJSON = function toJSON() {
+        SearchParams.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        return User;
+        return SearchParams;
     })();
 
     dd.AuthRequest = (function() {
@@ -1349,6 +1252,1624 @@ $root.dd = (function() {
         };
 
         return AuthResponse;
+    })();
+
+    dd.CreateUserRequest = (function() {
+
+        /**
+         * Properties of a CreateUserRequest.
+         * @memberof dd
+         * @interface ICreateUserRequest
+         * @property {string|null} [token] CreateUserRequest token
+         * @property {string|null} [username] CreateUserRequest username
+         */
+
+        /**
+         * Constructs a new CreateUserRequest.
+         * @memberof dd
+         * @classdesc Represents a CreateUserRequest.
+         * @implements ICreateUserRequest
+         * @constructor
+         * @param {dd.ICreateUserRequest=} [properties] Properties to set
+         */
+        function CreateUserRequest(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * CreateUserRequest token.
+         * @member {string} token
+         * @memberof dd.CreateUserRequest
+         * @instance
+         */
+        CreateUserRequest.prototype.token = "";
+
+        /**
+         * CreateUserRequest username.
+         * @member {string} username
+         * @memberof dd.CreateUserRequest
+         * @instance
+         */
+        CreateUserRequest.prototype.username = "";
+
+        /**
+         * Creates a new CreateUserRequest instance using the specified properties.
+         * @function create
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {dd.ICreateUserRequest=} [properties] Properties to set
+         * @returns {dd.CreateUserRequest} CreateUserRequest instance
+         */
+        CreateUserRequest.create = function create(properties) {
+            return new CreateUserRequest(properties);
+        };
+
+        /**
+         * Encodes the specified CreateUserRequest message. Does not implicitly {@link dd.CreateUserRequest.verify|verify} messages.
+         * @function encode
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {dd.ICreateUserRequest} message CreateUserRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CreateUserRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.token != null && message.hasOwnProperty("token"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.token);
+            if (message.username != null && message.hasOwnProperty("username"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.username);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified CreateUserRequest message, length delimited. Does not implicitly {@link dd.CreateUserRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {dd.ICreateUserRequest} message CreateUserRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CreateUserRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a CreateUserRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.CreateUserRequest} CreateUserRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CreateUserRequest.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.CreateUserRequest();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.token = reader.string();
+                    break;
+                case 2:
+                    message.username = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a CreateUserRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.CreateUserRequest} CreateUserRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CreateUserRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a CreateUserRequest message.
+         * @function verify
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        CreateUserRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.token != null && message.hasOwnProperty("token"))
+                if (!$util.isString(message.token))
+                    return "token: string expected";
+            if (message.username != null && message.hasOwnProperty("username"))
+                if (!$util.isString(message.username))
+                    return "username: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a CreateUserRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.CreateUserRequest} CreateUserRequest
+         */
+        CreateUserRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.CreateUserRequest)
+                return object;
+            var message = new $root.dd.CreateUserRequest();
+            if (object.token != null)
+                message.token = String(object.token);
+            if (object.username != null)
+                message.username = String(object.username);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a CreateUserRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.CreateUserRequest
+         * @static
+         * @param {dd.CreateUserRequest} message CreateUserRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        CreateUserRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.token = "";
+                object.username = "";
+            }
+            if (message.token != null && message.hasOwnProperty("token"))
+                object.token = message.token;
+            if (message.username != null && message.hasOwnProperty("username"))
+                object.username = message.username;
+            return object;
+        };
+
+        /**
+         * Converts this CreateUserRequest to JSON.
+         * @function toJSON
+         * @memberof dd.CreateUserRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        CreateUserRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CreateUserRequest;
+    })();
+
+    dd.GetCampaignsRequest = (function() {
+
+        /**
+         * Properties of a GetCampaignsRequest.
+         * @memberof dd
+         * @interface IGetCampaignsRequest
+         * @property {dd.ISearchParams|null} [search] GetCampaignsRequest search
+         */
+
+        /**
+         * Constructs a new GetCampaignsRequest.
+         * @memberof dd
+         * @classdesc Represents a GetCampaignsRequest.
+         * @implements IGetCampaignsRequest
+         * @constructor
+         * @param {dd.IGetCampaignsRequest=} [properties] Properties to set
+         */
+        function GetCampaignsRequest(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GetCampaignsRequest search.
+         * @member {dd.ISearchParams|null|undefined} search
+         * @memberof dd.GetCampaignsRequest
+         * @instance
+         */
+        GetCampaignsRequest.prototype.search = null;
+
+        /**
+         * Creates a new GetCampaignsRequest instance using the specified properties.
+         * @function create
+         * @memberof dd.GetCampaignsRequest
+         * @static
+         * @param {dd.IGetCampaignsRequest=} [properties] Properties to set
+         * @returns {dd.GetCampaignsRequest} GetCampaignsRequest instance
+         */
+        GetCampaignsRequest.create = function create(properties) {
+            return new GetCampaignsRequest(properties);
+        };
+
+        /**
+         * Encodes the specified GetCampaignsRequest message. Does not implicitly {@link dd.GetCampaignsRequest.verify|verify} messages.
+         * @function encode
+         * @memberof dd.GetCampaignsRequest
+         * @static
+         * @param {dd.IGetCampaignsRequest} message GetCampaignsRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetCampaignsRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.search != null && message.hasOwnProperty("search"))
+                $root.dd.SearchParams.encode(message.search, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified GetCampaignsRequest message, length delimited. Does not implicitly {@link dd.GetCampaignsRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.GetCampaignsRequest
+         * @static
+         * @param {dd.IGetCampaignsRequest} message GetCampaignsRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetCampaignsRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a GetCampaignsRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.GetCampaignsRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.GetCampaignsRequest} GetCampaignsRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetCampaignsRequest.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.GetCampaignsRequest();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.search = $root.dd.SearchParams.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a GetCampaignsRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.GetCampaignsRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.GetCampaignsRequest} GetCampaignsRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetCampaignsRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a GetCampaignsRequest message.
+         * @function verify
+         * @memberof dd.GetCampaignsRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GetCampaignsRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.search != null && message.hasOwnProperty("search")) {
+                var error = $root.dd.SearchParams.verify(message.search);
+                if (error)
+                    return "search." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a GetCampaignsRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.GetCampaignsRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.GetCampaignsRequest} GetCampaignsRequest
+         */
+        GetCampaignsRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.GetCampaignsRequest)
+                return object;
+            var message = new $root.dd.GetCampaignsRequest();
+            if (object.search != null) {
+                if (typeof object.search !== "object")
+                    throw TypeError(".dd.GetCampaignsRequest.search: object expected");
+                message.search = $root.dd.SearchParams.fromObject(object.search);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GetCampaignsRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.GetCampaignsRequest
+         * @static
+         * @param {dd.GetCampaignsRequest} message GetCampaignsRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GetCampaignsRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults)
+                object.search = null;
+            if (message.search != null && message.hasOwnProperty("search"))
+                object.search = $root.dd.SearchParams.toObject(message.search, options);
+            return object;
+        };
+
+        /**
+         * Converts this GetCampaignsRequest to JSON.
+         * @function toJSON
+         * @memberof dd.GetCampaignsRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GetCampaignsRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GetCampaignsRequest;
+    })();
+
+    dd.GetCampaignsResponse = (function() {
+
+        /**
+         * Properties of a GetCampaignsResponse.
+         * @memberof dd
+         * @interface IGetCampaignsResponse
+         * @property {Array.<dd.ICampaignCore>|null} [campaigns] GetCampaignsResponse campaigns
+         * @property {number|null} [total] GetCampaignsResponse total
+         */
+
+        /**
+         * Constructs a new GetCampaignsResponse.
+         * @memberof dd
+         * @classdesc Represents a GetCampaignsResponse.
+         * @implements IGetCampaignsResponse
+         * @constructor
+         * @param {dd.IGetCampaignsResponse=} [properties] Properties to set
+         */
+        function GetCampaignsResponse(properties) {
+            this.campaigns = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GetCampaignsResponse campaigns.
+         * @member {Array.<dd.ICampaignCore>} campaigns
+         * @memberof dd.GetCampaignsResponse
+         * @instance
+         */
+        GetCampaignsResponse.prototype.campaigns = $util.emptyArray;
+
+        /**
+         * GetCampaignsResponse total.
+         * @member {number} total
+         * @memberof dd.GetCampaignsResponse
+         * @instance
+         */
+        GetCampaignsResponse.prototype.total = 0;
+
+        /**
+         * Creates a new GetCampaignsResponse instance using the specified properties.
+         * @function create
+         * @memberof dd.GetCampaignsResponse
+         * @static
+         * @param {dd.IGetCampaignsResponse=} [properties] Properties to set
+         * @returns {dd.GetCampaignsResponse} GetCampaignsResponse instance
+         */
+        GetCampaignsResponse.create = function create(properties) {
+            return new GetCampaignsResponse(properties);
+        };
+
+        /**
+         * Encodes the specified GetCampaignsResponse message. Does not implicitly {@link dd.GetCampaignsResponse.verify|verify} messages.
+         * @function encode
+         * @memberof dd.GetCampaignsResponse
+         * @static
+         * @param {dd.IGetCampaignsResponse} message GetCampaignsResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetCampaignsResponse.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.campaigns != null && message.campaigns.length)
+                for (var i = 0; i < message.campaigns.length; ++i)
+                    $root.dd.CampaignCore.encode(message.campaigns[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.total != null && message.hasOwnProperty("total"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.total);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified GetCampaignsResponse message, length delimited. Does not implicitly {@link dd.GetCampaignsResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.GetCampaignsResponse
+         * @static
+         * @param {dd.IGetCampaignsResponse} message GetCampaignsResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetCampaignsResponse.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a GetCampaignsResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.GetCampaignsResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.GetCampaignsResponse} GetCampaignsResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetCampaignsResponse.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.GetCampaignsResponse();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    if (!(message.campaigns && message.campaigns.length))
+                        message.campaigns = [];
+                    message.campaigns.push($root.dd.CampaignCore.decode(reader, reader.uint32()));
+                    break;
+                case 2:
+                    message.total = reader.uint32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a GetCampaignsResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.GetCampaignsResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.GetCampaignsResponse} GetCampaignsResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetCampaignsResponse.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a GetCampaignsResponse message.
+         * @function verify
+         * @memberof dd.GetCampaignsResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GetCampaignsResponse.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.campaigns != null && message.hasOwnProperty("campaigns")) {
+                if (!Array.isArray(message.campaigns))
+                    return "campaigns: array expected";
+                for (var i = 0; i < message.campaigns.length; ++i) {
+                    var error = $root.dd.CampaignCore.verify(message.campaigns[i]);
+                    if (error)
+                        return "campaigns." + error;
+                }
+            }
+            if (message.total != null && message.hasOwnProperty("total"))
+                if (!$util.isInteger(message.total))
+                    return "total: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates a GetCampaignsResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.GetCampaignsResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.GetCampaignsResponse} GetCampaignsResponse
+         */
+        GetCampaignsResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.GetCampaignsResponse)
+                return object;
+            var message = new $root.dd.GetCampaignsResponse();
+            if (object.campaigns) {
+                if (!Array.isArray(object.campaigns))
+                    throw TypeError(".dd.GetCampaignsResponse.campaigns: array expected");
+                message.campaigns = [];
+                for (var i = 0; i < object.campaigns.length; ++i) {
+                    if (typeof object.campaigns[i] !== "object")
+                        throw TypeError(".dd.GetCampaignsResponse.campaigns: object expected");
+                    message.campaigns[i] = $root.dd.CampaignCore.fromObject(object.campaigns[i]);
+                }
+            }
+            if (object.total != null)
+                message.total = object.total >>> 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GetCampaignsResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.GetCampaignsResponse
+         * @static
+         * @param {dd.GetCampaignsResponse} message GetCampaignsResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GetCampaignsResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.campaigns = [];
+            if (options.defaults)
+                object.total = 0;
+            if (message.campaigns && message.campaigns.length) {
+                object.campaigns = [];
+                for (var j = 0; j < message.campaigns.length; ++j)
+                    object.campaigns[j] = $root.dd.CampaignCore.toObject(message.campaigns[j], options);
+            }
+            if (message.total != null && message.hasOwnProperty("total"))
+                object.total = message.total;
+            return object;
+        };
+
+        /**
+         * Converts this GetCampaignsResponse to JSON.
+         * @function toJSON
+         * @memberof dd.GetCampaignsResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GetCampaignsResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GetCampaignsResponse;
+    })();
+
+    dd.CreateCampaignRequest = (function() {
+
+        /**
+         * Properties of a CreateCampaignRequest.
+         * @memberof dd
+         * @interface ICreateCampaignRequest
+         */
+
+        /**
+         * Constructs a new CreateCampaignRequest.
+         * @memberof dd
+         * @classdesc Represents a CreateCampaignRequest.
+         * @implements ICreateCampaignRequest
+         * @constructor
+         * @param {dd.ICreateCampaignRequest=} [properties] Properties to set
+         */
+        function CreateCampaignRequest(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Creates a new CreateCampaignRequest instance using the specified properties.
+         * @function create
+         * @memberof dd.CreateCampaignRequest
+         * @static
+         * @param {dd.ICreateCampaignRequest=} [properties] Properties to set
+         * @returns {dd.CreateCampaignRequest} CreateCampaignRequest instance
+         */
+        CreateCampaignRequest.create = function create(properties) {
+            return new CreateCampaignRequest(properties);
+        };
+
+        /**
+         * Encodes the specified CreateCampaignRequest message. Does not implicitly {@link dd.CreateCampaignRequest.verify|verify} messages.
+         * @function encode
+         * @memberof dd.CreateCampaignRequest
+         * @static
+         * @param {dd.ICreateCampaignRequest} message CreateCampaignRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CreateCampaignRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified CreateCampaignRequest message, length delimited. Does not implicitly {@link dd.CreateCampaignRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.CreateCampaignRequest
+         * @static
+         * @param {dd.ICreateCampaignRequest} message CreateCampaignRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CreateCampaignRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a CreateCampaignRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.CreateCampaignRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.CreateCampaignRequest} CreateCampaignRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CreateCampaignRequest.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.CreateCampaignRequest();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a CreateCampaignRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.CreateCampaignRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.CreateCampaignRequest} CreateCampaignRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CreateCampaignRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a CreateCampaignRequest message.
+         * @function verify
+         * @memberof dd.CreateCampaignRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        CreateCampaignRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            return null;
+        };
+
+        /**
+         * Creates a CreateCampaignRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.CreateCampaignRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.CreateCampaignRequest} CreateCampaignRequest
+         */
+        CreateCampaignRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.CreateCampaignRequest)
+                return object;
+            return new $root.dd.CreateCampaignRequest();
+        };
+
+        /**
+         * Creates a plain object from a CreateCampaignRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.CreateCampaignRequest
+         * @static
+         * @param {dd.CreateCampaignRequest} message CreateCampaignRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        CreateCampaignRequest.toObject = function toObject() {
+            return {};
+        };
+
+        /**
+         * Converts this CreateCampaignRequest to JSON.
+         * @function toJSON
+         * @memberof dd.CreateCampaignRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        CreateCampaignRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CreateCampaignRequest;
+    })();
+
+    dd.CreateCampaignResponse = (function() {
+
+        /**
+         * Properties of a CreateCampaignResponse.
+         * @memberof dd
+         * @interface ICreateCampaignResponse
+         * @property {string|null} [id] CreateCampaignResponse id
+         */
+
+        /**
+         * Constructs a new CreateCampaignResponse.
+         * @memberof dd
+         * @classdesc Represents a CreateCampaignResponse.
+         * @implements ICreateCampaignResponse
+         * @constructor
+         * @param {dd.ICreateCampaignResponse=} [properties] Properties to set
+         */
+        function CreateCampaignResponse(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * CreateCampaignResponse id.
+         * @member {string} id
+         * @memberof dd.CreateCampaignResponse
+         * @instance
+         */
+        CreateCampaignResponse.prototype.id = "";
+
+        /**
+         * Creates a new CreateCampaignResponse instance using the specified properties.
+         * @function create
+         * @memberof dd.CreateCampaignResponse
+         * @static
+         * @param {dd.ICreateCampaignResponse=} [properties] Properties to set
+         * @returns {dd.CreateCampaignResponse} CreateCampaignResponse instance
+         */
+        CreateCampaignResponse.create = function create(properties) {
+            return new CreateCampaignResponse(properties);
+        };
+
+        /**
+         * Encodes the specified CreateCampaignResponse message. Does not implicitly {@link dd.CreateCampaignResponse.verify|verify} messages.
+         * @function encode
+         * @memberof dd.CreateCampaignResponse
+         * @static
+         * @param {dd.ICreateCampaignResponse} message CreateCampaignResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CreateCampaignResponse.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified CreateCampaignResponse message, length delimited. Does not implicitly {@link dd.CreateCampaignResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.CreateCampaignResponse
+         * @static
+         * @param {dd.ICreateCampaignResponse} message CreateCampaignResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CreateCampaignResponse.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a CreateCampaignResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.CreateCampaignResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.CreateCampaignResponse} CreateCampaignResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CreateCampaignResponse.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.CreateCampaignResponse();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a CreateCampaignResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.CreateCampaignResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.CreateCampaignResponse} CreateCampaignResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CreateCampaignResponse.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a CreateCampaignResponse message.
+         * @function verify
+         * @memberof dd.CreateCampaignResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        CreateCampaignResponse.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a CreateCampaignResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.CreateCampaignResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.CreateCampaignResponse} CreateCampaignResponse
+         */
+        CreateCampaignResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.CreateCampaignResponse)
+                return object;
+            var message = new $root.dd.CreateCampaignResponse();
+            if (object.id != null)
+                message.id = String(object.id);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a CreateCampaignResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.CreateCampaignResponse
+         * @static
+         * @param {dd.CreateCampaignResponse} message CreateCampaignResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        CreateCampaignResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults)
+                object.id = "";
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            return object;
+        };
+
+        /**
+         * Converts this CreateCampaignResponse to JSON.
+         * @function toJSON
+         * @memberof dd.CreateCampaignResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        CreateCampaignResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CreateCampaignResponse;
+    })();
+
+    dd.EditCampaignRequest = (function() {
+
+        /**
+         * Properties of an EditCampaignRequest.
+         * @memberof dd
+         * @interface IEditCampaignRequest
+         * @property {dd.ICampaignCore|null} [campaign] EditCampaignRequest campaign
+         * @property {string|null} [id] EditCampaignRequest id
+         */
+
+        /**
+         * Constructs a new EditCampaignRequest.
+         * @memberof dd
+         * @classdesc Represents an EditCampaignRequest.
+         * @implements IEditCampaignRequest
+         * @constructor
+         * @param {dd.IEditCampaignRequest=} [properties] Properties to set
+         */
+        function EditCampaignRequest(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * EditCampaignRequest campaign.
+         * @member {dd.ICampaignCore|null|undefined} campaign
+         * @memberof dd.EditCampaignRequest
+         * @instance
+         */
+        EditCampaignRequest.prototype.campaign = null;
+
+        /**
+         * EditCampaignRequest id.
+         * @member {string} id
+         * @memberof dd.EditCampaignRequest
+         * @instance
+         */
+        EditCampaignRequest.prototype.id = "";
+
+        /**
+         * Creates a new EditCampaignRequest instance using the specified properties.
+         * @function create
+         * @memberof dd.EditCampaignRequest
+         * @static
+         * @param {dd.IEditCampaignRequest=} [properties] Properties to set
+         * @returns {dd.EditCampaignRequest} EditCampaignRequest instance
+         */
+        EditCampaignRequest.create = function create(properties) {
+            return new EditCampaignRequest(properties);
+        };
+
+        /**
+         * Encodes the specified EditCampaignRequest message. Does not implicitly {@link dd.EditCampaignRequest.verify|verify} messages.
+         * @function encode
+         * @memberof dd.EditCampaignRequest
+         * @static
+         * @param {dd.IEditCampaignRequest} message EditCampaignRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        EditCampaignRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.campaign != null && message.hasOwnProperty("campaign"))
+                $root.dd.CampaignCore.encode(message.campaign, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.id);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified EditCampaignRequest message, length delimited. Does not implicitly {@link dd.EditCampaignRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.EditCampaignRequest
+         * @static
+         * @param {dd.IEditCampaignRequest} message EditCampaignRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        EditCampaignRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an EditCampaignRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.EditCampaignRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.EditCampaignRequest} EditCampaignRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        EditCampaignRequest.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.EditCampaignRequest();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.campaign = $root.dd.CampaignCore.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.id = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an EditCampaignRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.EditCampaignRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.EditCampaignRequest} EditCampaignRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        EditCampaignRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an EditCampaignRequest message.
+         * @function verify
+         * @memberof dd.EditCampaignRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        EditCampaignRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.campaign != null && message.hasOwnProperty("campaign")) {
+                var error = $root.dd.CampaignCore.verify(message.campaign);
+                if (error)
+                    return "campaign." + error;
+            }
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            return null;
+        };
+
+        /**
+         * Creates an EditCampaignRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.EditCampaignRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.EditCampaignRequest} EditCampaignRequest
+         */
+        EditCampaignRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.EditCampaignRequest)
+                return object;
+            var message = new $root.dd.EditCampaignRequest();
+            if (object.campaign != null) {
+                if (typeof object.campaign !== "object")
+                    throw TypeError(".dd.EditCampaignRequest.campaign: object expected");
+                message.campaign = $root.dd.CampaignCore.fromObject(object.campaign);
+            }
+            if (object.id != null)
+                message.id = String(object.id);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an EditCampaignRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.EditCampaignRequest
+         * @static
+         * @param {dd.EditCampaignRequest} message EditCampaignRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        EditCampaignRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.campaign = null;
+                object.id = "";
+            }
+            if (message.campaign != null && message.hasOwnProperty("campaign"))
+                object.campaign = $root.dd.CampaignCore.toObject(message.campaign, options);
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            return object;
+        };
+
+        /**
+         * Converts this EditCampaignRequest to JSON.
+         * @function toJSON
+         * @memberof dd.EditCampaignRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        EditCampaignRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return EditCampaignRequest;
+    })();
+
+    dd.GetQuestsRequest = (function() {
+
+        /**
+         * Properties of a GetQuestsRequest.
+         * @memberof dd
+         * @interface IGetQuestsRequest
+         * @property {dd.ISearchParams|null} [search] GetQuestsRequest search
+         */
+
+        /**
+         * Constructs a new GetQuestsRequest.
+         * @memberof dd
+         * @classdesc Represents a GetQuestsRequest.
+         * @implements IGetQuestsRequest
+         * @constructor
+         * @param {dd.IGetQuestsRequest=} [properties] Properties to set
+         */
+        function GetQuestsRequest(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GetQuestsRequest search.
+         * @member {dd.ISearchParams|null|undefined} search
+         * @memberof dd.GetQuestsRequest
+         * @instance
+         */
+        GetQuestsRequest.prototype.search = null;
+
+        /**
+         * Creates a new GetQuestsRequest instance using the specified properties.
+         * @function create
+         * @memberof dd.GetQuestsRequest
+         * @static
+         * @param {dd.IGetQuestsRequest=} [properties] Properties to set
+         * @returns {dd.GetQuestsRequest} GetQuestsRequest instance
+         */
+        GetQuestsRequest.create = function create(properties) {
+            return new GetQuestsRequest(properties);
+        };
+
+        /**
+         * Encodes the specified GetQuestsRequest message. Does not implicitly {@link dd.GetQuestsRequest.verify|verify} messages.
+         * @function encode
+         * @memberof dd.GetQuestsRequest
+         * @static
+         * @param {dd.IGetQuestsRequest} message GetQuestsRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetQuestsRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.search != null && message.hasOwnProperty("search"))
+                $root.dd.SearchParams.encode(message.search, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified GetQuestsRequest message, length delimited. Does not implicitly {@link dd.GetQuestsRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.GetQuestsRequest
+         * @static
+         * @param {dd.IGetQuestsRequest} message GetQuestsRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetQuestsRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a GetQuestsRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.GetQuestsRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.GetQuestsRequest} GetQuestsRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetQuestsRequest.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.GetQuestsRequest();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.search = $root.dd.SearchParams.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a GetQuestsRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.GetQuestsRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.GetQuestsRequest} GetQuestsRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetQuestsRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a GetQuestsRequest message.
+         * @function verify
+         * @memberof dd.GetQuestsRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GetQuestsRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.search != null && message.hasOwnProperty("search")) {
+                var error = $root.dd.SearchParams.verify(message.search);
+                if (error)
+                    return "search." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a GetQuestsRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.GetQuestsRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.GetQuestsRequest} GetQuestsRequest
+         */
+        GetQuestsRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.GetQuestsRequest)
+                return object;
+            var message = new $root.dd.GetQuestsRequest();
+            if (object.search != null) {
+                if (typeof object.search !== "object")
+                    throw TypeError(".dd.GetQuestsRequest.search: object expected");
+                message.search = $root.dd.SearchParams.fromObject(object.search);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GetQuestsRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.GetQuestsRequest
+         * @static
+         * @param {dd.GetQuestsRequest} message GetQuestsRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GetQuestsRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults)
+                object.search = null;
+            if (message.search != null && message.hasOwnProperty("search"))
+                object.search = $root.dd.SearchParams.toObject(message.search, options);
+            return object;
+        };
+
+        /**
+         * Converts this GetQuestsRequest to JSON.
+         * @function toJSON
+         * @memberof dd.GetQuestsRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GetQuestsRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GetQuestsRequest;
+    })();
+
+    dd.GetQuestsResponse = (function() {
+
+        /**
+         * Properties of a GetQuestsResponse.
+         * @memberof dd
+         * @interface IGetQuestsResponse
+         * @property {Array.<dd.IQuest>|null} [quests] GetQuestsResponse quests
+         * @property {number|null} [total] GetQuestsResponse total
+         */
+
+        /**
+         * Constructs a new GetQuestsResponse.
+         * @memberof dd
+         * @classdesc Represents a GetQuestsResponse.
+         * @implements IGetQuestsResponse
+         * @constructor
+         * @param {dd.IGetQuestsResponse=} [properties] Properties to set
+         */
+        function GetQuestsResponse(properties) {
+            this.quests = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GetQuestsResponse quests.
+         * @member {Array.<dd.IQuest>} quests
+         * @memberof dd.GetQuestsResponse
+         * @instance
+         */
+        GetQuestsResponse.prototype.quests = $util.emptyArray;
+
+        /**
+         * GetQuestsResponse total.
+         * @member {number} total
+         * @memberof dd.GetQuestsResponse
+         * @instance
+         */
+        GetQuestsResponse.prototype.total = 0;
+
+        /**
+         * Creates a new GetQuestsResponse instance using the specified properties.
+         * @function create
+         * @memberof dd.GetQuestsResponse
+         * @static
+         * @param {dd.IGetQuestsResponse=} [properties] Properties to set
+         * @returns {dd.GetQuestsResponse} GetQuestsResponse instance
+         */
+        GetQuestsResponse.create = function create(properties) {
+            return new GetQuestsResponse(properties);
+        };
+
+        /**
+         * Encodes the specified GetQuestsResponse message. Does not implicitly {@link dd.GetQuestsResponse.verify|verify} messages.
+         * @function encode
+         * @memberof dd.GetQuestsResponse
+         * @static
+         * @param {dd.IGetQuestsResponse} message GetQuestsResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetQuestsResponse.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.quests != null && message.quests.length)
+                for (var i = 0; i < message.quests.length; ++i)
+                    $root.dd.Quest.encode(message.quests[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.total != null && message.hasOwnProperty("total"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.total);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified GetQuestsResponse message, length delimited. Does not implicitly {@link dd.GetQuestsResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.GetQuestsResponse
+         * @static
+         * @param {dd.IGetQuestsResponse} message GetQuestsResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetQuestsResponse.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a GetQuestsResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.GetQuestsResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.GetQuestsResponse} GetQuestsResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetQuestsResponse.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.GetQuestsResponse();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    if (!(message.quests && message.quests.length))
+                        message.quests = [];
+                    message.quests.push($root.dd.Quest.decode(reader, reader.uint32()));
+                    break;
+                case 2:
+                    message.total = reader.uint32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a GetQuestsResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.GetQuestsResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.GetQuestsResponse} GetQuestsResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetQuestsResponse.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a GetQuestsResponse message.
+         * @function verify
+         * @memberof dd.GetQuestsResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GetQuestsResponse.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.quests != null && message.hasOwnProperty("quests")) {
+                if (!Array.isArray(message.quests))
+                    return "quests: array expected";
+                for (var i = 0; i < message.quests.length; ++i) {
+                    var error = $root.dd.Quest.verify(message.quests[i]);
+                    if (error)
+                        return "quests." + error;
+                }
+            }
+            if (message.total != null && message.hasOwnProperty("total"))
+                if (!$util.isInteger(message.total))
+                    return "total: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates a GetQuestsResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.GetQuestsResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.GetQuestsResponse} GetQuestsResponse
+         */
+        GetQuestsResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.GetQuestsResponse)
+                return object;
+            var message = new $root.dd.GetQuestsResponse();
+            if (object.quests) {
+                if (!Array.isArray(object.quests))
+                    throw TypeError(".dd.GetQuestsResponse.quests: array expected");
+                message.quests = [];
+                for (var i = 0; i < object.quests.length; ++i) {
+                    if (typeof object.quests[i] !== "object")
+                        throw TypeError(".dd.GetQuestsResponse.quests: object expected");
+                    message.quests[i] = $root.dd.Quest.fromObject(object.quests[i]);
+                }
+            }
+            if (object.total != null)
+                message.total = object.total >>> 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GetQuestsResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.GetQuestsResponse
+         * @static
+         * @param {dd.GetQuestsResponse} message GetQuestsResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GetQuestsResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.quests = [];
+            if (options.defaults)
+                object.total = 0;
+            if (message.quests && message.quests.length) {
+                object.quests = [];
+                for (var j = 0; j < message.quests.length; ++j)
+                    object.quests[j] = $root.dd.Quest.toObject(message.quests[j], options);
+            }
+            if (message.total != null && message.hasOwnProperty("total"))
+                object.total = message.total;
+            return object;
+        };
+
+        /**
+         * Converts this GetQuestsResponse to JSON.
+         * @function toJSON
+         * @memberof dd.GetQuestsResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GetQuestsResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GetQuestsResponse;
     })();
 
     dd.CreateQuestRequest = (function() {
@@ -1913,616 +3434,6 @@ $root.dd = (function() {
         return EditQuestRequest;
     })();
 
-    dd.GetQuestsRequest = (function() {
-
-        /**
-         * Properties of a GetQuestsRequest.
-         * @memberof dd
-         * @interface IGetQuestsRequest
-         * @property {dd.ISearchParams|null} [search] GetQuestsRequest search
-         */
-
-        /**
-         * Constructs a new GetQuestsRequest.
-         * @memberof dd
-         * @classdesc Represents a GetQuestsRequest.
-         * @implements IGetQuestsRequest
-         * @constructor
-         * @param {dd.IGetQuestsRequest=} [properties] Properties to set
-         */
-        function GetQuestsRequest(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * GetQuestsRequest search.
-         * @member {dd.ISearchParams|null|undefined} search
-         * @memberof dd.GetQuestsRequest
-         * @instance
-         */
-        GetQuestsRequest.prototype.search = null;
-
-        /**
-         * Creates a new GetQuestsRequest instance using the specified properties.
-         * @function create
-         * @memberof dd.GetQuestsRequest
-         * @static
-         * @param {dd.IGetQuestsRequest=} [properties] Properties to set
-         * @returns {dd.GetQuestsRequest} GetQuestsRequest instance
-         */
-        GetQuestsRequest.create = function create(properties) {
-            return new GetQuestsRequest(properties);
-        };
-
-        /**
-         * Encodes the specified GetQuestsRequest message. Does not implicitly {@link dd.GetQuestsRequest.verify|verify} messages.
-         * @function encode
-         * @memberof dd.GetQuestsRequest
-         * @static
-         * @param {dd.IGetQuestsRequest} message GetQuestsRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GetQuestsRequest.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.search != null && message.hasOwnProperty("search"))
-                $root.dd.SearchParams.encode(message.search, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            return writer;
-        };
-
-        /**
-         * Encodes the specified GetQuestsRequest message, length delimited. Does not implicitly {@link dd.GetQuestsRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof dd.GetQuestsRequest
-         * @static
-         * @param {dd.IGetQuestsRequest} message GetQuestsRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GetQuestsRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a GetQuestsRequest message from the specified reader or buffer.
-         * @function decode
-         * @memberof dd.GetQuestsRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {dd.GetQuestsRequest} GetQuestsRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GetQuestsRequest.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.GetQuestsRequest();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.search = $root.dd.SearchParams.decode(reader, reader.uint32());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a GetQuestsRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof dd.GetQuestsRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {dd.GetQuestsRequest} GetQuestsRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GetQuestsRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a GetQuestsRequest message.
-         * @function verify
-         * @memberof dd.GetQuestsRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        GetQuestsRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.search != null && message.hasOwnProperty("search")) {
-                var error = $root.dd.SearchParams.verify(message.search);
-                if (error)
-                    return "search." + error;
-            }
-            return null;
-        };
-
-        /**
-         * Creates a GetQuestsRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof dd.GetQuestsRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {dd.GetQuestsRequest} GetQuestsRequest
-         */
-        GetQuestsRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.dd.GetQuestsRequest)
-                return object;
-            var message = new $root.dd.GetQuestsRequest();
-            if (object.search != null) {
-                if (typeof object.search !== "object")
-                    throw TypeError(".dd.GetQuestsRequest.search: object expected");
-                message.search = $root.dd.SearchParams.fromObject(object.search);
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a GetQuestsRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof dd.GetQuestsRequest
-         * @static
-         * @param {dd.GetQuestsRequest} message GetQuestsRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        GetQuestsRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.defaults)
-                object.search = null;
-            if (message.search != null && message.hasOwnProperty("search"))
-                object.search = $root.dd.SearchParams.toObject(message.search, options);
-            return object;
-        };
-
-        /**
-         * Converts this GetQuestsRequest to JSON.
-         * @function toJSON
-         * @memberof dd.GetQuestsRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        GetQuestsRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return GetQuestsRequest;
-    })();
-
-    dd.GetQuestsResponse = (function() {
-
-        /**
-         * Properties of a GetQuestsResponse.
-         * @memberof dd
-         * @interface IGetQuestsResponse
-         * @property {Array.<dd.IQuest>|null} [quests] GetQuestsResponse quests
-         * @property {number|null} [total] GetQuestsResponse total
-         */
-
-        /**
-         * Constructs a new GetQuestsResponse.
-         * @memberof dd
-         * @classdesc Represents a GetQuestsResponse.
-         * @implements IGetQuestsResponse
-         * @constructor
-         * @param {dd.IGetQuestsResponse=} [properties] Properties to set
-         */
-        function GetQuestsResponse(properties) {
-            this.quests = [];
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * GetQuestsResponse quests.
-         * @member {Array.<dd.IQuest>} quests
-         * @memberof dd.GetQuestsResponse
-         * @instance
-         */
-        GetQuestsResponse.prototype.quests = $util.emptyArray;
-
-        /**
-         * GetQuestsResponse total.
-         * @member {number} total
-         * @memberof dd.GetQuestsResponse
-         * @instance
-         */
-        GetQuestsResponse.prototype.total = 0;
-
-        /**
-         * Creates a new GetQuestsResponse instance using the specified properties.
-         * @function create
-         * @memberof dd.GetQuestsResponse
-         * @static
-         * @param {dd.IGetQuestsResponse=} [properties] Properties to set
-         * @returns {dd.GetQuestsResponse} GetQuestsResponse instance
-         */
-        GetQuestsResponse.create = function create(properties) {
-            return new GetQuestsResponse(properties);
-        };
-
-        /**
-         * Encodes the specified GetQuestsResponse message. Does not implicitly {@link dd.GetQuestsResponse.verify|verify} messages.
-         * @function encode
-         * @memberof dd.GetQuestsResponse
-         * @static
-         * @param {dd.IGetQuestsResponse} message GetQuestsResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GetQuestsResponse.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.quests != null && message.quests.length)
-                for (var i = 0; i < message.quests.length; ++i)
-                    $root.dd.Quest.encode(message.quests[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            if (message.total != null && message.hasOwnProperty("total"))
-                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.total);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified GetQuestsResponse message, length delimited. Does not implicitly {@link dd.GetQuestsResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof dd.GetQuestsResponse
-         * @static
-         * @param {dd.IGetQuestsResponse} message GetQuestsResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GetQuestsResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a GetQuestsResponse message from the specified reader or buffer.
-         * @function decode
-         * @memberof dd.GetQuestsResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {dd.GetQuestsResponse} GetQuestsResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GetQuestsResponse.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.GetQuestsResponse();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    if (!(message.quests && message.quests.length))
-                        message.quests = [];
-                    message.quests.push($root.dd.Quest.decode(reader, reader.uint32()));
-                    break;
-                case 2:
-                    message.total = reader.uint32();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a GetQuestsResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof dd.GetQuestsResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {dd.GetQuestsResponse} GetQuestsResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GetQuestsResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a GetQuestsResponse message.
-         * @function verify
-         * @memberof dd.GetQuestsResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        GetQuestsResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.quests != null && message.hasOwnProperty("quests")) {
-                if (!Array.isArray(message.quests))
-                    return "quests: array expected";
-                for (var i = 0; i < message.quests.length; ++i) {
-                    var error = $root.dd.Quest.verify(message.quests[i]);
-                    if (error)
-                        return "quests." + error;
-                }
-            }
-            if (message.total != null && message.hasOwnProperty("total"))
-                if (!$util.isInteger(message.total))
-                    return "total: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a GetQuestsResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof dd.GetQuestsResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {dd.GetQuestsResponse} GetQuestsResponse
-         */
-        GetQuestsResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.dd.GetQuestsResponse)
-                return object;
-            var message = new $root.dd.GetQuestsResponse();
-            if (object.quests) {
-                if (!Array.isArray(object.quests))
-                    throw TypeError(".dd.GetQuestsResponse.quests: array expected");
-                message.quests = [];
-                for (var i = 0; i < object.quests.length; ++i) {
-                    if (typeof object.quests[i] !== "object")
-                        throw TypeError(".dd.GetQuestsResponse.quests: object expected");
-                    message.quests[i] = $root.dd.Quest.fromObject(object.quests[i]);
-                }
-            }
-            if (object.total != null)
-                message.total = object.total >>> 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a GetQuestsResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof dd.GetQuestsResponse
-         * @static
-         * @param {dd.GetQuestsResponse} message GetQuestsResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        GetQuestsResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.arrays || options.defaults)
-                object.quests = [];
-            if (options.defaults)
-                object.total = 0;
-            if (message.quests && message.quests.length) {
-                object.quests = [];
-                for (var j = 0; j < message.quests.length; ++j)
-                    object.quests[j] = $root.dd.Quest.toObject(message.quests[j], options);
-            }
-            if (message.total != null && message.hasOwnProperty("total"))
-                object.total = message.total;
-            return object;
-        };
-
-        /**
-         * Converts this GetQuestsResponse to JSON.
-         * @function toJSON
-         * @memberof dd.GetQuestsResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        GetQuestsResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return GetQuestsResponse;
-    })();
-
-    dd.GetQuestRequest = (function() {
-
-        /**
-         * Properties of a GetQuestRequest.
-         * @memberof dd
-         * @interface IGetQuestRequest
-         * @property {string|null} [id] GetQuestRequest id
-         */
-
-        /**
-         * Constructs a new GetQuestRequest.
-         * @memberof dd
-         * @classdesc Represents a GetQuestRequest.
-         * @implements IGetQuestRequest
-         * @constructor
-         * @param {dd.IGetQuestRequest=} [properties] Properties to set
-         */
-        function GetQuestRequest(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * GetQuestRequest id.
-         * @member {string} id
-         * @memberof dd.GetQuestRequest
-         * @instance
-         */
-        GetQuestRequest.prototype.id = "";
-
-        /**
-         * Creates a new GetQuestRequest instance using the specified properties.
-         * @function create
-         * @memberof dd.GetQuestRequest
-         * @static
-         * @param {dd.IGetQuestRequest=} [properties] Properties to set
-         * @returns {dd.GetQuestRequest} GetQuestRequest instance
-         */
-        GetQuestRequest.create = function create(properties) {
-            return new GetQuestRequest(properties);
-        };
-
-        /**
-         * Encodes the specified GetQuestRequest message. Does not implicitly {@link dd.GetQuestRequest.verify|verify} messages.
-         * @function encode
-         * @memberof dd.GetQuestRequest
-         * @static
-         * @param {dd.IGetQuestRequest} message GetQuestRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GetQuestRequest.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.id != null && message.hasOwnProperty("id"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified GetQuestRequest message, length delimited. Does not implicitly {@link dd.GetQuestRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof dd.GetQuestRequest
-         * @static
-         * @param {dd.IGetQuestRequest} message GetQuestRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GetQuestRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a GetQuestRequest message from the specified reader or buffer.
-         * @function decode
-         * @memberof dd.GetQuestRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {dd.GetQuestRequest} GetQuestRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GetQuestRequest.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.GetQuestRequest();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.id = reader.string();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a GetQuestRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof dd.GetQuestRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {dd.GetQuestRequest} GetQuestRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GetQuestRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a GetQuestRequest message.
-         * @function verify
-         * @memberof dd.GetQuestRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        GetQuestRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a GetQuestRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof dd.GetQuestRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {dd.GetQuestRequest} GetQuestRequest
-         */
-        GetQuestRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.dd.GetQuestRequest)
-                return object;
-            var message = new $root.dd.GetQuestRequest();
-            if (object.id != null)
-                message.id = String(object.id);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a GetQuestRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof dd.GetQuestRequest
-         * @static
-         * @param {dd.GetQuestRequest} message GetQuestRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        GetQuestRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.defaults)
-                object.id = "";
-            if (message.id != null && message.hasOwnProperty("id"))
-                object.id = message.id;
-            return object;
-        };
-
-        /**
-         * Converts this GetQuestRequest to JSON.
-         * @function toJSON
-         * @memberof dd.GetQuestRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        GetQuestRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return GetQuestRequest;
-    })();
-
     dd.Quest = (function() {
 
         /**
@@ -2755,27 +3666,27 @@ $root.dd = (function() {
         return Quest;
     })();
 
-    dd.SearchParams = (function() {
+    dd.User = (function() {
 
         /**
-         * Properties of a SearchParams.
+         * Properties of a User.
          * @memberof dd
-         * @interface ISearchParams
-         * @property {Array.<string>|null} [ids] SearchParams ids
-         * @property {number|null} [limit] SearchParams limit
-         * @property {number|null} [offset] SearchParams offset
+         * @interface IUser
+         * @property {string|null} [id] User id
+         * @property {string|null} [name] User name
+         * @property {string|null} [imageURL] User imageURL
+         * @property {number|Long|null} [createdAt] User createdAt
          */
 
         /**
-         * Constructs a new SearchParams.
+         * Constructs a new User.
          * @memberof dd
-         * @classdesc Represents a SearchParams.
-         * @implements ISearchParams
+         * @classdesc Represents a User.
+         * @implements IUser
          * @constructor
-         * @param {dd.ISearchParams=} [properties] Properties to set
+         * @param {dd.IUser=} [properties] Properties to set
          */
-        function SearchParams(properties) {
-            this.ids = [];
+        function User(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -2783,104 +3694,114 @@ $root.dd = (function() {
         }
 
         /**
-         * SearchParams ids.
-         * @member {Array.<string>} ids
-         * @memberof dd.SearchParams
+         * User id.
+         * @member {string} id
+         * @memberof dd.User
          * @instance
          */
-        SearchParams.prototype.ids = $util.emptyArray;
+        User.prototype.id = "";
 
         /**
-         * SearchParams limit.
-         * @member {number} limit
-         * @memberof dd.SearchParams
+         * User name.
+         * @member {string} name
+         * @memberof dd.User
          * @instance
          */
-        SearchParams.prototype.limit = 0;
+        User.prototype.name = "";
 
         /**
-         * SearchParams offset.
-         * @member {number} offset
-         * @memberof dd.SearchParams
+         * User imageURL.
+         * @member {string} imageURL
+         * @memberof dd.User
          * @instance
          */
-        SearchParams.prototype.offset = 0;
+        User.prototype.imageURL = "";
 
         /**
-         * Creates a new SearchParams instance using the specified properties.
+         * User createdAt.
+         * @member {number|Long} createdAt
+         * @memberof dd.User
+         * @instance
+         */
+        User.prototype.createdAt = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * Creates a new User instance using the specified properties.
          * @function create
-         * @memberof dd.SearchParams
+         * @memberof dd.User
          * @static
-         * @param {dd.ISearchParams=} [properties] Properties to set
-         * @returns {dd.SearchParams} SearchParams instance
+         * @param {dd.IUser=} [properties] Properties to set
+         * @returns {dd.User} User instance
          */
-        SearchParams.create = function create(properties) {
-            return new SearchParams(properties);
+        User.create = function create(properties) {
+            return new User(properties);
         };
 
         /**
-         * Encodes the specified SearchParams message. Does not implicitly {@link dd.SearchParams.verify|verify} messages.
+         * Encodes the specified User message. Does not implicitly {@link dd.User.verify|verify} messages.
          * @function encode
-         * @memberof dd.SearchParams
+         * @memberof dd.User
          * @static
-         * @param {dd.ISearchParams} message SearchParams message or plain object to encode
+         * @param {dd.IUser} message User message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        SearchParams.encode = function encode(message, writer) {
+        User.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.ids != null && message.ids.length)
-                for (var i = 0; i < message.ids.length; ++i)
-                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.ids[i]);
-            if (message.limit != null && message.hasOwnProperty("limit"))
-                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.limit);
-            if (message.offset != null && message.hasOwnProperty("offset"))
-                writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.offset);
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+            if (message.imageURL != null && message.hasOwnProperty("imageURL"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.imageURL);
+            if (message.createdAt != null && message.hasOwnProperty("createdAt"))
+                writer.uint32(/* id 4, wireType 0 =*/32).uint64(message.createdAt);
             return writer;
         };
 
         /**
-         * Encodes the specified SearchParams message, length delimited. Does not implicitly {@link dd.SearchParams.verify|verify} messages.
+         * Encodes the specified User message, length delimited. Does not implicitly {@link dd.User.verify|verify} messages.
          * @function encodeDelimited
-         * @memberof dd.SearchParams
+         * @memberof dd.User
          * @static
-         * @param {dd.ISearchParams} message SearchParams message or plain object to encode
+         * @param {dd.IUser} message User message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        SearchParams.encodeDelimited = function encodeDelimited(message, writer) {
+        User.encodeDelimited = function encodeDelimited(message, writer) {
             return this.encode(message, writer).ldelim();
         };
 
         /**
-         * Decodes a SearchParams message from the specified reader or buffer.
+         * Decodes a User message from the specified reader or buffer.
          * @function decode
-         * @memberof dd.SearchParams
+         * @memberof dd.User
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
          * @param {number} [length] Message length if known beforehand
-         * @returns {dd.SearchParams} SearchParams
+         * @returns {dd.User} User
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        SearchParams.decode = function decode(reader, length) {
+        User.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.SearchParams();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.User();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
-                    if (!(message.ids && message.ids.length))
-                        message.ids = [];
-                    message.ids.push(reader.string());
+                    message.id = reader.string();
                     break;
                 case 2:
-                    message.limit = reader.uint32();
+                    message.name = reader.string();
                     break;
                 case 3:
-                    message.offset = reader.uint32();
+                    message.imageURL = reader.string();
+                    break;
+                case 4:
+                    message.createdAt = reader.uint64();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -2891,117 +3812,748 @@ $root.dd = (function() {
         };
 
         /**
-         * Decodes a SearchParams message from the specified reader or buffer, length delimited.
+         * Decodes a User message from the specified reader or buffer, length delimited.
          * @function decodeDelimited
-         * @memberof dd.SearchParams
+         * @memberof dd.User
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {dd.SearchParams} SearchParams
+         * @returns {dd.User} User
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        SearchParams.decodeDelimited = function decodeDelimited(reader) {
+        User.decodeDelimited = function decodeDelimited(reader) {
             if (!(reader instanceof $Reader))
                 reader = new $Reader(reader);
             return this.decode(reader, reader.uint32());
         };
 
         /**
-         * Verifies a SearchParams message.
+         * Verifies a User message.
          * @function verify
-         * @memberof dd.SearchParams
+         * @memberof dd.User
          * @static
          * @param {Object.<string,*>} message Plain object to verify
          * @returns {string|null} `null` if valid, otherwise the reason why it is not
          */
-        SearchParams.verify = function verify(message) {
+        User.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.ids != null && message.hasOwnProperty("ids")) {
-                if (!Array.isArray(message.ids))
-                    return "ids: array expected";
-                for (var i = 0; i < message.ids.length; ++i)
-                    if (!$util.isString(message.ids[i]))
-                        return "ids: string[] expected";
-            }
-            if (message.limit != null && message.hasOwnProperty("limit"))
-                if (!$util.isInteger(message.limit))
-                    return "limit: integer expected";
-            if (message.offset != null && message.hasOwnProperty("offset"))
-                if (!$util.isInteger(message.offset))
-                    return "offset: integer expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.imageURL != null && message.hasOwnProperty("imageURL"))
+                if (!$util.isString(message.imageURL))
+                    return "imageURL: string expected";
+            if (message.createdAt != null && message.hasOwnProperty("createdAt"))
+                if (!$util.isInteger(message.createdAt) && !(message.createdAt && $util.isInteger(message.createdAt.low) && $util.isInteger(message.createdAt.high)))
+                    return "createdAt: integer|Long expected";
             return null;
         };
 
         /**
-         * Creates a SearchParams message from a plain object. Also converts values to their respective internal types.
+         * Creates a User message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
-         * @memberof dd.SearchParams
+         * @memberof dd.User
          * @static
          * @param {Object.<string,*>} object Plain object
-         * @returns {dd.SearchParams} SearchParams
+         * @returns {dd.User} User
          */
-        SearchParams.fromObject = function fromObject(object) {
-            if (object instanceof $root.dd.SearchParams)
+        User.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.User)
                 return object;
-            var message = new $root.dd.SearchParams();
-            if (object.ids) {
-                if (!Array.isArray(object.ids))
-                    throw TypeError(".dd.SearchParams.ids: array expected");
-                message.ids = [];
-                for (var i = 0; i < object.ids.length; ++i)
-                    message.ids[i] = String(object.ids[i]);
-            }
-            if (object.limit != null)
-                message.limit = object.limit >>> 0;
-            if (object.offset != null)
-                message.offset = object.offset >>> 0;
+            var message = new $root.dd.User();
+            if (object.id != null)
+                message.id = String(object.id);
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.imageURL != null)
+                message.imageURL = String(object.imageURL);
+            if (object.createdAt != null)
+                if ($util.Long)
+                    (message.createdAt = $util.Long.fromValue(object.createdAt)).unsigned = true;
+                else if (typeof object.createdAt === "string")
+                    message.createdAt = parseInt(object.createdAt, 10);
+                else if (typeof object.createdAt === "number")
+                    message.createdAt = object.createdAt;
+                else if (typeof object.createdAt === "object")
+                    message.createdAt = new $util.LongBits(object.createdAt.low >>> 0, object.createdAt.high >>> 0).toNumber(true);
             return message;
         };
 
         /**
-         * Creates a plain object from a SearchParams message. Also converts values to other types if specified.
+         * Creates a plain object from a User message. Also converts values to other types if specified.
          * @function toObject
-         * @memberof dd.SearchParams
+         * @memberof dd.User
          * @static
-         * @param {dd.SearchParams} message SearchParams
+         * @param {dd.User} message User
          * @param {$protobuf.IConversionOptions} [options] Conversion options
          * @returns {Object.<string,*>} Plain object
          */
-        SearchParams.toObject = function toObject(message, options) {
+        User.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
             var object = {};
-            if (options.arrays || options.defaults)
-                object.ids = [];
             if (options.defaults) {
-                object.limit = 0;
-                object.offset = 0;
+                object.id = "";
+                object.name = "";
+                object.imageURL = "";
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.createdAt = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.createdAt = options.longs === String ? "0" : 0;
             }
-            if (message.ids && message.ids.length) {
-                object.ids = [];
-                for (var j = 0; j < message.ids.length; ++j)
-                    object.ids[j] = message.ids[j];
-            }
-            if (message.limit != null && message.hasOwnProperty("limit"))
-                object.limit = message.limit;
-            if (message.offset != null && message.hasOwnProperty("offset"))
-                object.offset = message.offset;
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.imageURL != null && message.hasOwnProperty("imageURL"))
+                object.imageURL = message.imageURL;
+            if (message.createdAt != null && message.hasOwnProperty("createdAt"))
+                if (typeof message.createdAt === "number")
+                    object.createdAt = options.longs === String ? String(message.createdAt) : message.createdAt;
+                else
+                    object.createdAt = options.longs === String ? $util.Long.prototype.toString.call(message.createdAt) : options.longs === Number ? new $util.LongBits(message.createdAt.low >>> 0, message.createdAt.high >>> 0).toNumber(true) : message.createdAt;
             return object;
         };
 
         /**
-         * Converts this SearchParams to JSON.
+         * Converts this User to JSON.
          * @function toJSON
-         * @memberof dd.SearchParams
+         * @memberof dd.User
          * @instance
          * @returns {Object.<string,*>} JSON object
          */
-        SearchParams.prototype.toJSON = function toJSON() {
+        User.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        return SearchParams;
+        return User;
+    })();
+
+    dd.CampaignCore = (function() {
+
+        /**
+         * Properties of a CampaignCore.
+         * @memberof dd
+         * @interface ICampaignCore
+         * @property {string|null} [id] CampaignCore id
+         * @property {string|null} [name] CampaignCore name
+         * @property {string|null} [description] CampaignCore description
+         * @property {string|null} [imageId] CampaignCore imageId
+         * @property {Array.<number|Long>|null} [experienceTable] CampaignCore experienceTable
+         */
+
+        /**
+         * Constructs a new CampaignCore.
+         * @memberof dd
+         * @classdesc Represents a CampaignCore.
+         * @implements ICampaignCore
+         * @constructor
+         * @param {dd.ICampaignCore=} [properties] Properties to set
+         */
+        function CampaignCore(properties) {
+            this.experienceTable = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * CampaignCore id.
+         * @member {string} id
+         * @memberof dd.CampaignCore
+         * @instance
+         */
+        CampaignCore.prototype.id = "";
+
+        /**
+         * CampaignCore name.
+         * @member {string} name
+         * @memberof dd.CampaignCore
+         * @instance
+         */
+        CampaignCore.prototype.name = "";
+
+        /**
+         * CampaignCore description.
+         * @member {string} description
+         * @memberof dd.CampaignCore
+         * @instance
+         */
+        CampaignCore.prototype.description = "";
+
+        /**
+         * CampaignCore imageId.
+         * @member {string} imageId
+         * @memberof dd.CampaignCore
+         * @instance
+         */
+        CampaignCore.prototype.imageId = "";
+
+        /**
+         * CampaignCore experienceTable.
+         * @member {Array.<number|Long>} experienceTable
+         * @memberof dd.CampaignCore
+         * @instance
+         */
+        CampaignCore.prototype.experienceTable = $util.emptyArray;
+
+        /**
+         * Creates a new CampaignCore instance using the specified properties.
+         * @function create
+         * @memberof dd.CampaignCore
+         * @static
+         * @param {dd.ICampaignCore=} [properties] Properties to set
+         * @returns {dd.CampaignCore} CampaignCore instance
+         */
+        CampaignCore.create = function create(properties) {
+            return new CampaignCore(properties);
+        };
+
+        /**
+         * Encodes the specified CampaignCore message. Does not implicitly {@link dd.CampaignCore.verify|verify} messages.
+         * @function encode
+         * @memberof dd.CampaignCore
+         * @static
+         * @param {dd.ICampaignCore} message CampaignCore message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CampaignCore.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+            if (message.description != null && message.hasOwnProperty("description"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.description);
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.imageId);
+            if (message.experienceTable != null && message.experienceTable.length) {
+                writer.uint32(/* id 10, wireType 2 =*/82).fork();
+                for (var i = 0; i < message.experienceTable.length; ++i)
+                    writer.uint64(message.experienceTable[i]);
+                writer.ldelim();
+            }
+            return writer;
+        };
+
+        /**
+         * Encodes the specified CampaignCore message, length delimited. Does not implicitly {@link dd.CampaignCore.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.CampaignCore
+         * @static
+         * @param {dd.ICampaignCore} message CampaignCore message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CampaignCore.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a CampaignCore message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.CampaignCore
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.CampaignCore} CampaignCore
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CampaignCore.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.CampaignCore();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                case 2:
+                    message.name = reader.string();
+                    break;
+                case 3:
+                    message.description = reader.string();
+                    break;
+                case 4:
+                    message.imageId = reader.string();
+                    break;
+                case 10:
+                    if (!(message.experienceTable && message.experienceTable.length))
+                        message.experienceTable = [];
+                    if ((tag & 7) === 2) {
+                        var end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.experienceTable.push(reader.uint64());
+                    } else
+                        message.experienceTable.push(reader.uint64());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a CampaignCore message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.CampaignCore
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.CampaignCore} CampaignCore
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CampaignCore.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a CampaignCore message.
+         * @function verify
+         * @memberof dd.CampaignCore
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        CampaignCore.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.description != null && message.hasOwnProperty("description"))
+                if (!$util.isString(message.description))
+                    return "description: string expected";
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                if (!$util.isString(message.imageId))
+                    return "imageId: string expected";
+            if (message.experienceTable != null && message.hasOwnProperty("experienceTable")) {
+                if (!Array.isArray(message.experienceTable))
+                    return "experienceTable: array expected";
+                for (var i = 0; i < message.experienceTable.length; ++i)
+                    if (!$util.isInteger(message.experienceTable[i]) && !(message.experienceTable[i] && $util.isInteger(message.experienceTable[i].low) && $util.isInteger(message.experienceTable[i].high)))
+                        return "experienceTable: integer|Long[] expected";
+            }
+            return null;
+        };
+
+        /**
+         * Creates a CampaignCore message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.CampaignCore
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.CampaignCore} CampaignCore
+         */
+        CampaignCore.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.CampaignCore)
+                return object;
+            var message = new $root.dd.CampaignCore();
+            if (object.id != null)
+                message.id = String(object.id);
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.description != null)
+                message.description = String(object.description);
+            if (object.imageId != null)
+                message.imageId = String(object.imageId);
+            if (object.experienceTable) {
+                if (!Array.isArray(object.experienceTable))
+                    throw TypeError(".dd.CampaignCore.experienceTable: array expected");
+                message.experienceTable = [];
+                for (var i = 0; i < object.experienceTable.length; ++i)
+                    if ($util.Long)
+                        (message.experienceTable[i] = $util.Long.fromValue(object.experienceTable[i])).unsigned = true;
+                    else if (typeof object.experienceTable[i] === "string")
+                        message.experienceTable[i] = parseInt(object.experienceTable[i], 10);
+                    else if (typeof object.experienceTable[i] === "number")
+                        message.experienceTable[i] = object.experienceTable[i];
+                    else if (typeof object.experienceTable[i] === "object")
+                        message.experienceTable[i] = new $util.LongBits(object.experienceTable[i].low >>> 0, object.experienceTable[i].high >>> 0).toNumber(true);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a CampaignCore message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.CampaignCore
+         * @static
+         * @param {dd.CampaignCore} message CampaignCore
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        CampaignCore.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.experienceTable = [];
+            if (options.defaults) {
+                object.id = "";
+                object.name = "";
+                object.description = "";
+                object.imageId = "";
+            }
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.description != null && message.hasOwnProperty("description"))
+                object.description = message.description;
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                object.imageId = message.imageId;
+            if (message.experienceTable && message.experienceTable.length) {
+                object.experienceTable = [];
+                for (var j = 0; j < message.experienceTable.length; ++j)
+                    if (typeof message.experienceTable[j] === "number")
+                        object.experienceTable[j] = options.longs === String ? String(message.experienceTable[j]) : message.experienceTable[j];
+                    else
+                        object.experienceTable[j] = options.longs === String ? $util.Long.prototype.toString.call(message.experienceTable[j]) : options.longs === Number ? new $util.LongBits(message.experienceTable[j].low >>> 0, message.experienceTable[j].high >>> 0).toNumber(true) : message.experienceTable[j];
+            }
+            return object;
+        };
+
+        /**
+         * Converts this CampaignCore to JSON.
+         * @function toJSON
+         * @memberof dd.CampaignCore
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        CampaignCore.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CampaignCore;
+    })();
+
+    dd.Campaign = (function() {
+
+        /**
+         * Properties of a Campaign.
+         * @memberof dd
+         * @interface ICampaign
+         * @property {string|null} [id] Campaign id
+         * @property {string|null} [name] Campaign name
+         * @property {string|null} [description] Campaign description
+         * @property {string|null} [imageId] Campaign imageId
+         * @property {Array.<number|Long>|null} [experienceTable] Campaign experienceTable
+         */
+
+        /**
+         * Constructs a new Campaign.
+         * @memberof dd
+         * @classdesc Represents a Campaign.
+         * @implements ICampaign
+         * @constructor
+         * @param {dd.ICampaign=} [properties] Properties to set
+         */
+        function Campaign(properties) {
+            this.experienceTable = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Campaign id.
+         * @member {string} id
+         * @memberof dd.Campaign
+         * @instance
+         */
+        Campaign.prototype.id = "";
+
+        /**
+         * Campaign name.
+         * @member {string} name
+         * @memberof dd.Campaign
+         * @instance
+         */
+        Campaign.prototype.name = "";
+
+        /**
+         * Campaign description.
+         * @member {string} description
+         * @memberof dd.Campaign
+         * @instance
+         */
+        Campaign.prototype.description = "";
+
+        /**
+         * Campaign imageId.
+         * @member {string} imageId
+         * @memberof dd.Campaign
+         * @instance
+         */
+        Campaign.prototype.imageId = "";
+
+        /**
+         * Campaign experienceTable.
+         * @member {Array.<number|Long>} experienceTable
+         * @memberof dd.Campaign
+         * @instance
+         */
+        Campaign.prototype.experienceTable = $util.emptyArray;
+
+        /**
+         * Creates a new Campaign instance using the specified properties.
+         * @function create
+         * @memberof dd.Campaign
+         * @static
+         * @param {dd.ICampaign=} [properties] Properties to set
+         * @returns {dd.Campaign} Campaign instance
+         */
+        Campaign.create = function create(properties) {
+            return new Campaign(properties);
+        };
+
+        /**
+         * Encodes the specified Campaign message. Does not implicitly {@link dd.Campaign.verify|verify} messages.
+         * @function encode
+         * @memberof dd.Campaign
+         * @static
+         * @param {dd.ICampaign} message Campaign message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Campaign.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+            if (message.description != null && message.hasOwnProperty("description"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.description);
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.imageId);
+            if (message.experienceTable != null && message.experienceTable.length) {
+                writer.uint32(/* id 10, wireType 2 =*/82).fork();
+                for (var i = 0; i < message.experienceTable.length; ++i)
+                    writer.uint64(message.experienceTable[i]);
+                writer.ldelim();
+            }
+            return writer;
+        };
+
+        /**
+         * Encodes the specified Campaign message, length delimited. Does not implicitly {@link dd.Campaign.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.Campaign
+         * @static
+         * @param {dd.ICampaign} message Campaign message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Campaign.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a Campaign message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.Campaign
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.Campaign} Campaign
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Campaign.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.Campaign();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                case 2:
+                    message.name = reader.string();
+                    break;
+                case 3:
+                    message.description = reader.string();
+                    break;
+                case 4:
+                    message.imageId = reader.string();
+                    break;
+                case 10:
+                    if (!(message.experienceTable && message.experienceTable.length))
+                        message.experienceTable = [];
+                    if ((tag & 7) === 2) {
+                        var end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.experienceTable.push(reader.uint64());
+                    } else
+                        message.experienceTable.push(reader.uint64());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a Campaign message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.Campaign
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.Campaign} Campaign
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Campaign.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a Campaign message.
+         * @function verify
+         * @memberof dd.Campaign
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Campaign.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.description != null && message.hasOwnProperty("description"))
+                if (!$util.isString(message.description))
+                    return "description: string expected";
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                if (!$util.isString(message.imageId))
+                    return "imageId: string expected";
+            if (message.experienceTable != null && message.hasOwnProperty("experienceTable")) {
+                if (!Array.isArray(message.experienceTable))
+                    return "experienceTable: array expected";
+                for (var i = 0; i < message.experienceTable.length; ++i)
+                    if (!$util.isInteger(message.experienceTable[i]) && !(message.experienceTable[i] && $util.isInteger(message.experienceTable[i].low) && $util.isInteger(message.experienceTable[i].high)))
+                        return "experienceTable: integer|Long[] expected";
+            }
+            return null;
+        };
+
+        /**
+         * Creates a Campaign message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.Campaign
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.Campaign} Campaign
+         */
+        Campaign.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.Campaign)
+                return object;
+            var message = new $root.dd.Campaign();
+            if (object.id != null)
+                message.id = String(object.id);
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.description != null)
+                message.description = String(object.description);
+            if (object.imageId != null)
+                message.imageId = String(object.imageId);
+            if (object.experienceTable) {
+                if (!Array.isArray(object.experienceTable))
+                    throw TypeError(".dd.Campaign.experienceTable: array expected");
+                message.experienceTable = [];
+                for (var i = 0; i < object.experienceTable.length; ++i)
+                    if ($util.Long)
+                        (message.experienceTable[i] = $util.Long.fromValue(object.experienceTable[i])).unsigned = true;
+                    else if (typeof object.experienceTable[i] === "string")
+                        message.experienceTable[i] = parseInt(object.experienceTable[i], 10);
+                    else if (typeof object.experienceTable[i] === "number")
+                        message.experienceTable[i] = object.experienceTable[i];
+                    else if (typeof object.experienceTable[i] === "object")
+                        message.experienceTable[i] = new $util.LongBits(object.experienceTable[i].low >>> 0, object.experienceTable[i].high >>> 0).toNumber(true);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a Campaign message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.Campaign
+         * @static
+         * @param {dd.Campaign} message Campaign
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Campaign.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.experienceTable = [];
+            if (options.defaults) {
+                object.id = "";
+                object.name = "";
+                object.description = "";
+                object.imageId = "";
+            }
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.description != null && message.hasOwnProperty("description"))
+                object.description = message.description;
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                object.imageId = message.imageId;
+            if (message.experienceTable && message.experienceTable.length) {
+                object.experienceTable = [];
+                for (var j = 0; j < message.experienceTable.length; ++j)
+                    if (typeof message.experienceTable[j] === "number")
+                        object.experienceTable[j] = options.longs === String ? String(message.experienceTable[j]) : message.experienceTable[j];
+                    else
+                        object.experienceTable[j] = options.longs === String ? $util.Long.prototype.toString.call(message.experienceTable[j]) : options.longs === Number ? new $util.LongBits(message.experienceTable[j].low >>> 0, message.experienceTable[j].high >>> 0).toNumber(true) : message.experienceTable[j];
+            }
+            return object;
+        };
+
+        /**
+         * Converts this Campaign to JSON.
+         * @function toJSON
+         * @memberof dd.Campaign
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Campaign.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return Campaign;
     })();
 
     return dd;

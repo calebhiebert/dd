@@ -11,7 +11,7 @@ import (
 )
 
 // GetUser will return the user for a given id
-func (d *DD) GetUser(ctx context.Context, gu *dd.GetUserRequest) (*dd.User, error) {
+func (d *DD) GetUser(ctx context.Context, gu *dd.GetByIdRequest) (*dd.User, error) {
 	var user models.User
 
 	err := dbase.SelectFrom("users").Where("id = ?", gu.Id).One(&user)
@@ -36,7 +36,7 @@ func (d *DD) CreateUser(ctx context.Context, cu *dd.CreateUserRequest) (*dd.User
 		return nil, err
 	}
 
-	existingUser, err := d.GetUser(ctx, &dd.GetUserRequest{
+	existingUser, err := d.GetUser(ctx, &dd.GetByIdRequest{
 		Id: userData.Sub,
 	})
 	if err != nil {

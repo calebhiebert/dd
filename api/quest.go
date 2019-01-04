@@ -12,7 +12,7 @@ func (d *DD) GetQuests(ctx context.Context, gq *dd.GetQuestsRequest) (*dd.GetQue
 	quests := []*dd.Quest{}
 
 	for i := 0; i < 5; i++ {
-		quest, err := d.GetQuest(ctx, &dd.GetQuestRequest{})
+		quest, err := d.GetQuest(ctx, &dd.GetByIdRequest{})
 		if err != nil {
 			return nil, err
 		}
@@ -27,7 +27,7 @@ func (d *DD) GetQuests(ctx context.Context, gq *dd.GetQuestsRequest) (*dd.GetQue
 }
 
 // GetQuest will return the quest waiting at a given id
-func (d *DD) GetQuest(ctx context.Context, qr *dd.GetQuestRequest) (*dd.Quest, error) {
+func (d *DD) GetQuest(ctx context.Context, qr *dd.GetByIdRequest) (*dd.Quest, error) {
 
 	id, err := gonanoid.Nanoid()
 	if err != nil {
