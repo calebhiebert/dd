@@ -79,7 +79,11 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
   }
 
   public get imageURL() {
-    if (this.formGroup.get('imageId').value != null) {
+    if (
+      this.formGroup.get('imageId').value !== null &&
+      this.formGroup.get('imageId').value !== undefined &&
+      this.formGroup.get('imageId').value !== ''
+    ) {
       return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${
         this.formGroup.get('imageId').value
       }.png`;

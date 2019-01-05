@@ -135,6 +135,48 @@ export namespace dd {
         public editCampaign(request: dd.IEditCampaignRequest): Promise<dd.CampaignCore>;
 
         /**
+         * Calls GetEntityPreset.
+         * @param request GetByIdRequest message or plain object
+         * @param callback Node-style callback called with the error, if any, and EntityPreset
+         */
+        public getEntityPreset(request: dd.IGetByIdRequest, callback: dd.DD.GetEntityPresetCallback): void;
+
+        /**
+         * Calls GetEntityPreset.
+         * @param request GetByIdRequest message or plain object
+         * @returns Promise
+         */
+        public getEntityPreset(request: dd.IGetByIdRequest): Promise<dd.EntityPreset>;
+
+        /**
+         * Calls CreateEntityPreset.
+         * @param request Blank message or plain object
+         * @param callback Node-style callback called with the error, if any, and CreateEntityPresetResponse
+         */
+        public createEntityPreset(request: dd.IBlank, callback: dd.DD.CreateEntityPresetCallback): void;
+
+        /**
+         * Calls CreateEntityPreset.
+         * @param request Blank message or plain object
+         * @returns Promise
+         */
+        public createEntityPreset(request: dd.IBlank): Promise<dd.CreateEntityPresetResponse>;
+
+        /**
+         * Calls EditEntityPreset.
+         * @param request EditEntityPresetRequest message or plain object
+         * @param callback Node-style callback called with the error, if any, and EntityPreset
+         */
+        public editEntityPreset(request: dd.IEditEntityPresetRequest, callback: dd.DD.EditEntityPresetCallback): void;
+
+        /**
+         * Calls EditEntityPreset.
+         * @param request EditEntityPresetRequest message or plain object
+         * @returns Promise
+         */
+        public editEntityPreset(request: dd.IEditEntityPresetRequest): Promise<dd.EntityPreset>;
+
+        /**
          * Calls GetQuest.
          * @param request GetByIdRequest message or plain object
          * @param callback Node-style callback called with the error, if any, and Quest
@@ -248,6 +290,27 @@ export namespace dd {
          * @param [response] CampaignCore
          */
         type EditCampaignCallback = (error: (Error|null), response?: dd.CampaignCore) => void;
+
+        /**
+         * Callback as used by {@link dd.DD#getEntityPreset}.
+         * @param error Error, if any
+         * @param [response] EntityPreset
+         */
+        type GetEntityPresetCallback = (error: (Error|null), response?: dd.EntityPreset) => void;
+
+        /**
+         * Callback as used by {@link dd.DD#createEntityPreset}.
+         * @param error Error, if any
+         * @param [response] CreateEntityPresetResponse
+         */
+        type CreateEntityPresetCallback = (error: (Error|null), response?: dd.CreateEntityPresetResponse) => void;
+
+        /**
+         * Callback as used by {@link dd.DD#editEntityPreset}.
+         * @param error Error, if any
+         * @param [response] EntityPreset
+         */
+        type EditEntityPresetCallback = (error: (Error|null), response?: dd.EntityPreset) => void;
 
         /**
          * Callback as used by {@link dd.DD#getQuest}.
@@ -1287,6 +1350,198 @@ export namespace dd {
 
         /**
          * Converts this EditCampaignRequest to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a CreateEntityPresetResponse. */
+    interface ICreateEntityPresetResponse {
+
+        /** CreateEntityPresetResponse id */
+        id?: (string|null);
+    }
+
+    /** Represents a CreateEntityPresetResponse. */
+    class CreateEntityPresetResponse implements ICreateEntityPresetResponse {
+
+        /**
+         * Constructs a new CreateEntityPresetResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.ICreateEntityPresetResponse);
+
+        /** CreateEntityPresetResponse id. */
+        public id: string;
+
+        /**
+         * Creates a new CreateEntityPresetResponse instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns CreateEntityPresetResponse instance
+         */
+        public static create(properties?: dd.ICreateEntityPresetResponse): dd.CreateEntityPresetResponse;
+
+        /**
+         * Encodes the specified CreateEntityPresetResponse message. Does not implicitly {@link dd.CreateEntityPresetResponse.verify|verify} messages.
+         * @param message CreateEntityPresetResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.ICreateEntityPresetResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified CreateEntityPresetResponse message, length delimited. Does not implicitly {@link dd.CreateEntityPresetResponse.verify|verify} messages.
+         * @param message CreateEntityPresetResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.ICreateEntityPresetResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a CreateEntityPresetResponse message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns CreateEntityPresetResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.CreateEntityPresetResponse;
+
+        /**
+         * Decodes a CreateEntityPresetResponse message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns CreateEntityPresetResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.CreateEntityPresetResponse;
+
+        /**
+         * Verifies a CreateEntityPresetResponse message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a CreateEntityPresetResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns CreateEntityPresetResponse
+         */
+        public static fromObject(object: { [k: string]: any }): dd.CreateEntityPresetResponse;
+
+        /**
+         * Creates a plain object from a CreateEntityPresetResponse message. Also converts values to other types if specified.
+         * @param message CreateEntityPresetResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.CreateEntityPresetResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this CreateEntityPresetResponse to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an EditEntityPresetRequest. */
+    interface IEditEntityPresetRequest {
+
+        /** EditEntityPresetRequest campaignId */
+        campaignId?: (string|null);
+
+        /** EditEntityPresetRequest id */
+        id?: (string|null);
+
+        /** EditEntityPresetRequest preset */
+        preset?: (dd.IEntityPreset|null);
+    }
+
+    /** Represents an EditEntityPresetRequest. */
+    class EditEntityPresetRequest implements IEditEntityPresetRequest {
+
+        /**
+         * Constructs a new EditEntityPresetRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.IEditEntityPresetRequest);
+
+        /** EditEntityPresetRequest campaignId. */
+        public campaignId: string;
+
+        /** EditEntityPresetRequest id. */
+        public id: string;
+
+        /** EditEntityPresetRequest preset. */
+        public preset?: (dd.IEntityPreset|null);
+
+        /**
+         * Creates a new EditEntityPresetRequest instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns EditEntityPresetRequest instance
+         */
+        public static create(properties?: dd.IEditEntityPresetRequest): dd.EditEntityPresetRequest;
+
+        /**
+         * Encodes the specified EditEntityPresetRequest message. Does not implicitly {@link dd.EditEntityPresetRequest.verify|verify} messages.
+         * @param message EditEntityPresetRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.IEditEntityPresetRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified EditEntityPresetRequest message, length delimited. Does not implicitly {@link dd.EditEntityPresetRequest.verify|verify} messages.
+         * @param message EditEntityPresetRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.IEditEntityPresetRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes an EditEntityPresetRequest message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns EditEntityPresetRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.EditEntityPresetRequest;
+
+        /**
+         * Decodes an EditEntityPresetRequest message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns EditEntityPresetRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.EditEntityPresetRequest;
+
+        /**
+         * Verifies an EditEntityPresetRequest message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates an EditEntityPresetRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns EditEntityPresetRequest
+         */
+        public static fromObject(object: { [k: string]: any }): dd.EditEntityPresetRequest;
+
+        /**
+         * Creates a plain object from an EditEntityPresetRequest message. Also converts values to other types if specified.
+         * @param message EditEntityPresetRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.EditEntityPresetRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this EditEntityPresetRequest to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };

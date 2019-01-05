@@ -25,7 +25,11 @@ export class ItemEditComponent implements OnInit {
 
   public valid = true;
 
-  constructor(private route: ActivatedRoute, private itemService: ItemService, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private itemService: ItemService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -43,8 +47,9 @@ export class ItemEditComponent implements OnInit {
     this.saving = true;
 
     try {
-      const itm = await this.itemService.saveItem(<Item>this.form.formGroup.value);
-      console.log(itm);
+      const itm = await this.itemService.saveItem(<Item>(
+        this.form.formGroup.value
+      ));
     } catch (err) {
       console.log('SAVE ERR', err);
     }
@@ -54,7 +59,11 @@ export class ItemEditComponent implements OnInit {
   }
 
   public async delete() {
-    if (await this.confirmModal.getConfirmation('Are you sure you want to delete this item? This cannot be undone.')) {
+    if (
+      await this.confirmModal.getConfirmation(
+        'Are you sure you want to delete this item? This cannot be undone.'
+      )
+    ) {
       this.deleting = true;
       try {
         await this.itemService.deleteItem(this.item.id);

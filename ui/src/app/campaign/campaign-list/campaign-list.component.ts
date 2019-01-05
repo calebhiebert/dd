@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Campaign } from 'src/app/campaign';
 import { CampaignService } from 'src/app/campaign.service';
 import { RpcService } from 'src/app/rpc.service';
+import { dd } from 'src/dd.pb';
 
 @Component({
   selector: 'dd-campaign-list',
@@ -12,7 +13,7 @@ import { RpcService } from 'src/app/rpc.service';
 export class CampaignListComponent implements OnInit {
   public loading = false;
   public creating = false;
-  public campaigns: Campaign[] = null;
+  public campaigns: dd.ICampaignCore[] = null;
 
   constructor(
     private campaignService: CampaignService,
@@ -45,8 +46,8 @@ export class CampaignListComponent implements OnInit {
   private async loadCampaigns() {
     this.loading = true;
     try {
-      const campaigns = await this.campaignService.getCampaigns();
-      this.campaigns = campaigns;
+      const campaignResult = await this.rpc.dd.getCampaigns({});
+      this.campaigns = campaignResult.campaigns;
     } catch (err) {
       console.log('ERR', err);
     }

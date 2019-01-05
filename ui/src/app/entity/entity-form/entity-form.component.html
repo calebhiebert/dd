@@ -1,5 +1,5 @@
 <dd-confirmation-modal #confirmmodal></dd-confirmation-modal>
-<div class="container grid-xl" [formGroup]="formGroup">
+<div class="container grid-xl" [formGroup]="formGroup" *ngIf="entityPreset">
   <div class="columns">
     <div class="column"><h3>Create Entity Preset</h3></div>
     <div class="column col-auto col-ml-auto">
@@ -139,7 +139,10 @@
       </div>
 
       <h5 class="mt-2">Starting Inventory</h5>
-      <dd-inventory-selector></dd-inventory-selector>
+      <dd-inventory-selector
+        [formGroup]="formGroup"
+        [entityPreset]="entityPreset"
+      ></dd-inventory-selector>
 
       <h5 class="mt-2">Misc</h5>
       <!-- Misc Options -->
@@ -169,7 +172,8 @@
         <!-- Attribute Array -->
         <div>
           <dd-entity-attribute-row-editor
-            *ngFor="let attr of attributeControls"
+            *ngFor="let attr of attributeControls; let i = index"
+            (remove)="removeAttribute(i)"
             [formGroup]="attr"
           ></dd-entity-attribute-row-editor>
         </div>

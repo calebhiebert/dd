@@ -1,5 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { Attribute, AttributeType } from 'src/app/attributes';
 
 @Component({
@@ -17,7 +23,9 @@ export class AttributeEditorComponent implements OnInit {
     const controls: FormGroup[] = [];
 
     for (const attr of attributes) {
-      controls.push(this.createAttributeFormItem(attr.name, attr.type, attr.data));
+      controls.push(
+        this.createAttributeFormItem(attr.name, attr.type, attr.data)
+      );
     }
 
     return new FormArray(controls);
@@ -26,12 +34,22 @@ export class AttributeEditorComponent implements OnInit {
   private static createAttributeFormItem(
     presetName?: string,
     presetType?: AttributeType,
-    presetValue?: string,
+    presetValue?: string
   ): FormGroup {
     return new FormGroup({
-      name: new FormControl(presetName, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-      data: new FormControl(presetValue, [Validators.required, Validators.maxLength(255)]),
-      type: new FormControl(presetType ? presetType.toString() : AttributeType.STRING.toString(), Validators.required),
+      name: new FormControl(presetName, [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(50),
+      ]),
+      data: new FormControl(presetValue, [
+        Validators.required,
+        Validators.maxLength(255),
+      ]),
+      type: new FormControl(
+        presetType ? presetType.toString() : AttributeType.STRING.toString(),
+        Validators.required
+      ),
     });
   }
 
@@ -40,13 +58,21 @@ export class AttributeEditorComponent implements OnInit {
       this.formGroup.addControl('attributes', this.formBuilder.array([]));
       this.addAttribute('Weight', AttributeType.NUMBER, '10');
     }
-
-    console.log(this.formGroup);
   }
 
-  public addAttribute(presetName?: string, presetType?: AttributeType, presetValue?: string) {
+  public addAttribute(
+    presetName?: string,
+    presetType?: AttributeType,
+    presetValue?: string
+  ) {
     const attributes = this.formGroup.get('attributes') as FormArray;
-    attributes.push(AttributeEditorComponent.createAttributeFormItem(presetName, presetType, presetValue));
+    attributes.push(
+      AttributeEditorComponent.createAttributeFormItem(
+        presetName,
+        presetType,
+        presetValue
+      )
+    );
   }
 
   public removeAttribute(i: number) {

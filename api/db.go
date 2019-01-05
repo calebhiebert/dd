@@ -10,6 +10,7 @@ import (
 )
 
 var IDTypeCampaign = "campaign"
+var IDTypeEntityPreset = "ent_preset"
 
 var dbase sqlbuilder.Database
 
@@ -26,9 +27,7 @@ func connectDB() error {
 
 	dbase = sess
 
-	migrate()
-
-	return nil
+	return migrate()
 }
 
 func migrate() error {

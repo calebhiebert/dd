@@ -315,6 +315,105 @@ $root.dd = (function() {
          */
 
         /**
+         * Callback as used by {@link dd.DD#getEntityPreset}.
+         * @memberof dd.DD
+         * @typedef GetEntityPresetCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {dd.EntityPreset} [response] EntityPreset
+         */
+
+        /**
+         * Calls GetEntityPreset.
+         * @function getEntityPreset
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IGetByIdRequest} request GetByIdRequest message or plain object
+         * @param {dd.DD.GetEntityPresetCallback} callback Node-style callback called with the error, if any, and EntityPreset
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(DD.prototype.getEntityPreset = function getEntityPreset(request, callback) {
+            return this.rpcCall(getEntityPreset, $root.dd.GetByIdRequest, $root.dd.EntityPreset, request, callback);
+        }, "name", { value: "GetEntityPreset" });
+
+        /**
+         * Calls GetEntityPreset.
+         * @function getEntityPreset
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IGetByIdRequest} request GetByIdRequest message or plain object
+         * @returns {Promise<dd.EntityPreset>} Promise
+         * @variation 2
+         */
+
+        /**
+         * Callback as used by {@link dd.DD#createEntityPreset}.
+         * @memberof dd.DD
+         * @typedef CreateEntityPresetCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {dd.CreateEntityPresetResponse} [response] CreateEntityPresetResponse
+         */
+
+        /**
+         * Calls CreateEntityPreset.
+         * @function createEntityPreset
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IBlank} request Blank message or plain object
+         * @param {dd.DD.CreateEntityPresetCallback} callback Node-style callback called with the error, if any, and CreateEntityPresetResponse
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(DD.prototype.createEntityPreset = function createEntityPreset(request, callback) {
+            return this.rpcCall(createEntityPreset, $root.dd.Blank, $root.dd.CreateEntityPresetResponse, request, callback);
+        }, "name", { value: "CreateEntityPreset" });
+
+        /**
+         * Calls CreateEntityPreset.
+         * @function createEntityPreset
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IBlank} request Blank message or plain object
+         * @returns {Promise<dd.CreateEntityPresetResponse>} Promise
+         * @variation 2
+         */
+
+        /**
+         * Callback as used by {@link dd.DD#editEntityPreset}.
+         * @memberof dd.DD
+         * @typedef EditEntityPresetCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {dd.EntityPreset} [response] EntityPreset
+         */
+
+        /**
+         * Calls EditEntityPreset.
+         * @function editEntityPreset
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IEditEntityPresetRequest} request EditEntityPresetRequest message or plain object
+         * @param {dd.DD.EditEntityPresetCallback} callback Node-style callback called with the error, if any, and EntityPreset
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(DD.prototype.editEntityPreset = function editEntityPreset(request, callback) {
+            return this.rpcCall(editEntityPreset, $root.dd.EditEntityPresetRequest, $root.dd.EntityPreset, request, callback);
+        }, "name", { value: "EditEntityPreset" });
+
+        /**
+         * Calls EditEntityPreset.
+         * @function editEntityPreset
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IEditEntityPresetRequest} request EditEntityPresetRequest message or plain object
+         * @returns {Promise<dd.EntityPreset>} Promise
+         * @variation 2
+         */
+
+        /**
          * Callback as used by {@link dd.DD#getQuest}.
          * @memberof dd.DD
          * @typedef GetQuestCallback
@@ -2642,6 +2741,430 @@ $root.dd = (function() {
         return EditCampaignRequest;
     })();
 
+    dd.CreateEntityPresetResponse = (function() {
+
+        /**
+         * Properties of a CreateEntityPresetResponse.
+         * @memberof dd
+         * @interface ICreateEntityPresetResponse
+         * @property {string|null} [id] CreateEntityPresetResponse id
+         */
+
+        /**
+         * Constructs a new CreateEntityPresetResponse.
+         * @memberof dd
+         * @classdesc Represents a CreateEntityPresetResponse.
+         * @implements ICreateEntityPresetResponse
+         * @constructor
+         * @param {dd.ICreateEntityPresetResponse=} [properties] Properties to set
+         */
+        function CreateEntityPresetResponse(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * CreateEntityPresetResponse id.
+         * @member {string} id
+         * @memberof dd.CreateEntityPresetResponse
+         * @instance
+         */
+        CreateEntityPresetResponse.prototype.id = "";
+
+        /**
+         * Creates a new CreateEntityPresetResponse instance using the specified properties.
+         * @function create
+         * @memberof dd.CreateEntityPresetResponse
+         * @static
+         * @param {dd.ICreateEntityPresetResponse=} [properties] Properties to set
+         * @returns {dd.CreateEntityPresetResponse} CreateEntityPresetResponse instance
+         */
+        CreateEntityPresetResponse.create = function create(properties) {
+            return new CreateEntityPresetResponse(properties);
+        };
+
+        /**
+         * Encodes the specified CreateEntityPresetResponse message. Does not implicitly {@link dd.CreateEntityPresetResponse.verify|verify} messages.
+         * @function encode
+         * @memberof dd.CreateEntityPresetResponse
+         * @static
+         * @param {dd.ICreateEntityPresetResponse} message CreateEntityPresetResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CreateEntityPresetResponse.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified CreateEntityPresetResponse message, length delimited. Does not implicitly {@link dd.CreateEntityPresetResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.CreateEntityPresetResponse
+         * @static
+         * @param {dd.ICreateEntityPresetResponse} message CreateEntityPresetResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CreateEntityPresetResponse.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a CreateEntityPresetResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.CreateEntityPresetResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.CreateEntityPresetResponse} CreateEntityPresetResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CreateEntityPresetResponse.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.CreateEntityPresetResponse();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a CreateEntityPresetResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.CreateEntityPresetResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.CreateEntityPresetResponse} CreateEntityPresetResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CreateEntityPresetResponse.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a CreateEntityPresetResponse message.
+         * @function verify
+         * @memberof dd.CreateEntityPresetResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        CreateEntityPresetResponse.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a CreateEntityPresetResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.CreateEntityPresetResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.CreateEntityPresetResponse} CreateEntityPresetResponse
+         */
+        CreateEntityPresetResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.CreateEntityPresetResponse)
+                return object;
+            var message = new $root.dd.CreateEntityPresetResponse();
+            if (object.id != null)
+                message.id = String(object.id);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a CreateEntityPresetResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.CreateEntityPresetResponse
+         * @static
+         * @param {dd.CreateEntityPresetResponse} message CreateEntityPresetResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        CreateEntityPresetResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults)
+                object.id = "";
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            return object;
+        };
+
+        /**
+         * Converts this CreateEntityPresetResponse to JSON.
+         * @function toJSON
+         * @memberof dd.CreateEntityPresetResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        CreateEntityPresetResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CreateEntityPresetResponse;
+    })();
+
+    dd.EditEntityPresetRequest = (function() {
+
+        /**
+         * Properties of an EditEntityPresetRequest.
+         * @memberof dd
+         * @interface IEditEntityPresetRequest
+         * @property {string|null} [campaignId] EditEntityPresetRequest campaignId
+         * @property {string|null} [id] EditEntityPresetRequest id
+         * @property {dd.IEntityPreset|null} [preset] EditEntityPresetRequest preset
+         */
+
+        /**
+         * Constructs a new EditEntityPresetRequest.
+         * @memberof dd
+         * @classdesc Represents an EditEntityPresetRequest.
+         * @implements IEditEntityPresetRequest
+         * @constructor
+         * @param {dd.IEditEntityPresetRequest=} [properties] Properties to set
+         */
+        function EditEntityPresetRequest(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * EditEntityPresetRequest campaignId.
+         * @member {string} campaignId
+         * @memberof dd.EditEntityPresetRequest
+         * @instance
+         */
+        EditEntityPresetRequest.prototype.campaignId = "";
+
+        /**
+         * EditEntityPresetRequest id.
+         * @member {string} id
+         * @memberof dd.EditEntityPresetRequest
+         * @instance
+         */
+        EditEntityPresetRequest.prototype.id = "";
+
+        /**
+         * EditEntityPresetRequest preset.
+         * @member {dd.IEntityPreset|null|undefined} preset
+         * @memberof dd.EditEntityPresetRequest
+         * @instance
+         */
+        EditEntityPresetRequest.prototype.preset = null;
+
+        /**
+         * Creates a new EditEntityPresetRequest instance using the specified properties.
+         * @function create
+         * @memberof dd.EditEntityPresetRequest
+         * @static
+         * @param {dd.IEditEntityPresetRequest=} [properties] Properties to set
+         * @returns {dd.EditEntityPresetRequest} EditEntityPresetRequest instance
+         */
+        EditEntityPresetRequest.create = function create(properties) {
+            return new EditEntityPresetRequest(properties);
+        };
+
+        /**
+         * Encodes the specified EditEntityPresetRequest message. Does not implicitly {@link dd.EditEntityPresetRequest.verify|verify} messages.
+         * @function encode
+         * @memberof dd.EditEntityPresetRequest
+         * @static
+         * @param {dd.IEditEntityPresetRequest} message EditEntityPresetRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        EditEntityPresetRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.campaignId != null && message.hasOwnProperty("campaignId"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.campaignId);
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.id);
+            if (message.preset != null && message.hasOwnProperty("preset"))
+                $root.dd.EntityPreset.encode(message.preset, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified EditEntityPresetRequest message, length delimited. Does not implicitly {@link dd.EditEntityPresetRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.EditEntityPresetRequest
+         * @static
+         * @param {dd.IEditEntityPresetRequest} message EditEntityPresetRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        EditEntityPresetRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an EditEntityPresetRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.EditEntityPresetRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.EditEntityPresetRequest} EditEntityPresetRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        EditEntityPresetRequest.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.EditEntityPresetRequest();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.campaignId = reader.string();
+                    break;
+                case 2:
+                    message.id = reader.string();
+                    break;
+                case 3:
+                    message.preset = $root.dd.EntityPreset.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an EditEntityPresetRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.EditEntityPresetRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.EditEntityPresetRequest} EditEntityPresetRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        EditEntityPresetRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an EditEntityPresetRequest message.
+         * @function verify
+         * @memberof dd.EditEntityPresetRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        EditEntityPresetRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.campaignId != null && message.hasOwnProperty("campaignId"))
+                if (!$util.isString(message.campaignId))
+                    return "campaignId: string expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            if (message.preset != null && message.hasOwnProperty("preset")) {
+                var error = $root.dd.EntityPreset.verify(message.preset);
+                if (error)
+                    return "preset." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates an EditEntityPresetRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.EditEntityPresetRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.EditEntityPresetRequest} EditEntityPresetRequest
+         */
+        EditEntityPresetRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.EditEntityPresetRequest)
+                return object;
+            var message = new $root.dd.EditEntityPresetRequest();
+            if (object.campaignId != null)
+                message.campaignId = String(object.campaignId);
+            if (object.id != null)
+                message.id = String(object.id);
+            if (object.preset != null) {
+                if (typeof object.preset !== "object")
+                    throw TypeError(".dd.EditEntityPresetRequest.preset: object expected");
+                message.preset = $root.dd.EntityPreset.fromObject(object.preset);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an EditEntityPresetRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.EditEntityPresetRequest
+         * @static
+         * @param {dd.EditEntityPresetRequest} message EditEntityPresetRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        EditEntityPresetRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.campaignId = "";
+                object.id = "";
+                object.preset = null;
+            }
+            if (message.campaignId != null && message.hasOwnProperty("campaignId"))
+                object.campaignId = message.campaignId;
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            if (message.preset != null && message.hasOwnProperty("preset"))
+                object.preset = $root.dd.EntityPreset.toObject(message.preset, options);
+            return object;
+        };
+
+        /**
+         * Converts this EditEntityPresetRequest to JSON.
+         * @function toJSON
+         * @memberof dd.EditEntityPresetRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        EditEntityPresetRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return EditEntityPresetRequest;
+    })();
+
     dd.GetQuestsRequest = (function() {
 
         /**
@@ -4231,7 +4754,7 @@ $root.dd = (function() {
             if (message.experienceTable != null && message.experienceTable.length) {
                 writer.uint32(/* id 10, wireType 2 =*/82).fork();
                 for (var i = 0; i < message.experienceTable.length; ++i)
-                    writer.uint64(message.experienceTable[i]);
+                    writer.int64(message.experienceTable[i]);
                 writer.ldelim();
             }
             return writer;
@@ -4286,9 +4809,9 @@ $root.dd = (function() {
                     if ((tag & 7) === 2) {
                         var end2 = reader.uint32() + reader.pos;
                         while (reader.pos < end2)
-                            message.experienceTable.push(reader.uint64());
+                            message.experienceTable.push(reader.int64());
                     } else
-                        message.experienceTable.push(reader.uint64());
+                        message.experienceTable.push(reader.int64());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -4373,13 +4896,13 @@ $root.dd = (function() {
                 message.experienceTable = [];
                 for (var i = 0; i < object.experienceTable.length; ++i)
                     if ($util.Long)
-                        (message.experienceTable[i] = $util.Long.fromValue(object.experienceTable[i])).unsigned = true;
+                        (message.experienceTable[i] = $util.Long.fromValue(object.experienceTable[i])).unsigned = false;
                     else if (typeof object.experienceTable[i] === "string")
                         message.experienceTable[i] = parseInt(object.experienceTable[i], 10);
                     else if (typeof object.experienceTable[i] === "number")
                         message.experienceTable[i] = object.experienceTable[i];
                     else if (typeof object.experienceTable[i] === "object")
-                        message.experienceTable[i] = new $util.LongBits(object.experienceTable[i].low >>> 0, object.experienceTable[i].high >>> 0).toNumber(true);
+                        message.experienceTable[i] = new $util.LongBits(object.experienceTable[i].low >>> 0, object.experienceTable[i].high >>> 0).toNumber();
             }
             return message;
         };
@@ -4419,7 +4942,7 @@ $root.dd = (function() {
                     if (typeof message.experienceTable[j] === "number")
                         object.experienceTable[j] = options.longs === String ? String(message.experienceTable[j]) : message.experienceTable[j];
                     else
-                        object.experienceTable[j] = options.longs === String ? $util.Long.prototype.toString.call(message.experienceTable[j]) : options.longs === Number ? new $util.LongBits(message.experienceTable[j].low >>> 0, message.experienceTable[j].high >>> 0).toNumber(true) : message.experienceTable[j];
+                        object.experienceTable[j] = options.longs === String ? $util.Long.prototype.toString.call(message.experienceTable[j]) : options.longs === Number ? new $util.LongBits(message.experienceTable[j].low >>> 0, message.experienceTable[j].high >>> 0).toNumber() : message.experienceTable[j];
             }
             return object;
         };
@@ -4582,7 +5105,7 @@ $root.dd = (function() {
             if (message.experienceTable != null && message.experienceTable.length) {
                 writer.uint32(/* id 10, wireType 2 =*/82).fork();
                 for (var i = 0; i < message.experienceTable.length; ++i)
-                    writer.uint64(message.experienceTable[i]);
+                    writer.int64(message.experienceTable[i]);
                 writer.ldelim();
             }
             if (message.users != null && message.users.length)
@@ -4649,9 +5172,9 @@ $root.dd = (function() {
                     if ((tag & 7) === 2) {
                         var end2 = reader.uint32() + reader.pos;
                         while (reader.pos < end2)
-                            message.experienceTable.push(reader.uint64());
+                            message.experienceTable.push(reader.int64());
                     } else
-                        message.experienceTable.push(reader.uint64());
+                        message.experienceTable.push(reader.int64());
                     break;
                 case 11:
                     if (!(message.users && message.users.length))
@@ -4792,13 +5315,13 @@ $root.dd = (function() {
                 message.experienceTable = [];
                 for (var i = 0; i < object.experienceTable.length; ++i)
                     if ($util.Long)
-                        (message.experienceTable[i] = $util.Long.fromValue(object.experienceTable[i])).unsigned = true;
+                        (message.experienceTable[i] = $util.Long.fromValue(object.experienceTable[i])).unsigned = false;
                     else if (typeof object.experienceTable[i] === "string")
                         message.experienceTable[i] = parseInt(object.experienceTable[i], 10);
                     else if (typeof object.experienceTable[i] === "number")
                         message.experienceTable[i] = object.experienceTable[i];
                     else if (typeof object.experienceTable[i] === "object")
-                        message.experienceTable[i] = new $util.LongBits(object.experienceTable[i].low >>> 0, object.experienceTable[i].high >>> 0).toNumber(true);
+                        message.experienceTable[i] = new $util.LongBits(object.experienceTable[i].low >>> 0, object.experienceTable[i].high >>> 0).toNumber();
             }
             if (object.users) {
                 if (!Array.isArray(object.users))
@@ -4883,7 +5406,7 @@ $root.dd = (function() {
                     if (typeof message.experienceTable[j] === "number")
                         object.experienceTable[j] = options.longs === String ? String(message.experienceTable[j]) : message.experienceTable[j];
                     else
-                        object.experienceTable[j] = options.longs === String ? $util.Long.prototype.toString.call(message.experienceTable[j]) : options.longs === Number ? new $util.LongBits(message.experienceTable[j].low >>> 0, message.experienceTable[j].high >>> 0).toNumber(true) : message.experienceTable[j];
+                        object.experienceTable[j] = options.longs === String ? $util.Long.prototype.toString.call(message.experienceTable[j]) : options.longs === Number ? new $util.LongBits(message.experienceTable[j].low >>> 0, message.experienceTable[j].high >>> 0).toNumber() : message.experienceTable[j];
             }
             if (message.users && message.users.length) {
                 object.users = [];

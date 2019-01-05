@@ -5,6 +5,8 @@ import { ConfirmationModalComponent } from 'src/app/confirmation-modal/confirmat
 import { EntityService } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { numberValidator } from '../dynamic-attribute-form/dynamic-attribute-form.component';
+import { RpcService } from 'src/app/rpc.service';
+import { dd } from 'src/dd.pb';
 
 @Component({
   selector: 'dd-entity-form',
@@ -18,6 +20,8 @@ export class EntityFormComponent implements OnInit {
 
   public formGroup: FormGroup;
 
+  public entityPreset: dd.IEntityPreset;
+
   @ViewChild('confirmmodal')
   public confirmModal: ConfirmationModalComponent;
 
@@ -26,20 +30,28 @@ export class EntityFormComponent implements OnInit {
     private campaignService: CampaignService,
     private router: Router,
     private route: ActivatedRoute,
+    private rpc: RpcService
   ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
       id: new FormControl(),
-      name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
-      description: new FormControl(null, [Validators.required, Validators.minLength(3)]),
+      name: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30),
+      ]),
+      description: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(3),
+      ]),
       health: new FormGroup({
         mode: new FormControl('0'),
         max: new FormControl(null, [Validators.min(0), numberValidator]),
         current: new FormControl(null, [Validators.min(0), numberValidator]),
       }),
       playerCreatable: new FormControl(false),
-      imageId: new FormControl('shrug', Validators.required),
+      imageId: new FormControl(null, Validators.required),
       attributes: new FormArray([]),
     });
 
@@ -55,9 +67,11 @@ export class EntityFormComponent implements OnInit {
     this.formGroup.disable();
 
     try {
-      const preset = await this.entityService.getEntityPreset(this.campaignService.campaign.id, id);
+      const preset = await this.rpc.dd.getEntityPreset({
+        id: id,
+      });
 
-      console.log(preset);
+      this.entityPreset = preset;
 
       for (let i = 0; i < preset.attributes.length; i++) {
         this.addAttribute();
@@ -84,15 +98,35 @@ export class EntityFormComponent implements OnInit {
 
   public submit() {}
 
+  public removeAttribute(i: number) {
+    (this.formGroup.get('attributes') as FormArray).removeAt(i);
+  }
+
   public async save() {
     if (this.formGroup.valid) {
       this.formGroup.disable();
       this.saving = true;
       try {
-        const preset = await this.entityService.saveEntityPreset(
-          this.campaignService.campaign.id,
-          this.formGroup.value,
-        );
+        const res = await this.rpc.dd.editEntityPreset({
+          campaignId: this.campaignService.campaign.id,
+          id: this.entityPreset.id,
+          preset: {
+            id: this.entityPreset.id,
+            name: this.formGroup.value.name,
+            description: this.formGroup.value.description,
+            imageId: this.formGroup.value.imageId,
+            attributes: this.formGroup.value.attributes,
+            inventory: {
+              items: [],
+            },
+            health: {
+              mode: this.formGroup.value.health.mode,
+            },
+            playerCreatable: this.formGroup.value.playerCreatable,
+          },
+        });
+
+        console.log('CREATE ENT PRST', res);
 
         this.router.navigate(['../../..', 'settings'], {
           relativeTo: this.route,
@@ -107,11 +141,18 @@ export class EntityFormComponent implements OnInit {
   }
 
   public async delete() {
-    if (await this.confirmModal.getConfirmation('Are you sure you want to delete this entity? This cannot be undone')) {
+    if (
+      await this.confirmModal.getConfirmation(
+        'Are you sure you want to delete this entity? This cannot be undone'
+      )
+    ) {
       this.deleting = true;
       this.formGroup.disable();
       try {
-        await this.entityService.deleteEntityPreset(this.campaignService.campaign.id, '1');
+        await this.entityService.deleteEntityPreset(
+          this.campaignService.campaign.id,
+          '1'
+        );
         this.router.navigate(['../../..', 'settings'], {
           relativeTo: this.route,
         });

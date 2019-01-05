@@ -24,7 +24,7 @@ export class EntityViewComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private entityService: EntityService,
-    private campaignService: CampaignService,
+    private campaignService: CampaignService
   ) {}
 
   ngOnInit() {
@@ -37,10 +37,11 @@ export class EntityViewComponent implements OnInit {
     this.loading = true;
 
     try {
-      const ent = await this.entityService.getEntity(this.campaignService.campaign.id, id);
+      const ent = await this.entityService.getEntity(
+        this.campaignService.campaign.id,
+        id
+      );
       this.entity = ent;
-
-      console.log(this.entity);
     } catch (err) {
       console.log('LOAD ERR', err);
     }
@@ -48,8 +49,14 @@ export class EntityViewComponent implements OnInit {
     this.loading = false;
   }
 
-  public async editAttribute(attr: { attr: Attribute; pattr: EntityAttribute }) {
-    const attrValue = await this.attributeModal.editAttribute({ ...attr.pattr }, attr.attr.data);
+  public async editAttribute(attr: {
+    attr: Attribute;
+    pattr: EntityAttribute;
+  }) {
+    const attrValue = await this.attributeModal.editAttribute(
+      { ...attr.pattr },
+      attr.attr.data
+    );
 
     if (attrValue !== null && attrValue !== undefined) {
       for (const attribute of this.entity.attributes) {
@@ -74,7 +81,7 @@ export class EntityViewComponent implements OnInit {
         max: 30,
         class: AttributeClass.NORMAL,
       },
-      this.entity.name,
+      this.entity.name
     );
 
     if (attrValue !== null && attrValue !== undefined) {
@@ -87,14 +94,16 @@ export class EntityViewComponent implements OnInit {
     const attrValue = await this.attributeModal.editAttribute(
       {
         name: 'XP',
-        description: `Experience points that this ${this.entity.preset.name} has`,
+        description: `Experience points that this ${
+          this.entity.preset.name
+        } has`,
         type: AttributeType.NUMBER,
         required: true,
         min: 0,
         max: 2147483647,
         class: AttributeClass.NORMAL,
       },
-      this.entity.xp.toString(),
+      this.entity.xp.toString()
     );
 
     if (attrValue !== null && attrValue !== undefined) {
@@ -107,7 +116,10 @@ export class EntityViewComponent implements OnInit {
     this.saving = true;
 
     try {
-      await this.entityService.saveEntity(this.campaignService.campaign.id, this.entity);
+      await this.entityService.saveEntity(
+        this.campaignService.campaign.id,
+        this.entity
+      );
     } catch (err) {
       console.log('UPDATE ERR', err);
     }
@@ -119,7 +131,10 @@ export class EntityViewComponent implements OnInit {
     return this.entity.preset.attributes.find((e) => e.name === name);
   }
 
-  public get processedAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
+  public get processedAttributes(): {
+    attr: Attribute;
+    pattr: EntityAttribute;
+  }[] {
     return this.entity.attributes.map((a) => {
       return {
         attr: a,
@@ -161,7 +176,10 @@ export class EntityViewComponent implements OnInit {
       .filter((a) => a.pattr && a.pattr.class === 2);
   }
 
-  public get unimportantAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
+  public get unimportantAttributes(): {
+    attr: Attribute;
+    pattr: EntityAttribute;
+  }[] {
     return this.entity.attributes
       .map((a) => {
         return {

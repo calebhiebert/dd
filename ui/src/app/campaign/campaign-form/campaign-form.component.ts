@@ -36,7 +36,9 @@ export class CampaignFormComponent implements OnInit {
 
     this.formGroup.addControl(
       'imageId',
-      new FormControl(this.campaign.imageId)
+      new FormControl(
+        this.campaign.imageId === '' ? null : this.campaign.imageId
+      )
     );
   }
 

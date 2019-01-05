@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { numberValidator } from '../dynamic-attribute-form/dynamic-attribute-form.component';
 
@@ -13,6 +13,9 @@ export class EntityAttributeRowEditorComponent implements OnInit {
 
   public validateMin = false;
   public validateMax = false;
+
+  @Output()
+  public remove = new EventEmitter<any>();
 
   @Input()
   public formGroup: FormGroup;
@@ -45,21 +48,46 @@ export class EntityAttributeRowEditorComponent implements OnInit {
     if (!this.formGroup.contains('name')) {
       this.formGroup.addControl(
         'name',
-        new FormControl(null, [Validators.required, Validators.minLength(1), Validators.maxLength(20)]),
+        new FormControl(null, [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(20),
+        ])
       );
 
-      this.formGroup.addControl('description', new FormControl(null, [Validators.required]));
+      this.formGroup.addControl(
+        'description',
+        new FormControl(null, [Validators.required])
+      );
 
-      this.formGroup.addControl('class', new FormControl('1', [Validators.required]));
+      this.formGroup.addControl(
+        'class',
+        new FormControl('1', [Validators.required])
+      );
 
-      this.formGroup.addControl('type', new FormControl('0', [Validators.required]));
+      this.formGroup.addControl(
+        'type',
+        new FormControl('0', [Validators.required])
+      );
 
-      this.formGroup.addControl('required', new FormControl(true, [Validators.required]));
+      this.formGroup.addControl(
+        'required',
+        new FormControl(true, [Validators.required])
+      );
 
-      this.formGroup.addControl('min', new FormControl(null, [numberValidator]));
-      this.formGroup.addControl('max', new FormControl(null, [numberValidator]));
+      this.formGroup.addControl(
+        'min',
+        new FormControl(null, [numberValidator])
+      );
+      this.formGroup.addControl(
+        'max',
+        new FormControl(null, [numberValidator])
+      );
 
-      this.formGroup.addControl('options', new FormControl(null, [Validators.pattern(/([A-Za-z0-9._]+)/gi)]));
+      this.formGroup.addControl(
+        'options',
+        new FormControl(null, [Validators.pattern(/([A-Za-z0-9._]+)/gi)])
+      );
     }
   }
 

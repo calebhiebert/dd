@@ -31,8 +31,6 @@ export class CampaignSettingsComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = new FormGroup({});
-
-    console.log(this.campaign, this.campaignCore);
   }
 
   public selectEntityPreset(preset: EntityPreset) {
@@ -45,8 +43,8 @@ export class CampaignSettingsComponent implements OnInit {
     this.creatingEntityPreset = true;
 
     try {
-      const id = await this.entityService.createEntityPreset();
-      this.router.navigate(['..', 'entities', id, 'edit'], {
+      const result = await this.rpc.dd.createEntityPreset({});
+      this.router.navigate(['..', 'entities', result.id, 'edit'], {
         relativeTo: this.route,
       });
     } catch (err) {

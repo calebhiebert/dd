@@ -28,6 +28,15 @@ const getServiceMethodName = (fn: any): string => {
 	if (fn === dd.DD.prototype.editCampaign) {
 		return 'EditCampaign';
     }
+	if (fn === dd.DD.prototype.getEntityPreset) {
+		return 'GetEntityPreset';
+    }
+	if (fn === dd.DD.prototype.createEntityPreset) {
+		return 'CreateEntityPreset';
+    }
+	if (fn === dd.DD.prototype.editEntityPreset) {
+		return 'EditEntityPreset';
+    }
 	if (fn === dd.DD.prototype.getQuest) {
 		return 'GetQuest';
     }

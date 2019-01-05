@@ -17,6 +17,11 @@ service DD {
   rpc CreateCampaign (CreateCampaignRequest) returns (CreateCampaignResponse);
   rpc EditCampaign (EditCampaignRequest) returns (CampaignCore);
 
+  // Entity Presets
+  rpc GetEntityPreset (GetByIdRequest) returns (EntityPreset);
+  rpc CreateEntityPreset (Blank) returns (CreateEntityPresetResponse);
+  rpc EditEntityPreset (EditEntityPresetRequest) returns (EntityPreset);
+
   // Quests
   rpc GetQuest (GetByIdRequest) returns (Quest);
   rpc GetQuests (GetQuestsRequest) returns (GetQuestsResponse);
@@ -76,6 +81,19 @@ message EditCampaignRequest {
   string id = 2;
 }
 
+// *************************************
+//            ENTITY PRESETS
+// *************************************
+
+message CreateEntityPresetResponse {
+  string id = 1;
+}
+
+message EditEntityPresetRequest {
+  string campaignId = 1;
+  string id = 2;
+  EntityPreset preset = 3;
+}
 
 // *************************************
 //                QUESTS
