@@ -37,6 +37,20 @@ export namespace dd {
         public auth(request: dd.IAuthRequest): Promise<dd.AuthResponse>;
 
         /**
+         * Calls Me.
+         * @param request Blank message or plain object
+         * @param callback Node-style callback called with the error, if any, and User
+         */
+        public me(request: dd.IBlank, callback: dd.DD.MeCallback): void;
+
+        /**
+         * Calls Me.
+         * @param request Blank message or plain object
+         * @returns Promise
+         */
+        public me(request: dd.IBlank): Promise<dd.User>;
+
+        /**
          * Calls GetUser.
          * @param request GetByIdRequest message or plain object
          * @param callback Node-style callback called with the error, if any, and User
@@ -185,6 +199,13 @@ export namespace dd {
          * @param [response] AuthResponse
          */
         type AuthCallback = (error: (Error|null), response?: dd.AuthResponse) => void;
+
+        /**
+         * Callback as used by {@link dd.DD#me}.
+         * @param error Error, if any
+         * @param [response] User
+         */
+        type MeCallback = (error: (Error|null), response?: dd.User) => void;
 
         /**
          * Callback as used by {@link dd.DD#getUser}.
@@ -444,6 +465,90 @@ export namespace dd {
 
         /**
          * Converts this SearchParams to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a Blank. */
+    interface IBlank {
+    }
+
+    /** Represents a Blank. */
+    class Blank implements IBlank {
+
+        /**
+         * Constructs a new Blank.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.IBlank);
+
+        /**
+         * Creates a new Blank instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns Blank instance
+         */
+        public static create(properties?: dd.IBlank): dd.Blank;
+
+        /**
+         * Encodes the specified Blank message. Does not implicitly {@link dd.Blank.verify|verify} messages.
+         * @param message Blank message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.IBlank, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified Blank message, length delimited. Does not implicitly {@link dd.Blank.verify|verify} messages.
+         * @param message Blank message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.IBlank, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a Blank message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns Blank
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.Blank;
+
+        /**
+         * Decodes a Blank message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns Blank
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.Blank;
+
+        /**
+         * Verifies a Blank message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a Blank message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns Blank
+         */
+        public static fromObject(object: { [k: string]: any }): dd.Blank;
+
+        /**
+         * Creates a plain object from a Blank message. Also converts values to other types if specified.
+         * @param message Blank
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.Blank, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this Blank to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { WebAuth, Auth0DecodedHash, Auth0UserProfile } from 'auth0-js';
 import { environment } from 'src/environments/environment';
-import { createDD } from 'src/dd.twirp';
 import { dd } from 'src/dd.pb';
 import { RpcService } from './rpc.service';
+import Axios from 'axios';
 
 @Injectable({
   providedIn: 'root',
@@ -50,12 +50,14 @@ export class LoginService {
           this.userData = authResult.user;
           this.registrationRequired = authResult.reigstrationRequired;
           this.loginCompleted = true;
+          this.saveToken(token);
           resolve(true);
         } catch (err) {
           console.log('AUTH ERR', err);
           localStorage.removeItem('auth-token');
           resolve(false);
         }
+
         this.loginInProgress = false;
       });
     }
@@ -65,10 +67,18 @@ export class LoginService {
 
   public saveToken(token: string) {
     localStorage.setItem('auth-token', token);
+    Axios.defaults.headers.common = {
+      Authorization: `Bearer ${token}`,
+    };
   }
 
   public loadToken(): string | null {
-    return localStorage.getItem('auth-token');
+    const token = localStorage.getItem('auth-token');
+
+    Axios.defaults.headers.common = {
+      Authorization: `Bearer ${token}`,
+    };
+    return token;
   }
 
   public authorize(connection: string) {
@@ -101,9 +111,13 @@ export class LoginService {
           } else {
             resolve(result);
           }
-        },
+        }
       );
     });
+  }
+
+  public setUserData(userData: dd.IUser) {
+    this.userData = userData;
   }
 
   public get user() {

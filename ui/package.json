@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "gen": "pbjs -t static-module -w commonjs -o src/dd.pb.js ../api/rpc/dd.proto && pbts -o src/dd.pb.d.ts src/dd.pb.js && protoc --proto_path ../api --twirp_typescript_out=library=pbjs:src/ ../api/rpc/dd.proto"
+    "gen": "pbjs -t static-module -w commonjs -o src/dd.pb.js ../api/dd/dd.proto && pbts -o src/dd.pb.d.ts src/dd.pb.js && protoc --proto_path ../api --twirp_typescript_out=library=pbjs:src/ ../api/dd/dd.proto"
   },
   "private": true,
   "dependencies": {

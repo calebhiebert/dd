@@ -1,6 +1,9 @@
 package main
-
 import (
+	"dd-api/models"
+
+	"github.com/matoous/go-nanoid"
+	db "upper.io/db.v3"
 	"upper.io/db.v3/lib/sqlbuilder"
 	"upper.io/db.v3/postgresql"
 )
@@ -38,3 +41,42 @@ func migrate() error {
 
 	return nil
 }
+
+func getTempID(id, idType string) (*models.TemporaryID, error) {
+	var tempID models.TemporaryID
+
+	err := dbase.SelectFrom("temporary_ids").
+		Where("id = ?", id).And("type = ?", idType).
+		One(&tempID)
+	if err == db.ErrNoMoreRows {
+		return nil, nil
+	} else if err != nil {
+		return nil, err
+	}
+
+	return &tempID, nil
+}
+
+func genTempID(userID, idType string) (models.TemporaryID, error) {
+	var tempID models.TemporaryID
+
+	id, err := gonanoid.Nanoid(16)
+	if err != nil {
+		return tempID, err
+	}
+
+	_, err = dbase.InsertInto("temporary_ids").
+		Columns("id", "type", "user_id").
+		Values(id, idType, userID).
+		Exec()
+	if err != nil {
+		return tempID, err
+	}
+
+	return models.TemporaryID{
+		ID:     id,
+		Type:   idType,
+		UserID: userID,
+	}, nil
+}
+

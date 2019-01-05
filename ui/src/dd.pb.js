@@ -84,6 +84,39 @@ $root.dd = (function() {
          */
 
         /**
+         * Callback as used by {@link dd.DD#me}.
+         * @memberof dd.DD
+         * @typedef MeCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {dd.User} [response] User
+         */
+
+        /**
+         * Calls Me.
+         * @function me
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IBlank} request Blank message or plain object
+         * @param {dd.DD.MeCallback} callback Node-style callback called with the error, if any, and User
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(DD.prototype.me = function me(request, callback) {
+            return this.rpcCall(me, $root.dd.Blank, $root.dd.User, request, callback);
+        }, "name", { value: "Me" });
+
+        /**
+         * Calls Me.
+         * @function me
+         * @memberof dd.DD
+         * @instance
+         * @param {dd.IBlank} request Blank message or plain object
+         * @returns {Promise<dd.User>} Promise
+         * @variation 2
+         */
+
+        /**
          * Callback as used by {@link dd.DD#getUser}.
          * @memberof dd.DD
          * @typedef GetUserCallback
@@ -850,6 +883,166 @@ $root.dd = (function() {
         };
 
         return SearchParams;
+    })();
+
+    dd.Blank = (function() {
+
+        /**
+         * Properties of a Blank.
+         * @memberof dd
+         * @interface IBlank
+         */
+
+        /**
+         * Constructs a new Blank.
+         * @memberof dd
+         * @classdesc Represents a Blank.
+         * @implements IBlank
+         * @constructor
+         * @param {dd.IBlank=} [properties] Properties to set
+         */
+        function Blank(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Creates a new Blank instance using the specified properties.
+         * @function create
+         * @memberof dd.Blank
+         * @static
+         * @param {dd.IBlank=} [properties] Properties to set
+         * @returns {dd.Blank} Blank instance
+         */
+        Blank.create = function create(properties) {
+            return new Blank(properties);
+        };
+
+        /**
+         * Encodes the specified Blank message. Does not implicitly {@link dd.Blank.verify|verify} messages.
+         * @function encode
+         * @memberof dd.Blank
+         * @static
+         * @param {dd.IBlank} message Blank message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Blank.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified Blank message, length delimited. Does not implicitly {@link dd.Blank.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.Blank
+         * @static
+         * @param {dd.IBlank} message Blank message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Blank.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a Blank message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.Blank
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.Blank} Blank
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Blank.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.Blank();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a Blank message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.Blank
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.Blank} Blank
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Blank.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a Blank message.
+         * @function verify
+         * @memberof dd.Blank
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Blank.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            return null;
+        };
+
+        /**
+         * Creates a Blank message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.Blank
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.Blank} Blank
+         */
+        Blank.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.Blank)
+                return object;
+            return new $root.dd.Blank();
+        };
+
+        /**
+         * Creates a plain object from a Blank message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.Blank
+         * @static
+         * @param {dd.Blank} message Blank
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Blank.toObject = function toObject() {
+            return {};
+        };
+
+        /**
+         * Converts this Blank to JSON.
+         * @function toJSON
+         * @memberof dd.Blank
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Blank.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return Blank;
     })();
 
     dd.AuthRequest = (function() {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../login.service';
+import { RpcService } from '../rpc.service';
 
 @Component({
   selector: 'dd-home',
@@ -9,9 +10,7 @@ import { LoginService } from '../login.service';
 export class HomeComponent implements OnInit {
   constructor(private login: LoginService) {}
 
-  ngOnInit() {
-    console.log(this.login.user);
-  }
+  ngOnInit() {}
 
   public get user() {
     return this.login.user;

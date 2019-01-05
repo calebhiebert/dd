@@ -1,9 +1,8 @@
 package main
-
 import (
 	"context"
+	"dd-api/dd"
 	"dd-api/models"
-	"dd-api/rpc"
 	"time"
 
 	"github.com/twitchtv/twirp"
@@ -27,6 +26,27 @@ func (d *DD) GetUser(ctx context.Context, gu *dd.GetByIdRequest) (*dd.User, erro
 		ImageURL:  user.ImageURL,
 		CreatedAt: user.CreatedAt,
 	}, nil
+}
+
+func (d *DD) Me(ctx context.Context, gu *dd.Blank) (*dd.User, error) {
+	if ctx.Value("userId") == nil {
+		return nil, twirp.NewError(twirp.Unauthenticated, "Authentication missing")
+	}
+
+	userId := ctx.Value("userId").(string)
+
+	user, err := d.GetUser(ctx, &dd.GetByIdRequest{
+		Id: userId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if user != nil {
+		return user, nil
+	}
+
+	return nil, twirp.NewError(twirp.NotFound, "user missing")
 }
 
 // CreateUser will create a new user
@@ -62,3 +82,4 @@ func (d *DD) CreateUser(ctx context.Context, cu *dd.CreateUserRequest) (*dd.User
 		CreatedAt: uint64(time.Now().Unix()),
 	}, nil
 }
+

@@ -12,7 +12,9 @@
         <button (click)="logOut()" class="btn btn-link">Logout</button>
       </section>
       <section class="navbar-center">
-        <img src="/assets/logo.svg" width="32" />
+        <a [routerLink]="['home']">
+          <img src="/assets/logo.svg" width="32" />
+        </a>
       </section>
       <section class="navbar-section" *ngIf="campaign !== null">
         <a

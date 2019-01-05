@@ -1,8 +1,7 @@
 package main
-
 import (
 	"context"
-	"dd-api/rpc"
+	"dd-api/dd"
 )
 
 // GetCampaign returns a campaign object in full
@@ -24,3 +23,4 @@ func (d *DD) CreateCampaign(ctx context.Context, qr *dd.CreateCampaignRequest) (
 func (d *DD) EditCampaign(ctx context.Context, qr *dd.EditCampaignRequest) (*dd.CampaignCore, error) {
 	return nil, nil
 }
+

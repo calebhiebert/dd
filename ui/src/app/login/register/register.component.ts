@@ -13,7 +13,11 @@ export class RegisterComponent implements OnInit {
   public loading = false;
   public usernameControl: FormControl;
 
-  constructor(private rpc: RpcService, private login: LoginService, private router: Router) {}
+  constructor(
+    private rpc: RpcService,
+    private login: LoginService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.usernameControl = new FormControl(null, [
@@ -32,9 +36,9 @@ export class RegisterComponent implements OnInit {
           username: this.usernameControl.value.trim(),
         });
 
+        this.login.setUserData(user);
+        this.login.registrationRequired = false;
         this.router.navigate(['home']);
-
-        console.log(user);
       } catch (err) {
         console.log('REGISTER ERR', err);
         this.router.navigate(['home']);

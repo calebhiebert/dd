@@ -7,6 +7,7 @@ option go_package = "dd";
 service DD {
   // User/Auth
   rpc Auth (AuthRequest) returns (AuthResponse);
+  rpc Me(Blank) returns (User);
   rpc GetUser (GetByIdRequest) returns (User);
   rpc CreateUser (CreateUserRequest) returns (User);
 
@@ -33,6 +34,8 @@ message SearchParams {
   uint32 limit = 2;
   uint32 offset = 3;
 }
+
+message Blank { }
 
 // AUTH
 message AuthRequest {

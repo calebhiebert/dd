@@ -1,8 +1,6 @@
 package main
-
 import (
 	"context"
-	"dd-api/rpc"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
@@ -10,7 +8,11 @@ import (
 	"strings"
 	"time"
 
+	"dd-api/dd"
+	"dd-api/models"
+
 	"github.com/twitchtv/twirp"
+	db "upper.io/db.v3"
 )
 
 // Auth0Response is the response returned when asking auth0 for user info
@@ -100,3 +102,31 @@ func getUserDataFromToken(token string) (*Auth0Response, error) {
 
 	return &authResponse, nil
 }
+
+func cacheToken(token, userID string) error {
+	_, err := dbase.InsertInto("access_token_cache").
+		Columns("token", "user_id").
+		Values(token, userID).
+		Exec()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func getTokenCache(token string) (*string, error) {
+	var atCache models.AccessTokenCache
+
+	err := dbase.SelectFrom("access_token_cache").
+		Where("token = ?", token).
+		One(&atCache)
+	if err == db.ErrNoMoreRows {
+		return nil, nil
+	} else if err != nil {
+		return nil, err
+	}
+
+	return &atCache.UserID, nil
+}
+

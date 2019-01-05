@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import {
+  CanActivate,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+} from '@angular/router';
 import { LoginService } from './login.service';
 
 @Injectable({
@@ -8,11 +13,13 @@ import { LoginService } from './login.service';
 export class LoggedInGuard implements CanActivate {
   constructor(private login: LoginService, private router: Router) {}
 
-  public async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
-    console.log('Checking login');
+  public async canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Promise<boolean> {
     const isLoggedIn = await this.login.isLoggedIn();
 
-    if (this.login.registrationRequired) {
+    if (this.login.registrationRequired && isLoggedIn) {
       this.router.navigate(['register']);
       return false;
     }
