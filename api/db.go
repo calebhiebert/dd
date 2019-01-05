@@ -1,4 +1,5 @@
 package main
+
 import (
 	"dd-api/models"
 
@@ -7,6 +8,8 @@ import (
 	"upper.io/db.v3/lib/sqlbuilder"
 	"upper.io/db.v3/postgresql"
 )
+
+var IDTypeCampaign = "campaign"
 
 var dbase sqlbuilder.Database
 
@@ -40,6 +43,14 @@ func migrate() error {
 	}
 
 	return nil
+}
+
+func clearTempID(id string) error {
+	_, err := dbase.DeleteFrom("temporary_ids").
+		Where("id = ?", id).
+		Exec()
+
+	return err
 }
 
 func getTempID(id, idType string) (*models.TemporaryID, error) {
@@ -79,4 +90,3 @@ func genTempID(userID, idType string) (models.TemporaryID, error) {
 		UserID: userID,
 	}, nil
 }
-

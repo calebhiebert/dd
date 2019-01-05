@@ -3,25 +3,91 @@
   <div class="columns">
     <div class="column"><h2>Settings</h2></div>
     <div class="column col-auto col-ml-auto">
-      <button class="btn" (click)="save()" [ngClass]="{ loading: saving }">Save</button>
+      <button
+        class="btn"
+        [disabled]="formGroup.invalid"
+        (click)="save()"
+        [ngClass]="{ loading: saving }"
+      >
+        Save
+      </button>
     </div>
   </div>
 
+  <h3>General Settings</h3>
+  <dd-campaign-form
+    [campaign]="this.campaignCore"
+    [formGroup]="formGroup"
+  ></dd-campaign-form>
+
+  <!-- Experience Table -->
+  <div class="columns mt-2">
+    <div class="column"><h3 class="mt-2 mb-0">Experience Table</h3></div>
+    <div class="column col-auto col-ml-auto">
+      <button
+        class="btn btn-sm"
+        *ngIf="!expandXPTable"
+        (click)="expandXPTable = !expandXPTable"
+      >
+        Expand <i class="icon icon-arrow-down"></i>
+      </button>
+      <button
+        class="btn btn-sm"
+        *ngIf="expandXPTable"
+        (click)="expandXPTable = !expandXPTable"
+      >
+        Collapse <i class="icon icon-arrow-up"></i>
+      </button>
+    </div>
+  </div>
+  <span class="text-gray" *ngIf="expandXPTable"
+    >This is the experience table. This will determine entities' levels based on
+    the amount of XP they have. For example, if level 2 was set to 30 XP, an
+    entity would be level 2 when they reach 30 or above XP.</span
+  >
+  <dd-experience-table-editor
+    [campaign]="campaign"
+    [formGroup]="formGroup"
+    *ngIf="expandXPTable"
+  ></dd-experience-table-editor>
+
   <!-- Entity Types -->
-  <div class="columns">
-    <div class="column"><h4>Entity Types</h4></div>
+  <div class="columns mt-2">
+    <div class="column"><h3>Entity Types</h3></div>
     <div class="column col-auto">
-      <button class="btn btn-sm" (click)="createEntityPreset()" [ngClass]="{ loading: creatingEntityPreset }">
+      <button
+        class="btn btn-sm"
+        (click)="createEntityPreset()"
+        [ngClass]="{ loading: creatingEntityPreset }"
+      >
         <i class="icon icon-plus"></i> Create Entity Preset
       </button>
     </div>
   </div>
+  <div class="empty" *ngIf="campaign.entityPresets.length === 0">
+    <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
+    <p class="empty-title h5">There are no entity presets :(</p>
+    <p class="empty-subtitle">Click the button to create one</p>
+    <div class="empty-action">
+      <button class="btn btn-primary" (click)="createEntityPreset()">
+        Create Preset
+      </button>
+    </div>
+  </div>
   <div>
-    <div class="card p-2 mb-2 hoverable" *ngFor="let ep of campaign.entityPresets" (click)="selectEntityPreset(ep)">
+    <div
+      class="card p-2 mb-2 hoverable"
+      *ngFor="let ep of campaign.entityPresets"
+      (click)="selectEntityPreset(ep)"
+    >
       <div class="columns">
         <div class="column col-auto" *ngIf="ep.imageId">
           <figure class="avatar avatar-lg">
-            <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ ep.imageId }}.png" />
+            <img
+              src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+                ep.imageId
+              }}.png"
+            />
           </figure>
         </div>
         <div class="column">
@@ -31,25 +97,4 @@
       </div>
     </div>
   </div>
-
-  <!-- Experience Table -->
-  <div class="columns">
-    <div class="column"><h3 class="mt-2 mb-0">Experience Table</h3></div>
-    <div class="column col-auto col-ml-auto">
-      <button class="btn btn-sm" *ngIf="!expandXPTable" (click)="expandXPTable = !expandXPTable">
-        Expand <i class="icon icon-arrow-down"></i>
-      </button>
-      <button class="btn btn-sm" *ngIf="expandXPTable" (click)="expandXPTable = !expandXPTable">
-        Collapse <i class="icon icon-arrow-up"></i>
-      </button>
-    </div>
-  </div>
-  <span class="text-gray" *ngIf="expandXPTable"
-    >This is the experience table. This will determine entities' levels based on the amount of XP they have. For
-    example, if level 2 was set to 30 XP, an entity would be level 2 when they reach 30 or above XP.</span
-  >
-  <dd-experience-table-editor
-    [experienceTable]="campaign.experienceTable"
-    *ngIf="expandXPTable"
-  ></dd-experience-table-editor>
 </div>

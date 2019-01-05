@@ -1,5 +1,16 @@
 <div class="container grid-xl">
-  <h3>Campaigns</h3>
+  <div class="columns">
+    <div class="column"><h3>Campaigns</h3></div>
+    <div class="column col-auto col-ml-auto">
+      <button
+        class="btn btn-sm"
+        (click)="createCampaign()"
+        [ngClass]="{ loading: creating }"
+      >
+        <i class="icon icon-plus"></i> Create Campaign
+      </button>
+    </div>
+  </div>
   <div class="loading loading-lg" *ngIf="loading"></div>
 
   <!-- Display Campaings -->
@@ -8,7 +19,11 @@
       <div class="columns">
         <div class="column col-auto" *ngIf="c.imageId">
           <figure class="avatar avatar-lg">
-            <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ c.imageId }}.png" />
+            <img
+              src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+                c.imageId
+              }}.png"
+            />
           </figure>
         </div>
         <div class="column">
@@ -17,7 +32,9 @@
               <h4 class="mb-1">{{ c.name }}</h4>
             </div>
             <div class="column col-auto col-ml-auto">
-              <span class="text-gray text-italic"> {{ c.users.length }} Players </span>
+              <span class="text-gray text-italic">
+                {{ c.users.length }} Players
+              </span>
             </div>
           </div>
           <span class="text-gray">{{ c.description | truncate: 150 }}</span>

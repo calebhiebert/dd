@@ -1,6 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormArray, FormControl, ValidatorFn, ValidationErrors, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormArray,
+  FormControl,
+  ValidatorFn,
+  ValidationErrors,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-attribute-form.component';
+import { dd } from 'src/dd.pb';
 
 @Component({
   selector: 'dd-experience-table-editor',
@@ -9,36 +18,37 @@ import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-a
 })
 export class ExperienceTableEditorComponent implements OnInit {
   @Input()
-  public experienceTable: number[];
+  public campaign: dd.ICampaignCore;
 
+  @Input()
   public formGroup: FormGroup;
 
   constructor() {}
 
   ngOnInit() {
-    if (!this.experienceTable) {
-      throw new Error('The param experienceTable is required!');
+    if (!this.campaign) {
+      throw new Error('The param campaign is required!');
     }
 
-    this.formGroup = new FormGroup({
-      rows: new FormArray([], xpTest),
-    });
+    this.formGroup.addControl(
+      'experienceTable',
+      new FormArray(
+        this.campaign.experienceTable.map((xp) => this.createRow(xp)),
+        xpTest
+      )
+    );
+  }
 
-    for (let i = 0; i < this.experienceTable.length; i++) {
-      this.addRow();
-    }
-
-    this.formGroup.setValue({
-      rows: this.experienceTable,
-    });
-
-    this.formGroup.valueChanges.subscribe((v) => (this.experienceTable = v.rows));
+  private createRow(xp?: number): AbstractControl {
+    return new FormControl(xp ? xp : 0, [
+      Validators.required,
+      Validators.min(0),
+      numberValidator,
+    ]);
   }
 
   public addRow() {
-    this.formArray.push(
-      new FormControl(0, [Validators.required, Validators.min(0), Validators.max(2147483647), numberValidator]),
-    );
+    this.formArray.push(this.createRow());
   }
 
   public removeRow() {
@@ -50,7 +60,7 @@ export class ExperienceTableEditorComponent implements OnInit {
   }
 
   public get formArray() {
-    return this.formGroup.get('rows') as FormArray;
+    return this.formGroup.get('experienceTable') as FormArray;
   }
 
   public get controls() {
@@ -58,7 +68,9 @@ export class ExperienceTableEditorComponent implements OnInit {
   }
 }
 
-export const xpTest: ValidatorFn = (control: FormArray): ValidationErrors | null => {
+export const xpTest: ValidatorFn = (
+  control: FormArray
+): ValidationErrors | null => {
   let lastXP = 0;
   const errObj = {};
 

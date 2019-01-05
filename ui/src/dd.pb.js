@@ -4449,6 +4449,10 @@ $root.dd = (function() {
          * @property {string|null} [description] Campaign description
          * @property {string|null} [imageId] Campaign imageId
          * @property {Array.<number|Long>|null} [experienceTable] Campaign experienceTable
+         * @property {Array.<dd.ICampaignUser>|null} [users] Campaign users
+         * @property {Array.<dd.IItem>|null} [items] Campaign items
+         * @property {Array.<dd.IEntityPreset>|null} [entityPresets] Campaign entityPresets
+         * @property {Array.<dd.IEntity>|null} [entities] Campaign entities
          */
 
         /**
@@ -4461,6 +4465,10 @@ $root.dd = (function() {
          */
         function Campaign(properties) {
             this.experienceTable = [];
+            this.users = [];
+            this.items = [];
+            this.entityPresets = [];
+            this.entities = [];
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -4508,6 +4516,38 @@ $root.dd = (function() {
         Campaign.prototype.experienceTable = $util.emptyArray;
 
         /**
+         * Campaign users.
+         * @member {Array.<dd.ICampaignUser>} users
+         * @memberof dd.Campaign
+         * @instance
+         */
+        Campaign.prototype.users = $util.emptyArray;
+
+        /**
+         * Campaign items.
+         * @member {Array.<dd.IItem>} items
+         * @memberof dd.Campaign
+         * @instance
+         */
+        Campaign.prototype.items = $util.emptyArray;
+
+        /**
+         * Campaign entityPresets.
+         * @member {Array.<dd.IEntityPreset>} entityPresets
+         * @memberof dd.Campaign
+         * @instance
+         */
+        Campaign.prototype.entityPresets = $util.emptyArray;
+
+        /**
+         * Campaign entities.
+         * @member {Array.<dd.IEntity>} entities
+         * @memberof dd.Campaign
+         * @instance
+         */
+        Campaign.prototype.entities = $util.emptyArray;
+
+        /**
          * Creates a new Campaign instance using the specified properties.
          * @function create
          * @memberof dd.Campaign
@@ -4545,6 +4585,18 @@ $root.dd = (function() {
                     writer.uint64(message.experienceTable[i]);
                 writer.ldelim();
             }
+            if (message.users != null && message.users.length)
+                for (var i = 0; i < message.users.length; ++i)
+                    $root.dd.CampaignUser.encode(message.users[i], writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
+            if (message.items != null && message.items.length)
+                for (var i = 0; i < message.items.length; ++i)
+                    $root.dd.Item.encode(message.items[i], writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
+            if (message.entityPresets != null && message.entityPresets.length)
+                for (var i = 0; i < message.entityPresets.length; ++i)
+                    $root.dd.EntityPreset.encode(message.entityPresets[i], writer.uint32(/* id 13, wireType 2 =*/106).fork()).ldelim();
+            if (message.entities != null && message.entities.length)
+                for (var i = 0; i < message.entities.length; ++i)
+                    $root.dd.Entity.encode(message.entities[i], writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
             return writer;
         };
 
@@ -4601,6 +4653,26 @@ $root.dd = (function() {
                     } else
                         message.experienceTable.push(reader.uint64());
                     break;
+                case 11:
+                    if (!(message.users && message.users.length))
+                        message.users = [];
+                    message.users.push($root.dd.CampaignUser.decode(reader, reader.uint32()));
+                    break;
+                case 12:
+                    if (!(message.items && message.items.length))
+                        message.items = [];
+                    message.items.push($root.dd.Item.decode(reader, reader.uint32()));
+                    break;
+                case 13:
+                    if (!(message.entityPresets && message.entityPresets.length))
+                        message.entityPresets = [];
+                    message.entityPresets.push($root.dd.EntityPreset.decode(reader, reader.uint32()));
+                    break;
+                case 14:
+                    if (!(message.entities && message.entities.length))
+                        message.entities = [];
+                    message.entities.push($root.dd.Entity.decode(reader, reader.uint32()));
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -4655,6 +4727,42 @@ $root.dd = (function() {
                     if (!$util.isInteger(message.experienceTable[i]) && !(message.experienceTable[i] && $util.isInteger(message.experienceTable[i].low) && $util.isInteger(message.experienceTable[i].high)))
                         return "experienceTable: integer|Long[] expected";
             }
+            if (message.users != null && message.hasOwnProperty("users")) {
+                if (!Array.isArray(message.users))
+                    return "users: array expected";
+                for (var i = 0; i < message.users.length; ++i) {
+                    var error = $root.dd.CampaignUser.verify(message.users[i]);
+                    if (error)
+                        return "users." + error;
+                }
+            }
+            if (message.items != null && message.hasOwnProperty("items")) {
+                if (!Array.isArray(message.items))
+                    return "items: array expected";
+                for (var i = 0; i < message.items.length; ++i) {
+                    var error = $root.dd.Item.verify(message.items[i]);
+                    if (error)
+                        return "items." + error;
+                }
+            }
+            if (message.entityPresets != null && message.hasOwnProperty("entityPresets")) {
+                if (!Array.isArray(message.entityPresets))
+                    return "entityPresets: array expected";
+                for (var i = 0; i < message.entityPresets.length; ++i) {
+                    var error = $root.dd.EntityPreset.verify(message.entityPresets[i]);
+                    if (error)
+                        return "entityPresets." + error;
+                }
+            }
+            if (message.entities != null && message.hasOwnProperty("entities")) {
+                if (!Array.isArray(message.entities))
+                    return "entities: array expected";
+                for (var i = 0; i < message.entities.length; ++i) {
+                    var error = $root.dd.Entity.verify(message.entities[i]);
+                    if (error)
+                        return "entities." + error;
+                }
+            }
             return null;
         };
 
@@ -4692,6 +4800,46 @@ $root.dd = (function() {
                     else if (typeof object.experienceTable[i] === "object")
                         message.experienceTable[i] = new $util.LongBits(object.experienceTable[i].low >>> 0, object.experienceTable[i].high >>> 0).toNumber(true);
             }
+            if (object.users) {
+                if (!Array.isArray(object.users))
+                    throw TypeError(".dd.Campaign.users: array expected");
+                message.users = [];
+                for (var i = 0; i < object.users.length; ++i) {
+                    if (typeof object.users[i] !== "object")
+                        throw TypeError(".dd.Campaign.users: object expected");
+                    message.users[i] = $root.dd.CampaignUser.fromObject(object.users[i]);
+                }
+            }
+            if (object.items) {
+                if (!Array.isArray(object.items))
+                    throw TypeError(".dd.Campaign.items: array expected");
+                message.items = [];
+                for (var i = 0; i < object.items.length; ++i) {
+                    if (typeof object.items[i] !== "object")
+                        throw TypeError(".dd.Campaign.items: object expected");
+                    message.items[i] = $root.dd.Item.fromObject(object.items[i]);
+                }
+            }
+            if (object.entityPresets) {
+                if (!Array.isArray(object.entityPresets))
+                    throw TypeError(".dd.Campaign.entityPresets: array expected");
+                message.entityPresets = [];
+                for (var i = 0; i < object.entityPresets.length; ++i) {
+                    if (typeof object.entityPresets[i] !== "object")
+                        throw TypeError(".dd.Campaign.entityPresets: object expected");
+                    message.entityPresets[i] = $root.dd.EntityPreset.fromObject(object.entityPresets[i]);
+                }
+            }
+            if (object.entities) {
+                if (!Array.isArray(object.entities))
+                    throw TypeError(".dd.Campaign.entities: array expected");
+                message.entities = [];
+                for (var i = 0; i < object.entities.length; ++i) {
+                    if (typeof object.entities[i] !== "object")
+                        throw TypeError(".dd.Campaign.entities: object expected");
+                    message.entities[i] = $root.dd.Entity.fromObject(object.entities[i]);
+                }
+            }
             return message;
         };
 
@@ -4708,8 +4856,13 @@ $root.dd = (function() {
             if (!options)
                 options = {};
             var object = {};
-            if (options.arrays || options.defaults)
+            if (options.arrays || options.defaults) {
                 object.experienceTable = [];
+                object.users = [];
+                object.items = [];
+                object.entityPresets = [];
+                object.entities = [];
+            }
             if (options.defaults) {
                 object.id = "";
                 object.name = "";
@@ -4732,6 +4885,26 @@ $root.dd = (function() {
                     else
                         object.experienceTable[j] = options.longs === String ? $util.Long.prototype.toString.call(message.experienceTable[j]) : options.longs === Number ? new $util.LongBits(message.experienceTable[j].low >>> 0, message.experienceTable[j].high >>> 0).toNumber(true) : message.experienceTable[j];
             }
+            if (message.users && message.users.length) {
+                object.users = [];
+                for (var j = 0; j < message.users.length; ++j)
+                    object.users[j] = $root.dd.CampaignUser.toObject(message.users[j], options);
+            }
+            if (message.items && message.items.length) {
+                object.items = [];
+                for (var j = 0; j < message.items.length; ++j)
+                    object.items[j] = $root.dd.Item.toObject(message.items[j], options);
+            }
+            if (message.entityPresets && message.entityPresets.length) {
+                object.entityPresets = [];
+                for (var j = 0; j < message.entityPresets.length; ++j)
+                    object.entityPresets[j] = $root.dd.EntityPreset.toObject(message.entityPresets[j], options);
+            }
+            if (message.entities && message.entities.length) {
+                object.entities = [];
+                for (var j = 0; j < message.entities.length; ++j)
+                    object.entities[j] = $root.dd.Entity.toObject(message.entities[j], options);
+            }
             return object;
         };
 
@@ -4747,6 +4920,3460 @@ $root.dd = (function() {
         };
 
         return Campaign;
+    })();
+
+    dd.Entity = (function() {
+
+        /**
+         * Properties of an Entity.
+         * @memberof dd
+         * @interface IEntity
+         * @property {string|null} [id] Entity id
+         * @property {string|null} [name] Entity name
+         * @property {string|null} [description] Entity description
+         * @property {dd.IUser|null} [user] Entity user
+         * @property {string|null} [imageId] Entity imageId
+         * @property {Array.<dd.IAttribute>|null} [attributes] Entity attributes
+         * @property {number|Long|null} [xp] Entity xp
+         * @property {dd.IInventory|null} [inventory] Entity inventory
+         * @property {dd.IHealth|null} [health] Entity health
+         * @property {dd.IEntityPreset|null} [preset] Entity preset
+         */
+
+        /**
+         * Constructs a new Entity.
+         * @memberof dd
+         * @classdesc Represents an Entity.
+         * @implements IEntity
+         * @constructor
+         * @param {dd.IEntity=} [properties] Properties to set
+         */
+        function Entity(properties) {
+            this.attributes = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Entity id.
+         * @member {string} id
+         * @memberof dd.Entity
+         * @instance
+         */
+        Entity.prototype.id = "";
+
+        /**
+         * Entity name.
+         * @member {string} name
+         * @memberof dd.Entity
+         * @instance
+         */
+        Entity.prototype.name = "";
+
+        /**
+         * Entity description.
+         * @member {string} description
+         * @memberof dd.Entity
+         * @instance
+         */
+        Entity.prototype.description = "";
+
+        /**
+         * Entity user.
+         * @member {dd.IUser|null|undefined} user
+         * @memberof dd.Entity
+         * @instance
+         */
+        Entity.prototype.user = null;
+
+        /**
+         * Entity imageId.
+         * @member {string} imageId
+         * @memberof dd.Entity
+         * @instance
+         */
+        Entity.prototype.imageId = "";
+
+        /**
+         * Entity attributes.
+         * @member {Array.<dd.IAttribute>} attributes
+         * @memberof dd.Entity
+         * @instance
+         */
+        Entity.prototype.attributes = $util.emptyArray;
+
+        /**
+         * Entity xp.
+         * @member {number|Long} xp
+         * @memberof dd.Entity
+         * @instance
+         */
+        Entity.prototype.xp = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * Entity inventory.
+         * @member {dd.IInventory|null|undefined} inventory
+         * @memberof dd.Entity
+         * @instance
+         */
+        Entity.prototype.inventory = null;
+
+        /**
+         * Entity health.
+         * @member {dd.IHealth|null|undefined} health
+         * @memberof dd.Entity
+         * @instance
+         */
+        Entity.prototype.health = null;
+
+        /**
+         * Entity preset.
+         * @member {dd.IEntityPreset|null|undefined} preset
+         * @memberof dd.Entity
+         * @instance
+         */
+        Entity.prototype.preset = null;
+
+        /**
+         * Creates a new Entity instance using the specified properties.
+         * @function create
+         * @memberof dd.Entity
+         * @static
+         * @param {dd.IEntity=} [properties] Properties to set
+         * @returns {dd.Entity} Entity instance
+         */
+        Entity.create = function create(properties) {
+            return new Entity(properties);
+        };
+
+        /**
+         * Encodes the specified Entity message. Does not implicitly {@link dd.Entity.verify|verify} messages.
+         * @function encode
+         * @memberof dd.Entity
+         * @static
+         * @param {dd.IEntity} message Entity message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Entity.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+            if (message.description != null && message.hasOwnProperty("description"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.description);
+            if (message.user != null && message.hasOwnProperty("user"))
+                $root.dd.User.encode(message.user, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                writer.uint32(/* id 5, wireType 2 =*/42).string(message.imageId);
+            if (message.attributes != null && message.attributes.length)
+                for (var i = 0; i < message.attributes.length; ++i)
+                    $root.dd.Attribute.encode(message.attributes[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+            if (message.xp != null && message.hasOwnProperty("xp"))
+                writer.uint32(/* id 7, wireType 0 =*/56).int64(message.xp);
+            if (message.inventory != null && message.hasOwnProperty("inventory"))
+                $root.dd.Inventory.encode(message.inventory, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+            if (message.health != null && message.hasOwnProperty("health"))
+                $root.dd.Health.encode(message.health, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
+            if (message.preset != null && message.hasOwnProperty("preset"))
+                $root.dd.EntityPreset.encode(message.preset, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified Entity message, length delimited. Does not implicitly {@link dd.Entity.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.Entity
+         * @static
+         * @param {dd.IEntity} message Entity message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Entity.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an Entity message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.Entity
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.Entity} Entity
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Entity.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.Entity();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                case 2:
+                    message.name = reader.string();
+                    break;
+                case 3:
+                    message.description = reader.string();
+                    break;
+                case 4:
+                    message.user = $root.dd.User.decode(reader, reader.uint32());
+                    break;
+                case 5:
+                    message.imageId = reader.string();
+                    break;
+                case 6:
+                    if (!(message.attributes && message.attributes.length))
+                        message.attributes = [];
+                    message.attributes.push($root.dd.Attribute.decode(reader, reader.uint32()));
+                    break;
+                case 7:
+                    message.xp = reader.int64();
+                    break;
+                case 8:
+                    message.inventory = $root.dd.Inventory.decode(reader, reader.uint32());
+                    break;
+                case 9:
+                    message.health = $root.dd.Health.decode(reader, reader.uint32());
+                    break;
+                case 10:
+                    message.preset = $root.dd.EntityPreset.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an Entity message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.Entity
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.Entity} Entity
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Entity.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an Entity message.
+         * @function verify
+         * @memberof dd.Entity
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Entity.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.description != null && message.hasOwnProperty("description"))
+                if (!$util.isString(message.description))
+                    return "description: string expected";
+            if (message.user != null && message.hasOwnProperty("user")) {
+                var error = $root.dd.User.verify(message.user);
+                if (error)
+                    return "user." + error;
+            }
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                if (!$util.isString(message.imageId))
+                    return "imageId: string expected";
+            if (message.attributes != null && message.hasOwnProperty("attributes")) {
+                if (!Array.isArray(message.attributes))
+                    return "attributes: array expected";
+                for (var i = 0; i < message.attributes.length; ++i) {
+                    var error = $root.dd.Attribute.verify(message.attributes[i]);
+                    if (error)
+                        return "attributes." + error;
+                }
+            }
+            if (message.xp != null && message.hasOwnProperty("xp"))
+                if (!$util.isInteger(message.xp) && !(message.xp && $util.isInteger(message.xp.low) && $util.isInteger(message.xp.high)))
+                    return "xp: integer|Long expected";
+            if (message.inventory != null && message.hasOwnProperty("inventory")) {
+                var error = $root.dd.Inventory.verify(message.inventory);
+                if (error)
+                    return "inventory." + error;
+            }
+            if (message.health != null && message.hasOwnProperty("health")) {
+                var error = $root.dd.Health.verify(message.health);
+                if (error)
+                    return "health." + error;
+            }
+            if (message.preset != null && message.hasOwnProperty("preset")) {
+                var error = $root.dd.EntityPreset.verify(message.preset);
+                if (error)
+                    return "preset." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates an Entity message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.Entity
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.Entity} Entity
+         */
+        Entity.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.Entity)
+                return object;
+            var message = new $root.dd.Entity();
+            if (object.id != null)
+                message.id = String(object.id);
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.description != null)
+                message.description = String(object.description);
+            if (object.user != null) {
+                if (typeof object.user !== "object")
+                    throw TypeError(".dd.Entity.user: object expected");
+                message.user = $root.dd.User.fromObject(object.user);
+            }
+            if (object.imageId != null)
+                message.imageId = String(object.imageId);
+            if (object.attributes) {
+                if (!Array.isArray(object.attributes))
+                    throw TypeError(".dd.Entity.attributes: array expected");
+                message.attributes = [];
+                for (var i = 0; i < object.attributes.length; ++i) {
+                    if (typeof object.attributes[i] !== "object")
+                        throw TypeError(".dd.Entity.attributes: object expected");
+                    message.attributes[i] = $root.dd.Attribute.fromObject(object.attributes[i]);
+                }
+            }
+            if (object.xp != null)
+                if ($util.Long)
+                    (message.xp = $util.Long.fromValue(object.xp)).unsigned = false;
+                else if (typeof object.xp === "string")
+                    message.xp = parseInt(object.xp, 10);
+                else if (typeof object.xp === "number")
+                    message.xp = object.xp;
+                else if (typeof object.xp === "object")
+                    message.xp = new $util.LongBits(object.xp.low >>> 0, object.xp.high >>> 0).toNumber();
+            if (object.inventory != null) {
+                if (typeof object.inventory !== "object")
+                    throw TypeError(".dd.Entity.inventory: object expected");
+                message.inventory = $root.dd.Inventory.fromObject(object.inventory);
+            }
+            if (object.health != null) {
+                if (typeof object.health !== "object")
+                    throw TypeError(".dd.Entity.health: object expected");
+                message.health = $root.dd.Health.fromObject(object.health);
+            }
+            if (object.preset != null) {
+                if (typeof object.preset !== "object")
+                    throw TypeError(".dd.Entity.preset: object expected");
+                message.preset = $root.dd.EntityPreset.fromObject(object.preset);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an Entity message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.Entity
+         * @static
+         * @param {dd.Entity} message Entity
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Entity.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.attributes = [];
+            if (options.defaults) {
+                object.id = "";
+                object.name = "";
+                object.description = "";
+                object.user = null;
+                object.imageId = "";
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.xp = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.xp = options.longs === String ? "0" : 0;
+                object.inventory = null;
+                object.health = null;
+                object.preset = null;
+            }
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.description != null && message.hasOwnProperty("description"))
+                object.description = message.description;
+            if (message.user != null && message.hasOwnProperty("user"))
+                object.user = $root.dd.User.toObject(message.user, options);
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                object.imageId = message.imageId;
+            if (message.attributes && message.attributes.length) {
+                object.attributes = [];
+                for (var j = 0; j < message.attributes.length; ++j)
+                    object.attributes[j] = $root.dd.Attribute.toObject(message.attributes[j], options);
+            }
+            if (message.xp != null && message.hasOwnProperty("xp"))
+                if (typeof message.xp === "number")
+                    object.xp = options.longs === String ? String(message.xp) : message.xp;
+                else
+                    object.xp = options.longs === String ? $util.Long.prototype.toString.call(message.xp) : options.longs === Number ? new $util.LongBits(message.xp.low >>> 0, message.xp.high >>> 0).toNumber() : message.xp;
+            if (message.inventory != null && message.hasOwnProperty("inventory"))
+                object.inventory = $root.dd.Inventory.toObject(message.inventory, options);
+            if (message.health != null && message.hasOwnProperty("health"))
+                object.health = $root.dd.Health.toObject(message.health, options);
+            if (message.preset != null && message.hasOwnProperty("preset"))
+                object.preset = $root.dd.EntityPreset.toObject(message.preset, options);
+            return object;
+        };
+
+        /**
+         * Converts this Entity to JSON.
+         * @function toJSON
+         * @memberof dd.Entity
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Entity.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return Entity;
+    })();
+
+    dd.EntityPreset = (function() {
+
+        /**
+         * Properties of an EntityPreset.
+         * @memberof dd
+         * @interface IEntityPreset
+         * @property {string|null} [id] EntityPreset id
+         * @property {string|null} [name] EntityPreset name
+         * @property {string|null} [description] EntityPreset description
+         * @property {dd.IUser|null} [user] EntityPreset user
+         * @property {string|null} [imageId] EntityPreset imageId
+         * @property {Array.<dd.IEntityAttribute>|null} [attributes] EntityPreset attributes
+         * @property {dd.IInventory|null} [inventory] EntityPreset inventory
+         * @property {dd.IHealthPreset|null} [health] EntityPreset health
+         * @property {boolean|null} [playerCreatable] EntityPreset playerCreatable
+         */
+
+        /**
+         * Constructs a new EntityPreset.
+         * @memberof dd
+         * @classdesc Represents an EntityPreset.
+         * @implements IEntityPreset
+         * @constructor
+         * @param {dd.IEntityPreset=} [properties] Properties to set
+         */
+        function EntityPreset(properties) {
+            this.attributes = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * EntityPreset id.
+         * @member {string} id
+         * @memberof dd.EntityPreset
+         * @instance
+         */
+        EntityPreset.prototype.id = "";
+
+        /**
+         * EntityPreset name.
+         * @member {string} name
+         * @memberof dd.EntityPreset
+         * @instance
+         */
+        EntityPreset.prototype.name = "";
+
+        /**
+         * EntityPreset description.
+         * @member {string} description
+         * @memberof dd.EntityPreset
+         * @instance
+         */
+        EntityPreset.prototype.description = "";
+
+        /**
+         * EntityPreset user.
+         * @member {dd.IUser|null|undefined} user
+         * @memberof dd.EntityPreset
+         * @instance
+         */
+        EntityPreset.prototype.user = null;
+
+        /**
+         * EntityPreset imageId.
+         * @member {string} imageId
+         * @memberof dd.EntityPreset
+         * @instance
+         */
+        EntityPreset.prototype.imageId = "";
+
+        /**
+         * EntityPreset attributes.
+         * @member {Array.<dd.IEntityAttribute>} attributes
+         * @memberof dd.EntityPreset
+         * @instance
+         */
+        EntityPreset.prototype.attributes = $util.emptyArray;
+
+        /**
+         * EntityPreset inventory.
+         * @member {dd.IInventory|null|undefined} inventory
+         * @memberof dd.EntityPreset
+         * @instance
+         */
+        EntityPreset.prototype.inventory = null;
+
+        /**
+         * EntityPreset health.
+         * @member {dd.IHealthPreset|null|undefined} health
+         * @memberof dd.EntityPreset
+         * @instance
+         */
+        EntityPreset.prototype.health = null;
+
+        /**
+         * EntityPreset playerCreatable.
+         * @member {boolean} playerCreatable
+         * @memberof dd.EntityPreset
+         * @instance
+         */
+        EntityPreset.prototype.playerCreatable = false;
+
+        /**
+         * Creates a new EntityPreset instance using the specified properties.
+         * @function create
+         * @memberof dd.EntityPreset
+         * @static
+         * @param {dd.IEntityPreset=} [properties] Properties to set
+         * @returns {dd.EntityPreset} EntityPreset instance
+         */
+        EntityPreset.create = function create(properties) {
+            return new EntityPreset(properties);
+        };
+
+        /**
+         * Encodes the specified EntityPreset message. Does not implicitly {@link dd.EntityPreset.verify|verify} messages.
+         * @function encode
+         * @memberof dd.EntityPreset
+         * @static
+         * @param {dd.IEntityPreset} message EntityPreset message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        EntityPreset.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+            if (message.description != null && message.hasOwnProperty("description"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.description);
+            if (message.user != null && message.hasOwnProperty("user"))
+                $root.dd.User.encode(message.user, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                writer.uint32(/* id 5, wireType 2 =*/42).string(message.imageId);
+            if (message.attributes != null && message.attributes.length)
+                for (var i = 0; i < message.attributes.length; ++i)
+                    $root.dd.EntityAttribute.encode(message.attributes[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+            if (message.inventory != null && message.hasOwnProperty("inventory"))
+                $root.dd.Inventory.encode(message.inventory, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+            if (message.health != null && message.hasOwnProperty("health"))
+                $root.dd.HealthPreset.encode(message.health, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+            if (message.playerCreatable != null && message.hasOwnProperty("playerCreatable"))
+                writer.uint32(/* id 9, wireType 0 =*/72).bool(message.playerCreatable);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified EntityPreset message, length delimited. Does not implicitly {@link dd.EntityPreset.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.EntityPreset
+         * @static
+         * @param {dd.IEntityPreset} message EntityPreset message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        EntityPreset.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an EntityPreset message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.EntityPreset
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.EntityPreset} EntityPreset
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        EntityPreset.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.EntityPreset();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                case 2:
+                    message.name = reader.string();
+                    break;
+                case 3:
+                    message.description = reader.string();
+                    break;
+                case 4:
+                    message.user = $root.dd.User.decode(reader, reader.uint32());
+                    break;
+                case 5:
+                    message.imageId = reader.string();
+                    break;
+                case 6:
+                    if (!(message.attributes && message.attributes.length))
+                        message.attributes = [];
+                    message.attributes.push($root.dd.EntityAttribute.decode(reader, reader.uint32()));
+                    break;
+                case 7:
+                    message.inventory = $root.dd.Inventory.decode(reader, reader.uint32());
+                    break;
+                case 8:
+                    message.health = $root.dd.HealthPreset.decode(reader, reader.uint32());
+                    break;
+                case 9:
+                    message.playerCreatable = reader.bool();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an EntityPreset message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.EntityPreset
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.EntityPreset} EntityPreset
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        EntityPreset.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an EntityPreset message.
+         * @function verify
+         * @memberof dd.EntityPreset
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        EntityPreset.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.description != null && message.hasOwnProperty("description"))
+                if (!$util.isString(message.description))
+                    return "description: string expected";
+            if (message.user != null && message.hasOwnProperty("user")) {
+                var error = $root.dd.User.verify(message.user);
+                if (error)
+                    return "user." + error;
+            }
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                if (!$util.isString(message.imageId))
+                    return "imageId: string expected";
+            if (message.attributes != null && message.hasOwnProperty("attributes")) {
+                if (!Array.isArray(message.attributes))
+                    return "attributes: array expected";
+                for (var i = 0; i < message.attributes.length; ++i) {
+                    var error = $root.dd.EntityAttribute.verify(message.attributes[i]);
+                    if (error)
+                        return "attributes." + error;
+                }
+            }
+            if (message.inventory != null && message.hasOwnProperty("inventory")) {
+                var error = $root.dd.Inventory.verify(message.inventory);
+                if (error)
+                    return "inventory." + error;
+            }
+            if (message.health != null && message.hasOwnProperty("health")) {
+                var error = $root.dd.HealthPreset.verify(message.health);
+                if (error)
+                    return "health." + error;
+            }
+            if (message.playerCreatable != null && message.hasOwnProperty("playerCreatable"))
+                if (typeof message.playerCreatable !== "boolean")
+                    return "playerCreatable: boolean expected";
+            return null;
+        };
+
+        /**
+         * Creates an EntityPreset message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.EntityPreset
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.EntityPreset} EntityPreset
+         */
+        EntityPreset.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.EntityPreset)
+                return object;
+            var message = new $root.dd.EntityPreset();
+            if (object.id != null)
+                message.id = String(object.id);
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.description != null)
+                message.description = String(object.description);
+            if (object.user != null) {
+                if (typeof object.user !== "object")
+                    throw TypeError(".dd.EntityPreset.user: object expected");
+                message.user = $root.dd.User.fromObject(object.user);
+            }
+            if (object.imageId != null)
+                message.imageId = String(object.imageId);
+            if (object.attributes) {
+                if (!Array.isArray(object.attributes))
+                    throw TypeError(".dd.EntityPreset.attributes: array expected");
+                message.attributes = [];
+                for (var i = 0; i < object.attributes.length; ++i) {
+                    if (typeof object.attributes[i] !== "object")
+                        throw TypeError(".dd.EntityPreset.attributes: object expected");
+                    message.attributes[i] = $root.dd.EntityAttribute.fromObject(object.attributes[i]);
+                }
+            }
+            if (object.inventory != null) {
+                if (typeof object.inventory !== "object")
+                    throw TypeError(".dd.EntityPreset.inventory: object expected");
+                message.inventory = $root.dd.Inventory.fromObject(object.inventory);
+            }
+            if (object.health != null) {
+                if (typeof object.health !== "object")
+                    throw TypeError(".dd.EntityPreset.health: object expected");
+                message.health = $root.dd.HealthPreset.fromObject(object.health);
+            }
+            if (object.playerCreatable != null)
+                message.playerCreatable = Boolean(object.playerCreatable);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an EntityPreset message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.EntityPreset
+         * @static
+         * @param {dd.EntityPreset} message EntityPreset
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        EntityPreset.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.attributes = [];
+            if (options.defaults) {
+                object.id = "";
+                object.name = "";
+                object.description = "";
+                object.user = null;
+                object.imageId = "";
+                object.inventory = null;
+                object.health = null;
+                object.playerCreatable = false;
+            }
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.description != null && message.hasOwnProperty("description"))
+                object.description = message.description;
+            if (message.user != null && message.hasOwnProperty("user"))
+                object.user = $root.dd.User.toObject(message.user, options);
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                object.imageId = message.imageId;
+            if (message.attributes && message.attributes.length) {
+                object.attributes = [];
+                for (var j = 0; j < message.attributes.length; ++j)
+                    object.attributes[j] = $root.dd.EntityAttribute.toObject(message.attributes[j], options);
+            }
+            if (message.inventory != null && message.hasOwnProperty("inventory"))
+                object.inventory = $root.dd.Inventory.toObject(message.inventory, options);
+            if (message.health != null && message.hasOwnProperty("health"))
+                object.health = $root.dd.HealthPreset.toObject(message.health, options);
+            if (message.playerCreatable != null && message.hasOwnProperty("playerCreatable"))
+                object.playerCreatable = message.playerCreatable;
+            return object;
+        };
+
+        /**
+         * Converts this EntityPreset to JSON.
+         * @function toJSON
+         * @memberof dd.EntityPreset
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        EntityPreset.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return EntityPreset;
+    })();
+
+    dd.EntityAttribute = (function() {
+
+        /**
+         * Properties of an EntityAttribute.
+         * @memberof dd
+         * @interface IEntityAttribute
+         * @property {string|null} [name] EntityAttribute name
+         * @property {string|null} [description] EntityAttribute description
+         * @property {string|null} [imageId] EntityAttribute imageId
+         * @property {string|null} [defaultValue] EntityAttribute defaultValue
+         * @property {number|null} [type] EntityAttribute type
+         * @property {Array.<string>|null} [options] EntityAttribute options
+         * @property {number|null} ["class"] EntityAttribute class
+         * @property {boolean|null} [required] EntityAttribute required
+         * @property {number|Long|null} [max] EntityAttribute max
+         * @property {number|Long|null} [min] EntityAttribute min
+         */
+
+        /**
+         * Constructs a new EntityAttribute.
+         * @memberof dd
+         * @classdesc Represents an EntityAttribute.
+         * @implements IEntityAttribute
+         * @constructor
+         * @param {dd.IEntityAttribute=} [properties] Properties to set
+         */
+        function EntityAttribute(properties) {
+            this.options = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * EntityAttribute name.
+         * @member {string} name
+         * @memberof dd.EntityAttribute
+         * @instance
+         */
+        EntityAttribute.prototype.name = "";
+
+        /**
+         * EntityAttribute description.
+         * @member {string} description
+         * @memberof dd.EntityAttribute
+         * @instance
+         */
+        EntityAttribute.prototype.description = "";
+
+        /**
+         * EntityAttribute imageId.
+         * @member {string} imageId
+         * @memberof dd.EntityAttribute
+         * @instance
+         */
+        EntityAttribute.prototype.imageId = "";
+
+        /**
+         * EntityAttribute defaultValue.
+         * @member {string} defaultValue
+         * @memberof dd.EntityAttribute
+         * @instance
+         */
+        EntityAttribute.prototype.defaultValue = "";
+
+        /**
+         * EntityAttribute type.
+         * @member {number} type
+         * @memberof dd.EntityAttribute
+         * @instance
+         */
+        EntityAttribute.prototype.type = 0;
+
+        /**
+         * EntityAttribute options.
+         * @member {Array.<string>} options
+         * @memberof dd.EntityAttribute
+         * @instance
+         */
+        EntityAttribute.prototype.options = $util.emptyArray;
+
+        /**
+         * EntityAttribute class.
+         * @member {number} class
+         * @memberof dd.EntityAttribute
+         * @instance
+         */
+        EntityAttribute.prototype["class"] = 0;
+
+        /**
+         * EntityAttribute required.
+         * @member {boolean} required
+         * @memberof dd.EntityAttribute
+         * @instance
+         */
+        EntityAttribute.prototype.required = false;
+
+        /**
+         * EntityAttribute max.
+         * @member {number|Long} max
+         * @memberof dd.EntityAttribute
+         * @instance
+         */
+        EntityAttribute.prototype.max = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * EntityAttribute min.
+         * @member {number|Long} min
+         * @memberof dd.EntityAttribute
+         * @instance
+         */
+        EntityAttribute.prototype.min = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * Creates a new EntityAttribute instance using the specified properties.
+         * @function create
+         * @memberof dd.EntityAttribute
+         * @static
+         * @param {dd.IEntityAttribute=} [properties] Properties to set
+         * @returns {dd.EntityAttribute} EntityAttribute instance
+         */
+        EntityAttribute.create = function create(properties) {
+            return new EntityAttribute(properties);
+        };
+
+        /**
+         * Encodes the specified EntityAttribute message. Does not implicitly {@link dd.EntityAttribute.verify|verify} messages.
+         * @function encode
+         * @memberof dd.EntityAttribute
+         * @static
+         * @param {dd.IEntityAttribute} message EntityAttribute message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        EntityAttribute.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.name);
+            if (message.description != null && message.hasOwnProperty("description"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.description);
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.imageId);
+            if (message.defaultValue != null && message.hasOwnProperty("defaultValue"))
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.defaultValue);
+            if (message.type != null && message.hasOwnProperty("type"))
+                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.type);
+            if (message.options != null && message.options.length)
+                for (var i = 0; i < message.options.length; ++i)
+                    writer.uint32(/* id 6, wireType 2 =*/50).string(message.options[i]);
+            if (message["class"] != null && message.hasOwnProperty("class"))
+                writer.uint32(/* id 7, wireType 0 =*/56).int32(message["class"]);
+            if (message.required != null && message.hasOwnProperty("required"))
+                writer.uint32(/* id 8, wireType 0 =*/64).bool(message.required);
+            if (message.max != null && message.hasOwnProperty("max"))
+                writer.uint32(/* id 9, wireType 0 =*/72).int64(message.max);
+            if (message.min != null && message.hasOwnProperty("min"))
+                writer.uint32(/* id 10, wireType 0 =*/80).int64(message.min);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified EntityAttribute message, length delimited. Does not implicitly {@link dd.EntityAttribute.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.EntityAttribute
+         * @static
+         * @param {dd.IEntityAttribute} message EntityAttribute message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        EntityAttribute.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an EntityAttribute message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.EntityAttribute
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.EntityAttribute} EntityAttribute
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        EntityAttribute.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.EntityAttribute();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.name = reader.string();
+                    break;
+                case 2:
+                    message.description = reader.string();
+                    break;
+                case 3:
+                    message.imageId = reader.string();
+                    break;
+                case 4:
+                    message.defaultValue = reader.string();
+                    break;
+                case 5:
+                    message.type = reader.int32();
+                    break;
+                case 6:
+                    if (!(message.options && message.options.length))
+                        message.options = [];
+                    message.options.push(reader.string());
+                    break;
+                case 7:
+                    message["class"] = reader.int32();
+                    break;
+                case 8:
+                    message.required = reader.bool();
+                    break;
+                case 9:
+                    message.max = reader.int64();
+                    break;
+                case 10:
+                    message.min = reader.int64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an EntityAttribute message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.EntityAttribute
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.EntityAttribute} EntityAttribute
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        EntityAttribute.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an EntityAttribute message.
+         * @function verify
+         * @memberof dd.EntityAttribute
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        EntityAttribute.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.description != null && message.hasOwnProperty("description"))
+                if (!$util.isString(message.description))
+                    return "description: string expected";
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                if (!$util.isString(message.imageId))
+                    return "imageId: string expected";
+            if (message.defaultValue != null && message.hasOwnProperty("defaultValue"))
+                if (!$util.isString(message.defaultValue))
+                    return "defaultValue: string expected";
+            if (message.type != null && message.hasOwnProperty("type"))
+                if (!$util.isInteger(message.type))
+                    return "type: integer expected";
+            if (message.options != null && message.hasOwnProperty("options")) {
+                if (!Array.isArray(message.options))
+                    return "options: array expected";
+                for (var i = 0; i < message.options.length; ++i)
+                    if (!$util.isString(message.options[i]))
+                        return "options: string[] expected";
+            }
+            if (message["class"] != null && message.hasOwnProperty("class"))
+                if (!$util.isInteger(message["class"]))
+                    return "class: integer expected";
+            if (message.required != null && message.hasOwnProperty("required"))
+                if (typeof message.required !== "boolean")
+                    return "required: boolean expected";
+            if (message.max != null && message.hasOwnProperty("max"))
+                if (!$util.isInteger(message.max) && !(message.max && $util.isInteger(message.max.low) && $util.isInteger(message.max.high)))
+                    return "max: integer|Long expected";
+            if (message.min != null && message.hasOwnProperty("min"))
+                if (!$util.isInteger(message.min) && !(message.min && $util.isInteger(message.min.low) && $util.isInteger(message.min.high)))
+                    return "min: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates an EntityAttribute message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.EntityAttribute
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.EntityAttribute} EntityAttribute
+         */
+        EntityAttribute.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.EntityAttribute)
+                return object;
+            var message = new $root.dd.EntityAttribute();
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.description != null)
+                message.description = String(object.description);
+            if (object.imageId != null)
+                message.imageId = String(object.imageId);
+            if (object.defaultValue != null)
+                message.defaultValue = String(object.defaultValue);
+            if (object.type != null)
+                message.type = object.type | 0;
+            if (object.options) {
+                if (!Array.isArray(object.options))
+                    throw TypeError(".dd.EntityAttribute.options: array expected");
+                message.options = [];
+                for (var i = 0; i < object.options.length; ++i)
+                    message.options[i] = String(object.options[i]);
+            }
+            if (object["class"] != null)
+                message["class"] = object["class"] | 0;
+            if (object.required != null)
+                message.required = Boolean(object.required);
+            if (object.max != null)
+                if ($util.Long)
+                    (message.max = $util.Long.fromValue(object.max)).unsigned = false;
+                else if (typeof object.max === "string")
+                    message.max = parseInt(object.max, 10);
+                else if (typeof object.max === "number")
+                    message.max = object.max;
+                else if (typeof object.max === "object")
+                    message.max = new $util.LongBits(object.max.low >>> 0, object.max.high >>> 0).toNumber();
+            if (object.min != null)
+                if ($util.Long)
+                    (message.min = $util.Long.fromValue(object.min)).unsigned = false;
+                else if (typeof object.min === "string")
+                    message.min = parseInt(object.min, 10);
+                else if (typeof object.min === "number")
+                    message.min = object.min;
+                else if (typeof object.min === "object")
+                    message.min = new $util.LongBits(object.min.low >>> 0, object.min.high >>> 0).toNumber();
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an EntityAttribute message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.EntityAttribute
+         * @static
+         * @param {dd.EntityAttribute} message EntityAttribute
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        EntityAttribute.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.options = [];
+            if (options.defaults) {
+                object.name = "";
+                object.description = "";
+                object.imageId = "";
+                object.defaultValue = "";
+                object.type = 0;
+                object["class"] = 0;
+                object.required = false;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.max = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.max = options.longs === String ? "0" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.min = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.min = options.longs === String ? "0" : 0;
+            }
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.description != null && message.hasOwnProperty("description"))
+                object.description = message.description;
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                object.imageId = message.imageId;
+            if (message.defaultValue != null && message.hasOwnProperty("defaultValue"))
+                object.defaultValue = message.defaultValue;
+            if (message.type != null && message.hasOwnProperty("type"))
+                object.type = message.type;
+            if (message.options && message.options.length) {
+                object.options = [];
+                for (var j = 0; j < message.options.length; ++j)
+                    object.options[j] = message.options[j];
+            }
+            if (message["class"] != null && message.hasOwnProperty("class"))
+                object["class"] = message["class"];
+            if (message.required != null && message.hasOwnProperty("required"))
+                object.required = message.required;
+            if (message.max != null && message.hasOwnProperty("max"))
+                if (typeof message.max === "number")
+                    object.max = options.longs === String ? String(message.max) : message.max;
+                else
+                    object.max = options.longs === String ? $util.Long.prototype.toString.call(message.max) : options.longs === Number ? new $util.LongBits(message.max.low >>> 0, message.max.high >>> 0).toNumber() : message.max;
+            if (message.min != null && message.hasOwnProperty("min"))
+                if (typeof message.min === "number")
+                    object.min = options.longs === String ? String(message.min) : message.min;
+                else
+                    object.min = options.longs === String ? $util.Long.prototype.toString.call(message.min) : options.longs === Number ? new $util.LongBits(message.min.low >>> 0, message.min.high >>> 0).toNumber() : message.min;
+            return object;
+        };
+
+        /**
+         * Converts this EntityAttribute to JSON.
+         * @function toJSON
+         * @memberof dd.EntityAttribute
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        EntityAttribute.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return EntityAttribute;
+    })();
+
+    dd.Item = (function() {
+
+        /**
+         * Properties of an Item.
+         * @memberof dd
+         * @interface IItem
+         * @property {string|null} [id] Item id
+         * @property {string|null} [name] Item name
+         * @property {string|null} [description] Item description
+         * @property {string|null} [imageId] Item imageId
+         * @property {Array.<dd.IAttribute>|null} [attributes] Item attributes
+         */
+
+        /**
+         * Constructs a new Item.
+         * @memberof dd
+         * @classdesc Represents an Item.
+         * @implements IItem
+         * @constructor
+         * @param {dd.IItem=} [properties] Properties to set
+         */
+        function Item(properties) {
+            this.attributes = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Item id.
+         * @member {string} id
+         * @memberof dd.Item
+         * @instance
+         */
+        Item.prototype.id = "";
+
+        /**
+         * Item name.
+         * @member {string} name
+         * @memberof dd.Item
+         * @instance
+         */
+        Item.prototype.name = "";
+
+        /**
+         * Item description.
+         * @member {string} description
+         * @memberof dd.Item
+         * @instance
+         */
+        Item.prototype.description = "";
+
+        /**
+         * Item imageId.
+         * @member {string} imageId
+         * @memberof dd.Item
+         * @instance
+         */
+        Item.prototype.imageId = "";
+
+        /**
+         * Item attributes.
+         * @member {Array.<dd.IAttribute>} attributes
+         * @memberof dd.Item
+         * @instance
+         */
+        Item.prototype.attributes = $util.emptyArray;
+
+        /**
+         * Creates a new Item instance using the specified properties.
+         * @function create
+         * @memberof dd.Item
+         * @static
+         * @param {dd.IItem=} [properties] Properties to set
+         * @returns {dd.Item} Item instance
+         */
+        Item.create = function create(properties) {
+            return new Item(properties);
+        };
+
+        /**
+         * Encodes the specified Item message. Does not implicitly {@link dd.Item.verify|verify} messages.
+         * @function encode
+         * @memberof dd.Item
+         * @static
+         * @param {dd.IItem} message Item message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Item.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+            if (message.description != null && message.hasOwnProperty("description"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.description);
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.imageId);
+            if (message.attributes != null && message.attributes.length)
+                for (var i = 0; i < message.attributes.length; ++i)
+                    $root.dd.Attribute.encode(message.attributes[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified Item message, length delimited. Does not implicitly {@link dd.Item.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.Item
+         * @static
+         * @param {dd.IItem} message Item message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Item.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an Item message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.Item
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.Item} Item
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Item.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.Item();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                case 2:
+                    message.name = reader.string();
+                    break;
+                case 3:
+                    message.description = reader.string();
+                    break;
+                case 4:
+                    message.imageId = reader.string();
+                    break;
+                case 5:
+                    if (!(message.attributes && message.attributes.length))
+                        message.attributes = [];
+                    message.attributes.push($root.dd.Attribute.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an Item message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.Item
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.Item} Item
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Item.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an Item message.
+         * @function verify
+         * @memberof dd.Item
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Item.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.description != null && message.hasOwnProperty("description"))
+                if (!$util.isString(message.description))
+                    return "description: string expected";
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                if (!$util.isString(message.imageId))
+                    return "imageId: string expected";
+            if (message.attributes != null && message.hasOwnProperty("attributes")) {
+                if (!Array.isArray(message.attributes))
+                    return "attributes: array expected";
+                for (var i = 0; i < message.attributes.length; ++i) {
+                    var error = $root.dd.Attribute.verify(message.attributes[i]);
+                    if (error)
+                        return "attributes." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates an Item message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.Item
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.Item} Item
+         */
+        Item.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.Item)
+                return object;
+            var message = new $root.dd.Item();
+            if (object.id != null)
+                message.id = String(object.id);
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.description != null)
+                message.description = String(object.description);
+            if (object.imageId != null)
+                message.imageId = String(object.imageId);
+            if (object.attributes) {
+                if (!Array.isArray(object.attributes))
+                    throw TypeError(".dd.Item.attributes: array expected");
+                message.attributes = [];
+                for (var i = 0; i < object.attributes.length; ++i) {
+                    if (typeof object.attributes[i] !== "object")
+                        throw TypeError(".dd.Item.attributes: object expected");
+                    message.attributes[i] = $root.dd.Attribute.fromObject(object.attributes[i]);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an Item message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.Item
+         * @static
+         * @param {dd.Item} message Item
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Item.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.attributes = [];
+            if (options.defaults) {
+                object.id = "";
+                object.name = "";
+                object.description = "";
+                object.imageId = "";
+            }
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.description != null && message.hasOwnProperty("description"))
+                object.description = message.description;
+            if (message.imageId != null && message.hasOwnProperty("imageId"))
+                object.imageId = message.imageId;
+            if (message.attributes && message.attributes.length) {
+                object.attributes = [];
+                for (var j = 0; j < message.attributes.length; ++j)
+                    object.attributes[j] = $root.dd.Attribute.toObject(message.attributes[j], options);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this Item to JSON.
+         * @function toJSON
+         * @memberof dd.Item
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Item.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return Item;
+    })();
+
+    dd.Inventory = (function() {
+
+        /**
+         * Properties of an Inventory.
+         * @memberof dd
+         * @interface IInventory
+         * @property {Array.<dd.IInventoryItem>|null} [items] Inventory items
+         */
+
+        /**
+         * Constructs a new Inventory.
+         * @memberof dd
+         * @classdesc Represents an Inventory.
+         * @implements IInventory
+         * @constructor
+         * @param {dd.IInventory=} [properties] Properties to set
+         */
+        function Inventory(properties) {
+            this.items = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Inventory items.
+         * @member {Array.<dd.IInventoryItem>} items
+         * @memberof dd.Inventory
+         * @instance
+         */
+        Inventory.prototype.items = $util.emptyArray;
+
+        /**
+         * Creates a new Inventory instance using the specified properties.
+         * @function create
+         * @memberof dd.Inventory
+         * @static
+         * @param {dd.IInventory=} [properties] Properties to set
+         * @returns {dd.Inventory} Inventory instance
+         */
+        Inventory.create = function create(properties) {
+            return new Inventory(properties);
+        };
+
+        /**
+         * Encodes the specified Inventory message. Does not implicitly {@link dd.Inventory.verify|verify} messages.
+         * @function encode
+         * @memberof dd.Inventory
+         * @static
+         * @param {dd.IInventory} message Inventory message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Inventory.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.items != null && message.items.length)
+                for (var i = 0; i < message.items.length; ++i)
+                    $root.dd.InventoryItem.encode(message.items[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified Inventory message, length delimited. Does not implicitly {@link dd.Inventory.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.Inventory
+         * @static
+         * @param {dd.IInventory} message Inventory message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Inventory.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an Inventory message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.Inventory
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.Inventory} Inventory
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Inventory.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.Inventory();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    if (!(message.items && message.items.length))
+                        message.items = [];
+                    message.items.push($root.dd.InventoryItem.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an Inventory message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.Inventory
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.Inventory} Inventory
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Inventory.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an Inventory message.
+         * @function verify
+         * @memberof dd.Inventory
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Inventory.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.items != null && message.hasOwnProperty("items")) {
+                if (!Array.isArray(message.items))
+                    return "items: array expected";
+                for (var i = 0; i < message.items.length; ++i) {
+                    var error = $root.dd.InventoryItem.verify(message.items[i]);
+                    if (error)
+                        return "items." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates an Inventory message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.Inventory
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.Inventory} Inventory
+         */
+        Inventory.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.Inventory)
+                return object;
+            var message = new $root.dd.Inventory();
+            if (object.items) {
+                if (!Array.isArray(object.items))
+                    throw TypeError(".dd.Inventory.items: array expected");
+                message.items = [];
+                for (var i = 0; i < object.items.length; ++i) {
+                    if (typeof object.items[i] !== "object")
+                        throw TypeError(".dd.Inventory.items: object expected");
+                    message.items[i] = $root.dd.InventoryItem.fromObject(object.items[i]);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an Inventory message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.Inventory
+         * @static
+         * @param {dd.Inventory} message Inventory
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Inventory.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.items = [];
+            if (message.items && message.items.length) {
+                object.items = [];
+                for (var j = 0; j < message.items.length; ++j)
+                    object.items[j] = $root.dd.InventoryItem.toObject(message.items[j], options);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this Inventory to JSON.
+         * @function toJSON
+         * @memberof dd.Inventory
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Inventory.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return Inventory;
+    })();
+
+    dd.InventoryItem = (function() {
+
+        /**
+         * Properties of an InventoryItem.
+         * @memberof dd
+         * @interface IInventoryItem
+         * @property {dd.IItem|null} [item] InventoryItem item
+         * @property {number|Long|null} [quantity] InventoryItem quantity
+         */
+
+        /**
+         * Constructs a new InventoryItem.
+         * @memberof dd
+         * @classdesc Represents an InventoryItem.
+         * @implements IInventoryItem
+         * @constructor
+         * @param {dd.IInventoryItem=} [properties] Properties to set
+         */
+        function InventoryItem(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * InventoryItem item.
+         * @member {dd.IItem|null|undefined} item
+         * @memberof dd.InventoryItem
+         * @instance
+         */
+        InventoryItem.prototype.item = null;
+
+        /**
+         * InventoryItem quantity.
+         * @member {number|Long} quantity
+         * @memberof dd.InventoryItem
+         * @instance
+         */
+        InventoryItem.prototype.quantity = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * Creates a new InventoryItem instance using the specified properties.
+         * @function create
+         * @memberof dd.InventoryItem
+         * @static
+         * @param {dd.IInventoryItem=} [properties] Properties to set
+         * @returns {dd.InventoryItem} InventoryItem instance
+         */
+        InventoryItem.create = function create(properties) {
+            return new InventoryItem(properties);
+        };
+
+        /**
+         * Encodes the specified InventoryItem message. Does not implicitly {@link dd.InventoryItem.verify|verify} messages.
+         * @function encode
+         * @memberof dd.InventoryItem
+         * @static
+         * @param {dd.IInventoryItem} message InventoryItem message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        InventoryItem.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.item != null && message.hasOwnProperty("item"))
+                $root.dd.Item.encode(message.item, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.quantity != null && message.hasOwnProperty("quantity"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int64(message.quantity);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified InventoryItem message, length delimited. Does not implicitly {@link dd.InventoryItem.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.InventoryItem
+         * @static
+         * @param {dd.IInventoryItem} message InventoryItem message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        InventoryItem.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an InventoryItem message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.InventoryItem
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.InventoryItem} InventoryItem
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        InventoryItem.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.InventoryItem();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.item = $root.dd.Item.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.quantity = reader.int64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an InventoryItem message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.InventoryItem
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.InventoryItem} InventoryItem
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        InventoryItem.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an InventoryItem message.
+         * @function verify
+         * @memberof dd.InventoryItem
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        InventoryItem.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.item != null && message.hasOwnProperty("item")) {
+                var error = $root.dd.Item.verify(message.item);
+                if (error)
+                    return "item." + error;
+            }
+            if (message.quantity != null && message.hasOwnProperty("quantity"))
+                if (!$util.isInteger(message.quantity) && !(message.quantity && $util.isInteger(message.quantity.low) && $util.isInteger(message.quantity.high)))
+                    return "quantity: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates an InventoryItem message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.InventoryItem
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.InventoryItem} InventoryItem
+         */
+        InventoryItem.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.InventoryItem)
+                return object;
+            var message = new $root.dd.InventoryItem();
+            if (object.item != null) {
+                if (typeof object.item !== "object")
+                    throw TypeError(".dd.InventoryItem.item: object expected");
+                message.item = $root.dd.Item.fromObject(object.item);
+            }
+            if (object.quantity != null)
+                if ($util.Long)
+                    (message.quantity = $util.Long.fromValue(object.quantity)).unsigned = false;
+                else if (typeof object.quantity === "string")
+                    message.quantity = parseInt(object.quantity, 10);
+                else if (typeof object.quantity === "number")
+                    message.quantity = object.quantity;
+                else if (typeof object.quantity === "object")
+                    message.quantity = new $util.LongBits(object.quantity.low >>> 0, object.quantity.high >>> 0).toNumber();
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an InventoryItem message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.InventoryItem
+         * @static
+         * @param {dd.InventoryItem} message InventoryItem
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        InventoryItem.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.item = null;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.quantity = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.quantity = options.longs === String ? "0" : 0;
+            }
+            if (message.item != null && message.hasOwnProperty("item"))
+                object.item = $root.dd.Item.toObject(message.item, options);
+            if (message.quantity != null && message.hasOwnProperty("quantity"))
+                if (typeof message.quantity === "number")
+                    object.quantity = options.longs === String ? String(message.quantity) : message.quantity;
+                else
+                    object.quantity = options.longs === String ? $util.Long.prototype.toString.call(message.quantity) : options.longs === Number ? new $util.LongBits(message.quantity.low >>> 0, message.quantity.high >>> 0).toNumber() : message.quantity;
+            return object;
+        };
+
+        /**
+         * Converts this InventoryItem to JSON.
+         * @function toJSON
+         * @memberof dd.InventoryItem
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        InventoryItem.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return InventoryItem;
+    })();
+
+    dd.Attribute = (function() {
+
+        /**
+         * Properties of an Attribute.
+         * @memberof dd
+         * @interface IAttribute
+         * @property {string|null} [name] Attribute name
+         * @property {number|null} [type] Attribute type
+         * @property {string|null} [data] Attribute data
+         */
+
+        /**
+         * Constructs a new Attribute.
+         * @memberof dd
+         * @classdesc Represents an Attribute.
+         * @implements IAttribute
+         * @constructor
+         * @param {dd.IAttribute=} [properties] Properties to set
+         */
+        function Attribute(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Attribute name.
+         * @member {string} name
+         * @memberof dd.Attribute
+         * @instance
+         */
+        Attribute.prototype.name = "";
+
+        /**
+         * Attribute type.
+         * @member {number} type
+         * @memberof dd.Attribute
+         * @instance
+         */
+        Attribute.prototype.type = 0;
+
+        /**
+         * Attribute data.
+         * @member {string} data
+         * @memberof dd.Attribute
+         * @instance
+         */
+        Attribute.prototype.data = "";
+
+        /**
+         * Creates a new Attribute instance using the specified properties.
+         * @function create
+         * @memberof dd.Attribute
+         * @static
+         * @param {dd.IAttribute=} [properties] Properties to set
+         * @returns {dd.Attribute} Attribute instance
+         */
+        Attribute.create = function create(properties) {
+            return new Attribute(properties);
+        };
+
+        /**
+         * Encodes the specified Attribute message. Does not implicitly {@link dd.Attribute.verify|verify} messages.
+         * @function encode
+         * @memberof dd.Attribute
+         * @static
+         * @param {dd.IAttribute} message Attribute message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Attribute.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.name);
+            if (message.type != null && message.hasOwnProperty("type"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.type);
+            if (message.data != null && message.hasOwnProperty("data"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.data);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified Attribute message, length delimited. Does not implicitly {@link dd.Attribute.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.Attribute
+         * @static
+         * @param {dd.IAttribute} message Attribute message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Attribute.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an Attribute message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.Attribute
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.Attribute} Attribute
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Attribute.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.Attribute();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.name = reader.string();
+                    break;
+                case 2:
+                    message.type = reader.int32();
+                    break;
+                case 3:
+                    message.data = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an Attribute message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.Attribute
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.Attribute} Attribute
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Attribute.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an Attribute message.
+         * @function verify
+         * @memberof dd.Attribute
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Attribute.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.type != null && message.hasOwnProperty("type"))
+                if (!$util.isInteger(message.type))
+                    return "type: integer expected";
+            if (message.data != null && message.hasOwnProperty("data"))
+                if (!$util.isString(message.data))
+                    return "data: string expected";
+            return null;
+        };
+
+        /**
+         * Creates an Attribute message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.Attribute
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.Attribute} Attribute
+         */
+        Attribute.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.Attribute)
+                return object;
+            var message = new $root.dd.Attribute();
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.type != null)
+                message.type = object.type | 0;
+            if (object.data != null)
+                message.data = String(object.data);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an Attribute message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.Attribute
+         * @static
+         * @param {dd.Attribute} message Attribute
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Attribute.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.name = "";
+                object.type = 0;
+                object.data = "";
+            }
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.type != null && message.hasOwnProperty("type"))
+                object.type = message.type;
+            if (message.data != null && message.hasOwnProperty("data"))
+                object.data = message.data;
+            return object;
+        };
+
+        /**
+         * Converts this Attribute to JSON.
+         * @function toJSON
+         * @memberof dd.Attribute
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Attribute.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return Attribute;
+    })();
+
+    dd.CampaignUser = (function() {
+
+        /**
+         * Properties of a CampaignUser.
+         * @memberof dd
+         * @interface ICampaignUser
+         * @property {dd.IUser|null} [user] CampaignUser user
+         * @property {boolean|null} [isAdmin] CampaignUser isAdmin
+         */
+
+        /**
+         * Constructs a new CampaignUser.
+         * @memberof dd
+         * @classdesc Represents a CampaignUser.
+         * @implements ICampaignUser
+         * @constructor
+         * @param {dd.ICampaignUser=} [properties] Properties to set
+         */
+        function CampaignUser(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * CampaignUser user.
+         * @member {dd.IUser|null|undefined} user
+         * @memberof dd.CampaignUser
+         * @instance
+         */
+        CampaignUser.prototype.user = null;
+
+        /**
+         * CampaignUser isAdmin.
+         * @member {boolean} isAdmin
+         * @memberof dd.CampaignUser
+         * @instance
+         */
+        CampaignUser.prototype.isAdmin = false;
+
+        /**
+         * Creates a new CampaignUser instance using the specified properties.
+         * @function create
+         * @memberof dd.CampaignUser
+         * @static
+         * @param {dd.ICampaignUser=} [properties] Properties to set
+         * @returns {dd.CampaignUser} CampaignUser instance
+         */
+        CampaignUser.create = function create(properties) {
+            return new CampaignUser(properties);
+        };
+
+        /**
+         * Encodes the specified CampaignUser message. Does not implicitly {@link dd.CampaignUser.verify|verify} messages.
+         * @function encode
+         * @memberof dd.CampaignUser
+         * @static
+         * @param {dd.ICampaignUser} message CampaignUser message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CampaignUser.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.user != null && message.hasOwnProperty("user"))
+                $root.dd.User.encode(message.user, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.isAdmin != null && message.hasOwnProperty("isAdmin"))
+                writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isAdmin);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified CampaignUser message, length delimited. Does not implicitly {@link dd.CampaignUser.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.CampaignUser
+         * @static
+         * @param {dd.ICampaignUser} message CampaignUser message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        CampaignUser.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a CampaignUser message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.CampaignUser
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.CampaignUser} CampaignUser
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CampaignUser.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.CampaignUser();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.user = $root.dd.User.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.isAdmin = reader.bool();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a CampaignUser message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.CampaignUser
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.CampaignUser} CampaignUser
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        CampaignUser.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a CampaignUser message.
+         * @function verify
+         * @memberof dd.CampaignUser
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        CampaignUser.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.user != null && message.hasOwnProperty("user")) {
+                var error = $root.dd.User.verify(message.user);
+                if (error)
+                    return "user." + error;
+            }
+            if (message.isAdmin != null && message.hasOwnProperty("isAdmin"))
+                if (typeof message.isAdmin !== "boolean")
+                    return "isAdmin: boolean expected";
+            return null;
+        };
+
+        /**
+         * Creates a CampaignUser message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.CampaignUser
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.CampaignUser} CampaignUser
+         */
+        CampaignUser.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.CampaignUser)
+                return object;
+            var message = new $root.dd.CampaignUser();
+            if (object.user != null) {
+                if (typeof object.user !== "object")
+                    throw TypeError(".dd.CampaignUser.user: object expected");
+                message.user = $root.dd.User.fromObject(object.user);
+            }
+            if (object.isAdmin != null)
+                message.isAdmin = Boolean(object.isAdmin);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a CampaignUser message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.CampaignUser
+         * @static
+         * @param {dd.CampaignUser} message CampaignUser
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        CampaignUser.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.user = null;
+                object.isAdmin = false;
+            }
+            if (message.user != null && message.hasOwnProperty("user"))
+                object.user = $root.dd.User.toObject(message.user, options);
+            if (message.isAdmin != null && message.hasOwnProperty("isAdmin"))
+                object.isAdmin = message.isAdmin;
+            return object;
+        };
+
+        /**
+         * Converts this CampaignUser to JSON.
+         * @function toJSON
+         * @memberof dd.CampaignUser
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        CampaignUser.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return CampaignUser;
+    })();
+
+    dd.HealthPreset = (function() {
+
+        /**
+         * Properties of a HealthPreset.
+         * @memberof dd
+         * @interface IHealthPreset
+         * @property {number|null} [mode] HealthPreset mode
+         * @property {number|Long|null} [max] HealthPreset max
+         */
+
+        /**
+         * Constructs a new HealthPreset.
+         * @memberof dd
+         * @classdesc Represents a HealthPreset.
+         * @implements IHealthPreset
+         * @constructor
+         * @param {dd.IHealthPreset=} [properties] Properties to set
+         */
+        function HealthPreset(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * HealthPreset mode.
+         * @member {number} mode
+         * @memberof dd.HealthPreset
+         * @instance
+         */
+        HealthPreset.prototype.mode = 0;
+
+        /**
+         * HealthPreset max.
+         * @member {number|Long} max
+         * @memberof dd.HealthPreset
+         * @instance
+         */
+        HealthPreset.prototype.max = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * Creates a new HealthPreset instance using the specified properties.
+         * @function create
+         * @memberof dd.HealthPreset
+         * @static
+         * @param {dd.IHealthPreset=} [properties] Properties to set
+         * @returns {dd.HealthPreset} HealthPreset instance
+         */
+        HealthPreset.create = function create(properties) {
+            return new HealthPreset(properties);
+        };
+
+        /**
+         * Encodes the specified HealthPreset message. Does not implicitly {@link dd.HealthPreset.verify|verify} messages.
+         * @function encode
+         * @memberof dd.HealthPreset
+         * @static
+         * @param {dd.IHealthPreset} message HealthPreset message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        HealthPreset.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.mode != null && message.hasOwnProperty("mode"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.mode);
+            if (message.max != null && message.hasOwnProperty("max"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int64(message.max);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified HealthPreset message, length delimited. Does not implicitly {@link dd.HealthPreset.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.HealthPreset
+         * @static
+         * @param {dd.IHealthPreset} message HealthPreset message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        HealthPreset.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a HealthPreset message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.HealthPreset
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.HealthPreset} HealthPreset
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        HealthPreset.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.HealthPreset();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.mode = reader.int32();
+                    break;
+                case 2:
+                    message.max = reader.int64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a HealthPreset message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.HealthPreset
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.HealthPreset} HealthPreset
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        HealthPreset.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a HealthPreset message.
+         * @function verify
+         * @memberof dd.HealthPreset
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        HealthPreset.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.mode != null && message.hasOwnProperty("mode"))
+                if (!$util.isInteger(message.mode))
+                    return "mode: integer expected";
+            if (message.max != null && message.hasOwnProperty("max"))
+                if (!$util.isInteger(message.max) && !(message.max && $util.isInteger(message.max.low) && $util.isInteger(message.max.high)))
+                    return "max: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a HealthPreset message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.HealthPreset
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.HealthPreset} HealthPreset
+         */
+        HealthPreset.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.HealthPreset)
+                return object;
+            var message = new $root.dd.HealthPreset();
+            if (object.mode != null)
+                message.mode = object.mode | 0;
+            if (object.max != null)
+                if ($util.Long)
+                    (message.max = $util.Long.fromValue(object.max)).unsigned = false;
+                else if (typeof object.max === "string")
+                    message.max = parseInt(object.max, 10);
+                else if (typeof object.max === "number")
+                    message.max = object.max;
+                else if (typeof object.max === "object")
+                    message.max = new $util.LongBits(object.max.low >>> 0, object.max.high >>> 0).toNumber();
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a HealthPreset message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.HealthPreset
+         * @static
+         * @param {dd.HealthPreset} message HealthPreset
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        HealthPreset.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.mode = 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.max = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.max = options.longs === String ? "0" : 0;
+            }
+            if (message.mode != null && message.hasOwnProperty("mode"))
+                object.mode = message.mode;
+            if (message.max != null && message.hasOwnProperty("max"))
+                if (typeof message.max === "number")
+                    object.max = options.longs === String ? String(message.max) : message.max;
+                else
+                    object.max = options.longs === String ? $util.Long.prototype.toString.call(message.max) : options.longs === Number ? new $util.LongBits(message.max.low >>> 0, message.max.high >>> 0).toNumber() : message.max;
+            return object;
+        };
+
+        /**
+         * Converts this HealthPreset to JSON.
+         * @function toJSON
+         * @memberof dd.HealthPreset
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        HealthPreset.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return HealthPreset;
+    })();
+
+    dd.Health = (function() {
+
+        /**
+         * Properties of a Health.
+         * @memberof dd
+         * @interface IHealth
+         * @property {number|null} [mode] Health mode
+         * @property {dd.Health.INormal|null} [normal] Health normal
+         * @property {dd.Health.IMultiBar|null} [multiBar] Health multiBar
+         */
+
+        /**
+         * Constructs a new Health.
+         * @memberof dd
+         * @classdesc Represents a Health.
+         * @implements IHealth
+         * @constructor
+         * @param {dd.IHealth=} [properties] Properties to set
+         */
+        function Health(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Health mode.
+         * @member {number} mode
+         * @memberof dd.Health
+         * @instance
+         */
+        Health.prototype.mode = 0;
+
+        /**
+         * Health normal.
+         * @member {dd.Health.INormal|null|undefined} normal
+         * @memberof dd.Health
+         * @instance
+         */
+        Health.prototype.normal = null;
+
+        /**
+         * Health multiBar.
+         * @member {dd.Health.IMultiBar|null|undefined} multiBar
+         * @memberof dd.Health
+         * @instance
+         */
+        Health.prototype.multiBar = null;
+
+        /**
+         * Creates a new Health instance using the specified properties.
+         * @function create
+         * @memberof dd.Health
+         * @static
+         * @param {dd.IHealth=} [properties] Properties to set
+         * @returns {dd.Health} Health instance
+         */
+        Health.create = function create(properties) {
+            return new Health(properties);
+        };
+
+        /**
+         * Encodes the specified Health message. Does not implicitly {@link dd.Health.verify|verify} messages.
+         * @function encode
+         * @memberof dd.Health
+         * @static
+         * @param {dd.IHealth} message Health message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Health.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.mode != null && message.hasOwnProperty("mode"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.mode);
+            if (message.normal != null && message.hasOwnProperty("normal"))
+                $root.dd.Health.Normal.encode(message.normal, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            if (message.multiBar != null && message.hasOwnProperty("multiBar"))
+                $root.dd.Health.MultiBar.encode(message.multiBar, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified Health message, length delimited. Does not implicitly {@link dd.Health.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof dd.Health
+         * @static
+         * @param {dd.IHealth} message Health message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Health.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a Health message from the specified reader or buffer.
+         * @function decode
+         * @memberof dd.Health
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {dd.Health} Health
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Health.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.Health();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.mode = reader.int32();
+                    break;
+                case 2:
+                    message.normal = $root.dd.Health.Normal.decode(reader, reader.uint32());
+                    break;
+                case 3:
+                    message.multiBar = $root.dd.Health.MultiBar.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a Health message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof dd.Health
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {dd.Health} Health
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Health.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a Health message.
+         * @function verify
+         * @memberof dd.Health
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Health.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.mode != null && message.hasOwnProperty("mode"))
+                if (!$util.isInteger(message.mode))
+                    return "mode: integer expected";
+            if (message.normal != null && message.hasOwnProperty("normal")) {
+                var error = $root.dd.Health.Normal.verify(message.normal);
+                if (error)
+                    return "normal." + error;
+            }
+            if (message.multiBar != null && message.hasOwnProperty("multiBar")) {
+                var error = $root.dd.Health.MultiBar.verify(message.multiBar);
+                if (error)
+                    return "multiBar." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a Health message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof dd.Health
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {dd.Health} Health
+         */
+        Health.fromObject = function fromObject(object) {
+            if (object instanceof $root.dd.Health)
+                return object;
+            var message = new $root.dd.Health();
+            if (object.mode != null)
+                message.mode = object.mode | 0;
+            if (object.normal != null) {
+                if (typeof object.normal !== "object")
+                    throw TypeError(".dd.Health.normal: object expected");
+                message.normal = $root.dd.Health.Normal.fromObject(object.normal);
+            }
+            if (object.multiBar != null) {
+                if (typeof object.multiBar !== "object")
+                    throw TypeError(".dd.Health.multiBar: object expected");
+                message.multiBar = $root.dd.Health.MultiBar.fromObject(object.multiBar);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a Health message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof dd.Health
+         * @static
+         * @param {dd.Health} message Health
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Health.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.mode = 0;
+                object.normal = null;
+                object.multiBar = null;
+            }
+            if (message.mode != null && message.hasOwnProperty("mode"))
+                object.mode = message.mode;
+            if (message.normal != null && message.hasOwnProperty("normal"))
+                object.normal = $root.dd.Health.Normal.toObject(message.normal, options);
+            if (message.multiBar != null && message.hasOwnProperty("multiBar"))
+                object.multiBar = $root.dd.Health.MultiBar.toObject(message.multiBar, options);
+            return object;
+        };
+
+        /**
+         * Converts this Health to JSON.
+         * @function toJSON
+         * @memberof dd.Health
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Health.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        Health.Normal = (function() {
+
+            /**
+             * Properties of a Normal.
+             * @memberof dd.Health
+             * @interface INormal
+             * @property {number|Long|null} [max] Normal max
+             * @property {number|Long|null} [current] Normal current
+             * @property {number|Long|null} [temp] Normal temp
+             */
+
+            /**
+             * Constructs a new Normal.
+             * @memberof dd.Health
+             * @classdesc Represents a Normal.
+             * @implements INormal
+             * @constructor
+             * @param {dd.Health.INormal=} [properties] Properties to set
+             */
+            function Normal(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Normal max.
+             * @member {number|Long} max
+             * @memberof dd.Health.Normal
+             * @instance
+             */
+            Normal.prototype.max = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+            /**
+             * Normal current.
+             * @member {number|Long} current
+             * @memberof dd.Health.Normal
+             * @instance
+             */
+            Normal.prototype.current = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+            /**
+             * Normal temp.
+             * @member {number|Long} temp
+             * @memberof dd.Health.Normal
+             * @instance
+             */
+            Normal.prototype.temp = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+            /**
+             * Creates a new Normal instance using the specified properties.
+             * @function create
+             * @memberof dd.Health.Normal
+             * @static
+             * @param {dd.Health.INormal=} [properties] Properties to set
+             * @returns {dd.Health.Normal} Normal instance
+             */
+            Normal.create = function create(properties) {
+                return new Normal(properties);
+            };
+
+            /**
+             * Encodes the specified Normal message. Does not implicitly {@link dd.Health.Normal.verify|verify} messages.
+             * @function encode
+             * @memberof dd.Health.Normal
+             * @static
+             * @param {dd.Health.INormal} message Normal message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Normal.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.max != null && message.hasOwnProperty("max"))
+                    writer.uint32(/* id 1, wireType 0 =*/8).int64(message.max);
+                if (message.current != null && message.hasOwnProperty("current"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).int64(message.current);
+                if (message.temp != null && message.hasOwnProperty("temp"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).int64(message.temp);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Normal message, length delimited. Does not implicitly {@link dd.Health.Normal.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof dd.Health.Normal
+             * @static
+             * @param {dd.Health.INormal} message Normal message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Normal.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+
+            /**
+             * Decodes a Normal message from the specified reader or buffer.
+             * @function decode
+             * @memberof dd.Health.Normal
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {dd.Health.Normal} Normal
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Normal.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.Health.Normal();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.max = reader.int64();
+                        break;
+                    case 2:
+                        message.current = reader.int64();
+                        break;
+                    case 3:
+                        message.temp = reader.int64();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Decodes a Normal message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof dd.Health.Normal
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {dd.Health.Normal} Normal
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Normal.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Normal message.
+             * @function verify
+             * @memberof dd.Health.Normal
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Normal.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.max != null && message.hasOwnProperty("max"))
+                    if (!$util.isInteger(message.max) && !(message.max && $util.isInteger(message.max.low) && $util.isInteger(message.max.high)))
+                        return "max: integer|Long expected";
+                if (message.current != null && message.hasOwnProperty("current"))
+                    if (!$util.isInteger(message.current) && !(message.current && $util.isInteger(message.current.low) && $util.isInteger(message.current.high)))
+                        return "current: integer|Long expected";
+                if (message.temp != null && message.hasOwnProperty("temp"))
+                    if (!$util.isInteger(message.temp) && !(message.temp && $util.isInteger(message.temp.low) && $util.isInteger(message.temp.high)))
+                        return "temp: integer|Long expected";
+                return null;
+            };
+
+            /**
+             * Creates a Normal message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof dd.Health.Normal
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {dd.Health.Normal} Normal
+             */
+            Normal.fromObject = function fromObject(object) {
+                if (object instanceof $root.dd.Health.Normal)
+                    return object;
+                var message = new $root.dd.Health.Normal();
+                if (object.max != null)
+                    if ($util.Long)
+                        (message.max = $util.Long.fromValue(object.max)).unsigned = false;
+                    else if (typeof object.max === "string")
+                        message.max = parseInt(object.max, 10);
+                    else if (typeof object.max === "number")
+                        message.max = object.max;
+                    else if (typeof object.max === "object")
+                        message.max = new $util.LongBits(object.max.low >>> 0, object.max.high >>> 0).toNumber();
+                if (object.current != null)
+                    if ($util.Long)
+                        (message.current = $util.Long.fromValue(object.current)).unsigned = false;
+                    else if (typeof object.current === "string")
+                        message.current = parseInt(object.current, 10);
+                    else if (typeof object.current === "number")
+                        message.current = object.current;
+                    else if (typeof object.current === "object")
+                        message.current = new $util.LongBits(object.current.low >>> 0, object.current.high >>> 0).toNumber();
+                if (object.temp != null)
+                    if ($util.Long)
+                        (message.temp = $util.Long.fromValue(object.temp)).unsigned = false;
+                    else if (typeof object.temp === "string")
+                        message.temp = parseInt(object.temp, 10);
+                    else if (typeof object.temp === "number")
+                        message.temp = object.temp;
+                    else if (typeof object.temp === "object")
+                        message.temp = new $util.LongBits(object.temp.low >>> 0, object.temp.high >>> 0).toNumber();
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Normal message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof dd.Health.Normal
+             * @static
+             * @param {dd.Health.Normal} message Normal
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Normal.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, false);
+                        object.max = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.max = options.longs === String ? "0" : 0;
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, false);
+                        object.current = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.current = options.longs === String ? "0" : 0;
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, false);
+                        object.temp = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.temp = options.longs === String ? "0" : 0;
+                }
+                if (message.max != null && message.hasOwnProperty("max"))
+                    if (typeof message.max === "number")
+                        object.max = options.longs === String ? String(message.max) : message.max;
+                    else
+                        object.max = options.longs === String ? $util.Long.prototype.toString.call(message.max) : options.longs === Number ? new $util.LongBits(message.max.low >>> 0, message.max.high >>> 0).toNumber() : message.max;
+                if (message.current != null && message.hasOwnProperty("current"))
+                    if (typeof message.current === "number")
+                        object.current = options.longs === String ? String(message.current) : message.current;
+                    else
+                        object.current = options.longs === String ? $util.Long.prototype.toString.call(message.current) : options.longs === Number ? new $util.LongBits(message.current.low >>> 0, message.current.high >>> 0).toNumber() : message.current;
+                if (message.temp != null && message.hasOwnProperty("temp"))
+                    if (typeof message.temp === "number")
+                        object.temp = options.longs === String ? String(message.temp) : message.temp;
+                    else
+                        object.temp = options.longs === String ? $util.Long.prototype.toString.call(message.temp) : options.longs === Number ? new $util.LongBits(message.temp.low >>> 0, message.temp.high >>> 0).toNumber() : message.temp;
+                return object;
+            };
+
+            /**
+             * Converts this Normal to JSON.
+             * @function toJSON
+             * @memberof dd.Health.Normal
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Normal.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return Normal;
+        })();
+
+        Health.MultiBar = (function() {
+
+            /**
+             * Properties of a MultiBar.
+             * @memberof dd.Health
+             * @interface IMultiBar
+             * @property {Array.<number|Long>|null} [bars] MultiBar bars
+             * @property {number|Long|null} [current] MultiBar current
+             */
+
+            /**
+             * Constructs a new MultiBar.
+             * @memberof dd.Health
+             * @classdesc Represents a MultiBar.
+             * @implements IMultiBar
+             * @constructor
+             * @param {dd.Health.IMultiBar=} [properties] Properties to set
+             */
+            function MultiBar(properties) {
+                this.bars = [];
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * MultiBar bars.
+             * @member {Array.<number|Long>} bars
+             * @memberof dd.Health.MultiBar
+             * @instance
+             */
+            MultiBar.prototype.bars = $util.emptyArray;
+
+            /**
+             * MultiBar current.
+             * @member {number|Long} current
+             * @memberof dd.Health.MultiBar
+             * @instance
+             */
+            MultiBar.prototype.current = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+            /**
+             * Creates a new MultiBar instance using the specified properties.
+             * @function create
+             * @memberof dd.Health.MultiBar
+             * @static
+             * @param {dd.Health.IMultiBar=} [properties] Properties to set
+             * @returns {dd.Health.MultiBar} MultiBar instance
+             */
+            MultiBar.create = function create(properties) {
+                return new MultiBar(properties);
+            };
+
+            /**
+             * Encodes the specified MultiBar message. Does not implicitly {@link dd.Health.MultiBar.verify|verify} messages.
+             * @function encode
+             * @memberof dd.Health.MultiBar
+             * @static
+             * @param {dd.Health.IMultiBar} message MultiBar message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            MultiBar.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.bars != null && message.bars.length) {
+                    writer.uint32(/* id 1, wireType 2 =*/10).fork();
+                    for (var i = 0; i < message.bars.length; ++i)
+                        writer.int64(message.bars[i]);
+                    writer.ldelim();
+                }
+                if (message.current != null && message.hasOwnProperty("current"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).int64(message.current);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified MultiBar message, length delimited. Does not implicitly {@link dd.Health.MultiBar.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof dd.Health.MultiBar
+             * @static
+             * @param {dd.Health.IMultiBar} message MultiBar message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            MultiBar.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+
+            /**
+             * Decodes a MultiBar message from the specified reader or buffer.
+             * @function decode
+             * @memberof dd.Health.MultiBar
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {dd.Health.MultiBar} MultiBar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            MultiBar.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.dd.Health.MultiBar();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        if (!(message.bars && message.bars.length))
+                            message.bars = [];
+                        if ((tag & 7) === 2) {
+                            var end2 = reader.uint32() + reader.pos;
+                            while (reader.pos < end2)
+                                message.bars.push(reader.int64());
+                        } else
+                            message.bars.push(reader.int64());
+                        break;
+                    case 2:
+                        message.current = reader.int64();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Decodes a MultiBar message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof dd.Health.MultiBar
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {dd.Health.MultiBar} MultiBar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            MultiBar.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a MultiBar message.
+             * @function verify
+             * @memberof dd.Health.MultiBar
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            MultiBar.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.bars != null && message.hasOwnProperty("bars")) {
+                    if (!Array.isArray(message.bars))
+                        return "bars: array expected";
+                    for (var i = 0; i < message.bars.length; ++i)
+                        if (!$util.isInteger(message.bars[i]) && !(message.bars[i] && $util.isInteger(message.bars[i].low) && $util.isInteger(message.bars[i].high)))
+                            return "bars: integer|Long[] expected";
+                }
+                if (message.current != null && message.hasOwnProperty("current"))
+                    if (!$util.isInteger(message.current) && !(message.current && $util.isInteger(message.current.low) && $util.isInteger(message.current.high)))
+                        return "current: integer|Long expected";
+                return null;
+            };
+
+            /**
+             * Creates a MultiBar message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof dd.Health.MultiBar
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {dd.Health.MultiBar} MultiBar
+             */
+            MultiBar.fromObject = function fromObject(object) {
+                if (object instanceof $root.dd.Health.MultiBar)
+                    return object;
+                var message = new $root.dd.Health.MultiBar();
+                if (object.bars) {
+                    if (!Array.isArray(object.bars))
+                        throw TypeError(".dd.Health.MultiBar.bars: array expected");
+                    message.bars = [];
+                    for (var i = 0; i < object.bars.length; ++i)
+                        if ($util.Long)
+                            (message.bars[i] = $util.Long.fromValue(object.bars[i])).unsigned = false;
+                        else if (typeof object.bars[i] === "string")
+                            message.bars[i] = parseInt(object.bars[i], 10);
+                        else if (typeof object.bars[i] === "number")
+                            message.bars[i] = object.bars[i];
+                        else if (typeof object.bars[i] === "object")
+                            message.bars[i] = new $util.LongBits(object.bars[i].low >>> 0, object.bars[i].high >>> 0).toNumber();
+                }
+                if (object.current != null)
+                    if ($util.Long)
+                        (message.current = $util.Long.fromValue(object.current)).unsigned = false;
+                    else if (typeof object.current === "string")
+                        message.current = parseInt(object.current, 10);
+                    else if (typeof object.current === "number")
+                        message.current = object.current;
+                    else if (typeof object.current === "object")
+                        message.current = new $util.LongBits(object.current.low >>> 0, object.current.high >>> 0).toNumber();
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a MultiBar message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof dd.Health.MultiBar
+             * @static
+             * @param {dd.Health.MultiBar} message MultiBar
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            MultiBar.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.arrays || options.defaults)
+                    object.bars = [];
+                if (options.defaults)
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, false);
+                        object.current = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.current = options.longs === String ? "0" : 0;
+                if (message.bars && message.bars.length) {
+                    object.bars = [];
+                    for (var j = 0; j < message.bars.length; ++j)
+                        if (typeof message.bars[j] === "number")
+                            object.bars[j] = options.longs === String ? String(message.bars[j]) : message.bars[j];
+                        else
+                            object.bars[j] = options.longs === String ? $util.Long.prototype.toString.call(message.bars[j]) : options.longs === Number ? new $util.LongBits(message.bars[j].low >>> 0, message.bars[j].high >>> 0).toNumber() : message.bars[j];
+                }
+                if (message.current != null && message.hasOwnProperty("current"))
+                    if (typeof message.current === "number")
+                        object.current = options.longs === String ? String(message.current) : message.current;
+                    else
+                        object.current = options.longs === String ? $util.Long.prototype.toString.call(message.current) : options.longs === Number ? new $util.LongBits(message.current.low >>> 0, message.current.high >>> 0).toNumber() : message.current;
+                return object;
+            };
+
+            /**
+             * Converts this MultiBar to JSON.
+             * @function toJSON
+             * @memberof dd.Health.MultiBar
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            MultiBar.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return MultiBar;
+        })();
+
+        return Health;
     })();
 
     return dd;

@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
 import { ItemService } from 'src/app/item.service';
 import { Item } from 'src/app/item';
+import { dd } from 'src/dd.pb';
 
 @Component({
   selector: 'dd-item-manager',
@@ -22,7 +23,7 @@ export class ItemManagerComponent implements OnInit {
     private campaignService: CampaignService,
     private router: Router,
     private route: ActivatedRoute,
-    private itemService: ItemService,
+    private itemService: ItemService
   ) {}
 
   ngOnInit() {
@@ -71,7 +72,8 @@ export class ItemManagerComponent implements OnInit {
     if (this.search && this.search !== '') {
       return this.items.slice().filter((i) => {
         return (
-          i.name.toLowerCase().indexOf(this.search) !== -1 || i.description.toLowerCase().indexOf(this.search) !== -1
+          i.name.toLowerCase().indexOf(this.search) !== -1 ||
+          i.description.toLowerCase().indexOf(this.search) !== -1
         );
       });
     } else {
@@ -79,7 +81,10 @@ export class ItemManagerComponent implements OnInit {
     }
   }
 
-  public get filteredItems(): Item[] {
-    return this.searchedItems.slice(this.page * this.itemsPerPage - this.itemsPerPage, this.page * this.itemsPerPage);
+  public get filteredItems(): dd.IItem[] {
+    return this.searchedItems.slice(
+      this.page * this.itemsPerPage - this.itemsPerPage,
+      this.page * this.itemsPerPage
+    );
   }
 }

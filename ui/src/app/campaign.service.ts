@@ -3,21 +3,27 @@ import { Campaign } from './campaign';
 import { ItemService } from './item.service';
 import { EntityService } from './entity.service';
 import { Chance } from 'chance';
+import { RpcService } from './rpc.service';
+import { dd } from 'src/dd.pb';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CampaignService {
-  public campaign: Campaign = null;
+  public campaign: dd.ICampaign = null;
   public loadingCampaign = false;
 
-  constructor(private itemService: ItemService, private entityService: EntityService) {}
+  constructor(
+    private itemService: ItemService,
+    private entityService: EntityService,
+    private rpc: RpcService
+  ) {}
 
   public async setSelection(campaignId: string) {
     this.campaign = null;
     this.loadingCampaign = true;
     try {
-      const campaign = await this.getCampaign(campaignId);
+      const campaign = await this.rpc.dd.getCampaign({ id: campaignId });
       this.campaign = campaign;
     } catch (err) {
       console.log('LOAD ERR', err);
@@ -32,7 +38,7 @@ export class CampaignService {
     return Promise.all(
       ['1', '23', '54'].map((id) => {
         return this.getCampaign(id);
-      }),
+      })
     );
   }
 
@@ -54,25 +60,36 @@ export class CampaignService {
       entityPresets: [],
       users: [],
       entities: [],
-      experienceTable: [300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000],
+      experienceTable: [
+        300,
+        900,
+        2700,
+        6500,
+        14000,
+        23000,
+        34000,
+        48000,
+        64000,
+        85000,
+      ],
     };
 
     campaign.items = await Promise.all(
       ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].map((itemId) => {
         return this.itemService.getItem(itemId);
-      }),
+      })
     );
 
     campaign.entityPresets = await Promise.all(
       ['1', '2', '3'].map((entId) => {
         return this.entityService.getEntityPreset(campaign.id, entId);
-      }),
+      })
     );
 
     campaign.entities = await Promise.all(
       ['1', '2', '3', '2', '2', '2', '2', '2'].map((entId) => {
         return this.entityService.getEntity(campaign.id, entId);
-      }),
+      })
     );
 
     for (let i = 0; i < 7; i++) {
@@ -90,7 +107,9 @@ export class CampaignService {
     return campaign;
   }
 
-  public async saveCampaign(campaign: Campaign): Promise<Campaign> {
+  public async saveCampaign(
+    campaign: dd.ICampaignCore
+  ): Promise<dd.ICampaignCore> {
     await simulateDelay(250);
 
     return { ...campaign };

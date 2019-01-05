@@ -1,4 +1,5 @@
 package main
+
 import (
 	"context"
 	"dd-api/dd"
@@ -56,4 +57,3 @@ func (d *DD) CreateQuest(ctx context.Context, qr *dd.CreateQuestRequest) (*dd.Cr
 func (d *DD) EditQuest(ctx context.Context, eq *dd.EditQuestRequest) (*dd.Quest, error) {
 	return eq.Quest, nil
 }
-

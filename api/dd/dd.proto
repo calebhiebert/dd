@@ -124,7 +124,7 @@ message CampaignCore {
   string description = 3;
   string imageId = 4;
 
-  repeated uint64 experienceTable = 10;
+  repeated int64 experienceTable = 10;
 }
 
 message Campaign {
@@ -132,5 +132,99 @@ message Campaign {
   string name = 2;
   string description = 3;
   string imageId = 4;
-  repeated uint64 experienceTable = 10;
+  repeated int64 experienceTable = 10;
+  repeated CampaignUser users = 11;
+  repeated Item items = 12;
+  repeated EntityPreset entityPresets = 13;
+  repeated Entity entities = 14;
+}
+
+message Entity {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  User user = 4;
+  string imageId = 5;
+  repeated Attribute attributes = 6;
+  int64 xp = 7;
+  Inventory inventory = 8;
+  Health health = 9;
+  EntityPreset preset = 10;
+}
+
+message EntityPreset {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  User user = 4;
+  string imageId = 5;
+  repeated EntityAttribute attributes = 6;
+  Inventory inventory = 7;
+  HealthPreset health = 8;
+  bool playerCreatable = 9;
+}
+
+message EntityAttribute {
+  string name = 1;
+  string description = 2;
+  string imageId = 3;
+  string defaultValue = 4;
+  int32 type = 5;
+  repeated string options = 6;
+  int32 class = 7;
+  bool required = 8;
+  int64 max = 9;
+  int64 min = 10;
+}
+
+message Item {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string imageId = 4;
+  repeated Attribute attributes = 5;
+}
+
+message Inventory {
+  repeated InventoryItem items = 1;
+}
+
+message InventoryItem {
+  Item item = 1;
+  int64 quantity = 2;
+}
+
+message Attribute {
+  string name = 1;
+  int32 type = 2;
+  string data = 3;
+}
+
+message CampaignUser {
+  User user = 1;
+  bool isAdmin = 2;
+}
+
+message HealthPreset {
+  int32 mode = 1;
+  int64 max = 2;
+}
+
+message Health {
+  int32 mode = 1;
+
+  message Normal {
+    int64 max = 1;
+    int64 current = 2;
+    int64 temp = 3;
+  }
+
+  Normal normal = 2;
+
+  message MultiBar {
+    repeated int64 bars = 1;
+    int64 current = 2;
+  }
+
+  MultiBar multiBar = 3;
 }

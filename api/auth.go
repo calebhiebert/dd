@@ -1,4 +1,5 @@
 package main
+
 import (
 	"context"
 	"encoding/json"
@@ -129,4 +130,3 @@ func getTokenCache(token string) (*string, error) {
 
 	return &atCache.UserID, nil
 }
-

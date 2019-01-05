@@ -1,4 +1,5 @@
 package main
+
 import (
 	"context"
 	"dd-api/dd"
@@ -82,4 +83,3 @@ func (d *DD) CreateUser(ctx context.Context, cu *dd.CreateUserRequest) (*dd.User
 		CreatedAt: uint64(time.Now().Unix()),
 	}, nil
 }
-

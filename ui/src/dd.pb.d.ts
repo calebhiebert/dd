@@ -2089,6 +2089,18 @@ export namespace dd {
 
         /** Campaign experienceTable */
         experienceTable?: ((number|Long)[]|null);
+
+        /** Campaign users */
+        users?: (dd.ICampaignUser[]|null);
+
+        /** Campaign items */
+        items?: (dd.IItem[]|null);
+
+        /** Campaign entityPresets */
+        entityPresets?: (dd.IEntityPreset[]|null);
+
+        /** Campaign entities */
+        entities?: (dd.IEntity[]|null);
     }
 
     /** Represents a Campaign. */
@@ -2114,6 +2126,18 @@ export namespace dd {
 
         /** Campaign experienceTable. */
         public experienceTable: (number|Long)[];
+
+        /** Campaign users. */
+        public users: dd.ICampaignUser[];
+
+        /** Campaign items. */
+        public items: dd.IItem[];
+
+        /** Campaign entityPresets. */
+        public entityPresets: dd.IEntityPreset[];
+
+        /** Campaign entities. */
+        public entities: dd.IEntity[];
 
         /**
          * Creates a new Campaign instance using the specified properties.
@@ -2184,5 +2208,1328 @@ export namespace dd {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an Entity. */
+    interface IEntity {
+
+        /** Entity id */
+        id?: (string|null);
+
+        /** Entity name */
+        name?: (string|null);
+
+        /** Entity description */
+        description?: (string|null);
+
+        /** Entity user */
+        user?: (dd.IUser|null);
+
+        /** Entity imageId */
+        imageId?: (string|null);
+
+        /** Entity attributes */
+        attributes?: (dd.IAttribute[]|null);
+
+        /** Entity xp */
+        xp?: (number|Long|null);
+
+        /** Entity inventory */
+        inventory?: (dd.IInventory|null);
+
+        /** Entity health */
+        health?: (dd.IHealth|null);
+
+        /** Entity preset */
+        preset?: (dd.IEntityPreset|null);
+    }
+
+    /** Represents an Entity. */
+    class Entity implements IEntity {
+
+        /**
+         * Constructs a new Entity.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.IEntity);
+
+        /** Entity id. */
+        public id: string;
+
+        /** Entity name. */
+        public name: string;
+
+        /** Entity description. */
+        public description: string;
+
+        /** Entity user. */
+        public user?: (dd.IUser|null);
+
+        /** Entity imageId. */
+        public imageId: string;
+
+        /** Entity attributes. */
+        public attributes: dd.IAttribute[];
+
+        /** Entity xp. */
+        public xp: (number|Long);
+
+        /** Entity inventory. */
+        public inventory?: (dd.IInventory|null);
+
+        /** Entity health. */
+        public health?: (dd.IHealth|null);
+
+        /** Entity preset. */
+        public preset?: (dd.IEntityPreset|null);
+
+        /**
+         * Creates a new Entity instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns Entity instance
+         */
+        public static create(properties?: dd.IEntity): dd.Entity;
+
+        /**
+         * Encodes the specified Entity message. Does not implicitly {@link dd.Entity.verify|verify} messages.
+         * @param message Entity message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.IEntity, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified Entity message, length delimited. Does not implicitly {@link dd.Entity.verify|verify} messages.
+         * @param message Entity message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.IEntity, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes an Entity message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns Entity
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.Entity;
+
+        /**
+         * Decodes an Entity message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns Entity
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.Entity;
+
+        /**
+         * Verifies an Entity message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates an Entity message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns Entity
+         */
+        public static fromObject(object: { [k: string]: any }): dd.Entity;
+
+        /**
+         * Creates a plain object from an Entity message. Also converts values to other types if specified.
+         * @param message Entity
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.Entity, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this Entity to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an EntityPreset. */
+    interface IEntityPreset {
+
+        /** EntityPreset id */
+        id?: (string|null);
+
+        /** EntityPreset name */
+        name?: (string|null);
+
+        /** EntityPreset description */
+        description?: (string|null);
+
+        /** EntityPreset user */
+        user?: (dd.IUser|null);
+
+        /** EntityPreset imageId */
+        imageId?: (string|null);
+
+        /** EntityPreset attributes */
+        attributes?: (dd.IEntityAttribute[]|null);
+
+        /** EntityPreset inventory */
+        inventory?: (dd.IInventory|null);
+
+        /** EntityPreset health */
+        health?: (dd.IHealthPreset|null);
+
+        /** EntityPreset playerCreatable */
+        playerCreatable?: (boolean|null);
+    }
+
+    /** Represents an EntityPreset. */
+    class EntityPreset implements IEntityPreset {
+
+        /**
+         * Constructs a new EntityPreset.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.IEntityPreset);
+
+        /** EntityPreset id. */
+        public id: string;
+
+        /** EntityPreset name. */
+        public name: string;
+
+        /** EntityPreset description. */
+        public description: string;
+
+        /** EntityPreset user. */
+        public user?: (dd.IUser|null);
+
+        /** EntityPreset imageId. */
+        public imageId: string;
+
+        /** EntityPreset attributes. */
+        public attributes: dd.IEntityAttribute[];
+
+        /** EntityPreset inventory. */
+        public inventory?: (dd.IInventory|null);
+
+        /** EntityPreset health. */
+        public health?: (dd.IHealthPreset|null);
+
+        /** EntityPreset playerCreatable. */
+        public playerCreatable: boolean;
+
+        /**
+         * Creates a new EntityPreset instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns EntityPreset instance
+         */
+        public static create(properties?: dd.IEntityPreset): dd.EntityPreset;
+
+        /**
+         * Encodes the specified EntityPreset message. Does not implicitly {@link dd.EntityPreset.verify|verify} messages.
+         * @param message EntityPreset message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.IEntityPreset, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified EntityPreset message, length delimited. Does not implicitly {@link dd.EntityPreset.verify|verify} messages.
+         * @param message EntityPreset message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.IEntityPreset, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes an EntityPreset message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns EntityPreset
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.EntityPreset;
+
+        /**
+         * Decodes an EntityPreset message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns EntityPreset
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.EntityPreset;
+
+        /**
+         * Verifies an EntityPreset message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates an EntityPreset message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns EntityPreset
+         */
+        public static fromObject(object: { [k: string]: any }): dd.EntityPreset;
+
+        /**
+         * Creates a plain object from an EntityPreset message. Also converts values to other types if specified.
+         * @param message EntityPreset
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.EntityPreset, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this EntityPreset to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an EntityAttribute. */
+    interface IEntityAttribute {
+
+        /** EntityAttribute name */
+        name?: (string|null);
+
+        /** EntityAttribute description */
+        description?: (string|null);
+
+        /** EntityAttribute imageId */
+        imageId?: (string|null);
+
+        /** EntityAttribute defaultValue */
+        defaultValue?: (string|null);
+
+        /** EntityAttribute type */
+        type?: (number|null);
+
+        /** EntityAttribute options */
+        options?: (string[]|null);
+
+        /** EntityAttribute class */
+        "class"?: (number|null);
+
+        /** EntityAttribute required */
+        required?: (boolean|null);
+
+        /** EntityAttribute max */
+        max?: (number|Long|null);
+
+        /** EntityAttribute min */
+        min?: (number|Long|null);
+    }
+
+    /** Represents an EntityAttribute. */
+    class EntityAttribute implements IEntityAttribute {
+
+        /**
+         * Constructs a new EntityAttribute.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.IEntityAttribute);
+
+        /** EntityAttribute name. */
+        public name: string;
+
+        /** EntityAttribute description. */
+        public description: string;
+
+        /** EntityAttribute imageId. */
+        public imageId: string;
+
+        /** EntityAttribute defaultValue. */
+        public defaultValue: string;
+
+        /** EntityAttribute type. */
+        public type: number;
+
+        /** EntityAttribute options. */
+        public options: string[];
+
+        /** EntityAttribute class. */
+        public class: number;
+
+        /** EntityAttribute required. */
+        public required: boolean;
+
+        /** EntityAttribute max. */
+        public max: (number|Long);
+
+        /** EntityAttribute min. */
+        public min: (number|Long);
+
+        /**
+         * Creates a new EntityAttribute instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns EntityAttribute instance
+         */
+        public static create(properties?: dd.IEntityAttribute): dd.EntityAttribute;
+
+        /**
+         * Encodes the specified EntityAttribute message. Does not implicitly {@link dd.EntityAttribute.verify|verify} messages.
+         * @param message EntityAttribute message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.IEntityAttribute, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified EntityAttribute message, length delimited. Does not implicitly {@link dd.EntityAttribute.verify|verify} messages.
+         * @param message EntityAttribute message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.IEntityAttribute, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes an EntityAttribute message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns EntityAttribute
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.EntityAttribute;
+
+        /**
+         * Decodes an EntityAttribute message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns EntityAttribute
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.EntityAttribute;
+
+        /**
+         * Verifies an EntityAttribute message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates an EntityAttribute message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns EntityAttribute
+         */
+        public static fromObject(object: { [k: string]: any }): dd.EntityAttribute;
+
+        /**
+         * Creates a plain object from an EntityAttribute message. Also converts values to other types if specified.
+         * @param message EntityAttribute
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.EntityAttribute, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this EntityAttribute to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an Item. */
+    interface IItem {
+
+        /** Item id */
+        id?: (string|null);
+
+        /** Item name */
+        name?: (string|null);
+
+        /** Item description */
+        description?: (string|null);
+
+        /** Item imageId */
+        imageId?: (string|null);
+
+        /** Item attributes */
+        attributes?: (dd.IAttribute[]|null);
+    }
+
+    /** Represents an Item. */
+    class Item implements IItem {
+
+        /**
+         * Constructs a new Item.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.IItem);
+
+        /** Item id. */
+        public id: string;
+
+        /** Item name. */
+        public name: string;
+
+        /** Item description. */
+        public description: string;
+
+        /** Item imageId. */
+        public imageId: string;
+
+        /** Item attributes. */
+        public attributes: dd.IAttribute[];
+
+        /**
+         * Creates a new Item instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns Item instance
+         */
+        public static create(properties?: dd.IItem): dd.Item;
+
+        /**
+         * Encodes the specified Item message. Does not implicitly {@link dd.Item.verify|verify} messages.
+         * @param message Item message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.IItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified Item message, length delimited. Does not implicitly {@link dd.Item.verify|verify} messages.
+         * @param message Item message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.IItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes an Item message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns Item
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.Item;
+
+        /**
+         * Decodes an Item message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns Item
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.Item;
+
+        /**
+         * Verifies an Item message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates an Item message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns Item
+         */
+        public static fromObject(object: { [k: string]: any }): dd.Item;
+
+        /**
+         * Creates a plain object from an Item message. Also converts values to other types if specified.
+         * @param message Item
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.Item, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this Item to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an Inventory. */
+    interface IInventory {
+
+        /** Inventory items */
+        items?: (dd.IInventoryItem[]|null);
+    }
+
+    /** Represents an Inventory. */
+    class Inventory implements IInventory {
+
+        /**
+         * Constructs a new Inventory.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.IInventory);
+
+        /** Inventory items. */
+        public items: dd.IInventoryItem[];
+
+        /**
+         * Creates a new Inventory instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns Inventory instance
+         */
+        public static create(properties?: dd.IInventory): dd.Inventory;
+
+        /**
+         * Encodes the specified Inventory message. Does not implicitly {@link dd.Inventory.verify|verify} messages.
+         * @param message Inventory message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.IInventory, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified Inventory message, length delimited. Does not implicitly {@link dd.Inventory.verify|verify} messages.
+         * @param message Inventory message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.IInventory, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes an Inventory message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns Inventory
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.Inventory;
+
+        /**
+         * Decodes an Inventory message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns Inventory
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.Inventory;
+
+        /**
+         * Verifies an Inventory message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates an Inventory message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns Inventory
+         */
+        public static fromObject(object: { [k: string]: any }): dd.Inventory;
+
+        /**
+         * Creates a plain object from an Inventory message. Also converts values to other types if specified.
+         * @param message Inventory
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.Inventory, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this Inventory to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an InventoryItem. */
+    interface IInventoryItem {
+
+        /** InventoryItem item */
+        item?: (dd.IItem|null);
+
+        /** InventoryItem quantity */
+        quantity?: (number|Long|null);
+    }
+
+    /** Represents an InventoryItem. */
+    class InventoryItem implements IInventoryItem {
+
+        /**
+         * Constructs a new InventoryItem.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.IInventoryItem);
+
+        /** InventoryItem item. */
+        public item?: (dd.IItem|null);
+
+        /** InventoryItem quantity. */
+        public quantity: (number|Long);
+
+        /**
+         * Creates a new InventoryItem instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns InventoryItem instance
+         */
+        public static create(properties?: dd.IInventoryItem): dd.InventoryItem;
+
+        /**
+         * Encodes the specified InventoryItem message. Does not implicitly {@link dd.InventoryItem.verify|verify} messages.
+         * @param message InventoryItem message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.IInventoryItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified InventoryItem message, length delimited. Does not implicitly {@link dd.InventoryItem.verify|verify} messages.
+         * @param message InventoryItem message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.IInventoryItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes an InventoryItem message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns InventoryItem
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.InventoryItem;
+
+        /**
+         * Decodes an InventoryItem message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns InventoryItem
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.InventoryItem;
+
+        /**
+         * Verifies an InventoryItem message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates an InventoryItem message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns InventoryItem
+         */
+        public static fromObject(object: { [k: string]: any }): dd.InventoryItem;
+
+        /**
+         * Creates a plain object from an InventoryItem message. Also converts values to other types if specified.
+         * @param message InventoryItem
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.InventoryItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this InventoryItem to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an Attribute. */
+    interface IAttribute {
+
+        /** Attribute name */
+        name?: (string|null);
+
+        /** Attribute type */
+        type?: (number|null);
+
+        /** Attribute data */
+        data?: (string|null);
+    }
+
+    /** Represents an Attribute. */
+    class Attribute implements IAttribute {
+
+        /**
+         * Constructs a new Attribute.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.IAttribute);
+
+        /** Attribute name. */
+        public name: string;
+
+        /** Attribute type. */
+        public type: number;
+
+        /** Attribute data. */
+        public data: string;
+
+        /**
+         * Creates a new Attribute instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns Attribute instance
+         */
+        public static create(properties?: dd.IAttribute): dd.Attribute;
+
+        /**
+         * Encodes the specified Attribute message. Does not implicitly {@link dd.Attribute.verify|verify} messages.
+         * @param message Attribute message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.IAttribute, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified Attribute message, length delimited. Does not implicitly {@link dd.Attribute.verify|verify} messages.
+         * @param message Attribute message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.IAttribute, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes an Attribute message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns Attribute
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.Attribute;
+
+        /**
+         * Decodes an Attribute message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns Attribute
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.Attribute;
+
+        /**
+         * Verifies an Attribute message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates an Attribute message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns Attribute
+         */
+        public static fromObject(object: { [k: string]: any }): dd.Attribute;
+
+        /**
+         * Creates a plain object from an Attribute message. Also converts values to other types if specified.
+         * @param message Attribute
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.Attribute, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this Attribute to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a CampaignUser. */
+    interface ICampaignUser {
+
+        /** CampaignUser user */
+        user?: (dd.IUser|null);
+
+        /** CampaignUser isAdmin */
+        isAdmin?: (boolean|null);
+    }
+
+    /** Represents a CampaignUser. */
+    class CampaignUser implements ICampaignUser {
+
+        /**
+         * Constructs a new CampaignUser.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.ICampaignUser);
+
+        /** CampaignUser user. */
+        public user?: (dd.IUser|null);
+
+        /** CampaignUser isAdmin. */
+        public isAdmin: boolean;
+
+        /**
+         * Creates a new CampaignUser instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns CampaignUser instance
+         */
+        public static create(properties?: dd.ICampaignUser): dd.CampaignUser;
+
+        /**
+         * Encodes the specified CampaignUser message. Does not implicitly {@link dd.CampaignUser.verify|verify} messages.
+         * @param message CampaignUser message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.ICampaignUser, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified CampaignUser message, length delimited. Does not implicitly {@link dd.CampaignUser.verify|verify} messages.
+         * @param message CampaignUser message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.ICampaignUser, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a CampaignUser message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns CampaignUser
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.CampaignUser;
+
+        /**
+         * Decodes a CampaignUser message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns CampaignUser
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.CampaignUser;
+
+        /**
+         * Verifies a CampaignUser message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a CampaignUser message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns CampaignUser
+         */
+        public static fromObject(object: { [k: string]: any }): dd.CampaignUser;
+
+        /**
+         * Creates a plain object from a CampaignUser message. Also converts values to other types if specified.
+         * @param message CampaignUser
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.CampaignUser, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this CampaignUser to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a HealthPreset. */
+    interface IHealthPreset {
+
+        /** HealthPreset mode */
+        mode?: (number|null);
+
+        /** HealthPreset max */
+        max?: (number|Long|null);
+    }
+
+    /** Represents a HealthPreset. */
+    class HealthPreset implements IHealthPreset {
+
+        /**
+         * Constructs a new HealthPreset.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.IHealthPreset);
+
+        /** HealthPreset mode. */
+        public mode: number;
+
+        /** HealthPreset max. */
+        public max: (number|Long);
+
+        /**
+         * Creates a new HealthPreset instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns HealthPreset instance
+         */
+        public static create(properties?: dd.IHealthPreset): dd.HealthPreset;
+
+        /**
+         * Encodes the specified HealthPreset message. Does not implicitly {@link dd.HealthPreset.verify|verify} messages.
+         * @param message HealthPreset message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.IHealthPreset, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified HealthPreset message, length delimited. Does not implicitly {@link dd.HealthPreset.verify|verify} messages.
+         * @param message HealthPreset message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.IHealthPreset, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a HealthPreset message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns HealthPreset
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.HealthPreset;
+
+        /**
+         * Decodes a HealthPreset message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns HealthPreset
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.HealthPreset;
+
+        /**
+         * Verifies a HealthPreset message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a HealthPreset message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns HealthPreset
+         */
+        public static fromObject(object: { [k: string]: any }): dd.HealthPreset;
+
+        /**
+         * Creates a plain object from a HealthPreset message. Also converts values to other types if specified.
+         * @param message HealthPreset
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.HealthPreset, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this HealthPreset to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a Health. */
+    interface IHealth {
+
+        /** Health mode */
+        mode?: (number|null);
+
+        /** Health normal */
+        normal?: (dd.Health.INormal|null);
+
+        /** Health multiBar */
+        multiBar?: (dd.Health.IMultiBar|null);
+    }
+
+    /** Represents a Health. */
+    class Health implements IHealth {
+
+        /**
+         * Constructs a new Health.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: dd.IHealth);
+
+        /** Health mode. */
+        public mode: number;
+
+        /** Health normal. */
+        public normal?: (dd.Health.INormal|null);
+
+        /** Health multiBar. */
+        public multiBar?: (dd.Health.IMultiBar|null);
+
+        /**
+         * Creates a new Health instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns Health instance
+         */
+        public static create(properties?: dd.IHealth): dd.Health;
+
+        /**
+         * Encodes the specified Health message. Does not implicitly {@link dd.Health.verify|verify} messages.
+         * @param message Health message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: dd.IHealth, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified Health message, length delimited. Does not implicitly {@link dd.Health.verify|verify} messages.
+         * @param message Health message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: dd.IHealth, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a Health message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns Health
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.Health;
+
+        /**
+         * Decodes a Health message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns Health
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.Health;
+
+        /**
+         * Verifies a Health message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a Health message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns Health
+         */
+        public static fromObject(object: { [k: string]: any }): dd.Health;
+
+        /**
+         * Creates a plain object from a Health message. Also converts values to other types if specified.
+         * @param message Health
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: dd.Health, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this Health to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace Health {
+
+        /** Properties of a Normal. */
+        interface INormal {
+
+            /** Normal max */
+            max?: (number|Long|null);
+
+            /** Normal current */
+            current?: (number|Long|null);
+
+            /** Normal temp */
+            temp?: (number|Long|null);
+        }
+
+        /** Represents a Normal. */
+        class Normal implements INormal {
+
+            /**
+             * Constructs a new Normal.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: dd.Health.INormal);
+
+            /** Normal max. */
+            public max: (number|Long);
+
+            /** Normal current. */
+            public current: (number|Long);
+
+            /** Normal temp. */
+            public temp: (number|Long);
+
+            /**
+             * Creates a new Normal instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Normal instance
+             */
+            public static create(properties?: dd.Health.INormal): dd.Health.Normal;
+
+            /**
+             * Encodes the specified Normal message. Does not implicitly {@link dd.Health.Normal.verify|verify} messages.
+             * @param message Normal message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: dd.Health.INormal, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Normal message, length delimited. Does not implicitly {@link dd.Health.Normal.verify|verify} messages.
+             * @param message Normal message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: dd.Health.INormal, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Normal message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns Normal
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.Health.Normal;
+
+            /**
+             * Decodes a Normal message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns Normal
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.Health.Normal;
+
+            /**
+             * Verifies a Normal message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Normal message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Normal
+             */
+            public static fromObject(object: { [k: string]: any }): dd.Health.Normal;
+
+            /**
+             * Creates a plain object from a Normal message. Also converts values to other types if specified.
+             * @param message Normal
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: dd.Health.Normal, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Normal to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a MultiBar. */
+        interface IMultiBar {
+
+            /** MultiBar bars */
+            bars?: ((number|Long)[]|null);
+
+            /** MultiBar current */
+            current?: (number|Long|null);
+        }
+
+        /** Represents a MultiBar. */
+        class MultiBar implements IMultiBar {
+
+            /**
+             * Constructs a new MultiBar.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: dd.Health.IMultiBar);
+
+            /** MultiBar bars. */
+            public bars: (number|Long)[];
+
+            /** MultiBar current. */
+            public current: (number|Long);
+
+            /**
+             * Creates a new MultiBar instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MultiBar instance
+             */
+            public static create(properties?: dd.Health.IMultiBar): dd.Health.MultiBar;
+
+            /**
+             * Encodes the specified MultiBar message. Does not implicitly {@link dd.Health.MultiBar.verify|verify} messages.
+             * @param message MultiBar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: dd.Health.IMultiBar, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified MultiBar message, length delimited. Does not implicitly {@link dd.Health.MultiBar.verify|verify} messages.
+             * @param message MultiBar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: dd.Health.IMultiBar, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a MultiBar message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MultiBar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): dd.Health.MultiBar;
+
+            /**
+             * Decodes a MultiBar message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MultiBar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): dd.Health.MultiBar;
+
+            /**
+             * Verifies a MultiBar message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MultiBar message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MultiBar
+             */
+            public static fromObject(object: { [k: string]: any }): dd.Health.MultiBar;
+
+            /**
+             * Creates a plain object from a MultiBar message. Also converts values to other types if specified.
+             * @param message MultiBar
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: dd.Health.MultiBar, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MultiBar to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 }

@@ -9,7 +9,11 @@ import { Entity } from 'src/app/entity';
   styleUrls: ['./campaign-landing.component.scss'],
 })
 export class CampaignLandingComponent implements OnInit {
-  constructor(private campaignService: CampaignService, private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private campaignService: CampaignService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {}
 
@@ -18,7 +22,9 @@ export class CampaignLandingComponent implements OnInit {
   }
 
   public selectEntity(entity: Entity) {
-    this.router.navigate(['..', 'entities', entity.id], { relativeTo: this.route });
+    this.router.navigate(['..', 'entities', entity.id], {
+      relativeTo: this.route,
+    });
   }
 
   public get campaign() {

@@ -1,1 +1,91 @@
-<div class="container grid-xl"></div>
+<div class="container grid-xl" [formGroup]="formGroup">
+  <div class="columns">
+    <div class="column col-auto">
+      <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
+    </div>
+    <div class="column">
+      <div
+        class="form-group"
+        [ngClass]="{
+          'has-error': name.invalid && (name.dirty || name.touched)
+        }"
+      >
+        <label for="name" class="form-label">Name</label>
+        <input
+          type="text"
+          name="name"
+          formControlName="name"
+          id="name"
+          class="form-input"
+          placeholder="Name"
+        />
+        <p
+          class="form-input-hint"
+          *ngIf="
+            name.invalid && (name.dirty || name.touched) && name.errors.required
+          "
+        >
+          A name is required
+        </p>
+        <p
+          class="form-input-hint"
+          *ngIf="
+            name.invalid &&
+            (name.dirty || name.touched) &&
+            name.errors.minlength
+          "
+        >
+          The name cannot be shorter than 3 characters
+        </p>
+        <p
+          class="form-input-hint"
+          *ngIf="
+            name.invalid &&
+            (name.dirty || name.touched) &&
+            name.errors.maxlength
+          "
+        >
+          The name cannot be longer than 30 characters
+        </p>
+      </div>
+
+      <div
+        class="form-group"
+        [ngClass]="{
+          'has-error':
+            description.invalid && (description.dirty || description.touched)
+        }"
+      >
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          formControlName="description"
+          name="description"
+          id="description"
+          rows="5"
+          class="form-input"
+          placeholder="Description"
+        ></textarea>
+        <p
+          class="form-input-hint"
+          *ngIf="
+            description.invalid &&
+            (description.dirty || description.touched) &&
+            description.errors.required
+          "
+        >
+          A description is required
+        </p>
+        <p
+          class="form-input-hint"
+          *ngIf="
+            description.invalid &&
+            (description.dirty || description.touched) &&
+            description.errors.minlength
+          "
+        >
+          The description cannot be shorter than 3 characters
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

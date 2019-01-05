@@ -1,4 +1,5 @@
 package main
+
 import (
 	"context"
 	"fmt"
@@ -104,4 +105,3 @@ func main() {
 
 	http.ListenAndServe(":8080", cors)
 }
-
