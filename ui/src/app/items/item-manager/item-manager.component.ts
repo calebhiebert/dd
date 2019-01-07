@@ -4,7 +4,6 @@ import { FormControl } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
 import { ItemService } from 'src/app/item.service';
 import { Item } from 'src/app/item';
-import { dd } from 'src/dd.pb';
 
 @Component({
   selector: 'dd-item-manager',
@@ -81,7 +80,7 @@ export class ItemManagerComponent implements OnInit {
     }
   }
 
-  public get filteredItems(): dd.IItem[] {
+  public get filteredItems(): Item[] {
     return this.searchedItems.slice(
       this.page * this.itemsPerPage - this.itemsPerPage,
       this.page * this.itemsPerPage

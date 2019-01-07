@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Campaign } from 'src/app/campaign';
 import { CampaignService } from 'src/app/campaign.service';
-import { RpcService } from 'src/app/rpc.service';
-import { dd } from 'src/dd.pb';
 
 @Component({
   selector: 'dd-campaign-list',
@@ -13,12 +11,11 @@ import { dd } from 'src/dd.pb';
 export class CampaignListComponent implements OnInit {
   public loading = false;
   public creating = false;
-  public campaigns: dd.ICampaignCore[] = null;
+  public campaigns: Campaign[] = null;
 
   constructor(
     private campaignService: CampaignService,
-    private router: Router,
-    private rpc: RpcService
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -29,8 +26,8 @@ export class CampaignListComponent implements OnInit {
     this.creating = true;
 
     try {
-      const res = await this.rpc.dd.createCampaign({});
-      this.router.navigate(['campaign', 'manage', res.id, 'settings']);
+      // const res = await this.rpc.dd.createCampaign({});
+      // this.router.navigate(['campaign', 'manage', res.id, 'settings']);
     } catch (err) {
       console.log('CREATE ERR', err);
     }
@@ -46,8 +43,8 @@ export class CampaignListComponent implements OnInit {
   private async loadCampaigns() {
     this.loading = true;
     try {
-      const campaignResult = await this.rpc.dd.getCampaigns({});
-      this.campaigns = campaignResult.campaigns;
+      // const campaignResult = await this.rpc.dd.getCampaigns({});
+      // this.campaigns = campaignResult.campaigns;
     } catch (err) {
       console.log('ERR', err);
     }

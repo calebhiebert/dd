@@ -5,8 +5,7 @@ import { ConfirmationModalComponent } from 'src/app/confirmation-modal/confirmat
 import { EntityService } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { numberValidator } from '../dynamic-attribute-form/dynamic-attribute-form.component';
-import { RpcService } from 'src/app/rpc.service';
-import { dd } from 'src/dd.pb';
+import { EntityPreset } from 'src/app/entity';
 
 @Component({
   selector: 'dd-entity-form',
@@ -20,7 +19,7 @@ export class EntityFormComponent implements OnInit {
 
   public formGroup: FormGroup;
 
-  public entityPreset: dd.IEntityPreset;
+  public entityPreset: EntityPreset;
 
   @ViewChild('confirmmodal')
   public confirmModal: ConfirmationModalComponent;
@@ -29,8 +28,7 @@ export class EntityFormComponent implements OnInit {
     private entityService: EntityService,
     private campaignService: CampaignService,
     private router: Router,
-    private route: ActivatedRoute,
-    private rpc: RpcService
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -67,27 +65,24 @@ export class EntityFormComponent implements OnInit {
     this.formGroup.disable();
 
     try {
-      const preset = await this.rpc.dd.getEntityPreset({
-        id: id,
-      });
-
-      this.entityPreset = preset;
-
-      for (let i = 0; i < preset.attributes.length; i++) {
-        this.addAttribute();
-      }
-
-      setTimeout(() => {
-        this.formGroup.patchValue({
-          id: preset.id,
-          name: preset.name,
-          description: preset.description,
-          attributes: preset.attributes,
-          imageId: preset.imageId,
-          health: preset.health,
-          playerCreatable: preset.playerCreatable,
-        });
-      }, 1);
+      // const preset = await this.rpc.dd.getEntityPreset({
+      //   id: id,
+      // });
+      // this.entityPreset = preset;
+      // for (let i = 0; i < preset.attributes.length; i++) {
+      //   this.addAttribute();
+      // }
+      // setTimeout(() => {
+      //   this.formGroup.patchValue({
+      //     id: preset.id,
+      //     name: preset.name,
+      //     description: preset.description,
+      //     attributes: preset.attributes,
+      //     imageId: preset.imageId,
+      //     health: preset.health,
+      //     playerCreatable: preset.playerCreatable,
+      //   });
+      // }, 1);
     } catch (err) {
       console.log('LOAD ERR', err);
     }
@@ -107,30 +102,28 @@ export class EntityFormComponent implements OnInit {
       this.formGroup.disable();
       this.saving = true;
       try {
-        const res = await this.rpc.dd.editEntityPreset({
-          campaignId: this.campaignService.campaign.id,
-          id: this.entityPreset.id,
-          preset: {
-            id: this.entityPreset.id,
-            name: this.formGroup.value.name,
-            description: this.formGroup.value.description,
-            imageId: this.formGroup.value.imageId,
-            attributes: this.formGroup.value.attributes,
-            inventory: {
-              items: [],
-            },
-            health: {
-              mode: this.formGroup.value.health.mode,
-            },
-            playerCreatable: this.formGroup.value.playerCreatable,
-          },
-        });
-
-        console.log('CREATE ENT PRST', res);
-
-        this.router.navigate(['../../..', 'settings'], {
-          relativeTo: this.route,
-        });
+        // const res = await this.rpc.dd.editEntityPreset({
+        //   campaignId: this.campaignService.campaign.id,
+        //   id: this.entityPreset.id,
+        //   preset: {
+        //     id: this.entityPreset.id,
+        //     name: this.formGroup.value.name,
+        //     description: this.formGroup.value.description,
+        //     imageId: this.formGroup.value.imageId,
+        //     attributes: this.formGroup.value.attributes,
+        //     inventory: {
+        //       items: [],
+        //     },
+        //     health: {
+        //       mode: this.formGroup.value.health.mode,
+        //     },
+        //     playerCreatable: this.formGroup.value.playerCreatable,
+        //   },
+        // });
+        // console.log('CREATE ENT PRST', res);
+        // this.router.navigate(['../../..', 'settings'], {
+        //   relativeTo: this.route,
+        // });
       } catch (err) {
         console.log('SAVE ERR', err);
       }

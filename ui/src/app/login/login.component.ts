@@ -24,10 +24,13 @@ export class LoginComponent implements OnInit {
 
       try {
         const auth = await this.login.process(window.location.hash, null);
+
         this.login.saveToken(auth.accessToken);
         const loginSuccess = await this.login.isLoggedIn();
 
-        this.router.navigate(['home']);
+        if (loginSuccess) {
+          this.router.navigate(['home']);
+        }
       } catch (err) {
         console.log('Process ERR', err);
       }

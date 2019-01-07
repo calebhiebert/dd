@@ -1,24 +1,25 @@
 import { Injectable } from '@angular/core';
 import { WebAuth, Auth0DecodedHash, Auth0UserProfile } from 'auth0-js';
 import { environment } from 'src/environments/environment';
-import { dd } from 'src/dd.pb';
-import { RpcService } from './rpc.service';
-import Axios from 'axios';
+import { User } from './user';
+import { UserService, IUser } from './user.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
   private auth: WebAuth;
-  private userData: dd.IUser;
+  private userData: IUser;
 
-  public registrationRequired = false;
   public loginCompleted = false;
   public loginInProgress = false;
+  public authData: Auth0UserProfile;
 
   private loginPromise: Promise<boolean>;
 
-  constructor(private rpc: RpcService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   private getAuth(): WebAuth {
     if (this.auth === undefined) {
@@ -27,6 +28,7 @@ export class LoginService {
         clientID: environment.auth0ClientId,
         responseType: 'token',
         redirectUri: `${location.protocol}//${location.host}/callback`,
+        audience: 'https://dd.panchem.io',
       });
     }
 
@@ -46,11 +48,30 @@ export class LoginService {
         }
 
         try {
-          const authResult = await this.rpc.dd.auth({ token });
-          this.userData = authResult.user;
-          this.registrationRequired = authResult.reigstrationRequired;
+          const userInfo = await this.getUserInfo(token);
+          this.authData = userInfo;
+          let user;
+
+          try {
+            user = await this.userService.getUser(this.authData.sub);
+          } catch (err) {
+            if (err instanceof HttpErrorResponse) {
+              if (err.status === 404) {
+                this.loginInProgress = false;
+                resolve(false);
+                this.router.navigate(['register']);
+                return;
+              } else {
+                throw err;
+              }
+            } else {
+              throw err;
+            }
+          }
+
+          this.userData = user;
+
           this.loginCompleted = true;
-          this.saveToken(token);
           resolve(true);
         } catch (err) {
           console.log('AUTH ERR', err);
@@ -65,19 +86,26 @@ export class LoginService {
     return this.loginPromise;
   }
 
+  private getUserInfo(token: string): Promise<Auth0UserProfile> {
+    const auth = this.getAuth();
+
+    return new Promise((resolve, reject) => {
+      auth.client.userInfo(token, (err, res) => {
+        if (err !== null) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  }
+
   public saveToken(token: string) {
     localStorage.setItem('auth-token', token);
-    Axios.defaults.headers.common = {
-      Authorization: `Bearer ${token}`,
-    };
   }
 
   public loadToken(): string | null {
     const token = localStorage.getItem('auth-token');
-
-    Axios.defaults.headers.common = {
-      Authorization: `Bearer ${token}`,
-    };
     return token;
   }
 
@@ -116,15 +144,19 @@ export class LoginService {
     });
   }
 
-  public setUserData(userData: dd.IUser) {
+  public setUserData(userData: IUser) {
     this.userData = userData;
   }
 
-  public get user() {
+  public get user(): IUser {
     return this.userData;
   }
 
   public get loggedIn() {
     return this.loginCompleted;
+  }
+
+  public get id() {
+    return this.authData.sub;
   }
 }

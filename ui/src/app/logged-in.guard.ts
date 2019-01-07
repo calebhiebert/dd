@@ -19,11 +19,6 @@ export class LoggedInGuard implements CanActivate {
   ): Promise<boolean> {
     const isLoggedIn = await this.login.isLoggedIn();
 
-    if (this.login.registrationRequired && isLoggedIn) {
-      this.router.navigate(['register']);
-      return false;
-    }
-
     if (!isLoggedIn) {
       this.router.navigate(['login']);
       return false;

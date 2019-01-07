@@ -3,9 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
 import { EntityService } from 'src/app/entity.service';
 import { EntityPreset } from 'src/app/entity';
-import { RpcService } from 'src/app/rpc.service';
-import { dd } from 'src/dd.pb';
 import { FormGroup } from '@angular/forms';
+import { Campaign } from 'src/app/campaign';
 
 @Component({
   selector: 'dd-campaign-settings',
@@ -25,8 +24,7 @@ export class CampaignSettingsComponent implements OnInit {
     private campaignService: CampaignService,
     private entityService: EntityService,
     private router: Router,
-    private route: ActivatedRoute,
-    private rpc: RpcService
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -43,8 +41,7 @@ export class CampaignSettingsComponent implements OnInit {
     this.creatingEntityPreset = true;
 
     try {
-      const result = await this.rpc.dd.createEntityPreset({});
-      this.router.navigate(['..', 'entities', result.id, 'edit'], {
+      this.router.navigate(['..', 'entities', '', 'edit'], {
         relativeTo: this.route,
       });
     } catch (err) {
@@ -58,18 +55,13 @@ export class CampaignSettingsComponent implements OnInit {
     this.saving = true;
 
     try {
-      const newCampaign: dd.ICampaignCore = {
+      const newCampaign = {
         id: this.campaign.id,
         name: this.formGroup.value.name,
         description: this.formGroup.value.description,
         imageId: this.formGroup.value.imageId,
         experienceTable: this.formGroup.value.experienceTable || [1],
       };
-
-      await this.rpc.dd.editCampaign({
-        id: this.campaign.id,
-        campaign: newCampaign,
-      });
     } catch (err) {
       console.log('SAVE ERR', err);
     }
@@ -77,7 +69,7 @@ export class CampaignSettingsComponent implements OnInit {
     this.saving = false;
   }
 
-  public get campaignCore(): dd.ICampaignCore {
+  public get campaignCore(): any {
     return {
       name: this.campaign.name,
       description: this.campaign.description,

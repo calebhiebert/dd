@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../login.service';
-import { RpcService } from '../rpc.service';
 
 @Component({
   selector: 'dd-home',

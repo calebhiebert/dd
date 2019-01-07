@@ -35,6 +35,8 @@ import { EntityAttributeEditorModalComponent } from './entity/entity-view/entity
 import { QuestFormComponent } from './quest/quest-form/quest-form.component';
 import { RegisterComponent } from './login/register/register.component';
 import { CampaignFormComponent } from './campaign/campaign-form/campaign-form.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -70,8 +72,21 @@ import { CampaignFormComponent } from './campaign/campaign-form/campaign-form.co
     RegisterComponent,
     CampaignFormComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, FormsModule, TruncateModule],
-  providers: [],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TruncateModule,
+    HttpClientModule,
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

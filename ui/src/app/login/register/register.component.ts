@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { RpcService } from 'src/app/rpc.service';
 import { LoginService } from 'src/app/login.service';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/user.service';
 
 @Component({
   selector: 'dd-register',
@@ -14,8 +14,8 @@ export class RegisterComponent implements OnInit {
   public usernameControl: FormControl;
 
   constructor(
-    private rpc: RpcService,
     private login: LoginService,
+    public userService: UserService,
     private router: Router
   ) {}
 
@@ -31,13 +31,14 @@ export class RegisterComponent implements OnInit {
     if (this.usernameControl.valid) {
       this.loading = true;
       try {
-        const user = await this.rpc.dd.createUser({
-          token: this.login.loadToken(),
-          username: this.usernameControl.value.trim(),
+        const newUser = await this.userService.createUser({
+          id: this.login.id,
+          username: this.usernameControl.value,
+          pictureURl: this.login.authData.picture,
         });
 
-        this.login.setUserData(user);
-        this.login.registrationRequired = false;
+        this.login.setUserData(newUser);
+
         this.router.navigate(['home']);
       } catch (err) {
         console.log('REGISTER ERR', err);

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { dd } from 'src/dd.pb';
-import { RpcService } from 'src/app/rpc.service';
+import { Quest } from 'src/app/quest';
 
 @Component({
   selector: 'dd-quest-manager',
@@ -9,9 +8,9 @@ import { RpcService } from 'src/app/rpc.service';
 })
 export class QuestManagerComponent implements OnInit {
   public loading = false;
-  public quests: dd.IQuest[];
+  public quests: Quest[];
 
-  constructor(private rpc: RpcService) {}
+  constructor() {}
 
   ngOnInit() {
     this.loadQuests();
@@ -21,8 +20,8 @@ export class QuestManagerComponent implements OnInit {
     this.loading = true;
 
     try {
-      const resp = await this.rpc.dd.getQuests({});
-      this.quests = resp.quests;
+      // const resp = await this.rpc.dd.getQuests({});
+      // this.quests = resp.quests;
     } catch (err) {
       console.log('LOAD ERR', err);
     }

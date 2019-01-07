@@ -10,11 +10,11 @@ import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ConfirmationModalComponent } from 'src/app/confirmation-modal/confirmation-modal.component';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { Item } from 'src/app/item';
-import { InventoryItem } from 'src/app/inventory';
 import { ItemService } from 'src/app/item.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-attribute-form.component';
-import { dd } from 'src/dd.pb';
+import { EntityPreset } from 'src/app/entity';
+import { InventoryItem } from 'src/app/inventory';
 
 @Component({
   selector: 'dd-inventory-selector',
@@ -32,16 +32,16 @@ export class InventorySelectorComponent implements OnInit, AfterContentInit {
   public confirmation: ConfirmationModalComponent;
 
   @Input()
-  public entityPreset: dd.IEntityPreset;
+  public entityPreset: EntityPreset;
 
   @Input()
   public formGroup: FormGroup;
 
   public itemEditorGroup: FormGroup;
 
-  public selectedItems: dd.IInventoryItem[];
+  public selectedItems: InventoryItem[];
 
-  public currentItem: dd.IInventoryItem;
+  public currentItem: InventoryItem;
 
   constructor(
     private itemService: ItemService,
@@ -66,11 +66,11 @@ export class InventorySelectorComponent implements OnInit, AfterContentInit {
     this.selectedItems = [];
   }
 
-  public createControl(i: dd.IInventoryItem): FormControl {
+  public createControl(i: InventoryItem): FormControl {
     return new FormControl(i.item.id, [Validators.required]);
   }
 
-  public selectItem(item: dd.IInventoryItem) {
+  public selectItem(item: InventoryItem) {
     this.currentItem = item;
     this.itemEditorGroup.setValue({ quantity: item.quantity });
     this.itemEditor.open();
