@@ -13,14 +13,13 @@ import { environment } from 'src/environments/environment';
 export class EntityService {
   constructor(private http: HttpClient) {}
 
-  public async saveEntityPreset(
-    campaignId: string,
-    entityPreset: EntityPreset
-  ): Promise<EntityPreset> {
-    await simulateDelay(250);
-
-    entityPreset.id = '1';
-    return entityPreset;
+  public async updateEntityPreset(entityPreset: IEntityPreset): Promise<void> {
+    return this.http
+      .put<void>(
+        `${environment.apiURL}/entitypresets/${entityPreset.id}`,
+        entityPreset
+      )
+      .toPromise();
   }
 
   // Creates a blank entity preset and returns the ID
@@ -32,59 +31,10 @@ export class EntityService {
       .toPromise();
   }
 
-  public async getEntityPreset(
-    campaignId: string,
-    entityPresetId: string
-  ): Promise<EntityPreset> {
-    await simulateDelay(250);
-
-    const c = new Chance();
-
-    const preset: EntityPreset = {
-      id: entityPresetId,
-      user: {
-        id: '1',
-        name: 'Panchem',
-        imageURL: 'https://api.adorable.io/avatars/285/abott@adorable.png',
-      },
-      name: c.word(),
-      imageId: 'shrug',
-      description: c.paragraph(),
-      inventory: {
-        items: [],
-      },
-      attributes: [
-        {
-          name: 'Class',
-          description: 'The class of your character',
-          imageId: 'uncertainty',
-          type: AttributeType.ENUM,
-          required: true,
-          options: ['Barbarian', 'Aes Sedai', 'Construct'],
-          class: AttributeClass.MAJOR,
-        },
-      ],
-      health: {
-        mode: HealthMode.NORMAL,
-      },
-      playerCreatable: c.bool(),
-    };
-
-    for (let i = 0; i < 10; i++) {
-      preset.attributes.push({
-        name: c.word(),
-        description: c.paragraph({ sentences: 1 }),
-        imageId: 'uncertainty',
-        type: c.integer({ min: 0, max: 1 }) as AttributeType,
-        defaultValue: c.integer({ min: 0, max: 249 }).toString(),
-        required: c.bool(),
-        min: c.integer({ min: -20, max: 20 }),
-        max: c.integer({ min: 250, max: 60000 }),
-        class: c.integer({ min: 0, max: 3 }),
-      });
-    }
-
-    return preset;
+  public async getEntityPreset(id: string): Promise<IEntityPreset> {
+    return this.http
+      .get<IEntityPreset>(`${environment.apiURL}/entitypresets/${id}`)
+      .toPromise();
   }
 
   public async deleteEntityPreset(
@@ -121,8 +71,6 @@ export class EntityService {
         },
       },
     };
-
-    ent.preset = await this.getEntityPreset(campaignId, '1');
 
     for (const pattr of ent.preset.attributes) {
       ent.attributes.push({

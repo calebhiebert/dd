@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CampaignService } from 'src/app/campaign.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EntityPreset } from 'src/app/entity';
-import { EntityService } from 'src/app/entity.service';
+import { EntityService, IEntityPreset } from 'src/app/entity.service';
 
 @Component({
   selector: 'dd-entity-type-selector',
@@ -10,31 +10,24 @@ import { EntityService } from 'src/app/entity.service';
   styleUrls: ['./entity-type-selector.component.scss'],
 })
 export class EntityTypeSelectorComponent implements OnInit {
-  public creating = false;
-
   constructor(
     private campaignService: CampaignService,
     private router: Router,
     private route: ActivatedRoute,
-    private entityService: EntityService,
+    private entityService: EntityService
   ) {}
 
   ngOnInit() {}
 
-  public async selectEntityType(preset: EntityPreset) {
-    this.creating = true;
-
-    try {
-      const entId = await this.entityService.createEntity(this.campaignService.campaign.id, preset.id);
-      this.router.navigate(['..', entId, 'edit'], { relativeTo: this.route });
-    } catch (err) {
-      console.log('CREATE ERR', err);
-    }
-
-    this.creating = false;
+  public async selectEntityType(preset: IEntityPreset) {
+    this.router.navigate(['..', preset.id, 'create'], {
+      relativeTo: this.route,
+    });
   }
 
-  public get presets() {
-    return this.campaignService.campaign.entityPresets;
+  public get presets(): IEntityPreset[] {
+    return this.campaignService.campaign.entityPresets.filter(
+      (e) => e.playerCreatable
+    );
   }
 }

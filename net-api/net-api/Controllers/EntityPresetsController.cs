@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace net_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EntityPresetsController : ControllerBase
     {
         private readonly Context _context;
@@ -22,9 +24,16 @@ namespace net_api.Controllers
 
         // GET: api/EntityPresets
         [HttpGet]
-        public IEnumerable<EntityPreset> GetEntityPresets()
+        public async Task<IActionResult> GetEntityPresets([FromQuery(Name = "campaignId")] string campaignId)
         {
-            return _context.EntityPresets;
+            if (campaignId == null)
+            {
+                return BadRequest("Missing campaign id");
+            }
+
+            var presets = await _context.EntityPresets.Where(e => e.CampaignId == campaignId).ToListAsync();
+
+            return Ok(presets);
         }
 
         // GET: api/EntityPresets/5
@@ -89,6 +98,8 @@ namespace net_api.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            entityPreset.Id = Nanoid.Nanoid.Generate();
 
             _context.EntityPresets.Add(entityPreset);
             await _context.SaveChangesAsync();

@@ -55,11 +55,7 @@
   <div class="columns mt-2" *ngIf="editing">
     <div class="column"><h3>Entity Types</h3></div>
     <div class="column col-auto">
-      <button
-        class="btn btn-sm"
-        (click)="createEntityPreset()"
-        [ngClass]="{ loading: creatingEntityPreset }"
-      >
+      <button class="btn btn-sm" (click)="createEntityPreset()">
         <i class="icon icon-plus"></i> Create Entity Preset
       </button>
     </div>

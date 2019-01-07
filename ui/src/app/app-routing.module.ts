@@ -63,10 +63,16 @@ const routes: Routes = [
       {
         path: 'entities/create',
         component: EntityFormComponent,
+        data: {
+          editing: false,
+        },
       },
       {
         path: 'entities/:ent_id/edit',
         component: EntityFormComponent,
+        data: {
+          editing: true,
+        },
       },
     ],
   },
@@ -85,16 +91,26 @@ const routes: Routes = [
         component: CampaignLandingComponent,
       },
       {
+        path: 'entities/selecttype',
+        component: EntityTypeSelectorComponent,
+      },
+      {
         path: 'entities/:ent_id',
         component: EntityViewComponent,
       },
       {
-        path: 'entities/:ent_id/edit',
+        path: 'entities/:ent_type_id/create',
         component: EntityCreationFormComponent,
+        data: {
+          editing: false,
+        },
       },
       {
-        path: 'entities/selecttype',
-        component: EntityTypeSelectorComponent,
+        path: 'entities/:ent_id/edit',
+        component: EntityCreationFormComponent,
+        data: {
+          editing: true,
+        },
       },
     ],
   },

@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Entity } from 'src/app/entity';
-import { EntityService } from 'src/app/entity.service';
+import {
+  EntityService,
+  IEntityPreset,
+  IEntityAttribute,
+} from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { Attribute } from 'src/app/attributes';
 import { numberValidator } from '../../dynamic-attribute-form/dynamic-attribute-form.component';
@@ -32,13 +36,14 @@ export class EntityCreationFormComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       const id = params.get('ent_id');
-      this.loadEntity(id);
+      if (this.editing) {
+        this.loadEntity(id);
+      }
     });
 
     this.attributesFormGroup = new FormGroup({});
 
     this.formGroup = new FormGroup({
-      id: new FormControl(null, Validators.required),
       name: new FormControl(null, [
         Validators.required,
         Validators.minLength(2),
@@ -57,9 +62,9 @@ export class EntityCreationFormComponent implements OnInit {
       imageId: new FormControl('uncertainty'),
     });
 
-    this.formGroup.valueChanges.subscribe((v) => {
-      console.log(v, this.formGroup);
-    });
+    this.formGroup.valueChanges.subscribe((v) =>
+      console.log(v, this.formGroup)
+    );
   }
 
   public async save() {
@@ -121,6 +126,15 @@ export class EntityCreationFormComponent implements OnInit {
     this.loading = false;
   }
 
+  public get preset() {
+    if (this.editing) {
+    } else {
+      return this.campaignService.campaign.entityPresets.find(
+        (ep) => ep.id === this.route.snapshot.paramMap.get('ent_type_id')
+      );
+    }
+  }
+
   public get name() {
     return this.formGroup.get('name');
   }
@@ -131,5 +145,9 @@ export class EntityCreationFormComponent implements OnInit {
 
   public get xp() {
     return this.formGroup.get('xp');
+  }
+
+  public get editing() {
+    return this.route.snapshot.data.editing;
   }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +14,6 @@ namespace net_api.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<EntityPreset> EntityPresets { get; set; }
-        public DbSet<EntityAttribute> EntityAttributes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -85,17 +85,38 @@ namespace net_api.Models
         [Required]
         public bool PlayerCreatable { get; set; }
 
-        public virtual ICollection<EntityAttribute> Attributes { get; set; }
+        [Column("Attributes", TypeName = "jsonb")]
+        [JsonIgnore]
+        public string AttributeJson { get; set; }
+
+        [NotMapped]
+        [Required]
+        public List<EntityAttribute> Attributes {
+            get
+            {
+                if (AttributeJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<List<EntityAttribute>>(AttributeJson);
+            }
+
+            set
+            {
+                AttributeJson = JsonConvert.SerializeObject(value);
+            }
+        }
 
         [Required]
         public string CampaignId { get; set; }
-        public virtual Campaign Campaign { get; set; }
+
+        [JsonIgnore]
+        public Campaign Campaign { get; set; }
     }
 
     public class EntityAttribute
-    {
-        public string Id { get; set; }
-        
+    {    
         [Required]
         [StringLength(30, MinimumLength = 2)]
         public string Name { get; set; }
@@ -119,12 +140,9 @@ namespace net_api.Models
         [Required]
         public bool Required { get; set; }
 
-        [Required]
-        public string EntityPresetId { get; set; }
-        public virtual EntityPreset Preset { get; set; }
+        public double? Max { get; set; }
 
-        public double Max { get; set; }
-        public double Min { get; set; }
+        public double? Min { get; set; }
     }
 
     public enum AttributeType

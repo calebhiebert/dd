@@ -35,11 +35,17 @@ export class EntityAttributeRowEditorComponent implements OnInit {
     });
 
     this.formGroup.valueChanges.subscribe((v) => {
-      if (this.formGroup.value.min) {
+      if (
+        this.formGroup.value.min !== undefined &&
+        this.formGroup.value.min !== null
+      ) {
         this.minControl.setValue(true);
       }
 
-      if (this.formGroup.value.max) {
+      if (
+        this.formGroup.value.max !== undefined &&
+        this.formGroup.value.max !== null
+      ) {
         this.maxControl.setValue(true);
       }
     });

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CampaignService, ICampaign } from 'src/app/campaign.service';
-import { EntityService } from 'src/app/entity.service';
+import { EntityService, IEntityPreset } from 'src/app/entity.service';
 import { EntityPreset } from 'src/app/entity';
 import { FormGroup } from '@angular/forms';
-import { Campaign } from 'src/app/campaign';
 import { LoginService } from 'src/app/login.service';
 
 @Component({
@@ -13,8 +12,6 @@ import { LoginService } from 'src/app/login.service';
   styleUrls: ['./campaign-settings.component.css'],
 })
 export class CampaignSettingsComponent implements OnInit {
-  public creatingEntityPreset = false;
-
   public saving = false;
 
   public expandXPTable = false;
@@ -34,24 +31,16 @@ export class CampaignSettingsComponent implements OnInit {
     this.expandXPTable = !this.editing;
   }
 
-  public selectEntityPreset(preset: EntityPreset) {
+  public selectEntityPreset(preset: IEntityPreset) {
     this.router.navigate(['../', 'entities', preset.id, 'edit'], {
       relativeTo: this.route,
     });
   }
 
   public async createEntityPreset() {
-    this.creatingEntityPreset = true;
-
-    try {
-      this.router.navigate(['..', 'entities', '', 'edit'], {
-        relativeTo: this.route,
-      });
-    } catch (err) {
-      console.log('CREATE ERR', err);
-    }
-
-    this.creatingEntityPreset = false;
+    this.router.navigate(['..', 'entities', 'create'], {
+      relativeTo: this.route,
+    });
   }
 
   public async save() {

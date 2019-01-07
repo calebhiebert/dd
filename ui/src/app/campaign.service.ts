@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Campaign } from './campaign';
 import { ItemService } from './item.service';
-import { EntityService } from './entity.service';
+import { EntityService, IEntityPreset } from './entity.service';
 import { environment } from 'src/environments/environment';
 import { User } from './user';
 import { IUser } from './user.service';
@@ -95,7 +95,7 @@ export interface ICampaign {
   experienceTable: number[];
   entities?: any[];
   items?: any[];
-  entityPresets?: any[];
+  entityPresets?: IEntityPreset[];
   createdAt?: Date;
 }
 

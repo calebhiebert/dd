@@ -2,9 +2,9 @@
   <!-- Loader -->
   <div class="loading loading-lg" *ngIf="loading"></div>
 
-  <div class="columns" *ngIf="entity">
+  <div class="columns" *ngIf="entity || !editing">
     <div class="column">
-      <h3>Edit {{ entity.preset.name }}</h3>
+      <h3>Edit {{ preset.name }}</h3>
     </div>
     <div class="column col-auto col-ml-auto">
       <button
@@ -18,7 +18,7 @@
     </div>
   </div>
   <!-- Form -->
-  <div [formGroup]="formGroup" *ngIf="entity">
+  <div [formGroup]="formGroup" *ngIf="entity || !editing">
     <div class="columns">
       <div class="column col-auto">
         <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
@@ -157,7 +157,7 @@
     <h3 class="mt-2">Custom Attributes</h3>
     <dd-dynamic-attribute-form
       [formGroup]="attributesFormGroup"
-      [attributes]="entity.preset.attributes"
+      [attributes]="preset.attributes"
     ></dd-dynamic-attribute-form>
   </div>
 </div>

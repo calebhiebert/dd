@@ -33,6 +33,16 @@ export class EntityFormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.entityPreset = {
+      id: '',
+      name: '',
+      description: '',
+      userId: '',
+      imageId: '',
+      campaignId: '',
+      playerCreatable: false,
+    };
+
     this.formGroup = new FormGroup({
       id: new FormControl(),
       name: new FormControl(null, [
@@ -55,7 +65,7 @@ export class EntityFormComponent implements OnInit {
     });
 
     this.route.params.subscribe((params) => {
-      if (params.ent_id && params.ent_id !== '') {
+      if (params.ent_id) {
         this.loadEntityPreset(params.ent_id);
       }
     });
@@ -66,24 +76,23 @@ export class EntityFormComponent implements OnInit {
     this.formGroup.disable();
 
     try {
-      // const preset = await this.rpc.dd.getEntityPreset({
-      //   id: id,
-      // });
-      // this.entityPreset = preset;
-      // for (let i = 0; i < preset.attributes.length; i++) {
-      //   this.addAttribute();
-      // }
-      // setTimeout(() => {
-      //   this.formGroup.patchValue({
-      //     id: preset.id,
-      //     name: preset.name,
-      //     description: preset.description,
-      //     attributes: preset.attributes,
-      //     imageId: preset.imageId,
-      //     health: preset.health,
-      //     playerCreatable: preset.playerCreatable,
-      //   });
-      // }, 1);
+      const preset = await this.entityService.getEntityPreset(id);
+      this.entityPreset = preset;
+
+      for (let i = 0; i < preset.attributes.length; i++) {
+        this.addAttribute();
+      }
+
+      setTimeout(() => {
+        this.formGroup.patchValue({
+          id: preset.id,
+          name: preset.name,
+          description: preset.description,
+          attributes: preset.attributes,
+          imageId: preset.imageId,
+          playerCreatable: preset.playerCreatable,
+        });
+      }, 1);
     } catch (err) {
       console.log('LOAD ERR', err);
     }
@@ -102,26 +111,47 @@ export class EntityFormComponent implements OnInit {
     if (this.formGroup.valid) {
       this.formGroup.disable();
       this.saving = true;
-      try {
+
+      if (this.editing) {
+        try {
+          const v = this.formGroup.value;
+
+          await this.entityService.updateEntityPreset({
+            id: this.entityPreset.id,
+            userId: this.login.id,
+            campaignId: this.campaignService.campaign.id,
+            name: v.name,
+            description: v.description,
+            imageId: v.imageId,
+            playerCreatable: v.playerCreatable,
+            attributes: v.attributes,
+          });
+
+          await this.router.navigate(['../../..', 'settings'], {
+            relativeTo: this.route,
+          });
+        } catch (err) {
+          console.log('SAVE ERR', err);
+        }
+      } else {
         const v = this.formGroup.value;
 
-        const ep = this.entityService.createEntityPreset({
-          id: '',
+        const ep = await this.entityService.createEntityPreset({
+          id: this.entityPreset.id,
           userId: this.login.id,
           campaignId: this.campaignService.campaign.id,
           name: v.name,
           description: v.description,
           imageId: v.imageId,
           playerCreatable: v.playerCreatable,
+          attributes: v.attributes,
+        });
+
+        await this.router.navigate(['../..', 'settings'], {
+          relativeTo: this.route,
         });
 
         console.log('EF Create', ep);
-
-        // this.router.navigate(['../../..', 'settings'], {
-        //   relativeTo: this.route,
-        // });
-      } catch (err) {
-        console.log('SAVE ERR', err);
       }
 
       this.saving = false;
@@ -167,5 +197,9 @@ export class EntityFormComponent implements OnInit {
 
   public get description() {
     return this.formGroup.get('description');
+  }
+
+  public get editing() {
+    return this.route.snapshot.data.editing;
   }
 }
