@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
@@ -10,57 +11,56 @@ namespace net_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class CampaignsController : ControllerBase
+    public class EntityPresetsController : ControllerBase
     {
         private readonly Context _context;
 
-        public CampaignsController(Context context)
+        public EntityPresetsController(Context context)
         {
             _context = context;
         }
 
-        // GET: api/Campaigns
+        // GET: api/EntityPresets
         [HttpGet]
-        public IEnumerable<Campaign> GetCampaigns()
+        public IEnumerable<EntityPreset> GetEntityPresets()
         {
-            return _context.Campaigns;
+            return _context.EntityPresets;
         }
 
-        // GET: api/Campaigns/5
+        // GET: api/EntityPresets/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCampaign([FromRoute] string id)
+        public async Task<IActionResult> GetEntityPreset([FromRoute] string id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var campaign = await _context.Campaigns.Include(c => c.EntityPresets).FirstOrDefaultAsync(u => u.Id == id);
+            var entityPreset = await _context.EntityPresets.FindAsync(id);
 
-            if (campaign == null)
+            if (entityPreset == null)
             {
                 return NotFound();
             }
 
-            return Ok(campaign);
+            return Ok(entityPreset);
         }
 
-        // PUT: api/Campaigns/5
+        // PUT: api/EntityPresets/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCampaign([FromRoute] string id, [FromBody] Campaign campaign)
+        public async Task<IActionResult> PutEntityPreset([FromRoute] string id, [FromBody] EntityPreset entityPreset)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != campaign.Id)
+            if (id != entityPreset.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(campaign).State = EntityState.Modified;
+            _context.Entry(entityPreset).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace net_api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CampaignExists(id))
+                if (!EntityPresetExists(id))
                 {
                     return NotFound();
                 }
@@ -81,48 +81,45 @@ namespace net_api.Controllers
             return NoContent();
         }
 
-        // POST: api/Campaigns
+        // POST: api/EntityPresets
         [HttpPost]
-        public async Task<IActionResult> PostCampaign([FromBody] Campaign campaign)
+        public async Task<IActionResult> PostEntityPreset([FromBody] EntityPreset entityPreset)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            campaign.Id = Nanoid.Nanoid.Generate();
-            campaign.CreatedAt = new System.DateTime();
-
-            _context.Campaigns.Add(campaign);
+            _context.EntityPresets.Add(entityPreset);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCampaign", new { id = campaign.Id }, campaign);
+            return CreatedAtAction("GetEntityPreset", new { id = entityPreset.Id }, entityPreset);
         }
 
-        // DELETE: api/Campaigns/5
+        // DELETE: api/EntityPresets/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCampaign([FromRoute] string id)
+        public async Task<IActionResult> DeleteEntityPreset([FromRoute] string id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var campaign = await _context.Campaigns.FindAsync(id);
-            if (campaign == null)
+            var entityPreset = await _context.EntityPresets.FindAsync(id);
+            if (entityPreset == null)
             {
                 return NotFound();
             }
 
-            _context.Campaigns.Remove(campaign);
+            _context.EntityPresets.Remove(entityPreset);
             await _context.SaveChangesAsync();
 
-            return Ok(campaign);
+            return Ok(entityPreset);
         }
 
-        private bool CampaignExists(string id)
+        private bool EntityPresetExists(string id)
         {
-            return _context.Campaigns.Any(e => e.Id == id);
+            return _context.EntityPresets.Any(e => e.Id == id);
         }
     }
 }

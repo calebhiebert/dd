@@ -4,12 +4,14 @@ import { Campaign } from './campaign';
 import { ItemService } from './item.service';
 import { EntityService } from './entity.service';
 import { environment } from 'src/environments/environment';
+import { User } from './user';
+import { IUser } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CampaignService {
-  public campaign: Campaign = null;
+  public campaign: ICampaign = null;
   public loadingCampaign = false;
 
   constructor(
@@ -33,20 +35,31 @@ export class CampaignService {
   /**
    * Returns a list of campaigns the user can access
    */
-  public async getCampaigns(): Promise<Campaign[]> {
-    return this.http.get<any>(`${environment.apiURL}/campaigns`).toPromise();
-  }
-
-  public async getCampaign(id: string): Promise<Campaign> {
+  public async getCampaigns(): Promise<ICampaign[]> {
     return this.http
-      .get<any>(`${environment.apiURL}/campaigns/${id}`)
+      .get<ICampaign[]>(`${environment.apiURL}/campaigns`)
       .toPromise();
   }
 
-  public async saveCampaign(campaign: Campaign): Promise<Campaign> {
-    await simulateDelay(250);
+  public async getCampaign(id: string): Promise<ICampaign> {
+    return this.http
+      .get<ICampaign>(`${environment.apiURL}/campaigns/${id}`)
+      .toPromise();
+  }
 
-    return { ...campaign };
+  public async createCampaign(campaign: ICampaign): Promise<ICampaign> {
+    return this.http
+      .post<ICampaign>(`${environment.apiURL}/campaigns`, campaign)
+      .toPromise();
+  }
+
+  public async updateCampaign(campaign: ICampaign): Promise<ICampaign> {
+    return this.http
+      .put<ICampaign>(
+        `${environment.apiURL}/campaigns/${campaign.id}`,
+        campaign
+      )
+      .toPromise();
   }
 
   public calculateLevel(xp: number): number {
@@ -70,6 +83,20 @@ export class CampaignService {
 
     return level;
   }
+}
+
+export interface ICampaign {
+  id: string;
+  name: string;
+  description: string;
+  imageId: string;
+  userId: string;
+  user?: IUser;
+  experienceTable: number[];
+  entities?: any[];
+  items?: any[];
+  entityPresets?: any[];
+  createdAt?: Date;
 }
 
 // Used in mock apis, will be removed

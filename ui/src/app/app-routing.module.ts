@@ -29,6 +29,14 @@ const routes: Routes = [
   },
   { path: 'home', component: HomeComponent, canActivate: [LoggedInGuard] },
   {
+    path: 'campaigns/create',
+    component: CampaignSettingsComponent,
+    canActivate: [LoggedInGuard],
+    data: {
+      editing: false,
+    },
+  },
+  {
     path: 'campaign/manage/:id',
     component: CampaignComponent,
     canActivate: [LoggedInGuard],
@@ -40,6 +48,9 @@ const routes: Routes = [
       {
         path: 'settings',
         component: CampaignSettingsComponent,
+        data: {
+          editing: true,
+        },
       },
       {
         path: 'quests',
@@ -48,6 +59,10 @@ const routes: Routes = [
       {
         path: 'items/:item_id/edit',
         component: ItemEditComponent,
+      },
+      {
+        path: 'entities/create',
+        component: EntityFormComponent,
       },
       {
         path: 'entities/:ent_id/edit',

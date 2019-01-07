@@ -1,4 +1,4 @@
-<div class="container grid-xl" *ngIf="campaign">
+<div class="container grid-xl" *ngIf="campaign || !editing">
   <!-- Header -->
   <div class="columns">
     <div class="column"><h2>Settings</h2></div>
@@ -16,7 +16,7 @@
 
   <h3>General Settings</h3>
   <dd-campaign-form
-    [campaign]="this.campaignCore"
+    [campaign]="campaign"
     [formGroup]="formGroup"
   ></dd-campaign-form>
 
@@ -52,7 +52,7 @@
   ></dd-experience-table-editor>
 
   <!-- Entity Types -->
-  <div class="columns mt-2">
+  <div class="columns mt-2" *ngIf="editing">
     <div class="column"><h3>Entity Types</h3></div>
     <div class="column col-auto">
       <button
@@ -64,7 +64,7 @@
       </button>
     </div>
   </div>
-  <div class="empty" *ngIf="campaign.entityPresets.length === 0">
+  <div class="empty" *ngIf="editing && campaign.entityPresets.length === 0">
     <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
     <p class="empty-title h5">There are no entity presets :(</p>
     <p class="empty-subtitle">Click the button to create one</p>
@@ -74,7 +74,7 @@
       </button>
     </div>
   </div>
-  <div>
+  <div *ngIf="editing">
     <div
       class="card p-2 mb-2 hoverable"
       *ngFor="let ep of campaign.entityPresets"

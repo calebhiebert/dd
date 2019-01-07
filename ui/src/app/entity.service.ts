@@ -2,14 +2,21 @@ import { Injectable } from '@angular/core';
 import { EntityPreset, HealthMode, Entity, AttributeClass } from './entity';
 import { AttributeType } from './attributes';
 import { Chance } from 'chance';
+import { HttpClient } from '@angular/common/http';
+import { IUser } from './user.service';
+import { ICampaign } from './campaign.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EntityService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  public async saveEntityPreset(campaignId: string, entityPreset: EntityPreset): Promise<EntityPreset> {
+  public async saveEntityPreset(
+    campaignId: string,
+    entityPreset: EntityPreset
+  ): Promise<EntityPreset> {
     await simulateDelay(250);
 
     entityPreset.id = '1';
@@ -17,12 +24,18 @@ export class EntityService {
   }
 
   // Creates a blank entity preset and returns the ID
-  public async createEntityPreset(): Promise<string> {
-    await simulateDelay(250);
-    return '1';
+  public async createEntityPreset(
+    preset: IEntityPreset
+  ): Promise<IEntityPreset> {
+    return this.http
+      .post<IEntityPreset>(`${environment.apiURL}/entitypresets`, preset)
+      .toPromise();
   }
 
-  public async getEntityPreset(campaignId: string, entityPresetId: string): Promise<EntityPreset> {
+  public async getEntityPreset(
+    campaignId: string,
+    entityPresetId: string
+  ): Promise<EntityPreset> {
     await simulateDelay(250);
 
     const c = new Chance();
@@ -74,7 +87,10 @@ export class EntityService {
     return preset;
   }
 
-  public async deleteEntityPreset(campaignId: string, entityPresetId: string): Promise<void> {
+  public async deleteEntityPreset(
+    campaignId: string,
+    entityPresetId: string
+  ): Promise<void> {
     await simulateDelay(250);
   }
 
@@ -112,14 +128,20 @@ export class EntityService {
       ent.attributes.push({
         name: pattr.name,
         type: pattr.type,
-        data: pattr.type === AttributeType.NUMBER ? c.integer({ min: 0, max: 50 }).toString() : c.word(),
+        data:
+          pattr.type === AttributeType.NUMBER
+            ? c.integer({ min: 0, max: 50 }).toString()
+            : c.word(),
       });
     }
 
     return ent;
   }
 
-  public async createEntity(campaignId: string, entityPresetId: string): Promise<string> {
+  public async createEntity(
+    campaignId: string,
+    entityPresetId: string
+  ): Promise<string> {
     await simulateDelay(250);
     return '1';
   }
@@ -132,6 +154,35 @@ export class EntityService {
   public async deleteEntity(campaignId: string, entity: Entity): Promise<void> {
     await simulateDelay(250);
   }
+}
+
+export interface IEntityPreset {
+  id: string;
+  name: string;
+  description: string;
+  userId: string;
+  user?: IUser;
+  imageId: string;
+  playerCreatable: boolean;
+  attributes?: IEntityAttribute[];
+  campaignId: string;
+  campaign?: ICampaign;
+}
+
+export interface IEntityAttribute {
+  id: string;
+  name: string;
+  description: string;
+  imageId?: string;
+  defaultValue?: string;
+  type: AttributeType;
+  options?: string[];
+  class: AttributeClass;
+  required: boolean;
+  entityPresetId: string;
+  preset?: IEntityPreset;
+  max?: number;
+  min?: number;
 }
 
 // Used in mock apis, will be removed

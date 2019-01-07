@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationModalComponent } from 'src/app/confirmation-modal/confirmation-modal.component';
-import { EntityService } from 'src/app/entity.service';
+import { EntityService, IEntityPreset } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { numberValidator } from '../dynamic-attribute-form/dynamic-attribute-form.component';
-import { EntityPreset } from 'src/app/entity';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'dd-entity-form',
@@ -19,7 +19,7 @@ export class EntityFormComponent implements OnInit {
 
   public formGroup: FormGroup;
 
-  public entityPreset: EntityPreset;
+  public entityPreset: IEntityPreset;
 
   @ViewChild('confirmmodal')
   public confirmModal: ConfirmationModalComponent;
@@ -27,6 +27,7 @@ export class EntityFormComponent implements OnInit {
   constructor(
     private entityService: EntityService,
     private campaignService: CampaignService,
+    private login: LoginService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -54,7 +55,7 @@ export class EntityFormComponent implements OnInit {
     });
 
     this.route.params.subscribe((params) => {
-      if (params.ent_id !== '') {
+      if (params.ent_id && params.ent_id !== '') {
         this.loadEntityPreset(params.ent_id);
       }
     });
@@ -102,25 +103,20 @@ export class EntityFormComponent implements OnInit {
       this.formGroup.disable();
       this.saving = true;
       try {
-        // const res = await this.rpc.dd.editEntityPreset({
-        //   campaignId: this.campaignService.campaign.id,
-        //   id: this.entityPreset.id,
-        //   preset: {
-        //     id: this.entityPreset.id,
-        //     name: this.formGroup.value.name,
-        //     description: this.formGroup.value.description,
-        //     imageId: this.formGroup.value.imageId,
-        //     attributes: this.formGroup.value.attributes,
-        //     inventory: {
-        //       items: [],
-        //     },
-        //     health: {
-        //       mode: this.formGroup.value.health.mode,
-        //     },
-        //     playerCreatable: this.formGroup.value.playerCreatable,
-        //   },
-        // });
-        // console.log('CREATE ENT PRST', res);
+        const v = this.formGroup.value;
+
+        const ep = this.entityService.createEntityPreset({
+          id: '',
+          userId: this.login.id,
+          campaignId: this.campaignService.campaign.id,
+          name: v.name,
+          description: v.description,
+          imageId: v.imageId,
+          playerCreatable: v.playerCreatable,
+        });
+
+        console.log('EF Create', ep);
+
         // this.router.navigate(['../../..', 'settings'], {
         //   relativeTo: this.route,
         // });

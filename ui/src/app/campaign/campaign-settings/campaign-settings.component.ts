@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CampaignService } from 'src/app/campaign.service';
+import { CampaignService, ICampaign } from 'src/app/campaign.service';
 import { EntityService } from 'src/app/entity.service';
 import { EntityPreset } from 'src/app/entity';
 import { FormGroup } from '@angular/forms';
 import { Campaign } from 'src/app/campaign';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'dd-campaign-settings',
@@ -24,11 +25,13 @@ export class CampaignSettingsComponent implements OnInit {
     private campaignService: CampaignService,
     private entityService: EntityService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private login: LoginService
   ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({});
+    this.expandXPTable = !this.editing;
   }
 
   public selectEntityPreset(preset: EntityPreset) {
@@ -54,32 +57,63 @@ export class CampaignSettingsComponent implements OnInit {
   public async save() {
     this.saving = true;
 
-    try {
-      const newCampaign = {
-        id: this.campaign.id,
-        name: this.formGroup.value.name,
-        description: this.formGroup.value.description,
-        imageId: this.formGroup.value.imageId,
-        experienceTable: this.formGroup.value.experienceTable || [1],
-      };
-    } catch (err) {
-      console.log('SAVE ERR', err);
+    if (this.editing) {
+      try {
+        const v = this.formGroup.value;
+
+        const c = await this.campaignService.updateCampaign({
+          name: v.name,
+          description: v.description,
+          imageId: v.imageId,
+          experienceTable: v.experienceTable,
+          userId: this.login.id,
+          id: this.campaign.id,
+        });
+
+        // this.campaignService.campaign = c;
+      } catch (err) {
+        console.log('SAVE ERR', err);
+      }
+    } else {
+      const v = this.formGroup.value;
+
+      try {
+        const c = await this.campaignService.createCampaign({
+          name: v.name,
+          description: v.description,
+          imageId: v.imageId,
+          experienceTable: v.experienceTable,
+          userId: this.login.id,
+          id: '',
+        });
+
+        this.router.navigate(['campaigns', 'manage', c.id, 'settings']);
+
+        console.log('CREATE', c);
+      } catch (err) {
+        console.log('CREATE ERR', err, err.stack);
+      }
     }
 
     this.saving = false;
   }
 
-  public get campaignCore(): any {
-    return {
-      name: this.campaign.name,
-      description: this.campaign.description,
-      imageId: this.campaign.imageId,
-      id: this.campaign.id,
-      experienceTable: this.campaign.experienceTable,
-    };
+  public get campaign(): ICampaign {
+    if (this.editing) {
+      return this.campaignService.campaign;
+    } else {
+      return {
+        id: '',
+        name: '',
+        description: '',
+        imageId: '',
+        userId: '',
+        experienceTable: [],
+      };
+    }
   }
 
-  public get campaign() {
-    return this.campaignService.campaign;
+  public get editing() {
+    return this.route.snapshot.data.editing;
   }
 }

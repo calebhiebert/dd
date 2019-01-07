@@ -19,7 +19,7 @@ export class CampaignFormComponent implements OnInit {
   ngOnInit() {
     this.formGroup.addControl(
       'name',
-      new FormControl(this.campaign.name, [
+      new FormControl(this.campaign ? this.campaign.name : null, [
         Validators.required,
         Validators.maxLength(30),
         Validators.minLength(2),
@@ -28,7 +28,7 @@ export class CampaignFormComponent implements OnInit {
 
     this.formGroup.addControl(
       'description',
-      new FormControl(this.campaign.description, [
+      new FormControl(this.campaign ? this.campaign.description : null, [
         Validators.required,
         Validators.minLength(3),
       ])
@@ -37,7 +37,9 @@ export class CampaignFormComponent implements OnInit {
     this.formGroup.addControl(
       'imageId',
       new FormControl(
-        this.campaign.imageId === '' ? null : this.campaign.imageId
+        this.campaign.imageId === '' || !this.campaign
+          ? null
+          : this.campaign.imageId
       )
     );
   }
