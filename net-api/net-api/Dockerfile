@@ -16,4 +16,4 @@ RUN dotnet publish "net-api.csproj" -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "net-api.dll"]
+CMD  ASPNETCORE_URLS=http://*:$PORT dotnet net-api.dll
