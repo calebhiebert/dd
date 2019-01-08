@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,11 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var campaign = await _context.Campaigns.Include(c => c.EntityPresets).FirstOrDefaultAsync(u => u.Id == id);
+            var campaign = await _context.Campaigns
+                .Include(c => c.EntityPresets)
+                .Include(c => c.Entities)
+                .Include("Members.User")
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             if (campaign == null)
             {
@@ -93,7 +98,17 @@ namespace net_api.Controllers
             campaign.Id = Nanoid.Nanoid.Generate();
             campaign.CreatedAt = new System.DateTime();
 
+            var campaignUser = new CampaignUser
+            {
+                CampaignId = campaign.Id,
+                UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+            };
+
+            campaign.Members.Add(campaignUser);
+
             _context.Campaigns.Add(campaign);
+            _context.CampaignUsers.Add(campaignUser);
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCampaign", new { id = campaign.Id }, campaign);

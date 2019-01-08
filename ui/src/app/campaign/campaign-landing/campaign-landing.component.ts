@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
 import { Entity } from 'src/app/entity';
+import { ModalComponent } from 'src/app/modal/modal.component';
 
 @Component({
   selector: 'dd-campaign-landing',
@@ -9,6 +10,9 @@ import { Entity } from 'src/app/entity';
   styleUrls: ['./campaign-landing.component.scss'],
 })
 export class CampaignLandingComponent implements OnInit {
+  @ViewChild('invites')
+  public invites: ModalComponent<boolean>;
+
   constructor(
     private campaignService: CampaignService,
     private router: Router,

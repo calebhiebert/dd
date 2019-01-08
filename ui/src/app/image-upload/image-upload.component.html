@@ -6,11 +6,12 @@
 >
   <input
     type="file"
-    id="file-input"
+    [id]="controlId"
     accept="image/*"
+    class="file-input"
     (change)="onFileChange($event)"
   />
-  <label class="btn btn-sm text-ellipsis" for="file-input">
+  <label class="btn btn-sm text-ellipsis" [for]="controlId">
     <span *ngIf="file === null && imageURL === null">Upload Image</span>
     <span *ngIf="file === null && imageURL !== null">Change Image</span>
     <span *ngIf="file !== null">{{ file.name }}</span>

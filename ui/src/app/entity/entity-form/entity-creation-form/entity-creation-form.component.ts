@@ -84,9 +84,12 @@ export class EntityCreationFormComponent implements OnInit {
           this.constructEntity()
         );
 
-        this.router.navigate(['../', '../', ent.id], {
-          relativeTo: this.route,
-        });
+        this.router.navigate(
+          ['campaigns', this.campaignService.campaign.id, 'entities', ent.id],
+          {
+            relativeTo: this.route,
+          }
+        );
       } catch (err) {
         console.log('Create ERR', err);
       }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { numberValidator } from '../dynamic-attribute-form/dynamic-attribute-form.component';
 
 @Component({
@@ -94,6 +94,8 @@ export class EntityAttributeRowEditorComponent implements OnInit {
         'options',
         new FormControl(null, [Validators.pattern(/([A-Za-z0-9._]+)/gi)])
       );
+
+      this.formGroup.addControl('imageId', new FormControl(null));
     }
   }
 
@@ -134,5 +136,11 @@ export class EntityAttributeRowEditorComponent implements OnInit {
     } else {
       return [];
     }
+  }
+
+  public get id() {
+    return (this.formGroup.parent as FormArray).controls.indexOf(
+      this.formGroup
+    );
   }
 }

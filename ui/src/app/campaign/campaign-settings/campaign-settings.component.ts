@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CampaignService, ICampaign } from 'src/app/campaign.service';
-import { EntityService, IEntityPreset } from 'src/app/entity.service';
-import { EntityPreset } from 'src/app/entity';
+import { IEntityPreset } from 'src/app/entity.service';
 import { FormGroup } from '@angular/forms';
 import { LoginService } from 'src/app/login.service';
 
@@ -20,7 +19,6 @@ export class CampaignSettingsComponent implements OnInit {
 
   constructor(
     private campaignService: CampaignService,
-    private entityService: EntityService,
     private router: Router,
     private route: ActivatedRoute,
     private login: LoginService
@@ -29,6 +27,12 @@ export class CampaignSettingsComponent implements OnInit {
   ngOnInit() {
     this.formGroup = new FormGroup({});
     this.expandXPTable = !this.editing;
+    if (
+      this.campaign.experienceTable === undefined ||
+      this.campaign.experienceTable === null
+    ) {
+      this.campaign.experienceTable = [];
+    }
   }
 
   public selectEntityPreset(preset: IEntityPreset) {
@@ -50,7 +54,7 @@ export class CampaignSettingsComponent implements OnInit {
       try {
         const v = this.formGroup.value;
 
-        const c = await this.campaignService.updateCampaign({
+        await this.campaignService.updateCampaign({
           name: v.name,
           description: v.description,
           imageId: v.imageId,
@@ -58,8 +62,6 @@ export class CampaignSettingsComponent implements OnInit {
           userId: this.login.id,
           id: this.campaign.id,
         });
-
-        // this.campaignService.campaign = c;
       } catch (err) {
         console.log('SAVE ERR', err);
       }
@@ -76,7 +78,7 @@ export class CampaignSettingsComponent implements OnInit {
           id: '',
         });
 
-        this.router.navigate(['campaigns', 'manage', c.id, 'settings']);
+        this.router.navigate(['campaign', 'manage', c.id, 'settings']);
 
         console.log('CREATE', c);
       } catch (err) {

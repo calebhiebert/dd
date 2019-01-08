@@ -37,6 +37,7 @@ import { RegisterComponent } from './login/register/register.component';
 import { CampaignFormComponent } from './campaign/campaign-form/campaign-form.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
+import { InviteManagerComponent } from './campaign/invite-manager/invite-manager.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { AuthInterceptor } from './auth.interceptor';
     QuestFormComponent,
     RegisterComponent,
     CampaignFormComponent,
+    InviteManagerComponent,
   ],
   imports: [
     BrowserModule,

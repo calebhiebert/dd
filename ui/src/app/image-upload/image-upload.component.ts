@@ -28,6 +28,9 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
   @Input()
   public formGroup: FormGroup;
 
+  @Input()
+  public eleId = '';
+
   constructor() {}
 
   ngOnInit() {
@@ -127,5 +130,9 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
 
     this.isUploading = true;
     xhr.send(form);
+  }
+
+  public get controlId() {
+    return `file-upload-${this.eleId}`;
   }
 }

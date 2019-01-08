@@ -67,7 +67,7 @@ export class CampaignService {
       throw new Error('No campaign present');
     }
 
-    const xpTable = this.campaign.experienceTable;
+    const xpTable = this.campaign.experienceTable || [];
 
     let level = 1;
 

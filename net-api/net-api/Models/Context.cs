@@ -15,6 +15,7 @@ namespace net_api.Models
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<EntityPreset> EntityPresets { get; set; }
         public DbSet<Entity> Entities { get; set; }
+        public DbSet<CampaignUser> CampaignUsers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -36,12 +37,20 @@ namespace net_api.Models
         public string PictureURL { get; set; }
         public DateTime CreatedAt { get; set; }
 
+        [JsonIgnore]
         public ICollection<Campaign> Campaigns { get; set; }
+
+        [JsonIgnore]
         public ICollection<Entity> Entities { get; set; }
     }
 
     public class Campaign
     {
+        public Campaign()
+        {
+            Members = new List<CampaignUser>();
+        }
+
         public string Id { get; set; }
 
         [Required]
@@ -57,15 +66,35 @@ namespace net_api.Models
         [Required]
         public string UserId { get; set; }
         public virtual User User { get; set; }
+
+        public ICollection<CampaignUser> Members { get; set; }
         
         [Column("ExperienceTable", TypeName ="bigint[]")]
         public long[] ExperienceTable { get; set; }
 
-        public virtual ICollection<EntityPreset> EntityPresets { get; set; }
+        public ICollection<EntityPreset> EntityPresets { get; set; }
 
         public ICollection<Entity> Entities { get; set; }
         
         public DateTime CreatedAt { get; set; }
+    }
+
+    public class CampaignUser
+    {
+        public CampaignUser()
+        {
+            Id = Nanoid.Nanoid.Generate();
+        }
+
+        public string Id { get; set; }
+
+        public string CampaignId { get; set; }
+
+        [JsonIgnore]
+        public Campaign Campaign { get; set; }
+
+        public string UserId { get; set; }
+        public virtual User User { get; set; }
     }
 
     public class Entity
@@ -86,7 +115,6 @@ namespace net_api.Models
 
         [Required]
         public string CampaignId { get; set; }
-        public Campaign Campaign { get; set; }
 
         public string ImageId { get; set; }
 

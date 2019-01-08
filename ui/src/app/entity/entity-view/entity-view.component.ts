@@ -5,6 +5,7 @@ import { Entity, EntityAttribute, AttributeClass } from 'src/app/entity';
 import { EntityService, IEntity } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { AttributeType, Attribute } from 'src/app/attributes';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'dd-entity-view',
@@ -24,7 +25,8 @@ export class EntityViewComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private entityService: EntityService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -190,5 +192,11 @@ export class EntityViewComponent implements OnInit {
 
   public get editable() {
     return true;
+  }
+
+  public backgroundCSS(imageId: string) {
+    return this.sanitizer.bypassSecurityTrustStyle(
+      `linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%), url("http://res.cloudinary.com/dqhk8k6iv/image/upload/t_chr_blur/${imageId}.jpg")`
+    );
   }
 }

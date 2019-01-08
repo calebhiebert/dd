@@ -1,6 +1,11 @@
 <div class="container grid-xl">
+  <h3 class="mb-0">Please choose a type</h3>
+  <span class="text-gray mb-2">
+    These are the available types of entities the DM has allowed you to create
+  </span>
+
   <!-- Empty state -->
-  <div class="empty" *ngIf="presets.length === 0">
+  <div class="empty mt-2" *ngIf="presets.length === 0">
     <div class="empty-icon"><i class="icon icon-search icon-3x"></i></div>
     <p class="empty-title h5">There's nothing here!</p>
     <p class="empty-subtitle">
@@ -8,11 +13,6 @@
       this.
     </p>
   </div>
-
-  <h3 class="mb-0">Please choose a type</h3>
-  <span class="text-gray mb-2">
-    These are the available types of entities the DM has allowed you to create
-  </span>
 
   <div class="spacer"></div>
 

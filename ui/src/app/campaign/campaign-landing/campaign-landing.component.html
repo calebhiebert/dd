@@ -1,10 +1,20 @@
+<dd-modal #invites>
+  <div modal-body><dd-invite-manager></dd-invite-manager></div>
+</dd-modal>
+
 <div class="container grid-xl" *ngIf="campaign">
   <!-- Active Session Card -->
   <div class="card p-2">
     <div class="columns">
-      <div class="column"><span class="text-large text-bold">There is currently an active session!</span></div>
+      <div class="column">
+        <span class="text-large text-bold"
+          >There is currently an active session!</span
+        >
+      </div>
       <div class="column col-auto col-ml-auto">
-        <button class="btn btn-primary">Join Session <i class="icon icon-arrow-right"></i></button>
+        <button class="btn btn-primary">
+          Join Session <i class="icon icon-arrow-right"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -16,10 +26,16 @@
     </div>
     <div class="column col-auto col-ml-auto">
       <div class="dropdown dropdown-right">
-        <button class="btn btn-link dropdown-toggle">Menu <i class="icon icon-caret"></i></button>
+        <button class="btn btn-link dropdown-toggle">
+          Menu <i class="icon icon-caret"></i>
+        </button>
 
         <ul class="menu">
-          <li class="menu-item"><a [routerLink]="['..', 'entities', 'selecttype']"> Create Entity </a></li>
+          <li class="menu-item">
+            <a [routerLink]="['..', 'entities', 'selecttype']">
+              Create Entity
+            </a>
+          </li>
         </ul>
       </div>
     </div>
@@ -35,19 +51,37 @@
     <div class="column col-3 col-md-12 col-xl-4 col-ml-auto">
       <!-- Members Listing -->
       <div class="card">
-        <div class="card-header"><h5>Members</h5></div>
+        <div class="card-header">
+          <div class="columns">
+            <div class="column"><h5>Members</h5></div>
+            <div class="column col-auto col-ml-auto">
+              <button class="btn btn-sm" (click)="invites.open()">
+                <i class="icon icon-plus"></i> Invite Members
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div class="card-body">
-          <div class="tile tile-centered mb-2" *ngFor="let u of campaign.users">
+          <div
+            class="tile tile-centered mb-2"
+            *ngFor="let u of campaign.members"
+          >
             <div class="tile-icon">
-              <figure class="avatar"><img [src]="u.user.imageURL" /></figure>
+              <figure class="avatar"><img [src]="u.user.pictureURL" /></figure>
             </div>
             <div class="tile-content">
-              <div class="tile-title">{{ u.user.name }}</div>
+              <div class="tile-title">{{ u.user.username }}</div>
               <div class="d-flex">
-                <span class="chip hoverable-chip" (click)="selectEntity(e)" *ngFor="let e of userEntities(u.user.id)">
+                <span
+                  class="chip hoverable-chip"
+                  (click)="selectEntity(e)"
+                  *ngFor="let e of userEntities(u.user.id)"
+                >
                   <img
-                    src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}.png"
+                    src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+                      e.imageId
+                    }}.png"
                     class="avatar avatar-sm"
                   />
                   {{ e.name }}
