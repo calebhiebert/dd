@@ -1,15 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Entity } from 'src/app/entity';
-import {
-  EntityService,
-  IEntityPreset,
-  IEntityAttribute,
-} from 'src/app/entity.service';
+import { EntityService, IEntity } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
-import { Attribute } from 'src/app/attributes';
 import { numberValidator } from '../../dynamic-attribute-form/dynamic-attribute-form.component';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'dd-entity-creation-form',
@@ -25,17 +21,20 @@ export class EntityCreationFormComponent implements OnInit {
 
   public attributesFormGroup: FormGroup;
 
-  private entity: Entity;
+  private entity: IEntity;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private entityService: EntityService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private login: LoginService
   ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       const id = params.get('ent_id');
+
       if (this.editing) {
         this.loadEntity(id);
       }
@@ -62,9 +61,9 @@ export class EntityCreationFormComponent implements OnInit {
       imageId: new FormControl('uncertainty'),
     });
 
-    this.formGroup.valueChanges.subscribe((v) =>
-      console.log(v, this.formGroup)
-    );
+    // this.formGroup.valueChanges.subscribe((v) =>
+    //   console.log(v, this.formGroup)
+    // );
   }
 
   public async save() {
@@ -72,13 +71,25 @@ export class EntityCreationFormComponent implements OnInit {
     this.formGroup.disable();
     this.attributesFormGroup.disable();
 
-    try {
-      const res = await this.entityService.saveEntity(
-        this.campaignService.campaign.id,
-        this.constructEntity()
-      );
-    } catch (err) {
-      console.log('SAVE ERR', err);
+    if (this.editing) {
+      try {
+        await this.entityService.updateEntity(this.constructEntity());
+        this.router.navigate(['../'], { relativeTo: this.route });
+      } catch (err) {
+        console.log('SAVE ERR', err);
+      }
+    } else {
+      try {
+        const ent = await this.entityService.createEntity(
+          this.constructEntity()
+        );
+
+        this.router.navigate(['../', '../', ent.id], {
+          relativeTo: this.route,
+        });
+      } catch (err) {
+        console.log('Create ERR', err);
+      }
     }
 
     this.formGroup.enable();
@@ -86,24 +97,29 @@ export class EntityCreationFormComponent implements OnInit {
     this.saving = false;
   }
 
-  private constructEntity(): Entity {
-    const ent: Entity = {
-      ...this.formGroup.value,
+  private constructEntity(): IEntity {
+    const v = this.formGroup.value;
+
+    const ent: IEntity = {
+      name: v.name,
+      description: v.description,
+      xp: v.xp,
+      imageId: v.imageId,
+      userId: this.login.id,
+      campaignId: this.campaignService.campaign.id,
+      entityPresetId: this.preset.id,
+      attributes: [],
     };
 
-    const attributes: Attribute[] = [];
-
     for (const [k, v] of Object.entries(this.attributesFormGroup.value)) {
-      const preset = this.entity.preset.attributes.find((p) => p.name === k);
+      const preset = this.preset.attributes.find((p) => p.name === k);
 
-      attributes.push({
+      ent.attributes.push({
         name: preset.name,
         data: v as string,
         type: preset.type,
       });
     }
-
-    ent.attributes = attributes;
 
     return ent;
   }
@@ -112,10 +128,7 @@ export class EntityCreationFormComponent implements OnInit {
     this.loading = true;
 
     try {
-      const ent = await this.entityService.getEntity(
-        this.campaignService.campaign.id,
-        id
-      );
+      const ent = await this.entityService.getEntity(id);
 
       this.entity = ent;
       this.formGroup.get('id').setValue(ent.id);

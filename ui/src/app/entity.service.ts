@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { EntityPreset, HealthMode, Entity, AttributeClass } from './entity';
+import { Entity, AttributeClass } from './entity';
 import { AttributeType } from './attributes';
-import { Chance } from 'chance';
 import { HttpClient } from '@angular/common/http';
 import { IUser } from './user.service';
 import { ICampaign } from './campaign.service';
@@ -44,59 +43,22 @@ export class EntityService {
     await simulateDelay(250);
   }
 
-  public async getEntity(campaignId: string, entId: string): Promise<Entity> {
-    await simulateDelay(250);
-
-    const c = new Chance();
-
-    const ent: Entity = {
-      id: entId,
-      name: c.word(),
-      description: c.paragraph(),
-      imageId: 'uncertainty',
-      attributes: [],
-      inventory: { items: [] },
-      xp: c.integer({ min: 0, max: 80000 }),
-      user: {
-        id: entId,
-        name: c.word(),
-        imageURL: `https://api.adorable.io/avatars/285/${c.word()}`,
-      },
-      health: {
-        mode: HealthMode.NORMAL,
-        normal: {
-          max: 36,
-          current: 36,
-          temp: 0,
-        },
-      },
-    };
-
-    for (const pattr of ent.preset.attributes) {
-      ent.attributes.push({
-        name: pattr.name,
-        type: pattr.type,
-        data:
-          pattr.type === AttributeType.NUMBER
-            ? c.integer({ min: 0, max: 50 }).toString()
-            : c.word(),
-      });
-    }
-
-    return ent;
+  public async getEntity(id: string): Promise<IEntity> {
+    return this.http
+      .get<IEntity>(`${environment.apiURL}/entities/${id}`)
+      .toPromise();
   }
 
-  public async createEntity(
-    campaignId: string,
-    entityPresetId: string
-  ): Promise<string> {
-    await simulateDelay(250);
-    return '1';
+  public async createEntity(entity: IEntity): Promise<IEntity> {
+    return this.http
+      .post<IEntity>(`${environment.apiURL}/entities`, entity)
+      .toPromise();
   }
 
-  public async saveEntity(campaignId: string, entity: Entity): Promise<Entity> {
-    await simulateDelay(250);
-    return entity;
+  public async updateEntity(entity: IEntity): Promise<void> {
+    return this.http
+      .put<void>(`${environment.apiURL}/entities/${entity.id}`, entity)
+      .toPromise();
   }
 
   public async deleteEntity(campaignId: string, entity: Entity): Promise<void> {
@@ -131,6 +93,27 @@ export interface IEntityAttribute {
   preset?: IEntityPreset;
   max?: number;
   min?: number;
+}
+
+export interface IEntity {
+  id?: string;
+  name: string;
+  description: string;
+  imageId?: string;
+  userId: string;
+  user?: IUser;
+  campaignId: string;
+  campaign?: ICampaign;
+  attributes: IAttribute[];
+  xp: number;
+  entityPresetId: string;
+  preset?: IEntityPreset;
+}
+
+export interface IAttribute {
+  name: string;
+  type: AttributeType;
+  data: string;
 }
 
 // Used in mock apis, will be removed

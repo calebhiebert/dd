@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EntityAttributeEditorModalComponent } from './entity-attribute-editor-modal/entity-attribute-editor-modal.component';
 import { Entity, EntityAttribute, AttributeClass } from 'src/app/entity';
-import { EntityService } from 'src/app/entity.service';
+import { EntityService, IEntity } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { AttributeType, Attribute } from 'src/app/attributes';
 
@@ -15,7 +15,7 @@ export class EntityViewComponent implements OnInit {
   @ViewChild('attributemodal')
   public attributeModal: EntityAttributeEditorModalComponent;
 
-  public entity: Entity;
+  public entity: IEntity;
 
   public loading = false;
 
@@ -37,10 +37,7 @@ export class EntityViewComponent implements OnInit {
     this.loading = true;
 
     try {
-      const ent = await this.entityService.getEntity(
-        this.campaignService.campaign.id,
-        id
-      );
+      const ent = await this.entityService.getEntity(id);
       this.entity = ent;
     } catch (err) {
       console.log('LOAD ERR', err);
@@ -116,10 +113,7 @@ export class EntityViewComponent implements OnInit {
     this.saving = true;
 
     try {
-      await this.entityService.saveEntity(
-        this.campaignService.campaign.id,
-        this.entity
-      );
+      await this.entityService.updateEntity(this.entity);
     } catch (err) {
       console.log('UPDATE ERR', err);
     }

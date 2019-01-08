@@ -14,6 +14,7 @@ namespace net_api.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<EntityPreset> EntityPresets { get; set; }
+        public DbSet<Entity> Entities { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -35,7 +36,8 @@ namespace net_api.Models
         public string PictureURL { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public virtual ICollection<Campaign> Campaigns { get; set; }
+        public ICollection<Campaign> Campaigns { get; set; }
+        public ICollection<Entity> Entities { get; set; }
     }
 
     public class Campaign
@@ -60,8 +62,64 @@ namespace net_api.Models
         public long[] ExperienceTable { get; set; }
 
         public virtual ICollection<EntityPreset> EntityPresets { get; set; }
+
+        public ICollection<Entity> Entities { get; set; }
         
         public DateTime CreatedAt { get; set; }
+    }
+
+    public class Entity
+    {
+        public string Id { get; set; }
+
+        [Required]
+        [StringLength(20, MinimumLength = 3)]
+        public string Name { get; set; }
+
+        [Required]
+        public string Description { get; set; }
+
+        [Required]
+        public string UserId { get; set; }
+
+        public User User { get; set; }
+
+        [Required]
+        public string CampaignId { get; set; }
+        public Campaign Campaign { get; set; }
+
+        public string ImageId { get; set; }
+
+        [Column("Attributes", TypeName = "jsonb")]
+        [JsonIgnore]
+        public string AttributesJson { get; set; }
+
+        [NotMapped]
+        public List<Attribute> Attributes
+        {
+            get
+            {
+                if (AttributesJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<List<Attribute>>(AttributesJson);
+            }
+
+            set
+            {
+                AttributesJson = JsonConvert.SerializeObject(value);
+            }
+        }
+
+        [Required]
+        [Range(0, long.MaxValue)]
+        public long XP { get; set; }
+
+        [Required]
+        public string EntityPresetId { get; set; }
+        public EntityPreset Preset { get; set; }
     }
 
     public class EntityPreset
@@ -143,6 +201,13 @@ namespace net_api.Models
         public double? Max { get; set; }
 
         public double? Min { get; set; }
+    }
+
+    public class Attribute
+    {
+        public string Name { get; set; }
+        public AttributeType Type { get; set; }
+        public string Data { get; set; }
     }
 
     public enum AttributeType

@@ -30,7 +30,9 @@
             'has-success': xp.valid && (xp.touched || xp.dirty)
           }"
         >
-          <label for="xp" class="form-label">XP</label>
+          <label for="xp" class="form-label"
+            >XP <span class="text-large text-bold text-primary">*</span></label
+          >
           <input
             type="number"
             name="xp"
@@ -70,7 +72,10 @@
             'has-success': name.valid && (name.touched || name.dirty)
           }"
         >
-          <label for="name" class="form-lable">Name</label>
+          <label for="name" class="form-lable"
+            >Name
+            <span class="text-large text-bold text-primary">*</span></label
+          >
           <input
             type="text"
             name="name"
@@ -121,7 +126,10 @@
               description.valid && (description.touched || description.dirty)
           }"
         >
-          <label for="description" class="form-label">Description</label>
+          <label for="description" class="form-label"
+            >Description
+            <span class="text-large text-bold text-primary">*</span></label
+          >
           <textarea
             name="description"
             id="description"
