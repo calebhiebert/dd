@@ -1,9 +1,6 @@
 version: 2
 jobs:
   build-api:
-    branches:
-      only:
-        - ci
     machine: true
     steps:
       - checkout
