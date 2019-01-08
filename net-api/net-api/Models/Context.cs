@@ -16,6 +16,7 @@ namespace net_api.Models
         public DbSet<EntityPreset> EntityPresets { get; set; }
         public DbSet<Entity> Entities { get; set; }
         public DbSet<CampaignUser> CampaignUsers { get; set; }
+        public DbSet<CampaignInvite> CampaignInvites { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -116,6 +117,7 @@ namespace net_api.Models
         [Required]
         public string CampaignId { get; set; }
 
+
         public string ImageId { get; set; }
 
         [Column("Attributes", TypeName = "jsonb")]
@@ -148,6 +150,33 @@ namespace net_api.Models
         [Required]
         public string EntityPresetId { get; set; }
         public EntityPreset Preset { get; set; }
+    }
+
+    public class CampaignInvite
+    {
+        public string Id { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public DateTime CreatedAt { get; set; }
+
+        public CampaignInviteStatus Status { get; set; }
+
+        [Required]
+        public string CampaignId { get; set; }
+
+        [ForeignKey("User")]
+        public string AcceptedUserId { get; set; }
+        public User User { get; set; }
+
+        public CampaignInvite()
+        {
+            Id = Nanoid.Nanoid.Generate(size: 64);
+            CreatedAt = new DateTime();
+            Status = CampaignInviteStatus.Pending;
+        }
     }
 
     public class EntityPreset
@@ -246,5 +275,10 @@ namespace net_api.Models
     public enum AttributeClass
     {
         Major, Normal, Minor, Unimportant
+    }
+
+    public enum CampaignInviteStatus
+    {
+        Pending, Revoked, Accepted
     }
 }

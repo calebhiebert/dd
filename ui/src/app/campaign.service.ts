@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Campaign } from './campaign';
 import { ItemService } from './item.service';
 import { EntityService, IEntityPreset } from './entity.service';
 import { environment } from 'src/environments/environment';
-import { User } from './user';
 import { IUser } from './user.service';
 
 @Injectable({
@@ -14,11 +12,7 @@ export class CampaignService {
   public campaign: ICampaign = null;
   public loadingCampaign = false;
 
-  constructor(
-    private itemService: ItemService,
-    private entityService: EntityService,
-    private http: HttpClient
-  ) {}
+  constructor(private http: HttpClient) {}
 
   public async setSelection(campaignId: string) {
     this.campaign = null;
@@ -62,6 +56,53 @@ export class CampaignService {
       .toPromise();
   }
 
+  public async getInvites(): Promise<ICampaignInvite[]> {
+    return this.http
+      .get<ICampaignInvite[]>(
+        `${environment.apiURL}/campaigninvites?campaignId=${this.campaign.id}`
+      )
+      .toPromise();
+  }
+
+  public async getInvite(id: string): Promise<ICampaignInvite> {
+    return this.http
+      .get<ICampaignInvite>(`${environment.apiURL}/campaigninvites/${id}`)
+      .toPromise();
+  }
+
+  public async createInvite(name: string): Promise<ICampaignInvite> {
+    return this.http
+      .post<ICampaignInvite>(`${environment.apiURL}/campaigninvites`, {
+        campaignId: this.campaign.id,
+        name,
+      })
+      .toPromise();
+  }
+
+  public async updateInvite(invite: ICampaignInvite): Promise<void> {
+    return this.http
+      .put<void>(`${environment.apiURL}/campaigninvites/${invite.id}`, invite)
+      .toPromise();
+  }
+
+  public async deleteInvite(token: string): Promise<void> {
+    return this.http
+      .delete<void>(`${environment.apiURL}/campaigninvites/${token}`)
+      .toPromise();
+  }
+
+  public async acceptInvite(token: string): Promise<void> {
+    return this.http
+      .post<void>(`${environment.apiURL}/campaigninvites/${token}/accept`, {})
+      .toPromise();
+  }
+
+  public async denyInvite(token: string): Promise<void> {
+    return this.http
+      .post<void>(`${environment.apiURL}/campaigninvites/${token}/deny`, {})
+      .toPromise();
+  }
+
   public calculateLevel(xp: number): number {
     if (!this.campaign) {
       throw new Error('No campaign present');
@@ -97,6 +138,22 @@ export interface ICampaign {
   items?: any[];
   entityPresets?: IEntityPreset[];
   createdAt?: Date;
+}
+
+export interface ICampaignInvite {
+  id: string;
+  name: string;
+  campaignId: string;
+  createdAt: Date;
+  status: CampaignInviteStatus;
+  acceptedUserId?: string;
+  user?: IUser;
+}
+
+export enum CampaignInviteStatus {
+  PENDING,
+  REVOKED,
+  ACCEPTED,
 }
 
 // Used in mock apis, will be removed

@@ -38,6 +38,7 @@ import { CampaignFormComponent } from './campaign/campaign-form/campaign-form.co
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { InviteManagerComponent } from './campaign/invite-manager/invite-manager.component';
+import { InviteComponent } from './invite/invite.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { InviteManagerComponent } from './campaign/invite-manager/invite-manager
     RegisterComponent,
     CampaignFormComponent,
     InviteManagerComponent,
+    InviteComponent,
   ],
   imports: [
     BrowserModule,

@@ -5,6 +5,7 @@ import { User } from './user';
 import { UserService, IUser } from './user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ActionQueueService, ActionType } from './action-queue.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,11 @@ export class LoginService {
 
   private loginPromise: Promise<boolean>;
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private actions: ActionQueueService
+  ) {}
 
   private getAuth(): WebAuth {
     if (this.auth === undefined) {
@@ -64,8 +69,13 @@ export class LoginService {
             if (err instanceof HttpErrorResponse) {
               if (err.status === 404) {
                 this.loginInProgress = false;
-                resolve(false);
+                this.actions.queue.push({
+                  type: ActionType.ACCOUNT_SETUP,
+                  data: {},
+                });
+                this.actions.save();
                 this.router.navigate(['register']);
+                resolve(false);
                 return;
               } else {
                 throw err;

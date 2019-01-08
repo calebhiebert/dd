@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using net_api.Models;
@@ -9,9 +10,10 @@ using net_api.Models;
 namespace netapi.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20190108161235_CampaignInvites")]
+    partial class CampaignInvites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,21 +57,11 @@ namespace netapi.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AcceptedUserId");
+                    b.Property<string>("CampaignId");
 
-                    b.Property<string>("CampaignId")
-                        .IsRequired();
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<int>("Status");
+                    b.Property<string>("InviteToken");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AcceptedUserId");
 
                     b.ToTable("CampaignInvites");
                 });
@@ -193,13 +185,6 @@ namespace netapi.Migrations
                         .WithMany("Campaigns")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("net_api.Models.CampaignInvite", b =>
-                {
-                    b.HasOne("net_api.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("AcceptedUserId");
                 });
 
             modelBuilder.Entity("net_api.Models.CampaignUser", b =>

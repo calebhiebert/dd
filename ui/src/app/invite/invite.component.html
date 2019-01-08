@@ -1,0 +1,39 @@
+<div class="container grid-xl">
+  <!-- Loading -->
+  <div class="columns" *ngIf="loading">
+    <div class="column col-4 col-md-6 col-sm-12 col-mx-auto">
+      <div class="card">
+        <div class="card-body">
+          Processing information...
+          <div class="loading"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="columns" *ngIf="!loading && campaign">
+    <div class="column col-6 col-md-10 col-sm-12 text-center col-mx-auto">
+      <div class="card p-2">
+        <h2>Would you like to join this campaign?</h2>
+        <figure class="avatar avatar-xl align-self-center">
+          <img
+            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+              campaign.imageId
+            }}.png"
+          />
+        </figure>
+        <h1>{{ campaign.name }}</h1>
+        <p class="text-gray">{{ campaign.description }}</p>
+        <!-- Buttons -->
+        <button class="btn btn-lg my-2" (click)="deny()">No</button>
+        <button
+          class="btn btn-primary btn-lg"
+          [ngClass]="{ loading: accepting }"
+          (click)="accept()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

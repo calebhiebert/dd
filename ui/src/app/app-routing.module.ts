@@ -16,22 +16,29 @@ import { QuestManagerComponent } from './quest/quest-manager/quest-manager.compo
 import { ItemEditComponent } from './items/item-edit/item-edit.component';
 import { CampaignLandingComponent } from './campaign/campaign-landing/campaign-landing.component';
 import { RegisterComponent } from './login/register/register.component';
+import { InviteComponent } from './invite/invite.component';
+import { ActionGuard } from './action.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'invite/:invite_id', component: InviteComponent },
   { path: 'login', component: LoginComponent, canActivate: [LoginPageGuard] },
   { path: 'register', component: RegisterComponent },
   { path: 'callback', component: LoginComponent },
   {
     path: 'campaigns/list',
     component: CampaignListComponent,
-    canActivate: [LoggedInGuard],
+    canActivate: [LoggedInGuard, ActionGuard, ActionGuard],
   },
-  { path: 'home', component: HomeComponent, canActivate: [LoggedInGuard] },
+  {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [LoggedInGuard, ActionGuard],
+  },
   {
     path: 'campaigns/create',
     component: CampaignSettingsComponent,
-    canActivate: [LoggedInGuard],
+    canActivate: [LoggedInGuard, ActionGuard],
     data: {
       editing: false,
     },
@@ -39,7 +46,7 @@ const routes: Routes = [
   {
     path: 'campaign/manage/:id',
     component: CampaignComponent,
-    canActivate: [LoggedInGuard],
+    canActivate: [LoggedInGuard, ActionGuard],
     children: [
       {
         path: 'items',
@@ -79,7 +86,7 @@ const routes: Routes = [
   {
     path: 'campaigns/:id',
     component: CampaignComponent,
-    canActivate: [LoggedInGuard],
+    canActivate: [LoggedInGuard, ActionGuard],
     children: [
       {
         path: '',

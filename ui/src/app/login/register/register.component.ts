@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { LoginService } from 'src/app/login.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/user.service';
+import { ActionQueueService } from 'src/app/action-queue.service';
 
 @Component({
   selector: 'dd-register',
@@ -16,7 +17,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private login: LoginService,
     public userService: UserService,
-    private router: Router
+    private router: Router,
+    private action: ActionQueueService
   ) {}
 
   ngOnInit() {
@@ -39,6 +41,9 @@ export class RegisterComponent implements OnInit {
 
         this.login.setUserData(newUser);
         this.login.resetLoginStatus();
+
+        this.action.queue.pop();
+        this.action.save();
 
         this.router.navigate(['home']);
       } catch (err) {
