@@ -20,7 +20,7 @@ export class EntityCreationFormComponent implements OnInit {
 
   public attributesFormGroup: FormGroup;
 
-  private entity: IEntity;
+  public entity: IEntity;
 
   constructor(
     private route: ActivatedRoute,
