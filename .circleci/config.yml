@@ -59,10 +59,10 @@ workflows:
       - build-api:
           filters:
             branches:
-              only: ci
+              only: master
   ui:
     jobs:
       - build-ui:
           filters:
             branches:
-              only: ci
+              only: master
