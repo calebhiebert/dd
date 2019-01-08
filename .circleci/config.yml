@@ -8,7 +8,9 @@ jobs:
           command: |
             echo Running Docker Build
             cd net-api
-            docker build -t panchem/dd-api:$CIRCLE_BUILD_NUM -f net-api/Dockerfile .
+            docker build -t registry.heroku.com/panch-dd/web -f net-api/Dockerfile .
+            docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+            docker push registry.heroku.com/panch-dd/web
   build-ui:
     docker:
       - image: circleci/node:8-stretch-browsers
