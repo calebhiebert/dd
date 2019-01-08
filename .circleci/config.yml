@@ -11,6 +11,8 @@ jobs:
             docker build -t registry.heroku.com/panch-dd/web -f net-api/Dockerfile .
             docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
             docker push registry.heroku.com/panch-dd/web
+            curl https://cli-assets.heroku.com/install.sh | sh
+            heroku container:release web -a panch-dd
   build-ui:
     docker:
       - image: circleci/node:8-stretch-browsers
