@@ -1,9 +1,6 @@
 version: 2
 jobs:
   build-api:
-    branches:
-      only:
-        - ci
     machine: true
     steps:
       - checkout
@@ -11,7 +8,50 @@ jobs:
           command: |
             echo Running Docker Build
             cd net-api
-            docker build -t panchem/dd-api:$CIRCLE_BUILD_NUM -f net-api/Dockerfile .
+            docker build -t registry.heroku.com/panch-dd/web -f net-api/Dockerfile .
+            docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+            docker push registry.heroku.com/panch-dd/web
+            curl https://cli-assets.heroku.com/install.sh | sh
+            heroku container:release web -a panch-dd
+  build-ui:
+    docker:
+      - image: circleci/node:8-stretch-browsers
+    working_directory: ~/dd/ui
+    steps:
+      - checkout:
+          path: ~/dd
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install Packages
+          command: yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+            - yarn.lock
+      - run:
+          name: Build
+          command: yarn build
+      - deploy:
+          name: Deploy
+          command: |
+            export TARGET_BRANCH=gh-pages
+            git config --global user.email $GH_EMAIL
+            git config --global user.name $GH_NAME
+            git clone $CIRCLE_REPOSITORY_URL out
+            cd out
+            git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
+            git rm -rf .
+            cd ..
+            cp -a dist/ui/. out/.
+            cp out/index.html out/404.html
+            mkdir -p out/.circleci && cp -a ../.circleci/. out/.circleci/.
+            cd out
+            echo dd.panchem.io > CNAME
+            git add -A
+            git commit -m "Automated deployment to GitHub Pages: ${CIRCLE_SHA1}" --allow-empty
+            git push https://$GH_TOKEN@github.com/calebhiebert/dd.git $TARGET_BRANCH -q
 workflows:
   version: 2
   server:
@@ -19,4 +59,10 @@ workflows:
       - build-api:
           filters:
             branches:
-              only: ci
+              only: master
+  ui:
+    jobs:
+      - build-ui:
+          filters:
+            branches:
+              only: master

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace net_api.Models
@@ -20,7 +21,18 @@ namespace net_api.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=dd;Password=dd;User ID=dd");
+            var connectionString = "Host=localhost;Port=5432;Database=dd;Password=dd;User ID=dd";
+
+            var dbCreds = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+            if (dbCreds != null)
+            {
+                var reg = new Regex("postgres://(?<Username>[a-z]+):(?<Password>[a-z0-9]+)@(?<Host>[a-z0-9-.]+):(?<Port>[0-9]+)/(?<Database>[a-z0-9]+)");
+                var matches = reg.Match(dbCreds.Trim());
+                connectionString = $"Host={matches.Groups["Host"]};Port={matches.Groups["Port"]};Database={matches.Groups["Database"]};Password={matches.Groups["Password"]};User ID={matches.Groups["Username"]}";
+            }
+
+            optionsBuilder.UseNpgsql(connectionString);
             base.OnConfiguring(optionsBuilder);
         }
     }

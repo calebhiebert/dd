@@ -38,6 +38,9 @@ namespace net_api
                                                         .AllowAnyMethod());
             });
 
+            var context = new Context();
+            context.Database.EnsureCreated();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddScoped<Context>();

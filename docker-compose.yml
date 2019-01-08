@@ -1,0 +1,18 @@
+version: '3'
+services:
+  db:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_PASSWORD: dd
+      POSTGRES_USER: dd
+  api:
+    build:
+      context: ./net-api
+      dockerfile: net-api/Dockerfile
+    ports:
+      - '8080:80'
+  ui:
+    build:
+      context: ./ui
+    ports:
+      - '4200:80'
