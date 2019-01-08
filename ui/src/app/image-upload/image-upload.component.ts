@@ -135,4 +135,8 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
   public get controlId() {
     return `file-upload-${this.eleId}`;
   }
+
+  public get control() {
+    return this.formGroup.get('imageId');
+  }
 }

@@ -1,5 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  ValidatorFn,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { EntityAttribute } from 'src/app/entity';
 import { AttributeType, Attribute } from 'src/app/attributes';
 
@@ -46,9 +53,15 @@ export class DynamicAttributeFormComponent implements OnInit {
       }
 
       if (attr.type === AttributeType.ENUM && attr.defaultValue === undefined) {
-        this.formGroup.addControl(attr.name, new FormControl(attr.options[0], validators));
+        this.formGroup.addControl(
+          attr.name,
+          new FormControl(attr.options[0], validators)
+        );
       } else {
-        this.formGroup.addControl(attr.name, new FormControl(attr.defaultValue, validators));
+        this.formGroup.addControl(
+          attr.name,
+          new FormControl(attr.defaultValue, validators)
+        );
       }
     }
 
@@ -76,8 +89,14 @@ export class DynamicAttributeFormComponent implements OnInit {
   }
 }
 
-export const numberValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-  if (control.value !== null && control.value !== undefined && control.value !== '') {
+export const numberValidator: ValidatorFn = (
+  control: AbstractControl
+): ValidationErrors | null => {
+  if (
+    control.value !== null &&
+    control.value !== undefined &&
+    control.value !== ''
+  ) {
     try {
       parseFloat(control.value);
     } catch (err) {

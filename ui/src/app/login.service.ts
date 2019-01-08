@@ -35,6 +35,12 @@ export class LoginService {
     return this.auth;
   }
 
+  public resetLoginStatus() {
+    this.loginPromise = undefined;
+    this.loginInProgress = false;
+    this.loginCompleted = false;
+  }
+
   public async isLoggedIn(): Promise<boolean> {
     if (this.loginPromise === undefined) {
       this.loginPromise = new Promise<boolean>(async (resolve, reject) => {

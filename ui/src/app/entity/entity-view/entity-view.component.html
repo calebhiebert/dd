@@ -28,6 +28,9 @@
             (click)="editName()"
           >
             {{ entity.name }}
+            <a class="text-light" [routerLink]="['edit']"
+              ><i class="icon icon-edit"></i
+            ></a>
           </h3>
           <span class="text-italic">{{ entity.preset.name }}</span>
         </div>

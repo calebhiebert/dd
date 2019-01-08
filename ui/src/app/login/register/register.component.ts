@@ -38,6 +38,7 @@ export class RegisterComponent implements OnInit {
         });
 
         this.login.setUserData(newUser);
+        this.login.resetLoginStatus();
 
         this.router.navigate(['home']);
       } catch (err) {

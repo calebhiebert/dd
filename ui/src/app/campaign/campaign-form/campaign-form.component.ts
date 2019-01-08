@@ -39,7 +39,8 @@ export class CampaignFormComponent implements OnInit {
       new FormControl(
         this.campaign.imageId === '' || !this.campaign
           ? null
-          : this.campaign.imageId
+          : this.campaign.imageId,
+        [Validators.required]
       )
     );
   }

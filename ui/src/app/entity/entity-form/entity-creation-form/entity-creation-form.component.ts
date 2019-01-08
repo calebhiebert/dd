@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Entity } from 'src/app/entity';
 import { EntityService, IEntity } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { numberValidator } from '../../dynamic-attribute-form/dynamic-attribute-form.component';
@@ -84,12 +83,12 @@ export class EntityCreationFormComponent implements OnInit {
           this.constructEntity()
         );
 
-        this.router.navigate(
-          ['campaigns', this.campaignService.campaign.id, 'entities', ent.id],
-          {
-            relativeTo: this.route,
-          }
-        );
+        this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'entities',
+          ent.id,
+        ]);
       } catch (err) {
         console.log('Create ERR', err);
       }
@@ -134,7 +133,16 @@ export class EntityCreationFormComponent implements OnInit {
       const ent = await this.entityService.getEntity(id);
 
       this.entity = ent;
-      this.formGroup.get('id').setValue(ent.id);
+
+      setTimeout(() => {
+        this.formGroup.patchValue(ent);
+
+        for (let attr of ent.attributes) {
+          if (this.attributesFormGroup.get(attr.name)) {
+            this.attributesFormGroup.get(attr.name).setValue(attr.data);
+          }
+        }
+      }, 1);
     } catch (err) {
       console.log('LOAD ERR', err);
     }
@@ -144,6 +152,7 @@ export class EntityCreationFormComponent implements OnInit {
 
   public get preset() {
     if (this.editing) {
+      return this.entity.preset;
     } else {
       return this.campaignService.campaign.entityPresets.find(
         (ep) => ep.id === this.route.snapshot.paramMap.get('ent_type_id')

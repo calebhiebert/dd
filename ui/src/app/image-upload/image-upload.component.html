@@ -1,45 +1,54 @@
-<div
-  class="p-2"
-  id="drop-area"
-  [ngClass]="{ 'drag-over': isDragOver }"
-  #fupload
->
-  <input
-    type="file"
-    [id]="controlId"
-    accept="image/*"
-    class="file-input"
-    (change)="onFileChange($event)"
-  />
-  <label class="btn btn-sm text-ellipsis" [for]="controlId">
-    <span *ngIf="file === null && imageURL === null">Upload Image</span>
-    <span *ngIf="file === null && imageURL !== null">Change Image</span>
-    <span *ngIf="file !== null">{{ file.name }}</span>
-  </label>
-  <button
-    class="btn btn-error btn-sm mt-2"
-    *ngIf="imageURL !== null"
-    (click)="clearImage()"
+<div class="form-group" [ngClass]="{ 'has-error': control.invalid }">
+  <div
+    class="p-2"
+    id="drop-area"
+    [ngClass]="{
+      'drag-over': isDragOver,
+      'file-has-error': control.invalid
+    }"
+    #fupload
   >
-    Clear Image
-  </button>
+    <input
+      type="file"
+      [id]="controlId"
+      accept="image/*"
+      class="file-input"
+      (change)="onFileChange($event)"
+    />
+    <label class="btn btn-sm text-ellipsis" [for]="controlId">
+      <span *ngIf="file === null && imageURL === null">Upload Image</span>
+      <span *ngIf="file === null && imageURL !== null">Change Image</span>
+      <span *ngIf="file !== null">{{ file.name }}</span>
+    </label>
+    <button
+      class="btn btn-error btn-sm mt-2"
+      *ngIf="imageURL !== null"
+      (click)="clearImage()"
+    >
+      Clear Image
+    </button>
 
-  <!-- Progress bar -->
-  <div class="bar bar-sm mt-2" *ngIf="isUploading">
-    <div
-      class="bar-item"
-      role="progressbar"
-      [style.width]="uploadProgress + '%'"
-    ></div>
+    <!-- Progress bar -->
+    <div class="bar bar-sm mt-2" *ngIf="isUploading">
+      <div
+        class="bar-item"
+        role="progressbar"
+        [style.width]="uploadProgress + '%'"
+      ></div>
+    </div>
+
+    <!-- Preview image -->
+    <img
+      class="image-preview img-fit-contain mt-2"
+      *ngIf="imageURL !== null"
+      [src]="imageURL"
+    />
   </div>
-
-  <!-- Preview image -->
-  <img
-    class="image-preview img-fit-contain mt-2"
-    *ngIf="imageURL !== null"
-    [src]="imageURL"
-  />
+  <p class="form-input-hint" *ngIf="control.invalid && control.errors.required">
+    An image is required
+  </p>
 </div>
+
 <div class="toast toast-error" *ngIf="fileError !== null">
   <button class="btn btn-clear float-right" (click)="clearError()"></button>
   {{ fileError }}

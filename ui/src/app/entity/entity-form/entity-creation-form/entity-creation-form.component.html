@@ -2,13 +2,15 @@
   <!-- Loader -->
   <div class="loading loading-lg" *ngIf="loading"></div>
 
-  <div class="columns" *ngIf="entity || !editing">
+  <div class="columns" *ngIf="entity !== undefined || !editing">
     <div class="column">
       <h3>Edit {{ preset.name }}</h3>
     </div>
     <div class="column col-auto col-ml-auto">
+      <a class="btn mr-2" [routerLink]="['..']">Cancel</a>
+
       <button
-        class="btn"
+        class="btn btn-primary"
         (click)="save()"
         [ngClass]="{ loading: saving }"
         [disabled]="formGroup.invalid || attributesFormGroup.invalid"
@@ -18,7 +20,7 @@
     </div>
   </div>
   <!-- Form -->
-  <div [formGroup]="formGroup" *ngIf="entity || !editing">
+  <div [formGroup]="formGroup" *ngIf="entity !== undefined || !editing">
     <div class="columns">
       <div class="column col-auto">
         <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
