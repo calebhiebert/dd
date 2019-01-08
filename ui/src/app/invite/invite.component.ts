@@ -49,11 +49,14 @@ export class InviteComponent implements OnInit {
         this.loading = true;
         await this.loadInvite();
         await this.loadCampaign();
+
+        if (this.invite.status !== 0) {
+          this.actions.queue.pop();
+          this.actions.save();
+        }
       } catch (err) {
         this.actions.queue.pop();
         this.actions.save();
-        console.log(this.actions.queue);
-        console.log('Error during loading of invite, redirecting');
 
         await this.router
           .navigate(['home'])

@@ -13,7 +13,8 @@
 
   <div class="columns" *ngIf="!loading && campaign">
     <div class="column col-6 col-md-10 col-sm-12 text-center col-mx-auto">
-      <div class="card p-2">
+      <!-- Invite Display -->
+      <div class="card p-2" *ngIf="invite.status === 0">
         <h2>Would you like to join this campaign?</h2>
         <figure class="avatar avatar-xl align-self-center">
           <img
@@ -33,6 +34,15 @@
         >
           Yes
         </button>
+      </div>
+
+      <!-- Invalid Invite Display -->
+      <div class="toast text-left toast-error" *ngIf="invite.status !== 0">
+        <h6>Invalid Invite</h6>
+        <p>
+          Unfortunately this invite is no longer valid. Sorry about that
+          ¯\_(ツ)_/¯
+        </p>
       </div>
     </div>
   </div>

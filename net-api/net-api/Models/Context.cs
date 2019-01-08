@@ -279,6 +279,6 @@ namespace net_api.Models
 
     public enum CampaignInviteStatus
     {
-        Pending, Revoked, Accepted
+        Pending, Revoked, Accepted, Declined
     }
 }

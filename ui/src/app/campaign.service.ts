@@ -99,7 +99,7 @@ export class CampaignService {
 
   public async denyInvite(token: string): Promise<void> {
     return this.http
-      .post<void>(`${environment.apiURL}/campaigninvites/${token}/deny`, {})
+      .post<void>(`${environment.apiURL}/campaigninvites/${token}/decline`, {})
       .toPromise();
   }
 

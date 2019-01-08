@@ -30,7 +30,7 @@ namespace net_api.Controllers
                 return BadRequest("Missing campaign id");
             }
 
-            return Ok(_context.CampaignInvites.Where(c => c.CampaignId == campaignId).ToList());
+            return Ok(_context.CampaignInvites.Where(c => c.CampaignId == campaignId).Include(e => e.User).ToList());
         }
 
         // GET: api/CampaignInvites/5
@@ -80,6 +80,32 @@ namespace net_api.Controllers
             campaignInvite.AcceptedUserId = userId;
 
             _context.Add(user);
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPost("{id}/decline")]
+        [Authorize]
+        public async Task<IActionResult> DeclineInvite([FromRoute] string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var campaignInvite = await _context.CampaignInvites.FindAsync(id);
+
+            if (campaignInvite == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            campaignInvite.Status = CampaignInviteStatus.Declined;
+            campaignInvite.AcceptedUserId = userId;
 
             await _context.SaveChangesAsync();
 

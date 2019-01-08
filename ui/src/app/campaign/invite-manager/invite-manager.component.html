@@ -30,6 +30,7 @@
         <th>Link</th>
         <th>Name</th>
         <th>Status</th>
+        <th>User</th>
         <th>Created On</th>
         <th></th>
       </tr>
@@ -42,12 +43,22 @@
           <span *ngSwitchCase="0">Pending</span>
           <span *ngSwitchCase="1">Revoked</span>
           <span *ngSwitchCase="2">Accepted</span>
+          <span *ngSwitchCase="3">Declined</span>
+        </td>
+        <td>
+          <div *ngIf="i.user">
+            <figure class="avatar avatar-xs">
+              <img [src]="i.user.pictureURL" alt="Avatar" />
+            </figure>
+            {{ i.user.username }}
+          </div>
+          <span *ngIf="!i.user">N/A</span>
         </td>
         <td>{{ i.createdAt | date }}</td>
         <td>
           <button
             class="btn btn-link btn-sm"
-            *ngIf="i.status !== 1"
+            *ngIf="i.status === 0"
             (click)="revokeInvite(i)"
           >
             <i class="icon icon-cross"></i>Revoke
