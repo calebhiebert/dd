@@ -1,0 +1,22 @@
+version: 2
+jobs:
+  build-api:
+    branches:
+      only:
+        - ci
+    machine: true
+    steps:
+      - checkout
+      - run:
+          command: |
+            echo Running Docker Build
+            cd net-api
+            docker build -t panchem/dd-api:$CIRCLE_BUILD_NUM -f net-api/Dockerfile .
+workflows:
+  version: 2
+  server:
+    jobs:
+      - build-api:
+          filters:
+            branches:
+              only: ci
