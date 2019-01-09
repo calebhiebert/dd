@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { WebAuth, Auth0DecodedHash, Auth0UserProfile } from 'auth0-js';
 import { environment } from 'src/environments/environment';
-import { User } from './user';
 import { UserService, IUser } from './user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ActionQueueService, ActionType } from './action-queue.service';
+import { CampaignService } from './campaign.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +23,8 @@ export class LoginService {
   constructor(
     private userService: UserService,
     private router: Router,
-    private actions: ActionQueueService
+    private actions: ActionQueueService,
+    private campaignService: CampaignService
   ) {}
 
   private getAuth(): WebAuth {
@@ -138,6 +139,7 @@ export class LoginService {
     this.loginCompleted = false;
     this.loginInProgress = false;
     this.loginPromise = undefined;
+    this.campaignService.campaign = undefined;
   }
 
   public process(hash: string, state: string): Promise<Auth0DecodedHash> {

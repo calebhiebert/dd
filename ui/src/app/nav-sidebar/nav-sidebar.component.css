@@ -1,0 +1,7 @@
+.brand {
+  display: flex;
+}
+
+.brand > a {
+  width: 100%;
+}

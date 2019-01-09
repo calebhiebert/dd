@@ -39,6 +39,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { InviteManagerComponent } from './campaign/invite-manager/invite-manager.component';
 import { InviteComponent } from './invite/invite.component';
+import { NavSidebarComponent } from './nav-sidebar/nav-sidebar.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { InviteComponent } from './invite/invite.component';
     CampaignFormComponent,
     InviteManagerComponent,
     InviteComponent,
+    NavSidebarComponent,
   ],
   imports: [
     BrowserModule,

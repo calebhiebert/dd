@@ -1,0 +1,45 @@
+<div class="brand text-center mt-2">
+  <a [routerLink]="['home']"> <img src="/assets/logo.svg" width="32" /> </a>
+</div>
+
+<ul class="nav ml-2">
+  <!-- Login -->
+  <li class="nav-item">
+    <a [routerLink]="['login']" *ngIf="!loggedIn && !loginInProgress">Login</a>
+  </li>
+
+  <!-- User Stuff -->
+  <li class="nav-item" *ngIf="loggedIn">
+    <a [routerLink]="['home']">Me</a>
+    <ul class="nav">
+      <li class="nav-item">
+        <a [routerLink]="['campaigns', 'list']">Campaigns</a>
+      </li>
+      <li class="nav-item"><a class="c-hand" (click)="logOut()">Logout</a></li>
+    </ul>
+  </li>
+
+  <!-- Campaign -->
+  <li class="nav-item" *ngIf="campaign">
+    <a [routerLink]="['campaigns', campaign.id, 'landing']">
+      {{ campaign.name }}
+    </a>
+    <ul class="nav">
+      <li class="nav-item">
+        <a [routerLink]="['campaign', 'manage', campaign.id, 'items']">Items</a>
+      </li>
+      <li class="nav-item"><a [routerLink]="['home']">Places</a></li>
+      <li class="nav-item">
+        <a [routerLink]="['campaign', 'manage', campaign.id, 'quests']"
+          >Quests</a
+        >
+      </li>
+      <li class="nav-item"><a [routerLink]="['home']">Sessions</a></li>
+      <li class="nav-item">
+        <a [routerLink]="['campaign', 'manage', campaign.id, 'settings']"
+          >Settings</a
+        >
+      </li>
+    </ul>
+  </li>
+</ul>

@@ -2,19 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { CampaignService } from '../campaign.service';
 import { LoginService } from '../login.service';
 import { Router } from '@angular/router';
-import { SidebarService } from '../sidebar.service';
 
 @Component({
-  selector: 'dd-nav',
-  templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css'],
+  selector: 'dd-nav-sidebar',
+  templateUrl: './nav-sidebar.component.html',
+  styleUrls: ['./nav-sidebar.component.css'],
 })
-export class NavComponent implements OnInit {
+export class NavSidebarComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private login: LoginService,
-    private router: Router,
-    private sidebar: SidebarService
+    private router: Router
   ) {}
 
   ngOnInit() {}
@@ -22,10 +20,6 @@ export class NavComponent implements OnInit {
   public logOut() {
     this.login.logout();
     this.router.navigate(['login']);
-  }
-
-  public toggle() {
-    this.sidebar.toggle();
   }
 
   public get loadingCampaign() {

@@ -1,1 +1,18 @@
-<dd-nav></dd-nav> <router-outlet></router-outlet>
+<div class="body-container off-canvas off-canvas-sidebar-show">
+  <!-- off-screen toggle button -->
+  <div
+    id="sidebar-id"
+    class="off-canvas-sidebar"
+    [ngClass]="{ active: sidebarOpen }"
+  >
+    <!-- off-screen sidebar -->
+    <dd-nav-sidebar></dd-nav-sidebar>
+  </div>
+
+  <a class="off-canvas-overlay" (click)="toggle()"></a>
+
+  <div class="off-canvas-content p-0">
+    <!-- off-screen content -->
+    <dd-nav></dd-nav> <router-outlet></router-outlet>
+  </div>
+</div>
