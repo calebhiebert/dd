@@ -2,6 +2,7 @@
   <!-- Loader -->
   <div class="loading loading-lg" *ngIf="loading"></div>
 
+  <!-- Title Control -->
   <div class="columns" *ngIf="entity !== undefined || !editing">
     <div class="column">
       <h3>Edit {{ preset.name }}</h3>
@@ -19,10 +20,12 @@
       </button>
     </div>
   </div>
+
   <!-- Form -->
   <div [formGroup]="formGroup" *ngIf="entity !== undefined || !editing">
     <div class="columns">
-      <div class="column col-auto">
+      <!-- Image Upload -->
+      <div class="column col-3 col-md-12">
         <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
 
         <div
@@ -65,7 +68,7 @@
       </div>
 
       <!-- Standard form inputs -->
-      <div class="column">
+      <div class="column col-9 col-md-12">
         <!-- Name -->
         <div
           class="form-group"

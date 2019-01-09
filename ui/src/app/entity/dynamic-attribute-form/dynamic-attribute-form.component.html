@@ -4,13 +4,20 @@
       class="form-group col-12"
       *ngFor="let att of attributes"
       [ngClass]="{
-        'has-error': control(att.name).invalid && (control(att.name).dirty || control(att.name).touched),
-        'has-success': control(att.name).valid && (control(att.name).dirty || control(att.name).touched)
+        'has-error':
+          control(att.name).invalid &&
+          (control(att.name).dirty || control(att.name).touched),
+        'has-success':
+          control(att.name).valid &&
+          (control(att.name).dirty || control(att.name).touched)
       }"
     >
-      <div class="col-1 col-lg-2 col-sm-12">
+      <div class="col-1 col-lg-3 col-sm-12">
         <label class="form-label"
-          >{{ att.name }} <span *ngIf="att.required" class="text-primary text-large text-bold">*</span></label
+          >{{ att.name }}
+          <span *ngIf="att.required" class="text-primary text-large text-bold"
+            >*</span
+          ></label
         >
       </div>
       <div class="col-11 col-lg-10 col-sm-12">
@@ -36,12 +43,21 @@
           />
 
           <!-- Enum input -->
-          <select class="form-input" name="attr" [formControlName]="att.name" *ngSwitchCase="2">
+          <select
+            class="form-input"
+            name="attr"
+            [formControlName]="att.name"
+            *ngSwitchCase="2"
+          >
             <option *ngFor="let o of att.options" [value]="o">{{ o }}</option>
           </select>
 
           <figure class="form-icon avatar" *ngIf="att.imageId">
-            <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ att.imageId }}.png" />
+            <img
+              src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+                att.imageId
+              }}.png"
+            />
           </figure>
         </div>
         <p class="form-input-hint mb-0">{{ att.description }}</p>

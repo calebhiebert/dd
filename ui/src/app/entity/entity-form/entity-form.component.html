@@ -26,12 +26,12 @@
 
   <div class="columns">
     <!-- Image Upload -->
-    <div class="column col-auto">
+    <div class="column col-3 col-md-5 col-sm-12 col-mx-auto">
       <label class="form-label">Icon</label>
       <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
     </div>
 
-    <div class="column">
+    <div class="column col-9 col-md-12">
       <!-- Name -->
       <div
         class="form-group"
@@ -160,27 +160,27 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Attributes -->
-      <div>
-        <div class="columns">
-          <div class="column"><h5 class="mt-2">Attributes</h5></div>
-          <div class="column col-auto">
-            <button class="btn btn-sm" (click)="addAttribute()">
-              <i class="icon icon-plus"></i> Add Attribute
-            </button>
-          </div>
-        </div>
-
-        <!-- Attribute Array -->
-        <div>
-          <dd-entity-attribute-row-editor
-            *ngFor="let attr of attributeControls; let i = index"
-            (remove)="removeAttribute(i)"
-            [formGroup]="attr"
-          ></dd-entity-attribute-row-editor>
-        </div>
+  <!-- Attributes -->
+  <div>
+    <div class="columns">
+      <div class="column"><h5 class="mt-2">Attributes</h5></div>
+      <div class="column col-auto">
+        <button class="btn btn-sm" (click)="addAttribute()">
+          <i class="icon icon-plus"></i> Add Attribute
+        </button>
       </div>
+    </div>
+
+    <!-- Attribute Array -->
+    <div>
+      <dd-entity-attribute-row-editor
+        *ngFor="let attr of attributeControls; let i = index"
+        (remove)="removeAttribute(i)"
+        [formGroup]="attr"
+      ></dd-entity-attribute-row-editor>
     </div>
   </div>
 </div>
