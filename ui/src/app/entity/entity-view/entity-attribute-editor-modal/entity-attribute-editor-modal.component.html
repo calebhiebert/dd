@@ -12,7 +12,10 @@
           'has-success': control.valid && (control.dirty || control.touched)
         }"
       >
-        <div [ngClass]="{ 'has-icon-left': attribute.imageId }" [ngSwitch]="attribute.type">
+        <div
+          [ngClass]="{ 'has-icon-left': attribute.imageId }"
+          [ngSwitch]="attribute.type"
+        >
           <!-- Text Input -->
           <input
             type="text"
@@ -21,6 +24,7 @@
             [placeholder]="attribute.name"
             [formControl]="control"
             *ngSwitchCase="0"
+            #input
           />
 
           <!-- Number Input -->
@@ -31,47 +35,81 @@
             [placeholder]="attribute.name"
             [formControl]="control"
             *ngSwitchCase="1"
+            #input
           />
 
           <!-- Enum input -->
-          <select class="form-input" name="attr" [formControl]="control" *ngSwitchCase="2">
-            <option *ngFor="let o of attribute.options" [value]="o">{{ o }}</option>
+          <select
+            class="form-input"
+            name="attr"
+            [formControl]="control"
+            *ngSwitchCase="2"
+          >
+            <option *ngFor="let o of attribute.options" [value]="o">{{
+              o
+            }}</option>
           </select>
 
           <figure class="form-icon avatar" *ngIf="attribute.imageId">
-            <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ attribute.imageId }}.png" />
+            <img
+              src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+                attribute.imageId
+              }}.png"
+            />
           </figure>
         </div>
         <p class="form-input-hint mb-0">{{ attribute.description }}</p>
         <p
           class="form-input-hint mb-1"
-          *ngIf="control.invalid && (control.dirty || control.touched) && control.errors.required"
+          *ngIf="
+            control.invalid &&
+            (control.dirty || control.touched) &&
+            control.errors.required
+          "
         >
           {{ attribute.name }} is required
         </p>
         <p
           class="form-input-hint mb-1"
-          *ngIf="control.invalid && (control.dirty || control.touched) && control.errors.min"
+          *ngIf="
+            control.invalid &&
+            (control.dirty || control.touched) &&
+            control.errors.min
+          "
         >
           {{ attribute.name }} can't be lower than {{ attribute.min }}
         </p>
         <p
           class="form-input-hint mb-1"
-          *ngIf="control.invalid && (control.dirty || control.touched) && control.errors.max"
+          *ngIf="
+            control.invalid &&
+            (control.dirty || control.touched) &&
+            control.errors.max
+          "
         >
           {{ attribute.name }} can't be higher than {{ attribute.max }}
         </p>
         <p
           class="form-input-hint mb-1"
-          *ngIf="control.invalid && (control.dirty || control.touched) && control.errors.minlength"
+          *ngIf="
+            control.invalid &&
+            (control.dirty || control.touched) &&
+            control.errors.minlength
+          "
         >
-          {{ attribute.name }} cannot have less than {{ attribute.min }} characters
+          {{ attribute.name }} cannot have less than
+          {{ attribute.min }} characters
         </p>
         <p
           class="form-input-hint mb-1"
-          *ngIf="control.invalid && (control.dirty || control.touched) && control.errors.maxlength"
+          *ngIf="
+            control.invalid &&
+            (control.dirty || control.touched) &&
+            control.errors.maxlength
+          "
         >
-          {{ attribute.name }} cannot have more than {{ attribute.max }} characters
+          {{ attribute.name }} cannot have more than
+          {{ attribute.max }} characters
         </p>
       </div>
     </form>
@@ -79,6 +117,8 @@
 
   <div modal-footer *ngIf="attribute && control">
     <button class="btn btn-primary mr-2" (click)="cancel()">Cancel</button>
-    <button class="btn" (click)="ok()" [disabled]="control.invalid">Save</button>
+    <button class="btn" (click)="ok()" [disabled]="control.invalid">
+      Save
+    </button>
   </div>
 </dd-modal>

@@ -19,11 +19,6 @@ export class NavComponent implements OnInit {
 
   ngOnInit() {}
 
-  public logOut() {
-    this.login.logout();
-    this.router.navigate(['login']);
-  }
-
   public toggle() {
     this.sidebar.toggle();
   }

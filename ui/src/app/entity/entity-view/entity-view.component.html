@@ -28,15 +28,15 @@
             (click)="editName()"
           >
             {{ entity.name }}
-            <a class="text-light" [routerLink]="['edit']"
+            <a class="text-light" *ngIf="editable" [routerLink]="['edit']"
               ><i class="icon icon-edit"></i
             ></a>
           </h3>
-          <span class="text-italic">{{ entity.preset.name }}</span>
+          <span class="text-italic no-select">{{ entity.preset.name }}</span>
         </div>
         <div class="column d-flex justify-end align-items-end col-ml-auto">
           <span [ngClass]="{ 'c-hand': editable }" (click)="editXP()">
-            <span class="h5">LV. </span>
+            <span class="h5 no-select">LV. </span>
             <span class="h3 text-bold">{{ level }}</span>
           </span>
         </div>
@@ -54,7 +54,7 @@
       *ngFor="let a of majorAttributes"
       (click)="editAttribute(a)"
     >
-      <div class="h5">
+      <div class="h5 no-select">
         <figure class="avatar avatar-sm" *ngIf="a.pattr && a.pattr.imageId">
           <img
             src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
@@ -78,7 +78,7 @@
       *ngFor="let a of normalAttributes"
       (click)="editAttribute(a)"
     >
-      <div class="h6">
+      <div class="h6 no-select">
         <figure class="avatar avatar-xs" *ngIf="a.pattr && a.pattr.imageId">
           <img
             src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
@@ -109,7 +109,7 @@
             *ngFor="let attr of minorAttributes"
             (click)="editAttribute(attr)"
           >
-            <td>
+            <td class="no-select">
               <figure
                 class="avatar avatar-xs"
                 *ngIf="attr.pattr && attr.pattr.imageId"

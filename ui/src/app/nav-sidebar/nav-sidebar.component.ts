@@ -20,6 +20,7 @@ export class NavSidebarComponent implements OnInit {
   public logOut() {
     this.login.logout();
     this.router.navigate(['login']);
+    this.campaignService.campaign = undefined;
   }
 
   public get loadingCampaign() {
@@ -36,5 +37,9 @@ export class NavSidebarComponent implements OnInit {
 
   public get loginInProgress() {
     return this.login.loginInProgress;
+  }
+
+  public get campaignEditable() {
+    return this.campaignService.canEdit;
   }
 }

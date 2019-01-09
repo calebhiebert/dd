@@ -30,14 +30,17 @@
 
 .justify-end {
   justify-content: end;
+  justify-content: flex-end;
 }
 
 .align-end {
   align-content: end;
+  align-content: flex-end;
 }
 
 .align-items-end {
   align-items: end;
+  align-items: flex-end;
 }
 
 .align-self-center {
@@ -56,4 +59,11 @@ $hover-scale: 1.005;
   cursor: pointer;
   outline: 2px solid $primary-color;
   transform: scale($hover-scale, $hover-scale);
+}
+
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

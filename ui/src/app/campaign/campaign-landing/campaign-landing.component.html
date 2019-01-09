@@ -1,6 +1,8 @@
-<dd-modal #invites size="large">
+<dd-modal #invites size="large" *ngIf="editable">
   <div modal-header><h4>Manage Invites</h4></div>
-  <div modal-body><dd-invite-manager></dd-invite-manager></div>
+  <div modal-body *ngIf="invites.isOpen">
+    <dd-invite-manager></dd-invite-manager>
+  </div>
 </dd-modal>
 
 <div class="container grid-xl" *ngIf="campaign">
@@ -55,7 +57,7 @@
         <div class="card-header">
           <div class="columns">
             <div class="column"><h5>Members</h5></div>
-            <div class="column col-auto col-ml-auto">
+            <div class="column col-auto col-ml-auto" *ngIf="editable">
               <button class="btn btn-sm" (click)="invites.open()">
                 <i class="icon icon-plus"></i> Invite Members
               </button>

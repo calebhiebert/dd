@@ -22,7 +22,7 @@ export class CampaignLandingComponent implements OnInit {
   ngOnInit() {}
 
   public userEntities(id: string) {
-    return this.campaign.entities.filter((e) => e.user.id === id);
+    return this.campaign.entities.filter((e) => e.user && e.user.id === id);
   }
 
   public selectEntity(entity: Entity) {
@@ -33,5 +33,9 @@ export class CampaignLandingComponent implements OnInit {
 
   public get campaign() {
     return this.campaignService.campaign;
+  }
+
+  public get editable() {
+    return this.campaignService.canEdit;
   }
 }

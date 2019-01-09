@@ -6,6 +6,7 @@ import { EntityService, IEntity } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { AttributeType, Attribute } from 'src/app/attributes';
 import { DomSanitizer } from '@angular/platform-browser';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'dd-entity-view',
@@ -26,7 +27,8 @@ export class EntityViewComponent implements OnInit {
     private route: ActivatedRoute,
     private entityService: EntityService,
     private campaignService: CampaignService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private login: LoginService
   ) {}
 
   ngOnInit() {
@@ -52,6 +54,10 @@ export class EntityViewComponent implements OnInit {
     attr: Attribute;
     pattr: EntityAttribute;
   }) {
+    if (!this.editable) {
+      return;
+    }
+
     const attrValue = await this.attributeModal.editAttribute(
       { ...attr.pattr },
       attr.attr.data
@@ -70,6 +76,10 @@ export class EntityViewComponent implements OnInit {
   }
 
   public async editName() {
+    if (!this.editable) {
+      return;
+    }
+
     const attrValue = await this.attributeModal.editAttribute(
       {
         name: 'Name',
@@ -90,6 +100,10 @@ export class EntityViewComponent implements OnInit {
   }
 
   public async editXP() {
+    if (!this.editable) {
+      return;
+    }
+
     const attrValue = await this.attributeModal.editAttribute(
       {
         name: 'XP',
@@ -191,7 +205,7 @@ export class EntityViewComponent implements OnInit {
   }
 
   public get editable() {
-    return true;
+    return this.campaignService.canEdit || this.entity.userId == this.login.id;
   }
 
   public backgroundCSS(imageId: string) {

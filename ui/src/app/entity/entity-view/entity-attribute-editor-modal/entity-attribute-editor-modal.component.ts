@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { EntityAttribute } from 'src/app/entity';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl, Validators, ValidatorFn } from '@angular/forms';
@@ -14,6 +14,9 @@ export class EntityAttributeEditorModalComponent implements OnInit {
   @ViewChild('modal')
   public modal: ModalComponent<string | null>;
 
+  @ViewChild('input')
+  public input: ElementRef<HTMLInputElement>;
+
   public attribute: EntityAttribute;
 
   public control: FormControl;
@@ -22,9 +25,16 @@ export class EntityAttributeEditorModalComponent implements OnInit {
 
   ngOnInit() {}
 
-  public async editAttribute(attribute: EntityAttribute, currentValue?: string): Promise<string | null> {
+  public async editAttribute(
+    attribute: EntityAttribute,
+    currentValue?: string
+  ): Promise<string | null> {
     this.attribute = attribute;
     this.setupControl(currentValue);
+    setTimeout(() => {
+      this.input.nativeElement.focus();
+    }, 1);
+
     return this.modal.open();
   }
 

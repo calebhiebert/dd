@@ -18,6 +18,7 @@ import { CampaignLandingComponent } from './campaign/campaign-landing/campaign-l
 import { RegisterComponent } from './login/register/register.component';
 import { InviteComponent } from './invite/invite.component';
 import { ActionGuard } from './action.guard';
+import { CampaignEditableGuard } from './campaign-editable.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -46,7 +47,7 @@ const routes: Routes = [
   {
     path: 'campaign/manage/:id',
     component: CampaignComponent,
-    canActivate: [LoggedInGuard, ActionGuard],
+    canActivate: [LoggedInGuard, ActionGuard, CampaignEditableGuard],
     children: [
       {
         path: 'items',

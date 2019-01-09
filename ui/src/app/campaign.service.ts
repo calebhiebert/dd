@@ -4,6 +4,7 @@ import { ItemService } from './item.service';
 import { EntityService, IEntityPreset } from './entity.service';
 import { environment } from 'src/environments/environment';
 import { IUser } from './user.service';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class CampaignService {
   public campaign: ICampaign = null;
   public loadingCampaign = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private login: LoginService) {}
 
   public async setSelection(campaignId: string) {
     this.campaign = null;
@@ -101,6 +102,14 @@ export class CampaignService {
     return this.http
       .post<void>(`${environment.apiURL}/campaigninvites/${token}/decline`, {})
       .toPromise();
+  }
+
+  public get canEdit() {
+    if (!this.campaign) {
+      return false;
+    } else {
+      return this.login.id === this.campaign.userId;
+    }
   }
 
   public calculateLevel(xp: number): number {

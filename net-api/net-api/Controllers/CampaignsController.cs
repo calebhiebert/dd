@@ -25,7 +25,10 @@ namespace net_api.Controllers
         [HttpGet]
         public IEnumerable<Campaign> GetCampaigns()
         {
-            return _context.Campaigns;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            return _context.Campaigns.Include(c => c.Members)
+                .Where(c => c.UserId == userId || c.Members.Any(m => m.UserId == userId));
         }
 
         // GET: api/Campaigns/5
@@ -37,10 +40,13 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             var campaign = await _context.Campaigns
                 .Include(c => c.EntityPresets)
                 .Include(c => c.Entities)
                 .Include("Members.User")
+                .Where(c => c.UserId == userId || c.Members.Any(m => m.UserId == userId))
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             if (campaign == null)
