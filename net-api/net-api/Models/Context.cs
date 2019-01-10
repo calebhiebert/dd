@@ -250,6 +250,8 @@ namespace net_api.Models
         [Required]
         public string CampaignId { get; set; }
 
+        public Campaign Campaign { get; set; }
+
         [ForeignKey("User")]
         public string AcceptedUserId { get; set; }
         public User User { get; set; }

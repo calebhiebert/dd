@@ -42,7 +42,8 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var campaignInvite = await _context.CampaignInvites.FindAsync(id);
+            var campaignInvite = await _context.CampaignInvites.Include(c => c.Campaign)
+                .Where(c => c.Id == id).FirstOrDefaultAsync();
 
             if (campaignInvite == null)
             {

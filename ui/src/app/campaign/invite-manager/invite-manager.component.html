@@ -19,6 +19,7 @@
   <button
     class="btn btn-sm"
     (click)="createInvite()"
+    *ngIf="invites.length > 0"
     [ngClass]="{ loading: creatingInvite }"
   >
     <i class="icon icon-plus"></i> Create Invite

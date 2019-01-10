@@ -20,6 +20,17 @@ export class ActionQueueService {
 
   public save() {
     if (this._queue) {
+      const actionMap = {};
+
+      this._queue = this._queue.filter((action) => {
+        if (actionMap[action.type] === undefined) {
+          actionMap[action.type] = true;
+          return true;
+        } else {
+          return false;
+        }
+      });
+
       localStorage.setItem('action-queue', JSON.stringify(this._queue));
     }
   }

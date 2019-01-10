@@ -2,12 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../login.service';
 import { ActionQueueService, ActionType } from '../action-queue.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import {
-  ICampaign,
-  CampaignService,
-  ICampaignInvite,
-} from '../campaign.service';
-import { t } from '@angular/core/src/render3';
+import { CampaignService, ICampaignInvite } from '../campaign.service';
 
 @Component({
   selector: 'dd-invite',
@@ -16,7 +11,6 @@ import { t } from '@angular/core/src/render3';
 })
 export class InviteComponent implements OnInit {
   public loading = false;
-  public campaign: ICampaign;
   public invite: ICampaignInvite;
 
   public accepting = false;
@@ -48,7 +42,6 @@ export class InviteComponent implements OnInit {
       try {
         this.loading = true;
         await this.loadInvite();
-        await this.loadCampaign();
 
         if (this.invite.status !== 0) {
           this.actions.queue.pop();
@@ -100,18 +93,6 @@ export class InviteComponent implements OnInit {
     this.denying = true;
   }
 
-  private async loadCampaign() {
-    try {
-      const campaign = await this.campaignService.getCampaign(
-        this.invite.campaignId
-      );
-      this.campaign = campaign;
-    } catch (err) {
-      console.log('CLERR', err);
-      throw err;
-    }
-  }
-
   private async loadInvite() {
     try {
       const invite = await this.campaignService.getInvite(
@@ -121,6 +102,14 @@ export class InviteComponent implements OnInit {
     } catch (err) {
       console.log('INVITE LOAD ERR', err);
       throw err;
+    }
+  }
+
+  public get campaign() {
+    if (this.invite) {
+      return this.invite.campaign;
+    } else {
+      return null;
     }
   }
 }

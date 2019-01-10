@@ -157,6 +157,7 @@ export interface ICampaignInvite {
   id: string;
   name: string;
   campaignId: string;
+  campaign?: ICampaign;
   createdAt: Date;
   status: CampaignInviteStatus;
   acceptedUserId?: string;
