@@ -10,8 +10,8 @@ using net_api.Models;
 namespace netapi.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20190107234500_Entities")]
-    partial class Entities
+    [Migration("20190110192619_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,6 +28,10 @@ namespace netapi.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<string>("CurrencyTypesJson")
+                        .HasColumnName("CurrencyTypes")
+                        .HasColumnType("jsonb");
+
                     b.Property<string>("Description")
                         .IsRequired();
 
@@ -37,6 +41,14 @@ namespace netapi.Migrations
 
                     b.Property<string>("ImageId")
                         .IsRequired();
+
+                    b.Property<string>("ItemRarityTableJson")
+                        .HasColumnName("ItemRarityTable")
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("ItemTypesJson")
+                        .HasColumnName("ItemTypes")
+                        .HasColumnType("jsonb");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -50,6 +62,48 @@ namespace netapi.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Campaigns");
+                });
+
+            modelBuilder.Entity("net_api.Models.CampaignInvite", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AcceptedUserId");
+
+                    b.Property<string>("CampaignId")
+                        .IsRequired();
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AcceptedUserId");
+
+                    b.ToTable("CampaignInvites");
+                });
+
+            modelBuilder.Entity("net_api.Models.CampaignUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CampaignId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CampaignId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CampaignUsers");
                 });
 
             modelBuilder.Entity("net_api.Models.Entity", b =>
@@ -89,7 +143,7 @@ namespace netapi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Entity");
+                    b.ToTable("Entities");
                 });
 
             modelBuilder.Entity("net_api.Models.EntityPreset", b =>
@@ -128,6 +182,40 @@ namespace netapi.Migrations
                     b.ToTable("EntityPresets");
                 });
 
+            modelBuilder.Entity("net_api.Models.Item", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CampaignId")
+                        .IsRequired();
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(3000);
+
+                    b.Property<string>("ImageId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<int>("Rarity");
+
+                    b.Property<string[]>("Tags")
+                        .HasColumnName("Tags")
+                        .HasColumnType("varchar[]");
+
+                    b.Property<string>("Type")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CampaignId");
+
+                    b.ToTable("Items");
+                });
+
             modelBuilder.Entity("net_api.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -155,9 +243,27 @@ namespace netapi.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("net_api.Models.Entity", b =>
+            modelBuilder.Entity("net_api.Models.CampaignInvite", b =>
+                {
+                    b.HasOne("net_api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("AcceptedUserId");
+                });
+
+            modelBuilder.Entity("net_api.Models.CampaignUser", b =>
                 {
                     b.HasOne("net_api.Models.Campaign", "Campaign")
+                        .WithMany("Members")
+                        .HasForeignKey("CampaignId");
+
+                    b.HasOne("net_api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("net_api.Models.Entity", b =>
+                {
+                    b.HasOne("net_api.Models.Campaign")
                         .WithMany("Entities")
                         .HasForeignKey("CampaignId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -183,6 +289,14 @@ namespace netapi.Migrations
                     b.HasOne("net_api.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("net_api.Models.Item", b =>
+                {
+                    b.HasOne("net_api.Models.Campaign", "Campaign")
+                        .WithMany("Items")
+                        .HasForeignKey("CampaignId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

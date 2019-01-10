@@ -40,7 +40,6 @@ namespace net_api
             });
 
             var context = new Context();
-            context.Database.EnsureCreated();
             context.Database.Migrate();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
