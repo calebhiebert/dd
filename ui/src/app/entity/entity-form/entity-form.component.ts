@@ -136,9 +136,7 @@ export class EntityFormComponent implements OnInit {
         try {
           const v = this.formGroup.value;
 
-          console.log(this.entityPreset);
-
-          await this.entityService.updateEntityPreset({
+          const updatedPreset = {
             id: this.entityPreset.id,
             userId: this.login.id,
             campaignId: this.campaignService.campaign.id,
@@ -147,7 +145,9 @@ export class EntityFormComponent implements OnInit {
             imageId: v.imageId,
             playerCreatable: v.playerCreatable,
             attributes: v.attributes,
-          });
+          };
+
+          await this.entityService.updateEntityPreset(updatedPreset);
 
           await this.router.navigate(['../../..', 'settings'], {
             relativeTo: this.route,
@@ -168,6 +168,10 @@ export class EntityFormComponent implements OnInit {
           playerCreatable: v.playerCreatable,
           attributes: v.attributes,
         });
+
+        this.campaignService.campaign.entityPresets
+          ? this.campaignService.campaign.entityPresets.push(ep)
+          : (this.campaignService.campaign.entityPresets = [ep]);
 
         await this.router.navigate(['../..', 'settings'], {
           relativeTo: this.route,
