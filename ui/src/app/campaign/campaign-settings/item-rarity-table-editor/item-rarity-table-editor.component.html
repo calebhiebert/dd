@@ -4,22 +4,35 @@
 
 <!-- Form Container -->
 <div><div class="form-group"></div></div>
-
-<div *ngFor="let r of ['rr']">
-  <div class="columns">
-    <!-- Name -->
-    <div class="column col-6">
-      <div class="form-group">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" name="name" id="name" class="form-input" />
+<div [formGroup]="formGroup">
+  <div *ngFor="let c of controls; let i = index" formArrayName="itemRarities">
+    <div class="columns" [formGroupName]="i">
+      <!-- Name -->
+      <div class="column col-6">
+        <div class="form-group">
+          <label for="name" class="form-label">Name</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            class="form-input"
+            formControlName="name"
+          />
+        </div>
       </div>
-    </div>
 
-    <!-- Color -->
-    <div class="column col-6">
-      <div class="form-group">
-        <label for="color" class="form-label">Color</label>
-        <input type="color" class="form-input" name="color" id="color" />
+      <!-- Color -->
+      <div class="column col-6">
+        <div class="form-group">
+          <label for="color" class="form-label">Color</label>
+          <input
+            type="color"
+            formControlName="color"
+            class="form-input"
+            name="color"
+            id="color"
+          />
+        </div>
       </div>
     </div>
   </div>

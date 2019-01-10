@@ -12,7 +12,11 @@
   </div>
 </dd-modal>
 
-<div class="container grid-xl" [formGroup]="formGroup" *ngIf="entityPreset">
+<div
+  class="container grid-xl"
+  [formGroup]="formGroup"
+  *ngIf="entityPreset || !editing"
+>
   <div class="columns">
     <div class="column">
       <h3 *ngIf="!editing">Create Entity Preset</h3>
@@ -22,6 +26,7 @@
       <button
         class="btn btn-error mr-2"
         (click)="delete()"
+        *ngIf="editing"
         [ngClass]="{ loading: deleting }"
       >
         Delete

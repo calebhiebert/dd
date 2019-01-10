@@ -137,6 +137,29 @@ namespace net_api.Models
             }
         }
 
+        [Column("ItemRarityTable", TypeName = "jsonb")]
+        [JsonIgnore]
+        public string ItemRarityTableJson { get; set; }
+
+        [NotMapped]
+        public List<ItemRarity> ItemRarities
+        {
+            get
+            {
+                if (ItemRarityTableJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<List<ItemRarity>>(ItemRarityTableJson);
+            }
+
+            set
+            {
+                ItemRarityTableJson = JsonConvert.SerializeObject(value);
+            }
+        }
+
         public DateTime CreatedAt { get; set; }
     }
 
@@ -366,9 +389,6 @@ namespace net_api.Models
 
         [Required]
         public string ImageId { get; set; }
-
-        [Required]
-        public string Color { get; set; }
     }
 
     public class CurrencyType
@@ -383,6 +403,15 @@ namespace net_api.Models
         [Required]
         [Range(0, double.MaxValue)]
         public double Value { get; set; }
+    }
+
+    public class ItemRarity
+    {
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string Color { get; set; }
     }
 
     public enum AttributeType

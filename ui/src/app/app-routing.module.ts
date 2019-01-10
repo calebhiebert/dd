@@ -47,7 +47,7 @@ const routes: Routes = [
   {
     path: 'campaign/manage/:id',
     component: CampaignComponent,
-    canActivate: [LoggedInGuard, ActionGuard, CampaignEditableGuard],
+    canActivate: [LoggedInGuard, ActionGuard],
     children: [
       {
         path: 'items',

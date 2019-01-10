@@ -48,7 +48,7 @@
   <dd-experience-table-editor
     [campaign]="campaign"
     [formGroup]="formGroup"
-    *ngIf="expandXPTable"
+    [hidden]="!expandXPTable"
   ></dd-experience-table-editor>
 
   <!-- Item Rarity Table -->
@@ -69,7 +69,9 @@
     </div>
   </div>
   <dd-item-rarity-table-editor
-    *ngIf="expandItemRarityTable"
+    [hidden]="!expandItemRarityTable"
+    [campaign]="campaign"
+    [formGroup]="formGroup"
   ></dd-item-rarity-table-editor>
 
   <!-- Entity Types -->
