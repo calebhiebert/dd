@@ -12,4 +12,8 @@ export class ItemRarityTableEditorComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  public get formArray() {
+    return this.formGroup.get('');
+  }
 }

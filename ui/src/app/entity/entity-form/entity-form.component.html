@@ -1,4 +1,17 @@
 <dd-confirmation-modal #confirmmodal></dd-confirmation-modal>
+<dd-modal #presets>
+  <div modal-header><h4>Attribute Presets</h4></div>
+  <div modal-body>
+    <div
+      class="card p-1 mb-1 hoverable"
+      (click)="usePreset(p)"
+      *ngFor="let p of presetList"
+    >
+      {{ p.name }} <span class="text-gray">{{ p.description }}</span>
+    </div>
+  </div>
+</dd-modal>
+
 <div class="container grid-xl" [formGroup]="formGroup" *ngIf="entityPreset">
   <div class="columns">
     <div class="column">
@@ -168,6 +181,9 @@
     <div class="columns">
       <div class="column"><h5 class="mt-2">Attributes</h5></div>
       <div class="column col-auto">
+        <button class="btn btn-sm mr-2" (click)="presets.open()">
+          Use Preset
+        </button>
         <button class="btn btn-sm" (click)="addAttribute()">
           <i class="icon icon-plus"></i> Add Attribute
         </button>

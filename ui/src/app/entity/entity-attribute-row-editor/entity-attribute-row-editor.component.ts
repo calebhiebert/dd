@@ -139,6 +139,10 @@ export class EntityAttributeRowEditorComponent implements OnInit {
   }
 
   public get id() {
+    if (!this.formGroup.parent) {
+      return 0;
+    }
+
     return (this.formGroup.parent as FormArray).controls.indexOf(
       this.formGroup
     );

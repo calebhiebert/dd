@@ -6,6 +6,11 @@ import { EntityService, IEntityPreset } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { numberValidator } from '../dynamic-attribute-form/dynamic-attribute-form.component';
 import { LoginService } from 'src/app/login.service';
+import {
+  IEntityAttributePreset,
+  EntityAttributePresetsService,
+} from 'src/app/entity-attribute-presets.service';
+import { ModalComponent } from 'src/app/modal/modal.component';
 
 @Component({
   selector: 'dd-entity-form',
@@ -21,12 +26,18 @@ export class EntityFormComponent implements OnInit {
 
   public entityPreset: IEntityPreset;
 
+  public presetList: IEntityAttributePreset[];
+
+  @ViewChild('presets')
+  public presetsModal: ModalComponent<void>;
+
   @ViewChild('confirmmodal')
   public confirmModal: ConfirmationModalComponent;
 
   constructor(
     private entityService: EntityService,
     private campaignService: CampaignService,
+    private presets: EntityAttributePresetsService,
     private login: LoginService,
     private router: Router,
     private route: ActivatedRoute
@@ -59,6 +70,8 @@ export class EntityFormComponent implements OnInit {
         this.loadEntityPreset(params.ent_id);
       }
     });
+
+    this.presets.getPresets().then((p) => (this.presetList = p));
   }
 
   private async loadEntityPreset(id: string) {
@@ -69,9 +82,11 @@ export class EntityFormComponent implements OnInit {
       const preset = await this.entityService.getEntityPreset(id);
       this.entityPreset = preset;
 
-      for (let i = 0; i < preset.attributes.length; i++) {
-        this.addAttribute();
-      }
+      (this.formGroup.get(
+        'attributes'
+      ) as FormArray).controls = preset.attributes.map(() => {
+        return new FormGroup({});
+      });
 
       setTimeout(() => {
         this.formGroup.patchValue({
@@ -89,6 +104,21 @@ export class EntityFormComponent implements OnInit {
 
     this.loading = false;
     this.formGroup.enable();
+  }
+
+  public usePreset(p: IEntityAttributePreset) {
+    console.log(p);
+
+    (this.formGroup.get('attributes') as FormArray).controls = p.attributes.map(
+      (attr) => {
+        return new FormGroup({});
+      }
+    );
+
+    setTimeout(() => {
+      this.formGroup.patchValue({ attributes: p.attributes });
+      this.presetsModal.close(null);
+    }, 1);
   }
 
   public submit() {}

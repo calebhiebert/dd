@@ -61,7 +61,7 @@ export class ExperienceTableEditorComponent implements OnInit {
 
   public usePreset(preset: IXPTablePreset) {
     this.formArray.controls = preset.xpTable.map((xp) => this.createRow(xp));
-    this.presetsModal.close();
+    this.presetsModal.close(null);
   }
 
   public addRow() {
