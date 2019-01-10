@@ -54,14 +54,18 @@ export class CampaignSettingsComponent implements OnInit {
       try {
         const v = this.formGroup.value;
 
-        await this.campaignService.updateCampaign({
+        const campaignUpdate: ICampaign = {
           name: v.name,
           description: v.description,
           imageId: v.imageId,
           experienceTable: v.experienceTable,
           userId: this.login.id,
           id: this.campaign.id,
-        });
+        };
+
+        await this.campaignService.updateCampaign(campaignUpdate);
+
+        this.campaignService.campaign = { ...this.campaign, ...campaignUpdate };
       } catch (err) {
         console.log('SAVE ERR', err);
       }
