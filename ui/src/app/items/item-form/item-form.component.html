@@ -4,7 +4,13 @@
       <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
     </div>
     <div class="column">
-      <div class="form-group" [ngClass]="{ 'has-error': name.invalid }">
+      <!-- Name -->
+      <div
+        class="form-group"
+        [ngClass]="{
+          'has-error': name.invalid && (name.dirty || name.touched)
+        }"
+      >
         <label class="form-label label-lg" for="item-name">Name</label>
         <input
           class="form-input input-lg"
@@ -26,11 +32,18 @@
           class="form-input-hint"
           *ngIf="name.invalid && name.errors.maxlength"
         >
-          The name can't be more than 60 characters long
+          The name can't be more than 30 characters long
         </p>
       </div>
 
-      <div class="form-group" [ngClass]="{ 'has-error': description.invalid }">
+      <!-- Description -->
+      <div
+        class="form-group"
+        [ngClass]="{
+          'has-error':
+            description.invalid && (description.touched || description.dirty)
+        }"
+      >
         <label class="form-label" for="item-description">Description</label>
         <textarea
           class="form-input"
@@ -47,7 +60,17 @@
         </p>
       </div>
 
-      <dd-attribute-editor [formGroup]="formGroup"></dd-attribute-editor>
+      <!-- Rarity -->
+      <div class="form-group">
+        <label for="rarity" class="form-label">Rarity</label>
+        <select name="rarity" id="rarity" class="form-input"></select>
+      </div>
+
+      <!-- Type -->
+      <div class="form-group">
+        <label for="type" class="form-label">Type</label>
+        <select name="type" id="type" class="form-input"></select>
+      </div>
     </div>
   </div>
 </div>

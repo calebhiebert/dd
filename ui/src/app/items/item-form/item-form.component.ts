@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { AttributeEditorComponent } from '../attribute-editor/attribute-editor.component';
 import { IItem } from 'src/app/item.service';
 
 @Component({
@@ -17,27 +16,23 @@ export class ItemFormComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    this.formGroup = new FormGroup({
+      name: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30),
+      ]),
+      description: new FormControl(null, Validators.required),
+      imageId: new FormControl(null),
+      rarity: new FormControl(null, Validators.required),
+      type: new FormControl(null, Validators.required),
+    });
+
     if (this.inputItem !== undefined) {
-      this.formGroup = new FormGroup({
-        name: new FormControl(this.inputItem.name, [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(60),
-        ]),
-        description: new FormControl(
-          this.inputItem.description,
-          Validators.required
-        ),
-        imageId: new FormControl(this.inputItem.imageId),
-        // attributes: AttributeEditorComponent.createAttributesControl(
-        //   this.inputItem.attributes
-        // ),
-      });
-    } else {
-      this.formGroup = new FormGroup({
-        name: new FormControl(null, Validators.required),
-        description: new FormControl(null, Validators.required),
-        imageId: new FormControl('cvgvysrwdivcxjfipjry'),
+      this.formGroup.patchValue({
+        name: this.inputItem.name,
+        description: this.inputItem.description,
+        imageId: this.inputItem.imageId,
       });
     }
   }

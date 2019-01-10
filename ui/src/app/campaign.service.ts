@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ItemService, IItem } from './item.service';
-import { EntityService, IEntityPreset } from './entity.service';
+import { IItem } from './item.service';
+import { IEntityPreset } from './entity.service';
 import { environment } from 'src/environments/environment';
 import { IUser } from './user.service';
 import { LoginService } from './login.service';
@@ -21,7 +21,6 @@ export class CampaignService {
     try {
       const campaign = await this.getCampaign(campaignId);
       this.campaign = campaign;
-
       document.title = this.campaign.name;
     } catch (err) {
       console.log('LOAD ERR', err);

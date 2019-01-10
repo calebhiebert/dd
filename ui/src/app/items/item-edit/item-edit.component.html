@@ -2,7 +2,7 @@
 <div class="container grid-xl">
   <div class="loading loading-lg" *ngIf="loading"></div>
 
-  <div class="columns col-oneline">
+  <div class="columns col-oneline" *ngIf="!loading || !editing">
     <div class="column">
       <a class="btn" [routerLink]="['../..']"
         ><i class="icon icon-arrow-left"></i> Back</a
@@ -28,5 +28,9 @@
     </div>
   </div>
   <hr />
-  <dd-item-form *ngIf="item" [inputItem]="item" #iform></dd-item-form>
+  <dd-item-form
+    *ngIf="item || !editing"
+    [inputItem]="item"
+    #iform
+  ></dd-item-form>
 </div>

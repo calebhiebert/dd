@@ -4,9 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace net_api.Models
 {
@@ -306,6 +304,12 @@ namespace net_api.Models
         public string ImageId { get; set; }
 
         [Required]
+        public string CampaignId { get; set; }
+
+        [JsonIgnore]
+        public Campaign Campaign { get; set; }
+
+        [Required]
         [Range(-1, double.MaxValue)]
         public int Rarity { get; set; }
 
@@ -313,7 +317,7 @@ namespace net_api.Models
         public string Type { get; set; }
 
         [Column("Tags", TypeName = "varchar[]")]
-        public List<string> Tags { get; set; }
+        public string[] Tags { get; set; }
     }
 
     public class EntityAttribute

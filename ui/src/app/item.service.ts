@@ -1,54 +1,36 @@
 import { Injectable } from '@angular/core';
-import { AttributeType } from './attributes';
 import { Chance } from 'chance';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ItemService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  public async createItem(): Promise<string> {
-    await simulateDelay(250);
-    return '1';
+  public createItem(item: IItem): Promise<IItem> {
+    return this.http
+      .post<IItem>(`${environment.apiURL}/items`, item)
+      .toPromise();
   }
 
-  public async saveItem(item: IItem): Promise<IItem> {
-    await simulateDelay(250);
-    return item;
+  public async updateItem(item: IItem): Promise<void> {
+    return this.http
+      .put<void>(`${environment.apiURL}/items/${item.id}`, item)
+      .toPromise();
+  }
+
+  public async getItems(campaignId: string): Promise<IItem[]> {
+    return this.http
+      .get<IItem[]>(`${environment.apiURL}/items?campaignId=${campaignId}`)
+      .toPromise();
   }
 
   public async getItem(id: string): Promise<IItem> {
-    if (id === '1') {
-      const c = new Chance();
-
-      const item: IItem = {
-        id: id,
-        name: '--_blank_--',
-        description: '--_blank_--',
-        imageId: 'uncertainty',
-        rarity: 0,
-        type: '',
-      };
-
-      return item;
-    }
-    const c = new Chance();
-
-    const item: IItem = {
-      id: id,
-      name: c.sentence({ words: c.integer({ min: 1, max: 3 }) }),
-      description: c.paragraph(),
-      imageId: 'uncertainty',
-      rarity: 0,
-      type: '',
-    };
-
-    return item;
-  }
-
-  public async deleteItem(id: string): Promise<void> {
-    await simulateDelay(255);
+    return this.http
+      .get<IItem>(`${environment.apiURL}/items/${id}`)
+      .toPromise();
   }
 }
 
@@ -61,12 +43,3 @@ export interface IItem {
   type: string;
   tags?: string[];
 }
-
-// Used in mock apis, will be removed
-const simulateDelay = (ms: number): Promise<void> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  });
-};

@@ -65,8 +65,18 @@ const routes: Routes = [
         component: QuestManagerComponent,
       },
       {
+        path: 'items/create',
+        component: ItemEditComponent,
+        data: {
+          editing: false,
+        },
+      },
+      {
         path: 'items/:item_id/edit',
         component: ItemEditComponent,
+        data: {
+          editing: false,
+        },
       },
       {
         path: 'entities/create',

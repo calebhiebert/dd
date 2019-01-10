@@ -4,11 +4,7 @@
     <div class="column col-auto"><h3>Items</h3></div>
 
     <div class="column">
-      <button
-        class="btn"
-        (click)="addItem()"
-        [ngClass]="{ loading: creatingItem }"
-      >
+      <button class="btn" (click)="addItem()">
         <i class="icon icon-plus"></i>
       </button>
     </div>
@@ -29,26 +25,28 @@
     </div>
   </div>
 
-  <div *ngFor="let item of filteredItems">
-    <dd-item-view-list
-      [item]="item"
-      (click)="selectItem(item)"
-    ></dd-item-view-list>
-  </div>
-
-  <dd-paginator
-    [totalItems]="searchedItems.length"
-    [itemsPerPage]="itemsPerPage"
-    [page]="page"
-    (pageChange)="page = $event"
-  ></dd-paginator>
-
-  <div class="empty" *ngIf="items.length === 0">
-    <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
-    <p class="empty-title h5">There are no items</p>
-    <p class="empty-subtitle">Click the button to create one</p>
-    <div class="empty-action">
-      <button class="btn btn-primary">Create Item</button>
+  <div *ngIf="items">
+    <div class="empty" *ngIf="items.length === 0">
+      <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
+      <p class="empty-title h5">There are no items</p>
+      <p class="empty-subtitle">Click the button to create one</p>
+      <div class="empty-action">
+        <button class="btn btn-primary" (click)="addItem()">Create Item</button>
+      </div>
     </div>
+
+    <div *ngFor="let item of filteredItems">
+      <dd-item-view-list
+        [item]="item"
+        (click)="selectItem(item)"
+      ></dd-item-view-list>
+    </div>
+
+    <dd-paginator
+      [totalItems]="searchedItems.length"
+      [itemsPerPage]="itemsPerPage"
+      [page]="page"
+      (pageChange)="page = $event"
+    ></dd-paginator>
   </div>
 </div>

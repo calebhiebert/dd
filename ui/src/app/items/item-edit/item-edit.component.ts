@@ -12,7 +12,7 @@ import { ItemService, IItem } from 'src/app/item.service';
 })
 export class ItemEditComponent implements OnInit {
   public loading = false;
-  public item: IItem = null;
+  public item: IItem;
   public saving = false;
   public deleting = false;
 
@@ -31,10 +31,12 @@ export class ItemEditComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      const id = params.item_id;
-      this.loadItem(id);
-    });
+    if (this.editing) {
+      this.route.params.subscribe((params) => {
+        const id = params.item_id;
+        this.loadItem(id);
+      });
+    }
   }
 
   public async save() {
@@ -46,9 +48,7 @@ export class ItemEditComponent implements OnInit {
     this.saving = true;
 
     try {
-      const itm = await this.itemService.saveItem(<IItem>(
-        this.form.formGroup.value
-      ));
+      await this.itemService.updateItem(<IItem>this.form.formGroup.value);
     } catch (err) {
       console.log('SAVE ERR', err);
     }
@@ -65,7 +65,8 @@ export class ItemEditComponent implements OnInit {
     ) {
       this.deleting = true;
       try {
-        await this.itemService.deleteItem(this.item.id);
+        // TODO add back delete
+        // await this.itemService.deleteItem(this.item.id);
         this.router.navigate(['../..'], { relativeTo: this.route });
       } catch (err) {
         console.log('DEL ERR', err);
@@ -97,5 +98,9 @@ export class ItemEditComponent implements OnInit {
     formGroup.valueChanges.subscribe((v) => {
       this.valid = formGroup.valid;
     });
+  }
+
+  public get editing() {
+    return this.route.snapshot.data.editing;
   }
 }

@@ -4,7 +4,6 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from '@angular/router';
-import { Observable } from 'rxjs';
 import { LoginService } from './login.service';
 import { CampaignService } from './campaign.service';
 
@@ -12,12 +11,14 @@ import { CampaignService } from './campaign.service';
   providedIn: 'root',
 })
 export class CampaignEditableGuard implements CanActivate {
-  constructor(private campaign: CampaignService) {}
+  constructor(private campaign: CampaignService, private login: LoginService) {}
 
-  canActivate(
+  async canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<boolean> | Promise<boolean> | boolean {
+  ): Promise<boolean> {
+    await this.login.isLoggedIn();
+
     return this.campaign.canEdit;
   }
 }

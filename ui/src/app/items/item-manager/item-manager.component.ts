@@ -10,12 +10,14 @@ import { ItemService, IItem } from 'src/app/item.service';
   styleUrls: ['./item-manager.component.css'],
 })
 export class ItemManagerComponent implements OnInit {
+  public loading = false;
+
   private search: string;
   public searchControl: FormControl;
   public page = 1;
   public itemsPerPage = 10;
 
-  public creatingItem = false;
+  public items: IItem[];
 
   constructor(
     private campaignService: CampaignService,
@@ -25,6 +27,7 @@ export class ItemManagerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loadItems();
     this.searchControl = new FormControl(null);
 
     this.searchControl.valueChanges.subscribe((search: string) => {
@@ -37,34 +40,26 @@ export class ItemManagerComponent implements OnInit {
     });
   }
 
-  public async addItem() {
-    this.creatingItem = true;
-
+  private async loadItems() {
+    this.loading = true;
     try {
-      const item: IItem = {
-        id: null,
-        name: '--_blank_--',
-        description: '--_blank_--',
-        imageId: 'uncertainty',
-        rarity: 0,
-        type: '',
-      };
-
-      const id = await this.itemService.createItem();
-      this.router.navigate([id, 'edit'], { relativeTo: this.route });
+      const items = await this.itemService.getItems(
+        this.campaignService.campaign.id
+      );
+      this.items = items;
     } catch (err) {
-      console.log('ADD ERR', err);
+      console.log('LOAD ERR', err);
     }
 
-    this.creatingItem = false;
+    this.loading = false;
+  }
+
+  public async addItem() {
+    this.router.navigate(['create'], { relativeTo: this.route });
   }
 
   public selectItem(item: IItem) {
     this.router.navigate([item.id, 'edit'], { relativeTo: this.route });
-  }
-
-  public get items() {
-    return this.campaignService.campaign.items;
   }
 
   public get searchedItems() {

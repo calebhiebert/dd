@@ -7,7 +7,6 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ActionQueueService, ActionType } from './action-queue.service';
-import { ActionSequence } from 'protractor';
 
 @Injectable({
   providedIn: 'root',
