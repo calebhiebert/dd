@@ -103,6 +103,7 @@ export class EntityCreationFormComponent implements OnInit {
     const v = this.formGroup.value;
 
     const ent: IEntity = {
+      id: this.entity.id,
       name: v.name,
       description: v.description,
       xp: v.xp,

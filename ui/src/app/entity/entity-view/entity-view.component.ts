@@ -210,7 +210,7 @@ export class EntityViewComponent implements OnInit {
 
   public backgroundCSS(imageId: string) {
     return this.sanitizer.bypassSecurityTrustStyle(
-      `linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%), url("http://res.cloudinary.com/dqhk8k6iv/image/upload/t_chr_blur/${imageId}.jpg")`
+      `linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%), url("https://res.cloudinary.com/dqhk8k6iv/image/upload/t_chr_blur/${imageId}.jpg")`
     );
   }
 }

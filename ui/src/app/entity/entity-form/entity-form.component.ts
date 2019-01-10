@@ -33,16 +33,6 @@ export class EntityFormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.entityPreset = {
-      id: '',
-      name: '',
-      description: '',
-      userId: '',
-      imageId: '',
-      campaignId: '',
-      playerCreatable: false,
-    };
-
     this.formGroup = new FormGroup({
       id: new FormControl(),
       name: new FormControl(null, [
@@ -116,6 +106,8 @@ export class EntityFormComponent implements OnInit {
         try {
           const v = this.formGroup.value;
 
+          console.log(this.entityPreset);
+
           await this.entityService.updateEntityPreset({
             id: this.entityPreset.id,
             userId: this.login.id,
@@ -137,7 +129,7 @@ export class EntityFormComponent implements OnInit {
         const v = this.formGroup.value;
 
         const ep = await this.entityService.createEntityPreset({
-          id: this.entityPreset.id,
+          id: '',
           userId: this.login.id,
           campaignId: this.campaignService.campaign.id,
           name: v.name,
