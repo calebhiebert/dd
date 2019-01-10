@@ -9,7 +9,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-attribute-form.component';
-import { Campaign } from 'src/app/campaign';
+import { ICampaign } from 'src/app/campaign.service';
 
 @Component({
   selector: 'dd-experience-table-editor',
@@ -18,7 +18,7 @@ import { Campaign } from 'src/app/campaign';
 })
 export class ExperienceTableEditorComponent implements OnInit {
   @Input()
-  public campaign: Campaign;
+  public campaign: ICampaign;
 
   @Input()
   public formGroup: FormGroup;

@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
-import { ItemService } from 'src/app/item.service';
-import { Item } from 'src/app/item';
+import { ItemService, IItem } from 'src/app/item.service';
 
 @Component({
   selector: 'dd-item-manager',
@@ -42,12 +41,13 @@ export class ItemManagerComponent implements OnInit {
     this.creatingItem = true;
 
     try {
-      const item: Item = {
+      const item: IItem = {
         id: null,
         name: '--_blank_--',
         description: '--_blank_--',
         imageId: 'uncertainty',
-        attributes: [],
+        rarity: 0,
+        type: '',
       };
 
       const id = await this.itemService.createItem();
@@ -59,7 +59,7 @@ export class ItemManagerComponent implements OnInit {
     this.creatingItem = false;
   }
 
-  public selectItem(item: Item) {
+  public selectItem(item: IItem) {
     this.router.navigate([item.id, 'edit'], { relativeTo: this.route });
   }
 
@@ -80,7 +80,7 @@ export class ItemManagerComponent implements OnInit {
     }
   }
 
-  public get filteredItems(): Item[] {
+  public get filteredItems(): IItem[] {
     return this.searchedItems.slice(
       this.page * this.itemsPerPage - this.itemsPerPage,
       this.page * this.itemsPerPage

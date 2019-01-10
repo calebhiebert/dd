@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { Campaign } from 'src/app/campaign';
+import { ICampaign } from 'src/app/campaign.service';
 
 @Component({
   selector: 'dd-campaign-form',
@@ -12,7 +12,7 @@ export class CampaignFormComponent implements OnInit {
   public formGroup: FormGroup;
 
   @Input()
-  public campaign: Campaign;
+  public campaign: ICampaign;
 
   constructor() {}
 

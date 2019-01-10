@@ -1,10 +1,10 @@
-import { Item } from './item';
+import { IItem } from './item.service';
 
 export interface Inventory {
   items: InventoryItem[];
 }
 
 export interface InventoryItem {
-  item: Item;
+  item: IItem;
   quantity: number;
 }

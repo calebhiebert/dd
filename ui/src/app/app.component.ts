@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Item } from './item';
 import { SidebarService } from './sidebar.service';
 
 @Component({

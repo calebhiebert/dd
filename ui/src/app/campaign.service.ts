@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ItemService } from './item.service';
+import { ItemService, IItem } from './item.service';
 import { EntityService, IEntityPreset } from './entity.service';
 import { environment } from 'src/environments/environment';
 import { IUser } from './user.service';
@@ -21,6 +21,8 @@ export class CampaignService {
     try {
       const campaign = await this.getCampaign(campaignId);
       this.campaign = campaign;
+
+      document.title = this.campaign.name;
     } catch (err) {
       console.log('LOAD ERR', err);
     }
@@ -144,8 +146,10 @@ export interface ICampaign {
   user?: IUser;
   experienceTable: number[];
   entities?: any[];
-  items?: any[];
+  items?: IItem[];
   entityPresets?: IEntityPreset[];
+  itemTypes?: IItemType[];
+  currencyTypes?: ICurrencyType[];
   createdAt?: Date;
 }
 
@@ -165,11 +169,14 @@ export enum CampaignInviteStatus {
   ACCEPTED,
 }
 
-// Used in mock apis, will be removed
-const simulateDelay = (ms: number): Promise<void> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  });
-};
+export interface IItemType {
+  name: string;
+  imageId: string;
+  color: string;
+}
+
+export interface ICurrencyType {
+  name: string;
+  imageId: string;
+  value: number;
+}

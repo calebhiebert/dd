@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AttributeEditorComponent } from '../attribute-editor/attribute-editor.component';
-import { Item } from 'src/app/item';
+import { IItem } from 'src/app/item.service';
 
 @Component({
   selector: 'dd-item-form',
@@ -10,7 +10,7 @@ import { Item } from 'src/app/item';
 })
 export class ItemFormComponent implements OnInit {
   @Input()
-  public inputItem: Item;
+  public inputItem: IItem;
 
   public formGroup: FormGroup;
 
@@ -24,9 +24,14 @@ export class ItemFormComponent implements OnInit {
           Validators.minLength(2),
           Validators.maxLength(60),
         ]),
-        description: new FormControl(this.inputItem.description, Validators.required),
+        description: new FormControl(
+          this.inputItem.description,
+          Validators.required
+        ),
         imageId: new FormControl(this.inputItem.imageId),
-        attributes: AttributeEditorComponent.createAttributesControl(this.inputItem.attributes),
+        // attributes: AttributeEditorComponent.createAttributesControl(
+        //   this.inputItem.attributes
+        // ),
       });
     } else {
       this.formGroup = new FormGroup({

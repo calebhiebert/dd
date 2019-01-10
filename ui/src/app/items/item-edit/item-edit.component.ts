@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild, AfterContentInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { ItemFormComponent } from '../item-form/item-form.component';
-import { Item } from 'src/app/item';
 import { ConfirmationModalComponent } from 'src/app/confirmation-modal/confirmation-modal.component';
-import { ItemService } from 'src/app/item.service';
+import { ItemService, IItem } from 'src/app/item.service';
 
 @Component({
   selector: 'dd-item-edit',
@@ -13,7 +12,7 @@ import { ItemService } from 'src/app/item.service';
 })
 export class ItemEditComponent implements OnInit {
   public loading = false;
-  public item: Item = null;
+  public item: IItem = null;
   public saving = false;
   public deleting = false;
 
@@ -47,7 +46,7 @@ export class ItemEditComponent implements OnInit {
     this.saving = true;
 
     try {
-      const itm = await this.itemService.saveItem(<Item>(
+      const itm = await this.itemService.saveItem(<IItem>(
         this.form.formGroup.value
       ));
     } catch (err) {

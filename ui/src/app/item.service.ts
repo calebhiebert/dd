@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Item } from './item';
 import { AttributeType } from './attributes';
 import { Chance } from 'chance';
 
@@ -14,33 +13,35 @@ export class ItemService {
     return '1';
   }
 
-  public async saveItem(item: Item): Promise<Item> {
+  public async saveItem(item: IItem): Promise<IItem> {
     await simulateDelay(250);
     return item;
   }
 
-  public async getItem(id: string): Promise<Item> {
+  public async getItem(id: string): Promise<IItem> {
     if (id === '1') {
       const c = new Chance();
 
-      const item: Item = {
+      const item: IItem = {
         id: id,
         name: '--_blank_--',
         description: '--_blank_--',
         imageId: 'uncertainty',
-        attributes: [{ name: 'Weight', data: '6', type: AttributeType.NUMBER }],
+        rarity: 0,
+        type: '',
       };
 
       return item;
     }
     const c = new Chance();
 
-    const item: Item = {
+    const item: IItem = {
       id: id,
       name: c.sentence({ words: c.integer({ min: 1, max: 3 }) }),
       description: c.paragraph(),
       imageId: 'uncertainty',
-      attributes: [{ name: 'Weight', data: '6', type: AttributeType.NUMBER }],
+      rarity: 0,
+      type: '',
     };
 
     return item;
@@ -49,6 +50,16 @@ export class ItemService {
   public async deleteItem(id: string): Promise<void> {
     await simulateDelay(255);
   }
+}
+
+export interface IItem {
+  id: string;
+  name: string;
+  description: string;
+  imageId?: string;
+  rarity: number;
+  type: string;
+  tags?: string[];
 }
 
 // Used in mock apis, will be removed

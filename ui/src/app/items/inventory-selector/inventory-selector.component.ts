@@ -9,8 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ConfirmationModalComponent } from 'src/app/confirmation-modal/confirmation-modal.component';
 import { ModalComponent } from 'src/app/modal/modal.component';
-import { Item } from 'src/app/item';
-import { ItemService } from 'src/app/item.service';
+import { ItemService, IItem } from 'src/app/item.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-attribute-form.component';
 import { EntityPreset } from 'src/app/entity';
@@ -23,7 +22,7 @@ import { InventoryItem } from 'src/app/inventory';
 })
 export class InventorySelectorComponent implements OnInit, AfterContentInit {
   @ViewChild('itemselector')
-  public itemSelector: ModalComponent<Item>;
+  public itemSelector: ModalComponent<IItem>;
 
   @ViewChild('itemedit')
   public itemEditor: ModalComponent<any>;
@@ -79,7 +78,7 @@ export class InventorySelectorComponent implements OnInit, AfterContentInit {
   ngAfterContentInit(): void {}
 
   public async addItem() {
-    this.itemSelector.open().then((item: Item) => {
+    this.itemSelector.open().then((item: IItem) => {
       if (item !== undefined) {
         this.selectedItems.push({
           quantity: 1,

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Item } from 'src/app/item';
+import { IItem } from 'src/app/item.service';
 
 @Component({
   selector: 'dd-item-view-list',
@@ -8,7 +8,7 @@ import { Item } from 'src/app/item';
 })
 export class ItemViewListComponent implements OnInit {
   @Input()
-  public item: Item;
+  public item: IItem;
 
   constructor() {}
 
@@ -16,7 +16,9 @@ export class ItemViewListComponent implements OnInit {
 
   public get imageURL() {
     if (this.item.imageId) {
-      return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${this.item.imageId}.png`;
+      return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${
+        this.item.imageId
+      }.png`;
     } else {
       return 'https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/uncertainty.png';
     }

@@ -18,6 +18,7 @@ namespace net_api.Models
         public DbSet<Entity> Entities { get; set; }
         public DbSet<CampaignUser> CampaignUsers { get; set; }
         public DbSet<CampaignInvite> CampaignInvites { get; set; }
+        public DbSet<Item> Items { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -88,7 +89,55 @@ namespace net_api.Models
         public ICollection<EntityPreset> EntityPresets { get; set; }
 
         public ICollection<Entity> Entities { get; set; }
-        
+
+        public ICollection<Item> Items { get; set; }
+
+        [Column("ItemTypes", TypeName = "jsonb")]
+        [JsonIgnore]
+        public string ItemTypesJson { get; set; }
+
+        [NotMapped]
+        public List<ItemType> ItemTypes
+        {
+            get
+            {
+                if (ItemTypesJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<List<ItemType>>(ItemTypesJson);
+            }
+
+            set
+            {
+                ItemTypesJson = JsonConvert.SerializeObject(value);
+            }
+        }
+
+        [Column("CurrencyTypes", TypeName = "jsonb")]
+        [JsonIgnore]
+        public string CurrencyTypesJson { get; set; }
+
+        [NotMapped]
+        public List<CurrencyType> CurrencyTypes
+        {
+            get
+            {
+                if (CurrencyTypesJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<List<CurrencyType>>(CurrencyTypesJson);
+            } 
+
+            set
+            {
+                CurrencyTypesJson = JsonConvert.SerializeObject(value);
+            }
+        }
+
         public DateTime CreatedAt { get; set; }
     }
 
@@ -242,6 +291,31 @@ namespace net_api.Models
         public Campaign Campaign { get; set; }
     }
 
+    public class Item
+    {
+        public string Id { get; set; }
+
+        [Required]
+        [StringLength(30, MinimumLength = 3)]
+        public string Name { get; set; }
+
+        [Required]
+        [StringLength(3000, MinimumLength = 3)]
+        public string Description { get; set; }
+
+        public string ImageId { get; set; }
+
+        [Required]
+        [Range(-1, double.MaxValue)]
+        public int Rarity { get; set; }
+
+        [Required]
+        public string Type { get; set; }
+
+        [Column("Tags", TypeName = "string[]")]
+        public List<string> Tags { get; set; }
+    }
+
     public class EntityAttribute
     {    
         [Required]
@@ -279,9 +353,36 @@ namespace net_api.Models
         public string Data { get; set; }
     }
 
+    public class ItemType
+    {
+        [Required]
+        [StringLength(30, MinimumLength = 3)]
+        public string Name { get; set; }
+
+        [Required]
+        public string ImageId { get; set; }
+
+        [Required]
+        public string Color { get; set; }
+    }
+
+    public class CurrencyType
+    {
+        [Required]
+        [StringLength(30, MinimumLength = 3)]
+        public string Name { get; set; }
+
+        [Required]
+        public string ImageId { get; set; }
+
+        [Required]
+        [Range(0, double.MaxValue)]
+        public double Value { get; set; }
+    }
+
     public enum AttributeType
     {
-        String, Number, Enum
+        String, Number, Enum, Currency
     }
 
     public enum AttributeClass

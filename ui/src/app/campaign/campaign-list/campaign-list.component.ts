@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Campaign } from 'src/app/campaign';
 import { CampaignService, ICampaign } from 'src/app/campaign.service';
 
 @Component({
@@ -26,7 +25,7 @@ export class CampaignListComponent implements OnInit {
     this.router.navigate(['campaigns', 'create']);
   }
 
-  public selectCampaign(campaign: Campaign) {
+  public selectCampaign(campaign: ICampaign) {
     this.campaignService.setSelection(campaign.id);
     this.router.navigate(['campaigns', campaign.id]);
   }
