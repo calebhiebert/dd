@@ -108,7 +108,7 @@ export class EntityCreationFormComponent implements OnInit {
       description: v.description,
       xp: v.xp,
       imageId: v.imageId,
-      userId: this.login.id,
+      userId: this.editing ? this.entity.userId : this.login.id,
       campaignId: this.campaignService.campaign.id,
       entityPresetId: this.preset.id,
       attributes: [],
