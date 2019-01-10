@@ -22,7 +22,7 @@
 
   <!-- Experience Table -->
   <div class="columns mt-2">
-    <div class="column"><h3 class="mt-2 mb-0">Experience Table</h3></div>
+    <div class="column"><h3 class="mb-0">Experience Table</h3></div>
     <div class="column col-auto col-ml-auto">
       <button
         class="btn btn-sm"
@@ -50,6 +50,15 @@
     [formGroup]="formGroup"
     *ngIf="expandXPTable"
   ></dd-experience-table-editor>
+
+  <!-- Item Rarity Table -->
+  <div class="columns mt-2">
+    <div class="column"><h3 class="mb-0">Item Rarity Table</h3></div>
+    <div class="column col-auto col-ml-auto">
+      <button class="btn btn-sm">Do Something</button>
+    </div>
+  </div>
+  <dd-item-rarity-table-editor></dd-item-rarity-table-editor>
 
   <!-- Entity Types -->
   <div class="columns mt-2" *ngIf="editing">

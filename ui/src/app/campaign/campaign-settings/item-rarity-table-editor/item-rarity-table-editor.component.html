@@ -1,0 +1,23 @@
+<span class="text-gray">
+  This is where you can add the possible rarities that an item can have.
+</span>
+
+<div *ngFor="let r of ['rr']">
+  <div class="columns">
+    <!-- Name -->
+    <div class="column col-6">
+      <div class="form-group">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" name="name" id="name" class="form-input" />
+      </div>
+    </div>
+
+    <!-- Color -->
+    <div class="column col-6">
+      <div class="form-group">
+        <label for="color" class="form-label">Color</label>
+        <input type="color" class="form-input" name="color" id="color" />
+      </div>
+    </div>
+  </div>
+</div>
