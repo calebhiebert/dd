@@ -71,6 +71,23 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var existingCampaign = await _context.Campaigns.AsNoTracking()
+                .Where(c => c.Id == id).FirstOrDefaultAsync();
+
+            if (existingCampaign == null)
+            {
+                return NotFound();
+            }
+
+            if (userId != campaign.UserId)
+            {
+                return BadRequest("not the owner of the campaign");
+            }
+
+            campaign.UserId = existingCampaign.UserId;
+
             _context.Entry(campaign).State = EntityState.Modified;
 
             try
@@ -133,6 +150,13 @@ namespace net_api.Controllers
             if (campaign == null)
             {
                 return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (campaign.UserId != userId)
+            {
+                return BadRequest("do not own campaign");
             }
 
             _context.Campaigns.Remove(campaign);

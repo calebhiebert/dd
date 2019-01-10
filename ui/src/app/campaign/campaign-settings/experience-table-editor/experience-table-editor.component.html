@@ -1,3 +1,16 @@
+<dd-modal #presets>
+  <div modal-header><h5>Experience Table Presets</h5></div>
+  <div modal-body>
+    <div
+      class="card p-1 hoverable mb-2"
+      *ngFor="let p of presetList"
+      (click)="usePreset(p)"
+    >
+      <h6>{{ p.name }}</h6>
+    </div>
+  </div>
+</dd-modal>
+
 <div class="form-horizontal" [formGroup]="formGroup">
   <div class="form-group">
     <div class="col-1 col-lg-2 col-sm-12">
@@ -66,6 +79,7 @@
 <button class="btn btn-sm" (click)="addRow()">
   <i class="icon icon-plus"></i> Add Level
 </button>
+<button class="btn btn-sm ml-2" (click)="presets.open()">Use Preset</button>
 <button
   class="btn btn-sm btn-error ml-2"
   (click)="removeRow()"

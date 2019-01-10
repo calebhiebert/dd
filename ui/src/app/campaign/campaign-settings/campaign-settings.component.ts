@@ -14,6 +14,7 @@ export class CampaignSettingsComponent implements OnInit {
   public saving = false;
 
   public expandXPTable = false;
+  public expandItemRarityTable = false;
 
   public formGroup: FormGroup;
 

@@ -80,7 +80,6 @@ export interface IEntityPreset {
 }
 
 export interface IEntityAttribute {
-  id: string;
   name: string;
   description: string;
   imageId?: string;
@@ -89,8 +88,6 @@ export interface IEntityAttribute {
   options?: string[];
   class: AttributeClass;
   required: boolean;
-  entityPresetId: string;
-  preset?: IEntityPreset;
   max?: number;
   min?: number;
 }

@@ -55,10 +55,22 @@
   <div class="columns mt-2">
     <div class="column"><h3 class="mb-0">Item Rarity Table</h3></div>
     <div class="column col-auto col-ml-auto">
-      <button class="btn btn-sm">Do Something</button>
+      <button
+        class="btn btn-sm"
+        (click)="expandItemRarityTable = !expandItemRarityTable"
+      >
+        <span *ngIf="expandItemRarityTable"
+          >Collapse <i class="icon icon-arrow-up"></i
+        ></span>
+        <span *ngIf="!expandItemRarityTable"
+          >Expand <i class="icon icon-arrow-down"></i
+        ></span>
+      </button>
     </div>
   </div>
-  <dd-item-rarity-table-editor></dd-item-rarity-table-editor>
+  <dd-item-rarity-table-editor
+    *ngIf="expandItemRarityTable"
+  ></dd-item-rarity-table-editor>
 
   <!-- Entity Types -->
   <div class="columns mt-2" *ngIf="editing">

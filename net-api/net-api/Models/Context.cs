@@ -81,6 +81,7 @@ namespace net_api.Models
 
         public ICollection<CampaignUser> Members { get; set; }
         
+        [XPTable]
         [Column("ExperienceTable", TypeName ="bigint[]")]
         public long[] ExperienceTable { get; set; }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import {
   FormGroup,
   FormArray,
@@ -10,6 +10,11 @@ import {
 } from '@angular/forms';
 import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-attribute-form.component';
 import { ICampaign } from 'src/app/campaign.service';
+import {
+  XpTablePresetsService,
+  IXPTablePreset,
+} from 'src/app/xp-table-presets.service';
+import { ModalComponent } from 'src/app/modal/modal.component';
 
 @Component({
   selector: 'dd-experience-table-editor',
@@ -23,12 +28,19 @@ export class ExperienceTableEditorComponent implements OnInit {
   @Input()
   public formGroup: FormGroup;
 
-  constructor() {}
+  @ViewChild('presets')
+  public presetsModal: ModalComponent<void>;
+
+  public presetList: IXPTablePreset[];
+
+  constructor(private presets: XpTablePresetsService) {}
 
   ngOnInit() {
     if (!this.campaign) {
       throw new Error('The param campaign is required!');
     }
+
+    this.presets.getPresets().then((p) => (this.presetList = p));
 
     this.formGroup.addControl(
       'experienceTable',
@@ -45,6 +57,11 @@ export class ExperienceTableEditorComponent implements OnInit {
       Validators.min(0),
       numberValidator,
     ]);
+  }
+
+  public usePreset(preset: IXPTablePreset) {
+    this.formArray.controls = preset.xpTable.map((xp) => this.createRow(xp));
+    this.presetsModal.close();
   }
 
   public addRow() {
