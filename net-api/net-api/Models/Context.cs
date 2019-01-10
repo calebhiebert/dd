@@ -312,7 +312,7 @@ namespace net_api.Models
         [Required]
         public string Type { get; set; }
 
-        [Column("Tags", TypeName = "string[]")]
+        [Column("Tags", TypeName = "varchar[]")]
         public List<string> Tags { get; set; }
     }
 

@@ -29,7 +29,7 @@ namespace netapi.Migrations
                     ImageId = table.Column<string>(nullable: true),
                     Rarity = table.Column<int>(nullable: false),
                     Type = table.Column<string>(nullable: false),
-                    Tags = table.Column<List<string>>(type: "string[]", nullable: true),
+                    Tags = table.Column<List<string>>(type: "varchar[]", nullable: true),
                     CampaignId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

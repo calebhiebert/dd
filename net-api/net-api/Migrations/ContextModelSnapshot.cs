@@ -198,7 +198,7 @@ namespace netapi.Migrations
 
                     b.Property<List<string>>("Tags")
                         .HasColumnName("Tags")
-                        .HasColumnType("string[]");
+                        .HasColumnType("varchar[]");
 
                     b.Property<string>("Type")
                         .IsRequired();
