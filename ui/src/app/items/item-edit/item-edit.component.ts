@@ -22,7 +22,7 @@ export class ItemEditComponent implements OnInit {
   @ViewChild('iform')
   public form: ItemFormComponent;
 
-  public valid = true;
+  public formGroup: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,6 +37,8 @@ export class ItemEditComponent implements OnInit {
         this.loadItem(id);
       });
     }
+
+    this.formGroup = new FormGroup({});
   }
 
   public async save() {
@@ -88,16 +90,6 @@ export class ItemEditComponent implements OnInit {
     }
 
     this.loading = false;
-
-    setTimeout(() => {
-      this.setupFormListener(this.form.formGroup);
-    }, 1);
-  }
-
-  private setupFormListener(formGroup: FormGroup) {
-    formGroup.valueChanges.subscribe((v) => {
-      this.valid = formGroup.valid;
-    });
   }
 
   public get editing() {

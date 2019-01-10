@@ -13,13 +13,14 @@
         class="btn btn-error mr-2"
         [ngClass]="{ loading: deleting }"
         [disabled]="saving"
+        *ngIf="editing"
         (click)="delete()"
       >
         Delete
       </button>
       <button
         class="btn"
-        [disabled]="!valid || saving"
+        [disabled]="formGroup.invalid"
         (click)="save()"
         [ngClass]="{ loading: saving }"
       >
@@ -30,6 +31,7 @@
   <hr />
   <dd-item-form
     *ngIf="item || !editing"
+    [formGroup]="formGroup"
     [inputItem]="item"
     #iform
   ></dd-item-form>

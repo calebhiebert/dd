@@ -61,6 +61,7 @@ export class CampaignSettingsComponent implements OnInit {
           imageId: v.imageId,
           experienceTable: v.experienceTable,
           userId: this.login.id,
+          itemRarities: v.itemRarities,
           id: this.campaign.id,
         };
 
@@ -79,6 +80,7 @@ export class CampaignSettingsComponent implements OnInit {
           description: v.description,
           imageId: v.imageId,
           experienceTable: v.experienceTable,
+          itemRarities: v.itemRarities,
           userId: this.login.id,
           id: '',
         });

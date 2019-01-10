@@ -1,9 +1,10 @@
 <div [formGroup]="formGroup">
   <div class="columns">
-    <div class="column col-auto">
+    <div class="column col-3 col-md-12">
+      <label class="form-label">Item Image</label>
       <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
     </div>
-    <div class="column">
+    <div class="column col-9 col-md-12">
       <!-- Name -->
       <div
         class="form-group"
@@ -63,7 +64,9 @@
       <!-- Rarity -->
       <div class="form-group">
         <label for="rarity" class="form-label">Rarity</label>
-        <select name="rarity" id="rarity" class="form-input"></select>
+        <select name="rarity" id="rarity" class="form-input">
+          <option [value]="i" *ngFor="let ir of rarities">{{ ir.name }}</option>
+        </select>
       </div>
 
       <!-- Type -->
