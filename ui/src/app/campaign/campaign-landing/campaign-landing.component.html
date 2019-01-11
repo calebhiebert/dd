@@ -24,11 +24,11 @@
 
   <!-- Header -->
   <div class="columns">
-    <div class="column col-auto">
+    <div class="column col-9 col-lg-8 col-md-12 hide-md">
       <h1>{{ campaign.name }}</h1>
     </div>
-    <div class="column col-auto col-ml-auto">
-      <div class="dropdown dropdown-right">
+    <div class="column col-3 col-lg-4 col-md-12 d-flex">
+      <div class="dropdown dropdown-right ml-auto">
         <button class="btn btn-link dropdown-toggle">
           Menu <i class="icon icon-caret"></i>
         </button>
@@ -41,6 +41,9 @@
           </li>
         </ul>
       </div>
+    </div>
+    <div class="column col-6 col-md-12 show-md">
+      <h3>{{ campaign.name }}</h3>
     </div>
   </div>
 

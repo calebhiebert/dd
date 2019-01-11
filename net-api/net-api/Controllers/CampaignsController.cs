@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
 
@@ -15,10 +16,12 @@ namespace net_api.Controllers
     public class CampaignsController : ControllerBase
     {
         private readonly Context _context;
+        private readonly IHubContext<UpdateHub> _hub;
 
-        public CampaignsController(Context context)
+        public CampaignsController(Context context, IHubContext<UpdateHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         // GET: api/Campaigns
@@ -105,6 +108,8 @@ namespace net_api.Controllers
                     throw;
                 }
             }
+
+            await _hub.Clients.All.SendAsync("CampaignUpdate", campaign);
 
             return NoContent();
         }

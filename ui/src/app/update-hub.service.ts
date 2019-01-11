@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { environment } from 'src/environments/environment';
 import { LoginService } from './login.service';
+import { ICampaign, CampaignService } from './campaign.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,10 @@ export class UpdateHubService {
 
   private connection: HubConnection;
 
-  constructor(private login: LoginService) {
+  constructor(
+    private login: LoginService,
+    private campaignService: CampaignService
+  ) {
     this._state = ConnectionState.NOT_CONNECTED;
   }
 
@@ -19,11 +23,13 @@ export class UpdateHubService {
     this.connection.onclose((e) => {
       this._state = ConnectionState.CLOSED;
       console.log('Connection Closed', e);
+      this.start();
     });
 
-    this.connection.on('AuthenticateComplete', () => {
-      this._state = ConnectionState.CONNECTED;
-    });
+    this.connection.on('AuthenticateComplete', () => this.authComplete());
+    this.connection.on('CampaignUpdate', (campaign: ICampaign) =>
+      this.campaignUpdate(campaign)
+    );
 
     await this.authenticate();
   }
@@ -59,6 +65,29 @@ export class UpdateHubService {
 
   public get state() {
     return this._state;
+  }
+
+  public authComplete() {
+    console.log('Authenticated');
+    this._state = ConnectionState.CONNECTED;
+  }
+
+  public campaignUpdate(campaign: ICampaign) {
+    if (
+      this.campaignService.campaign &&
+      this.campaignService.campaign.id === campaign.id
+    ) {
+      // TODO, do this automatically somehow
+      const c = this.campaignService.campaign;
+
+      c.name = campaign.name;
+      c.description = campaign.description;
+      c.imageId = campaign.imageId;
+      c.experienceTable = campaign.experienceTable;
+      c.itemTypes = campaign.itemTypes;
+      c.itemRarities = campaign.itemRarities;
+      c.currencyTypes = campaign.currencyTypes;
+    }
   }
 }
 
