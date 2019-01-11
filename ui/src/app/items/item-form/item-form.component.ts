@@ -26,4 +26,16 @@ export class ItemFormComponent implements OnInit {
   public get description() {
     return this.formGroup.controls.description;
   }
+
+  public get cost() {
+    return this.formGroup.get('cost');
+  }
+
+  public get weight() {
+    return this.formGroup.get('weight');
+  }
+
+  public get rarity() {
+    return this.formGroup.get('rarity');
+  }
 }

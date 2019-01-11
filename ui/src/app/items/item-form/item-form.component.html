@@ -9,7 +9,8 @@
       <div
         class="form-group"
         [ngClass]="{
-          'has-error': name.invalid && (name.dirty || name.touched)
+          'has-error': name.invalid && (name.dirty || name.touched),
+          'has-success': name.valid
         }"
       >
         <label class="form-label label-lg" for="item-name">Name</label>
@@ -55,7 +56,8 @@
         class="form-group"
         [ngClass]="{
           'has-error':
-            description.invalid && (description.touched || description.dirty)
+            description.invalid && (description.touched || description.dirty),
+          'has-success': description.valid
         }"
       >
         <label class="form-label" for="item-description">Description</label>
@@ -79,7 +81,7 @@
       </div>
 
       <!-- Rarity -->
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{ 'has-success': rarity.valid }">
         <label for="rarity" class="form-label">Rarity</label>
         <select
           name="rarity"
@@ -91,6 +93,80 @@
             ir.name
           }}</option>
         </select>
+      </div>
+
+      <!-- Cost -->
+      <div
+        class="form-group"
+        [ngClass]="{
+          'has-error': cost.invalid && (cost.dirty || cost.touched),
+          'has-success': cost.valid
+        }"
+      >
+        <label for="cost" class="form-label">Cost</label>
+        <input
+          class="form-input"
+          formControlName="cost"
+          type="number"
+          placeholder="Cost"
+          name="cost"
+          id="cost"
+        />
+        <p
+          class="form-input-hint"
+          *ngIf="
+            cost.invalid && (cost.dirty || cost.touched) && cost.errors.required
+          "
+        >
+          A cost is required
+        </p>
+        <p
+          class="form-input-hint"
+          *ngIf="
+            cost.invalid && (cost.dirty || cost.touched) && cost.errors.number
+          "
+        >
+          The cost must be a number
+        </p>
+      </div>
+
+      <!-- Weight -->
+      <div
+        class="form-group"
+        [ngClass]="{
+          'has-error': weight.invalid && (weight.dirty || weight.touched),
+          'has-success': weight.valid
+        }"
+      >
+        <label for="weight" class="form-label">Weight</label>
+        <input
+          class="form-input"
+          formControlName="weight"
+          type="number"
+          placeholder="Weight"
+          name="weight"
+          id="weight"
+        />
+        <p
+          class="form-input-hint"
+          *ngIf="
+            weight.invalid &&
+            (weight.dirty || weight.touched) &&
+            weight.errors.required
+          "
+        >
+          A weight is required
+        </p>
+        <p
+          class="form-input-hint"
+          *ngIf="
+            weight.invalid &&
+            (weight.dirty || weight.touched) &&
+            weight.errors.number
+          "
+        >
+          The weight must be a number
+        </p>
       </div>
 
       <!-- Tags -->

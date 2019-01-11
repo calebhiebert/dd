@@ -19,6 +19,7 @@ import { RegisterComponent } from './login/register/register.component';
 import { InviteComponent } from './invite/invite.component';
 import { ActionGuard } from './action.guard';
 import { CampaignEditableGuard } from './campaign-editable.guard';
+import { ItemViewComponent } from './items/item-view/item-view.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -49,10 +50,6 @@ const routes: Routes = [
     component: CampaignComponent,
     canActivate: [LoggedInGuard, ActionGuard],
     children: [
-      {
-        path: 'items',
-        component: ItemManagerComponent,
-      },
       {
         path: 'settings',
         component: CampaignSettingsComponent,
@@ -129,6 +126,14 @@ const routes: Routes = [
         data: {
           editing: true,
         },
+      },
+      {
+        path: 'items',
+        component: ItemManagerComponent,
+      },
+      {
+        path: 'items/:item_id',
+        component: ItemViewComponent,
       },
     ],
   },

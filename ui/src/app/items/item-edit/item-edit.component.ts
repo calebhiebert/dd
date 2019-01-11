@@ -5,6 +5,7 @@ import { ConfirmationModalComponent } from 'src/app/confirmation-modal/confirmat
 import { ItemService, IItem } from 'src/app/item.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { FormArray } from '@angular/forms';
+import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-attribute-form.component';
 
 @Component({
   selector: 'dd-item-edit',
@@ -39,6 +40,8 @@ export class ItemEditComponent implements OnInit {
       description: new FormControl(null, Validators.required),
       imageId: new FormControl(this.editing ? null : 'item-default'),
       rarity: new FormControl('0', Validators.required),
+      cost: new FormControl(0, [Validators.required, numberValidator]),
+      weight: new FormControl(0, [Validators.required, numberValidator]),
       tags: new FormArray([]),
     });
 
@@ -69,6 +72,8 @@ export class ItemEditComponent implements OnInit {
         description: v.description,
         imageId: v.imageId,
         rarity: v.rarity,
+        weight: v.weight,
+        cost: v.cost,
         tags: v.tags,
       };
 
@@ -86,6 +91,8 @@ export class ItemEditComponent implements OnInit {
         description: v.description,
         imageId: v.imageId,
         rarity: v.rarity,
+        weight: v.weight,
+        cost: v.cost,
         tags: v.tags,
       };
 

@@ -59,7 +59,12 @@ export class ItemManagerComponent implements OnInit {
   }
 
   public selectItem(item: IItem) {
-    this.router.navigate([item.id, 'edit'], { relativeTo: this.route });
+    this.router.navigate([
+      'campaigns',
+      this.campaignService.campaign.id,
+      'items',
+      item.id,
+    ]);
   }
 
   public get searchedItems() {

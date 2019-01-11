@@ -39,6 +39,8 @@ export interface IItem {
   name: string;
   description: string;
   campaignId: string;
+  cost: number;
+  weight: number;
   imageId?: string;
   rarity: number;
   tags?: string[];

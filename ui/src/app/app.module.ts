@@ -42,6 +42,7 @@ import { InviteComponent } from './invite/invite.component';
 import { NavSidebarComponent } from './nav-sidebar/nav-sidebar.component';
 import { ItemRarityTableEditorComponent } from './campaign/campaign-settings/item-rarity-table-editor/item-rarity-table-editor.component';
 import { TagEditorComponent } from './tag-editor/tag-editor.component';
+import { ItemViewComponent } from './items/item-view/item-view.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import { TagEditorComponent } from './tag-editor/tag-editor.component';
     NavSidebarComponent,
     ItemRarityTableEditorComponent,
     TagEditorComponent,
+    ItemViewComponent,
   ],
   imports: [
     BrowserModule,

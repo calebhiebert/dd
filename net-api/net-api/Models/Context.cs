@@ -313,8 +313,15 @@ namespace net_api.Models
         public Campaign Campaign { get; set; }
 
         [Required]
-        [Range(-1, double.MaxValue)]
+        [Range(-1, int.MaxValue)]
         public int Rarity { get; set; }
+
+        [Required]
+        [Range(0, double.MaxValue)]
+        public double Cost { get; set; }
+
+        [Required]
+        public double Weight { get; set; }
 
         [Column("Tags", TypeName = "varchar[]")]
         public string[] Tags { get; set; }
