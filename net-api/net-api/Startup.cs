@@ -62,6 +62,23 @@ namespace net_api
             {
                 options.Authority = "https://panch-dd.auth0.com/";
                 options.Audience = "https://dd.panchem.io";
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = ctx =>
+                    {
+                        var accessToken = ctx.Request.Query["access_token"];
+
+                        var path = ctx.HttpContext.Request.Path;
+
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hub"))
+                        {
+                            ctx.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             var sp = services.BuildServiceProvider();
@@ -77,13 +94,12 @@ namespace net_api
             }
 
             app.UseCors("AllowAll");
+            app.UseAuthentication();
 
             app.UseSignalR(routes =>
             {
                 routes.MapHub<UpdateHub>("/hub");
             });
-
-            app.UseAuthentication();
 
             app.UseMvc();
         }

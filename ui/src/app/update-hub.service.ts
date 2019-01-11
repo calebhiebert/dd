@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { environment } from 'src/environments/environment';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,32 +11,49 @@ export class UpdateHubService {
 
   private connection: HubConnection;
 
-  constructor() {
+  constructor(private login: LoginService) {
     this._state = ConnectionState.NOT_CONNECTED;
-
-    this.connection = new HubConnectionBuilder()
-      .withUrl(environment.hubURL)
-      .build();
   }
 
-  private setup() {
+  private async setup() {
     this.connection.onclose((e) => {
       this._state = ConnectionState.CLOSED;
       console.log('Connection Closed', e);
     });
+
+    this.connection.on('AuthenticateComplete', () => {
+      this._state = ConnectionState.CONNECTED;
+    });
+
+    await this.authenticate();
+  }
+
+  private async authenticate() {
+    this._state = ConnectionState.AUTHENTICATING;
+    try {
+      await this.connection.invoke('Authenticate');
+    } catch (err) {
+      console.log('Auth ERR', err);
+    }
   }
 
   public async start() {
+    this.connection = new HubConnectionBuilder()
+      .withUrl(`${environment.hubURL}`, {
+        accessTokenFactory: this.login.loadToken,
+      })
+      .build();
+
     try {
       this._state = ConnectionState.CONNECTING;
       await this.connection.start();
       this._state = ConnectionState.CONNECTED;
-      this.setup();
+      await this.setup();
     } catch (err) {
       console.log('Connection Err', err);
       setTimeout(() => {
         this.start();
-      }, 1000);
+      }, 5000);
     }
   }
 
