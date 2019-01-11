@@ -7,6 +7,7 @@ export const environment = {
   auth0Domain: 'panch-dd.auth0.com',
   auth0ClientId: 'wtWPWeaJjR4hbWYi4hJuduRDDFVn97Fn',
   apiURL: 'http://localhost:5000/api',
+  hubURL: 'http://localhost:5000/hub',
 };
 
 /*

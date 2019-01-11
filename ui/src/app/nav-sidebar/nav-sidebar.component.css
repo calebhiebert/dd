@@ -5,3 +5,14 @@
 .brand > a {
   width: 100%;
 }
+
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.connection-status {
+  align-self: center;
+  margin-top: auto;
+}

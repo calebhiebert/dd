@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using net_api.Controllers;
 using net_api.Models;
 using Npgsql;
 
@@ -31,18 +32,21 @@ namespace net_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(opt =>
-            {
-                opt.AddPolicy("CorsPolicy", builder => builder
-                                                        .AllowAnyOrigin()
-                                                        .WithHeaders("Content-Type", "Authorization")
-                                                        .AllowAnyMethod());
-            });
-
             var context = new Context();
             context.Database.Migrate();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("AllowAll", builder => builder
+                .WithOrigins("http://localhost:4200", "https://dd.panchem.io")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+            });
+
+            services.AddSignalR();
 
             services.AddScoped<Context>();
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
@@ -72,7 +76,12 @@ namespace net_api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("CorsPolicy");
+            app.UseCors("AllowAll");
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<UpdateHub>("/hub");
+            });
 
             app.UseAuthentication();
 

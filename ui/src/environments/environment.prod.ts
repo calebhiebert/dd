@@ -3,4 +3,5 @@ export const environment = {
   auth0Domain: 'panch-dd.auth0.com',
   auth0ClientId: '9vKGU44oDoiGxliIyFL7hjWQQSdmvWEz',
   apiURL: 'https://panch-dd.herokuapp.com/api',
+  hubURL: 'https://panch-dd.herokuapp.com/hub',
 };

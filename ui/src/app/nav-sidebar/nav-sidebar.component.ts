@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CampaignService } from '../campaign.service';
 import { LoginService } from '../login.service';
 import { Router } from '@angular/router';
+import { UpdateHubService } from '../update-hub.service';
 
 @Component({
   selector: 'dd-nav-sidebar',
@@ -12,7 +13,8 @@ export class NavSidebarComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private login: LoginService,
-    private router: Router
+    private router: Router,
+    private hub: UpdateHubService
   ) {}
 
   ngOnInit() {}
@@ -41,5 +43,9 @@ export class NavSidebarComponent implements OnInit {
 
   public get campaignEditable() {
     return this.campaignService.canEdit;
+  }
+
+  public get connectionStatus() {
+    return this.hub.state;
   }
 }

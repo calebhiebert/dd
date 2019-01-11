@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SidebarService } from './sidebar.service';
+import { UpdateHubService } from './update-hub.service';
 
 @Component({
   selector: 'dd-root',
@@ -9,7 +10,9 @@ import { SidebarService } from './sidebar.service';
 export class AppComponent {
   title = 'ui';
 
-  constructor(private sidebar: SidebarService) {}
+  constructor(private sidebar: SidebarService, private hub: UpdateHubService) {
+    this.hub.start();
+  }
 
   public toggle() {
     this.sidebar.toggle();

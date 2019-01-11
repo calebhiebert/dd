@@ -43,3 +43,14 @@
     </ul>
   </li>
 </ul>
+
+<!-- Update Connection Status -->
+<div class="connection-status mb-2">
+  <div [ngSwitch]="connectionStatus">
+    <div *ngSwitchCase="0" class="label">Not Connected</div>
+    <div *ngSwitchCase="1" class="label label-secondary">Connected</div>
+    <div *ngSwitchCase="2" class="label label-error">Disconnected</div>
+    <div *ngSwitchCase="3" class="label label-secondary">Connecting ...</div>
+    <div *ngSwitchCase="4" class="label label-primary">Authenticating</div>
+  </div>
+</div>
