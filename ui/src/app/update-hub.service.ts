@@ -44,6 +44,15 @@ export class UpdateHubService {
   }
 
   public async start() {
+    const isLoggedIn = await this.login.isLoggedIn();
+
+    if (!isLoggedIn) {
+      setTimeout(() => {
+        this.start();
+      }, 1000);
+      return;
+    }
+
     this.connection = new HubConnectionBuilder()
       .withUrl(`${environment.hubURL}`, {
         accessTokenFactory: this.login.loadToken,

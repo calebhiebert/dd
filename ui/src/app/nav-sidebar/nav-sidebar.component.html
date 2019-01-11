@@ -22,14 +22,16 @@
   <!-- Campaign -->
   <li class="nav-item" *ngIf="campaign">
     <a [routerLink]="['campaigns', campaign.id, 'landing']">
-      {{ campaign.name }}
+      {{ campaign.name | truncate: 20 }}
     </a>
     <ul class="nav">
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="campaignEditable">
         <a [routerLink]="['campaign', 'manage', campaign.id, 'items']">Items</a>
       </li>
-      <li class="nav-item"><a [routerLink]="['home']">Places</a></li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="campaignEditable">
+        <a [routerLink]="['home']">Places</a>
+      </li>
+      <li class="nav-item" *ngIf="campaignEditable">
         <a [routerLink]="['campaign', 'manage', campaign.id, 'quests']"
           >Quests</a
         >

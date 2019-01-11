@@ -20,18 +20,31 @@
           id="item-name"
           placeholder="Sword of Agatha"
         />
-        <p class="form-input-hint" *ngIf="name.invalid && name.errors.required">
+        <p
+          class="form-input-hint"
+          *ngIf="
+            name.invalid && (name.dirty || name.touched) && name.errors.required
+          "
+        >
           The item needs a name
         </p>
         <p
           class="form-input-hint"
-          *ngIf="name.invalid && name.errors.minlength"
+          *ngIf="
+            name.invalid &&
+            (name.dirty || name.touched) &&
+            name.errors.minlength
+          "
         >
           The name is too short
         </p>
         <p
           class="form-input-hint"
-          *ngIf="name.invalid && name.errors.maxlength"
+          *ngIf="
+            name.invalid &&
+            (name.dirty || name.touched) &&
+            name.errors.maxlength
+          "
         >
           The name can't be more than 30 characters long
         </p>
@@ -55,7 +68,11 @@
         ></textarea>
         <p
           class="form-input-hint"
-          *ngIf="description.invalid && description.errors.required"
+          *ngIf="
+            description.invalid &&
+            (description.touched || description.dirty) &&
+            description.errors.required
+          "
         >
           The item needs a description
         </p>
@@ -64,16 +81,23 @@
       <!-- Rarity -->
       <div class="form-group">
         <label for="rarity" class="form-label">Rarity</label>
-        <select name="rarity" id="rarity" class="form-input">
-          <option [value]="i" *ngFor="let ir of rarities">{{ ir.name }}</option>
+        <select
+          name="rarity"
+          id="rarity"
+          class="form-input"
+          formControlName="rarity"
+        >
+          <option [value]="i" *ngFor="let ir of rarities; let i = index">{{
+            ir.name
+          }}</option>
         </select>
       </div>
 
-      <!-- Type -->
-      <div class="form-group">
-        <label for="type" class="form-label">Type</label>
-        <select name="type" id="type" class="form-input"></select>
-      </div>
+      <!-- Tags -->
+      <label class="form-label">Tags</label>
+      <dd-tag-editor [formGroup]="formGroup"></dd-tag-editor>
+
+      <tui-editor></tui-editor>
     </div>
   </div>
 </div>

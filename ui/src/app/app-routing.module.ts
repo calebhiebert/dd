@@ -75,7 +75,7 @@ const routes: Routes = [
         path: 'items/:item_id/edit',
         component: ItemEditComponent,
         data: {
-          editing: false,
+          editing: true,
         },
       },
       {

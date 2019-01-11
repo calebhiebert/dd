@@ -1,15 +1,17 @@
-<div class="columns hoverable p-1">
-  <div class="column col-auto">
-    <figure class="avatar avatar-lg" *ngIf="item.imageId">
-      <img
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-          item.imageId
-        }}.png"
-      />
-    </figure>
-  </div>
-  <div class="column d-flex flex-col">
-    <h5 class="mb-0">{{ item.name }}</h5>
-    <span class="text-gray">{{ item.description | truncate: 150 }}</span>
+<div class="container grid-xl">
+  <div class="columns hoverable p-1">
+    <div class="column col-auto">
+      <figure class="avatar avatar-lg" *ngIf="item.imageId">
+        <img
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+            item.imageId
+          }}.png"
+        />
+      </figure>
+    </div>
+    <div class="column d-flex flex-col">
+      <h5 class="mb-0">{{ item.name }}</h5>
+      <span class="text-gray">{{ item.description | truncate: 150 }}</span>
+    </div>
   </div>
 </div>

@@ -3,11 +3,6 @@
   <div class="loading loading-lg" *ngIf="loading"></div>
 
   <div class="columns col-oneline" *ngIf="!loading || !editing">
-    <div class="column">
-      <a class="btn" [routerLink]="['../..']"
-        ><i class="icon icon-arrow-left"></i> Back</a
-      >
-    </div>
     <div class="column col-ml-auto col-auto">
       <button
         class="btn btn-error mr-2"
@@ -29,10 +24,5 @@
     </div>
   </div>
   <hr />
-  <dd-item-form
-    *ngIf="item || !editing"
-    [formGroup]="formGroup"
-    [inputItem]="item"
-    #iform
-  ></dd-item-form>
+  <dd-item-form [formGroup]="formGroup"></dd-item-form>
 </div>

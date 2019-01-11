@@ -96,6 +96,8 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
+            item.Id = Nanoid.Nanoid.Generate();
+
             _context.Items.Add(item);
             await _context.SaveChangesAsync();
 

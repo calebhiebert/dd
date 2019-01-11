@@ -38,8 +38,8 @@ export interface IItem {
   id: string;
   name: string;
   description: string;
+  campaignId: string;
   imageId?: string;
   rarity: number;
-  type: string;
   tags?: string[];
 }

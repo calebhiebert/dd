@@ -91,29 +91,6 @@ namespace net_api.Models
 
         public ICollection<Item> Items { get; set; }
 
-        [Column("ItemTypes", TypeName = "jsonb")]
-        [JsonIgnore]
-        public string ItemTypesJson { get; set; }
-
-        [NotMapped]
-        public List<ItemType> ItemTypes
-        {
-            get
-            {
-                if (ItemTypesJson == null)
-                {
-                    return null;
-                }
-
-                return JsonConvert.DeserializeObject<List<ItemType>>(ItemTypesJson);
-            }
-
-            set
-            {
-                ItemTypesJson = JsonConvert.SerializeObject(value);
-            }
-        }
-
         [Column("CurrencyTypes", TypeName = "jsonb")]
         [JsonIgnore]
         public string CurrencyTypesJson { get; set; }
@@ -338,9 +315,6 @@ namespace net_api.Models
         [Required]
         [Range(-1, double.MaxValue)]
         public int Rarity { get; set; }
-
-        [Required]
-        public string Type { get; set; }
 
         [Column("Tags", TypeName = "varchar[]")]
         public string[] Tags { get; set; }
