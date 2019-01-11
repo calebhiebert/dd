@@ -3,7 +3,7 @@
     <!-- Title -->
     <div class="column col-auto"><h3>Items</h3></div>
 
-    <div class="column">
+    <div class="column" *ngIf="editable">
       <button class="btn" (click)="addItem()">
         <i class="icon icon-plus"></i>
       </button>

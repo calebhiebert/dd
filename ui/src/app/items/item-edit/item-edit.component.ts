@@ -79,7 +79,11 @@ export class ItemEditComponent implements OnInit {
 
       try {
         await this.itemService.updateItem(item);
-        this.router.navigate(['../..'], { relativeTo: this.route });
+        this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'items',
+        ]);
       } catch (err) {
         console.log('SAVE ERR', err);
       }
@@ -98,7 +102,11 @@ export class ItemEditComponent implements OnInit {
 
       try {
         const createdItem = await this.itemService.createItem(item);
-        this.router.navigate(['..'], { relativeTo: this.route });
+        this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'items',
+        ]);
       } catch (err) {
         console.log('CREATE ERR', err);
       }

@@ -80,6 +80,10 @@ export class ItemManagerComponent implements OnInit {
     }
   }
 
+  public get editable() {
+    return this.campaignService.canEdit;
+  }
+
   public get filteredItems(): IItem[] {
     return this.searchedItems.slice(
       this.page * this.itemsPerPage - this.itemsPerPage,
