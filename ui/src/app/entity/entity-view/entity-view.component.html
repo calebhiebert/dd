@@ -95,11 +95,14 @@
 
   <div class="columns">
     <!-- Sidebar -->
-    <div class="column col-auto col-ml-auto" *ngIf="minorAttributes.length > 0">
+    <div
+      class="column col-4 col-md-6 col-sm-12 col-ml-auto"
+      *ngIf="minorAttributes.length > 0"
+    >
       <div class="table table-striped" [ngClass]="{ 'table-hover': editable }">
         <thead>
           <tr>
-            <th>Minor Attributes</th>
+            <th class="w-100">Minor Attributes</th>
             <th></th>
           </tr>
         </thead>
