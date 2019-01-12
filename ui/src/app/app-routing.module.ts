@@ -20,13 +20,30 @@ import { InviteComponent } from './invite/invite.component';
 import { ActionGuard } from './action.guard';
 import { CampaignEditableGuard } from './campaign-editable.guard';
 import { ItemViewComponent } from './items/item-view/item-view.component';
+import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'invite/:invite_id', component: InviteComponent },
-  { path: 'login', component: LoginComponent, canActivate: [LoginPageGuard] },
-  { path: 'register', component: RegisterComponent },
-  { path: 'callback', component: LoginComponent },
+  { path: 'about', component: AboutComponent },
+  {
+    path: 'login',
+    component: LoginComponent,
+    data: { showLoginLoading: false },
+    canActivate: [LoginPageGuard],
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    data: { showLoginLoading: false },
+  },
+  {
+    path: 'callback',
+    component: LoginComponent,
+    data: {
+      showLoginLoading: false,
+    },
+  },
   {
     path: 'campaigns/list',
     component: CampaignListComponent,

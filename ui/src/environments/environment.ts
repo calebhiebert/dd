@@ -8,6 +8,8 @@ export const environment = {
   auth0ClientId: 'wtWPWeaJjR4hbWYi4hJuduRDDFVn97Fn',
   apiURL: 'http://localhost:5000/api',
   hubURL: 'http://localhost:5000/hub',
+  gitHash: 'REPLACE_GIT_HASH',
+  gitTag: 'REPLACE_GIT_TAG',
 };
 
 /*

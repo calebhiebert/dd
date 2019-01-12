@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SidebarService } from './sidebar.service';
-import { UpdateHubService } from './update-hub.service';
+import { LoginService } from './login.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'dd-root',
@@ -10,7 +11,17 @@ import { UpdateHubService } from './update-hub.service';
 export class AppComponent {
   title = 'ui';
 
-  constructor(private sidebar: SidebarService) {}
+  private showLoginLoading = true;
+
+  constructor(
+    private sidebar: SidebarService,
+    private login: LoginService,
+    private route: ActivatedRoute
+  ) {
+    route.data.subscribe((data) => {
+      this.showLoginLoading = data.showLoginLoading || true;
+    });
+  }
 
   public toggle() {
     this.sidebar.toggle();
@@ -18,5 +29,13 @@ export class AppComponent {
 
   public get sidebarOpen() {
     return this.sidebar.sidebarOpen;
+  }
+
+  public get loginLoading() {
+    if (this.showLoginLoading === false) {
+      return false;
+    }
+
+    return this.login.loginInProgress;
   }
 }
