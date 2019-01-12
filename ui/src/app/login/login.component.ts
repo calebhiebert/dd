@@ -27,9 +27,8 @@ export class LoginComponent implements OnInit {
 
         this.login.saveToken(auth.accessToken);
         const loginSuccess = await this.login.isLoggedIn();
-
         if (loginSuccess) {
-          this.router.navigate(['home']);
+          await this.router.navigate(['home']);
         }
       } catch (err) {
         console.log('Process ERR', err);

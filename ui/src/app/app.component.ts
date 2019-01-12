@@ -10,9 +10,7 @@ import { UpdateHubService } from './update-hub.service';
 export class AppComponent {
   title = 'ui';
 
-  constructor(private sidebar: SidebarService, private hub: UpdateHubService) {
-    this.hub.start();
-  }
+  constructor(private sidebar: SidebarService) {}
 
   public toggle() {
     this.sidebar.toggle();

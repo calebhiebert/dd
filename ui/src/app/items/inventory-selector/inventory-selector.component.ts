@@ -97,7 +97,6 @@ export class InventorySelectorComponent implements OnInit, AfterContentInit {
         'Are you sure you want to remove this item?'
       )
     ) {
-      console.log('removing item', this.currentItem);
       this.selectedItems = this.selectedItems.filter(
         (i) => i !== this.currentItem
       );

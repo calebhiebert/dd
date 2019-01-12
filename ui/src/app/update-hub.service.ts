@@ -44,6 +44,14 @@ export class UpdateHubService {
   }
 
   public async start() {
+    if (
+      [ConnectionState.CLOSED, ConnectionState.NOT_CONNECTED].indexOf(
+        this.state
+      ) == -1
+    ) {
+      return;
+    }
+
     const isLoggedIn = await this.login.isLoggedIn();
 
     if (!isLoggedIn) {
@@ -66,6 +74,7 @@ export class UpdateHubService {
       await this.setup();
     } catch (err) {
       console.log('Connection Err', err);
+      this._state = ConnectionState.CLOSED;
       setTimeout(() => {
         this.start();
       }, 5000);
@@ -77,7 +86,6 @@ export class UpdateHubService {
   }
 
   public authComplete() {
-    console.log('Authenticated');
     this._state = ConnectionState.CONNECTED;
   }
 

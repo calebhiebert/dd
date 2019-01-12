@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CampaignService } from './campaign.service';
 import { Route, ActivatedRoute } from '@angular/router';
+import { UpdateHubService } from './update-hub.service';
 
 @Component({
   selector: 'dd-campaign',
@@ -8,7 +9,10 @@ import { Route, ActivatedRoute } from '@angular/router';
   styleUrls: ['./campaign.component.css'],
 })
 export class CampaignComponent implements OnInit {
-  constructor(private campaignService: CampaignService, private route: ActivatedRoute) {}
+  constructor(
+    private campaignService: CampaignService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     if (!this.loading && !this.campaign) {

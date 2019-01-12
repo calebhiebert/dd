@@ -23,14 +23,31 @@ namespace net_api.Controllers
 
         // GET: api/Items
         [HttpGet]
-        public IActionResult GetItems([FromQuery(Name = "campaignId")] string campaignId)
+        public IActionResult GetItems(
+            [FromQuery(Name = "campaignId")] string campaignId, 
+            [FromQuery(Name = "limit")] int limit,
+            [FromQuery(Name = "offset")] int offset
+            )
         {
             if (campaignId == null)
             {
                 return BadRequest("Missing campaign id");
             }
 
-            return Ok(_context.Items.Where(i => i.CampaignId == campaignId));
+            if (limit == 0)
+            {
+                limit = 1000;
+            } else if (limit > 50)
+            {
+                limit = 50;
+            }
+
+            var items = _context.Items.Where(i => i.CampaignId == campaignId)
+                .OrderBy(i => i.Id)
+                .Skip(offset)
+                .Take(limit);
+
+            return Ok(items);
         }
 
         // GET: api/Items/5

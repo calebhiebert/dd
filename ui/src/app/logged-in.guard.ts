@@ -6,12 +6,17 @@ import {
   Router,
 } from '@angular/router';
 import { LoginService } from './login.service';
+import { UpdateHubService } from './update-hub.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoggedInGuard implements CanActivate {
-  constructor(private login: LoginService, private router: Router) {}
+  constructor(
+    private login: LoginService,
+    private router: Router,
+    private hub: UpdateHubService
+  ) {}
 
   public async canActivate(
     next: ActivatedRouteSnapshot,
@@ -23,6 +28,7 @@ export class LoggedInGuard implements CanActivate {
       this.router.navigate(['login']);
       return false;
     } else {
+      this.hub.start();
       return true;
     }
   }

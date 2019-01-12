@@ -107,8 +107,6 @@ export class EntityFormComponent implements OnInit {
   }
 
   public usePreset(p: IEntityAttributePreset) {
-    console.log(p);
-
     (this.formGroup.get('attributes') as FormArray).controls = p.attributes.map(
       (attr) => {
         return new FormGroup({});

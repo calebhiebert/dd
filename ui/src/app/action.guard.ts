@@ -25,7 +25,6 @@ export class ActionGuard implements CanActivate {
     } else {
       const action = queue.pop();
       this.actions.save();
-      console.log('Routing based on action', action);
 
       switch (action.type) {
         case ActionType.ACCOUNT_SETUP:
