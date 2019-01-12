@@ -8,6 +8,8 @@ jobs:
           command: |
             echo Running Docker Build
             cd net-api
+            sed 's/REPLACE_GIT_HASH/$CIRCLE_SHA1/g' ./net-api/Controllers/AboutInfoController.cs
+            sed 's/REPLACE_GIT_TAG/$CIRCLE_TAG/g' ./net-api/Controllers/AboutInfoController.cs
             docker build -t registry.heroku.com/panch-dd/web -f net-api/Dockerfile .
             docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
             docker push registry.heroku.com/panch-dd/web
@@ -30,6 +32,11 @@ jobs:
           paths:
             - node_modules
             - yarn.lock
+      - run:
+          name: Version Replacer
+          command: |
+            sed 's/REPLACE_GIT_HASH/$CIRCLE_SHA1/g' ./src/environments/environment.prod.ts
+            sed 's/REPLACE_GIT_TAG/$CIRCLE_TAG/g' ./src/environments/environment.prod.ts
       - run:
           name: Build
           command: yarn build --prod
