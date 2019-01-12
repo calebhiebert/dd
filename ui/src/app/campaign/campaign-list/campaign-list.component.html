@@ -41,7 +41,9 @@
               <h4 class="mb-1">{{ c.name }}</h4>
             </div>
             <div class="column col-auto col-ml-auto">
-              <span class="text-gray text-italic"> Example Text </span>
+              <span class="text-gray text-italic">
+                {{ c.members.length }} Members • {{ c.user.username }}</span
+              >
             </div>
           </div>
           <span class="text-gray">{{ c.description | truncate: 150 }}</span>

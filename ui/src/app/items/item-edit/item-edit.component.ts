@@ -38,7 +38,7 @@ export class ItemEditComponent implements OnInit {
         Validators.maxLength(30),
       ]),
       description: new FormControl(null, Validators.required),
-      imageId: new FormControl(this.editing ? null : 'item-default'),
+      imageId: new FormControl(null),
       rarity: new FormControl('0', Validators.required),
       cost: new FormControl(0, [Validators.required, numberValidator]),
       weight: new FormControl(0, [Validators.required, numberValidator]),

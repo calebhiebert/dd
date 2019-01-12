@@ -30,7 +30,7 @@ namespace net_api.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            return _context.Campaigns.Include(c => c.Members)
+            return _context.Campaigns.Include(c => c.Members).Include(c => c.User)
                 .Where(c => c.UserId == userId || c.Members.Any(m => m.UserId == userId));
         }
 

@@ -94,6 +94,18 @@
   <div class="divider" *ngIf="normalAttributes.length > 0"></div>
 
   <div class="columns">
+    <!-- Image and description -->
+    <div class="column col-8 col-md-6 col-sm-12 hide-sm">
+      <markdown [data]="entity.description"></markdown>
+
+      <img
+        class="image-responsive s-rounded"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
+          entity.imageId
+        }}"
+      />
+    </div>
+
     <!-- Sidebar -->
     <div
       class="column col-4 col-md-6 col-sm-12 col-ml-auto"
@@ -129,6 +141,18 @@
           </tr>
         </tbody>
       </div>
+    </div>
+
+    <!-- Image and description lower -->
+    <div class="column col-12 show-sm">
+      <markdown [data]="entity.description"></markdown>
+
+      <img
+        class="image-responsive s-rounded"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
+          entity.imageId
+        }}"
+      />
     </div>
   </div>
 </div>

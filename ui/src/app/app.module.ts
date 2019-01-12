@@ -45,6 +45,7 @@ import { TagEditorComponent } from './tag-editor/tag-editor.component';
 import { ItemViewComponent } from './items/item-view/item-view.component';
 import { AboutComponent } from './about/about.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -95,6 +96,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
     FormsModule,
     TruncateModule,
     HttpClientModule,
+    MarkdownModule.forRoot(),
   ],
   providers: [
     {

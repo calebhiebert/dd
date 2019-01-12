@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { IItem } from 'src/app/item.service';
+import { CampaignService, IItemRarity } from 'src/app/campaign.service';
 
 @Component({
   selector: 'dd-item-view-list',
@@ -10,7 +11,7 @@ export class ItemViewListComponent implements OnInit {
   @Input()
   public item: IItem;
 
-  constructor() {}
+  constructor(private campaignService: CampaignService) {}
 
   ngOnInit() {}
 
@@ -21,6 +22,18 @@ export class ItemViewListComponent implements OnInit {
       }`;
     } else {
       return 'https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/uncertainty';
+    }
+  }
+
+  public get rarity(): IItemRarity {
+    if (
+      this.campaignService.campaign &&
+      this.campaignService.campaign.itemRarities &&
+      this.item
+    ) {
+      return this.campaignService.campaign.itemRarities[this.item.rarity];
+    } else {
+      return null;
     }
   }
 }

@@ -23,10 +23,16 @@
       </div>
       <div class="column">
         <h2 class="mb-0">{{ item.name }}</h2>
-        <span class="text-gray text-italic" *ngIf="rarity"
-          >{{ rarity.name }} • {{ item.weight }}kg • {{ item.cost }}gp</span
-        >
-        <a class="ml-2 c-hand" (click)="edit()" *ngIf="editable">Edit</a>
+        <div class="text-gray text-italic" *ngIf="rarity">
+          <span class="text-bold" [style.color]="rarity.color">{{
+            rarity.name
+          }}</span>
+          • <span class="text-bold">{{ item.weight }}</span
+          >kg • <span class="text-bold text-warning">{{ item.cost }}</span
+          >gp
+
+          <a class="ml-2 c-hand" (click)="edit()" *ngIf="editable">Edit</a>
+        </div>
       </div>
     </div>
 
@@ -41,7 +47,7 @@
         />
       </div>
       <div class="column col-8 col-md-12">
-        <p>{{ item.description }}</p>
+        <markdown [data]="item.description"></markdown>
 
         <!-- Tags -->
         <div *ngIf="item.tags">
