@@ -34,10 +34,10 @@
         </button>
 
         <ul class="menu">
-          <li class="menu-item">
-            <a [routerLink]="['..', 'entities', 'selecttype']">
-              Create Entity
-            </a>
+          <li class="menu-item" *ngFor="let ep of entityPresets">
+            <a [routerLink]="['..', 'entities', ep.id, 'create']"
+              >Create {{ ep.name }}</a
+            >
           </li>
         </ul>
       </div>

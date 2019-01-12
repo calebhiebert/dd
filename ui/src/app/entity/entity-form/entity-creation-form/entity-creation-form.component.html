@@ -5,10 +5,10 @@
   <!-- Title Control -->
   <div class="columns" *ngIf="entity !== undefined || !editing">
     <div class="column">
-      <h3>Edit {{ preset.name }}</h3>
+      <h3>{{ editing ? 'Edit' : 'Create' }} {{ preset.name }}</h3>
     </div>
     <div class="column col-auto col-ml-auto">
-      <a class="btn mr-2" [routerLink]="['..']">Cancel</a>
+      <a class="btn mr-2" [routerLink]="['../../..', 'landing']">Cancel</a>
 
       <button
         class="btn btn-primary"

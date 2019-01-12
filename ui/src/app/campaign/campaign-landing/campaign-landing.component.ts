@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
 import { Entity } from 'src/app/entity';
 import { ModalComponent } from 'src/app/modal/modal.component';
+import { IEntityPreset } from 'src/app/entity.service';
 
 @Component({
   selector: 'dd-campaign-landing',
@@ -37,5 +38,9 @@ export class CampaignLandingComponent implements OnInit {
 
   public get editable() {
     return this.campaignService.canEdit;
+  }
+
+  public get entityPresets(): IEntityPreset[] {
+    return this.campaign.entityPresets.filter((e) => e.playerCreatable);
   }
 }

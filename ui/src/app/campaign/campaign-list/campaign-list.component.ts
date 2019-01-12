@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CampaignService, ICampaign } from 'src/app/campaign.service';
+import { IEntityPreset } from 'src/app/entity.service';
 
 @Component({
   selector: 'dd-campaign-list',
@@ -21,15 +22,6 @@ export class CampaignListComponent implements OnInit {
     this.loadCampaigns();
   }
 
-  public async createCampaign() {
-    this.router.navigate(['campaigns', 'create']);
-  }
-
-  public selectCampaign(campaign: ICampaign) {
-    this.campaignService.setSelection(campaign.id);
-    this.router.navigate(['campaigns', campaign.id]);
-  }
-
   private async loadCampaigns() {
     this.loading = true;
     try {
@@ -40,5 +32,14 @@ export class CampaignListComponent implements OnInit {
     }
 
     this.loading = false;
+  }
+
+  public async createCampaign() {
+    this.router.navigate(['campaigns', 'create']);
+  }
+
+  public selectCampaign(campaign: ICampaign) {
+    this.campaignService.setSelection(campaign.id);
+    this.router.navigate(['campaigns', campaign.id]);
   }
 }
