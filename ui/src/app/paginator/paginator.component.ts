@@ -46,10 +46,30 @@ export class PaginatorComponent implements OnInit {
   }
 
   public get pageArr(): number[] {
-    const pageArr: number[] = [];
+    const pageArr: number[] = [1];
 
-    for (let i = 1; i < this.numPages + 1; i++) {
-      pageArr.push(i);
+    if (this.numPages > 4) {
+      if (this.page > 2) {
+        pageArr.push(-1);
+      }
+
+      for (
+        let i = Math.max(2, this.page - 1);
+        i < Math.min(this.page + 2, this.numPages);
+        i++
+      ) {
+        pageArr.push(i);
+      }
+
+      if (this.page < this.numPages - 2) {
+        pageArr.push(-1);
+      }
+
+      pageArr.push(this.numPages);
+    } else if (this.numPages > 1) {
+      for (let i = 2; i < this.numPages + 1; i++) {
+        pageArr.push(i);
+      }
     }
 
     return pageArr;

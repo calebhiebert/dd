@@ -1,12 +1,16 @@
 <div class="mb-2 bg-light">
-  <div class="py-2">
+  <div class="p-2">
     <header class="navbar">
       <section>
         <a class="off-canvas-toggle btn btn-link btn-action" (click)="toggle()">
           <i class="icon icon-menu"></i>
         </a>
       </section>
-      <section class="navbar-section">
+      <section class="navbar-section" *ngIf="loginInProgress"></section>
+      <section class="navbar-section" *ngIf="loginInProgress">
+        <div class="loading loading-lg"></div>
+      </section>
+      <section class="navbar-section p-1">
         <button
           class="btn badge"
           data-badge="0"
@@ -14,16 +18,6 @@
         >
           <i class="icon icon-flag"></i>
         </button>
-        <a
-          *ngIf="campaign"
-          class="btn btn-link"
-          [routerLink]="['campaigns', campaign.id, 'landing']"
-        >
-          {{ campaign.name }}
-        </a>
-        <span class="text-italic btn btn-link" *ngIf="!campaign"
-          >No campaign selected...</span
-        >
       </section>
     </header>
   </div>

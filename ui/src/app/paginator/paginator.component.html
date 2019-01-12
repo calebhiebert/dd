@@ -9,9 +9,11 @@
       class="btn"
       [ngClass]="{ 'btn-primary': page === p, 'btn-link': page !== p }"
       (click)="setPage(p)"
+      *ngIf="p > 0"
     >
       {{ p }}
     </button>
+    <span *ngIf="p === -1">...</span>
   </li>
   <li class="page-item">
     <button class="btn btn-link" (click)="next()" [disabled]="!canNext">

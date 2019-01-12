@@ -12,10 +12,6 @@
   <a class="off-canvas-overlay" (click)="toggle()"></a>
 
   <div class="off-canvas-content content p-0">
-    <div class="container grid-xl mt-2" *ngIf="loginLoading">
-      <div class="loading loading-lg"></div>
-    </div>
-
     <!-- off-screen content -->
     <dd-nav></dd-nav> <router-outlet></router-outlet>
   </div>
