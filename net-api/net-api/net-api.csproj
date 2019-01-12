@@ -8,6 +8,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20190106234612_Loading.cs" />
     <Compile Remove="Migrations\20190106234612_Loading.Designer.cs" />
+    <Compile Remove="Migrations\20190112190404_Notifications.cs" />
+    <Compile Remove="Migrations\20190112190404_Notifications.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +24,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.1.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
     <PackageReference Include="Nanoid" Version="2.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
     <PackageReference Include="Npgsql.Json.NET" Version="4.0.4" />

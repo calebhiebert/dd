@@ -18,6 +18,9 @@ namespace net_api.Models
         public DbSet<CampaignInvite> CampaignInvites { get; set; }
         public DbSet<Item> Items { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<CampaignInviteNotification> CampaignInviteNotifications { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connectionString = "Host=localhost;Port=5432;Database=dd;Password=dd;User ID=dd";
@@ -337,6 +340,10 @@ namespace net_api.Models
         public string Message { get; set; }
 
         [Required]
+        public string UserId { get; set; }
+        public User User { get; set; }
+
+        [Required]
         public DateTime CreatedAt { get; set; }
 
         public Notification()
@@ -353,8 +360,8 @@ namespace net_api.Models
         public Campaign Campaign { get; set; }
 
         [Required]
-        public string UserId { get; set; }
-        public User User { get; set; }
+        public string InviteUserId { get; set; }
+        public User InviteUser { get; set; }
 
         [Required]
         public bool Accepted { get; set; }

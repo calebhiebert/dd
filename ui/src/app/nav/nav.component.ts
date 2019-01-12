@@ -3,6 +3,7 @@ import { CampaignService } from '../campaign.service';
 import { LoginService } from '../login.service';
 import { Router } from '@angular/router';
 import { SidebarService } from '../sidebar.service';
+import { NotificationService } from '../notification.service';
 
 @Component({
   selector: 'dd-nav',
@@ -13,8 +14,8 @@ export class NavComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private login: LoginService,
-    private router: Router,
-    private sidebar: SidebarService
+    private sidebar: SidebarService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {}
@@ -37,5 +38,13 @@ export class NavComponent implements OnInit {
 
   public get loginInProgress() {
     return this.login.loginInProgress;
+  }
+
+  public get notificationText() {
+    if (!this.notificationService.notifications) {
+      return '...';
+    } else {
+      return this.notificationService.notifications.length;
+    }
   }
 }

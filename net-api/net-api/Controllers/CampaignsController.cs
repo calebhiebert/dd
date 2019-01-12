@@ -77,7 +77,18 @@ namespace net_api.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var existingCampaign = await _context.Campaigns.AsNoTracking()
-                .Where(c => c.Id == id).FirstOrDefaultAsync();
+                .Where(c => c.Id == id).Include(c => c.Members).FirstOrDefaultAsync();
+
+            foreach (var member in existingCampaign.Members)
+            {
+                var notification = new Notification
+                {
+                    Message = $"{existingCampaign.Name} was edited",
+                    UserId = member.UserId,
+                };
+
+                _context.Notifications.Add(notification);
+            }
 
             if (existingCampaign == null)
             {
