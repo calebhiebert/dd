@@ -9,8 +9,16 @@
           width="64"
           src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
             item.imageId
-          }}.jpg"
+          }}"
+          *ngIf="item.imageId"
           alt="Item Picture"
+        />
+        <img
+          class="s-rounded"
+          width="64"
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/item-default"
+          *ngIf="!item.imageId"
+          alt="Item Fallback Picture"
         />
       </div>
       <div class="column">
@@ -23,7 +31,7 @@
     </div>
 
     <div class="columns mt-2">
-      <div class="column col-4 hide-md">
+      <div class="column col-4 hide-md" *ngIf="item.imageId">
         <img
           class="img-responsive s-rounded"
           src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
@@ -45,7 +53,10 @@
           </div>
         </div>
       </div>
-      <div class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2">
+      <div
+        class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2"
+        *ngIf="item.imageId"
+      >
         <img
           class="img-responsive s-rounded"
           src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{

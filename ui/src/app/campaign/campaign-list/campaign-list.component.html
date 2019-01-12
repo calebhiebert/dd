@@ -28,13 +28,12 @@
     <div class="card hoverable p-2 mb-2" (click)="selectCampaign(c)">
       <div class="columns">
         <div class="column col-auto" *ngIf="c.imageId">
-          <figure class="avatar avatar-lg">
-            <img
-              src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-                c.imageId
-              }}"
-            />
-          </figure>
+          <img
+            class="img-responsive s-rounded"
+            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+              c.imageId
+            }}"
+          />
         </div>
         <div class="column">
           <div class="columns">

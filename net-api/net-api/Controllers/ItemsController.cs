@@ -52,7 +52,7 @@ namespace net_api.Controllers
 
             IQueryable<Item> items;
 
-            items = _context.Items.Where(i => i.CampaignId == campaignId);
+            items = _context.Items.Where(i => i.CampaignId == campaignId).OrderBy(i => i.Name);
 
             if (tags != null)
             {
@@ -75,7 +75,7 @@ namespace net_api.Controllers
 
             if (limit > 0 || offset > 0)
             {
-                items = items.OrderBy(i => i.Id)
+                items = items
                     .Skip(offset)
                     .Take(limit);
             }
