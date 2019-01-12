@@ -1,11 +1,13 @@
-<h4>Local</h4>
-<ul>
-  <li>Hash: {{ local.gitHash }}</li>
-  <li>Tag: {{ local.gitTag }}</li>
-</ul>
-<h4>Remote</h4>
-<span *ngIf="loading">Loading...</span>
-<ul *ngIf="remote">
-  <li>Hash: {{ remote.gitHash }}</li>
-  <li>Tag: {{ remote.gitTag }}</li>
-</ul>
+<div class="container grid-xl">
+  <h4>Local</h4>
+  <ul>
+    <li>Hash: {{ local.gitHash }}</li>
+    <li>Tag: {{ local.gitTag }}</li>
+  </ul>
+  <h4>Remote</h4>
+  <span *ngIf="loading">Loading...</span>
+  <ul *ngIf="remote">
+    <li>Hash: {{ remote.gitHash }}</li>
+    <li>Tag: {{ remote.gitTag }}</li>
+  </ul>
+</div>
