@@ -82,6 +82,76 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico?v=2" />
   </head>
   <body>
-    <dd-root></dd-root>
+    <dd-root>
+      <div id="loader">
+        <style>
+          #loader {
+            width: 100vw;
+            height: 100vh;
+            z-index: 300;
+            background-color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+            justify-items: center;
+          }
+
+          .loading {
+            color: transparent !important;
+            min-height: 0.8rem;
+            pointer-events: none;
+            position: relative;
+          }
+
+          .loading::after {
+            animation: loading 500ms infinite linear;
+            border: 0.1rem solid #5755d9;
+            border-radius: 50%;
+            border-right-color: transparent;
+            border-top-color: transparent;
+            content: '';
+            display: block;
+            height: 0.8rem;
+            left: 50%;
+            margin-left: -0.4rem;
+            margin-top: -0.4rem;
+            position: absolute;
+            top: 50%;
+            width: 0.8rem;
+            z-index: 1;
+          }
+
+          .loading.loading-lg {
+            min-height: 2rem;
+          }
+
+          .loading.loading-lg::after {
+            height: 1.6rem;
+            margin-left: -0.8rem;
+            margin-top: -0.8rem;
+            width: 1.6rem;
+          }
+
+          @keyframes loading {
+            0% {
+              transform: rotate(0deg);
+            }
+            100% {
+              transform: rotate(360deg);
+            }
+          }
+        </style>
+
+        <div>
+          <img src="/assets/logo.svg" width="64" />
+          <div class="loading loading-lg"></div>
+        </div>
+      </div>
+    </dd-root>
   </body>
 </html>
