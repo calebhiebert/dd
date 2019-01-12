@@ -11,9 +11,7 @@ export class NotificationService {
   private _loading = false;
   private _notifications: Notification[];
 
-  constructor(private http: HttpClient) {
-    this.loadNotifications();
-  }
+  constructor(private http: HttpClient) {}
 
   public async loadNotifications() {
     this._loading = true;

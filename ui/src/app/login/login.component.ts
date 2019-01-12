@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { LoginService } from '../login.service';
 import { ActivatedRoute, Router } from '@angular/router';
 

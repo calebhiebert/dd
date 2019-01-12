@@ -7,6 +7,7 @@ import {
 } from '@angular/router';
 import { LoginService } from './login.service';
 import { UpdateHubService } from './update-hub.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,8 @@ export class LoggedInGuard implements CanActivate {
   constructor(
     private login: LoginService,
     private router: Router,
-    private hub: UpdateHubService
+    private hub: UpdateHubService,
+    private notificationService: NotificationService
   ) {}
 
   public async canActivate(
@@ -29,6 +31,7 @@ export class LoggedInGuard implements CanActivate {
       return false;
     } else {
       this.hub.start();
+      this.notificationService.loadNotifications();
       return true;
     }
   }

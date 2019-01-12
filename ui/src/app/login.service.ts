@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { WebAuth, Auth0DecodedHash, Auth0UserProfile } from 'auth0-js';
 import { environment } from 'src/environments/environment';
 import { UserService, IUser } from './user.service';
@@ -13,6 +13,7 @@ export class LoginService {
   private auth: WebAuth;
   private userData: IUser;
 
+  public onLogin = new EventEmitter<boolean>();
   public loginCompleted = false;
   public loginInProgress = false;
   public authData: Auth0UserProfile;
@@ -88,6 +89,7 @@ export class LoginService {
 
           this.loginCompleted = true;
           resolve(true);
+          this.onLogin.emit();
         } catch (err) {
           console.log('AUTH ERR', err);
           localStorage.removeItem('auth-token');

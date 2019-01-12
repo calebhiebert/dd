@@ -40,7 +40,12 @@
             <div class="column">
               <h4 class="mb-1">{{ c.name }}</h4>
             </div>
-            <div class="column col-auto col-ml-auto">
+            <div class="column col-md-12 text-right hide-md">
+              <span class="text-gray text-italic">
+                {{ c.members.length }} Members • {{ c.user.username }}</span
+              >
+            </div>
+            <div class="column col-md-12 show-md">
               <span class="text-gray text-italic">
                 {{ c.members.length }} Members • {{ c.user.username }}</span
               >
