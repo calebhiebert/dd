@@ -18,9 +18,9 @@ import { CampaignLandingComponent } from './campaign/campaign-landing/campaign-l
 import { RegisterComponent } from './login/register/register.component';
 import { InviteComponent } from './invite/invite.component';
 import { ActionGuard } from './action.guard';
-import { CampaignEditableGuard } from './campaign-editable.guard';
 import { ItemViewComponent } from './items/item-view/item-view.component';
 import { AboutComponent } from './about/about.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -45,9 +45,14 @@ const routes: Routes = [
     },
   },
   {
+    path: 'notifications',
+    component: NotificationsComponent,
+    canActivate: [LoggedInGuard, ActionGuard],
+  },
+  {
     path: 'campaigns/list',
     component: CampaignListComponent,
-    canActivate: [LoggedInGuard, ActionGuard, ActionGuard],
+    canActivate: [LoggedInGuard, ActionGuard],
   },
   {
     path: 'home',

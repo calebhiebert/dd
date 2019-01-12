@@ -128,8 +128,8 @@ export class ItemManagerComponent implements OnInit {
         {
           queryParams: {
             search: this.search,
-            queryLimit: this.queryLimit,
-            queryOffset: 0,
+            limit: this.queryLimit,
+            offset: 0,
           },
           queryParamsHandling: 'merge',
         }

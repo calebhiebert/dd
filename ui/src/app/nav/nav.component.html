@@ -7,6 +7,13 @@
         </a>
       </section>
       <section class="navbar-section">
+        <button
+          class="btn badge"
+          data-badge="0"
+          [routerLink]="['notifications']"
+        >
+          <i class="icon icon-flag"></i>
+        </button>
         <a
           *ngIf="campaign"
           class="btn btn-link"

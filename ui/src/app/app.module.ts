@@ -44,6 +44,7 @@ import { ItemRarityTableEditorComponent } from './campaign/campaign-settings/ite
 import { TagEditorComponent } from './tag-editor/tag-editor.component';
 import { ItemViewComponent } from './items/item-view/item-view.component';
 import { AboutComponent } from './about/about.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { AboutComponent } from './about/about.component';
     TagEditorComponent,
     ItemViewComponent,
     AboutComponent,
+    NotificationsComponent,
   ],
   imports: [
     BrowserModule,
