@@ -32,7 +32,7 @@ export class ItemManagerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadItems();
+    // this.loadItems();
     this.searchControl = new FormControl(null);
 
     this.searchControl.valueChanges
@@ -55,6 +55,11 @@ export class ItemManagerComponent implements OnInit {
           .filter((t) => t !== '' && t !== null && t !== undefined);
       } else {
         this.queryTags = undefined;
+      }
+
+      if (query.get('search')) {
+        this.searchControl.setValue(query.get('search'));
+        this._search = query.get('search');
       }
 
       if (query.get('limit')) {
