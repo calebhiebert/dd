@@ -89,7 +89,7 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
     ) {
       return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${
         this.formGroup.get('imageId').value
-      }.png`;
+      }`;
     } else {
       return null;
     }

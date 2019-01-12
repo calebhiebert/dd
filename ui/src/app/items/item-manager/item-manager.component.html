@@ -36,7 +36,7 @@
       </div>
     </div>
 
-    <div *ngFor="let item of filteredItems">
+    <div *ngFor="let item of items">
       <dd-item-view-list
         [item]="item"
         (click)="selectItem(item)"
@@ -44,8 +44,8 @@
     </div>
 
     <dd-paginator
-      [totalItems]="searchedItems.length"
-      [itemsPerPage]="itemsPerPage"
+      [totalItems]="totalItemCount"
+      [itemsPerPage]="queryLimit"
       [page]="page"
       (pageChange)="page = $event"
     ></dd-paginator>

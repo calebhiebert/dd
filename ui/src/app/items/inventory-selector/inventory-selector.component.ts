@@ -106,7 +106,7 @@ export class InventorySelectorComponent implements OnInit, AfterContentInit {
   }
 
   public imageSource(id: string): string {
-    return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_blurred_bg/${id}.png`;
+    return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_blurred_bg/${id}`;
   }
 
   public backgroundCSS(imageId: string) {

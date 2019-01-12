@@ -9,6 +9,12 @@ using net_api.Models;
 
 namespace net_api.Controllers
 {
+    public struct ItemsQueryResponse
+    {
+        public Item[] Items { get; set; }
+        public int Total { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -26,7 +32,9 @@ namespace net_api.Controllers
         public IActionResult GetItems(
             [FromQuery(Name = "campaignId")] string campaignId, 
             [FromQuery(Name = "limit")] int limit,
-            [FromQuery(Name = "offset")] int offset
+            [FromQuery(Name = "offset")] int offset,
+            [FromQuery(Name = "tags")] string tags,
+            [FromQuery(Name = "search")] string search
             )
         {
             if (campaignId == null)
@@ -42,12 +50,41 @@ namespace net_api.Controllers
                 limit = 50;
             }
 
-            var items = _context.Items.Where(i => i.CampaignId == campaignId)
-                .OrderBy(i => i.Id)
-                .Skip(offset)
-                .Take(limit);
+            IQueryable<Item> items;
 
-            return Ok(items);
+            items = _context.Items.Where(i => i.CampaignId == campaignId);
+
+            if (tags != null)
+            {
+                var tagList = tags.Split(",");
+                items = items.Where(i => i.Tags.Any(t => tagList.Contains(t)));
+            }
+
+            if (search != null)
+            {
+                search = search.ToLower().Trim();
+
+                Console.WriteLine("\n\n\nSEARCH\n" + search + "\n\n\n\n");
+
+                items = items.Where(
+                    i => i.Name.ToLower().Contains(search) ||
+                    i.Description.ToLower().Contains(search));
+            }
+
+            var count = items.Count();
+
+            if (limit > 0 || offset > 0)
+            {
+                items = items.OrderBy(i => i.Id)
+                    .Skip(offset)
+                    .Take(limit);
+            }
+
+            return Ok(new ItemsQueryResponse
+            {
+                Items = items.ToArray(),
+                Total = count,
+            });
         }
 
         // GET: api/Items/5

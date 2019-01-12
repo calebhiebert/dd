@@ -21,9 +21,31 @@ export class ItemService {
       .toPromise();
   }
 
-  public async getItems(campaignId: string): Promise<IItem[]> {
+  public async getItems(
+    campaignId: string,
+    tags?: string[],
+    limit: number = 10,
+    offset: number = 0,
+    search?: string
+  ): Promise<IItemQueryResult> {
+    let tagString = '';
+
+    if (tags) {
+      tagString = `&tags=${tags.join(',')}`;
+    }
+
+    let searchString = '';
+
+    if (search) {
+      searchString = `&search=${search}`;
+    }
+
     return this.http
-      .get<IItem[]>(`${environment.apiURL}/items?campaignId=${campaignId}`)
+      .get<IItemQueryResult>(
+        `${
+          environment.apiURL
+        }/items?campaignId=${campaignId}${tagString}${searchString}&limit=${limit}&offset=${offset}`
+      )
       .toPromise();
   }
 
@@ -44,4 +66,9 @@ export interface IItem {
   imageId?: string;
   rarity: number;
   tags?: string[];
+}
+
+export interface IItemQueryResult {
+  items: IItem[];
+  total: number;
 }

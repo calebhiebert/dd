@@ -3,26 +3,32 @@
 
   <div *ngIf="item">
     <div class="columns">
+      <div class="column col-auto">
+        <img
+          class="s-rounded"
+          width="64"
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+            item.imageId
+          }}.jpg"
+          alt="Item Picture"
+        />
+      </div>
       <div class="column">
         <h2 class="mb-0">{{ item.name }}</h2>
-        <span class="text-gray text-italic" *ngIf="rarity">{{
-          rarity.name
-        }}</span>
+        <span class="text-gray text-italic" *ngIf="rarity"
+          >{{ rarity.name }} • {{ item.weight }}kg • {{ item.cost }}gp</span
+        >
         <a class="ml-2 c-hand" (click)="edit()" *ngIf="editable">Edit</a>
-      </div>
-      <div class="column text-right">
-        <h6>{{ item.weight }}kg</h6>
-        <h6>{{ item.cost }}gp</h6>
       </div>
     </div>
 
     <div class="columns mt-2">
-      <div class="column col-4 col-md-6 col-mx-auto">
+      <div class="column col-4 hide-md">
         <img
           class="img-responsive s-rounded"
-          src="http://res.cloudinary.com/dqhk8k6iv/image/upload/t_large_original_aspect/{{
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
             item.imageId
-          }}.jpg"
+          }}"
           [alt]="'picture of' + item.name"
         />
       </div>
@@ -38,6 +44,15 @@
             {{ t }}
           </div>
         </div>
+      </div>
+      <div class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2">
+        <img
+          class="img-responsive s-rounded"
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
+            item.imageId
+          }}"
+          [alt]="'picture of' + item.name"
+        />
       </div>
     </div>
   </div>

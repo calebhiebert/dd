@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
 import { ItemService, IItem } from 'src/app/item.service';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'dd-item-manager',
@@ -12,12 +13,16 @@ import { ItemService, IItem } from 'src/app/item.service';
 export class ItemManagerComponent implements OnInit {
   public loading = false;
 
-  private search: string;
   public searchControl: FormControl;
-  public page = 1;
-  public itemsPerPage = 10;
 
   public items: IItem[];
+  public totalItemCount: number;
+
+  private queryTags: string[];
+  private queryLimit: number = 10;
+  private queryOffset: number;
+  private _page = 1;
+  private _search: string;
 
   constructor(
     private campaignService: CampaignService,
@@ -30,13 +35,51 @@ export class ItemManagerComponent implements OnInit {
     this.loadItems();
     this.searchControl = new FormControl(null);
 
-    this.searchControl.valueChanges.subscribe((search: string) => {
-      if (!search) {
-        this.search = '';
-        return;
+    this.searchControl.valueChanges
+      .pipe(debounceTime(350))
+      .subscribe((search: string) => {
+        if (!search) {
+          this.search = '';
+          return;
+        }
+
+        this.search = search.trim().toLowerCase();
+      });
+
+    this.route.queryParamMap.subscribe((query) => {
+      if (query.get('tags')) {
+        this.queryTags = query
+          .get('tags')
+          .split(',')
+          .map((t) => t.trim())
+          .filter((t) => t !== '' && t !== null && t !== undefined);
+      } else {
+        this.queryTags = undefined;
       }
 
-      this.search = search.trim().toLowerCase();
+      if (query.get('limit')) {
+        try {
+          this.queryLimit = parseInt(query.get('limit'));
+        } catch (err) {
+          console.log('Limit parse err');
+        }
+      } else {
+        this.queryLimit = 10;
+      }
+
+      if (query.get('offset')) {
+        try {
+          this.queryOffset = parseInt(query.get('offset'));
+        } catch (err) {
+          console.log('Offset parse err');
+        }
+      } else {
+        this.queryOffset = 0;
+      }
+
+      this._page = (this.queryOffset || 0) / (this.queryLimit || 10) + 1;
+
+      this.loadItems();
     });
   }
 
@@ -44,9 +87,14 @@ export class ItemManagerComponent implements OnInit {
     this.loading = true;
     try {
       const items = await this.itemService.getItems(
-        this.campaignService.campaign.id
+        this.campaignService.campaign.id,
+        this.queryTags,
+        this.queryLimit,
+        this.queryOffset,
+        this.search
       );
-      this.items = items;
+      this.items = items.items;
+      this.totalItemCount = items.total;
     } catch (err) {
       console.log('LOAD ERR', err);
     }
@@ -67,27 +115,58 @@ export class ItemManagerComponent implements OnInit {
     ]);
   }
 
-  public get searchedItems() {
-    if (this.search && this.search !== '') {
-      return this.items.slice().filter((i) => {
-        return (
-          i.name.toLowerCase().indexOf(this.search) !== -1 ||
-          i.description.toLowerCase().indexOf(this.search) !== -1
-        );
-      });
+  public get search() {
+    return this._search;
+  }
+
+  public set search(value: string) {
+    this._search = value;
+
+    if (this._search !== '') {
+      this.router.navigate(
+        ['campaigns', this.campaignService.campaign.id, 'items'],
+        {
+          queryParams: {
+            search: this.search,
+            queryLimit: this.queryLimit,
+            queryOffset: 0,
+          },
+          queryParamsHandling: 'merge',
+        }
+      );
     } else {
-      return this.items;
+      this.router.navigate(
+        ['campaigns', this.campaignService.campaign.id, 'items'],
+        {
+          queryParams: {
+            search: undefined,
+          },
+          queryParamsHandling: 'merge',
+        }
+      );
     }
+  }
+
+  public get page() {
+    return this._page;
+  }
+
+  public set page(value: number) {
+    this._page = value;
+
+    this.router.navigate(
+      ['campaigns', this.campaignService.campaign.id, 'items'],
+      {
+        queryParams: {
+          limit: this.queryLimit,
+          offset: this.queryLimit * (this.page - 1),
+        },
+        queryParamsHandling: 'merge',
+      }
+    );
   }
 
   public get editable() {
     return this.campaignService.canEdit;
-  }
-
-  public get filteredItems(): IItem[] {
-    return this.searchedItems.slice(
-      this.page * this.itemsPerPage - this.itemsPerPage,
-      this.page * this.itemsPerPage
-    );
   }
 }
