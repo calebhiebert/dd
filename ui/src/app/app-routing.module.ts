@@ -21,6 +21,7 @@ import { ActionGuard } from './action.guard';
 import { ItemViewComponent } from './items/item-view/item-view.component';
 import { AboutComponent } from './about/about.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { EntityComponent } from './entity/entity.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -113,6 +114,9 @@ const routes: Routes = [
     path: 'campaigns/:id',
     component: CampaignComponent,
     canActivate: [LoggedInGuard, ActionGuard],
+    data: {
+      breadcrumb: 'Campaign',
+    },
     children: [
       {
         path: '',
@@ -124,26 +128,40 @@ const routes: Routes = [
         component: CampaignLandingComponent,
       },
       {
-        path: 'entities/selecttype',
-        component: EntityTypeSelectorComponent,
-      },
-      {
-        path: 'entities/:ent_id',
-        component: EntityViewComponent,
-      },
-      {
-        path: 'entities/:ent_type_id/create',
-        component: EntityCreationFormComponent,
+        path: 'entities',
+        component: EntityComponent,
         data: {
-          editing: false,
+          breadcrumb: 'Entity',
         },
-      },
-      {
-        path: 'entities/:ent_id/edit',
-        component: EntityCreationFormComponent,
-        data: {
-          editing: true,
-        },
+        children: [
+          {
+            path: 'selecttype',
+            component: EntityTypeSelectorComponent,
+          },
+          {
+            path: ':ent_id',
+            component: EntityViewComponent,
+            data: {
+              breadcrumb: 'View',
+            },
+          },
+          {
+            path: ':ent_type_id/create',
+            component: EntityCreationFormComponent,
+            data: {
+              editing: false,
+              breadcrumb: 'Create',
+            },
+          },
+          {
+            path: ':ent_id/edit',
+            component: EntityCreationFormComponent,
+            data: {
+              editing: true,
+              breadcrumb: 'Edit',
+            },
+          },
+        ],
       },
       {
         path: 'quests',
@@ -152,6 +170,9 @@ const routes: Routes = [
       {
         path: 'items',
         component: ItemManagerComponent,
+        data: {
+          breadcrumb: 'Items',
+        },
       },
       {
         path: 'items/:item_id',

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CampaignService } from './campaign.service';
-import { Route, ActivatedRoute } from '@angular/router';
-import { UpdateHubService } from './update-hub.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'dd-campaign',

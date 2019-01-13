@@ -46,6 +46,8 @@ import { ItemViewComponent } from './items/item-view/item-view.component';
 import { AboutComponent } from './about/about.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { MarkdownModule } from 'ngx-markdown';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
+import { EntityComponent } from './entity/entity.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +90,8 @@ import { MarkdownModule } from 'ngx-markdown';
     ItemViewComponent,
     AboutComponent,
     NotificationsComponent,
+    BreadcrumbsComponent,
+    EntityComponent,
   ],
   imports: [
     BrowserModule,
