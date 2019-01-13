@@ -80,10 +80,6 @@ const routes: Routes = [
         },
       },
       {
-        path: 'quests',
-        component: QuestManagerComponent,
-      },
-      {
         path: 'items/create',
         component: ItemEditComponent,
         data: {
@@ -148,6 +144,10 @@ const routes: Routes = [
         data: {
           editing: true,
         },
+      },
+      {
+        path: 'quests',
+        component: QuestManagerComponent,
       },
       {
         path: 'items',
