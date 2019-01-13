@@ -36,4 +36,16 @@ export class ItemViewListComponent implements OnInit {
       return null;
     }
   }
+
+  public get weight(): string {
+    if (!this.item) {
+      return '';
+    }
+
+    if (this.item.weight > 0) {
+      return `${this.item.weight}kg`;
+    } else {
+      return 'Weightless';
+    }
+  }
 }

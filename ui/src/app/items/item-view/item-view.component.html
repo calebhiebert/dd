@@ -27,8 +27,8 @@
           <span class="text-bold" [style.color]="rarity.color">{{
             rarity.name
           }}</span>
-          • <span class="text-bold">{{ item.weight }}</span
-          >kg • <span class="text-bold text-warning">{{ item.cost }}</span
+          • <span class="text-bold">{{ weight }}</span> •
+          <span class="text-bold text-warning">{{ item.cost }}</span
           >gp
 
           <a class="ml-2 c-hand" (click)="edit()" *ngIf="editable">Edit</a>

@@ -1,4 +1,4 @@
-<ul class="pagination">
+<ul class="pagination" *ngIf="numPages > 1 || !autoHide">
   <li class="page-item">
     <button class="btn btn-link" (click)="prev()" [disabled]="!canPrev">
       <i class="icon icon-arrow-left"></i>

@@ -64,8 +64,6 @@ namespace net_api.Controllers
             {
                 search = search.ToLower().Trim();
 
-                Console.WriteLine("\n\n\nSEARCH\n" + search + "\n\n\n\n");
-
                 items = items.Where(
                     i => i.Name.ToLower().Contains(search) ||
                     i.Description.ToLower().Contains(search));

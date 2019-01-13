@@ -69,6 +69,18 @@ export class ItemViewComponent implements OnInit {
     }
   }
 
+  public get weight(): string {
+    if (!this.item) {
+      return '';
+    }
+
+    if (this.item.weight > 0) {
+      return `${this.item.weight}kg`;
+    } else {
+      return 'Weightless';
+    }
+  }
+
   public get editable() {
     return this.campaignService.canEdit;
   }

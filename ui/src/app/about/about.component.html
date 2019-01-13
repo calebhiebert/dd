@@ -1,13 +1,18 @@
 <div class="container grid-xl">
-  <h4>Local</h4>
-  <ul>
-    <li>Hash: {{ local.gitHash }}</li>
-    <li>Tag: {{ local.gitTag }}</li>
-  </ul>
-  <h4>Remote</h4>
-  <span *ngIf="loading">Loading...</span>
-  <ul *ngIf="remote">
-    <li>Hash: {{ remote.gitHash }}</li>
-    <li>Tag: {{ remote.gitTag }}</li>
-  </ul>
+  <h4>DD - App</h4>
+  <div class="card p-2">
+    <h5 class="mb-1">Commit Hash</h5>
+    <span class="text-italic text-gray">{{ local.gitHash }}</span>
+
+    <h5 class="mt-2 mb-1">Version Tag</h5>
+    <span class="text-italic text-gray">{{ local.gitTag }}</span>
+  </div>
+  <h4 class="mt-2">DD - Server <span *ngIf="loading">(Loading...)</span></h4>
+  <div class="card p-2" *ngIf="remote">
+    <h5 class="mb-1">Commit Hash</h5>
+    <span class="text-italic text-gray">{{ remote.gitHash }}</span>
+
+    <h5 class="mt-2 mb-1">Version Tag</h5>
+    <span class="text-italic text-gray">{{ remote.gitTag }}</span>
+  </div>
 </div>

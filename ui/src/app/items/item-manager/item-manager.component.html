@@ -24,16 +24,27 @@
       </div>
     </div>
   </div>
-  <div class="loading loading-lg" *ngIf="loading"></div>
+  <div class="loading loading-lg" *ngIf="loading && !items"></div>
 
   <div *ngIf="items">
-    <div class="empty" *ngIf="items.length === 0">
+    <!-- No Items at all -->
+    <div class="empty" *ngIf="items.length === 0 && !search">
       <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
       <p class="empty-title h5">There are no items</p>
-      <p class="empty-subtitle">Click the button to create one</p>
+      <p class="empty-subtitle" *ngIf="editable">
+        Click the button to create one
+      </p>
       <div class="empty-action">
-        <button class="btn btn-primary" (click)="addItem()">Create Item</button>
+        <button class="btn btn-primary" (click)="addItem()" *ngIf="editable">
+          Create Item
+        </button>
       </div>
+    </div>
+
+    <!-- No Items from search -->
+    <div class="empty" *ngIf="items.length === 0 && search">
+      <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
+      <p class="empty-title h5">Your search returned nothing :(</p>
     </div>
 
     <div *ngFor="let item of items">

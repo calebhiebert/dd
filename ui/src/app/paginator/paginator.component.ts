@@ -15,16 +15,15 @@ export class PaginatorComponent implements OnInit {
   @Input()
   public page: number = 0;
 
+  @Input()
+  public autoHide = true;
+
   @Output()
   public pageChange = new EventEmitter<number>();
 
   constructor() {}
 
   ngOnInit() {}
-
-  public get numPages() {
-    return Math.ceil(this.totalItems / this.itemsPerPage);
-  }
 
   public next() {
     if (this.canNext) {
@@ -73,6 +72,10 @@ export class PaginatorComponent implements OnInit {
     }
 
     return pageArr;
+  }
+
+  public get numPages() {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
   }
 
   public get canNext() {
