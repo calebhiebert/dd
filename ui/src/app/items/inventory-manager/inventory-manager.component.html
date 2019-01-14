@@ -1,0 +1,24 @@
+<dd-modal #itemselect>
+  <dd-item-select (selected)="addItem($event)" modal-body></dd-item-select>
+</dd-modal>
+
+<div>
+  <div class="loading" *ngIf="loading"></div>
+
+  <div class="card p-2">
+    <!-- Control Title -->
+    <div class="columns">
+      <div class="column"><h5>Inventory</h5></div>
+      <div class="column col-auto col-ml-auto">
+        <button class="btn btn-sm" (click)="itemselect.open()">
+          <i class="icon icon-plus"></i> Add Item
+        </button>
+      </div>
+    </div>
+
+    <!-- Items -->
+    <div>
+      <div *ngFor="let i of inventory">{{ i.item.name }}</div>
+    </div>
+  </div>
+</div>

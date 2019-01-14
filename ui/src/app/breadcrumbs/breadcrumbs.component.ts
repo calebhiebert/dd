@@ -2,7 +2,7 @@ import { Component, OnInit, Injector } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute, Event } from '@angular/router';
 import { filter, distinctUntilChanged, map } from 'rxjs/operators';
 import { Observable, Subscription } from 'rxjs';
-import { CampaignComponent } from '../campaign.component';
+import { CampaignComponent } from '../campaign/campaign.component';
 import { CampaignService } from '../campaign.service';
 
 @Component({

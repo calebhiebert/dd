@@ -92,6 +92,11 @@
     </div>
   </div>
 
+  <dd-inventory-manager
+    [entityId]="entity.id"
+    *ngIf="entity"
+  ></dd-inventory-manager>
+
   <div class="columns">
     <!-- Image and description -->
     <div class="column col-8 col-md-6 col-sm-12 hide-sm">

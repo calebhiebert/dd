@@ -17,6 +17,7 @@ namespace net_api.Models
         public DbSet<CampaignUser> CampaignUsers { get; set; }
         public DbSet<CampaignInvite> CampaignInvites { get; set; }
         public DbSet<Item> Items { get; set; }
+        public DbSet<InventoryItem> InventoryItems { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<CampaignInviteNotification> CampaignInviteNotifications { get; set; }
@@ -213,6 +214,8 @@ namespace net_api.Models
         [Required]
         public string EntityPresetId { get; set; }
         public EntityPreset Preset { get; set; }
+
+        public ICollection<InventoryItem> InventoryItems { get; set; }
     }
 
     public class CampaignInvite
@@ -328,6 +331,22 @@ namespace net_api.Models
 
         [Column("Tags", TypeName = "varchar[]")]
         public string[] Tags { get; set; }
+    }
+
+    public class InventoryItem
+    {
+        public string Id { get; set; }
+
+        [Required]
+        public string ItemId { get; set; }
+        public Item Item { get; set; }
+
+        [Required]
+        public string EntityId { get; set; }
+        public Entity Entity { get; set; }
+
+        [Required]
+        public int Quantity { get; set; }
     }
 
     public class Notification

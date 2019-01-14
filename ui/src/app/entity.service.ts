@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Entity, AttributeClass } from './entity';
-import { AttributeType } from './attributes';
-import { HttpClient } from '@angular/common/http';
-import { IUser } from './user.service';
-import { ICampaign } from './campaign.service';
-import { environment } from 'src/environments/environment';
+import { Injectable } from "@angular/core";
+import { Entity, AttributeClass } from "./entity";
+import { AttributeType } from "./attributes";
+import { HttpClient } from "@angular/common/http";
+import { IUser } from "./user.service";
+import { ICampaign } from "./campaign.service";
+import { environment } from "src/environments/environment";
+import { IItem } from "./item.service";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root"
 })
 export class EntityService {
   constructor(private http: HttpClient) {}
@@ -64,6 +65,14 @@ export class EntityService {
   public async deleteEntity(campaignId: string, entity: Entity): Promise<void> {
     await simulateDelay(250);
   }
+
+  public async getInventory(entityId: string): Promise<IInventoryItem[]> {
+    return this.http
+      .get<IInventoryItem[]>(
+        `${environment.apiURL}/inventoryitems?entityId=${entityId}`
+      )
+      .toPromise();
+  }
 }
 
 export interface IEntityPreset {
@@ -105,6 +114,7 @@ export interface IEntity {
   xp: number;
   entityPresetId: string;
   preset?: IEntityPreset;
+  inventoryItems?: IInventoryItem[];
 }
 
 export interface IAttribute {
@@ -113,9 +123,17 @@ export interface IAttribute {
   data: string;
 }
 
+export interface IInventoryItem {
+  itemId: string;
+  item?: IItem;
+  entityId: string;
+  entity?: IEntity;
+  quantity: number;
+}
+
 // Used in mock apis, will be removed
 const simulateDelay = (ms: number): Promise<void> => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(() => {
       resolve();
     }, ms);

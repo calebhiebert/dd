@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NavComponent } from './nav/nav.component';
-import { CampaignComponent } from './campaign.component';
+import { CampaignComponent } from './campaign/campaign.component';
 import { PaginatorComponent } from './paginator/paginator.component';
 import { ModalComponent } from './modal/modal.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
@@ -31,7 +31,6 @@ import { DynamicAttributeFormComponent } from './entity/dynamic-attribute-form/d
 import { InventorySelectorComponent } from './items/inventory-selector/inventory-selector.component';
 import { ExperienceTableEditorComponent } from './campaign/campaign-settings/experience-table-editor/experience-table-editor.component';
 import { QuestManagerComponent } from './quest/quest-manager/quest-manager.component';
-import { EntityAttributeEditorModalComponent } from './entity/entity-view/entity-attribute-editor-modal/entity-attribute-editor-modal.component';
 import { QuestFormComponent } from './quest/quest-form/quest-form.component';
 import { RegisterComponent } from './login/register/register.component';
 import { CampaignFormComponent } from './campaign/campaign-form/campaign-form.component';
@@ -48,6 +47,9 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { MarkdownModule } from 'ngx-markdown';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { EntityComponent } from './entity/entity.component';
+import { EntityAttributeEditorModalComponent } from './entity/entity-view/entity-attribute-editor-modal/entity-attribute-editor-modal.component';
+import { InventoryManagerComponent } from './items/inventory-manager/inventory-manager.component';
+import { ItemSelectComponent } from './items/item-select/item-select.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +94,8 @@ import { EntityComponent } from './entity/entity.component';
     NotificationsComponent,
     BreadcrumbsComponent,
     EntityComponent,
+    InventoryManagerComponent,
+    ItemSelectComponent,
   ],
   imports: [
     BrowserModule,

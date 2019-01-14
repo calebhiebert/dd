@@ -8,7 +8,7 @@ import { debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'dd-item-manager',
   templateUrl: './item-manager.component.html',
-  styleUrls: ['./item-manager.component.css'],
+  styleUrls: ['./item-manager.component.css']
 })
 export class ItemManagerComponent implements OnInit {
   public loading = false;
@@ -19,7 +19,7 @@ export class ItemManagerComponent implements OnInit {
   public totalItemCount: number;
 
   private queryTags: string[];
-  private queryLimit: number = 10;
+  private queryLimit = 10;
   private queryOffset: number;
   private _page = 1;
   private _search: string;
@@ -46,13 +46,13 @@ export class ItemManagerComponent implements OnInit {
         this.search = search.trim().toLowerCase();
       });
 
-    this.route.queryParamMap.subscribe((query) => {
+    this.route.queryParamMap.subscribe(query => {
       if (query.get('tags')) {
         this.queryTags = query
           .get('tags')
           .split(',')
-          .map((t) => t.trim())
-          .filter((t) => t !== '' && t !== null && t !== undefined);
+          .map(t => t.trim())
+          .filter(t => t !== '' && t !== null && t !== undefined);
       } else {
         this.queryTags = undefined;
       }
@@ -64,7 +64,7 @@ export class ItemManagerComponent implements OnInit {
 
       if (query.get('limit')) {
         try {
-          this.queryLimit = parseInt(query.get('limit'));
+          this.queryLimit = parseInt(query.get('limit'), 10);
         } catch (err) {
           console.log('Limit parse err');
         }
@@ -74,7 +74,7 @@ export class ItemManagerComponent implements OnInit {
 
       if (query.get('offset')) {
         try {
-          this.queryOffset = parseInt(query.get('offset'));
+          this.queryOffset = parseInt(query.get('offset'), 10);
         } catch (err) {
           console.log('Offset parse err');
         }
@@ -108,7 +108,13 @@ export class ItemManagerComponent implements OnInit {
   }
 
   public async addItem() {
-    this.router.navigate(['create'], { relativeTo: this.route });
+    this.router.navigate([
+      'campaign',
+      'manage',
+      this.campaignService.campaign.id,
+      'items',
+      'create'
+    ]);
   }
 
   public selectItem(item: IItem) {
@@ -116,7 +122,7 @@ export class ItemManagerComponent implements OnInit {
       'campaigns',
       this.campaignService.campaign.id,
       'items',
-      item.id,
+      item.id
     ]);
   }
 
@@ -134,9 +140,9 @@ export class ItemManagerComponent implements OnInit {
           queryParams: {
             search: this.search,
             limit: this.queryLimit,
-            offset: 0,
+            offset: 0
           },
-          queryParamsHandling: 'merge',
+          queryParamsHandling: 'merge'
         }
       );
     } else {
@@ -144,9 +150,9 @@ export class ItemManagerComponent implements OnInit {
         ['campaigns', this.campaignService.campaign.id, 'items'],
         {
           queryParams: {
-            search: undefined,
+            search: undefined
           },
-          queryParamsHandling: 'merge',
+          queryParamsHandling: 'merge'
         }
       );
     }
@@ -164,9 +170,9 @@ export class ItemManagerComponent implements OnInit {
       {
         queryParams: {
           limit: this.queryLimit,
-          offset: this.queryLimit * (this.page - 1),
+          offset: this.queryLimit * (this.page - 1)
         },
-        queryParamsHandling: 'merge',
+        queryParamsHandling: 'merge'
       }
     );
   }
