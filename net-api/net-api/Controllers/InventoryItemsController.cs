@@ -52,6 +52,8 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
+            inventoryItem.Item = null;
+
             _context.Entry(inventoryItem).State = EntityState.Modified;
 
             try
@@ -77,6 +79,8 @@ namespace net_api.Controllers
         [HttpPost]
         public async Task<ActionResult<InventoryItem>> PostInventoryItem(InventoryItem inventoryItem)
         {
+            inventoryItem.Item = null;
+
             _context.InventoryItems.Add(inventoryItem);
             await _context.SaveChangesAsync();
 

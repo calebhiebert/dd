@@ -34,7 +34,9 @@
           </h3>
           <span class="text-italic no-select">{{ entity.preset.name }}</span>
         </div>
-        <div class="column d-flex justify-end align-items-end col-ml-auto">
+        <div
+          class="column col-auto d-flex justify-end align-items-end col-ml-auto"
+        >
           <span [ngClass]="{ 'c-hand': editable }" (click)="editXP()">
             <span class="h5 no-select">LV. </span>
             <span class="h3 text-bold">{{ level }}</span>
@@ -91,8 +93,11 @@
       <div class="h5">{{ a.attr.data }}</div>
     </div>
   </div>
+  <div class="divider" *ngIf="normalAttributes.length > 0"></div>
 
+  <!-- Inventory Management -->
   <dd-inventory-manager
+    class="mt-2"
     [entityId]="entity.id"
     *ngIf="entity"
   ></dd-inventory-manager>

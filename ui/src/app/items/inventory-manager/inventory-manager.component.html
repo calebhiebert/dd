@@ -1,24 +1,96 @@
 <dd-modal #itemselect>
-  <dd-item-select (selected)="addItem($event)" modal-body></dd-item-select>
+  <div modal-header>Click to add</div>
+  <div modal-body>
+    <dd-item-select
+      (selected)="addItem($event)"
+      *ngIf="itemselect.isOpen"
+    ></dd-item-select>
+  </div>
+</dd-modal>
+
+<dd-modal #itemedit>
+  <div modal-header>Edit Item</div>
+  <div modal-body *ngIf="editingItem">
+    <form (ngSubmit)="saveItem()" [formGroup]="editFormGroup">
+      <div class="form-group">
+        <label for="quantity"
+          >How many <strong>{{ editingItem.item.name }}</strong> do you
+          have?</label
+        >
+        <input
+          class="form-input"
+          type="number"
+          name="quantity"
+          id="quantity"
+          formControlName="quantity"
+        />
+      </div>
+    </form>
+  </div>
+  <div modal-footer *ngIf="editingItem">
+    <button class="btn" (click)="itemedit.close(null)">Cancel</button>
+    <button
+      class="btn btn-primary ml-2"
+      (click)="saveItem()"
+      [ngClass]="{ loading: working }"
+      [disabled]="editFormGroup.invalid"
+    >
+      Save
+    </button>
+  </div>
 </dd-modal>
 
 <div>
   <div class="loading" *ngIf="loading"></div>
 
-  <div class="card p-2">
-    <!-- Control Title -->
-    <div class="columns">
-      <div class="column"><h5>Inventory</h5></div>
-      <div class="column col-auto col-ml-auto">
-        <button class="btn btn-sm" (click)="itemselect.open()">
-          <i class="icon icon-plus"></i> Add Item
-        </button>
-      </div>
+  <!-- Control Title -->
+  <div class="columns">
+    <div class="column">
+      <h5>Inventory <span *ngIf="working">(Working...)</span></h5>
     </div>
+    <div class="column col-auto col-ml-auto">
+      <button class="btn btn-sm" (click)="itemselect.open()">
+        <i class="icon icon-plus"></i> Add Item
+      </button>
+    </div>
+  </div>
 
-    <!-- Items -->
-    <div>
-      <div *ngFor="let i of inventory">{{ i.item.name }}</div>
+  <!-- Items -->
+  <div>
+    <div class="card px-1 pt-1 mb-1" *ngFor="let i of inventory">
+      <div class="columns col-gapless">
+        <div class="column c-hand col-auto mr-1" (click)="editItem(i)">
+          <img
+            class="s-rounded"
+            width="32"
+            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+              i.item.imageId
+            }}"
+            *ngIf="i.item.imageId"
+          />
+          <img
+            class="s-rounded"
+            width="32"
+            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/item-default"
+            *ngIf="!i.item.imageId"
+          />
+        </div>
+        <div class="column c-hand" (click)="editItem(i)">
+          {{ i.item.name }}
+          <span class="text-bold text-large">x{{ i.quantity }}</span>
+        </div>
+        <div class="column col-auto">
+          <button class="btn btn-sm" (click)="useItem(i)">
+            <i class="icon icon-share"></i>
+          </button>
+          <button
+            class="btn btn-sm ml-1"
+            [routerLink]="['../..', 'items', i.item.id]"
+          >
+            <i class="icon icon-arrow-right"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

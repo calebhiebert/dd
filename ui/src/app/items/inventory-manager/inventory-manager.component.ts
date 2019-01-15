@@ -2,21 +2,32 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { IInventoryItem, EntityService } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { IItem } from 'src/app/item.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-attribute-form.component';
 
 @Component({
   selector: 'dd-inventory-manager',
   templateUrl: './inventory-manager.component.html',
-  styleUrls: ['./inventory-manager.component.css']
+  styleUrls: ['./inventory-manager.component.css'],
 })
 export class InventoryManagerComponent implements OnInit {
+  public working = false;
   public loading = false;
   public inventory: IInventoryItem[];
+
+  // Will be set to the item currently being edited
+  public editingItem: IInventoryItem;
+
+  public editFormGroup: FormGroup;
 
   @Input()
   public entityId: string;
 
   @ViewChild('itemselect')
-  public itemSelectModal: ModalComponent<IItem>;
+  public itemSelectModal: ModalComponent<any>;
+
+  @ViewChild('itemedit')
+  public itemEditModal: ModalComponent<any>;
 
   constructor(private entityService: EntityService) {}
 
@@ -41,14 +52,91 @@ export class InventoryManagerComponent implements OnInit {
     this.loading = false;
   }
 
-  public addItem(item: IItem) {
+  public async addItem(item: IItem) {
     this.itemSelectModal.close(null);
 
-    this.inventory.push({
+    const inventoryItem: IInventoryItem = {
       itemId: item.id,
       item: item,
       entityId: this.entityId,
-      quantity: 1
+      quantity: 1,
+    };
+
+    this.working = true;
+
+    try {
+      const item = await this.entityService.createInventoryItem(inventoryItem);
+      inventoryItem.id = item.id;
+    } catch (err) {
+      console.log('ADD ERR', err);
+    }
+
+    this.working = false;
+
+    this.inventory.push(inventoryItem);
+  }
+
+  public async editItem(item: IInventoryItem) {
+    this.editFormGroup = new FormGroup({
+      quantity: new FormControl(item.quantity, [
+        numberValidator,
+        Validators.required,
+        Validators.min(0),
+      ]),
     });
+    this.editingItem = item;
+
+    this.itemEditModal.open().then(() => {
+      this.editingItem = undefined;
+      this.editFormGroup = undefined;
+    });
+  }
+
+  public async saveItem() {
+    if (!this.editFormGroup.valid) {
+      return;
+    }
+
+    this.working = true;
+
+    const item = this.editingItem;
+
+    item.quantity = this.editFormGroup.value.quantity;
+
+    try {
+      if (item.quantity == 0) {
+        await this.entityService.deleteInventoryItem(item.id);
+        this.inventory = this.inventory.filter((itm) => itm !== item);
+      } else {
+        await this.entityService.updateInventoryItem(item);
+      }
+
+      this.itemEditModal.close(null);
+    } catch (err) {
+      console.log('Edit ERR', err);
+    }
+
+    this.working = false;
+  }
+
+  public async useItem(inventoryItem: IInventoryItem) {
+    this.working = true;
+
+    try {
+      if (inventoryItem.quantity == 1) {
+        await this.entityService.deleteInventoryItem(inventoryItem.id);
+        this.inventory = this.inventory.filter((itm) => itm !== inventoryItem);
+      } else {
+        await this.entityService.updateInventoryItem({
+          ...inventoryItem,
+          quantity: inventoryItem.quantity - 1,
+        });
+        inventoryItem.quantity--;
+      }
+    } catch (err) {
+      console.log('UPDATE ERR', err);
+    }
+
+    this.working = false;
   }
 }

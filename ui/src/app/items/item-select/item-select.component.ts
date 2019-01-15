@@ -7,7 +7,7 @@ import { CampaignService } from 'src/app/campaign.service';
 @Component({
   selector: 'dd-item-select',
   templateUrl: './item-select.component.html',
-  styleUrls: ['./item-select.component.css']
+  styleUrls: ['./item-select.component.css'],
 })
 export class ItemSelectComponent implements OnInit {
   public loading = false;
@@ -30,7 +30,7 @@ export class ItemSelectComponent implements OnInit {
 
     this.searchControl.valueChanges
       .pipe(debounceTime(250))
-      .subscribe(search => {
+      .subscribe((search) => {
         this._search = search;
         this.loadItems();
       });
@@ -49,8 +49,6 @@ export class ItemSelectComponent implements OnInit {
         0,
         this._search
       );
-
-      console.log(items);
 
       this.items = items.items;
     } catch (err) {

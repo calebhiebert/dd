@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
-import { Entity, AttributeClass } from "./entity";
-import { AttributeType } from "./attributes";
-import { HttpClient } from "@angular/common/http";
-import { IUser } from "./user.service";
-import { ICampaign } from "./campaign.service";
-import { environment } from "src/environments/environment";
-import { IItem } from "./item.service";
+import { Injectable } from '@angular/core';
+import { Entity, AttributeClass } from './entity';
+import { AttributeType } from './attributes';
+import { HttpClient } from '@angular/common/http';
+import { IUser } from './user.service';
+import { ICampaign } from './campaign.service';
+import { environment } from 'src/environments/environment';
+import { IItem } from './item.service';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root',
 })
 export class EntityService {
   constructor(private http: HttpClient) {}
@@ -40,9 +40,7 @@ export class EntityService {
   public async deleteEntityPreset(
     campaignId: string,
     entityPresetId: string
-  ): Promise<void> {
-    await simulateDelay(250);
-  }
+  ): Promise<void> {}
 
   public async getEntity(id: string): Promise<IEntity> {
     return this.http
@@ -62,15 +60,42 @@ export class EntityService {
       .toPromise();
   }
 
-  public async deleteEntity(campaignId: string, entity: Entity): Promise<void> {
-    await simulateDelay(250);
-  }
+  public async deleteEntity(
+    campaignId: string,
+    entity: Entity
+  ): Promise<void> {}
 
   public async getInventory(entityId: string): Promise<IInventoryItem[]> {
     return this.http
       .get<IInventoryItem[]>(
         `${environment.apiURL}/inventoryitems?entityId=${entityId}`
       )
+      .toPromise();
+  }
+
+  public async createInventoryItem(
+    inventoryItem: IInventoryItem
+  ): Promise<IInventoryItem> {
+    return this.http
+      .post<IInventoryItem>(
+        `${environment.apiURL}/inventoryitems`,
+        inventoryItem
+      )
+      .toPromise();
+  }
+
+  public async updateInventoryItem(inventoryItem: IInventoryItem) {
+    return this.http
+      .put<void>(
+        `${environment.apiURL}/inventoryitems/${inventoryItem.id}`,
+        inventoryItem
+      )
+      .toPromise();
+  }
+
+  public async deleteInventoryItem(id: string): Promise<void> {
+    return this.http
+      .delete<void>(`${environment.apiURL}/inventoryitems/${id}`)
       .toPromise();
   }
 }
@@ -124,18 +149,10 @@ export interface IAttribute {
 }
 
 export interface IInventoryItem {
+  id?: string;
   itemId: string;
   item?: IItem;
   entityId: string;
   entity?: IEntity;
   quantity: number;
 }
-
-// Used in mock apis, will be removed
-const simulateDelay = (ms: number): Promise<void> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  });
-};
