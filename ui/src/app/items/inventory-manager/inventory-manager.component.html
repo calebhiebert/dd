@@ -1,4 +1,4 @@
-<dd-modal #itemselect>
+<dd-modal #itemselect *ngIf="editable">
   <div modal-header>Click to add</div>
   <div modal-body>
     <dd-item-select
@@ -8,7 +8,7 @@
   </div>
 </dd-modal>
 
-<dd-modal #itemedit>
+<dd-modal #itemedit *ngIf="editable">
   <div modal-header>Edit Item</div>
   <div modal-body *ngIf="editingItem">
     <form (ngSubmit)="saveItem()" [formGroup]="editFormGroup">
@@ -48,7 +48,7 @@
     <div class="column">
       <h5>Inventory <span *ngIf="working">(Working...)</span></h5>
     </div>
-    <div class="column col-auto col-ml-auto">
+    <div class="column col-auto col-ml-auto" *ngIf="editable">
       <button class="btn btn-sm" (click)="itemselect.open()">
         <i class="icon icon-plus"></i> Add Item
       </button>
@@ -59,7 +59,11 @@
   <div>
     <div class="card px-1 pt-1 mb-1" *ngFor="let i of inventory">
       <div class="columns col-gapless">
-        <div class="column c-hand col-auto mr-1" (click)="editItem(i)">
+        <div
+          class="column col-auto mr-1"
+          [ngClass]="{ 'c-hand': editable }"
+          (click)="editItem(i)"
+        >
           <img
             class="s-rounded"
             width="32"
@@ -75,12 +79,16 @@
             *ngIf="!i.item.imageId"
           />
         </div>
-        <div class="column c-hand" (click)="editItem(i)">
+        <div
+          class="column"
+          [ngClass]="{ 'c-hand': editable }"
+          (click)="editItem(i)"
+        >
           {{ i.item.name }}
           <span class="text-bold text-large">x{{ i.quantity }}</span>
         </div>
         <div class="column col-auto">
-          <button class="btn btn-sm" (click)="useItem(i)">
+          <button class="btn btn-sm" (click)="useItem(i)" *ngIf="editable">
             <i class="icon icon-share"></i>
           </button>
           <button

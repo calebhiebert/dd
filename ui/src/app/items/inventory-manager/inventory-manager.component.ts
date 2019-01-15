@@ -23,6 +23,9 @@ export class InventoryManagerComponent implements OnInit {
   @Input()
   public entityId: string;
 
+  @Input()
+  public editable = false;
+
   @ViewChild('itemselect')
   public itemSelectModal: ModalComponent<any>;
 
@@ -53,6 +56,10 @@ export class InventoryManagerComponent implements OnInit {
   }
 
   public async addItem(item: IItem) {
+    if (!this.editable) {
+      return;
+    }
+
     this.itemSelectModal.close(null);
 
     const inventoryItem: IInventoryItem = {
@@ -77,6 +84,10 @@ export class InventoryManagerComponent implements OnInit {
   }
 
   public async editItem(item: IInventoryItem) {
+    if (!this.editable) {
+      return;
+    }
+
     this.editFormGroup = new FormGroup({
       quantity: new FormControl(item.quantity, [
         numberValidator,
@@ -93,7 +104,7 @@ export class InventoryManagerComponent implements OnInit {
   }
 
   public async saveItem() {
-    if (!this.editFormGroup.valid) {
+    if (!this.editFormGroup.valid || !this.editable) {
       return;
     }
 
@@ -120,6 +131,10 @@ export class InventoryManagerComponent implements OnInit {
   }
 
   public async useItem(inventoryItem: IInventoryItem) {
+    if (!this.editable) {
+      return;
+    }
+
     this.working = true;
 
     try {
