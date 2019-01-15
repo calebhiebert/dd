@@ -97,6 +97,10 @@ namespace net_api.Controllers
                 _context.Notifications.Add(notification);
             }
 
+            await _hub.Clients
+                .Groups(campaignMembers.Select(m => $"notifications-{m.UserId}").ToList())
+                .SendAsync("Notify");
+
             _context.Add(user);
 
             await _context.SaveChangesAsync();

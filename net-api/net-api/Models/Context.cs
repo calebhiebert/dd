@@ -18,6 +18,7 @@ namespace net_api.Models
         public DbSet<CampaignInvite> CampaignInvites { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<InventoryItem> InventoryItems { get; set; }
+        public DbSet<Quest> Quests { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<CampaignNotification> CampaignInviteNotifications { get; set; }
@@ -94,6 +95,8 @@ namespace net_api.Models
         public ICollection<Entity> Entities { get; set; }
 
         public ICollection<Item> Items { get; set; }
+
+        public ICollection<Quest> Quests { get; set; }
 
         [Column("CurrencyTypes", TypeName = "jsonb")]
         [JsonIgnore]
@@ -296,6 +299,37 @@ namespace net_api.Models
 
         [JsonIgnore]
         public Campaign Campaign { get; set; }
+    }
+
+    public class Quest
+    {
+        public string Id { get; set; }
+
+        [Required]
+        [StringLength(30, MinimumLength = 3)]
+        public string Name { get; set; }
+
+        [Required]
+        [StringLength(3000)]
+        public string Description { get; set; }
+
+        [Required]
+        public bool Visible { get; set; }
+
+        [Required]
+        public bool Active { get; set; }
+
+        [Required]
+        public string CampaignId { get; set; }
+        public Campaign Campaign { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public Quest()
+        {
+            Id = Nanoid.Nanoid.Generate();
+            CreatedAt = DateTime.UtcNow;
+        }
     }
 
     public class Item
