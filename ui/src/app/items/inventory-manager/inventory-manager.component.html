@@ -1,4 +1,4 @@
-<dd-modal #itemselect *ngIf="editable">
+<dd-modal #itemselect>
   <div modal-header>Click to add</div>
   <div modal-body>
     <dd-item-select
@@ -8,7 +8,7 @@
   </div>
 </dd-modal>
 
-<dd-modal #itemedit *ngIf="editable">
+<dd-modal #itemedit>
   <div modal-header>Edit Item</div>
   <div modal-body *ngIf="editingItem">
     <form (ngSubmit)="saveItem()" [formGroup]="editFormGroup">
