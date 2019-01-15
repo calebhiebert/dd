@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { IItem } from './item.service';
-import { IEntityPreset } from './entity.service';
+import { IEntityPreset, IEntity } from './entity.service';
 import { environment } from 'src/environments/environment';
 import { IUser } from './user.service';
 import { LoginService } from './login.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class CampaignService {
   public campaign: ICampaign = null;
@@ -76,7 +76,7 @@ export class CampaignService {
     return this.http
       .post<ICampaignInvite>(`${environment.apiURL}/campaigninvites`, {
         campaignId: this.campaign.id,
-        name,
+        name
       })
       .toPromise();
   }
@@ -105,14 +105,6 @@ export class CampaignService {
       .toPromise();
   }
 
-  public get canEdit() {
-    if (!this.campaign) {
-      return false;
-    } else {
-      return this.login.id === this.campaign.userId;
-    }
-  }
-
   public calculateLevel(xp: number): number {
     if (!this.campaign) {
       throw new Error('No campaign present');
@@ -134,6 +126,26 @@ export class CampaignService {
 
     return level;
   }
+
+  public get canEdit() {
+    if (!this.campaign) {
+      return false;
+    }
+
+    return this.login.id === this.campaign.userId;
+  }
+
+  public get editableEntities(): IEntity[] {
+    if (!this.campaign) {
+      return [];
+    }
+
+    if (this.canEdit) {
+      return this.campaign.entities;
+    }
+
+    return this.campaign.entities.filter(e => e.userId === this.login.id);
+  }
 }
 
 export interface ICampaign {
@@ -144,7 +156,7 @@ export interface ICampaign {
   userId: string;
   user?: IUser;
   experienceTable: number[];
-  entities?: any[];
+  entities?: IEntity[];
   items?: IItem[];
   entityPresets?: IEntityPreset[];
   itemTypes?: IItemType[];
@@ -167,7 +179,7 @@ export interface ICampaignInvite {
 export enum CampaignInviteStatus {
   PENDING,
   REVOKED,
-  ACCEPTED,
+  ACCEPTED
 }
 
 export interface IItemType {

@@ -50,6 +50,8 @@ import { EntityComponent } from './entity/entity.component';
 import { EntityAttributeEditorModalComponent } from './entity/entity-view/entity-attribute-editor-modal/entity-attribute-editor-modal.component';
 import { InventoryManagerComponent } from './items/inventory-manager/inventory-manager.component';
 import { ItemSelectComponent } from './items/item-select/item-select.component';
+import { PhraserComponent } from './phraser/phraser.component';
+import { EditableEntitySelectorComponent } from './entity/editable-entity-selector/editable-entity-selector.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +98,8 @@ import { ItemSelectComponent } from './items/item-select/item-select.component';
     EntityComponent,
     InventoryManagerComponent,
     ItemSelectComponent,
+    PhraserComponent,
+    EditableEntitySelectorComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,10 @@
+<dd-editable-entity-selector #entityselect></dd-editable-entity-selector>
+
 <div class="container grid-xl">
   <div class="loading loading-lg" *ngIf="loading"></div>
 
   <div *ngIf="item">
+    <!-- Item Header -->
     <div class="columns">
       <div class="column col-auto">
         <img
@@ -31,11 +34,20 @@
           <span class="text-bold text-warning">{{ item.cost }}</span
           >gp
 
-          <a class="ml-2 c-hand" (click)="edit()" *ngIf="editable">Edit</a>
+          <span *ngIf="editable"
+            >•<a class="ml-2 c-hand" (click)="edit()">Edit</a></span
+          >
+
+          <span *ngIf="canAddToInventory">
+            •<a class="ml-2 c-hand" (click)="addToInventory()"
+              >Add to Inventory</a
+            ></span
+          >
         </div>
       </div>
     </div>
 
+    <!-- Item Body -->
     <div class="columns mt-2">
       <div class="column col-4 hide-md" *ngIf="item.imageId">
         <img

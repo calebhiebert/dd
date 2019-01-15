@@ -1,0 +1,13 @@
+<dd-modal #modal>
+  <div modal-header>Which inventory?</div>
+
+  <div modal-body>
+    <div
+      class="card p-1 mb-1 hoverable"
+      *ngFor="let e of entities"
+      (click)="choose(e)"
+    >
+      {{ e.name }}
+    </div>
+  </div>
+</dd-modal>

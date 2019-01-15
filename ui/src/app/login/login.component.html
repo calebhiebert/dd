@@ -5,9 +5,13 @@
       <div class="card text-center" *ngIf="!processing">
         <div class="card-header"><h2>Login</h2></div>
         <div class="card-body">
-          <button class="btn btn-lg btn-primary wide" (click)="authGoog()">Google</button>
+          <button class="btn btn-lg btn-primary wide" (click)="authGoog()">
+            Google
+          </button>
           <div class="divider" data-content="OR"></div>
-          <button class="btn btn-lg btn-primary wide" (click)="authFb()">Facebook</button>
+          <button class="btn btn-lg btn-primary wide" (click)="authFb()">
+            Facebook
+          </button>
         </div>
       </div>
 
@@ -15,6 +19,7 @@
       <div class="card text-center" *ngIf="processing">
         <div class="card-body">
           <h6>Processing Information...</h6>
+          <h6><dd-phraser></dd-phraser></h6>
           <div class="loading"></div>
         </div>
       </div>
