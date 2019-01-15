@@ -3,6 +3,7 @@ import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { environment } from 'src/environments/environment';
 import { LoginService } from './login.service';
 import { ICampaign, CampaignService } from './campaign.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,8 @@ export class UpdateHubService {
 
   constructor(
     private login: LoginService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private notificationService: NotificationService
   ) {
     this._state = ConnectionState.NOT_CONNECTED;
   }
@@ -30,6 +32,9 @@ export class UpdateHubService {
     this.connection.on('CampaignUpdate', (campaign: ICampaign) =>
       this.campaignUpdate(campaign)
     );
+    this.connection.on('Notify', () => {
+      this.notificationService.loadNotifications();
+    });
 
     await this.authenticate();
   }

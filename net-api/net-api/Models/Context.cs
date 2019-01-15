@@ -20,7 +20,7 @@ namespace net_api.Models
         public DbSet<InventoryItem> InventoryItems { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
-        public DbSet<CampaignInviteNotification> CampaignInviteNotifications { get; set; }
+        public DbSet<CampaignNotification> CampaignInviteNotifications { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -372,18 +372,11 @@ namespace net_api.Models
         }
     }
 
-    public class CampaignInviteNotification : Notification
+    public class CampaignNotification : Notification
     {
         [Required]
         public string CampaignId { get; set; }
         public Campaign Campaign { get; set; }
-
-        [Required]
-        public string InviteUserId { get; set; }
-        public User InviteUser { get; set; }
-
-        [Required]
-        public bool Accepted { get; set; }
     }
 
     public class EntityAttribute

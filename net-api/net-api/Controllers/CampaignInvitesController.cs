@@ -15,10 +15,12 @@ namespace net_api.Controllers
     public class CampaignInvitesController : ControllerBase
     {
         private readonly Context _context;
+        private readonly UpdateHub _hub;
 
-        public CampaignInvitesController(Context context)
+        public CampaignInvitesController(Context context, UpdateHub hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         // GET: api/CampaignInvites
@@ -79,6 +81,20 @@ namespace net_api.Controllers
 
             campaignInvite.Status = CampaignInviteStatus.Accepted;
             campaignInvite.AcceptedUserId = userId;
+
+            var campaignMembers = _context.CampaignUsers.Where(u => u.CampaignId == campaignInvite.CampaignId);
+
+            foreach (var member in campaignMembers)
+            {
+                var notification = new CampaignNotification
+                {
+                    CampaignId = campaignInvite.CampaignId,
+                    UserId = member.UserId,
+                    Message = $"A user has joined a campaign! This message will eventually have more details."
+                };
+
+                _context.Notifications.Add(notification);
+            }
 
             _context.Add(user);
 

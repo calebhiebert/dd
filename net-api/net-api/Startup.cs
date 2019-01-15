@@ -53,6 +53,7 @@ namespace net_api
             services.AddSingleton<DDQuery>();
             services.AddSingleton<UserType>();
             services.AddSingleton<CampaignType>();
+            services.AddSingleton<NotificationService>();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

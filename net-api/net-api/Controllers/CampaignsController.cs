@@ -81,14 +81,19 @@ namespace net_api.Controllers
 
             foreach (var member in existingCampaign.Members)
             {
-                var notification = new Notification
+                var notification = new CampaignNotification
                 {
-                    Message = $"{existingCampaign.Name} was edited",
+                    Message = $"{existingCampaign.Name} has been updated!",
                     UserId = member.UserId,
+                    CampaignId = existingCampaign.Id,
                 };
 
                 _context.Notifications.Add(notification);
             }
+
+            await _hub.Clients
+                .Groups(existingCampaign.Members.Select(m => $"notifications-{m.UserId}").ToList())
+                .SendAsync("Notify");
 
             if (existingCampaign == null)
             {
