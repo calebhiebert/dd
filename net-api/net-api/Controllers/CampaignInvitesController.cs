@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
 
@@ -15,9 +16,9 @@ namespace net_api.Controllers
     public class CampaignInvitesController : ControllerBase
     {
         private readonly Context _context;
-        private readonly UpdateHub _hub;
+        private readonly IHubContext<UpdateHub> _hub;
 
-        public CampaignInvitesController(Context context, UpdateHub hub)
+        public CampaignInvitesController(Context context, IHubContext<UpdateHub> hub)
         {
             _context = context;
             _hub = hub;
@@ -120,6 +121,24 @@ namespace net_api.Controllers
             }
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var campaignMembers = _context.CampaignUsers.Where(u => u.CampaignId == campaignInvite.CampaignId);
+
+            foreach (var member in campaignMembers)
+            {
+                var notification = new CampaignNotification
+                {
+                    CampaignId = campaignInvite.CampaignId,
+                    UserId = member.UserId,
+                    Message = $"A user has rejected an invite! This message will eventually have more details."
+                };
+
+                _context.Notifications.Add(notification);
+            }
+
+            await _hub.Clients
+                .Groups(campaignMembers.Select(m => $"notifications-{m.UserId}").ToList())
+                .SendAsync("Notify");
 
             campaignInvite.Status = CampaignInviteStatus.Declined;
             campaignInvite.AcceptedUserId = userId;

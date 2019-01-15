@@ -79,6 +79,18 @@ namespace net_api.Controllers
             var existingCampaign = await _context.Campaigns.AsNoTracking()
                 .Where(c => c.Id == id).Include(c => c.Members).FirstOrDefaultAsync();
 
+            if (existingCampaign == null)
+            {
+                return NotFound();
+            }
+
+            if (userId != campaign.UserId)
+            {
+                return BadRequest("not the owner of the campaign");
+            }
+
+            campaign.UserId = existingCampaign.UserId;
+
             foreach (var member in existingCampaign.Members)
             {
                 var notification = new CampaignNotification
@@ -94,18 +106,6 @@ namespace net_api.Controllers
             await _hub.Clients
                 .Groups(existingCampaign.Members.Select(m => $"notifications-{m.UserId}").ToList())
                 .SendAsync("Notify");
-
-            if (existingCampaign == null)
-            {
-                return NotFound();
-            }
-
-            if (userId != campaign.UserId)
-            {
-                return BadRequest("not the owner of the campaign");
-            }
-
-            campaign.UserId = existingCampaign.UserId;
 
             _context.Entry(campaign).State = EntityState.Modified;
 
