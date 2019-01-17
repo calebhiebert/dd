@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { EntityService, IEntity } from 'src/app/entity.service';
+import { EntityService, IEntity, HealthType } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { numberValidator } from '../../dynamic-attribute-form/dynamic-attribute-form.component';
 import { LoginService } from 'src/app/login.service';
@@ -9,7 +9,7 @@ import { LoginService } from 'src/app/login.service';
 @Component({
   selector: 'dd-entity-creation-form',
   templateUrl: './entity-creation-form.component.html',
-  styleUrls: ['./entity-creation-form.component.css'],
+  styleUrls: ['./entity-creation-form.component.css']
 })
 export class EntityCreationFormComponent implements OnInit {
   public loading = false;
@@ -31,7 +31,7 @@ export class EntityCreationFormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.subscribe(params => {
       const id = params.get('ent_id');
 
       if (this.editing) {
@@ -45,23 +45,23 @@ export class EntityCreationFormComponent implements OnInit {
       name: new FormControl(null, [
         Validators.required,
         Validators.minLength(2),
-        Validators.maxLength(30),
+        Validators.maxLength(30)
       ]),
       description: new FormControl(null, [
         Validators.required,
-        Validators.minLength(3),
+        Validators.minLength(3)
       ]),
       xp: new FormControl(null, [
         Validators.required,
         numberValidator,
-        Validators.min(0),
+        Validators.min(0)
       ]),
       currency: new FormControl(null, [
         Validators.required,
         numberValidator,
-        Validators.min(0),
+        Validators.min(0)
       ]),
-      imageId: new FormControl('uncertainty'),
+      imageId: new FormControl('uncertainty')
     });
 
     // this.formGroup.valueChanges.subscribe((v) =>
@@ -91,7 +91,7 @@ export class EntityCreationFormComponent implements OnInit {
           'campaigns',
           this.campaignService.campaign.id,
           'entities',
-          ent.id,
+          ent.id
         ]);
       } catch (err) {
         console.log('Create ERR', err);
@@ -113,19 +113,25 @@ export class EntityCreationFormComponent implements OnInit {
       xp: v.xp,
       imageId: v.imageId,
       currency: v.currency,
+      health: {
+        type: HealthType.NORMAL,
+        max: 100
+      },
       userId: this.editing ? this.entity.userId : this.login.id,
       campaignId: this.campaignService.campaign.id,
       entityPresetId: this.preset.id,
-      attributes: [],
+      attributes: []
     };
 
-    for (const [k, v] of Object.entries(this.attributesFormGroup.value)) {
-      const preset = this.preset.attributes.find((p) => p.name === k);
+    for (const [k, attrData] of Object.entries(
+      this.attributesFormGroup.value
+    )) {
+      const preset = this.preset.attributes.find(p => p.name === k);
 
       ent.attributes.push({
         name: preset.name,
-        data: v as string,
-        type: preset.type,
+        data: attrData as string,
+        type: preset.type
       });
     }
 
@@ -143,7 +149,7 @@ export class EntityCreationFormComponent implements OnInit {
       setTimeout(() => {
         this.formGroup.patchValue(ent);
 
-        for (let attr of ent.attributes) {
+        for (const attr of ent.attributes) {
           if (this.attributesFormGroup.get(attr.name)) {
             this.attributesFormGroup.get(attr.name).setValue(attr.data);
           }
@@ -161,7 +167,7 @@ export class EntityCreationFormComponent implements OnInit {
       return this.entity.preset;
     } else {
       return this.campaignService.campaign.entityPresets.find(
-        (ep) => ep.id === this.route.snapshot.paramMap.get('ent_type_id')
+        ep => ep.id === this.route.snapshot.paramMap.get('ent_type_id')
       );
     }
   }

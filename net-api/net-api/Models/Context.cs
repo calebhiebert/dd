@@ -296,6 +296,30 @@ namespace net_api.Models
             }
         }
 
+        [Column("Health", TypeName = "jsonb")]
+        [JsonIgnore]
+        public string HealthJson { get; set; }
+
+        [NotMapped]
+        [Required]
+        public HealthPreset Health
+        {
+            get
+            {
+                if (HealthJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<HealthPreset>(HealthJson);
+            }
+
+            set
+            {
+                HealthJson = JsonConvert.SerializeObject(value);
+            }
+        }
+
         [Required]
         public string CampaignId { get; set; }
 
@@ -485,6 +509,17 @@ namespace net_api.Models
         public string Color { get; set; }
     }
 
+    public class HealthPreset
+    {
+        [Required]
+        public HealthType Type { get; set; }
+
+        [Required]
+        public double Max { get; set; }
+
+        public double[] Bars { get; set; }
+    }
+
     public enum AttributeType
     {
         String, Number, Enum, Currency
@@ -498,5 +533,10 @@ namespace net_api.Models
     public enum CampaignInviteStatus
     {
         Pending, Revoked, Accepted, Declined
+    }
+
+    public enum HealthType
+    {
+        Normal, MultiBar
     }
 }

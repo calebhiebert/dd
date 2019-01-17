@@ -135,6 +135,7 @@ export interface IEntity {
   campaignId: string;
   campaign?: ICampaign;
   attributes: IAttribute[];
+  health: IHealthPreset;
   xp: number;
   currency: number;
   entityPresetId: string;
@@ -157,9 +158,20 @@ export interface IInventoryItem {
   quantity: number;
 }
 
+export interface IHealthPreset {
+  type: HealthType;
+  max: number;
+  bars?: number[];
+}
+
 export enum EntityAttributeClass {
   MAJOR,
   NORMAL,
   MINOR,
   UNIMPORTANT
+}
+
+export enum HealthType {
+  NORMAL,
+  MULTI_BAR
 }
