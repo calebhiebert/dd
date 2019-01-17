@@ -213,6 +213,31 @@ namespace net_api.Models
         }
 
         [Required]
+        [Column("Health", TypeName = "jsonb")]
+        [JsonIgnore]
+        public string HealthJson { get; set; }
+
+        [NotMapped]
+        [Required]
+        public Health Health
+        {
+            get
+            {
+                if (HealthJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<Health>(HealthJson);
+            }
+
+            set
+            {
+                HealthJson = JsonConvert.SerializeObject(value);
+            }
+        }
+
+        [Required]
         [Range(0, long.MaxValue)]
         public long XP { get; set; }
 
@@ -516,6 +541,17 @@ namespace net_api.Models
 
         [Required]
         public double Max { get; set; }
+
+        public double[] Bars { get; set; }
+    }
+
+    public class Health
+    {
+        [Required]
+        public double Max { get; set; }
+
+        [Required]
+        public double Current { get; set; }
 
         public double[] Bars { get; set; }
     }

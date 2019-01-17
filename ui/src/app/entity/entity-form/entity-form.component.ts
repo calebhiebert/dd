@@ -2,7 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationModalComponent } from 'src/app/confirmation-modal/confirmation-modal.component';
-import { EntityService, IEntityPreset } from 'src/app/entity.service';
+import {
+  EntityService,
+  IEntityPreset,
+  HealthType,
+} from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { numberValidator } from '../dynamic-attribute-form/dynamic-attribute-form.component';
 import { LoginService } from 'src/app/login.service';
@@ -58,7 +62,6 @@ export class EntityFormComponent implements OnInit {
       health: new FormGroup({
         mode: new FormControl('0'),
         max: new FormControl(null, [Validators.min(0), numberValidator]),
-        current: new FormControl(null, [Validators.min(0), numberValidator]),
       }),
       playerCreatable: new FormControl(false),
       imageId: new FormControl(null, Validators.required),
@@ -95,6 +98,10 @@ export class EntityFormComponent implements OnInit {
           description: preset.description,
           attributes: preset.attributes,
           imageId: preset.imageId,
+          health: {
+            type: preset.health.type,
+            max: preset.health.max,
+          },
           playerCreatable: preset.playerCreatable,
         });
       }, 1);
@@ -134,12 +141,16 @@ export class EntityFormComponent implements OnInit {
         try {
           const v = this.formGroup.value;
 
-          const updatedPreset = {
+          const updatedPreset: IEntityPreset = {
             id: this.entityPreset.id,
             userId: this.login.id,
             campaignId: this.campaignService.campaign.id,
             name: v.name,
             description: v.description,
+            health: {
+              type: HealthType.NORMAL,
+              max: 100,
+            },
             imageId: v.imageId,
             playerCreatable: v.playerCreatable,
             attributes: v.attributes,
@@ -162,6 +173,10 @@ export class EntityFormComponent implements OnInit {
           campaignId: this.campaignService.campaign.id,
           name: v.name,
           description: v.description,
+          health: {
+            type: v.health.type,
+            max: v.health.max || 100,
+          },
           imageId: v.imageId,
           playerCreatable: v.playerCreatable,
           attributes: v.attributes,

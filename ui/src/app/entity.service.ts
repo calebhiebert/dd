@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { IItem } from './item.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EntityService {
   constructor(private http: HttpClient) {}
@@ -108,6 +108,7 @@ export interface IEntityPreset {
   imageId: string;
   playerCreatable: boolean;
   attributes?: IEntityAttribute[];
+  health: IHealthPreset;
   campaignId: string;
   campaign?: ICampaign;
 }
@@ -135,7 +136,7 @@ export interface IEntity {
   campaignId: string;
   campaign?: ICampaign;
   attributes: IAttribute[];
-  health: IHealthPreset;
+  health: IHealth;
   xp: number;
   currency: number;
   entityPresetId: string;
@@ -164,14 +165,20 @@ export interface IHealthPreset {
   bars?: number[];
 }
 
+export interface IHealth {
+  max: number;
+  current: number;
+  bars?: number[];
+}
+
 export enum EntityAttributeClass {
   MAJOR,
   NORMAL,
   MINOR,
-  UNIMPORTANT
+  UNIMPORTANT,
 }
 
 export enum HealthType {
   NORMAL,
-  MULTI_BAR
+  MULTI_BAR,
 }

@@ -210,6 +210,56 @@
             You must be bad with money, you can't have negative money!
           </p>
         </div>
+
+        <!-- Health -->
+        <div
+          class="form-group"
+          [ngClass]="{
+            'has-error': health.invalid && (health.dirty || health.touched)
+          }"
+          formGroupName="health"
+        >
+          <label class="form-label">Health</label>
+          <div class="input-group">
+            <input
+              type="number"
+              name="current-hp"
+              formControlName="current"
+              id="current-hp"
+              placeholder="Current HP"
+              class="form-input"
+            />
+            <span class="input-group-addon">/</span>
+            <input
+              type="number"
+              name="current-hp"
+              formControlName="max"
+              placeholder="Max HP"
+              id="current-hp"
+              class="form-input"
+            />
+          </div>
+          <p
+            class="form-input-hint mb-0"
+            *ngIf="
+              hpCurrent.invalid &&
+              (hpCurrent.dirty || hpCurrent.touched) &&
+              hpCurrent.errors.required
+            "
+          >
+            A value is required for current health
+          </p>
+          <p
+            class="form-input-hint mb-0"
+            *ngIf="
+              hpMax.invalid &&
+              (hpMax.dirty || hpMax.touched) &&
+              hpMax.errors.required
+            "
+          >
+            A value is required for max health
+          </p>
+        </div>
       </div>
     </div>
 
