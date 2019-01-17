@@ -75,6 +75,29 @@ export class EntityViewComponent implements OnInit {
     }
   }
 
+  public async editCurrency() {
+    if (!this.editable) {
+      return;
+    }
+
+    const attrValue = await this.attributeModal.editAttribute(
+      {
+        name: 'Gold Pieces',
+        description: `How many money you have`,
+        type: AttributeType.NUMBER,
+        required: true,
+        min: 0,
+        class: AttributeClass.NORMAL,
+      },
+      this.entity.currency.toString()
+    );
+
+    if (attrValue !== null && attrValue !== undefined) {
+      this.entity.currency = parseInt(attrValue);
+      this.updateEntity();
+    }
+  }
+
   public async editName() {
     if (!this.editable) {
       return;

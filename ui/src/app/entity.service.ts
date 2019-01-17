@@ -137,6 +137,7 @@ export interface IEntity {
   campaign?: ICampaign;
   attributes: IAttribute[];
   xp: number;
+  currency: number;
   entityPresetId: string;
   preset?: IEntityPreset;
   inventoryItems?: IInventoryItem[];

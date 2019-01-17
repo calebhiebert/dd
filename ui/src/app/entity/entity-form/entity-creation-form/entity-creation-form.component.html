@@ -56,13 +56,7 @@
             class="form-input-hint"
             *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.min"
           >
-            XP must be more than 0
-          </p>
-          <p
-            class="form-input-hint"
-            *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.max"
-          >
-            Too many XP!!
+            Can't have negative XP :/
           </p>
         </div>
       </div>
@@ -172,6 +166,48 @@
             "
           >
             The description is required
+          </p>
+        </div>
+
+        <!-- Currency -->
+        <div
+          class="form-group"
+          [ngClass]="{
+            'has-error':
+              currency.invalid && (currency.dirty || currency.touched)
+          }"
+        >
+          <label for="currency" class="form-label">Gold Pieces</label>
+          <div class="input-group">
+            <input
+              type="number"
+              name="currency"
+              placeholder="Gold Pieces"
+              formControlName="currency"
+              id="currency"
+              class="form-input"
+            />
+            <span class="input-group-addon"> gp </span>
+          </div>
+          <p
+            class="form-input-hint"
+            *ngIf="
+              currency.invalid &&
+              (currency.dirty || currency.touched) &&
+              currency.errors.required
+            "
+          >
+            A value for gold pieces is required
+          </p>
+          <p
+            class="form-input-hint"
+            *ngIf="
+              currency.invalid &&
+              (currency.dirty || currency.touched) &&
+              currency.errors.min
+            "
+          >
+            You must be bad with money, you can't have negative money!
           </p>
         </div>
       </div>

@@ -184,6 +184,8 @@ namespace net_api.Models
         [Required]
         public string CampaignId { get; set; }
 
+        [Required]
+        public double Currency { get; set; }
 
         public string ImageId { get; set; }
 

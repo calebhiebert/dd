@@ -55,7 +55,11 @@ export class EntityCreationFormComponent implements OnInit {
         Validators.required,
         numberValidator,
         Validators.min(0),
-        Validators.max(2147483647),
+      ]),
+      currency: new FormControl(null, [
+        Validators.required,
+        numberValidator,
+        Validators.min(0),
       ]),
       imageId: new FormControl('uncertainty'),
     });
@@ -108,6 +112,7 @@ export class EntityCreationFormComponent implements OnInit {
       description: v.description,
       xp: v.xp,
       imageId: v.imageId,
+      currency: v.currency,
       userId: this.editing ? this.entity.userId : this.login.id,
       campaignId: this.campaignService.campaign.id,
       entityPresetId: this.preset.id,
@@ -171,6 +176,10 @@ export class EntityCreationFormComponent implements OnInit {
 
   public get xp() {
     return this.formGroup.get('xp');
+  }
+
+  public get currency() {
+    return this.formGroup.get('currency');
   }
 
   public get editing() {

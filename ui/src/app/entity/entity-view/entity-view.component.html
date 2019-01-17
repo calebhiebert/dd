@@ -95,6 +95,28 @@
   </div>
   <div class="divider" *ngIf="normalAttributes.length > 0"></div>
 
+  <!-- Health/Currency -->
+  <div class="columns">
+    <div class="column col-9 col-md-7 col-sm-12 mb-2">
+      <div class="card p-2">Health</div>
+    </div>
+    <div class="column col-3 col-md-5 col-sm-12">
+      <div
+        class="card p-2 d-flex flex-row justify-between align-items-center"
+        (click)="editCurrency()"
+        [ngClass]="{ 'c-hand': editable }"
+      >
+        <h4 class="mb-0 mr-2 hide-sm">{{ entity.currency }}</h4>
+        <h6 class="mb-0 mr-2 show-sm">{{ entity.currency }}</h6>
+        <picture>
+          <source srcset="/assets/coins.png" type="image/png" />
+          <img src="/assets/coins.svg" alt="Money Icon" width="32" />
+        </picture>
+      </div>
+    </div>
+  </div>
+  <div class="divider"></div>
+
   <!-- Inventory Management -->
   <dd-inventory-manager
     class="mt-2"
