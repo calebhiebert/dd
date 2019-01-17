@@ -31,6 +31,8 @@ namespace net_api.Controllers
                 return BadRequest("Missing campaign id");
             }
 
+            // TODO authenticate requests
+
             var presets = await _context.EntityPresets.Where(e => e.CampaignId == campaignId).ToListAsync();
 
             return Ok(presets);
@@ -44,6 +46,8 @@ namespace net_api.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            // TODO authenticate requests
 
             var entityPreset = await _context.EntityPresets.FindAsync(id);
 
@@ -68,6 +72,8 @@ namespace net_api.Controllers
             {
                 return BadRequest();
             }
+
+            // TODO authenticate requests
 
             _context.Entry(entityPreset).State = EntityState.Modified;
 
@@ -99,6 +105,8 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
+            // TODO authenticate requests
+
             entityPreset.Id = Nanoid.Nanoid.Generate();
 
             _context.EntityPresets.Add(entityPreset);
@@ -115,6 +123,8 @@ namespace net_api.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            // TODO authenticate requests
 
             var entityPreset = await _context.EntityPresets.FindAsync(id);
             if (entityPreset == null)

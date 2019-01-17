@@ -20,13 +20,6 @@ namespace net_api.Controllers
             _context = context;
         }
 
-        // GET: api/Entities
-        [HttpGet]
-        public IEnumerable<Entity> GetEntities()
-        {
-            return _context.Entities;
-        }
-
         // GET: api/Entities/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEntity([FromRoute] string id)
@@ -35,6 +28,8 @@ namespace net_api.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            // TODO authenticate requests
 
             var entity = await _context.Entities.Where(e => e.Id == id).Include(e => e.Preset).FirstOrDefaultAsync();
 
@@ -59,6 +54,8 @@ namespace net_api.Controllers
             {
                 return BadRequest();
             }
+
+            // TODO authenticate requests
 
             _context.Entry(entity).State = EntityState.Modified;
 
@@ -90,6 +87,8 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
+            // TODO authenticate requests
+
             entity.Id = Nanoid.Nanoid.Generate();
 
             _context.Entities.Add(entity);
@@ -106,6 +105,8 @@ namespace net_api.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            // TODO authenticate requests
 
             var entity = await _context.Entities.FindAsync(id);
             if (entity == null)

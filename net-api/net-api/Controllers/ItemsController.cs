@@ -42,6 +42,8 @@ namespace net_api.Controllers
                 return BadRequest("Missing campaign id");
             }
 
+            // TODO authenticate requests
+
             if (limit == 0)
             {
                 limit = 1000;
@@ -94,6 +96,8 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
+            // TODO authenticate requests
+
             var item = await _context.Items.FindAsync(id);
 
             if (item == null)
@@ -117,6 +121,8 @@ namespace net_api.Controllers
             {
                 return BadRequest();
             }
+
+            // TODO authenticate requests
 
             _context.Entry(item).State = EntityState.Modified;
 
@@ -148,6 +154,8 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
+            // TODO authenticate requests
+
             item.Id = Nanoid.Nanoid.Generate();
 
             _context.Items.Add(item);
@@ -170,6 +178,8 @@ namespace net_api.Controllers
             {
                 return NotFound();
             }
+
+            // TODO authenticate requests
 
             _context.Items.Remove(item);
             await _context.SaveChangesAsync();

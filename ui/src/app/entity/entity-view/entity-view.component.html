@@ -106,8 +106,8 @@
         (click)="editCurrency()"
         [ngClass]="{ 'c-hand': editable }"
       >
-        <h4 class="mb-0 mr-2 hide-sm">{{ entity.currency }}</h4>
-        <h6 class="mb-0 mr-2 show-sm">{{ entity.currency }}</h6>
+        <h4 class="mb-0 mr-2 hide-sm">{{ formattedCurrency }}</h4>
+        <h6 class="mb-0 mr-2 show-sm">{{ formattedCurrency }}</h6>
         <picture>
           <source srcset="/assets/coins.png" type="image/png" />
           <img src="/assets/coins.svg" alt="Money Icon" width="32" />

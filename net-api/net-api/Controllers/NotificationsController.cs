@@ -41,6 +41,13 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId != notification.UserId)
+            {
+                return BadRequest("edit notification for user which you are not");
+            }
+
             _context.Entry(notification).State = EntityState.Modified;
 
             try
@@ -71,6 +78,8 @@ namespace net_api.Controllers
             {
                 return NotFound();
             }
+
+            // TODO authenticate users
 
             _context.Notifications.Remove(notification);
             await _context.SaveChangesAsync();

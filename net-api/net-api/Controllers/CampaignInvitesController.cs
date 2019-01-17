@@ -157,41 +157,6 @@ namespace net_api.Controllers
             throw new NotImplementedException();
         }
 
-        // PUT: api/CampaignInvites/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCampaignInvite([FromRoute] string id, [FromBody] CampaignInvite campaignInvite)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != campaignInvite.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(campaignInvite).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CampaignInviteExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/CampaignInvites
         [HttpPost]
         public async Task<IActionResult> PostCampaignInvite([FromBody] CampaignInvite campaignInvite)
@@ -199,6 +164,21 @@ namespace net_api.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            // Verify that the user has permission to edit the campaign
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var campaign = _context.Campaigns.FirstOrDefault(c => c.Id == campaignInvite.CampaignId);
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            if (campaign.UserId != userId)
+            {
+                return BadRequest("No permission");
             }
 
             _context.CampaignInvites.Add(campaignInvite);

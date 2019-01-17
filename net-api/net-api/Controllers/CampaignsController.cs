@@ -49,12 +49,16 @@ namespace net_api.Controllers
                 .Include(c => c.EntityPresets)
                 .Include(c => c.Entities)
                 .Include("Members.User")
-                .Where(c => c.UserId == userId || c.Members.Any(m => m.UserId == userId))
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             if (campaign == null)
             {
                 return NotFound();
+            }
+
+            if (campaign.UserId != userId && !campaign.Members.Any(m => m.UserId == userId))
+            {
+                return BadRequest("No permission");
             }
 
             return Ok(campaign);

@@ -26,6 +26,8 @@ namespace net_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InventoryItem>>> GetInventoryItems([FromQuery(Name = "entityId")]string entityId)
         {
+            // TODO authenticate requests
+
             return await _context.InventoryItems.Where(i => i.EntityId == entityId).Include(i => i.Item).ToListAsync();
         }
 
@@ -33,6 +35,8 @@ namespace net_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<InventoryItem>> GetInventoryItem(string id)
         {
+            // TODO authenticate requests
+
             var inventoryItem = await _context.InventoryItems.FindAsync(id);
 
             if (inventoryItem == null)
@@ -51,6 +55,8 @@ namespace net_api.Controllers
             {
                 return BadRequest();
             }
+
+            // TODO authenticate requests
 
             inventoryItem.Item = null;
 
@@ -81,6 +87,8 @@ namespace net_api.Controllers
         {
             inventoryItem.Item = null;
 
+            // TODO authenticate requests
+
             _context.InventoryItems.Add(inventoryItem);
             await _context.SaveChangesAsync();
 
@@ -96,6 +104,8 @@ namespace net_api.Controllers
             {
                 return NotFound();
             }
+
+            // TODO authenticate requests
 
             _context.InventoryItems.Remove(inventoryItem);
             await _context.SaveChangesAsync();

@@ -11,7 +11,7 @@ import { LoginService } from 'src/app/login.service';
 @Component({
   selector: 'dd-entity-view',
   templateUrl: './entity-view.component.html',
-  styleUrls: ['./entity-view.component.scss'],
+  styleUrls: ['./entity-view.component.scss']
 })
 export class EntityViewComponent implements OnInit {
   @ViewChild('attributemodal')
@@ -32,7 +32,7 @@ export class EntityViewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.subscribe(params => {
       this.loadEntity(params.get('ent_id'));
     });
   }
@@ -87,7 +87,7 @@ export class EntityViewComponent implements OnInit {
         type: AttributeType.NUMBER,
         required: true,
         min: 0,
-        class: AttributeClass.NORMAL,
+        class: AttributeClass.NORMAL
       },
       this.entity.currency.toString()
     );
@@ -111,7 +111,7 @@ export class EntityViewComponent implements OnInit {
         required: true,
         min: 2,
         max: 30,
-        class: AttributeClass.NORMAL,
+        class: AttributeClass.NORMAL
       },
       this.entity.name
     );
@@ -137,7 +137,7 @@ export class EntityViewComponent implements OnInit {
         required: true,
         min: 0,
         max: 2147483647,
-        class: AttributeClass.NORMAL,
+        class: AttributeClass.NORMAL
       },
       this.entity.xp.toString()
     );
@@ -161,52 +161,52 @@ export class EntityViewComponent implements OnInit {
   }
 
   private getEntityAttribute(name: string) {
-    return this.entity.preset.attributes.find((e) => e.name === name);
+    return this.entity.preset.attributes.find(e => e.name === name);
   }
 
   public get processedAttributes(): {
     attr: Attribute;
     pattr: EntityAttribute;
   }[] {
-    return this.entity.attributes.map((a) => {
+    return this.entity.attributes.map(a => {
       return {
         attr: a,
-        pattr: this.getEntityAttribute(a.name),
+        pattr: this.getEntityAttribute(a.name)
       };
     });
   }
 
   public get majorAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
     return this.entity.attributes
-      .map((a) => {
+      .map(a => {
         return {
           attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          pattr: this.getEntityAttribute(a.name)
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 0);
+      .filter(a => a.pattr && a.pattr.class === 0);
   }
 
   public get normalAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
     return this.entity.attributes
-      .map((a) => {
+      .map(a => {
         return {
           attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          pattr: this.getEntityAttribute(a.name)
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 1);
+      .filter(a => a.pattr && a.pattr.class === 1);
   }
 
   public get minorAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
     return this.entity.attributes
-      .map((a) => {
+      .map(a => {
         return {
           attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          pattr: this.getEntityAttribute(a.name)
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 2);
+      .filter(a => a.pattr && a.pattr.class === 2);
   }
 
   public get unimportantAttributes(): {
@@ -214,13 +214,13 @@ export class EntityViewComponent implements OnInit {
     pattr: EntityAttribute;
   }[] {
     return this.entity.attributes
-      .map((a) => {
+      .map(a => {
         return {
           attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          pattr: this.getEntityAttribute(a.name)
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 3);
+      .filter(a => a.pattr && a.pattr.class === 3);
   }
 
   public get level() {
@@ -229,6 +229,27 @@ export class EntityViewComponent implements OnInit {
 
   public get editable() {
     return this.campaignService.canEdit || this.entity.userId == this.login.id;
+  }
+
+  public get formattedCurrency() {
+    if (!this.entity) {
+      return '0';
+    }
+
+    let currency = '';
+    const currencyString = this.entity.currency.toString();
+
+    for (let i = 0; i < currencyString.length; i++) {
+      currency += currencyString[i];
+      if (
+        (currencyString.length - i - 1) % 3 === 0 &&
+        currencyString.length - i - 1 > 0
+      ) {
+        currency += ',';
+      }
+    }
+
+    return currency;
   }
 
   public backgroundCSS(imageId: string) {
