@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Entity, AttributeClass } from './entity';
 import { AttributeType } from './attributes';
 import { HttpClient } from '@angular/common/http';
 import { IUser } from './user.service';
@@ -8,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { IItem } from './item.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class EntityService {
   constructor(private http: HttpClient) {}
@@ -62,7 +61,7 @@ export class EntityService {
 
   public async deleteEntity(
     campaignId: string,
-    entity: Entity
+    entity: IEntity
   ): Promise<void> {}
 
   public async getInventory(entityId: string): Promise<IInventoryItem[]> {
@@ -120,7 +119,7 @@ export interface IEntityAttribute {
   defaultValue?: string;
   type: AttributeType;
   options?: string[];
-  class: AttributeClass;
+  class: EntityAttributeClass;
   required: boolean;
   max?: number;
   min?: number;
@@ -156,4 +155,11 @@ export interface IInventoryItem {
   entityId: string;
   entity?: IEntity;
   quantity: number;
+}
+
+export enum EntityAttributeClass {
+  MAJOR,
+  NORMAL,
+  MINOR,
+  UNIMPORTANT
 }

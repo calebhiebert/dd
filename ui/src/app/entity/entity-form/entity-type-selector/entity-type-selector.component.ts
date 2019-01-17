@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CampaignService } from 'src/app/campaign.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EntityPreset } from 'src/app/entity';
 import { EntityService, IEntityPreset } from 'src/app/entity.service';
 
 @Component({
   selector: 'dd-entity-type-selector',
   templateUrl: './entity-type-selector.component.html',
-  styleUrls: ['./entity-type-selector.component.scss'],
+  styleUrls: ['./entity-type-selector.component.scss']
 })
 export class EntityTypeSelectorComponent implements OnInit {
   constructor(
@@ -21,13 +20,13 @@ export class EntityTypeSelectorComponent implements OnInit {
 
   public async selectEntityType(preset: IEntityPreset) {
     this.router.navigate(['..', preset.id, 'create'], {
-      relativeTo: this.route,
+      relativeTo: this.route
     });
   }
 
   public get presets(): IEntityPreset[] {
     return this.campaignService.campaign.entityPresets.filter(
-      (e) => e.playerCreatable
+      e => e.playerCreatable
     );
   }
 }

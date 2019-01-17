@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { EntityAttribute } from 'src/app/entity';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl, Validators, ValidatorFn } from '@angular/forms';
 import { AttributeType } from 'src/app/attributes';
 import { numberValidator } from '../../dynamic-attribute-form/dynamic-attribute-form.component';
+import { IEntityAttribute } from 'src/app/entity.service';
 
 @Component({
   selector: 'dd-entity-attribute-editor-modal',
   templateUrl: './entity-attribute-editor-modal.component.html',
-  styleUrls: ['./entity-attribute-editor-modal.component.css'],
+  styleUrls: ['./entity-attribute-editor-modal.component.css']
 })
 export class EntityAttributeEditorModalComponent implements OnInit {
   @ViewChild('modal')
@@ -17,7 +17,7 @@ export class EntityAttributeEditorModalComponent implements OnInit {
   @ViewChild('input')
   public input: ElementRef<HTMLInputElement>;
 
-  public attribute: EntityAttribute;
+  public attribute: IEntityAttribute;
 
   public control: FormControl;
 
@@ -26,7 +26,7 @@ export class EntityAttributeEditorModalComponent implements OnInit {
   ngOnInit() {}
 
   public async editAttribute(
-    attribute: EntityAttribute,
+    attribute: IEntityAttribute,
     currentValue?: string
   ): Promise<string | null> {
     this.attribute = attribute;

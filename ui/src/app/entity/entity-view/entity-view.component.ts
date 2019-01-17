@@ -1,8 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EntityAttributeEditorModalComponent } from './entity-attribute-editor-modal/entity-attribute-editor-modal.component';
-import { Entity, EntityAttribute, AttributeClass } from 'src/app/entity';
-import { EntityService, IEntity } from 'src/app/entity.service';
+import {
+  EntityService,
+  IEntity,
+  IEntityAttribute,
+  EntityAttributeClass
+} from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { AttributeType, Attribute } from 'src/app/attributes';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -52,7 +56,7 @@ export class EntityViewComponent implements OnInit {
 
   public async editAttribute(attr: {
     attr: Attribute;
-    pattr: EntityAttribute;
+    pattr: IEntityAttribute;
   }) {
     if (!this.editable) {
       return;
@@ -87,13 +91,13 @@ export class EntityViewComponent implements OnInit {
         type: AttributeType.NUMBER,
         required: true,
         min: 0,
-        class: AttributeClass.NORMAL
+        class: EntityAttributeClass.NORMAL
       },
       this.entity.currency.toString()
     );
 
     if (attrValue !== null && attrValue !== undefined) {
-      this.entity.currency = parseInt(attrValue);
+      this.entity.currency = parseInt(attrValue, 10);
       this.updateEntity();
     }
   }
@@ -111,7 +115,7 @@ export class EntityViewComponent implements OnInit {
         required: true,
         min: 2,
         max: 30,
-        class: AttributeClass.NORMAL
+        class: EntityAttributeClass.NORMAL
       },
       this.entity.name
     );
@@ -137,7 +141,7 @@ export class EntityViewComponent implements OnInit {
         required: true,
         min: 0,
         max: 2147483647,
-        class: AttributeClass.NORMAL
+        class: EntityAttributeClass.NORMAL
       },
       this.entity.xp.toString()
     );
@@ -166,7 +170,7 @@ export class EntityViewComponent implements OnInit {
 
   public get processedAttributes(): {
     attr: Attribute;
-    pattr: EntityAttribute;
+    pattr: IEntityAttribute;
   }[] {
     return this.entity.attributes.map(a => {
       return {
@@ -176,7 +180,7 @@ export class EntityViewComponent implements OnInit {
     });
   }
 
-  public get majorAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
+  public get majorAttributes(): { attr: Attribute; pattr: IEntityAttribute }[] {
     return this.entity.attributes
       .map(a => {
         return {
@@ -187,7 +191,10 @@ export class EntityViewComponent implements OnInit {
       .filter(a => a.pattr && a.pattr.class === 0);
   }
 
-  public get normalAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
+  public get normalAttributes(): {
+    attr: Attribute;
+    pattr: IEntityAttribute;
+  }[] {
     return this.entity.attributes
       .map(a => {
         return {
@@ -198,7 +205,7 @@ export class EntityViewComponent implements OnInit {
       .filter(a => a.pattr && a.pattr.class === 1);
   }
 
-  public get minorAttributes(): { attr: Attribute; pattr: EntityAttribute }[] {
+  public get minorAttributes(): { attr: Attribute; pattr: IEntityAttribute }[] {
     return this.entity.attributes
       .map(a => {
         return {
@@ -211,7 +218,7 @@ export class EntityViewComponent implements OnInit {
 
   public get unimportantAttributes(): {
     attr: Attribute;
-    pattr: EntityAttribute;
+    pattr: IEntityAttribute;
   }[] {
     return this.entity.attributes
       .map(a => {
@@ -228,7 +235,7 @@ export class EntityViewComponent implements OnInit {
   }
 
   public get editable() {
-    return this.campaignService.canEdit || this.entity.userId == this.login.id;
+    return this.campaignService.canEdit || this.entity.userId === this.login.id;
   }
 
   public get formattedCurrency() {

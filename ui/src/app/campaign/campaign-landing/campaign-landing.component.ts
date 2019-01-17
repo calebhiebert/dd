@@ -1,14 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
-import { Entity } from 'src/app/entity';
 import { ModalComponent } from 'src/app/modal/modal.component';
-import { IEntityPreset } from 'src/app/entity.service';
+import { IEntityPreset, IEntity } from 'src/app/entity.service';
 
 @Component({
   selector: 'dd-campaign-landing',
   templateUrl: './campaign-landing.component.html',
-  styleUrls: ['./campaign-landing.component.scss'],
+  styleUrls: ['./campaign-landing.component.scss']
 })
 export class CampaignLandingComponent implements OnInit {
   @ViewChild('invites')
@@ -23,12 +22,12 @@ export class CampaignLandingComponent implements OnInit {
   ngOnInit() {}
 
   public userEntities(id: string) {
-    return this.campaign.entities.filter((e) => e.user && e.user.id === id);
+    return this.campaign.entities.filter(e => e.user && e.user.id === id);
   }
 
-  public selectEntity(entity: Entity) {
+  public selectEntity(entity: IEntity) {
     this.router.navigate(['..', 'entities', entity.id], {
-      relativeTo: this.route,
+      relativeTo: this.route
     });
   }
 
@@ -41,6 +40,6 @@ export class CampaignLandingComponent implements OnInit {
   }
 
   public get entityPresets(): IEntityPreset[] {
-    return this.campaign.entityPresets.filter((e) => e.playerCreatable);
+    return this.campaign.entityPresets.filter(e => e.playerCreatable);
   }
 }

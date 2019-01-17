@@ -28,7 +28,6 @@ import { ItemEditComponent } from './items/item-edit/item-edit.component';
 import { CampaignSettingsComponent } from './campaign/campaign-settings/campaign-settings.component';
 import { EntityTypesComponent } from './campaign/campaign-settings/entity-types/entity-types.component';
 import { DynamicAttributeFormComponent } from './entity/dynamic-attribute-form/dynamic-attribute-form.component';
-import { InventorySelectorComponent } from './items/inventory-selector/inventory-selector.component';
 import { ExperienceTableEditorComponent } from './campaign/campaign-settings/experience-table-editor/experience-table-editor.component';
 import { QuestManagerComponent } from './quest/quest-manager/quest-manager.component';
 import { QuestFormComponent } from './quest/quest-form/quest-form.component';
@@ -73,7 +72,6 @@ import { EditableEntitySelectorComponent } from './entity/editable-entity-select
     DynamicAttributeFormComponent,
     EntityFormComponent,
     ModalComponent,
-    InventorySelectorComponent,
     ConfirmationModalComponent,
     LoginComponent,
     HomeComponent,
@@ -99,7 +97,7 @@ import { EditableEntitySelectorComponent } from './entity/editable-entity-select
     InventoryManagerComponent,
     ItemSelectComponent,
     PhraserComponent,
-    EditableEntitySelectorComponent,
+    EditableEntitySelectorComponent
   ],
   imports: [
     BrowserModule,
@@ -108,15 +106,15 @@ import { EditableEntitySelectorComponent } from './entity/editable-entity-select
     FormsModule,
     TruncateModule,
     HttpClientModule,
-    MarkdownModule.forRoot(),
+    MarkdownModule.forRoot()
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true,
-    },
+      multi: true
+    }
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
