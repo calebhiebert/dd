@@ -1,0 +1,9 @@
+<div class="container grid-xl">
+  <!-- Loading -->
+  <div class="loading loading-lg" *ngIf="loading"></div>
+
+  <!-- Display -->
+  <div *ngIf="quest">
+    <h3>{{ quest.name }}</h3>
+  </div>
+</div>

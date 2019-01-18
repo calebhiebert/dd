@@ -75,10 +75,6 @@ export class EntityCreationFormComponent implements OnInit {
       }),
       imageId: new FormControl('uncertainty'),
     });
-
-    // this.formGroup.valueChanges.subscribe((v) =>
-    //   console.log(v, this.formGroup)
-    // );
   }
 
   public async save() {

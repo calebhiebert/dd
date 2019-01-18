@@ -52,6 +52,7 @@ import { ItemSelectComponent } from './items/item-select/item-select.component';
 import { PhraserComponent } from './phraser/phraser.component';
 import { EditableEntitySelectorComponent } from './entity/editable-entity-selector/editable-entity-selector.component';
 import { HealthDisplayComponent } from './entity/health-display/health-display.component';
+import { QuestViewComponent } from './quest/quest-view/quest-view.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { HealthDisplayComponent } from './entity/health-display/health-display.c
     ItemSelectComponent,
     PhraserComponent,
     EditableEntitySelectorComponent,
-    HealthDisplayComponent
+    HealthDisplayComponent,
+    QuestViewComponent
   ],
   imports: [
     BrowserModule,

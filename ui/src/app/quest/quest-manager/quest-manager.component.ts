@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Quest } from 'src/app/quest';
+import { Route, Router, ActivatedRoute } from '@angular/router';
+import { CampaignService } from 'src/app/campaign.service';
+import { IQuest, QuestService } from 'src/app/quest.service';
 
 @Component({
   selector: 'dd-quest-manager',
@@ -7,7 +9,46 @@ import { Quest } from 'src/app/quest';
   styleUrls: ['./quest-manager.component.css'],
 })
 export class QuestManagerComponent implements OnInit {
-  constructor() {}
+  public loading = false;
 
-  ngOnInit() {}
+  public quests: IQuest[];
+
+  constructor(
+    private router: Router,
+    private campaignService: CampaignService,
+    private questService: QuestService,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit() {
+    this.loadQuests();
+  }
+
+  private async loadQuests() {
+    this.loading = true;
+
+    try {
+      this.quests = await this.questService.getQuests(
+        this.campaignService.campaign.id
+      );
+    } catch (err) {
+      console.log('LOAD ERR', err);
+    }
+
+    this.loading = false;
+  }
+
+  public viewQuest(quest: IQuest) {
+    this.router.navigate([quest.id], { relativeTo: this.route });
+  }
+
+  public addQuest() {
+    this.router.navigate([
+      'campaign',
+      'manage',
+      this.campaignService.campaign.id,
+      'quests',
+      'create',
+    ]);
+  }
 }

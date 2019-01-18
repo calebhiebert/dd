@@ -23,6 +23,7 @@ import { AboutComponent } from './about/about.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { EntityComponent } from './entity/entity.component';
 import { QuestFormComponent } from './quest/quest-form/quest-form.component';
+import { QuestViewComponent } from './quest/quest-view/quest-view.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -32,42 +33,42 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     data: { showLoginLoading: false },
-    canActivate: [LoginPageGuard]
+    canActivate: [LoginPageGuard],
   },
   {
     path: 'register',
     component: RegisterComponent,
-    data: { showLoginLoading: false }
+    data: { showLoginLoading: false },
   },
   {
     path: 'callback',
     component: LoginComponent,
     data: {
-      showLoginLoading: false
-    }
+      showLoginLoading: false,
+    },
   },
   {
     path: 'notifications',
     component: NotificationsComponent,
-    canActivate: [LoggedInGuard, ActionGuard]
+    canActivate: [LoggedInGuard, ActionGuard],
   },
   {
     path: 'campaigns/list',
     component: CampaignListComponent,
-    canActivate: [LoggedInGuard, ActionGuard]
+    canActivate: [LoggedInGuard, ActionGuard],
   },
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [LoggedInGuard, ActionGuard]
+    canActivate: [LoggedInGuard, ActionGuard],
   },
   {
     path: 'campaigns/create',
     component: CampaignSettingsComponent,
     canActivate: [LoggedInGuard, ActionGuard],
     data: {
-      editing: false
-    }
+      editing: false,
+    },
   },
   {
     path: 'campaign/manage/:id',
@@ -78,133 +79,131 @@ const routes: Routes = [
         path: 'settings',
         component: CampaignSettingsComponent,
         data: {
-          editing: true
-        }
+          editing: true,
+        },
       },
       {
         path: 'items/create',
         component: ItemEditComponent,
         data: {
-          editing: false
-        }
+          editing: false,
+        },
       },
       {
         path: 'items/:item_id/edit',
         component: ItemEditComponent,
         data: {
-          editing: true
-        }
+          editing: true,
+        },
       },
       {
         path: 'entities/create',
         component: EntityFormComponent,
         data: {
-          editing: false
-        }
+          editing: false,
+        },
       },
       {
         path: 'entities/:ent_id/edit',
         component: EntityFormComponent,
         data: {
-          editing: true
-        }
+          editing: true,
+        },
       },
       {
         path: 'quests/create',
         component: QuestFormComponent,
         data: {
-          editing: false
-        }
+          editing: false,
+        },
       },
       {
         path: 'quests/:q_id/edit',
         component: QuestFormComponent,
         data: {
-          editing: true
-        }
-      }
-    ]
+          editing: true,
+        },
+      },
+    ],
   },
   {
     path: 'campaigns/:id',
     component: CampaignComponent,
     canActivate: [LoggedInGuard, ActionGuard],
     data: {
-      breadcrumb: 'Campaign'
+      breadcrumb: 'Campaign',
     },
     children: [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'landing'
+        redirectTo: 'landing',
       },
       {
         path: 'landing',
-        component: CampaignLandingComponent
+        component: CampaignLandingComponent,
       },
       {
         path: 'entities',
         component: EntityComponent,
         data: {
-          breadcrumb: 'Entity'
+          breadcrumb: 'Entity',
         },
         children: [
           {
             path: 'selecttype',
-            component: EntityTypeSelectorComponent
+            component: EntityTypeSelectorComponent,
           },
           {
             path: ':ent_id',
             component: EntityViewComponent,
             data: {
-              breadcrumb: 'View'
-            }
+              breadcrumb: 'View',
+            },
           },
           {
             path: ':ent_type_id/create',
             component: EntityCreationFormComponent,
             data: {
               editing: false,
-              breadcrumb: 'Create'
-            }
+              breadcrumb: 'Create',
+            },
           },
           {
             path: ':ent_id/edit',
             component: EntityCreationFormComponent,
             data: {
               editing: true,
-              breadcrumb: 'Edit'
-            }
-          }
-        ]
+              breadcrumb: 'Edit',
+            },
+          },
+        ],
       },
       {
         path: 'quests',
         component: QuestManagerComponent,
-        children: [
-          {
-            path: ':q_id',
-            component: QuestManagerComponent
-          }
-        ]
+      },
+      {
+        path: 'quests/:q_id',
+        component: QuestViewComponent,
       },
       {
         path: 'items',
         component: ItemManagerComponent,
         data: {
-          breadcrumb: 'Items'
-        }
+          breadcrumb: 'Items',
+        },
       },
       {
         path: 'items/:item_id',
-        component: ItemViewComponent
-      }
-    ]
-  }
+        component: ItemViewComponent,
+      },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}
