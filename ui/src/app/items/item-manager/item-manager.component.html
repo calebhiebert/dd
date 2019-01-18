@@ -20,7 +20,8 @@
           placeholder="Search"
           [formControl]="searchControl"
         />
-        <i class="form-icon icon icon-search"></i>
+        <i class="form-icon icon icon-search" *ngIf="!loading"></i>
+        <div class="form-icon loading" *ngIf="loading && items"></div>
       </div>
     </div>
   </div>
