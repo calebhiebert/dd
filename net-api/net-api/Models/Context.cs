@@ -36,7 +36,7 @@ namespace net_api.Models
                 connectionString = $"Host={matches.Groups["Host"]};Port={matches.Groups["Port"]};Database={matches.Groups["Database"]};Password={matches.Groups["Password"]};User ID={matches.Groups["Username"]}";
             }
 
-            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.UseNpgsql(connectionString, opt => opt.EnableRetryOnFailure(10));
             base.OnConfiguring(optionsBuilder);
         }
     }

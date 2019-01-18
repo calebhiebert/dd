@@ -1,0 +1,73 @@
+<dd-modal #editmodal>
+  <div modal-header>Edit Health</div>
+  <div modal-body>
+    <div class="form-group">
+      <label class="form-label" for="operation">HP</label>
+      <input
+        type="text"
+        name="operation"
+        id="operation"
+        placeholder="HP"
+        class="form-input"
+      />
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Operation</th>
+          <th>Effect</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Add</td>
+          <td>Adds the amount to the hp</td>
+          <td>+30</td>
+        </tr>
+        <tr>
+          <td>Subtract</td>
+          <td>Subtracts the amount from the hp</td>
+          <td>-7</td>
+        </tr>
+        <tr>
+          <td>Divide</td>
+          <td>Divides the current hp by the amount</td>
+          <td>/2</td>
+        </tr>
+        <tr>
+          <td>Multiply</td>
+          <td>Multiplies the current hp by the amount</td>
+          <td>*2</td>
+        </tr>
+        <tr>
+          <td>Fill</td>
+          <td>Fills up to max hp</td>
+          <td>++</td>
+        </tr>
+        <tr>
+          <td>Half</td>
+          <td>Adds or subtracts to get to half hp</td>
+          <td>//</td>
+        </tr>
+        <tr>
+          <td>Quarter</td>
+          <td>Adds or subtracts to get to quarter hp</td>
+          <td>/</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</dd-modal>
+
+<div
+  class="bar"
+  (click)="editHP()"
+  [ngClass]="{ 'c-hand': editable }"
+  *ngFor="let bar of bars"
+>
+  <div class="bar-item d-flex" [style.width]="bar.percentCSS">
+    <span class="text-bold">{{ bar.current }} / {{ bar.max }}</span>
+  </div>
+</div>

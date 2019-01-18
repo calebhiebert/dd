@@ -51,6 +51,7 @@ import { InventoryManagerComponent } from './items/inventory-manager/inventory-m
 import { ItemSelectComponent } from './items/item-select/item-select.component';
 import { PhraserComponent } from './phraser/phraser.component';
 import { EditableEntitySelectorComponent } from './entity/editable-entity-selector/editable-entity-selector.component';
+import { HealthDisplayComponent } from './entity/health-display/health-display.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { EditableEntitySelectorComponent } from './entity/editable-entity-select
     InventoryManagerComponent,
     ItemSelectComponent,
     PhraserComponent,
-    EditableEntitySelectorComponent
+    EditableEntitySelectorComponent,
+    HealthDisplayComponent
   ],
   imports: [
     BrowserModule,

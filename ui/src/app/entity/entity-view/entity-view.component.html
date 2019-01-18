@@ -98,7 +98,12 @@
   <!-- Health/Currency -->
   <div class="columns">
     <div class="column col-9 col-md-7 col-sm-12 mb-2">
-      <div class="card p-2">Health</div>
+      <div class="card p-2">
+        <dd-health-display
+          [editable]="editable"
+          [health]="entity.health"
+        ></dd-health-display>
+      </div>
     </div>
     <div class="column col-3 col-md-5 col-sm-12">
       <div
