@@ -8,7 +8,7 @@ import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-a
 @Component({
   selector: 'dd-inventory-manager',
   templateUrl: './inventory-manager.component.html',
-  styleUrls: ['./inventory-manager.component.css'],
+  styleUrls: ['./inventory-manager.component.css']
 })
 export class InventoryManagerComponent implements OnInit {
   public working = false;
@@ -66,14 +66,21 @@ export class InventoryManagerComponent implements OnInit {
       itemId: item.id,
       item: item,
       entityId: this.entityId,
-      quantity: 1,
+      quantity: 1
     };
+
+    // Check if the inventory already has this item
+    if (this.inventory.find(i => i.itemId === inventoryItem.itemId)) {
+      return;
+    }
 
     this.working = true;
 
     try {
-      const item = await this.entityService.createInventoryItem(inventoryItem);
-      inventoryItem.id = item.id;
+      const addedItem = await this.entityService.createInventoryItem(
+        inventoryItem
+      );
+      inventoryItem.id = addedItem.id;
     } catch (err) {
       console.log('ADD ERR', err);
     }
@@ -92,8 +99,8 @@ export class InventoryManagerComponent implements OnInit {
       quantity: new FormControl(item.quantity, [
         numberValidator,
         Validators.required,
-        Validators.min(0),
-      ]),
+        Validators.min(0)
+      ])
     });
     this.editingItem = item;
 
@@ -117,7 +124,7 @@ export class InventoryManagerComponent implements OnInit {
     try {
       if (item.quantity == 0) {
         await this.entityService.deleteInventoryItem(item.id);
-        this.inventory = this.inventory.filter((itm) => itm !== item);
+        this.inventory = this.inventory.filter(itm => itm !== item);
       } else {
         await this.entityService.updateInventoryItem(item);
       }
@@ -140,11 +147,11 @@ export class InventoryManagerComponent implements OnInit {
     try {
       if (inventoryItem.quantity == 1) {
         await this.entityService.deleteInventoryItem(inventoryItem.id);
-        this.inventory = this.inventory.filter((itm) => itm !== inventoryItem);
+        this.inventory = this.inventory.filter(itm => itm !== inventoryItem);
       } else {
         await this.entityService.updateInventoryItem({
           ...inventoryItem,
-          quantity: inventoryItem.quantity - 1,
+          quantity: inventoryItem.quantity - 1
         });
         inventoryItem.quantity--;
       }

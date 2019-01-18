@@ -5,7 +5,8 @@ import {
   EntityService,
   IEntity,
   IEntityAttribute,
-  EntityAttributeClass
+  EntityAttributeClass,
+  IHealth
 } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { AttributeType, Attribute } from 'src/app/attributes';
@@ -77,6 +78,11 @@ export class EntityViewComponent implements OnInit {
 
       this.updateEntity();
     }
+  }
+
+  public async onHPEdit(health: IHealth) {
+    this.entity.health = health;
+    await this.updateEntity();
   }
 
   public async editCurrency() {
@@ -155,8 +161,10 @@ export class EntityViewComponent implements OnInit {
   private async updateEntity() {
     this.saving = true;
 
+    const entityToSave = { ...this.entity, preset: undefined };
+
     try {
-      await this.entityService.updateEntity(this.entity);
+      await this.entityService.updateEntity(entityToSave);
     } catch (err) {
       console.log('UPDATE ERR', err);
     }

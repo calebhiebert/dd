@@ -27,6 +27,7 @@ namespace net_api.Controllers
         public async Task<ActionResult<IEnumerable<InventoryItem>>> GetInventoryItems([FromQuery(Name = "entityId")]string entityId)
         {
             // TODO authenticate requests
+            // TODO verify that the inventory does not have this item already
 
             return await _context.InventoryItems.Where(i => i.EntityId == entityId).Include(i => i.Item).ToListAsync();
         }

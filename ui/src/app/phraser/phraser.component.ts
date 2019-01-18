@@ -30,10 +30,10 @@ export class PhraserComponent implements OnInit {
   }
 
   private generatePhrase() {
-    this.phrase = PHRASES[this.chance.integer({ min: 0, max: PHRASES.length })];
+    this.phrase = PHRASES[this.chance.integer({ min: 0, max: PHRASES.length - 1 })];
 
     setTimeout(() => {
       this.generatePhrase();
-    }, this.chance.integer({ min: 500, max: 3000 }));
+    }, this.chance.integer({ min: 250, max: 1500 }));
   }
 }

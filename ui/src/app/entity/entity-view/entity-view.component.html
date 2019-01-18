@@ -102,6 +102,7 @@
         <dd-health-display
           [editable]="editable"
           [health]="entity.health"
+          (healthChange)="onHPEdit($event)"
         ></dd-health-display>
       </div>
     </div>
