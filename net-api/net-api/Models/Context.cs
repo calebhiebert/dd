@@ -372,6 +372,8 @@ namespace net_api.Models
 
         [Required]
         public string CampaignId { get; set; }
+
+        [JsonIgnore]
         public Campaign Campaign { get; set; }
 
         public DateTime CreatedAt { get; set; }

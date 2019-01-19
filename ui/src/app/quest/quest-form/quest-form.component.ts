@@ -38,9 +38,26 @@ export class QuestFormComponent implements OnInit {
       active: new FormControl(false),
     });
 
+    this.active.disable();
+
+    this.visible.valueChanges.subscribe(() => {
+      this.dataToUI();
+    });
+
     if (this.editing) {
       const questId = this.route.snapshot.paramMap.get('q_id');
       this.loadQuest(questId);
+    }
+  }
+
+  private dataToUI() {
+    const isVisible = this.visible.value as boolean;
+
+    if (!isVisible) {
+      this.active.setValue(false);
+      this.active.disable();
+    } else {
+      this.active.enable();
     }
   }
 
@@ -52,6 +69,10 @@ export class QuestFormComponent implements OnInit {
       this.quest = await this.questService.getQuest(id);
 
       this.formGroup.patchValue(this.quest);
+
+      setTimeout(() => {
+        this.dataToUI();
+      }, 1);
     } catch (err) {
       console.log('LOAD ERR', err);
     }

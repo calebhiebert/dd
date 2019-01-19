@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
@@ -22,9 +22,41 @@ namespace net_api.Controllers
 
         // GET: api/Quests
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Quest>>> GetQuests()
+        public async Task<ActionResult<IEnumerable<Quest>>> GetQuests(
+            [FromQuery] string campaignId
+            )
         {
-            return await _context.Quests.ToListAsync();
+            if (campaignId == null)
+            {
+                return BadRequest("missing campaign id");
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var campaign = await _context.Campaigns
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync(c => c.Id == campaignId);
+
+            if (campaign == null)
+            {
+                return NotFound();
+            } else if (!campaign.Members.Any(m => m.UserId == userId))
+            {
+                return BadRequest("not part of campaign");
+            }
+
+            var query = _context.Quests.Where(q => q.CampaignId == campaign.Id);
+
+            if (userId != campaign.UserId)
+            {
+                query = query.Where(q => q.Visible == true);
+            }
+
+            query = query.OrderBy(q => q.Active);
+
+            var quests = await query.ToListAsync();
+
+            return Ok(quests);
         }
 
         // GET: api/Quests/5

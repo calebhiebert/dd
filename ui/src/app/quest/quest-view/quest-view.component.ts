@@ -40,6 +40,21 @@ export class QuestViewComponent implements OnInit {
     this.loading = false;
   }
 
+  public edit() {
+    if (!this.editable) {
+      return;
+    }
+
+    this.router.navigate([
+      'campaign',
+      'manage',
+      this.campaignService.campaign.id,
+      'quests',
+      this.quest.id,
+      'edit',
+    ]);
+  }
+
   public get editable() {
     return this.campaignService.canEdit;
   }

@@ -2,7 +2,9 @@
   <div class="columns">
     <div class="column"><h3>Quests</h3></div>
     <div class="column col-auto col-ml-auto">
-      <button class="btn btn-sm" (click)="addQuest()">Add Quest</button>
+      <button class="btn btn-sm" (click)="addQuest()" *ngIf="editable">
+        Add Quest
+      </button>
     </div>
   </div>
   <div class="loading loading-lg" *ngIf="loading"></div>
@@ -11,20 +13,33 @@
   <div class="empty" *ngIf="quests && quests.length === 0">
     <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
     <p class="empty-title h5">There are no quests here</p>
-    <p class="empty-subtitle">Click the button to create one.</p>
+    <p class="empty-subtitle" *ngIf="editable">
+      Click the button to create one.
+    </p>
     <div class="empty-action">
-      <button class="btn btn-primary" (click)="addQuest()">Create Quest</button>
+      <button class="btn btn-primary" (click)="addQuest()" *ngIf="editable">
+        Create Quest
+      </button>
     </div>
   </div>
 
   <!-- Quest List -->
   <div *ngIf="quests">
     <div
-      class="card p-2 hoverable"
+      class="card p-2 mb-2 hoverable"
       *ngFor="let quest of quests"
       (click)="viewQuest(quest)"
     >
-      {{ quest.name }}
+      <div class="columns col-gapless">
+        <div class="column col-auto mr-1" *ngIf="quest.active">
+          <i class="icon icon-flag"></i>
+        </div>
+        <div class="column">
+          <span [ngClass]="{ 'text-gray': !quest.visible }">
+            {{ quest.name }}
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </div>

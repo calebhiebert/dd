@@ -97,6 +97,7 @@
 
   <!-- Health/Currency -->
   <div class="columns">
+    <!-- Health -->
     <div class="column col-9 col-md-7 col-sm-12 mb-2">
       <div class="card p-2">
         <dd-health-display
@@ -106,6 +107,8 @@
         ></dd-health-display>
       </div>
     </div>
+
+    <!-- Currency -->
     <div class="column col-3 col-md-5 col-sm-12">
       <div
         class="card p-2 d-flex flex-row justify-between align-items-center"
@@ -113,10 +116,10 @@
         [ngClass]="{ 'c-hand': editable }"
       >
         <h4 class="mb-0 mr-2 hide-sm">{{ formattedCurrency }}</h4>
-        <h6 class="mb-0 mr-2 show-sm">{{ formattedCurrency }}</h6>
-        <picture>
+        <h5 class="mb-0 mr-2 show-sm">{{ formattedCurrency }}</h5>
+        <picture style="margin-bottom: -0.25rem">
           <source srcset="/assets/coins.png" type="image/png" />
-          <img src="/assets/coins.svg" alt="Money Icon" width="32" />
+          <img src="/assets/coins.svg" alt="Money Icon" width="30" />
         </picture>
       </div>
     </div>

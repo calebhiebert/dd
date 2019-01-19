@@ -1,20 +1,26 @@
 <div class="container grid-xl mt-2">
-  <div class="columns col-oneline">
+  <div class="columns">
     <!-- Title -->
     <div class="column col-auto"><h3>Items</h3></div>
 
-    <div class="column" *ngIf="editable">
+    <div class="column show-md col-8" *ngIf="editable">
+      <button class="btn btn-sm mt-1" (click)="addItem()">
+        <i class="icon icon-plus"></i> Create Item
+      </button>
+    </div>
+
+    <div class="column hide-md" *ngIf="editable">
       <button class="btn btn-sm mt-1" (click)="addItem()">
         <i class="icon icon-plus"></i> Create Item
       </button>
     </div>
 
     <!-- Search -->
-    <div class="column col-6 col-ml-auto">
+    <div class="column col-6 col-md-12 col-ml-auto mb-2">
       <div class="has-icon-left">
         <input
           class="form-input"
-          type="text"
+          type="search"
           name="search"
           id="search"
           placeholder="Search"

@@ -51,4 +51,8 @@ export class QuestManagerComponent implements OnInit {
       'create',
     ]);
   }
+
+  public get editable() {
+    return this.campaignService.canEdit;
+  }
 }

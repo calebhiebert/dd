@@ -4,6 +4,17 @@
 
   <!-- Display -->
   <div *ngIf="quest">
-    <h3>{{ quest.name }}</h3>
+    <div class="columns">
+      <div class="column">
+        <h3>{{ quest.name }}</h3>
+      </div>
+      <div class="column col-auto col-ml-auto">
+        <button class="btn btn-sm" *ngIf="editable" (click)="edit()">
+          Edit
+        </button>
+      </div>
+    </div>
+
+    <markdown [data]="quest.description"></markdown>
   </div>
 </div>
