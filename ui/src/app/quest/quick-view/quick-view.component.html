@@ -2,9 +2,18 @@
 <div *ngIf="quests">
   <div
     class="card p-2 hoverable"
-    (click)="viewQuest(q)"
-    *ngFor="let q of quests"
+    (click)="viewQuest(quest)"
+    *ngFor="let quest of quests"
   >
-    {{ q.name }}
+    <div class="columns col-gapless">
+      <div class="column col-auto mr-1" *ngIf="quest.active">
+        <i class="icon icon-flag"></i>
+      </div>
+      <div class="column">
+        <span [ngClass]="{ 'text-gray': !quest.visible }">
+          {{ quest.name }}
+        </span>
+      </div>
+    </div>
   </div>
 </div>
