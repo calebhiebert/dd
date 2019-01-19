@@ -3,12 +3,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
 import { ItemService, IItem } from 'src/app/item.service';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinct, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'dd-item-manager',
   templateUrl: './item-manager.component.html',
-  styleUrls: ['./item-manager.component.css']
+  styleUrls: ['./item-manager.component.css'],
 })
 export class ItemManagerComponent implements OnInit {
   public loading = false;
@@ -32,8 +32,9 @@ export class ItemManagerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // this.loadItems();
-    this.searchControl = new FormControl(null);
+    this.readURLParams();
+
+    this.searchControl = new FormControl(this.search);
 
     this.searchControl.valueChanges
       .pipe(debounceTime(350))
@@ -46,50 +47,56 @@ export class ItemManagerComponent implements OnInit {
         this.search = search.trim().toLowerCase();
       });
 
-    this.route.queryParamMap.subscribe(query => {
-      if (query.get('tags')) {
-        this.queryTags = query
-          .get('tags')
-          .split(',')
-          .map(t => t.trim())
-          .filter(t => t !== '' && t !== null && t !== undefined);
-      } else {
-        this.queryTags = undefined;
-      }
-
-      if (query.get('search')) {
-        this.searchControl.setValue(query.get('search'));
-        this._search = query.get('search');
-      }
-
-      if (query.get('limit')) {
-        try {
-          this.queryLimit = parseInt(query.get('limit'), 10);
-        } catch (err) {
-          console.log('Limit parse err');
-        }
-      } else {
-        this.queryLimit = 10;
-      }
-
-      if (query.get('offset')) {
-        try {
-          this.queryOffset = parseInt(query.get('offset'), 10);
-        } catch (err) {
-          console.log('Offset parse err');
-        }
-      } else {
-        this.queryOffset = 0;
-      }
-
-      this._page = (this.queryOffset || 0) / (this.queryLimit || 10) + 1;
-
-      this.loadItems();
-    });
+    this.loadItems(false);
   }
 
-  private async loadItems() {
+  private readURLParams() {
+    const query = this.route.snapshot.queryParamMap;
+
+    if (query.get('tags')) {
+      this.queryTags = query
+        .get('tags')
+        .split(',')
+        .map((t) => t.trim())
+        .filter((t) => t !== '' && t !== null && t !== undefined);
+    } else {
+      this.queryTags = undefined;
+    }
+
+    if (query.get('search')) {
+      this._search = query.get('search');
+    }
+
+    if (query.get('limit')) {
+      try {
+        this.queryLimit = parseInt(query.get('limit'), 10);
+      } catch (err) {
+        console.log('Limit parse err');
+      }
+    } else {
+      this.queryLimit = 10;
+    }
+
+    if (query.get('offset')) {
+      try {
+        this.queryOffset = parseInt(query.get('offset'), 10);
+      } catch (err) {
+        console.log('Offset parse err');
+      }
+    } else {
+      this.queryOffset = 0;
+    }
+
+    this._page = (this.queryOffset || 0) / (this.queryLimit || 10) + 1;
+  }
+
+  private async loadItems(navigate: boolean = true) {
     this.loading = true;
+
+    if (navigate) {
+      await this.writeURLParams();
+    }
+
     try {
       const items = await this.itemService.getItems(
         this.campaignService.campaign.id,
@@ -107,13 +114,32 @@ export class ItemManagerComponent implements OnInit {
     this.loading = false;
   }
 
+  private async writeURLParams() {
+    const queryObj: { [key: string]: string } = {
+      limit: this.queryLimit.toString(),
+      offset: (this.queryLimit * (this.page - 1)).toString(),
+    };
+
+    if (this.search && this.search.trim() !== '') {
+      queryObj.search = this.search;
+    }
+
+    await this.router.navigate(
+      ['campaigns', this.campaignService.campaign.id, 'items'],
+      {
+        queryParams: queryObj,
+        replaceUrl: true,
+      }
+    );
+  }
+
   public async addItem() {
     this.router.navigate([
       'campaign',
       'manage',
       this.campaignService.campaign.id,
       'items',
-      'create'
+      'create',
     ]);
   }
 
@@ -122,7 +148,7 @@ export class ItemManagerComponent implements OnInit {
       'campaigns',
       this.campaignService.campaign.id,
       'items',
-      item.id
+      item.id,
     ]);
   }
 
@@ -132,30 +158,7 @@ export class ItemManagerComponent implements OnInit {
 
   public set search(value: string) {
     this._search = value;
-
-    if (this._search !== '') {
-      this.router.navigate(
-        ['campaigns', this.campaignService.campaign.id, 'items'],
-        {
-          queryParams: {
-            search: this.search,
-            limit: this.queryLimit,
-            offset: 0
-          },
-          queryParamsHandling: 'merge'
-        }
-      );
-    } else {
-      this.router.navigate(
-        ['campaigns', this.campaignService.campaign.id, 'items'],
-        {
-          queryParams: {
-            search: undefined
-          },
-          queryParamsHandling: 'merge'
-        }
-      );
-    }
+    this.loadItems();
   }
 
   public get page() {
@@ -164,17 +167,7 @@ export class ItemManagerComponent implements OnInit {
 
   public set page(value: number) {
     this._page = value;
-
-    this.router.navigate(
-      ['campaigns', this.campaignService.campaign.id, 'items'],
-      {
-        queryParams: {
-          limit: this.queryLimit,
-          offset: this.queryLimit * (this.page - 1)
-        },
-        queryParamsHandling: 'merge'
-      }
-    );
+    this.loadItems();
   }
 
   public get editable() {

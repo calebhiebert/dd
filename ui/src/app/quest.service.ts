@@ -9,9 +9,16 @@ import { environment } from 'src/environments/environment';
 export class QuestService {
   constructor(private http: HttpClient) {}
 
-  public getQuests(campaignId: string): Promise<IQuest[]> {
+  public getQuests(
+    campaignId: string,
+    activeOnly: boolean = false
+  ): Promise<IQuest[]> {
     return this.http
-      .get<IQuest[]>(`${environment.apiURL}/quests?campaignId=${campaignId}`)
+      .get<IQuest[]>(
+        `${
+          environment.apiURL
+        }/quests?campaignId=${campaignId}&activeOnly=${activeOnly}`
+      )
       .toPromise();
   }
 

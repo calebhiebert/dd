@@ -1,0 +1,10 @@
+<div class="loading" *ngIf="loading"></div>
+<div *ngIf="quests">
+  <div
+    class="card p-2 hoverable"
+    (click)="viewQuest(q)"
+    *ngFor="let q of quests"
+  >
+    {{ q.name }}
+  </div>
+</div>

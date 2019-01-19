@@ -53,6 +53,7 @@ import { PhraserComponent } from './phraser/phraser.component';
 import { EditableEntitySelectorComponent } from './entity/editable-entity-selector/editable-entity-selector.component';
 import { HealthDisplayComponent } from './entity/health-display/health-display.component';
 import { QuestViewComponent } from './quest/quest-view/quest-view.component';
+import { QuickViewComponent } from './quest/quick-view/quick-view.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +102,8 @@ import { QuestViewComponent } from './quest/quest-view/quest-view.component';
     PhraserComponent,
     EditableEntitySelectorComponent,
     HealthDisplayComponent,
-    QuestViewComponent
+    QuestViewComponent,
+    QuickViewComponent
   ],
   imports: [
     BrowserModule,
