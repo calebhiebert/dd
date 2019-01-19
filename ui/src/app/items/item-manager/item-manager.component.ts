@@ -167,6 +167,7 @@ export class ItemManagerComponent implements OnInit {
 
   public set page(value: number) {
     this._page = value;
+    this.queryOffset = this.queryLimit * (this.page - 1);
     this.loadItems();
   }
 
