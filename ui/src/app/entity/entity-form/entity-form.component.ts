@@ -87,8 +87,14 @@ export class EntityFormComponent implements OnInit {
 
       (this.formGroup.get(
         'attributes'
-      ) as FormArray).controls = preset.attributes.map(() => {
-        return new FormGroup({});
+      ) as FormArray).controls = preset.attributes.map((attr) => {
+        if (attr.options) {
+          return new FormGroup({
+            options: new FormArray(attr.options.map((o) => new FormControl(o))),
+          });
+        } else {
+          return new FormGroup({});
+        }
       });
 
       setTimeout(() => {

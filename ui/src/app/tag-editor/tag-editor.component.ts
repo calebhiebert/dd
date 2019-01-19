@@ -12,6 +12,9 @@ export class TagEditorComponent implements OnInit {
   @Input()
   public formGroup: FormGroup;
 
+  @Input()
+  public controlName = 'tags';
+
   private previousInput: string;
   private justHadValue = false;
 
@@ -30,8 +33,8 @@ export class TagEditorComponent implements OnInit {
       this.previousInput = v;
     });
 
-    if (!this.formGroup.contains('tags')) {
-      this.formGroup.addControl('tags', new FormArray([]));
+    if (!this.formGroup.contains(this.controlName)) {
+      this.formGroup.addControl(this.controlName, new FormArray([]));
     }
   }
 
@@ -70,6 +73,6 @@ export class TagEditorComponent implements OnInit {
   }
 
   public get formArray() {
-    return this.formGroup.get('tags') as FormArray;
+    return this.formGroup.get(this.controlName) as FormArray;
   }
 }

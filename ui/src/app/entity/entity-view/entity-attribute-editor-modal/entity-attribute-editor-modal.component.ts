@@ -8,7 +8,7 @@ import { IEntityAttribute } from 'src/app/entity.service';
 @Component({
   selector: 'dd-entity-attribute-editor-modal',
   templateUrl: './entity-attribute-editor-modal.component.html',
-  styleUrls: ['./entity-attribute-editor-modal.component.css']
+  styleUrls: ['./entity-attribute-editor-modal.component.css'],
 })
 export class EntityAttributeEditorModalComponent implements OnInit {
   @ViewChild('modal')
@@ -32,7 +32,9 @@ export class EntityAttributeEditorModalComponent implements OnInit {
     this.attribute = attribute;
     this.setupControl(currentValue);
     setTimeout(() => {
-      this.input.nativeElement.focus();
+      if (this.input) {
+        this.input.nativeElement.focus();
+      }
     }, 1);
 
     return this.modal.open();

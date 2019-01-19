@@ -90,11 +90,6 @@ export class EntityAttributeRowEditorComponent implements OnInit {
         new FormControl(null, [numberValidator])
       );
 
-      this.formGroup.addControl(
-        'options',
-        new FormControl(null, [Validators.pattern(/([A-Za-z0-9._]+)/gi)])
-      );
-
       this.formGroup.addControl('imageId', new FormControl(null));
     }
   }
@@ -125,17 +120,6 @@ export class EntityAttributeRowEditorComponent implements OnInit {
 
   public get options() {
     return this.formGroup.get('options');
-  }
-
-  public get optionsList(): string[] {
-    if (this.options.value) {
-      return (this.options.value as string)
-        .split(',')
-        .map((o) => o.trim())
-        .filter((o) => o.length > 0);
-    } else {
-      return [];
-    }
   }
 
   public get id() {

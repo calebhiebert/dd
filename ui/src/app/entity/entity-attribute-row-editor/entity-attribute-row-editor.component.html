@@ -88,24 +88,12 @@
       </div>
 
       <!-- Options -->
-      <div class="form-group" *ngIf="type.value === '2'">
+      <div class="form-group" *ngIf="type.value === '2' || type.value === 2">
         <label for="options" class="form-label">Options</label>
-        <input
-          class="form-input"
-          type="text"
-          name="options"
-          formControlName="options"
-          id="options"
-          placeholder="Big, Medium, Small"
-        />
-        <p class="form-input-hint mb-1">
-          Comma separated list of possible values the user can choose from
-        </p>
-        <div>
-          <div class="chip bg-primary" *ngFor="let o of optionsList">
-            {{ o }}
-          </div>
-        </div>
+        <dd-tag-editor
+          [formGroup]="formGroup"
+          controlName="options"
+        ></dd-tag-editor>
       </div>
 
       <!-- Other Controls -->

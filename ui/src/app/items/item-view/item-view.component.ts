@@ -8,7 +8,7 @@ import { EditableEntitySelectorComponent } from 'src/app/entity/editable-entity-
 @Component({
   selector: 'dd-item-view',
   templateUrl: './item-view.component.html',
-  styleUrls: ['./item-view.component.css']
+  styleUrls: ['./item-view.component.css'],
 })
 export class ItemViewComponent implements OnInit {
   public loading = false;
@@ -26,7 +26,7 @@ export class ItemViewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       const id = params.get('item_id');
 
       if (id) {
@@ -56,7 +56,7 @@ export class ItemViewComponent implements OnInit {
         this.campaignService.campaign.id,
         'items',
         this.item.id,
-        'edit'
+        'edit',
       ]);
     } catch (err) {
       console.log(err.name, err.message);
@@ -80,7 +80,7 @@ export class ItemViewComponent implements OnInit {
     try {
       const inventory = await this.entityService.getInventory(entity.id);
 
-      if (inventory.find(i => i.itemId === this.item.id)) {
+      if (inventory.find((i) => i.itemId === this.item.id)) {
         console.log('Item already in inventory!');
         return;
       }
@@ -88,14 +88,12 @@ export class ItemViewComponent implements OnInit {
       const inventoryItem: IInventoryItem = {
         itemId: this.item.id,
         entityId: entity.id,
-        quantity: 1
+        quantity: 1,
       };
 
       const createdItem = await this.entityService.createInventoryItem(
         inventoryItem
       );
-
-      console.log('Added to inventory', createdItem);
     } catch (err) {
       console.log('Load ERR', err);
     }
