@@ -35,7 +35,7 @@ export class EntityCreationFormComponent implements OnInit {
       name: new FormControl(null, [
         Validators.required,
         Validators.minLength(2),
-        Validators.maxLength(30),
+        Validators.maxLength(20),
       ]),
       description: new FormControl(null, [
         Validators.required,

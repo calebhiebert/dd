@@ -10,6 +10,8 @@ import { IItem } from './item.service';
   providedIn: 'root',
 })
 export class EntityService {
+  private _currentViewEntity: IEntity = null;
+
   constructor(private http: HttpClient) {}
 
   public async updateEntityPreset(entityPreset: IEntityPreset): Promise<void> {
@@ -96,6 +98,14 @@ export class EntityService {
     return this.http
       .delete<void>(`${environment.apiURL}/inventoryitems/${id}`)
       .toPromise();
+  }
+
+  public get currentViewEntity() {
+    return this._currentViewEntity;
+  }
+
+  public set currentViewEntity(entity: IEntity) {
+    this._currentViewEntity = entity;
   }
 }
 

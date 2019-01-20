@@ -129,7 +129,8 @@ namespace net_api.Controllers
                 }
             }
 
-            await _hub.Clients.All.SendAsync("CampaignUpdate", campaign);
+            await _hub.Clients.Group($"campaign-{campaign.Id}")
+                .SendAsync("CampaignUpdate", campaign);
 
             return NoContent();
         }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
 
@@ -14,10 +15,12 @@ namespace net_api.Controllers
     public class EntitiesController : ControllerBase
     {
         private readonly Context _context;
+        private readonly IHubContext<UpdateHub> _hub;
 
-        public EntitiesController(Context context)
+        public EntitiesController(Context context, IHubContext<UpdateHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         // GET: api/Entities/5
@@ -75,6 +78,9 @@ namespace net_api.Controllers
                 }
             }
 
+            await _hub.Clients.Group($"campaign-{entity.CampaignId}")
+                .SendAsync("EntityUpdate", entity);
+
             return NoContent();
         }
 
@@ -93,6 +99,9 @@ namespace net_api.Controllers
 
             _context.Entities.Add(entity);
             await _context.SaveChangesAsync();
+
+            await _hub.Clients.Group($"campaign-{entity.CampaignId}")
+                .SendAsync("EntityCreate", entity);
 
             return CreatedAtAction("GetEntity", new { id = entity.Id }, entity);
         }

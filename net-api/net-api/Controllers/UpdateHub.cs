@@ -17,5 +17,15 @@ namespace net_api.Controllers
             await Groups.AddToGroupAsync(Context.ConnectionId, $"notifications-{Context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value}");
             await Clients.Caller.SendAsync("AuthenticateComplete");
         }
+
+        public async Task SubscribeCampaign(string campaignId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, $"campaign-{campaignId}");
+        }
+
+        public async Task UnsubscribeCampaign(string campaignId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"campaign-{campaignId}");
+        }
     }
 }

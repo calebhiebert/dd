@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { IItem } from './item.service';
 import { IEntityPreset, IEntity } from './entity.service';
@@ -7,21 +7,36 @@ import { IUser } from './user.service';
 import { LoginService } from './login.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CampaignService {
   public campaign: ICampaign = null;
   public loadingCampaign = false;
+  public previousCampaignId: string;
+  public events = new EventEmitter<ICampaign>();
 
   constructor(private http: HttpClient, private login: LoginService) {}
 
-  public async setSelection(campaignId: string) {
+  public async setSelection(campaignId?: string) {
+    if (campaignId === null) {
+      if (this.campaign !== null) {
+        this.previousCampaignId = this.campaign.id;
+      }
+
+      this.campaign = null;
+
+      this.events.emit(null);
+      return;
+    }
+
     this.campaign = null;
+
     this.loadingCampaign = true;
     try {
       const campaign = await this.getCampaign(campaignId);
       this.campaign = campaign;
       document.title = this.campaign.name;
+      this.events.emit(campaign);
     } catch (err) {
       console.log('LOAD ERR', err);
     }
@@ -76,7 +91,7 @@ export class CampaignService {
     return this.http
       .post<ICampaignInvite>(`${environment.apiURL}/campaigninvites`, {
         campaignId: this.campaign.id,
-        name
+        name,
       })
       .toPromise();
   }
@@ -144,7 +159,7 @@ export class CampaignService {
       return this.campaign.entities;
     }
 
-    return this.campaign.entities.filter(e => e.userId === this.login.id);
+    return this.campaign.entities.filter((e) => e.userId === this.login.id);
   }
 }
 
@@ -162,6 +177,7 @@ export interface ICampaign {
   itemTypes?: IItemType[];
   itemRarities?: IItemRarity[];
   currencyTypes?: ICurrencyType[];
+  members: ICampaignUser[];
   createdAt?: Date;
 }
 
@@ -176,10 +192,18 @@ export interface ICampaignInvite {
   user?: IUser;
 }
 
+export interface ICampaignUser {
+  id: string;
+  campaignId: string;
+  campaign?: ICampaign;
+  userId: string;
+  user?: IUser;
+}
+
 export enum CampaignInviteStatus {
   PENDING,
   REVOKED,
-  ACCEPTED
+  ACCEPTED,
 }
 
 export interface IItemType {

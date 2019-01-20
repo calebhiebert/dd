@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CampaignService } from '../campaign.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './campaign.component.html',
   styleUrls: ['./campaign.component.css'],
 })
-export class CampaignComponent implements OnInit {
+export class CampaignComponent implements OnInit, OnDestroy {
   constructor(
     private campaignService: CampaignService,
     private route: ActivatedRoute
@@ -19,6 +19,10 @@ export class CampaignComponent implements OnInit {
         this.campaignService.setSelection(params.id);
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.campaignService.setSelection(null);
   }
 
   public get loading() {

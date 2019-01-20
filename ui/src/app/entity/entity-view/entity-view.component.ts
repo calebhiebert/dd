@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EntityAttributeEditorModalComponent } from './entity-attribute-editor-modal/entity-attribute-editor-modal.component';
 import {
   EntityService,
-  IEntity,
   IEntityAttribute,
   EntityAttributeClass,
   IHealth,
@@ -18,11 +17,9 @@ import { LoginService } from 'src/app/login.service';
   templateUrl: './entity-view.component.html',
   styleUrls: ['./entity-view.component.scss'],
 })
-export class EntityViewComponent implements OnInit {
+export class EntityViewComponent implements OnInit, OnDestroy {
   @ViewChild('attributemodal')
   public attributeModal: EntityAttributeEditorModalComponent;
-
-  public entity: IEntity;
 
   public loading = false;
 
@@ -42,12 +39,16 @@ export class EntityViewComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.entityService.currentViewEntity = null;
+  }
+
   private async loadEntity(id: string) {
     this.loading = true;
 
     try {
       const ent = await this.entityService.getEntity(id);
-      this.entity = ent;
+      this.entityService.currentViewEntity = ent;
     } catch (err) {
       console.log('LOAD ERR', err);
     }
@@ -275,6 +276,10 @@ export class EntityViewComponent implements OnInit {
         (preset) => preset.id === this.entity.entityPresetId
       );
     }
+  }
+
+  public get entity() {
+    return this.entityService.currentViewEntity;
   }
 
   public backgroundCSS(imageId: string) {

@@ -23,7 +23,7 @@ export class CampaignLandingComponent implements OnInit {
 
   public userEntities(id: string) {
     return this.campaign.entities.filter(
-      (e) => e.user && e.user.id === id && !e.spawnable
+      (e) => e.userId === id && !e.spawnable
     );
   }
 
