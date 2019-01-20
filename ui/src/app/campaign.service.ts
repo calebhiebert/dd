@@ -177,7 +177,7 @@ export interface ICampaign {
   itemTypes?: IItemType[];
   itemRarities?: IItemRarity[];
   currencyTypes?: ICurrencyType[];
-  members: ICampaignUser[];
+  members?: ICampaignUser[];
   createdAt?: Date;
 }
 
