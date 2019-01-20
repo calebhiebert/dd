@@ -34,16 +34,17 @@
       <li class="nav-item">
         <a [routerLink]="['campaigns', campaign.id, 'quests']">Quests</a>
       </li>
+      <li class="nav-item"><a [routerLink]="[]">Spawnables</a></li>
+      <li class="nav-item" *ngFor="let ep of entityPresets">
+        <a
+          [routerLink]="['campaigns', campaign.id, 'entities', ep.id, 'create']"
+          >Create {{ ep.name }}</a
+        >
+      </li>
       <!-- <li class="nav-item"><a [routerLink]="['home']">Sessions</a></li> -->
       <li class="nav-item" *ngIf="campaignEditable">
         <a [routerLink]="['campaign', 'manage', campaign.id, 'settings']"
           >Settings</a
-        >
-      </li>
-      <li class="nav-item" *ngFor="let ep of campaign.entityPresets">
-        <a
-          [routerLink]="['campaigns', campaign.id, 'entities', ep.id, 'create']"
-          >Create {{ ep.name }}</a
         >
       </li>
     </ul>

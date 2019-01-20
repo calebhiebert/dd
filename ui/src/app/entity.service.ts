@@ -107,6 +107,10 @@ export interface IEntityPreset {
   user?: IUser;
   imageId: string;
   playerCreatable: boolean;
+  isInventoryEnabled: boolean;
+  isCurrencyEnabled: boolean;
+  isXPEnabled: boolean;
+  isHealthEnabled: boolean;
   attributes?: IEntityAttribute[];
   health: IHealthPreset;
   campaignId: string;
@@ -136,9 +140,10 @@ export interface IEntity {
   campaignId: string;
   campaign?: ICampaign;
   attributes: IAttribute[];
-  health: IHealth;
-  xp: number;
-  currency: number;
+  spawnable: boolean;
+  health?: IHealth;
+  xp?: number;
+  currency?: number;
   entityPresetId: string;
   preset?: IEntityPreset;
   inventoryItems?: IInventoryItem[];

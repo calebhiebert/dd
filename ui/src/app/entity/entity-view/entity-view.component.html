@@ -36,6 +36,7 @@
         </div>
         <div
           class="column col-auto d-flex justify-end align-items-end col-ml-auto"
+          *ngIf="preset.isXPEnabled"
         >
           <span [ngClass]="{ 'c-hand': editable }" (click)="editXP()">
             <span class="h5 no-select">LV. </span>
@@ -98,7 +99,10 @@
   <!-- Health/Currency -->
   <div class="columns">
     <!-- Health -->
-    <div class="column col-9 col-md-7 col-sm-12 mb-2">
+    <div
+      class="column col-9 col-md-7 col-sm-12 mb-2"
+      *ngIf="preset.isHealthEnabled"
+    >
       <div class="card p-2">
         <dd-health-display
           [editable]="editable"
@@ -109,7 +113,10 @@
     </div>
 
     <!-- Currency -->
-    <div class="column col-3 col-md-5 col-sm-12">
+    <div
+      class="column col-3 col-md-5 col-sm-12"
+      *ngIf="preset.isCurrencyEnabled"
+    >
       <div
         class="card p-2 d-flex flex-row justify-between align-items-center"
         (click)="editCurrency()"
@@ -131,7 +138,7 @@
     class="mt-2"
     [entityId]="entity.id"
     [editable]="editable"
-    *ngIf="entity"
+    *ngIf="entity && preset.isInventoryEnabled"
   ></dd-inventory-manager>
 
   <div class="columns">

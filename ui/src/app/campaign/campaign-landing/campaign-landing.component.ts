@@ -22,7 +22,9 @@ export class CampaignLandingComponent implements OnInit {
   ngOnInit() {}
 
   public userEntities(id: string) {
-    return this.campaign.entities.filter((e) => e.user && e.user.id === id);
+    return this.campaign.entities.filter(
+      (e) => e.user && e.user.id === id && !e.spawnable
+    );
   }
 
   public selectEntity(entity: IEntity) {

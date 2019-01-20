@@ -28,12 +28,14 @@
       <div class="column col-3 col-md-12">
         <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
 
+        <!-- XP -->
         <div
           class="form-group"
           [ngClass]="{
             'has-error': xp.invalid && (xp.touched || xp.dirty),
             'has-success': xp.valid && (xp.touched || xp.dirty)
           }"
+          *ngIf="preset.isXPEnabled"
         >
           <label for="xp" class="form-label"
             >XP <span class="text-large text-bold text-primary">*</span></label
@@ -169,6 +171,18 @@
           </p>
         </div>
 
+        <!-- Spawnable -->
+        <div class="form-group">
+          <label class="form-checkbox">
+            <input type="checkbox" formControlName="spawnable" />
+            <i class="form-icon"></i> This entity is spawnable
+          </label>
+          <p class="form-input-hint">
+            Spawnable entities act as presets. They can be quickly spawned into
+            game sessions
+          </p>
+        </div>
+
         <!-- Currency -->
         <div
           class="form-group"
@@ -176,6 +190,7 @@
             'has-error':
               currency.invalid && (currency.dirty || currency.touched)
           }"
+          *ngIf="preset.isCurrencyEnabled"
         >
           <label for="currency" class="form-label">Gold Pieces</label>
           <div class="input-group">
@@ -218,6 +233,7 @@
             'has-error': health.invalid && (health.dirty || health.touched)
           }"
           formGroupName="health"
+          *ngIf="preset.isHealthEnabled"
         >
           <label class="form-label">Health</label>
           <div class="input-group">

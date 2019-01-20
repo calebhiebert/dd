@@ -6,7 +6,7 @@ import {
   Output,
   EventEmitter,
   ElementRef,
-  AfterViewInit
+  AfterViewInit,
 } from '@angular/core';
 import { IHealth } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
@@ -15,7 +15,7 @@ import { FormControl } from '@angular/forms';
 @Component({
   selector: 'dd-health-display',
   templateUrl: './health-display.component.html',
-  styleUrls: ['./health-display.component.css']
+  styleUrls: ['./health-display.component.css'],
 })
 export class HealthDisplayComponent implements OnInit {
   @Input()
@@ -42,11 +42,15 @@ export class HealthDisplayComponent implements OnInit {
   ngOnInit() {
     this.operationControl = new FormControl(null);
 
-    this.operationControl.valueChanges.subscribe(v => this.parseOperation(v));
+    this.operationControl.valueChanges.subscribe((v) => this.parseOperation(v));
   }
 
   public editHP() {
-    this.editModal.open().then(hp => this.healthChange.emit(hp));
+    this.editModal.open().then((hp) => {
+      if (hp !== null) {
+        this.healthChange.emit(hp);
+      }
+    });
 
     setTimeout(() => {
       this.operationControl.reset();
@@ -67,7 +71,7 @@ export class HealthDisplayComponent implements OnInit {
 
     const operation: IHPOperation = {
       type: HPOperation.ADD,
-      amount: 10
+      amount: 10,
     };
 
     const [
@@ -81,7 +85,7 @@ export class HealthDisplayComponent implements OnInit {
       mul,
       mulValue,
       fill,
-      set
+      set,
     ] = matches;
 
     if (add) {
@@ -162,8 +166,8 @@ export class HealthDisplayComponent implements OnInit {
         percentCSS:
           ((this.health.current / this.health.max) * 100)
             .toFixed(2)
-            .toString() + '%'
-      }
+            .toString() + '%',
+      },
     ];
   }
 }
@@ -187,5 +191,5 @@ enum HPOperation {
   DIVIDE,
   MULTIPLY,
   FILL,
-  SET
+  SET,
 }

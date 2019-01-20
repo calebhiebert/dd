@@ -31,16 +31,6 @@ export class EntityCreationFormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      const id = params.get('ent_id');
-
-      if (this.editing) {
-        this.loadEntity(id);
-      }
-    });
-
-    this.attributesFormGroup = new FormGroup({});
-
     this.formGroup = new FormGroup({
       name: new FormControl(null, [
         Validators.required,
@@ -51,30 +41,69 @@ export class EntityCreationFormComponent implements OnInit {
         Validators.required,
         Validators.minLength(3),
       ]),
-      xp: new FormControl(0, [
-        Validators.required,
-        numberValidator,
-        Validators.min(0),
-      ]),
-      currency: new FormControl(null, [
-        Validators.required,
-        numberValidator,
-        Validators.min(0),
-      ]),
+      spawnable: new FormControl(false),
+      xp: new FormControl(0, [numberValidator, Validators.min(0)]),
+      currency: new FormControl(null, [numberValidator, Validators.min(0)]),
       health: new FormGroup({
-        max: new FormControl(null, [
-          Validators.required,
-          numberValidator,
-          Validators.min(1),
-        ]),
-        current: new FormControl(null, [
-          Validators.required,
-          numberValidator,
-          Validators.min(0),
-        ]),
+        max: new FormControl(null, [numberValidator, Validators.min(1)]),
+        current: new FormControl(null, [numberValidator, Validators.min(0)]),
       }),
       imageId: new FormControl('uncertainty'),
     });
+
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('ent_id');
+
+      if (this.editing) {
+        this.loadEntity(id);
+      }
+    });
+
+    this.attributesFormGroup = new FormGroup({});
+
+    if (!this.editing) {
+      this.setFormValidators();
+    }
+  }
+
+  private setFormValidators() {
+    if (this.preset.isXPEnabled) {
+      this.formGroup
+        .get('xp')
+        .setValidators([
+          numberValidator,
+          Validators.min(0),
+          Validators.required,
+        ]);
+    }
+
+    if (this.preset.isCurrencyEnabled) {
+      this.formGroup
+        .get('currency')
+        .setValidators([
+          numberValidator,
+          Validators.min(0),
+          Validators.required,
+        ]);
+    }
+
+    if (this.preset.isHealthEnabled) {
+      this.formGroup
+        .get('health.max')
+        .setValidators([
+          numberValidator,
+          Validators.min(1),
+          Validators.required,
+        ]);
+
+      this.formGroup
+        .get('health.current')
+        .setValidators([
+          numberValidator,
+          Validators.min(0),
+          Validators.required,
+        ]);
+    }
   }
 
   public async save() {
@@ -121,6 +150,7 @@ export class EntityCreationFormComponent implements OnInit {
       xp: v.xp,
       imageId: v.imageId,
       currency: v.currency,
+      spawnable: v.spawnable,
       health: {
         max: v.health.max,
         current: v.health.current,
@@ -130,6 +160,10 @@ export class EntityCreationFormComponent implements OnInit {
       entityPresetId: this.preset.id,
       attributes: [],
     };
+
+    if (!this.preset.isHealthEnabled) {
+      ent.health = null;
+    }
 
     for (const [k, attrData] of Object.entries(
       this.attributesFormGroup.value
@@ -148,14 +182,15 @@ export class EntityCreationFormComponent implements OnInit {
 
   private async loadEntity(id: string) {
     this.loading = true;
+    this.formGroup.disable();
 
     try {
       const ent = await this.entityService.getEntity(id);
-
       this.entity = ent;
+      this.setFormValidators();
 
       setTimeout(() => {
-        this.formGroup.patchValue(ent);
+        this.formGroup.patchValue({ ...ent, health: {} });
 
         for (const attr of ent.attributes) {
           if (this.attributesFormGroup.get(attr.name)) {
@@ -167,6 +202,7 @@ export class EntityCreationFormComponent implements OnInit {
       console.log('LOAD ERR', err);
     }
 
+    this.formGroup.enable();
     this.loading = false;
   }
 

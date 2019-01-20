@@ -184,10 +184,12 @@ namespace net_api.Models
         [Required]
         public string CampaignId { get; set; }
 
-        [Required]
-        public double Currency { get; set; }
+        public double? Currency { get; set; }
 
         public string ImageId { get; set; }
+
+        [Required]
+        public bool Spawnable { get; set; }
 
         [Column("Attributes", TypeName = "jsonb")]
         [JsonIgnore]
@@ -212,13 +214,11 @@ namespace net_api.Models
             }
         }
 
-        [Required]
         [Column("Health", TypeName = "jsonb")]
         [JsonIgnore]
         public string HealthJson { get; set; }
 
         [NotMapped]
-        [Required]
         public Health Health
         {
             get
@@ -237,9 +237,8 @@ namespace net_api.Models
             }
         }
 
-        [Required]
         [Range(0, long.MaxValue)]
-        public long XP { get; set; }
+        public long? XP { get; set; }
 
         [Required]
         public string EntityPresetId { get; set; }
@@ -321,12 +320,23 @@ namespace net_api.Models
             }
         }
 
+        [Required]
+        public bool IsInventoryEnabled { get; set; }
+
+        [Required]
+        public bool IsCurrencyEnabled { get; set; }
+
+        [Required]
+        public bool IsXPEnabled { get; set; }
+
+        [Required]
+        public bool IsHealthEnabled { get; set; }
+
         [Column("Health", TypeName = "jsonb")]
         [JsonIgnore]
         public string HealthJson { get; set; }
 
         [NotMapped]
-        [Required]
         public HealthPreset Health
         {
             get

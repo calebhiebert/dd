@@ -25,6 +25,18 @@ export class NavSidebarComponent implements OnInit {
     this.campaignService.campaign = undefined;
   }
 
+  public get entityPresets() {
+    if (!this.campaign) {
+      return;
+    }
+
+    if (this.campaignService.canEdit) {
+      return this.campaign.entityPresets;
+    } else {
+      return this.campaign.entityPresets.filter((ep) => ep.playerCreatable);
+    }
+  }
+
   public get loadingCampaign() {
     return this.campaignService.loadingCampaign;
   }

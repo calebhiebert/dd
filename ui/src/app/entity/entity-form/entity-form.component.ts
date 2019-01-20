@@ -64,6 +64,11 @@ export class EntityFormComponent implements OnInit {
         max: new FormControl(null, [Validators.min(0), numberValidator]),
       }),
       playerCreatable: new FormControl(false),
+      spawnable: new FormControl(false),
+      isInventoryEnabled: new FormControl(false),
+      isCurrencyEnabled: new FormControl(false),
+      isXPEnabled: new FormControl(false),
+      isHealthEnabled: new FormControl(false),
       imageId: new FormControl(null, Validators.required),
       attributes: new FormArray([]),
     });
@@ -98,18 +103,7 @@ export class EntityFormComponent implements OnInit {
       });
 
       setTimeout(() => {
-        this.formGroup.patchValue({
-          id: preset.id,
-          name: preset.name,
-          description: preset.description,
-          attributes: preset.attributes,
-          imageId: preset.imageId,
-          health: {
-            type: preset.health.type,
-            max: preset.health.max,
-          },
-          playerCreatable: preset.playerCreatable,
-        });
+        this.formGroup.patchValue(preset);
       }, 1);
     } catch (err) {
       console.log('LOAD ERR', err);
@@ -159,6 +153,10 @@ export class EntityFormComponent implements OnInit {
             },
             imageId: v.imageId,
             playerCreatable: v.playerCreatable,
+            isCurrencyEnabled: v.isCurrencyEnabled,
+            isInventoryEnabled: v.isInventoryEnabled,
+            isXPEnabled: v.isXPEnabled,
+            isHealthEnabled: v.isHealthEnabled,
             attributes: v.attributes,
           };
 
@@ -184,6 +182,10 @@ export class EntityFormComponent implements OnInit {
             max: v.health.max || 100,
           },
           imageId: v.imageId,
+          isCurrencyEnabled: v.isCurrencyEnabled,
+          isInventoryEnabled: v.isInventoryEnabled,
+          isXPEnabled: v.isXPEnabled,
+          isHealthEnabled: v.isHealthEnabled,
           playerCreatable: v.playerCreatable,
           attributes: v.attributes,
         });
