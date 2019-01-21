@@ -1,0 +1,8 @@
+<div class="card p-2">
+  <h6>{{ entity.name }}</h6>
+  <dd-health-display
+    [health]="entity.health"
+    [editable]="false"
+    *ngIf="entity.health"
+  ></dd-health-display>
+</div>

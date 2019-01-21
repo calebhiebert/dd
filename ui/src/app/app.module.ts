@@ -55,6 +55,8 @@ import { HealthDisplayComponent } from './entity/health-display/health-display.c
 import { QuestViewComponent } from './quest/quest-view/quest-view.component';
 import { QuickViewComponent } from './quest/quick-view/quick-view.component';
 import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-manager.component';
+import { OverviewComponent } from './session/overview/overview.component';
+import { OverviewEntityComponent } from './session/overview-entity/overview-entity.component';
 
 @NgModule({
   declarations: [
@@ -105,7 +107,9 @@ import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-
     HealthDisplayComponent,
     QuestViewComponent,
     QuickViewComponent,
-    SpawnableManagerComponent
+    SpawnableManagerComponent,
+    OverviewComponent,
+    OverviewEntityComponent
   ],
   imports: [
     BrowserModule,

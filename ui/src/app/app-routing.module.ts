@@ -25,6 +25,7 @@ import { EntityComponent } from './entity/entity.component';
 import { QuestFormComponent } from './quest/quest-form/quest-form.component';
 import { QuestViewComponent } from './quest/quest-view/quest-view.component';
 import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-manager.component';
+import { OverviewComponent } from './session/overview/overview.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -189,6 +190,13 @@ const routes: Routes = [
             }
           }
         ]
+      },
+      {
+        path: 'overview',
+        component: OverviewComponent,
+        data: {
+          breadcrumb: 'Overview'
+        }
       },
       {
         path: 'quests',

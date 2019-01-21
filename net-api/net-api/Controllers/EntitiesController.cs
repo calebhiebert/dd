@@ -58,6 +58,9 @@ namespace net_api.Controllers
             if (spawnable == true)
             {
                 query = query.Where(e => e.Spawnable == true);
+            } else
+            {
+                query = query.Where(e => e.Spawnable == false);
             }
 
             var entities = await query.ToListAsync();
