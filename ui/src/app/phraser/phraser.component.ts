@@ -1,14 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { Chance } from 'chance';
 
-const PHRASES: string[] = [
-  'Securing trebuchets',
-  'Ripening apples',
-  'Planting pumpkins',
-  'Generating dank memes',
-  'Loading characters',
-  'Computing the meaning of life',
-  'Cooking dinner'
+const PHRASE_VERB: string[] = [
+  'Securing',
+  'Ripening',
+  'Planting',
+  'Cooking',
+  'Generating',
+  'Loading',
+  'Spinning up',
+  'Computing',
+  'Slurping'
+];
+
+const PHRASE_NOUN: string[] = [
+  'trebuchets',
+  'apples',
+  'pumpkins',
+  'dank memes',
+  'characters',
+  'the meaning of life',
+  'dinner',
+  'a smoothie',
+  'chocolate cake',
+  'gloves',
+  'a water bottle'
 ];
 
 @Component({
@@ -30,7 +46,11 @@ export class PhraserComponent implements OnInit {
   }
 
   private generatePhrase() {
-    this.phrase = PHRASES[this.chance.integer({ min: 0, max: PHRASES.length - 1 })];
+    this.phrase = `${
+      PHRASE_NOUN[this.chance.integer({ min: 0, max: PHRASE_NOUN.length - 1 })]
+    } ${
+      PHRASE_VERB[this.chance.integer({ min: 0, max: PHRASE_VERB.length - 1 })]
+    }`;
 
     setTimeout(() => {
       this.generatePhrase();
