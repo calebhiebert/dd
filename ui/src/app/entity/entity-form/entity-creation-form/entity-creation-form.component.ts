@@ -23,6 +23,8 @@ export class EntityCreationFormComponent implements OnInit {
 
   public entity: IEntity;
 
+  private _entTypeId: string;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -55,6 +57,7 @@ export class EntityCreationFormComponent implements OnInit {
 
     this.route.paramMap.subscribe(params => {
       const id = params.get('ent_id');
+      this._entTypeId = params.get('ent_type_id');
 
       if (this.editing) {
         this.loadEntity(id);
@@ -228,9 +231,11 @@ export class EntityCreationFormComponent implements OnInit {
     if (this.editing) {
       return this.entity.preset;
     } else {
-      return this.campaignService.campaign.entityPresets.find(
-        ep => ep.id === this.route.snapshot.paramMap.get('ent_type_id')
+      const epreset = this.campaignService.campaign.entityPresets.find(
+        ep => ep.id === this._entTypeId
       );
+
+      return epreset;
     }
   }
 

@@ -16,8 +16,7 @@ import { IEntityAttribute } from 'src/app/entity.service';
   styleUrls: ['./dynamic-attribute-form.component.css']
 })
 export class DynamicAttributeFormComponent implements OnInit {
-  @Input()
-  public attributes: IEntityAttribute[];
+  private _attributes: IEntityAttribute[];
 
   @Input()
   public formGroup: FormGroup;
@@ -25,6 +24,16 @@ export class DynamicAttributeFormComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    this.resetControls();
+
+    // this.formGroup.valueChanges.subscribe((v) => {
+    //   console.log(v, this.formGroup);
+    // });
+  }
+
+  private resetControls() {
+    this.formGroup.controls = {};
+
     for (const attr of this.attributes) {
       const validators: ValidatorFn[] = [];
 
@@ -64,10 +73,6 @@ export class DynamicAttributeFormComponent implements OnInit {
         );
       }
     }
-
-    // this.formGroup.valueChanges.subscribe((v) => {
-    //   console.log(v, this.formGroup);
-    // });
   }
 
   public constructAttributes(): Attribute[] {
@@ -86,6 +91,16 @@ export class DynamicAttributeFormComponent implements OnInit {
 
   public control(name: string): AbstractControl {
     return this.formGroup.get(name);
+  }
+
+  @Input()
+  public set attributes(value) {
+    this._attributes = value;
+    this.resetControls();
+  }
+
+  public get attributes() {
+    return this._attributes;
   }
 }
 
