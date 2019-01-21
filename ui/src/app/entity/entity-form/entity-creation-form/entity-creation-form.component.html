@@ -172,7 +172,7 @@
         </div>
 
         <!-- Spawnable -->
-        <div class="form-group">
+        <div class="form-group" *ngIf="campaignEditable">
           <label class="form-checkbox">
             <input type="checkbox" formControlName="spawnable" />
             <i class="form-icon"></i> This entity is spawnable

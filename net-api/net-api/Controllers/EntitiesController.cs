@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,22 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
+            // Make sure a null health is not returned
+            if (entity.Health == null)
+            {
+                entity.Health = new Health
+                {
+                    Max = 1,
+                    Current = 0
+                };
+            }
+
+            // Make sure a null currency is not returned
+            if (entity.Currency == null)
+            {
+                entity.Currency = 0;
+            }
+
             return Ok(entity);
         }
 
@@ -58,7 +75,20 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
-            // TODO authenticate requests
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var campaign = await _context.Campaigns.Include(c => c.Members).FirstOrDefaultAsync(c => c.Id == entity.CampaignId);
+
+            // Check that the user is part of the campaign
+            if (userId != campaign.UserId && !campaign.Members.Any(m => m.UserId == userId))
+            {
+                return BadRequest("no permissions");
+            }
+
+            if (userId != campaign.UserId)
+            {
+                entity.Spawnable = false;
+            }
 
             _context.Entry(entity).State = EntityState.Modified;
 
@@ -93,7 +123,32 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            // TODO authenticate requests
+            var campaign = await _context.Campaigns.Include(c => c.Members).FirstOrDefaultAsync(c => c.Id == entity.CampaignId);
+            var preset = await _context.EntityPresets.FirstOrDefaultAsync(p => p.Id == entity.EntityPresetId);
+
+            if (campaign == null || preset == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Check that the user is part of the campaign
+            if (userId != campaign.UserId && !campaign.Members.Any(m => m.UserId == userId))
+            {
+                return BadRequest("no permissions");
+            }
+
+            // Check that the user is allowed to create the specified entity type
+            if (!preset.PlayerCreatable && userId != campaign.UserId)
+            {
+                return BadRequest("entity type is not player creatable, and you are not admin");
+            }
+
+            if (userId != campaign.UserId)
+            {
+                entity.Spawnable = false;
+            }
 
             entity.Id = Nanoid.Nanoid.Generate();
 
