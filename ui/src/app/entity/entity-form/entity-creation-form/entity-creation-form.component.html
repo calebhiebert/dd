@@ -3,7 +3,7 @@
   <div class="loading loading-lg" *ngIf="loading"></div>
 
   <!-- Title Control -->
-  <div class="columns" *ngIf="entity !== undefined || !editing">
+  <div class="columns" *ngIf="entity || !editing">
     <div class="column">
       <h3>{{ editing ? 'Edit' : 'Create' }} {{ preset.name }}</h3>
     </div>
@@ -22,7 +22,7 @@
   </div>
 
   <!-- Form -->
-  <div [formGroup]="formGroup" *ngIf="entity !== undefined || !editing">
+  <div [formGroup]="formGroup" *ngIf="entity || !editing">
     <div class="columns">
       <!-- Image Upload -->
       <div class="column col-3 col-md-12">
