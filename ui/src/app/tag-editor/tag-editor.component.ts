@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
 @Component({
   selector: 'dd-tag-editor',
   templateUrl: './tag-editor.component.html',
-  styleUrls: ['./tag-editor.component.css'],
+  styleUrls: ['./tag-editor.component.css']
 })
 export class TagEditorComponent implements OnInit {
   public inputControl: FormControl;
@@ -23,7 +23,7 @@ export class TagEditorComponent implements OnInit {
   ngOnInit() {
     this.inputControl = new FormControl(null, [Validators.maxLength(20)]);
 
-    this.inputControl.valueChanges.subscribe((v) => {
+    this.inputControl.valueChanges.subscribe(v => {
       if (this.previousInput !== '' && v === '') {
         this.justHadValue = true;
       } else {
@@ -52,11 +52,11 @@ export class TagEditorComponent implements OnInit {
         if (
           this.inputControl.valid &&
           this.inputControl.value.trim().length > 0 &&
-          this.formArray.value.indexOf(this.inputControl.value.trim()) == -1
+          this.formArray.value.indexOf(this.inputControl.value.trim()) === -1
         ) {
           this.formArray.push(
             new FormControl(this.inputControl.value.trim(), [
-              Validators.required,
+              Validators.required
             ])
           );
           this.inputControl.setValue('');

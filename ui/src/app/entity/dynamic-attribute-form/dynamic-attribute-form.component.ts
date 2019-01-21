@@ -10,6 +10,25 @@ import {
 import { AttributeType, Attribute } from 'src/app/attributes';
 import { IEntityAttribute } from 'src/app/entity.service';
 
+// TODO move this to some sort of validator file
+export const numberValidator: ValidatorFn = (
+  control: AbstractControl
+): ValidationErrors | null => {
+  if (
+    control.value !== null &&
+    control.value !== undefined &&
+    control.value !== ''
+  ) {
+    try {
+      parseFloat(control.value);
+    } catch (err) {
+      return {
+        number: true
+      };
+    }
+  }
+};
+
 @Component({
   selector: 'dd-dynamic-attribute-form',
   templateUrl: './dynamic-attribute-form.component.html',
@@ -103,21 +122,3 @@ export class DynamicAttributeFormComponent implements OnInit {
     return this._attributes;
   }
 }
-
-export const numberValidator: ValidatorFn = (
-  control: AbstractControl
-): ValidationErrors | null => {
-  if (
-    control.value !== null &&
-    control.value !== undefined &&
-    control.value !== ''
-  ) {
-    try {
-      parseFloat(control.value);
-    } catch (err) {
-      return {
-        number: true
-      };
-    }
-  }
-};

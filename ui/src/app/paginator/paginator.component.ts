@@ -3,17 +3,17 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 @Component({
   selector: 'dd-paginator',
   templateUrl: './paginator.component.html',
-  styleUrls: ['./paginator.component.css'],
+  styleUrls: ['./paginator.component.css']
 })
 export class PaginatorComponent implements OnInit {
   @Input()
   public totalItems: number;
 
   @Input()
-  public itemsPerPage: number = 5;
+  public itemsPerPage = 5;
 
   @Input()
-  public page: number = 0;
+  public page = 0;
 
   @Input()
   public autoHide = true;

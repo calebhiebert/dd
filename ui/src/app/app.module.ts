@@ -1,7 +1,7 @@
+/* tslint:disable:max-line-length */
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { TruncateModule } from 'ng2-truncate';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
@@ -57,6 +57,7 @@ import { QuickViewComponent } from './quest/quick-view/quick-view.component';
 import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-manager.component';
 import { OverviewComponent } from './session/overview/overview.component';
 import { OverviewEntityComponent } from './session/overview-entity/overview-entity.component';
+/* tslint:enable:max-line-length */
 
 @NgModule({
   declarations: [

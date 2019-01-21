@@ -122,7 +122,7 @@ export class InventoryManagerComponent implements OnInit {
     item.quantity = this.editFormGroup.value.quantity;
 
     try {
-      if (item.quantity == 0) {
+      if (item.quantity === 0) {
         await this.entityService.deleteInventoryItem(item.id);
         this.inventory = this.inventory.filter(itm => itm !== item);
       } else {
@@ -145,7 +145,7 @@ export class InventoryManagerComponent implements OnInit {
     this.working = true;
 
     try {
-      if (inventoryItem.quantity == 1) {
+      if (inventoryItem.quantity === 1) {
         await this.entityService.deleteInventoryItem(inventoryItem.id);
         this.inventory = this.inventory.filter(itm => itm !== inventoryItem);
       } else {

@@ -5,7 +5,7 @@ import {
   EntityService,
   IEntityAttribute,
   EntityAttributeClass,
-  IHealth,
+  IHealth
 } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { AttributeType, Attribute } from 'src/app/attributes';
@@ -15,7 +15,7 @@ import { LoginService } from 'src/app/login.service';
 @Component({
   selector: 'dd-entity-view',
   templateUrl: './entity-view.component.html',
-  styleUrls: ['./entity-view.component.scss'],
+  styleUrls: ['./entity-view.component.scss']
 })
 export class EntityViewComponent implements OnInit, OnDestroy {
   @ViewChild('attributemodal')
@@ -34,7 +34,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.subscribe(params => {
       this.loadEntity(params.get('ent_id'));
     });
   }
@@ -98,7 +98,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
         type: AttributeType.NUMBER,
         required: true,
         min: 0,
-        class: EntityAttributeClass.NORMAL,
+        class: EntityAttributeClass.NORMAL
       },
       this.entity.currency.toString()
     );
@@ -122,7 +122,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
         required: true,
         min: 2,
         max: 30,
-        class: EntityAttributeClass.NORMAL,
+        class: EntityAttributeClass.NORMAL
       },
       this.entity.name
     );
@@ -148,7 +148,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
         required: true,
         min: 0,
         max: 2147483647,
-        class: EntityAttributeClass.NORMAL,
+        class: EntityAttributeClass.NORMAL
       },
       this.entity.xp.toString()
     );
@@ -174,30 +174,30 @@ export class EntityViewComponent implements OnInit, OnDestroy {
   }
 
   private getEntityAttribute(name: string) {
-    return this.entity.preset.attributes.find((e) => e.name === name);
+    return this.entity.preset.attributes.find(e => e.name === name);
   }
 
   public get processedAttributes(): {
     attr: Attribute;
     pattr: IEntityAttribute;
   }[] {
-    return this.entity.attributes.map((a) => {
+    return this.entity.attributes.map(a => {
       return {
         attr: a,
-        pattr: this.getEntityAttribute(a.name),
+        pattr: this.getEntityAttribute(a.name)
       };
     });
   }
 
   public get majorAttributes(): { attr: Attribute; pattr: IEntityAttribute }[] {
     return this.entity.attributes
-      .map((a) => {
+      .map(a => {
         return {
           attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          pattr: this.getEntityAttribute(a.name)
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 0);
+      .filter(a => a.pattr && a.pattr.class === 0);
   }
 
   public get normalAttributes(): {
@@ -205,24 +205,24 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     pattr: IEntityAttribute;
   }[] {
     return this.entity.attributes
-      .map((a) => {
+      .map(a => {
         return {
           attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          pattr: this.getEntityAttribute(a.name)
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 1);
+      .filter(a => a.pattr && a.pattr.class === 1);
   }
 
   public get minorAttributes(): { attr: Attribute; pattr: IEntityAttribute }[] {
     return this.entity.attributes
-      .map((a) => {
+      .map(a => {
         return {
           attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          pattr: this.getEntityAttribute(a.name)
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 2);
+      .filter(a => a.pattr && a.pattr.class === 2);
   }
 
   public get unimportantAttributes(): {
@@ -230,13 +230,13 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     pattr: IEntityAttribute;
   }[] {
     return this.entity.attributes
-      .map((a) => {
+      .map(a => {
         return {
           attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          pattr: this.getEntityAttribute(a.name)
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 3);
+      .filter(a => a.pattr && a.pattr.class === 3);
   }
 
   public get level() {
@@ -273,7 +273,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
       return null;
     } else {
       return this.campaignService.campaign.entityPresets.find(
-        (preset) => preset.id === this.entity.entityPresetId
+        preset => preset.id === this.entity.entityPresetId
       );
     }
   }
@@ -284,7 +284,8 @@ export class EntityViewComponent implements OnInit, OnDestroy {
 
   public backgroundCSS(imageId: string) {
     return this.sanitizer.bypassSecurityTrustStyle(
-      `linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%), url("https://res.cloudinary.com/dqhk8k6iv/image/upload/t_chr_blur/${imageId}.jpg")`
+      `linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%),
+      url("https://res.cloudinary.com/dqhk8k6iv/image/upload/t_chr_blur/${imageId}.jpg")`
     );
   }
 }
