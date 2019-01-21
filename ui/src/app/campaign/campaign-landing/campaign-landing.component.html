@@ -42,6 +42,11 @@
               >Create {{ ep.name }}</a
             >
           </li>
+          <li class="menu-item" *ngIf="editable">
+            <a [routerLink]="['campaign', 'manage', campaign.id, 'settings']"
+              >Settings</a
+            >
+          </li>
         </ul>
       </div>
     </div>

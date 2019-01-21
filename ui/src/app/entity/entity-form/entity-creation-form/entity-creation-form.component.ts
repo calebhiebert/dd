@@ -5,6 +5,7 @@ import { EntityService, IEntity, HealthType } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { numberValidator } from '../../dynamic-attribute-form/dynamic-attribute-form.component';
 import { LoginService } from 'src/app/login.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'dd-entity-creation-form',
@@ -27,7 +28,8 @@ export class EntityCreationFormComponent implements OnInit {
     private router: Router,
     private entityService: EntityService,
     private campaignService: CampaignService,
-    private login: LoginService
+    private login: LoginService,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -63,6 +65,11 @@ export class EntityCreationFormComponent implements OnInit {
 
     if (!this.editing) {
       this.setFormValidators();
+
+      // Pre-set the spawnable variable if the query param 'spawnable' is present
+      if (this.route.snapshot.queryParamMap.get('spawnable') === 'true') {
+        this.formGroup.patchValue({ spawnable: true });
+      }
     }
   }
 
@@ -104,40 +111,6 @@ export class EntityCreationFormComponent implements OnInit {
           Validators.required
         ]);
     }
-  }
-
-  public async save() {
-    this.saving = true;
-    this.formGroup.disable();
-    this.attributesFormGroup.disable();
-
-    if (this.editing) {
-      try {
-        await this.entityService.updateEntity(this.constructEntity());
-        this.router.navigate(['../'], { relativeTo: this.route });
-      } catch (err) {
-        console.log('SAVE ERR', err);
-      }
-    } else {
-      try {
-        const ent = await this.entityService.createEntity(
-          this.constructEntity()
-        );
-
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'entities',
-          ent.id
-        ]);
-      } catch (err) {
-        console.log('Create ERR', err);
-      }
-    }
-
-    this.formGroup.enable();
-    this.attributesFormGroup.enable();
-    this.saving = false;
   }
 
   private constructEntity(): IEntity {
@@ -182,6 +155,7 @@ export class EntityCreationFormComponent implements OnInit {
 
   private async loadEntity(id: string) {
     this.loading = true;
+    this.entity = null;
     this.formGroup.disable();
 
     try {
@@ -210,6 +184,44 @@ export class EntityCreationFormComponent implements OnInit {
 
     this.formGroup.enable();
     this.loading = false;
+  }
+
+  public async save() {
+    this.saving = true;
+    this.formGroup.disable();
+    this.attributesFormGroup.disable();
+
+    if (this.editing) {
+      try {
+        await this.entityService.updateEntity(this.constructEntity());
+        this.router.navigate(['../'], { relativeTo: this.route });
+      } catch (err) {
+        console.log('SAVE ERR', err);
+      }
+    } else {
+      try {
+        const ent = await this.entityService.createEntity(
+          this.constructEntity()
+        );
+
+        this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'entities',
+          ent.id
+        ]);
+      } catch (err) {
+        console.log('Create ERR', err);
+      }
+    }
+
+    this.formGroup.enable();
+    this.attributesFormGroup.enable();
+    this.saving = false;
+  }
+
+  public cancel() {
+    this.location.back();
   }
 
   public get preset() {

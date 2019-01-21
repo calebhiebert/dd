@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { IItem } from './item.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class EntityService {
   private _currentViewEntity: IEntity = null;
@@ -46,6 +46,19 @@ export class EntityService {
   public async getEntity(id: string): Promise<IEntity> {
     return this.http
       .get<IEntity>(`${environment.apiURL}/entities/${id}`)
+      .toPromise();
+  }
+
+  public async getEntities(
+    campaignId: string,
+    spawnable: boolean = false
+  ): Promise<IEntity[]> {
+    return this.http
+      .get<IEntity[]>(
+        `${
+          environment.apiURL
+        }/entities?campaignId=${campaignId}&spawnable=${spawnable}`
+      )
       .toPromise();
   }
 
@@ -190,10 +203,10 @@ export enum EntityAttributeClass {
   MAJOR,
   NORMAL,
   MINOR,
-  UNIMPORTANT,
+  UNIMPORTANT
 }
 
 export enum HealthType {
   NORMAL,
-  MULTI_BAR,
+  MULTI_BAR
 }

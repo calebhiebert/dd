@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -22,6 +23,46 @@ namespace net_api.Controllers
         {
             _context = context;
             _hub = hub;
+        }
+
+        // GET: api/Entities
+        [HttpGet]
+        public async Task<IActionResult> GetEntities([FromQuery] string campaignId, [FromQuery] bool spawnable)
+        {
+            if (campaignId == "")
+            {
+                return BadRequest("missing campaign id");
+            }
+
+            var campaign = await _context.Campaigns.Include(c => c.Members).FirstOrDefaultAsync(c => c.Id == campaignId);
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId != campaign.UserId || !campaign.Members.Any(m => m.UserId == userId))
+            {
+                return BadRequest("no permissions");
+            }
+
+            if (spawnable && userId != campaign.UserId)
+            {
+                return BadRequest("can't view spawnables if not admin");
+            }
+
+            var query = _context.Entities.Where(e => e.CampaignId == campaign.Id);
+
+            if (spawnable == true)
+            {
+                query = query.Where(e => e.Spawnable == true);
+            }
+
+            var entities = await query.ToListAsync();
+
+            return Ok(entities);
         }
 
         // GET: api/Entities/5

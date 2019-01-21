@@ -54,6 +54,7 @@ import { EditableEntitySelectorComponent } from './entity/editable-entity-select
 import { HealthDisplayComponent } from './entity/health-display/health-display.component';
 import { QuestViewComponent } from './quest/quest-view/quest-view.component';
 import { QuickViewComponent } from './quest/quick-view/quick-view.component';
+import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-manager.component';
 
 @NgModule({
   declarations: [
@@ -103,7 +104,8 @@ import { QuickViewComponent } from './quest/quick-view/quick-view.component';
     EditableEntitySelectorComponent,
     HealthDisplayComponent,
     QuestViewComponent,
-    QuickViewComponent
+    QuickViewComponent,
+    SpawnableManagerComponent
   ],
   imports: [
     BrowserModule,
