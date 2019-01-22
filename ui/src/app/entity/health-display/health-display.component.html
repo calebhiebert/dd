@@ -28,13 +28,13 @@
       class="slider mt-1"
       type="range"
       min="0"
-      id="hp-slider"
+      id
       name="hp-slider"
       [max]="health.max"
       [formControl]="sliderControl"
     />
 
-    <!-- <table class="table">
+    <table class="table">
       <thead>
         <tr>
           <th>Operation</th>
@@ -69,7 +69,7 @@
           <td>++</td>
         </tr>
       </tbody>
-    </table> -->
+    </table>
   </div>
   <div modal-footer>
     <button class="btn" (click)="editmodal.close(null)">Cancel</button>
@@ -81,10 +81,10 @@
   class="bar"
   (click)="editHP()"
   [ngClass]="{ 'c-hand': editable }"
-  *ngFor="let bar of bars"
+  *ngFor="let bar of bars; trackBy: trackBarElement"
 >
   <div
-    class="bar-item d-flex"
+    class="bar-item bar-animated"
     [style.width]="bar.percentCSS"
     [style.backgroundColor]="bar.colorCSS"
   >

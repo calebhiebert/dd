@@ -12,6 +12,10 @@ export class OverviewComponent implements OnInit {
 
   ngOnInit() {}
 
+  public trackEntityElement(idx: number, ent: IEntity) {
+    return ent.id;
+  }
+
   public get campaign(): ICampaign {
     return this.campaign;
   }

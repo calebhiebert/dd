@@ -11,11 +11,11 @@ export enum ConnectionState {
   CONNECTED,
   CLOSED,
   CONNECTING,
-  AUTHENTICATING
+  AUTHENTICATING,
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UpdateHubService {
   private _state: ConnectionState;
@@ -32,7 +32,7 @@ export class UpdateHubService {
   ) {
     this._state = ConnectionState.NOT_CONNECTED;
 
-    campaignService.events.subscribe(campaign => {
+    campaignService.events.subscribe((campaign) => {
       if (campaign === null && campaignService.previousCampaignId) {
         this.unsubscribeCampaign(campaignService.previousCampaignId);
       } else if (campaign !== null) {
@@ -42,7 +42,7 @@ export class UpdateHubService {
   }
 
   private async setup() {
-    this.connection.onclose(e => {
+    this.connection.onclose((e) => {
       this._state = ConnectionState.CLOSED;
       console.log('Connection Closed', e);
       this.start();
@@ -58,11 +58,11 @@ export class UpdateHubService {
       this.notificationService.loadNotifications();
     });
 
-    this.connection.on('EntityUpdate', entity => {
+    this.connection.on('EntityUpdate', (entity) => {
       this.entityUpdate(entity);
     });
 
-    this.connection.on('EntityCreate', entity => {
+    this.connection.on('EntityCreate', (entity) => {
       this.entityCreate(entity);
     });
 
@@ -98,7 +98,7 @@ export class UpdateHubService {
 
     this.connection = new HubConnectionBuilder()
       .withUrl(`${environment.hubURL}`, {
-        accessTokenFactory: this.login.loadToken
+        accessTokenFactory: this.login.loadToken,
       })
       .build();
 
@@ -150,18 +150,18 @@ export class UpdateHubService {
 
     // populate properties from the campaign object
     entity.preset = this.campaignService.campaign.entityPresets.find(
-      ep => ep.id === entity.entityPresetId
+      (ep) => ep.id === entity.entityPresetId
     );
 
     entity.user = this.campaignService.campaign.members.find(
-      m => m.userId === entity.userId
+      (m) => m.userId === entity.userId
     ).user;
 
     this.campaignService.campaign.entities.forEach((ent, idx) => {
       if (ent.id === entity.id) {
         this.campaignService.campaign.entities[idx] = {
           ...ent,
-          ...entity
+          ...entity,
         };
       }
     });
@@ -172,7 +172,7 @@ export class UpdateHubService {
     ) {
       this.entityService.currentViewEntity = {
         ...this.entityService.currentViewEntity,
-        ...entity
+        ...entity,
       };
     }
   }
@@ -185,11 +185,11 @@ export class UpdateHubService {
 
     // populate properties from the campaign object
     entity.preset = this.campaignService.campaign.entityPresets.find(
-      ep => ep.id === entity.entityPresetId
+      (ep) => ep.id === entity.entityPresetId
     );
 
     entity.user = this.campaignService.campaign.members.find(
-      m => m.userId === entity.userId
+      (m) => m.userId === entity.userId
     ).user;
 
     this.campaignService.campaign.entities.push(entity);

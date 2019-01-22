@@ -44,7 +44,7 @@ enum HPOperation {
 @Component({
   selector: 'dd-health-display',
   templateUrl: './health-display.component.html',
-  styleUrls: ['./health-display.component.css'],
+  styleUrls: ['./health-display.component.scss'],
 })
 export class HealthDisplayComponent implements OnInit {
   @Input()
@@ -77,9 +77,19 @@ export class HealthDisplayComponent implements OnInit {
     this.operationControl = new FormControl(null);
     this.sliderControl = new FormControl(this.health.current);
 
-    this.sliderControl.valueChanges.subscribe((v) =>
-      this.operationControl.setValue(v)
-    );
+    this.sliderControl.valueChanges.subscribe((v) => {
+      let operation = '';
+
+      if (v === this.health.current) {
+        operation = v;
+      } else if (v < this.health.current) {
+        operation = `-${this.health.current - v}`;
+      } else if (v > this.health.current) {
+        operation = `+${v - this.health.current}`;
+      }
+
+      this.operationControl.setValue(operation);
+    });
   }
 
   public editHP() {
@@ -183,6 +193,10 @@ export class HealthDisplayComponent implements OnInit {
     }
 
     return newHealth;
+  }
+
+  public trackBarElement(idx: number, element: IBarStats) {
+    return idx.toString();
   }
 
   public get hpAfterOperation(): IHealth {
