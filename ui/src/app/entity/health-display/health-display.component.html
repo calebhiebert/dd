@@ -16,12 +16,25 @@
       </div>
     </form>
 
+    <!-- Bar Preview -->
     <dd-health-display
       [editable]="false"
       [health]="hpAfterOperation"
+      [preset]="preset"
     ></dd-health-display>
 
-    <table class="table">
+    <!-- Slider for quick controls -->
+    <input
+      class="slider mt-1"
+      type="range"
+      min="0"
+      id="hp-slider"
+      name="hp-slider"
+      [max]="health.max"
+      [formControl]="sliderControl"
+    />
+
+    <!-- <table class="table">
       <thead>
         <tr>
           <th>Operation</th>
@@ -56,7 +69,7 @@
           <td>++</td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
   </div>
   <div modal-footer>
     <button class="btn" (click)="editmodal.close(null)">Cancel</button>
@@ -70,7 +83,11 @@
   [ngClass]="{ 'c-hand': editable }"
   *ngFor="let bar of bars"
 >
-  <div class="bar-item d-flex" [style.width]="bar.percentCSS">
+  <div
+    class="bar-item d-flex"
+    [style.width]="bar.percentCSS"
+    [style.backgroundColor]="bar.colorCSS"
+  >
     <span class="text-bold">{{ bar.current }} / {{ bar.max }}</span>
   </div>
 </div>

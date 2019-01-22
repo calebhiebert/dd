@@ -551,8 +551,10 @@ namespace net_api.Models
         [Required]
         public HealthType Type { get; set; }
 
-        [Required]
-        public double Max { get; set; }
+        public HealthColorType ColorType { get; set; }
+
+        // TODO verify that a valid hex color code was entered
+        public string StaticColor { get; set; }
 
         public double[] Bars { get; set; }
     }
@@ -586,5 +588,10 @@ namespace net_api.Models
     public enum HealthType
     {
         Normal, MultiBar
+    }
+
+    public enum HealthColorType
+    {
+        Dynamic, Static
     }
 }

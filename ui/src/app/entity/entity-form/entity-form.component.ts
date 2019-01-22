@@ -60,8 +60,9 @@ export class EntityFormComponent implements OnInit {
         Validators.minLength(3),
       ]),
       health: new FormGroup({
-        mode: new FormControl('0'),
-        max: new FormControl(null, [Validators.min(0), numberValidator]),
+        type: new FormControl('0'),
+        colorType: new FormControl('0'),
+        staticColor: new FormControl(null),
       }),
       playerCreatable: new FormControl(false),
       spawnable: new FormControl(false),
@@ -148,8 +149,9 @@ export class EntityFormComponent implements OnInit {
             name: v.name,
             description: v.description,
             health: {
-              type: HealthType.NORMAL,
-              max: 100,
+              type: v.health.type,
+              colorType: v.health.colorType,
+              staticColor: v.health.staticColor,
             },
             imageId: v.imageId,
             playerCreatable: v.playerCreatable,
@@ -179,7 +181,8 @@ export class EntityFormComponent implements OnInit {
           description: v.description,
           health: {
             type: v.health.type,
-            max: v.health.max || 100,
+            colorType: v.health.colorType,
+            staticColor: v.health.staticColor,
           },
           imageId: v.imageId,
           isCurrencyEnabled: v.isCurrencyEnabled,
@@ -244,6 +247,14 @@ export class EntityFormComponent implements OnInit {
 
   public get description() {
     return this.formGroup.get('description');
+  }
+
+  public get isHealthEnabled() {
+    return this.formGroup.get('isHealthEnabled');
+  }
+
+  public get hpColorType() {
+    return this.formGroup.get('health.colorType');
   }
 
   public get editing() {

@@ -6,9 +6,13 @@ import {
   Output,
   EventEmitter,
   ElementRef,
-  AfterViewInit
+  AfterViewInit,
 } from '@angular/core';
-import { IHealth } from 'src/app/entity.service';
+import {
+  IHealth,
+  IHealthPreset,
+  HealthColorType,
+} from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl } from '@angular/forms';
 
@@ -18,6 +22,9 @@ interface IBarStats {
 
   // Will be a value like: 30%
   percentCSS: string;
+
+  // Will be a hex color code like: #ffffff
+  colorCSS: string;
 }
 
 interface IHPOperation {
@@ -31,13 +38,13 @@ enum HPOperation {
   DIVIDE,
   MULTIPLY,
   FILL,
-  SET
+  SET,
 }
 
 @Component({
   selector: 'dd-health-display',
   templateUrl: './health-display.component.html',
-  styleUrls: ['./health-display.component.css']
+  styleUrls: ['./health-display.component.css'],
 })
 export class HealthDisplayComponent implements OnInit {
   @Input()
@@ -45,6 +52,9 @@ export class HealthDisplayComponent implements OnInit {
 
   @Input()
   public health: IHealth;
+
+  @Input()
+  public preset: IHealthPreset;
 
   @Output()
   public healthChange = new EventEmitter<IHealth>();
@@ -57,18 +67,24 @@ export class HealthDisplayComponent implements OnInit {
 
   public operationControl: FormControl;
 
+  public sliderControl: FormControl;
+
   private operationRegex = /^(\+([0-9]+))|(-([0-9]+))|(\/([0-9]+))|(\*([0-9]+))|(\+\+)|([0-9]+)$/;
 
   constructor() {}
 
   ngOnInit() {
     this.operationControl = new FormControl(null);
+    this.sliderControl = new FormControl(this.health.current);
 
-    this.operationControl.valueChanges.subscribe(v => this.parseOperation(v));
+    this.operationControl.valueChanges.subscribe((v) => this.parseOperation(v));
+    this.sliderControl.valueChanges.subscribe((v) =>
+      this.operationControl.setValue(v)
+    );
   }
 
   public editHP() {
-    this.editModal.open().then(hp => {
+    this.editModal.open().then((hp) => {
       if (hp !== null) {
         this.healthChange.emit(hp);
       }
@@ -93,7 +109,7 @@ export class HealthDisplayComponent implements OnInit {
 
     const operation: IHPOperation = {
       type: HPOperation.ADD,
-      amount: 10
+      amount: 10,
     };
 
     const [
@@ -107,7 +123,7 @@ export class HealthDisplayComponent implements OnInit {
       mul,
       mulValue,
       fill,
-      set
+      set,
     ] = matches;
 
     if (add) {
@@ -181,15 +197,35 @@ export class HealthDisplayComponent implements OnInit {
   }
 
   public get bars(): IBarStats[] {
+    let colorCSS;
+    const hpPercent = (this.health.current / this.health.max) * 100;
+
+    switch (this.preset.colorType) {
+      case HealthColorType.DYNAMIC:
+        if (hpPercent > 80) {
+          colorCSS = '#6ed854';
+        } else if (hpPercent > 60) {
+          colorCSS = '#c2d854';
+        } else if (hpPercent > 40) {
+          colorCSS = '#d8c954';
+        } else if (hpPercent > 20) {
+          colorCSS = '#d86e54';
+        } else {
+          colorCSS = '#d8545b';
+        }
+        break;
+      case HealthColorType.STATIC:
+        colorCSS = this.preset.staticColor || '#5755d9';
+        break;
+    }
+
     return [
       {
         max: this.health.max,
         current: this.health.current,
-        percentCSS:
-          ((this.health.current / this.health.max) * 100)
-            .toFixed(2)
-            .toString() + '%'
-      }
+        percentCSS: hpPercent.toFixed(2) + '%',
+        colorCSS: colorCSS,
+      },
     ];
   }
 }

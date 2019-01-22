@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { IItem } from './item.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EntityService {
   private _currentViewEntity: IEntity = null;
@@ -189,7 +189,8 @@ export interface IInventoryItem {
 
 export interface IHealthPreset {
   type: HealthType;
-  max: number;
+  colorType?: HealthColorType;
+  staticColor?: string;
   bars?: number[];
 }
 
@@ -203,10 +204,15 @@ export enum EntityAttributeClass {
   MAJOR,
   NORMAL,
   MINOR,
-  UNIMPORTANT
+  UNIMPORTANT,
 }
 
 export enum HealthType {
   NORMAL,
-  MULTI_BAR
+  MULTI_BAR,
+}
+
+export enum HealthColorType {
+  DYNAMIC,
+  STATIC,
 }

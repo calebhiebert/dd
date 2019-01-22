@@ -125,40 +125,6 @@
         </p>
       </div>
 
-      <h5 class="mt-2">Health</h5>
-      <!-- Health -->
-      <div formGroupName="health" class="columns">
-        <div class="column">
-          <div class="form-group">
-            <label for="health-mode" class="form-label">Health Mode</label>
-            <select
-              name="health-mode"
-              id="health-mode"
-              class="form-input"
-              formControlName="mode"
-            >
-              <option value="0">Normal</option>
-              <option value="1" disabled>Multi Bar (Coming Soon)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="column">
-          <!-- Default Max -->
-          <div class="form-group">
-            <label for="hp-max" class="form-label">Default Max HP</label>
-            <input
-              formControlName="max"
-              type="number"
-              name="hp-max"
-              id="hp-max"
-              class="form-input"
-              placeholder="Default Max HP"
-            />
-          </div>
-        </div>
-      </div>
-
       <!-- <h5 class="mt-2">Starting Inventory</h5>
       <dd-inventory-selector
         [formGroup]="formGroup"
@@ -207,6 +173,60 @@
               <input type="checkbox" formControlName="isHealthEnabled" />
               <i class="form-icon"></i> This entity can have health
             </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Health -->
+      <div
+        formGroupName="health"
+        class="columns mb-2"
+        *ngIf="isHealthEnabled.value === true"
+      >
+        <div class="column">
+          <div class="form-group">
+            <label for="health-type" class="form-label">Health Type</label>
+            <select
+              name="health-type"
+              id="health-type"
+              class="form-input"
+              formControlName="type"
+            >
+              <option value="0">Normal</option>
+              <option value="1" disabled>Multi Bar (Coming Soon)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="form-group">
+            <label for="bar-type" class="form-label">HP Bar Type</label>
+            <select
+              formControlName="colorType"
+              name="bar-type"
+              id="bar-type"
+              class="form-input"
+            >
+              <option value="0">Dynamic</option>
+              <option value="1">Static</option>
+            </select>
+          </div>
+        </div>
+
+        <div
+          class="column"
+          *ngIf="hpColorType.value === '1' || hpColorType.value === 1"
+        >
+          <!-- Bar Color -->
+          <div class="form-group">
+            <label for="bar-color" class="form-label">Bar Color</label>
+            <input
+              formControlName="staticColor"
+              type="color"
+              name="bar-color"
+              id="bar-color"
+              class="form-input"
+            />
           </div>
         </div>
       </div>

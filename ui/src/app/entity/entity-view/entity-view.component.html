@@ -106,6 +106,7 @@
       <div class="card p-2">
         <dd-health-display
           [editable]="editable"
+          [preset]="entity.preset.health"
           [health]="entity.health"
           (healthChange)="onHPEdit($event)"
         ></dd-health-display>
