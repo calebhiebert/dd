@@ -1,3 +1,11 @@
 .bar-animated {
   transition: all 250ms ease-out !important;
 }
+
+:host {
+  height: 100%;
+}
+
+.bar-item.d-flex {
+  display: flex;
+}

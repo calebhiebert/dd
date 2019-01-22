@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CampaignService, ICampaign } from 'src/app/campaign.service';
 import { IEntity } from 'src/app/entity.service';
+import { OverviewService } from 'src/app/overview.service';
 
 @Component({
   selector: 'dd-overview',
   templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.css'],
+  styleUrls: ['./overview.component.css']
 })
 export class OverviewComponent implements OnInit {
-  constructor(private campaignService: CampaignService) {}
+  constructor(
+    private campaignService: CampaignService,
+    private overviewService: OverviewService
+  ) {}
 
   ngOnInit() {}
 
@@ -20,7 +24,7 @@ export class OverviewComponent implements OnInit {
     return this.campaign;
   }
 
-  public get entities(): IEntity[] {
-    return this.campaignService.campaign.entities.filter((e) => !e.spawnable);
+  public get sortedEntities(): IEntity[] {
+    return this.overviewService.sortedEntities;
   }
 }

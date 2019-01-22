@@ -78,13 +78,13 @@
 </dd-modal>
 
 <div
-  class="bar"
+  class="bar h-100"
   (click)="editHP()"
   [ngClass]="{ 'c-hand': editable }"
   *ngFor="let bar of bars; trackBy: trackBarElement"
 >
   <div
-    class="bar-item bar-animated"
+    class="bar-item d-flex bar-animated align-items-center justify-content-center"
     [style.width]="bar.percentCSS"
     [style.backgroundColor]="bar.colorCSS"
   >

@@ -543,6 +543,7 @@ namespace net_api.Models
         public string Name { get; set; }
 
         [Required]
+        [HexColorCodeValidator]
         public string Color { get; set; }
     }
 
@@ -553,7 +554,8 @@ namespace net_api.Models
 
         public HealthColorType ColorType { get; set; }
 
-        // TODO verify that a valid hex color code was entered
+
+        [HexColorCodeValidator]
         public string StaticColor { get; set; }
 
         public double[] Bars { get; set; }

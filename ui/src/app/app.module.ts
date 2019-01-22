@@ -57,6 +57,8 @@ import { QuickViewComponent } from './quest/quick-view/quick-view.component';
 import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-manager.component';
 import { OverviewComponent } from './session/overview/overview.component';
 import { OverviewEntityComponent } from './session/overview-entity/overview-entity.component';
+import { OverviewToolbarComponent } from './session/overview-toolbar/overview-toolbar.component';
+import { FooterComponent } from './footer/footer.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -110,7 +112,9 @@ import { OverviewEntityComponent } from './session/overview-entity/overview-enti
     QuickViewComponent,
     SpawnableManagerComponent,
     OverviewComponent,
-    OverviewEntityComponent
+    OverviewEntityComponent,
+    OverviewToolbarComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
