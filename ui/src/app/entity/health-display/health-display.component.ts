@@ -6,17 +6,16 @@ import {
   Output,
   EventEmitter,
   ElementRef,
-  AfterViewInit,
+  AfterViewInit
 } from '@angular/core';
 import {
   IHealth,
   IHealthPreset,
-  HealthColorType,
+  HealthColorType
 } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl } from '@angular/forms';
-import { debounceTime, throttle } from 'rxjs/operators';
-import { interval } from 'rxjs';
+import { throttle, throttleTime } from 'rxjs/operators';
 
 interface IBarStats {
   max: number;
@@ -40,13 +39,13 @@ enum HPOperation {
   DIVIDE,
   MULTIPLY,
   FILL,
-  SET,
+  SET
 }
 
 @Component({
   selector: 'dd-health-display',
   templateUrl: './health-display.component.html',
-  styleUrls: ['./health-display.component.scss'],
+  styleUrls: ['./health-display.component.scss']
 })
 export class HealthDisplayComponent implements OnInit {
   @Input()
@@ -79,19 +78,36 @@ export class HealthDisplayComponent implements OnInit {
     this.operationControl = new FormControl(null);
     this.sliderControl = new FormControl(this.health.current);
 
-    this.sliderControl.valueChanges.pipe(debounceTime(75)).subscribe((v) => {
-      let operation = '';
-
-      if (v === this.health.current) {
-        operation = v;
-      } else if (v < this.health.current) {
-        operation = `-${this.health.current - v}`;
-      } else if (v > this.health.current) {
-        operation = `+${v - this.health.current}`;
-      }
-
-      this.operationControl.setValue(operation);
+    this.sliderControl.valueChanges.pipe(throttleTime(40)).subscribe(v => {
+      this.updateOperationFromSliderValue(v);
     });
+  }
+
+  /**
+   * Generates an operation from a slider value
+   * @param v current slider value (corresponds to current hp)
+   */
+  private updateOperationFromSliderValue(v: any) {
+    let operation = '';
+
+    if (v === this.health.current) {
+      operation = v;
+    } else if (v < this.health.current) {
+      operation = `-${this.health.current - v}`;
+    } else if (v > this.health.current) {
+      operation = `+${v - this.health.current}`;
+    }
+
+    this.operationControl.setValue(operation);
+  }
+
+  // Should only be called when the slider is released
+  public onSliderChange(e) {
+    // Wait for one tick so that the control value cannot overwrite
+    // this one
+    setTimeout(() => {
+      this.updateOperationFromSliderValue(this.sliderControl.value);
+    }, 1);
   }
 
   public editHP() {
@@ -99,7 +115,9 @@ export class HealthDisplayComponent implements OnInit {
       return;
     }
 
-    this.editModal.open().then((hp) => {
+    this.sliderControl.setValue(this.health.current);
+
+    this.editModal.open().then(hp => {
       if (hp !== null) {
         this.healthChange.emit(hp);
       }
@@ -124,7 +142,7 @@ export class HealthDisplayComponent implements OnInit {
 
     const operation: IHPOperation = {
       type: HPOperation.ADD,
-      amount: 10,
+      amount: 10
     };
 
     const [
@@ -138,7 +156,7 @@ export class HealthDisplayComponent implements OnInit {
       mul,
       mulValue,
       fill,
-      set,
+      set
     ] = matches;
 
     if (add) {
@@ -222,11 +240,11 @@ export class HealthDisplayComponent implements OnInit {
     switch (this.preset.colorType) {
       case HealthColorType.DYNAMIC:
         if (hpPercent > 80) {
-          colorCSS = '#6ed854';
+          colorCSS = '#64ad53';
         } else if (hpPercent > 60) {
-          colorCSS = '#c2d854';
+          colorCSS = '#84bb47';
         } else if (hpPercent > 40) {
-          colorCSS = '#d8c954';
+          colorCSS = '#d2ae2b';
         } else if (hpPercent > 20) {
           colorCSS = '#d86e54';
         } else {
@@ -243,8 +261,12 @@ export class HealthDisplayComponent implements OnInit {
         max: this.health.max,
         current: this.health.current,
         percentCSS: hpPercent.toFixed(2) + '%',
-        colorCSS: colorCSS,
-      },
+        colorCSS: colorCSS
+      }
     ];
+  }
+
+  public get sliderTooltip() {
+    return `${this.sliderControl.value}/${this.health.max}`;
   }
 }

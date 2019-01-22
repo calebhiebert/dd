@@ -11,7 +11,7 @@ namespace net_api.Models
         {
             var colorCode = (string)value;
 
-            if (Regex.IsMatch(colorCode, this.regex))
+            if (colorCode == null || Regex.IsMatch(colorCode, this.regex))
             {
                 return ValidationResult.Success;
             } else

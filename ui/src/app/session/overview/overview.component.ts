@@ -6,7 +6,7 @@ import { OverviewService } from 'src/app/overview.service';
 @Component({
   selector: 'dd-overview',
   templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.css']
+  styleUrls: ['./overview.component.scss']
 })
 export class OverviewComponent implements OnInit {
   constructor(

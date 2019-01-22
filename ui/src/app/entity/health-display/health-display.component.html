@@ -25,11 +25,11 @@
 
     <!-- Slider for quick controls -->
     <input
-      class="slider mt-1 tooltip"
+      class="slider mt-1"
       type="range"
       min="0"
-      id
       name="hp-slider"
+      (change)="onSliderChange($event)"
       [max]="health.max"
       [formControl]="sliderControl"
     />

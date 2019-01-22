@@ -1,10 +1,53 @@
 <div class="card p-2">
-  <h6>{{ entity.name }} <span *ngIf="saving">(Saving...)</span></h6>
-  <dd-health-display
-    [health]="entity.health"
-    [editable]="editable"
-    [preset]="preset.health"
-    (healthChange)="onHealthChange($event)"
-    *ngIf="entity.health"
-  ></dd-health-display>
+  <div class="columns">
+    <!-- Image -->
+    <div class="column col-auto" *ngIf="entity.imageId">
+      <figure class="avatar avatar-lg hide-md">
+        <img
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+            entity.imageId
+          }}"
+        />
+      </figure>
+      <figure class="avatar show-md hide-sm">
+        <img
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+            entity.imageId
+          }}"
+        />
+      </figure>
+      <figure class="avatar avatar-sm show-sm">
+        <img
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+            entity.imageId
+          }}"
+        />
+      </figure>
+    </div>
+
+    <!-- Misc -->
+    <div class="column">
+      <div>
+        <h6>{{ entity.name }} <span *ngIf="saving">(Saving...)</span></h6>
+        <dd-health-display
+          [health]="entity.health"
+          [editable]="editable"
+          [preset]="preset.health"
+          (healthChange)="onHealthChange($event)"
+          *ngIf="entity.health"
+        ></dd-health-display>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="column col-auto d-flex align-items-center">
+      <!-- View Button -->
+      <button
+        class="btn"
+        [routerLink]="['/campaigns', entity.campaignId, 'entities', entity.id]"
+      >
+        <i class="icon icon-arrow-right"></i>
+      </button>
+    </div>
+  </div>
 </div>
