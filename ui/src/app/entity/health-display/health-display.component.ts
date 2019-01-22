@@ -15,6 +15,8 @@ import {
 } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl } from '@angular/forms';
+import { debounceTime, throttle } from 'rxjs/operators';
+import { interval } from 'rxjs';
 
 interface IBarStats {
   max: number;
@@ -77,7 +79,7 @@ export class HealthDisplayComponent implements OnInit {
     this.operationControl = new FormControl(null);
     this.sliderControl = new FormControl(this.health.current);
 
-    this.sliderControl.valueChanges.subscribe((v) => {
+    this.sliderControl.valueChanges.pipe(debounceTime(75)).subscribe((v) => {
       let operation = '';
 
       if (v === this.health.current) {
