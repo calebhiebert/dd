@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using net_api.Controllers;
 using net_api.Models;
+using dotenv.net;
 
 namespace net_api
 {
@@ -25,6 +26,8 @@ namespace net_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            DotEnv.Config();
+
             var context = new Context();
             context.Database.Migrate();
 

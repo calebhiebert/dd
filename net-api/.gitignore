@@ -4,3 +4,4 @@
 */bin
 */obj
 **/.toolstarget
+net-api/.env

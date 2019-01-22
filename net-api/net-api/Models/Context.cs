@@ -188,6 +188,12 @@ namespace net_api.Models
 
         public string ImageId { get; set; }
 
+        [HexColorCodeValidator]
+        public string ImageColor1 { get; set; }
+
+        [HexColorCodeValidator]
+        public string ImageColor2 { get; set; }
+
         [Required]
         public bool Spawnable { get; set; }
 

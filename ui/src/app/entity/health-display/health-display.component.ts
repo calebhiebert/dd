@@ -57,6 +57,9 @@ export class HealthDisplayComponent implements OnInit {
   @Input()
   public preset: IHealthPreset;
 
+  @Input()
+  public disableAnimation = false;
+
   @Output()
   public healthChange = new EventEmitter<IHealth>();
 
@@ -78,7 +81,7 @@ export class HealthDisplayComponent implements OnInit {
     this.operationControl = new FormControl(null);
     this.sliderControl = new FormControl(this.health.current);
 
-    this.sliderControl.valueChanges.pipe(throttleTime(40)).subscribe(v => {
+    this.sliderControl.valueChanges.subscribe(v => {
       this.updateOperationFromSliderValue(v);
     });
   }

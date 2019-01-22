@@ -195,7 +195,8 @@ const routes: Routes = [
         path: 'overview',
         component: OverviewComponent,
         data: {
-          breadcrumb: 'Overview'
+          breadcrumb: 'Overview',
+          footer: false
         }
       },
       {

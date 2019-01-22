@@ -52,7 +52,9 @@ export class EntityCreationFormComponent implements OnInit {
         max: new FormControl(null, [numberValidator, Validators.min(1)]),
         current: new FormControl(null, [numberValidator, Validators.min(0)])
       }),
-      imageId: new FormControl('uncertainty')
+      imageId: new FormControl('uncertainty'),
+      imageColor1: new FormControl('#fff'),
+      imageColor2: new FormControl('#000')
     });
 
     this.route.paramMap.subscribe(params => {
@@ -125,6 +127,8 @@ export class EntityCreationFormComponent implements OnInit {
       description: v.description,
       xp: v.xp,
       imageId: v.imageId,
+      imageColor1: v.imageColor1,
+      imageColor2: v.imageColor2,
       currency: v.currency,
       spawnable: v.spawnable,
       health: {

@@ -1,5 +1,5 @@
 .bar-animated {
-  transition: all 250ms ease-out !important;
+  transition: all 400ms ease-in-out !important;
 }
 
 :host {
@@ -8,4 +8,10 @@
 
 .bar-item.d-flex {
   display: flex;
+}
+
+.bar-item {
+  background-image: url('/assets/hp-pattern.png');
+  background-repeat: repeat;
+  background-blend-mode: multiply;
 }

@@ -6,6 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Authorization\**" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="Authorization\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="Authorization\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="Authorization\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Migrations\20190106234612_Loading.cs" />
     <Compile Remove="Migrations\20190106234612_Loading.Designer.cs" />
     <Compile Remove="Migrations\20190112190404_Notifications.cs" />
@@ -13,11 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Authorization\" />
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="CloudinaryDotNet" Version="1.6.0" />
+    <PackageReference Include="dotenv.net" Version="1.0.4" />
     <PackageReference Include="GraphQL" Version="2.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />

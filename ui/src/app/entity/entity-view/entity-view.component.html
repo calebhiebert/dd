@@ -100,7 +100,7 @@
   <div class="columns">
     <!-- Health -->
     <div class="column col-9 col-md-7 col-sm-12" *ngIf="preset.isHealthEnabled">
-      <div class="card p-2 h-100">
+      <div class="card h-100">
         <dd-health-display
           [editable]="editable"
           [preset]="entity.preset.health"
@@ -116,16 +116,12 @@
       *ngIf="preset.isCurrencyEnabled"
     >
       <div
-        class="card p-2 d-flex flex-row justify-between align-items-center"
+        class="card p-2 currency-box text-center"
         (click)="editCurrency()"
         [ngClass]="{ 'c-hand': editable }"
       >
-        <h4 class="mb-0 mr-2 hide-sm">{{ formattedCurrency }}</h4>
-        <h5 class="mb-0 mr-2 show-sm">{{ formattedCurrency }}</h5>
-        <picture style="margin-bottom: -0.25rem">
-          <source srcset="/assets/coins.png" type="image/png" />
-          <img src="/assets/coins.svg" alt="Money Icon" width="30" />
-        </picture>
+        <h4 class="mb-0 mr-2 hide-sm text-bold">{{ formattedCurrency }}</h4>
+        <h5 class="mb-0 mr-2 show-sm text-bold">{{ formattedCurrency }}</h5>
       </div>
     </div>
   </div>
