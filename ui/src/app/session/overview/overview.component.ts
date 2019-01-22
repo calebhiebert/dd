@@ -5,7 +5,7 @@ import { IEntity } from 'src/app/entity.service';
 @Component({
   selector: 'dd-overview',
   templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.css']
+  styleUrls: ['./overview.component.css'],
 })
 export class OverviewComponent implements OnInit {
   constructor(private campaignService: CampaignService) {}
@@ -17,6 +17,6 @@ export class OverviewComponent implements OnInit {
   }
 
   public get entities(): IEntity[] {
-    return this.campaignService.campaign.entities;
+    return this.campaignService.campaign.entities.filter((e) => !e.spawnable);
   }
 }

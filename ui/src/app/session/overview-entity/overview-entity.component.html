@@ -1,9 +1,10 @@
 <div class="card p-2">
-  <h6>{{ entity.name }}</h6>
+  <h6>{{ entity.name }} <span *ngIf="saving">(Saving...)</span></h6>
   <dd-health-display
     [health]="entity.health"
-    [editable]="false"
-    [preset]="preset"
+    [editable]="editable"
+    [preset]="preset.health"
+    (healthChange)="onHealthChange($event)"
     *ngIf="entity.health"
   ></dd-health-display>
 </div>

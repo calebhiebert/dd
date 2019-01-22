@@ -77,13 +77,16 @@ export class HealthDisplayComponent implements OnInit {
     this.operationControl = new FormControl(null);
     this.sliderControl = new FormControl(this.health.current);
 
-    this.operationControl.valueChanges.subscribe((v) => this.parseOperation(v));
     this.sliderControl.valueChanges.subscribe((v) =>
       this.operationControl.setValue(v)
     );
   }
 
   public editHP() {
+    if (!this.editable) {
+      return;
+    }
+
     this.editModal.open().then((hp) => {
       if (hp !== null) {
         this.healthChange.emit(hp);
