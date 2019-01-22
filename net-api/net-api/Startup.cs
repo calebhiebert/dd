@@ -1,6 +1,4 @@
 ﻿using System.Threading.Tasks;
-using GraphQL;
-using GraphQL.Types;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,10 +43,6 @@ namespace net_api
             services.AddSignalR();
 
             services.AddScoped<Context>();
-            services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
-            services.AddSingleton<DDQuery>();
-            services.AddSingleton<UserType>();
-            services.AddSingleton<CampaignType>();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -76,9 +70,6 @@ namespace net_api
                     }
                 };
             });
-
-            var sp = services.BuildServiceProvider();
-            services.AddSingleton<ISchema>(new DDSchema(new FuncDependencyResolver(type => sp.GetService(type))));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

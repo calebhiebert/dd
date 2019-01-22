@@ -28,7 +28,7 @@ namespace net_api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadImage([FromForm]IFormFile file)
+        public IActionResult UploadImage([FromForm]IFormFile file)
         {
             if (file == null)
             {
@@ -41,6 +41,11 @@ namespace net_api.Controllers
             uploadParams.UploadPreset = "server_upload";
 
             var uploadResult = _cloudinary.Upload(uploadParams);
+
+            if (uploadResult.Error != null)
+            {
+                return BadRequest(uploadResult);
+            }
 
             return Ok(uploadResult);
         }

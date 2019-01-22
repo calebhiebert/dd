@@ -26,7 +26,6 @@
   <ItemGroup>
     <PackageReference Include="CloudinaryDotNet" Version="1.6.0" />
     <PackageReference Include="dotenv.net" Version="1.0.4" />
-    <PackageReference Include="GraphQL" Version="2.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
