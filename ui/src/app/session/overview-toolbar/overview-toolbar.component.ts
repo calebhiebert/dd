@@ -15,7 +15,7 @@ export class OverviewToolbarComponent implements OnInit {
   ngOnInit() {
     this.sortGroup = new FormGroup({
       mode: new FormControl(0),
-      direction: new FormControl(1)
+      direction: new FormControl(0)
     });
 
     // Subscribe to changes in sorting params
@@ -24,5 +24,9 @@ export class OverviewToolbarComponent implements OnInit {
     });
 
     this.overviewService.loadPreferences();
+    this.sortGroup.patchValue({
+      mode: this.overviewService.preferences.sortMode || 0,
+      direction: this.overviewService.preferences.sortDirection || 0
+    });
   }
 }

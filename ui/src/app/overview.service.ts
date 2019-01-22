@@ -71,15 +71,11 @@ export class OverviewService {
   }
 
   public setSorting(mode: SortMode, direction: SortDirection) {
-    console.log(this._sortMode, this._sortDirection);
-
     // Parameters are parsed because angular reactive forms submit number
     // values as strings
     this._sortMode = typeof mode === 'string' ? parseInt(mode, 10) : mode;
     this._sortDirection =
       typeof direction === 'string' ? parseInt(direction, 10) : direction;
-
-    console.log(this._sortMode, this._sortDirection);
 
     // Save new sorting preferences
     this.savePrefs(this.getPrefsFromState());
@@ -137,7 +133,7 @@ export class OverviewService {
 
           return this.compareNumber(
             a.health.current / a.health.max,
-            a.health.current / b.health.max,
+            b.health.current / b.health.max,
             this._sortDirection
           );
         });
