@@ -21,6 +21,9 @@ namespace net_api.Models
         [Required]
         public string CampaignId { get; set; }
 
+        [Required]
+        public bool PlayerVisible { get; set; }
+
         [JsonIgnore]
         public Campaign Campaign { get; set; }
 

@@ -65,6 +65,7 @@ export interface IItem {
   weight: number;
   imageId?: string;
   rarity: number;
+  playerVisible: boolean;
   tags?: string[];
 }
 

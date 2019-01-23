@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,6 +24,8 @@ namespace net_api.Models
 
         [Column("ImageIds", TypeName = "varchar[]")]
         public string[] ImageIds { get; set; }
+
+        public ICollection<SellableItem> SellableItems { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

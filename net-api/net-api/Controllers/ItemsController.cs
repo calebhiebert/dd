@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,23 @@ namespace net_api.Controllers
                 return BadRequest("Missing campaign id");
             }
 
-            // TODO authenticate requests
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var campaign = _context.Campaigns
+                .Where(c => c.Id == campaignId)
+                .Include(c => c.Members)
+                .FirstOrDefault();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            // Authorize requests
+            if (userId != campaign.UserId && !campaign.Members.Any(m => m.UserId == userId))
+            {
+                return BadRequest("not authorized");
+            }
 
             if (limit == 0)
             {
@@ -55,6 +72,12 @@ namespace net_api.Controllers
             IQueryable<Item> items;
 
             items = _context.Items.Where(i => i.CampaignId == campaignId).OrderBy(i => i.Name);
+
+            // Do not show player items that are not player visible
+            if (userId != campaign.UserId)
+            {
+                items = items.Where(i => i.PlayerVisible == true);
+            }
 
             if (tags != null)
             {

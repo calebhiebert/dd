@@ -10,7 +10,7 @@ import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-a
 @Component({
   selector: 'dd-item-edit',
   templateUrl: './item-edit.component.html',
-  styleUrls: ['./item-edit.component.css'],
+  styleUrls: ['./item-edit.component.css']
 })
 export class ItemEditComponent implements OnInit {
   public loading = false;
@@ -35,18 +35,19 @@ export class ItemEditComponent implements OnInit {
       name: new FormControl(null, [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(30),
+        Validators.maxLength(30)
       ]),
       description: new FormControl(null, Validators.required),
       imageId: new FormControl(null),
       rarity: new FormControl('0', Validators.required),
+      playerVisible: new FormControl(true),
       cost: new FormControl(0, [Validators.required, numberValidator]),
       weight: new FormControl(0, [Validators.required, numberValidator]),
-      tags: new FormArray([]),
+      tags: new FormArray([])
     });
 
     if (this.editing) {
-      this.route.params.subscribe((params) => {
+      this.route.params.subscribe(params => {
         const id = params.item_id;
         this.loadItem(id);
       });
@@ -68,13 +69,14 @@ export class ItemEditComponent implements OnInit {
       const item: IItem = {
         id: this.item.id,
         campaignId: this.item.campaignId,
+        playerVisible: v.playerVisible,
         name: v.name,
         description: v.description,
         imageId: v.imageId,
         rarity: v.rarity,
         weight: v.weight,
         cost: v.cost,
-        tags: v.tags,
+        tags: v.tags
       };
 
       try {
@@ -82,7 +84,7 @@ export class ItemEditComponent implements OnInit {
         this.router.navigate([
           'campaigns',
           this.campaignService.campaign.id,
-          'items',
+          'items'
         ]);
       } catch (err) {
         console.log('SAVE ERR', err);
@@ -95,9 +97,10 @@ export class ItemEditComponent implements OnInit {
         description: v.description,
         imageId: v.imageId,
         rarity: v.rarity,
+        playerVisible: v.playerVisible,
         weight: v.weight,
         cost: v.cost,
-        tags: v.tags,
+        tags: v.tags
       };
 
       try {
@@ -105,7 +108,7 @@ export class ItemEditComponent implements OnInit {
         this.router.navigate([
           'campaigns',
           this.campaignService.campaign.id,
-          'items',
+          'items'
         ]);
       } catch (err) {
         console.log('CREATE ERR', err);
@@ -148,7 +151,7 @@ export class ItemEditComponent implements OnInit {
 
       if (this.item.tags) {
         (this.formGroup.get('tags') as FormArray).controls = this.item.tags.map(
-          (t) => new FormControl(t)
+          t => new FormControl(t)
         );
       }
     } catch (err) {
