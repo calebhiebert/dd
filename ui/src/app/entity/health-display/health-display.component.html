@@ -85,7 +85,7 @@
   *ngFor="let bar of bars; trackBy: trackBarElement"
 >
   <div
-    class="bar-item d-flex align-items-center justify-content-center"
+    class="bar-item d-flex p-2 align-items-center justify-content-center"
     [ngClass]="{ 'bar-animated': !disableAnimation }"
     [style.width]="bar.percentCSS"
     [style.backgroundColor]="bar.colorCSS"

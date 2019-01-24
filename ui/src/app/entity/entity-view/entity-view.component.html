@@ -111,18 +111,26 @@
     </div>
 
     <!-- Currency -->
-    <div
-      class="column col-3 col-md-5 col-sm-12"
-      *ngIf="preset.isCurrencyEnabled"
-    >
+    <!-- Currency Desktop -->
+    <div class="column col-3 col-md-5 hide-sm" *ngIf="preset.isCurrencyEnabled">
       <div
         class="card p-2 currency-box text-center"
         (click)="editCurrency()"
         [ngClass]="{ 'c-hand': editable }"
       >
-        <h4 class="mb-0 mr-2 hide-sm text-bold">{{ formattedCurrency }}</h4>
-        <h5 class="mb-0 mr-2 show-sm text-bold">{{ formattedCurrency }}</h5>
+        <h4 class="mb-0 mr-2 text-bold">{{ formattedCurrency }}</h4>
       </div>
+    </div>
+  </div>
+
+  <!-- Currency Mobile -->
+  <div class="column col-12 show-sm mt-2 px-0" *ngIf="preset.isCurrencyEnabled">
+    <div
+      class="card p-2 currency-box text-center"
+      (click)="editCurrency()"
+      [ngClass]="{ 'c-hand': editable }"
+    >
+      <h5 class="mb-0 mr-2 text-bold">{{ formattedCurrency }}</h5>
     </div>
   </div>
   <div class="divider"></div>
