@@ -51,11 +51,7 @@ export class InviteComponent implements OnInit {
         this.actions.queue.pop();
         this.actions.save();
 
-        await this.router
-          .navigate(['home'])
-          .catch((err) =>
-            console.log('ROPUTE', err.name, err.message, err.stack)
-          );
+        await this.router.navigate(['home']);
       }
       this.loading = false;
     }
@@ -71,7 +67,7 @@ export class InviteComponent implements OnInit {
       this.actions.save();
       this.router.navigate(['campaigns', this.campaign.id, 'landing']);
     } catch (err) {
-      console.log('ACCERR', err);
+      throw err;
     }
 
     this.accepting = true;
@@ -83,7 +79,7 @@ export class InviteComponent implements OnInit {
     try {
       await this.campaignService.denyInvite(this.invite.id);
     } catch (err) {
-      console.log('ACCERR', err);
+      throw err;
     }
 
     this.actions.queue.pop();
@@ -100,7 +96,6 @@ export class InviteComponent implements OnInit {
       );
       this.invite = invite;
     } catch (err) {
-      console.log('INVITE LOAD ERR', err);
       throw err;
     }
   }

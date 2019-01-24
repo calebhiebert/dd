@@ -52,7 +52,7 @@ export class ItemSelectComponent implements OnInit {
 
       this.items = items.items;
     } catch (err) {
-      console.log('Search ERR', err);
+      throw err;
     }
 
     this.loading = false;

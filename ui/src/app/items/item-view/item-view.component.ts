@@ -42,7 +42,7 @@ export class ItemViewComponent implements OnInit {
       const item = await this.itemService.getItem(id);
       this.item = item;
     } catch (err) {
-      console.log('LOAD ERR', err);
+      throw err;
     }
 
     this.loading = false;
@@ -59,7 +59,7 @@ export class ItemViewComponent implements OnInit {
         'edit',
       ]);
     } catch (err) {
-      console.log(err.name, err.message);
+      throw err;
     }
   }
 
@@ -95,7 +95,7 @@ export class ItemViewComponent implements OnInit {
         inventoryItem
       );
     } catch (err) {
-      console.log('Load ERR', err);
+      throw err;
     }
   }
 

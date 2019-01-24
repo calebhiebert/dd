@@ -34,7 +34,7 @@ export class InviteManagerComponent implements OnInit {
       );
       this.invites.push(invite);
     } catch (err) {
-      console.log('INVITE ERRR', err);
+      throw err;
     }
 
     this.creatingInvite = false;
@@ -51,7 +51,7 @@ export class InviteManagerComponent implements OnInit {
 
       invite.status = toUpdate.status;
     } catch (err) {
-      console.log('REVOKE ERR', err);
+      throw err;
     }
   }
 
@@ -65,7 +65,7 @@ export class InviteManagerComponent implements OnInit {
       const invites = await this.campaignService.getInvites();
       this.invites = invites;
     } catch (err) {
-      console.log('LOAD ERR', err);
+      throw err;
     }
     this.loading = false;
   }

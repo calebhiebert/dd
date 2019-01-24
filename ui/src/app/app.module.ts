@@ -1,6 +1,6 @@
 /* tslint:disable:max-line-length */
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { TruncateModule } from 'ng2-truncate';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -59,6 +59,8 @@ import { OverviewComponent } from './session/overview/overview.component';
 import { OverviewEntityComponent } from './session/overview-entity/overview-entity.component';
 import { OverviewToolbarComponent } from './session/overview-toolbar/overview-toolbar.component';
 import { FooterComponent } from './footer/footer.component';
+import { HttpErrorInterceptor } from './http-error.interceptor.ts';
+import { SentryErrorHandler } from './sentry.errorhandler';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -114,7 +116,7 @@ import { FooterComponent } from './footer/footer.component';
     OverviewComponent,
     OverviewEntityComponent,
     OverviewToolbarComponent,
-    FooterComponent
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
@@ -123,15 +125,24 @@ import { FooterComponent } from './footer/footer.component';
     FormsModule,
     TruncateModule,
     HttpClientModule,
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot(),
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+    },
+    {
+      provide: ErrorHandler,
+      useClass: SentryErrorHandler,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

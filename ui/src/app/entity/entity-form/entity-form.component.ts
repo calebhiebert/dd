@@ -107,7 +107,7 @@ export class EntityFormComponent implements OnInit {
         this.formGroup.patchValue(preset);
       }, 1);
     } catch (err) {
-      console.log('LOAD ERR', err);
+      throw err;
     }
 
     this.loading = false;
@@ -168,7 +168,7 @@ export class EntityFormComponent implements OnInit {
             relativeTo: this.route,
           });
         } catch (err) {
-          console.log('SAVE ERR', err);
+          throw err;
         }
       } else {
         const v = this.formGroup.value;
@@ -200,8 +200,6 @@ export class EntityFormComponent implements OnInit {
         await this.router.navigate(['../..', 'settings'], {
           relativeTo: this.route,
         });
-
-        console.log('EF Create', ep);
       }
 
       this.saving = false;
@@ -226,7 +224,7 @@ export class EntityFormComponent implements OnInit {
           relativeTo: this.route,
         });
       } catch (err) {
-        console.log('DEL ERR', err);
+        throw err;
       }
       this.formGroup.enable();
       this.deleting = false;

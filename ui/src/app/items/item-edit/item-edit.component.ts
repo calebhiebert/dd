@@ -87,7 +87,7 @@ export class ItemEditComponent implements OnInit {
           'items'
         ]);
       } catch (err) {
-        console.log('SAVE ERR', err);
+        throw err;
       }
     } else {
       const item: IItem = {
@@ -111,7 +111,7 @@ export class ItemEditComponent implements OnInit {
           'items'
         ]);
       } catch (err) {
-        console.log('CREATE ERR', err);
+        throw err;
       }
     }
 
@@ -131,7 +131,7 @@ export class ItemEditComponent implements OnInit {
         // await this.itemService.deleteItem(this.item.id);
         this.router.navigate(['../..'], { relativeTo: this.route });
       } catch (err) {
-        console.log('DEL ERR', err);
+        throw err;
       }
 
       this.deleting = false;
@@ -155,7 +155,7 @@ export class ItemEditComponent implements OnInit {
         );
       }
     } catch (err) {
-      console.log('LOAD ERR', err);
+      throw err;
     }
 
     this.formGroup.enable();

@@ -5,6 +5,7 @@ import { LoginService } from './login.service';
 import { ICampaign, CampaignService } from './campaign.service';
 import { NotificationService } from './notification.service';
 import { IEntity, EntityService } from './entity.service';
+import * as Sentry from '@sentry/browser';
 
 export enum ConnectionState {
   NOT_CONNECTED,
@@ -44,8 +45,8 @@ export class UpdateHubService {
   private async setup() {
     this.connection.onclose((e) => {
       this._state = ConnectionState.CLOSED;
-      console.log('Connection Closed', e);
       this.start();
+      Sentry.captureEvent(e);
     });
 
     this.connection.on('AuthenticateComplete', () => this.authComplete());
@@ -74,7 +75,7 @@ export class UpdateHubService {
     try {
       await this.connection.invoke('Authenticate');
     } catch (err) {
-      console.log('Auth ERR', err);
+      throw err;
     }
   }
 
@@ -108,7 +109,7 @@ export class UpdateHubService {
       this._state = ConnectionState.CONNECTED;
       await this.setup();
     } catch (err) {
-      console.log('Connection Err', err);
+      throw err;
       this._state = ConnectionState.CLOSED;
       setTimeout(() => {
         this.start();
@@ -205,7 +206,7 @@ export class UpdateHubService {
       const res = await this.connection.invoke('SubscribeCampaign', campaignId);
       this._isCampaignSubscribed = true;
     } catch (err) {
-      console.log('SUB ERR', err);
+      throw err;
     }
   }
 
@@ -222,7 +223,7 @@ export class UpdateHubService {
       );
       this._isCampaignSubscribed = false;
     } catch (err) {
-      console.log('SUB ERR', err);
+      throw err;
     }
   }
 

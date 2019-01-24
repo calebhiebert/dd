@@ -74,7 +74,7 @@ export class QuestFormComponent implements OnInit {
         this.dataToUI();
       }, 1);
     } catch (err) {
-      console.log('LOAD ERR', err);
+      throw err;
     }
 
     this.loading = false;
@@ -116,7 +116,7 @@ export class QuestFormComponent implements OnInit {
           this.quest.id,
         ]);
       } catch (err) {
-        console.log('EDIT ERR', err);
+        throw err;
       }
     } else {
       try {
@@ -128,7 +128,7 @@ export class QuestFormComponent implements OnInit {
           createdQuest.id,
         ]);
       } catch (err) {
-        console.log('CREATE ERR', err);
+        throw err;
       }
     }
 

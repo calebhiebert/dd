@@ -5,6 +5,7 @@ import { UserService, IUser } from './user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ActionQueueService, ActionType } from './action-queue.service';
+import * as Sentry from '@sentry/browser';
 
 @Injectable({
   providedIn: 'root',
@@ -87,11 +88,20 @@ export class LoginService {
 
           this.userData = user;
 
+          Sentry.configureScope((scope) => {
+            scope.setUser({
+              id: userInfo.sub,
+              email: userInfo.email,
+              email_verified: userInfo.email_verified,
+              username: this.userData.username || userInfo.name,
+              locale: userInfo.locale,
+            });
+          });
+
           this.loginCompleted = true;
           resolve(true);
           this.onLogin.emit();
         } catch (err) {
-          console.log('AUTH ERR', err);
           localStorage.removeItem('auth-token');
           resolve(false);
         }
@@ -139,6 +149,10 @@ export class LoginService {
     this.loginCompleted = false;
     this.loginInProgress = false;
     this.loginPromise = undefined;
+
+    Sentry.configureScope((scope) => {
+      scope.setUser(null);
+    });
   }
 
   public process(hash: string, state: string): Promise<Auth0DecodedHash> {

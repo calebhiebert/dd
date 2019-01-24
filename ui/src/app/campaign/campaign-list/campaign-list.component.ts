@@ -28,7 +28,7 @@ export class CampaignListComponent implements OnInit {
       const campaigns = await this.campaignService.getCampaigns();
       this.campaigns = campaigns;
     } catch (err) {
-      console.log('ERR', err);
+      throw err;
     }
 
     this.loading = false;

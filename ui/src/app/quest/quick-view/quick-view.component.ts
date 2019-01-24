@@ -40,7 +40,7 @@ export class QuickViewComponent implements OnInit {
         true
       );
     } catch (err) {
-      console.log('LOAD ERR', err);
+      throw err;
     }
 
     this.loading = false;

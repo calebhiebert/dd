@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'dd-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
   public processing = false;
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
           await this.router.navigate(['home']);
         }
       } catch (err) {
-        console.log('Process ERR', err);
+        throw err;
       }
       this.processing = false;
     }

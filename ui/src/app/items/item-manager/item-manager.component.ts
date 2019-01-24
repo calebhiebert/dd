@@ -71,7 +71,7 @@ export class ItemManagerComponent implements OnInit {
       try {
         this.queryLimit = parseInt(query.get('limit'), 10);
       } catch (err) {
-        console.log('Limit parse err');
+        throw err;
       }
     } else {
       this.queryLimit = 10;
@@ -81,7 +81,7 @@ export class ItemManagerComponent implements OnInit {
       try {
         this.queryOffset = parseInt(query.get('offset'), 10);
       } catch (err) {
-        console.log('Offset parse err');
+        throw err;
       }
     } else {
       this.queryOffset = 0;
@@ -108,7 +108,7 @@ export class ItemManagerComponent implements OnInit {
       this.items = items.items;
       this.totalItemCount = items.total;
     } catch (err) {
-      console.log('LOAD ERR', err);
+      throw err;
     }
 
     this.loading = false;

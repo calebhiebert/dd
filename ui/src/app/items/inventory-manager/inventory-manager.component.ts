@@ -49,7 +49,7 @@ export class InventoryManagerComponent implements OnInit {
       const inventory = await this.entityService.getInventory(this.entityId);
       this.inventory = inventory;
     } catch (err) {
-      console.log('LOAD ERR', err);
+      throw err;
     }
 
     this.loading = false;
@@ -82,7 +82,7 @@ export class InventoryManagerComponent implements OnInit {
       );
       inventoryItem.id = addedItem.id;
     } catch (err) {
-      console.log('ADD ERR', err);
+      throw err;
     }
 
     this.working = false;
@@ -131,7 +131,7 @@ export class InventoryManagerComponent implements OnInit {
 
       this.itemEditModal.close(null);
     } catch (err) {
-      console.log('Edit ERR', err);
+      throw err;
     }
 
     this.working = false;
@@ -156,7 +156,7 @@ export class InventoryManagerComponent implements OnInit {
         inventoryItem.quantity--;
       }
     } catch (err) {
-      console.log('UPDATE ERR', err);
+      throw err;
     }
 
     this.working = false;

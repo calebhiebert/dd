@@ -30,7 +30,7 @@ export class OverviewEntityComponent implements OnInit {
     try {
       await this.entityService.updateEntity(entity);
     } catch (err) {
-      console.log('SAVE ERR', err);
+      throw err;
     }
 
     this.saving = false;

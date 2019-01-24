@@ -6,4 +6,5 @@ export const environment = {
   hubURL: 'https://panch-dd.herokuapp.com/hub',
   gitHash: 'REPLACE_GIT_HASH',
   gitTag: 'REPLACE_GIT_TAG',
+  sentryDSN: 'https://afdf2c17948049938e2f1d3151093cc1@sentry.io/1378358',
 };

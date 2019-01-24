@@ -6,7 +6,7 @@ import { Route, Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'dd-spawnable-manager',
   templateUrl: './spawnable-manager.component.html',
-  styleUrls: ['./spawnable-manager.component.css']
+  styleUrls: ['./spawnable-manager.component.css'],
 })
 export class SpawnableManagerComponent implements OnInit {
   public loading = false;
@@ -32,7 +32,7 @@ export class SpawnableManagerComponent implements OnInit {
         true
       );
     } catch (err) {
-      console.log('LOAD ERR', err);
+      throw err;
     }
 
     this.loading = false;
@@ -45,12 +45,12 @@ export class SpawnableManagerComponent implements OnInit {
         this.campaignService.campaign.id,
         'entities',
         entityPreset.id,
-        'create'
+        'create',
       ],
       {
         queryParams: {
-          spawnable: true
-        }
+          spawnable: true,
+        },
       }
     );
   }
@@ -61,7 +61,7 @@ export class SpawnableManagerComponent implements OnInit {
       this.campaignService.campaign.id,
       'entities',
       spawnable.id,
-      'edit'
+      'edit',
     ]);
   }
 

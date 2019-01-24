@@ -69,7 +69,7 @@ export class CampaignSettingsComponent implements OnInit {
 
         this.campaignService.campaign = { ...this.campaign, ...campaignUpdate };
       } catch (err) {
-        console.log('SAVE ERR', err);
+        throw err;
       }
     } else {
       const v = this.formGroup.value;
@@ -86,10 +86,8 @@ export class CampaignSettingsComponent implements OnInit {
         });
 
         this.router.navigate(['campaign', 'manage', c.id, 'settings']);
-
-        console.log('CREATE', c);
       } catch (err) {
-        console.log('CREATE ERR', err, err.stack);
+        throw err;
       }
     }
 

@@ -27,9 +27,15 @@ export class AboutComponent implements OnInit {
       const abt = await this.aboutService.remoteAbout();
       this.remote = abt;
     } catch (err) {
-      console.log('ABOUT ERR', err);
+      throw err;
     }
 
     this.loading = false;
+  }
+
+  public makeDummyException() {
+    const error = new Error('This is a test error!');
+    error.name = 'SentryTestError';
+    throw error;
   }
 }

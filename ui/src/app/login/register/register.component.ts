@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
 
         this.router.navigate(['home']);
       } catch (err) {
-        console.log('REGISTER ERR', err);
+        throw err;
         this.router.navigate(['home']);
       }
 

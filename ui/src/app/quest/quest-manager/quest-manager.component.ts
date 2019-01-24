@@ -32,7 +32,7 @@ export class QuestManagerComponent implements OnInit {
         this.campaignService.campaign.id
       );
     } catch (err) {
-      console.log('LOAD ERR', err);
+      throw err;
     }
 
     this.loading = false;

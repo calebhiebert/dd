@@ -34,7 +34,7 @@ export class QuestViewComponent implements OnInit {
     try {
       this.quest = await this.questService.getQuest(id);
     } catch (err) {
-      console.log(err);
+      throw err;
     }
 
     this.loading = false;

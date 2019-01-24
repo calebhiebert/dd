@@ -5,7 +5,7 @@ import {
   Validators,
   ValidatorFn,
   AbstractControl,
-  ValidationErrors
+  ValidationErrors,
 } from '@angular/forms';
 import { AttributeType, Attribute } from 'src/app/attributes';
 import { IEntityAttribute } from 'src/app/entity.service';
@@ -23,7 +23,7 @@ export const numberValidator: ValidatorFn = (
       parseFloat(control.value);
     } catch (err) {
       return {
-        number: true
+        number: true,
       };
     }
   }
@@ -32,7 +32,7 @@ export const numberValidator: ValidatorFn = (
 @Component({
   selector: 'dd-dynamic-attribute-form',
   templateUrl: './dynamic-attribute-form.component.html',
-  styleUrls: ['./dynamic-attribute-form.component.css']
+  styleUrls: ['./dynamic-attribute-form.component.css'],
 })
 export class DynamicAttributeFormComponent implements OnInit {
   private _attributes: IEntityAttribute[];
@@ -44,10 +44,6 @@ export class DynamicAttributeFormComponent implements OnInit {
 
   ngOnInit() {
     this.resetControls();
-
-    // this.formGroup.valueChanges.subscribe((v) => {
-    //   console.log(v, this.formGroup);
-    // });
   }
 
   private resetControls() {
@@ -101,7 +97,7 @@ export class DynamicAttributeFormComponent implements OnInit {
       attributes.push({
         name: attr.name,
         type: attr.type,
-        data: this.formGroup.get(attr.name).value
+        data: this.formGroup.get(attr.name).value,
       });
     }
 

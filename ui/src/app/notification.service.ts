@@ -19,7 +19,7 @@ export class NotificationService {
       const notifications = await this.getNotifications();
       this._notifications = notifications;
     } catch (err) {
-      console.log('NOTIF ERR', err);
+      throw err;
     }
     this._loading = false;
   }
@@ -30,7 +30,7 @@ export class NotificationService {
     try {
       await this.deleteNotification(n.id);
     } catch (err) {
-      console.log('NOTIF DEL ERR', err);
+      throw err;
     }
   }
 

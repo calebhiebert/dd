@@ -10,7 +10,7 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'dd-entity-creation-form',
   templateUrl: './entity-creation-form.component.html',
-  styleUrls: ['./entity-creation-form.component.css']
+  styleUrls: ['./entity-creation-form.component.css'],
 })
 export class EntityCreationFormComponent implements OnInit {
   public loading = false;
@@ -39,25 +39,25 @@ export class EntityCreationFormComponent implements OnInit {
       name: new FormControl(null, [
         Validators.required,
         Validators.minLength(2),
-        Validators.maxLength(20)
+        Validators.maxLength(20),
       ]),
       description: new FormControl(null, [
         Validators.required,
-        Validators.minLength(3)
+        Validators.minLength(3),
       ]),
       spawnable: new FormControl(false),
       xp: new FormControl(0, [numberValidator, Validators.min(0)]),
       currency: new FormControl(null, [numberValidator, Validators.min(0)]),
       health: new FormGroup({
         max: new FormControl(null, [numberValidator, Validators.min(1)]),
-        current: new FormControl(null, [numberValidator, Validators.min(0)])
+        current: new FormControl(null, [numberValidator, Validators.min(0)]),
       }),
       imageId: new FormControl('uncertainty'),
       imageColor1: new FormControl('#fff'),
-      imageColor2: new FormControl('#000')
+      imageColor2: new FormControl('#000'),
     });
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       const id = params.get('ent_id');
       this._entTypeId = params.get('ent_type_id');
 
@@ -85,7 +85,7 @@ export class EntityCreationFormComponent implements OnInit {
         .setValidators([
           numberValidator,
           Validators.min(0),
-          Validators.required
+          Validators.required,
         ]);
     }
 
@@ -95,7 +95,7 @@ export class EntityCreationFormComponent implements OnInit {
         .setValidators([
           numberValidator,
           Validators.min(0),
-          Validators.required
+          Validators.required,
         ]);
     }
 
@@ -105,7 +105,7 @@ export class EntityCreationFormComponent implements OnInit {
         .setValidators([
           numberValidator,
           Validators.min(1),
-          Validators.required
+          Validators.required,
         ]);
 
       this.formGroup
@@ -113,7 +113,7 @@ export class EntityCreationFormComponent implements OnInit {
         .setValidators([
           numberValidator,
           Validators.min(0),
-          Validators.required
+          Validators.required,
         ]);
     }
   }
@@ -133,12 +133,12 @@ export class EntityCreationFormComponent implements OnInit {
       spawnable: v.spawnable,
       health: {
         max: v.health.max,
-        current: v.health.current
+        current: v.health.current,
       },
       userId: this.editing ? this.entity.userId : this.login.id,
       campaignId: this.campaignService.campaign.id,
       entityPresetId: this.preset.id,
-      attributes: []
+      attributes: [],
     };
 
     if (!this.preset.isHealthEnabled) {
@@ -148,12 +148,12 @@ export class EntityCreationFormComponent implements OnInit {
     for (const [k, attrData] of Object.entries(
       this.attributesFormGroup.value
     )) {
-      const preset = this.preset.attributes.find(p => p.name === k);
+      const preset = this.preset.attributes.find((p) => p.name === k);
 
       ent.attributes.push({
         name: preset.name,
         data: attrData as string,
-        type: preset.type
+        type: preset.type,
       });
     }
 
@@ -186,7 +186,7 @@ export class EntityCreationFormComponent implements OnInit {
         }
       }, 1);
     } catch (err) {
-      console.log('LOAD ERR', err);
+      throw err;
     }
 
     this.formGroup.enable();
@@ -203,7 +203,7 @@ export class EntityCreationFormComponent implements OnInit {
         await this.entityService.updateEntity(this.constructEntity());
         this.router.navigate(['../'], { relativeTo: this.route });
       } catch (err) {
-        console.log('SAVE ERR', err);
+        throw err;
       }
     } else {
       try {
@@ -215,10 +215,10 @@ export class EntityCreationFormComponent implements OnInit {
           'campaigns',
           this.campaignService.campaign.id,
           'entities',
-          ent.id
+          ent.id,
         ]);
       } catch (err) {
-        console.log('Create ERR', err);
+        throw err;
       }
     }
 
@@ -236,7 +236,7 @@ export class EntityCreationFormComponent implements OnInit {
       return this.entity.preset;
     } else {
       const epreset = this.campaignService.campaign.entityPresets.find(
-        ep => ep.id === this._entTypeId
+        (ep) => ep.id === this._entTypeId
       );
 
       return epreset;
