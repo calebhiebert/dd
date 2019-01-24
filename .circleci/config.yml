@@ -37,6 +37,7 @@ jobs:
           command: |
             sed -i "s/REPLACE_GIT_HASH/$CIRCLE_SHA1/g" ./src/environments/environment.prod.ts
             sed -i "s/REPLACE_GIT_TAG/$CIRCLE_TAG/g" ./src/environments/environment.prod.ts
+            sed -i "s/REPLACE_GIT_HASH/$CIRCLE_SHA1/g" ./src/main.ts
       - run:
           name: Build
           command: yarn build --prod
