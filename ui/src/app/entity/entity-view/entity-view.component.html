@@ -99,7 +99,14 @@
   <!-- Health/Currency -->
   <div class="columns">
     <!-- Health -->
-    <div class="column col-9 col-md-7 col-sm-12" *ngIf="preset.isHealthEnabled">
+    <div
+      class="column"
+      [ngClass]="{
+        'col-9 col-md-7 col-sm-12': preset.isCurrencyEnabled,
+        'col-12': !preset.isCurrencyEnabled
+      }"
+      *ngIf="preset.isHealthEnabled"
+    >
       <div class="card h-100">
         <dd-health-display
           [editable]="editable"
