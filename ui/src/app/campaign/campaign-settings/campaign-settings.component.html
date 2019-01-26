@@ -3,47 +3,34 @@
   <div class="columns">
     <div class="column"><h2>Settings</h2></div>
     <div class="column col-auto col-ml-auto">
-      <button
-        class="btn"
-        [disabled]="formGroup.invalid"
-        (click)="save()"
-        [ngClass]="{ loading: saving }"
-      >
+      <button class="btn mr-2" (click)="cancel()">Cancel</button>
+
+      <button class="btn btn-primary" [disabled]="formGroup.invalid" (click)="save()" [ngClass]="{ loading: saving }">
         Save
       </button>
     </div>
   </div>
 
   <h3>General Settings</h3>
-  <dd-campaign-form
-    [campaign]="campaign"
-    [formGroup]="formGroup"
-  ></dd-campaign-form>
+  <dd-campaign-form [campaign]="campaign" [formGroup]="formGroup"></dd-campaign-form>
+
+  <div class="divider my-2"></div>
 
   <!-- Experience Table -->
   <div class="columns mt-2">
     <div class="column"><h3 class="mb-0">Experience Table</h3></div>
     <div class="column col-auto col-ml-auto">
-      <button
-        class="btn btn-sm"
-        *ngIf="!expandXPTable"
-        (click)="expandXPTable = !expandXPTable"
-      >
+      <button class="btn btn-sm" *ngIf="!expandXPTable" (click)="expandXPTable = !expandXPTable">
         Expand <i class="icon icon-arrow-down"></i>
       </button>
-      <button
-        class="btn btn-sm"
-        *ngIf="expandXPTable"
-        (click)="expandXPTable = !expandXPTable"
-      >
+      <button class="btn btn-sm" *ngIf="expandXPTable" (click)="expandXPTable = !expandXPTable">
         Collapse <i class="icon icon-arrow-up"></i>
       </button>
     </div>
   </div>
   <span class="text-gray" *ngIf="expandXPTable"
-    >This is the experience table. This will determine entities' levels based on
-    the amount of XP they have. For example, if level 2 was set to 30 XP, an
-    entity would be level 2 when they reach 30 or above XP.</span
+    >This is the experience table. This will determine entities' levels based on the amount of XP they have. For
+    example, if level 2 was set to 30 XP, an entity would be level 2 when they reach 30 or above XP.</span
   >
   <dd-experience-table-editor
     [campaign]="campaign"
@@ -51,20 +38,15 @@
     [hidden]="!expandXPTable"
   ></dd-experience-table-editor>
 
+  <div class="divider my-2"></div>
+
   <!-- Item Rarity Table -->
   <div class="columns mt-2">
     <div class="column"><h3 class="mb-0">Item Rarity Table</h3></div>
     <div class="column col-auto col-ml-auto">
-      <button
-        class="btn btn-sm"
-        (click)="expandItemRarityTable = !expandItemRarityTable"
-      >
-        <span *ngIf="expandItemRarityTable"
-          >Collapse <i class="icon icon-arrow-up"></i
-        ></span>
-        <span *ngIf="!expandItemRarityTable"
-          >Expand <i class="icon icon-arrow-down"></i
-        ></span>
+      <button class="btn btn-sm" (click)="expandItemRarityTable = !expandItemRarityTable">
+        <span *ngIf="expandItemRarityTable">Collapse <i class="icon icon-arrow-up"></i></span>
+        <span *ngIf="!expandItemRarityTable">Expand <i class="icon icon-arrow-down"></i></span>
       </button>
     </div>
   </div>
@@ -73,6 +55,8 @@
     [campaign]="campaign"
     [formGroup]="formGroup"
   ></dd-item-rarity-table-editor>
+
+  <div class="divider my-2"></div>
 
   <!-- Entity Types -->
   <div class="columns mt-2" *ngIf="editing">
@@ -88,25 +72,15 @@
     <p class="empty-title h5">There are no entity presets :(</p>
     <p class="empty-subtitle">Click the button to create one</p>
     <div class="empty-action">
-      <button class="btn btn-primary" (click)="createEntityPreset()">
-        Create Preset
-      </button>
+      <button class="btn btn-primary" (click)="createEntityPreset()">Create Preset</button>
     </div>
   </div>
   <div *ngIf="editing">
-    <div
-      class="card p-2 mb-2 hoverable"
-      *ngFor="let ep of campaign.entityPresets"
-      (click)="selectEntityPreset(ep)"
-    >
+    <div class="card p-2 mb-2 hoverable" *ngFor="let ep of campaign.entityPresets" (click)="selectEntityPreset(ep)">
       <div class="columns">
         <div class="column col-auto" *ngIf="ep.imageId">
           <figure class="avatar avatar-lg">
-            <img
-              src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-                ep.imageId
-              }}"
-            />
+            <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ ep.imageId }}" />
           </figure>
         </div>
         <div class="column">
@@ -115,5 +89,14 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="divider my-2"></div>
+
+  <!-- Danger Options -->
+  <div class="card p-2">
+    <div class="card-title"><h3 class="mb-2">Danger!</h3></div>
+
+    <div class="card-body"><button class="btn btn-error" (click)="delete()" disabled>Delete Campaign</button></div>
   </div>
 </div>

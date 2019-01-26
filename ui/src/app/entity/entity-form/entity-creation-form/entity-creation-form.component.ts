@@ -31,20 +31,13 @@ export class EntityCreationFormComponent implements OnInit {
     private entityService: EntityService,
     private campaignService: CampaignService,
     private login: LoginService,
-    private location: Location
+    private location: Location,
   ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      name: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(20),
-      ]),
-      description: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
+      name: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]),
+      description: new FormControl(null, [Validators.required, Validators.minLength(3)]),
       spawnable: new FormControl(false),
       xp: new FormControl(0, [numberValidator, Validators.min(0)]),
       currency: new FormControl(null, [numberValidator, Validators.min(0)]),
@@ -80,41 +73,17 @@ export class EntityCreationFormComponent implements OnInit {
 
   private setFormValidators() {
     if (this.preset.isXPEnabled) {
-      this.formGroup
-        .get('xp')
-        .setValidators([
-          numberValidator,
-          Validators.min(0),
-          Validators.required,
-        ]);
+      this.formGroup.get('xp').setValidators([numberValidator, Validators.min(0), Validators.required]);
     }
 
     if (this.preset.isCurrencyEnabled) {
-      this.formGroup
-        .get('currency')
-        .setValidators([
-          numberValidator,
-          Validators.min(0),
-          Validators.required,
-        ]);
+      this.formGroup.get('currency').setValidators([numberValidator, Validators.min(0), Validators.required]);
     }
 
     if (this.preset.isHealthEnabled) {
-      this.formGroup
-        .get('health.max')
-        .setValidators([
-          numberValidator,
-          Validators.min(1),
-          Validators.required,
-        ]);
+      this.formGroup.get('health.max').setValidators([numberValidator, Validators.min(1), Validators.required]);
 
-      this.formGroup
-        .get('health.current')
-        .setValidators([
-          numberValidator,
-          Validators.min(0),
-          Validators.required,
-        ]);
+      this.formGroup.get('health.current').setValidators([numberValidator, Validators.min(0), Validators.required]);
     }
   }
 
@@ -145,9 +114,7 @@ export class EntityCreationFormComponent implements OnInit {
       ent.health = null;
     }
 
-    for (const [k, attrData] of Object.entries(
-      this.attributesFormGroup.value
-    )) {
+    for (const [k, attrData] of Object.entries(this.attributesFormGroup.value)) {
       const preset = this.preset.attributes.find((p) => p.name === k);
 
       ent.attributes.push({
@@ -207,16 +174,9 @@ export class EntityCreationFormComponent implements OnInit {
       }
     } else {
       try {
-        const ent = await this.entityService.createEntity(
-          this.constructEntity()
-        );
+        const ent = await this.entityService.createEntity(this.constructEntity());
 
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'entities',
-          ent.id,
-        ]);
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'entities', ent.id]);
       } catch (err) {
         throw err;
       }
@@ -227,6 +187,10 @@ export class EntityCreationFormComponent implements OnInit {
     this.saving = false;
   }
 
+  public async delete() {
+    // TODO add delete logic
+  }
+
   public cancel() {
     this.location.back();
   }
@@ -235,9 +199,7 @@ export class EntityCreationFormComponent implements OnInit {
     if (this.editing) {
       return this.entity.preset;
     } else {
-      const epreset = this.campaignService.campaign.entityPresets.find(
-        (ep) => ep.id === this._entTypeId
-      );
+      const epreset = this.campaignService.campaign.entityPresets.find((ep) => ep.id === this._entTypeId);
 
       return epreset;
     }

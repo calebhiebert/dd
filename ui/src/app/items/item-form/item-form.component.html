@@ -14,7 +14,9 @@
       >
         Delete
       </button>
-      <button class="btn" [disabled]="formGroup.invalid" (click)="save()" [ngClass]="{ loading: saving }">Save</button>
+      <button class="btn btn-primary" [disabled]="formGroup.invalid" (click)="save()" [ngClass]="{ loading: saving }">
+        Save
+      </button>
     </div>
   </div>
 

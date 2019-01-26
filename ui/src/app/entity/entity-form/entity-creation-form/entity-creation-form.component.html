@@ -8,7 +8,9 @@
       <h3>{{ editing ? 'Edit' : 'Create' }} {{ preset.name }}</h3>
     </div>
     <div class="column col-auto col-ml-auto">
-      <a class="btn mr-2 c-hand" (click)="cancel()">Cancel</a>
+      <button class="btn mr-2" (click)="cancel()">Cancel</button>
+
+      <button class="btn btn-error mr-2" (click)="delete()" *ngIf="editing">Delete</button>
 
       <button
         class="btn btn-primary"
@@ -37,27 +39,12 @@
           }"
           *ngIf="preset.isXPEnabled"
         >
-          <label for="xp" class="form-label"
-            >XP <span class="text-large text-bold text-primary">*</span></label
-          >
-          <input
-            type="number"
-            name="xp"
-            id="xp"
-            class="form-input"
-            placeholder="XP"
-            formControlName="xp"
-          />
-          <p
-            class="form-input-hint"
-            *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.required"
-          >
+          <label for="xp" class="form-label">XP <span class="text-large text-bold text-primary">*</span></label>
+          <input type="number" name="xp" id="xp" class="form-input" placeholder="XP" formControlName="xp" />
+          <p class="form-input-hint" *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.required">
             An XP value is required
           </p>
-          <p
-            class="form-input-hint"
-            *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.min"
-          >
+          <p class="form-input-hint" *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.min">
             Can't have negative XP :/
           </p>
         </div>
@@ -73,46 +60,15 @@
             'has-success': name.valid && (name.touched || name.dirty)
           }"
         >
-          <label for="name" class="form-lable"
-            >Name
-            <span class="text-large text-bold text-primary">*</span></label
-          >
-          <input
-            type="text"
-            name="name"
-            id="name"
-            formControlName="name"
-            class="form-input"
-            placeholder="Name"
-          />
-          <p
-            class="form-input-hint"
-            *ngIf="
-              name.invalid &&
-              (name.touched || name.dirty) &&
-              name.errors.required
-            "
-          >
+          <label for="name" class="form-lable">Name <span class="text-large text-bold text-primary">*</span></label>
+          <input type="text" name="name" id="name" formControlName="name" class="form-input" placeholder="Name" />
+          <p class="form-input-hint" *ngIf="name.invalid && (name.touched || name.dirty) && name.errors.required">
             A name is required
           </p>
-          <p
-            class="form-input-hint"
-            *ngIf="
-              name.invalid &&
-              (name.touched || name.dirty) &&
-              name.errors.minlength
-            "
-          >
+          <p class="form-input-hint" *ngIf="name.invalid && (name.touched || name.dirty) && name.errors.minlength">
             The name can't be shorter than 2 characters
           </p>
-          <p
-            class="form-input-hint"
-            *ngIf="
-              name.invalid &&
-              (name.touched || name.dirty) &&
-              name.errors.maxlength
-            "
-          >
+          <p class="form-input-hint" *ngIf="name.invalid && (name.touched || name.dirty) && name.errors.maxlength">
             The name can't be longer than 20 characters
           </p>
         </div>
@@ -121,15 +77,12 @@
         <div
           class="form-group"
           [ngClass]="{
-            'has-error':
-              description.invalid && (description.touched || description.dirty),
-            'has-success':
-              description.valid && (description.touched || description.dirty)
+            'has-error': description.invalid && (description.touched || description.dirty),
+            'has-success': description.valid && (description.touched || description.dirty)
           }"
         >
           <label for="description" class="form-label"
-            >Description
-            <span class="text-large text-bold text-primary">*</span></label
+            >Description <span class="text-large text-bold text-primary">*</span></label
           >
           <textarea
             name="description"
@@ -151,21 +104,13 @@
           </p>
           <p
             class="form-input-hint"
-            *ngIf="
-              description.invalid &&
-              (description.touched || description.dirty) &&
-              description.errors.minlength
-            "
+            *ngIf="description.invalid && (description.touched || description.dirty) && description.errors.minlength"
           >
             The description can't be shorter than 3 characters
           </p>
           <p
             class="form-input-hint"
-            *ngIf="
-              description.invalid &&
-              (description.touched || description.dirty) &&
-              description.errors.required
-            "
+            *ngIf="description.invalid && (description.touched || description.dirty) && description.errors.required"
           >
             The description is required
           </p>
@@ -174,12 +119,10 @@
         <!-- Spawnable -->
         <div class="form-group" *ngIf="campaignEditable">
           <label class="form-checkbox">
-            <input type="checkbox" formControlName="spawnable" />
-            <i class="form-icon"></i> This entity is spawnable
+            <input type="checkbox" formControlName="spawnable" /> <i class="form-icon"></i> This entity is spawnable
           </label>
           <p class="form-input-hint">
-            Spawnable entities act as presets. They can be quickly spawned into
-            game sessions
+            Spawnable entities act as presets. They can be quickly spawned into game sessions
           </p>
         </div>
 
@@ -187,8 +130,7 @@
         <div
           class="form-group"
           [ngClass]="{
-            'has-error':
-              currency.invalid && (currency.dirty || currency.touched)
+            'has-error': currency.invalid && (currency.dirty || currency.touched)
           }"
           *ngIf="preset.isCurrencyEnabled"
         >
@@ -206,21 +148,13 @@
           </div>
           <p
             class="form-input-hint"
-            *ngIf="
-              currency.invalid &&
-              (currency.dirty || currency.touched) &&
-              currency.errors.required
-            "
+            *ngIf="currency.invalid && (currency.dirty || currency.touched) && currency.errors.required"
           >
             A value for gold pieces is required
           </p>
           <p
             class="form-input-hint"
-            *ngIf="
-              currency.invalid &&
-              (currency.dirty || currency.touched) &&
-              currency.errors.min
-            "
+            *ngIf="currency.invalid && (currency.dirty || currency.touched) && currency.errors.min"
           >
             You must be bad with money, you can't have negative money!
           </p>
@@ -257,21 +191,13 @@
           </div>
           <p
             class="form-input-hint mb-0"
-            *ngIf="
-              hpCurrent.invalid &&
-              (hpCurrent.dirty || hpCurrent.touched) &&
-              hpCurrent.errors.required
-            "
+            *ngIf="hpCurrent.invalid && (hpCurrent.dirty || hpCurrent.touched) && hpCurrent.errors.required"
           >
             A value is required for current health
           </p>
           <p
             class="form-input-hint mb-0"
-            *ngIf="
-              hpMax.invalid &&
-              (hpMax.dirty || hpMax.touched) &&
-              hpMax.errors.required
-            "
+            *ngIf="hpMax.invalid && (hpMax.dirty || hpMax.touched) && hpMax.errors.required"
           >
             A value is required for max health
           </p>

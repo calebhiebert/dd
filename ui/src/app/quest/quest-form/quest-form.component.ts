@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IQuest, QuestService } from 'src/app/quest.service';
 import { CampaignService } from 'src/app/campaign.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'dd-quest-form',
@@ -21,6 +22,7 @@ export class QuestFormComponent implements OnInit {
     private route: ActivatedRoute,
     private campaignService: CampaignService,
     private questService: QuestService,
+    private location: Location,
   ) {}
 
   ngOnInit() {
@@ -120,6 +122,10 @@ export class QuestFormComponent implements OnInit {
 
   public async delete() {
     // TODO add delete logic
+  }
+
+  public cancel() {
+    this.location.back();
   }
 
   public get editing() {
