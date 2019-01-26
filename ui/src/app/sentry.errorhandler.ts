@@ -6,7 +6,7 @@ export class SentryErrorHandler implements ErrorHandler {
   constructor() {}
 
   handleError(error) {
-    console.log('Handling Error', error);
+    console.log('Handling Error', error.name, error.message, error);
     Sentry.captureException(error.originalError || error);
   }
 }

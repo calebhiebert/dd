@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  AfterViewInit,
-  ElementRef,
-  Input
-} from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { LoginService } from '../login.service';
@@ -13,7 +6,7 @@ import { LoginService } from '../login.service';
 @Component({
   selector: 'dd-image-upload',
   templateUrl: './image-upload.component.html',
-  styleUrls: ['./image-upload.component.scss']
+  styleUrls: ['./image-upload.component.scss'],
 })
 export class ImageUploadComponent implements OnInit, AfterViewInit {
   @ViewChild('fupload')
@@ -47,25 +40,25 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    ['dragenter', 'dragover'].forEach(evt =>
-      this.fupload.nativeElement.addEventListener(evt, e => {
+    ['dragenter', 'dragover'].forEach((evt) =>
+      this.fupload.nativeElement.addEventListener(evt, (e) => {
         e.preventDefault();
         e.stopPropagation();
 
         this.isDragOver = true;
-      })
+      }),
     );
 
-    ['dragleave', 'dragend', 'drop'].forEach(evt =>
-      this.fupload.nativeElement.addEventListener(evt, e => {
+    ['dragleave', 'dragend', 'drop'].forEach((evt) =>
+      this.fupload.nativeElement.addEventListener(evt, (e) => {
         e.preventDefault();
         e.stopPropagation();
 
         this.isDragOver = false;
-      })
+      }),
     );
 
-    this.fupload.nativeElement.addEventListener('drop', e => {
+    this.fupload.nativeElement.addEventListener('drop', (e) => {
       if (e.dataTransfer.files.length > 0) {
         this.handleFileUpload(e.dataTransfer.files[0]);
       }
@@ -94,9 +87,7 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
       this.formGroup.get('imageId').value !== undefined &&
       this.formGroup.get('imageId').value !== ''
     ) {
-      return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${
-        this.formGroup.get('imageId').value
-      }`;
+      return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${this.formGroup.get('imageId').value}`;
     } else {
       return null;
     }
@@ -118,21 +109,22 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `${environment.apiURL}/upload`, true);
-    xhr.setRequestHeader(
-      'Authorization',
-      `Bearer ${this.loginService.loadToken()}`
-    );
+    xhr.setRequestHeader('Authorization', `Bearer ${this.loginService.loadToken()}`);
 
-    xhr.onload = e => {
+    xhr.onload = (e) => {
       const image = JSON.parse(xhr.responseText);
+
       this.isUploading = false;
       this.file = null;
       this.formGroup.get('imageId').setValue(image.public_id);
-      this.imageColor1.setValue(image.colors[0][0]);
-      this.imageColor2.setValue(image.colors[1][0]);
+
+      if (image.colors) {
+        this.imageColor1.setValue(image.colors[0][0]);
+        this.imageColor2.setValue(image.colors[1][0]);
+      }
     };
 
-    xhr.upload.addEventListener('progress', e => {
+    xhr.upload.addEventListener('progress', (e) => {
       this.uploadProgress = (e.loaded / e.total) * 100;
     });
 
