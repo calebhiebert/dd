@@ -6,9 +6,8 @@
         <h3>{{ editing ? 'Edit' : 'Create' }} Quest</h3>
       </div>
       <div class="column col-auto col-ml-auto">
-        <button class="btn btn-primary" [disabled]="formGroup.invalid">
-          Save
-        </button>
+        <button class="btn btn-error mx-2" type="button" *ngIf="editing">Delete</button>
+        <button class="btn btn-primary" [disabled]="formGroup.invalid">Save</button>
       </div>
     </div>
 
@@ -20,35 +19,14 @@
       }"
     >
       <label class="form-label label-lg" for="name">Name</label>
-      <input
-        class="form-input input-lg"
-        formControlName="name"
-        type="text"
-        id="name"
-        placeholder="Name"
-      />
-      <p
-        class="form-input-hint"
-        *ngIf="
-          name.invalid && (name.dirty || name.touched) && name.errors.required
-        "
-      >
+      <input class="form-input input-lg" formControlName="name" type="text" id="name" placeholder="Name" />
+      <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.required">
         The quest needs a name
       </p>
-      <p
-        class="form-input-hint"
-        *ngIf="
-          name.invalid && (name.dirty || name.touched) && name.errors.minlength
-        "
-      >
+      <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.minlength">
         The name is too short
       </p>
-      <p
-        class="form-input-hint"
-        *ngIf="
-          name.invalid && (name.dirty || name.touched) && name.errors.maxlength
-        "
-      >
+      <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.maxlength">
         The name can't be more than 30 characters long
       </p>
     </div>
@@ -57,8 +35,7 @@
     <div
       class="form-group"
       [ngClass]="{
-        'has-error':
-          description.invalid && (description.touched || description.dirty),
+        'has-error': description.invalid && (description.touched || description.dirty),
         'has-success': description.valid
       }"
     >
@@ -82,11 +59,7 @@
       </p>
       <p
         class="form-input-hint"
-        *ngIf="
-          description.invalid &&
-          (description.touched || description.dirty) &&
-          description.errors.required
-        "
+        *ngIf="description.invalid && (description.touched || description.dirty) && description.errors.required"
       >
         The quest needs a description
       </p>
@@ -95,26 +68,16 @@
     <!-- Visible -->
     <div class="form-group">
       <label for="visible" class="form-switch">
-        <input
-          type="checkbox"
-          name="visible"
-          id="visible"
-          formControlName="visible"
-        />
-        <i class="form-icon"></i> This quest is visible to players
+        <input type="checkbox" name="visible" id="visible" formControlName="visible" /> <i class="form-icon"></i> This
+        quest is visible to players
       </label>
     </div>
 
     <!-- Active -->
     <div class="form-group">
       <label for="active" class="form-switch">
-        <input
-          type="checkbox"
-          name="active"
-          id="active"
-          formControlName="active"
-        />
-        <i class="form-icon"></i> This quest is marked as active
+        <input type="checkbox" name="active" id="active" formControlName="active" /> <i class="form-icon"></i> This
+        quest is marked as active
       </label>
     </div>
   </form>
