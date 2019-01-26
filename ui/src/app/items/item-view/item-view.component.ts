@@ -4,6 +4,7 @@ import { ItemService, IItem } from 'src/app/item.service';
 import { IItemRarity, CampaignService } from 'src/app/campaign.service';
 import { EntityService, IInventoryItem, IEntity } from 'src/app/entity.service';
 import { EditableEntitySelectorComponent } from 'src/app/entity/editable-entity-selector/editable-entity-selector.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'dd-item-view',
@@ -22,7 +23,8 @@ export class ItemViewComponent implements OnInit {
     private router: Router,
     private itemService: ItemService,
     private campaignService: CampaignService,
-    private entityService: EntityService
+    private entityService: EntityService,
+    private toast: ToastrService,
   ) {}
 
   ngOnInit() {
@@ -74,6 +76,7 @@ export class ItemViewComponent implements OnInit {
     }
 
     if (entity === null || entity === undefined) {
+      this.toast.error('Unable to find selected entity.');
       return console.log('Entity not found');
     }
 
@@ -81,7 +84,15 @@ export class ItemViewComponent implements OnInit {
       const inventory = await this.entityService.getInventory(entity.id);
 
       if (inventory.find((i) => i.itemId === this.item.id)) {
-        console.log('Item already in inventory!');
+        this.toast.warning(
+          `<span class="text-bold">${entity.name}</span> already has <span class="text-bold">${
+            this.item.name
+          }</span> in their inventory`,
+          '',
+          {
+            enableHtml: true,
+          },
+        );
         return;
       }
 
@@ -91,20 +102,16 @@ export class ItemViewComponent implements OnInit {
         quantity: 1,
       };
 
-      const createdItem = await this.entityService.createInventoryItem(
-        inventoryItem
-      );
+      const createdItem = await this.entityService.createInventoryItem(inventoryItem);
+
+      this.toast.info(`Added 1x ${this.item.name} to the inventory of ${entity.name}`);
     } catch (err) {
       throw err;
     }
   }
 
   public get rarity(): IItemRarity {
-    if (
-      this.campaignService.campaign &&
-      this.campaignService.campaign.itemRarities &&
-      this.item
-    ) {
+    if (this.campaignService.campaign && this.campaignService.campaign.itemRarities && this.item) {
       return this.campaignService.campaign.itemRarities[this.item.rarity];
     } else {
       return null;

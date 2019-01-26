@@ -60,6 +60,8 @@ import { FooterComponent } from './footer/footer.component';
 import { HttpErrorInterceptor } from './http-error.interceptor.ts';
 import { SentryErrorHandler } from './sentry.errorhandler';
 import { ItemFormComponent } from './items/item-form/item-form.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -121,6 +123,8 @@ import { ItemFormComponent } from './items/item-form/item-form.component';
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     TruncateModule,
     HttpClientModule,
     MarkdownModule.forRoot(),
