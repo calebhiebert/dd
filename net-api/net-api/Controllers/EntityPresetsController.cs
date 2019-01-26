@@ -33,7 +33,9 @@ namespace net_api.Controllers
 
             // TODO authenticate requests
 
-            var presets = await _context.EntityPresets.Where(e => e.CampaignId == campaignId).ToListAsync();
+            var presets = await _context.EntityPresets
+                .Where(e => e.CampaignId == campaignId)
+                .ToListAsync();
 
             return Ok(presets);
         }

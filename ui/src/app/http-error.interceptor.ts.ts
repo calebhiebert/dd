@@ -38,6 +38,15 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
                 await this.router.navigate(['login']);
                 break;
+              case 0:
+                await Swal.fire({
+                  title: "Can't Connect!",
+                  text:
+                    'A connection to the server could not be established. Please make sure you are connected to the internet',
+                  type: 'error',
+                  confirmButtonText: 'Okay',
+                });
+                break;
               default:
                 await Swal.fire({
                   title: 'Unknown Error!',

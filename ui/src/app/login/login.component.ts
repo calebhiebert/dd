@@ -31,7 +31,12 @@ export class LoginComponent implements OnInit {
           await this.router.navigate(['home']);
         }
       } catch (err) {
-        throw err;
+        // Handle invalid state
+        if (err && err.error === 'invalid_token') {
+          this.router.navigate(['login']);
+        } else {
+          throw err;
+        }
       }
       this.processing = false;
     }

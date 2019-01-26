@@ -77,13 +77,28 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            // TODO authenticate requests
-
             var entity = await _context.Entities.Where(e => e.Id == id).Include(e => e.Preset).FirstOrDefaultAsync();
 
             if (entity == null)
             {
                 return NotFound();
+            }
+
+            var campaign = await _context.Campaigns
+                .Include(c => c.Members)
+                .Where(c => c.Id == entity.CampaignId)
+                .FirstOrDefaultAsync();
+            
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (campaign.UserId != userId && !campaign.Members.Any(m => m.UserId == userId))
+            {
+                return BadRequest("No permissions");
             }
 
             // Make sure a null health is not returned
@@ -214,13 +229,29 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            // TODO authenticate requests
-
             var entity = await _context.Entities.FindAsync(id);
             if (entity == null)
             {
                 return NotFound();
             }
+
+            var campaign = await _context.Campaigns
+                .Include(c => c.Members)
+                .Where(c => c.Id == entity.CampaignId)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (campaign.UserId != userId && !campaign.Members.Any(m => m.UserId == userId))
+            {
+                return BadRequest("No permissions");
+            }
+
 
             _context.Entities.Remove(entity);
             await _context.SaveChangesAsync();
