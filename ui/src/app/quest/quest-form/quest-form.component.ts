@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IQuest, QuestService } from 'src/app/quest.service';
 import { CampaignService } from 'src/app/campaign.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'dd-quest-form',
@@ -20,20 +21,14 @@ export class QuestFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private campaignService: CampaignService,
-    private questService: QuestService
+    private questService: QuestService,
+    private location: Location,
   ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      name: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(30),
-      ]),
-      description: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(3000),
-      ]),
+      name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+      description: new FormControl(null, [Validators.required, Validators.maxLength(3000)]),
       visible: new FormControl(false),
       active: new FormControl(false),
     });
@@ -109,30 +104,28 @@ export class QuestFormComponent implements OnInit {
     if (this.editing) {
       try {
         await this.questService.updateQuest(quest);
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'quests',
-          this.quest.id,
-        ]);
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'quests', this.quest.id]);
       } catch (err) {
         throw err;
       }
     } else {
       try {
         const createdQuest = await this.questService.createQuest(quest);
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'quests',
-          createdQuest.id,
-        ]);
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'quests', createdQuest.id]);
       } catch (err) {
         throw err;
       }
     }
 
     this.loading = false;
+  }
+
+  public async delete() {
+    // TODO add delete logic
+  }
+
+  public cancel() {
+    this.location.back();
   }
 
   public get editing() {

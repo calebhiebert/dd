@@ -19,12 +19,10 @@ import { EntityTypeSelectorComponent } from './entity/entity-form/entity-type-se
 import { EntityCreationFormComponent } from './entity/entity-form/entity-creation-form/entity-creation-form.component';
 import { EntityViewComponent } from './entity/entity-view/entity-view.component';
 import { ItemViewListComponent } from './items/item-view-list/item-view-list.component';
-import { ItemFormComponent } from './items/item-form/item-form.component';
 import { AttributeEditorComponent } from './items/attribute-editor/attribute-editor.component';
 import { ItemManagerComponent } from './items/item-manager/item-manager.component';
 import { CampaignListComponent } from './campaign/campaign-list/campaign-list.component';
 import { CampaignLandingComponent } from './campaign/campaign-landing/campaign-landing.component';
-import { ItemEditComponent } from './items/item-edit/item-edit.component';
 import { CampaignSettingsComponent } from './campaign/campaign-settings/campaign-settings.component';
 import { EntityTypesComponent } from './campaign/campaign-settings/entity-types/entity-types.component';
 import { DynamicAttributeFormComponent } from './entity/dynamic-attribute-form/dynamic-attribute-form.component';
@@ -64,6 +62,9 @@ import { SentryErrorHandler } from './sentry.errorhandler';
 import { NoteFormComponent } from './note/note-form/note-form.component';
 import { NoteEditorComponent } from './note/note-editor/note-editor.component';
 import { NoteListComponent } from './note/note-list/note-list.component';
+import { ItemFormComponent } from './items/item-form/item-form.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -78,7 +79,6 @@ import { NoteListComponent } from './note/note-list/note-list.component';
     CampaignComponent,
     CampaignListComponent,
     CampaignLandingComponent,
-    ItemEditComponent,
     PaginatorComponent,
     CampaignSettingsComponent,
     EntityTypesComponent,
@@ -129,6 +129,8 @@ import { NoteListComponent } from './note/note-list/note-list.component';
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     TruncateModule,
     HttpClientModule,
     MarkdownModule.forRoot(),

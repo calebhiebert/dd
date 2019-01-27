@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CampaignService, ICampaign } from 'src/app/campaign.service';
 import { IEntityPreset } from 'src/app/entity.service';
 import { FormGroup } from '@angular/forms';
+import { Location } from '@angular/common';
 import { LoginService } from 'src/app/login.service';
 
 @Component({
@@ -22,16 +23,14 @@ export class CampaignSettingsComponent implements OnInit {
     private campaignService: CampaignService,
     private router: Router,
     private route: ActivatedRoute,
-    private login: LoginService
+    private login: LoginService,
+    private location: Location,
   ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({});
     this.expandXPTable = !this.editing;
-    if (
-      this.campaign.experienceTable === undefined ||
-      this.campaign.experienceTable === null
-    ) {
+    if (this.campaign.experienceTable === undefined || this.campaign.experienceTable === null) {
       this.campaign.experienceTable = [];
     }
   }
@@ -92,6 +91,14 @@ export class CampaignSettingsComponent implements OnInit {
     }
 
     this.saving = false;
+  }
+
+  public cancel() {
+    this.location.back();
+  }
+
+  public async delete() {
+    // TODO add delete logic
   }
 
   public get campaign(): ICampaign {
