@@ -1,8 +1,15 @@
 <dd-modal #modal>
-  <div modal-body>
+  <div modal-body *ngIf="note">
     <div class="text-gray text-italic">{{ statusText }}</div>
     <div class="loading" *ngIf="loading"></div>
-    <dd-note-form *ngIf="note" [note]="note"></dd-note-form>
+    <dd-note-form
+      *ngIf="note"
+      [note]="note"
+      (noteChange)="onNoteChange($event)"
+    ></dd-note-form>
   </div>
-  <div modal-footer><button class="btn">Close</button></div>
+  <div modal-footer>
+    <button class="btn btn-error mr-2" (click)="delete()">Delete</button>
+    <button class="btn" (click)="modal.close(null)">Close</button>
+  </div>
 </dd-modal>

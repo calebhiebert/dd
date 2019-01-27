@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,9 +25,43 @@ namespace net_api.Controllers
 
         // GET: api/Notes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Note>>> GetNotes()
+        public async Task<ActionResult<IEnumerable<Note>>> GetNotes(
+            [FromQuery] string campaignId,
+            [FromQuery] string questId
+            )
         {
-            return await _context.Notes.ToListAsync();
+            if (campaignId == null || campaignId == string.Empty)
+            {
+                return BadRequest("missing campaign id");
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var campaign = await _context.Campaigns
+                .Include(c => c.Members)
+                .Where(c => c.Id == campaignId)
+                .FirstOrDefaultAsync();
+        
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            if (userId != campaign.Id && !campaign.Members.Any(m => m.UserId == userId))
+            {
+                return BadRequest("No permissions");
+            }
+
+            var query = _context.Notes
+                .Where(n => n.CampaignId == campaignId)
+                .Where(n => n.UserId == userId || n.PublicView);
+
+            if (questId != null)
+            {
+                query = query.Where(q => q.QuestId == questId);
+            }
+
+            return await query.ToListAsync();
         }
 
         // GET: api/Notes/5
@@ -34,6 +69,8 @@ namespace net_api.Controllers
         public async Task<ActionResult<Note>> GetNote(string id)
         {
             var note = await _context.Notes.FindAsync(id);
+
+            // TODO authorize request
 
             if (note == null)
             {
@@ -51,6 +88,10 @@ namespace net_api.Controllers
             {
                 return BadRequest();
             }
+
+            // TODO authorize request
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            note.UserId = userId;
 
             _context.Entry(note).State = EntityState.Modified;
 

@@ -38,7 +38,7 @@ export class CampaignService {
       document.title = this.campaign.name;
       this.events.emit(campaign);
     } catch (err) {
-      console.log('LOAD ERR', err);
+      throw err;
     }
     this.loadingCampaign = false;
   }

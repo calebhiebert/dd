@@ -1,0 +1,9 @@
+<div *ngIf="notes">
+  <div
+    class="card mb-1 p-1 hoverable"
+    *ngFor="let n of notes"
+    (click)="noteSelected(n)"
+  >
+    {{ n.title }}
+  </div>
+</div>

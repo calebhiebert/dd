@@ -63,6 +63,7 @@ import { HttpErrorInterceptor } from './http-error.interceptor.ts';
 import { SentryErrorHandler } from './sentry.errorhandler';
 import { NoteFormComponent } from './note/note-form/note-form.component';
 import { NoteEditorComponent } from './note/note-editor/note-editor.component';
+import { NoteListComponent } from './note/note-list/note-list.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -121,6 +122,7 @@ import { NoteEditorComponent } from './note/note-editor/note-editor.component';
     FooterComponent,
     NoteFormComponent,
     NoteEditorComponent,
+    NoteListComponent,
   ],
   imports: [
     BrowserModule,

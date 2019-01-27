@@ -16,12 +16,15 @@ import { CampaignService } from 'src/app/campaign.service';
 export class NoteEditorComponent implements OnInit {
   @ViewChild('modal')
   private modal: ModalComponent<any>;
-
   public statusText: string = '';
-
   public loading = false;
 
   public note: INote;
+
+  private _autosaveInterval = 1500;
+  private _lastAutosave = 0;
+  private _autosavePromise: Promise<void> = null;
+  private _saveTimeout: number;
 
   constructor(
     private noteService: NoteService,
@@ -54,16 +57,82 @@ export class NoteEditorComponent implements OnInit {
       this.note = await this.noteService.createNote(noteCreation);
       this.note.text = '';
       this.note.title = '';
-      this.statusText = '';
     } catch (err) {
       throw err;
     }
 
+    this.statusText = '';
     this.loading = false;
+  }
+
+  private async saveNote() {
+    if (this._autosavePromise !== null) {
+      await this._autosavePromise;
+    }
+
+    this.statusText = 'Saving...';
+
+    try {
+      this._autosavePromise = this.noteService.updateNote(this.note);
+      await this._autosavePromise;
+      this._autosavePromise = null;
+    } catch (err) {
+      throw err;
+    }
+
+    this._lastAutosave = Date.now();
+    this.statusText = 'Saved';
+  }
+
+  public onNoteChange(note: INote) {
+    this.statusText = 'Unsaved';
+
+    if (Date.now() > this._lastAutosave + this._autosaveInterval) {
+      this.note = note;
+      this.saveNote();
+    } else {
+      if (this._saveTimeout !== undefined) {
+        clearTimeout(this._saveTimeout);
+      }
+
+      this._saveTimeout = window.setTimeout(() => {
+        this.note = note;
+        this.saveNote();
+        this._saveTimeout = undefined;
+      }, this._autosaveInterval);
+    }
   }
 
   public addNote(opts: INoteOptions) {
     this.createNote(opts);
-    this.modal.open();
+    this.modal.open().then(() => {
+      if (this.note.text === '' && this.note.title === '') {
+        this.noteService.deleteNote(this.note.id);
+      }
+
+      this.note = undefined;
+    });
+  }
+
+  public editNote(note: INote) {
+    this.note = { ...note };
+    this.modal.open().then(() => {
+      this.note = undefined;
+    });
+  }
+
+  public async delete() {
+    if (this.note) {
+      try {
+        await this.noteService.deleteNote(this.note.id);
+        this.modal.close(null);
+      } catch (err) {
+        if (err.message.indexOf('Cannot close modal') !== -1) {
+          // Do nothing
+        } else {
+          throw err;
+        }
+      }
+    }
   }
 }

@@ -35,6 +35,10 @@ export class QuestViewComponent implements OnInit {
 
     try {
       this.quest = await this.questService.getQuest(id);
+      this.noteService.getNotes(
+        this.campaignService.campaign.id,
+        this.quest.id
+      );
     } catch (err) {
       throw err;
     }
@@ -66,5 +70,13 @@ export class QuestViewComponent implements OnInit {
 
   public get editable() {
     return this.campaignService.canEdit;
+  }
+
+  public get notes() {
+    if (this.quest) {
+      return this.noteService.getQuestNotes(this.quest.id);
+    } else {
+      return [];
+    }
   }
 }

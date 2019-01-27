@@ -25,7 +25,17 @@ export class NoteFormComponent implements OnInit {
       publicEdit: new FormControl(this.note.publicEdit),
     });
 
-    this.formGroup.valueChanges.subscribe((value) => {
+    this.formGroup.valueChanges.subscribe((v) => {
+      if (v.text.length > 0) {
+        this.note.title = (v.text as string).substring(0, 20);
+        this.note.text = v.text;
+      } else {
+        this.note.title = 'Blank Note';
+        this.note.text = 'Blank Note';
+      }
+      this.note.publicEdit = v.publicEdit;
+      this.note.publicView = v.publicView;
+
       this.noteChange.emit(this.note);
     });
   }
