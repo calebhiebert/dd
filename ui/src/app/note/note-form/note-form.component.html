@@ -1,0 +1,12 @@
+<form (ngSubmit)="submit()">
+  <div class="form-group" [formGroup]="formGroup">
+    <textarea
+      name="text"
+      id="text"
+      cols="30"
+      rows="10"
+      class="form-input"
+      formControlName="text"
+    ></textarea>
+  </div>
+</form>

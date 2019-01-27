@@ -61,6 +61,8 @@ import { OverviewToolbarComponent } from './session/overview-toolbar/overview-to
 import { FooterComponent } from './footer/footer.component';
 import { HttpErrorInterceptor } from './http-error.interceptor.ts';
 import { SentryErrorHandler } from './sentry.errorhandler';
+import { NoteFormComponent } from './note/note-form/note-form.component';
+import { NoteEditorComponent } from './note/note-editor/note-editor.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -117,6 +119,8 @@ import { SentryErrorHandler } from './sentry.errorhandler';
     OverviewEntityComponent,
     OverviewToolbarComponent,
     FooterComponent,
+    NoteFormComponent,
+    NoteEditorComponent,
   ],
   imports: [
     BrowserModule,

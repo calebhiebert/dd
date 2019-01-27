@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IQuest, QuestService } from 'src/app/quest.service';
 import { CampaignService } from 'src/app/campaign.service';
+import { NoteService, NoteType } from 'src/app/note.service';
 
 @Component({
   selector: 'dd-quest-view',
@@ -16,7 +17,8 @@ export class QuestViewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private questService: QuestService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private noteService: NoteService
   ) {}
 
   ngOnInit() {
@@ -38,6 +40,13 @@ export class QuestViewComponent implements OnInit {
     }
 
     this.loading = false;
+  }
+
+  public addNote() {
+    this.noteService.addNote({
+      type: NoteType.QUEST,
+      questId: this.quest.id,
+    });
   }
 
   public edit() {

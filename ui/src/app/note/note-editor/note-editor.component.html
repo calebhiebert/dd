@@ -1,0 +1,8 @@
+<dd-modal #modal>
+  <div modal-body>
+    <div class="text-gray text-italic">{{ statusText }}</div>
+    <div class="loading" *ngIf="loading"></div>
+    <dd-note-form *ngIf="note" [note]="note"></dd-note-form>
+  </div>
+  <div modal-footer><button class="btn">Close</button></div>
+</dd-modal>
