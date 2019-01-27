@@ -4,7 +4,7 @@
 @import 'spectre.css/dist/spectre-icons.css';
 @import 'spectre.css/dist/spectre-exp.css';
 @import 'sweetalert2/dist/sweetalert2.min.css';
-@import '~ngx-toastr/toastr.css';
+@import './toast.scss';
 
 .flex-row {
   flex-direction: row;
