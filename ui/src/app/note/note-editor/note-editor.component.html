@@ -3,13 +3,20 @@
     <div class="text-gray text-italic">{{ statusText }}</div>
     <div class="loading" *ngIf="loading"></div>
     <dd-note-form
-      *ngIf="note"
+      *ngIf="note && editable"
       [note]="note"
       (noteChange)="onNoteChange($event)"
     ></dd-note-form>
+    <div class="note-display" *ngIf="!editable">{{ note.text }}</div>
   </div>
   <div modal-footer>
-    <button class="btn btn-error mr-2" (click)="delete()">Delete</button>
+    <button
+      class="btn btn-error mr-2"
+      (click)="delete()"
+      *ngIf="note && editable"
+    >
+      Delete
+    </button>
     <button class="btn" (click)="modal.close(null)">Close</button>
   </div>
 </dd-modal>

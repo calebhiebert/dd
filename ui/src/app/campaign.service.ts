@@ -142,6 +142,30 @@ export class CampaignService {
     return level;
   }
 
+  /**
+   * Returns the entity preset from the current campaign object (if it exists)
+   * @param presetId
+   */
+  public getEntityPreset(presetId: string): IEntityPreset {
+    if (!this.campaign) {
+      return null;
+    }
+
+    return this.campaign.entityPresets.find((ep) => ep.id === presetId) || null;
+  }
+
+  /**
+   * Returns the user from the current campaign object (if it exists)
+   * @param userId
+   */
+  public getUser(userId: string): ICampaignUser | null {
+    if (!this.campaign) {
+      return null;
+    }
+
+    return this.campaign.members.find((m) => m.userId === userId) || null;
+  }
+
   public get canEdit() {
     if (!this.campaign) {
       return false;

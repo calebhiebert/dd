@@ -74,6 +74,17 @@ namespace net_api.Controllers
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            // Search to see if the user is already in the campaign
+            var existingMember = await _context.CampaignUsers
+                .Where(cu => cu.CampaignId == campaignInvite.CampaignId)
+                .Where(cu => cu.UserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (existingMember != null)
+            {
+                return BadRequest("already in campaign");
+            } 
+
             var user = new CampaignUser
             {
                 UserId = userId,
@@ -125,6 +136,17 @@ namespace net_api.Controllers
             }
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Search to see if the user is already in the campaign
+            var existingMember = await _context.CampaignUsers
+                .Where(cu => cu.CampaignId == campaignInvite.CampaignId)
+                .Where(cu => cu.UserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (existingMember != null)
+            {
+                return BadRequest("already in campaign");
+            }
 
             var campaignMembers = _context.CampaignUsers.Where(u => u.CampaignId == campaignInvite.CampaignId);
 

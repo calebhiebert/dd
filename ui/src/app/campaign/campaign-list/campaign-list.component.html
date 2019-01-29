@@ -42,12 +42,18 @@
             </div>
             <div class="column col-md-12 text-right hide-md">
               <span class="text-gray text-italic">
-                {{ c.members.length }} Members • {{ c.user.username }}</span
+                {{ c.members.length }} Member{{
+                  c.members.length === 1 ? '' : 's'
+                }}
+                • {{ c.user.username }}</span
               >
             </div>
             <div class="column col-md-12 show-md">
               <span class="text-gray text-italic">
-                {{ c.members.length }} Members • {{ c.user.username }}</span
+                {{ c.members.length }} Member{{
+                  c.members.length === 1 ? '' : 's'
+                }}
+                • {{ c.user.username }}</span
               >
             </div>
           </div>

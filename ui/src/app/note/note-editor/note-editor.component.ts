@@ -7,6 +7,7 @@ import {
 } from 'src/app/note.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { CampaignService } from 'src/app/campaign.service';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'dd-note-editor',
@@ -28,7 +29,8 @@ export class NoteEditorComponent implements OnInit {
 
   constructor(
     private noteService: NoteService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private loginService: LoginService
   ) {
     noteService.setNoteEditor(this);
   }
@@ -134,5 +136,9 @@ export class NoteEditorComponent implements OnInit {
         }
       }
     }
+  }
+
+  public get editable() {
+    return this.note.userId === this.loginService.id || this.note.publicEdit;
   }
 }

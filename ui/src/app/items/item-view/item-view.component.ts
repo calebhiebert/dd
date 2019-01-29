@@ -5,6 +5,7 @@ import { IItemRarity, CampaignService } from 'src/app/campaign.service';
 import { EntityService, IInventoryItem, IEntity } from 'src/app/entity.service';
 import { EditableEntitySelectorComponent } from 'src/app/entity/editable-entity-selector/editable-entity-selector.component';
 import { ToastrService } from 'ngx-toastr';
+import * as Sentry from '@sentry/browser';
 
 @Component({
   selector: 'dd-item-view',
@@ -24,7 +25,7 @@ export class ItemViewComponent implements OnInit {
     private itemService: ItemService,
     private campaignService: CampaignService,
     private entityService: EntityService,
-    private toast: ToastrService,
+    private toast: ToastrService
   ) {}
 
   ngOnInit() {
@@ -68,16 +69,42 @@ export class ItemViewComponent implements OnInit {
   public async addToInventory() {
     let entity: IEntity;
 
-    if (this.campaignService.editableEntities.length === 1) {
-      entity = this.campaignService.editableEntities[0];
+    // A filtered list of all entities that support inventories
+    const inventoryableEntities = this.campaignService.editableEntities.filter(
+      (e) => {
+        if (!e.preset) {
+          const preset = this.campaignService.getEntityPreset(e.entityPresetId);
+
+          // This would be weird, capture the event
+          if (!preset) {
+            Sentry.captureEvent({
+              message:
+                'An entity existed on the campaign, but it did not have the corresponding preset.',
+              extra: {
+                campaign: this.campaignService.campaign,
+              },
+            });
+
+            return false;
+          }
+
+          e.preset = preset;
+        }
+
+        return e.preset.isInventoryEnabled;
+      }
+    );
+
+    if (inventoryableEntities.length === 1) {
+      entity = inventoryableEntities[0];
     } else {
       // Get entity from list
-      entity = await this.entitySelect.selectEntity();
+      entity = await this.entitySelect.selectEntity(inventoryableEntities);
     }
 
+    // This means that an entity was not selected
     if (entity === null || entity === undefined) {
-      this.toast.error('Unable to find selected entity.');
-      return console.log('Entity not found');
+      return;
     }
 
     try {
@@ -85,13 +112,15 @@ export class ItemViewComponent implements OnInit {
 
       if (inventory.find((i) => i.itemId === this.item.id)) {
         this.toast.warning(
-          `<span class="text-bold">${entity.name}</span> already has <span class="text-bold">${
+          `<span class="text-bold">${
+            entity.name
+          }</span> already has <span class="text-bold">${
             this.item.name
           }</span> in their inventory`,
           '',
           {
             enableHtml: true,
-          },
+          }
         );
         return;
       }
@@ -102,16 +131,24 @@ export class ItemViewComponent implements OnInit {
         quantity: 1,
       };
 
-      const createdItem = await this.entityService.createInventoryItem(inventoryItem);
+      const createdItem = await this.entityService.createInventoryItem(
+        inventoryItem
+      );
 
-      this.toast.info(`Added 1x ${this.item.name} to the inventory of ${entity.name}`);
+      this.toast.info(
+        `Added 1x ${this.item.name} to the inventory of ${entity.name}`
+      );
     } catch (err) {
       throw err;
     }
   }
 
   public get rarity(): IItemRarity {
-    if (this.campaignService.campaign && this.campaignService.campaign.itemRarities && this.item) {
+    if (
+      this.campaignService.campaign &&
+      this.campaignService.campaign.itemRarities &&
+      this.item
+    ) {
       return this.campaignService.campaign.itemRarities[this.item.rarity];
     } else {
       return null;

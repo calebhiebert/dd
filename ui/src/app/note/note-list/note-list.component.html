@@ -4,6 +4,14 @@
     *ngFor="let n of notes"
     (click)="noteSelected(n)"
   >
-    {{ n.title }}
+    <div class="columns">
+      <div class="column">{{ n.title }}</div>
+      <div class="column col-auto text-gray text-italic text-right hide-sm">
+        {{ getUserText(n.userId) }}
+      </div>
+      <div class="column text-gray text-italic show-sm col-12">
+        {{ getUserText(n.userId) }}
+      </div>
+    </div>
   </div>
 </div>

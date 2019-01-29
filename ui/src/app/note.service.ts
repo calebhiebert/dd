@@ -45,10 +45,7 @@ export class NoteService {
       .get<INote[]>(`${environment.apiURL}/notes${queryString}`)
       .toPromise()
       .then((notes) => {
-        for (const n of notes) {
-          this._noteCache.push({ ...n });
-        }
-
+        this.addOrUpdateCacheNotes(notes);
         return notes;
       });
   }
@@ -58,8 +55,7 @@ export class NoteService {
       .get<INote>(`${environment.apiURL}/notes/${id}`)
       .toPromise()
       .then((note) => {
-        this._noteCache = this._noteCache.filter((n) => n.id !== note.id);
-        this._noteCache.push({ ...note });
+        this.addOrUpdateCacheNotes([note]);
         return note;
       });
   }
@@ -69,7 +65,7 @@ export class NoteService {
       .post<INote>(`${environment.apiURL}/notes`, note)
       .toPromise()
       .then((note) => {
-        this._noteCache.push({ ...note });
+        this.addOrUpdateCacheNotes([note]);
         return note;
       });
   }
@@ -79,8 +75,7 @@ export class NoteService {
       .put<void>(`${environment.apiURL}/notes/${note.id}`, note)
       .toPromise()
       .then(() => {
-        this._noteCache = this._noteCache.filter((n) => n.id !== note.id);
-        this._noteCache.push({ ...note });
+        this.addOrUpdateCacheNotes([note]);
       });
   }
 
@@ -89,8 +84,24 @@ export class NoteService {
       .delete<void>(`${environment.apiURL}/notes/${id}`)
       .toPromise()
       .then(() => {
-        this._noteCache = this._noteCache.filter((n) => n.id !== id);
+        this.removeNoteFromCache(id);
       });
+  }
+
+  public addOrUpdateCacheNotes(notes: INote[]) {
+    for (const n of notes) {
+      const existingNote = this._noteCache.find((cn) => cn.id === n.id);
+
+      if (existingNote !== undefined) {
+        Object.assign(existingNote, n);
+      } else {
+        this._noteCache.push({ ...n });
+      }
+    }
+  }
+
+  public removeNoteFromCache(noteId: string) {
+    this._noteCache = this._noteCache.filter((n) => n.id !== noteId);
   }
 }
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
 
@@ -17,10 +18,12 @@ namespace net_api.Controllers
     public class NotesController : ControllerBase
     {
         private readonly Context _context;
+        private readonly IHubContext<UpdateHub> _hub;
 
-        public NotesController(Context context)
+        public NotesController(Context context, IHubContext<UpdateHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         // GET: api/Notes
@@ -111,6 +114,13 @@ namespace net_api.Controllers
                 }
             }
 
+            // Notify other users of the change
+            if (note.PublicView)
+            {
+                await _hub.Clients.Group($"campaign-{note.CampaignId}")
+                    .SendAsync("NoteUpdate", note);
+            }
+
             return NoContent();
         }
 
@@ -118,8 +128,19 @@ namespace net_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Note>> PostNote(Note note)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            note.UserId = userId;
+
             _context.Notes.Add(note);
             await _context.SaveChangesAsync();
+
+            // Notify other users of the change
+            if (note.PublicView)
+            {
+                await _hub.Clients.Group($"campaign-{note.CampaignId}")
+                    .SendAsync("NoteCreate", note);
+            }
 
             return CreatedAtAction("GetNote", new { id = note.Id }, note);
         }
@@ -136,6 +157,13 @@ namespace net_api.Controllers
 
             _context.Notes.Remove(note);
             await _context.SaveChangesAsync();
+
+            // Notify other users of the change
+            if (note.PublicView)
+            {
+                await _hub.Clients.Group($"campaign-{note.CampaignId}")
+                    .SendAsync("NoteDelete", note);
+            }
 
             return note;
         }

@@ -6,6 +6,7 @@ import { ICampaign, CampaignService } from './campaign.service';
 import { NotificationService } from './notification.service';
 import { IEntity, EntityService } from './entity.service';
 import * as Sentry from '@sentry/browser';
+import { NoteService } from './note.service';
 
 export enum ConnectionState {
   NOT_CONNECTED,
@@ -29,7 +30,8 @@ export class UpdateHubService {
     private login: LoginService,
     private campaignService: CampaignService,
     private notificationService: NotificationService,
-    private entityService: EntityService
+    private entityService: EntityService,
+    private noteService: NoteService
   ) {
     this._state = ConnectionState.NOT_CONNECTED;
 
@@ -65,6 +67,18 @@ export class UpdateHubService {
 
     this.connection.on('EntityCreate', (entity) => {
       this.entityCreate(entity);
+    });
+
+    this.connection.on('NoteCreate', (note) => {
+      this.noteService.addOrUpdateCacheNotes([note]);
+    });
+
+    this.connection.on('NoteUpdate', (note) => {
+      this.noteService.addOrUpdateCacheNotes([note]);
+    });
+
+    this.connection.on('NoteDelete', (note) => {
+      this.noteService.removeNoteFromCache(note.id);
     });
 
     await this.authenticate();

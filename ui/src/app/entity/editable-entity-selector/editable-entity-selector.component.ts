@@ -6,11 +6,13 @@ import { IEntity } from 'src/app/entity.service';
 @Component({
   selector: 'dd-editable-entity-selector',
   templateUrl: './editable-entity-selector.component.html',
-  styleUrls: ['./editable-entity-selector.component.css']
+  styleUrls: ['./editable-entity-selector.component.css'],
 })
 export class EditableEntitySelectorComponent implements OnInit {
   @ViewChild('modal')
   public modal: ModalComponent<IEntity>;
+
+  private _entityOverride: IEntity[];
 
   constructor(private campaignService: CampaignService) {}
 
@@ -20,11 +22,20 @@ export class EditableEntitySelectorComponent implements OnInit {
     this.modal.close(entity);
   }
 
-  public selectEntity(): Promise<IEntity | null> {
-    return this.modal.open();
+  public selectEntity(overrideEntityList?: IEntity[]): Promise<IEntity | null> {
+    this._entityOverride = overrideEntityList;
+
+    return this.modal.open().then((entity) => {
+      this._entityOverride = undefined;
+      return entity;
+    });
   }
 
   public get entities() {
-    return this.campaignService.editableEntities;
+    if (this._entityOverride) {
+      return this._entityOverride;
+    } else {
+      return this.campaignService.editableEntities;
+    }
   }
 }

@@ -1,5 +1,5 @@
-<form (ngSubmit)="submit()">
-  <div class="form-group" [formGroup]="formGroup">
+<form (ngSubmit)="submit()" [formGroup]="formGroup">
+  <div class="form-group">
     <textarea
       name="text"
       id="text"
@@ -8,5 +8,12 @@
       class="form-input"
       formControlName="text"
     ></textarea>
+  </div>
+
+  <div class="form-group">
+    <label class="form-switch">
+      <input type="checkbox" formControlName="publicView" />
+      <i class="form-icon"></i> This note is publicly visible
+    </label>
   </div>
 </form>
