@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { IEntity } from 'src/app/entity.service';
+import { IEntity, EntityService } from 'src/app/entity.service';
+import { Router } from '@angular/router';
+import { CampaignService } from 'src/app/campaign.service';
 
 @Component({
   selector: 'dd-spawnable-list-item',
@@ -9,14 +11,42 @@ import { IEntity } from 'src/app/entity.service';
 export class SpawnableListItemComponent implements OnInit {
   public spawnMode = false;
 
+  public spawning = false;
+
   @Input()
   public spawnable: IEntity;
 
-  constructor() {}
+  constructor(
+    private entityService: EntityService,
+    private router: Router,
+    private campaignService: CampaignService
+  ) {}
 
   ngOnInit() {}
 
-  public spawn(count: number) {
-    console.log('Spawning ', count);
+  public edit() {
+    this.router.navigate([
+      'campaigns',
+      this.campaignService.campaign.id,
+      'entities',
+      this.spawnable.id,
+    ]);
+  }
+
+  public async spawn(count: number) {
+    this.spawning = true;
+
+    try {
+      await this.entityService.spawnSpawnable(this.spawnable.id, count);
+      await this.router.navigate([
+        'campaigns',
+        this.campaignService.campaign.id,
+        'overview',
+      ]);
+    } catch (err) {
+      throw err;
+    }
+
+    this.spawning = false;
   }
 }

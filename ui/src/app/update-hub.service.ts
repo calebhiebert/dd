@@ -69,6 +69,10 @@ export class UpdateHubService {
       this.entityCreate(entity);
     });
 
+    this.connection.on('EntityDelete', (entityId) => {
+      this.entityDelete(entityId);
+    });
+
     this.connection.on('NoteCreate', (note) => {
       this.noteService.addOrUpdateCacheNotes([note]);
     });
@@ -123,7 +127,6 @@ export class UpdateHubService {
       this._state = ConnectionState.CONNECTED;
       await this.setup();
     } catch (err) {
-      throw err;
       this._state = ConnectionState.CLOSED;
       setTimeout(() => {
         this.start();
@@ -208,6 +211,12 @@ export class UpdateHubService {
     ).user;
 
     this.campaignService.campaign.entities.push(entity);
+  }
+
+  private entityDelete(id: string) {
+    this.campaignService.campaign.entities = this.campaignService.campaign.entities.filter(
+      (e) => e.id !== id
+    );
   }
 
   public async subscribeCampaign(campaignId: string) {

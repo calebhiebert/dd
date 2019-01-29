@@ -103,7 +103,7 @@
       class="column"
       [ngClass]="{
         'col-9 col-md-7 col-sm-12': preset.isCurrencyEnabled,
-        'col-12': !preset.isCurrencyEnabled
+        'col-12 mt-2': !preset.isCurrencyEnabled
       }"
       *ngIf="preset.isHealthEnabled"
     >
@@ -140,7 +140,7 @@
       <h5 class="mb-0 mr-2 text-bold">{{ formattedCurrency }}</h5>
     </div>
   </div>
-  <div class="divider"></div>
+  <div class="divider" *ngIf="preset.isCurrencyEnabled"></div>
 
   <!-- Inventory Management -->
   <dd-inventory-manager

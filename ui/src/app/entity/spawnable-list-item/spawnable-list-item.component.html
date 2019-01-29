@@ -4,11 +4,15 @@
   </div>
 
   <div class="column text-right" *ngIf="!spawnMode">
+    <button class="btn btn-sm mr-2" (click)="edit()">Edit</button>
     <button class="btn btn-sm" (click)="spawnMode = true">Spawn</button>
   </div>
 
   <!-- Spawn Count Selector -->
   <div class="column col-sm-12" *ngIf="spawnMode">
-    <dd-number-quick-select (selected)="spawn($event)"></dd-number-quick-select>
+    <dd-number-quick-select
+      (selected)="spawn($event)"
+      [loading]="spawning"
+    ></dd-number-quick-select>
   </div>
 </div>

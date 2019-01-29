@@ -25,6 +25,8 @@ namespace net_api.Models
 
         [Required]
         public string CampaignId { get; set; }
+        [JsonIgnore]
+        public Campaign Campaign { get; set; }
 
         public double? Currency { get; set; }
 
@@ -38,6 +40,9 @@ namespace net_api.Models
 
         [Required]
         public bool Spawnable { get; set; }
+
+        public string SpawnedFromId { get; set; }
+        public Entity SpawnedFrom { get; set; }
 
         [Column("Attributes", TypeName = "jsonb")]
         [JsonIgnore]

@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { IItem } from './item.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EntityService {
   private _currentViewEntity: IEntity = null;
@@ -74,10 +74,11 @@ export class EntityService {
       .toPromise();
   }
 
-  public async deleteEntity(
-    campaignId: string,
-    entity: IEntity
-  ): Promise<void> {}
+  public async deleteEntity(id: string): Promise<void> {
+    return this.http
+      .delete<void>(`${environment.apiURL}/entities/${id}`)
+      .toPromise();
+  }
 
   public async getInventory(entityId: string): Promise<IInventoryItem[]> {
     return this.http
@@ -110,6 +111,18 @@ export class EntityService {
   public async deleteInventoryItem(id: string): Promise<void> {
     return this.http
       .delete<void>(`${environment.apiURL}/inventoryitems/${id}`)
+      .toPromise();
+  }
+
+  public async spawnSpawnable(
+    spawnableId: string,
+    count: number
+  ): Promise<void> {
+    return this.http
+      .post<void>(
+        `${environment.apiURL}/entities/spawn/${spawnableId}?count=${count}`,
+        null
+      )
       .toPromise();
   }
 
@@ -206,15 +219,15 @@ export enum EntityAttributeClass {
   MAJOR,
   NORMAL,
   MINOR,
-  UNIMPORTANT
+  UNIMPORTANT,
 }
 
 export enum HealthType {
   NORMAL,
-  MULTI_BAR
+  MULTI_BAR,
 }
 
 export enum HealthColorType {
   DYNAMIC,
-  STATIC
+  STATIC,
 }

@@ -229,7 +229,11 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var entity = await _context.Entities.FindAsync(id);
+            var entity = await _context.Entities
+                .Where(e => e.Id == id)
+                .Include(e => e.InventoryItems)
+                .FirstOrDefaultAsync();
+
             if (entity == null)
             {
                 return NotFound();
@@ -252,11 +256,76 @@ namespace net_api.Controllers
                 return BadRequest("No permissions");
             }
 
-
+            _context.InventoryItems.RemoveRange(entity.InventoryItems);
             _context.Entities.Remove(entity);
             await _context.SaveChangesAsync();
 
+            await _hub.Clients.Group($"campaign-{entity.CampaignId}")
+                .SendAsync("EntityDelete", entity.Id);
+
             return Ok(entity);
+        }
+
+        [HttpPost("spawn/{id}")]
+        public async Task<IActionResult> SpawnSpawnable([FromQuery] int count, [FromRoute] string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var preset = await _context.Entities
+                .Where(ep => ep.Id == id)
+                .Include(ep => ep.Campaign)
+                .FirstOrDefaultAsync();
+
+            if (preset == null)
+            {
+                return NotFound();
+            } else if (!preset.Spawnable)
+            {
+                return BadRequest("entity is not spawnable");
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId != preset.Campaign.UserId)
+            {
+                return BadRequest("no permissions");
+            }
+
+            for (var i = 0; i < count; i++)
+            {
+                // TODO also copy over inventory items
+
+                var entity = new Entity
+                {
+                    Id = Nanoid.Nanoid.Generate(),
+                    Name = preset.Name,
+                    Description = preset.Description,
+                    UserId = userId,
+                    CampaignId = preset.CampaignId,
+                    Currency = preset.Currency,
+                    ImageId = preset.ImageId,
+                    ImageColor1 = preset.ImageColor1,
+                    ImageColor2 = preset.ImageColor2,
+                    Spawnable = false,
+                    Attributes = preset.Attributes,
+                    Health = preset.Health,
+                    XP = preset.XP,
+                    EntityPresetId = preset.EntityPresetId,
+                    SpawnedFromId = preset.Id
+                };
+
+                _context.Entities.Add(entity);
+
+                await _hub.Clients.Group($"campaign-{entity.CampaignId}")
+                    .SendAsync("EntityCreate", entity);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         private bool EntityExists(string id)

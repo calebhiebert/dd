@@ -17,6 +17,9 @@ export class NumberQuickSelectComponent implements OnInit {
   @Input()
   public min = 1;
 
+  @Input()
+  public loading = false;
+
   @Output()
   public selected = new EventEmitter<number>();
 
