@@ -65,6 +65,8 @@ import { NoteListComponent } from './note/note-list/note-list.component';
 import { ItemFormComponent } from './items/item-form/item-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { NumberQuickSelectComponent } from './number-quick-select/number-quick-select.component';
+import { SpawnableListItemComponent } from './entity/spawnable-list-item/spawnable-list-item.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -123,6 +125,8 @@ import { ToastrModule } from 'ngx-toastr';
     NoteFormComponent,
     NoteEditorComponent,
     NoteListComponent,
+    NumberQuickSelectComponent,
+    SpawnableListItemComponent,
   ],
   imports: [
     BrowserModule,
