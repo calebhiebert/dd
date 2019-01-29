@@ -27,12 +27,8 @@
     </div>
 
     <!-- List -->
-    <div
-      class="card mb-2 p-2 hoverable"
-      *ngFor="let s of spawnables"
-      (click)="selectSpawnable(s)"
-    >
-      <h5 class="mb-0">{{ s.name }}</h5>
+    <div class="card mb-2 p-2" *ngFor="let s of spawnables">
+      <dd-spawnable-list-item [spawnable]="s"></dd-spawnable-list-item>
     </div>
   </div>
 </div>

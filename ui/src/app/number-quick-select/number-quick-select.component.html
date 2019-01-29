@@ -1,0 +1,21 @@
+<div class="columns">
+  <div class="column">
+    <input
+      type="range"
+      name="slider"
+      min="{{ min }}"
+      max="{{ sliderMax }}"
+      [formControl]="inputControl"
+      class="slider tooltip"
+    />
+  </div>
+  <div class="column col-auto">
+    <button
+      class="btn btn-sm"
+      [disabled]="inputControl.invalid"
+      (click)="submit()"
+    >
+      <i class="icon icon-check"></i> {{ inputControl.value }}
+    </button>
+  </div>
+</div>

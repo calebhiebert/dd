@@ -1,0 +1,14 @@
+<div class="columns">
+  <div class="column">
+    <h5 class="mb-0">{{ spawnable.name }}</h5>
+  </div>
+
+  <div class="column text-right" *ngIf="!spawnMode">
+    <button class="btn btn-sm" (click)="spawnMode = true">Spawn</button>
+  </div>
+
+  <!-- Spawn Count Selector -->
+  <div class="column col-sm-12" *ngIf="spawnMode">
+    <dd-number-quick-select (selected)="spawn($event)"></dd-number-quick-select>
+  </div>
+</div>
