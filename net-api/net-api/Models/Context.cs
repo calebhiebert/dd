@@ -27,6 +27,7 @@ namespace net_api.Models
         public DbSet<ThingOfInterest> ThingsOfInterest { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<SellableItem> SellableItems { get; set; }
+        public DbSet<Spell> Spells { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

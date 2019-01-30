@@ -12,6 +12,7 @@ import { CampaignService } from 'src/app/campaign.service';
 export class ItemSelectComponent implements OnInit {
   public loading = false;
   public items: IItem[];
+  public totalItems: number;
 
   public searchControl: FormControl;
 

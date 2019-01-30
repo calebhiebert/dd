@@ -4,6 +4,7 @@ import { ModalComponent } from 'src/app/modal/modal.component';
 import { IItem } from 'src/app/item.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-attribute-form.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'dd-inventory-manager',
@@ -32,7 +33,10 @@ export class InventoryManagerComponent implements OnInit {
   @ViewChild('itemedit')
   public itemEditModal: ModalComponent<any>;
 
-  constructor(private entityService: EntityService) {}
+  constructor(
+    private entityService: EntityService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
     if (!this.entityId) {
@@ -148,12 +152,14 @@ export class InventoryManagerComponent implements OnInit {
       if (inventoryItem.quantity === 1) {
         await this.entityService.deleteInventoryItem(inventoryItem.id);
         this.inventory = this.inventory.filter(itm => itm !== inventoryItem);
+        this.toastr.info(`Used 1x ${inventoryItem.item.name}`);
       } else {
         await this.entityService.updateInventoryItem({
           ...inventoryItem,
           quantity: inventoryItem.quantity - 1
         });
         inventoryItem.quantity--;
+        this.toastr.info(`Used 1x ${inventoryItem.item.name}`);
       }
     } catch (err) {
       throw err;
