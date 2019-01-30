@@ -1,11 +1,9 @@
 <div class="container">
   <div class="columns">
     <div class="column"><h3>Overview</h3></div>
-
-    <!-- Sort Tools -->
-    <div class="column"></div>
   </div>
 
+  <!-- Entity list -->
   <div
     class="mb-2"
     *ngFor="let e of sortedEntities; trackBy: trackEntityElement"
@@ -13,5 +11,13 @@
     <dd-overview-entity [entity]="e"></dd-overview-entity>
   </div>
 
-  <dd-overview-toolbar></dd-overview-toolbar>
+  <!-- Empty State -->
+  <div class="empty mb-2" *ngIf="sortedEntities.length === 0">
+    <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
+    <p class="empty-title h5">There's nothing here</p>
+    <p class="empty-subtitle">Once the campaign gets going this will fill up</p>
+  </div>
+
+  <!-- Toolbar -->
+  <dd-overview-toolbar *ngIf="sortedEntities.length > 0"></dd-overview-toolbar>
 </div>
