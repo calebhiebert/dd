@@ -3,11 +3,12 @@ import { LoginService } from '../login.service';
 import { ActionQueueService, ActionType } from '../action-queue.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CampaignService, ICampaignInvite } from '../campaign.service';
+import * as Sentry from '@sentry/browser';
 
 @Component({
   selector: 'dd-invite',
   templateUrl: './invite.component.html',
-  styleUrls: ['./invite.component.css'],
+  styleUrls: ['./invite.component.css']
 })
 export class InviteComponent implements OnInit {
   public loading = false;
@@ -29,8 +30,8 @@ export class InviteComponent implements OnInit {
     actions.unshift({
       type: ActionType.INVITE,
       data: {
-        inviteId: this.route.snapshot.paramMap.get('invite_id'),
-      },
+        inviteId: this.route.snapshot.paramMap.get('invite_id')
+      }
     });
     this.actions.save();
 
@@ -67,10 +68,10 @@ export class InviteComponent implements OnInit {
       this.actions.save();
       this.router.navigate(['campaigns', this.campaign.id, 'landing']);
     } catch (err) {
-      throw err;
+      Sentry.captureException(err);
     }
 
-    this.accepting = true;
+    this.accepting = false;
   }
 
   public async deny() {
@@ -79,14 +80,14 @@ export class InviteComponent implements OnInit {
     try {
       await this.campaignService.denyInvite(this.invite.id);
     } catch (err) {
-      throw err;
+      Sentry.captureException(err);
     }
 
     this.actions.queue.pop();
     this.actions.save();
     this.router.navigate(['home']);
 
-    this.denying = true;
+    this.denying = false;
   }
 
   private async loadInvite() {

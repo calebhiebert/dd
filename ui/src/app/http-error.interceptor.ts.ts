@@ -1,4 +1,10 @@
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpInterceptor,
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpErrorResponse
+} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { tap, finalize } from 'rxjs/operators';
@@ -9,11 +15,14 @@ import { Router } from '@angular/router';
 export class HttpErrorInterceptor implements HttpInterceptor {
   constructor(private router: Router) {}
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     let responseError;
 
     return next.handle(req).pipe(
-      tap(() => {}, (error) => (responseError = error)),
+      tap(() => {}, error => (responseError = error)),
       finalize(async () => {
         if (responseError !== undefined) {
           if (responseError instanceof HttpErrorResponse) {
@@ -21,9 +30,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               case 401:
                 await Swal.fire({
                   title: 'Session Expired',
-                  text: 'Your login session has expired, you will be redirected to the login page',
+                  text:
+                    'Your login session has expired, you will be redirected to the login page',
                   type: 'warning',
-                  confirmButtonText: 'Okay',
+                  confirmButtonText: 'Okay'
                 });
 
                 await this.router.navigate(['login']);
@@ -33,11 +43,15 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                 } else {
                   await Swal.fire({
                     title: 'Not Found',
-                    text: 'The resource you requested could not be found! Sorry about that.',
+                    text:
+                      'The resource you requested could not be found! Sorry about that.',
                     type: 'error',
-                    confirmButtonText: 'Okay',
+                    confirmButtonText: 'Okay'
                   });
                 }
+                break;
+              case 400:
+                this.handleBadRequest(responseError);
                 break;
               case 0:
                 await Swal.fire({
@@ -45,15 +59,17 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                   text:
                     'A connection to the server could not be established. Please make sure you are connected to the internet',
                   type: 'error',
-                  confirmButtonText: 'Okay',
+                  confirmButtonText: 'Okay'
                 });
                 break;
               default:
                 await Swal.fire({
                   title: 'Unknown Error!',
-                  text: 'An unknown error occured. Maybe this will help: ' + responseError.message,
+                  text:
+                    'An unknown error occured. Maybe this will help: ' +
+                    responseError.message,
                   type: 'error',
-                  confirmButtonText: 'Okay',
+                  confirmButtonText: 'Okay'
                 });
                 break;
             }
@@ -61,7 +77,27 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             console.log('UNKNOWN ERR', responseError);
           }
         }
-      }),
+      })
     );
+  }
+
+  private handleBadRequest(err: HttpErrorResponse) {
+    const error = err.error;
+    const errorTitle = 'Oh Dear';
+    let errorText = error;
+    const swalType = 'error';
+
+    switch (error) {
+      case 'already in campaign':
+        errorText = 'You are already a member of this campaign!';
+        break;
+    }
+
+    Swal.fire({
+      type: swalType,
+      confirmButtonText: '¯\\_(ツ)_/¯',
+      title: errorTitle,
+      text: errorText
+    });
   }
 }

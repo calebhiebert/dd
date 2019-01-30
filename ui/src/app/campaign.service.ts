@@ -218,7 +218,6 @@ export interface ICampaignInvite {
 }
 
 export interface ICampaignUser {
-  id: string;
   campaignId: string;
   campaign?: ICampaign;
   userId: string;

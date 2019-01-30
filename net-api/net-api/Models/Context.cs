@@ -45,5 +45,10 @@ namespace net_api.Models
             optionsBuilder.UseNpgsql(connectionString, opt => opt.EnableRetryOnFailure(10));
             base.OnConfiguring(optionsBuilder);
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CampaignUser>().HasKey(tbl => new { tbl.CampaignId, tbl.UserId });
+        }
     }
 }
