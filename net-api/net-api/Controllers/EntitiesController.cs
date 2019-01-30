@@ -136,7 +136,18 @@ namespace net_api.Controllers
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var campaign = await _context.Campaigns.Include(c => c.Members).FirstOrDefaultAsync(c => c.Id == entity.CampaignId);
+            var existingEntity = await _context.Entities
+                .Where(e => e.Id == entity.Id)
+                .Include(e => e.Campaign).ThenInclude(c => c.Members)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (existingEntity == null)
+            {
+                return NotFound();
+            }
+
+            var campaign = existingEntity.Campaign;
 
             // Check that the user is part of the campaign
             if (userId != campaign.UserId && !campaign.Members.Any(m => m.UserId == userId))
@@ -169,6 +180,8 @@ namespace net_api.Controllers
 
             await _hub.Clients.Group($"campaign-{entity.CampaignId}")
                 .SendAsync("EntityUpdate", entity);
+
+            await HandleUpdateDifferences(existingEntity, entity);
 
             return NoContent();
         }
@@ -328,6 +341,39 @@ namespace net_api.Controllers
         private bool EntityExists(Guid id)
         {
             return _context.Entities.Any(e => e.Id == id);
+        }
+
+        /// <summary>
+        /// Sends messages about entity updates
+        /// </summary>
+        /// <param name="a">Original entity</param>
+        /// <param name="b">Updated entity</param>
+        private async Task HandleUpdateDifferences(Entity a, Entity b)
+        {
+            // Check for current hp differences
+            if (a.Health != null && b.Health != null && a.Health.Current != b.Health.Current && a.Health.Max == b.Health.Max)
+            {
+                var difference = b.Health.Current - a.Health.Current;
+                var message = string.Empty;
+
+                if (b.Health.Current == b.Health.Max)
+                {
+                    message = $"{b.Name} healed to full health";
+                } else if (difference > 0)
+                {
+                    message = $"{b.Name} healed {difference} hp";
+                } else if (difference < 0)
+                {
+                    message = $"{b.Name} took {difference * -1} damage";
+                }
+
+                await _hub.Clients.Group($"campaign-{a.CampaignId}")
+                        .SendAsync("EventNotify", new EventNotify
+                        {
+                            Sender = "System",
+                            Message = message
+                        });
+            }
         }
     }
 }

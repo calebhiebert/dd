@@ -126,7 +126,7 @@ import { SpawnableListItemComponent } from './entity/spawnable-list-item/spawnab
     NoteEditorComponent,
     NoteListComponent,
     NumberQuickSelectComponent,
-    SpawnableListItemComponent,
+    SpawnableListItemComponent
   ],
   imports: [
     BrowserModule,
@@ -134,27 +134,29 @@ import { SpawnableListItemComponent } from './entity/spawnable-list-item/spawnab
     ReactiveFormsModule,
     FormsModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-center'
+    }),
     TruncateModule,
     HttpClientModule,
-    MarkdownModule.forRoot(),
+    MarkdownModule.forRoot()
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true,
+      multi: true
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
-      multi: true,
+      multi: true
     },
     {
       provide: ErrorHandler,
-      useClass: SentryErrorHandler,
-    },
+      useClass: SentryErrorHandler
+    }
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

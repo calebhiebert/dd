@@ -1,5 +1,7 @@
 /* based on angular-toastr css https://github.com/Foxandxss/angular-toastr/blob/cb508fe6801d6b288d3afc525bb40fee1b101650/dist/angular-toastr.css */
 
+@import './variables.scss';
+
 /* position */
 .toast-center-center {
   top: 50%;
@@ -95,19 +97,10 @@ button.toast-close-button {
 .toast-container * {
   box-sizing: border-box;
 }
-// .toast-container .toast {
-//   position: relative;
-//   overflow: hidden;
-//   margin: 0 0 6px;
-//   padding: 15px 15px 15px 50px;
-//   width: 300px;
-//   border-radius: 3px 3px 3px 3px;
-//   background-position: 15px center;
-//   background-repeat: no-repeat;
-//   background-size: 24px;
-//   box-shadow: 0 0 12px #999999;
-//   color: #ffffff;
-// }
+.toast-container .toast {
+  margin-top: $unit-1;
+  margin-bottom: $unit-1;
+}
 
 .toast-container .toast:hover {
   box-shadow: 0 0 12px #000000;
@@ -145,7 +138,7 @@ button.toast-close-button {
 }
 
 .toast {
-  background-color: #030303;
+  background-color: $dark-color;
   pointer-events: auto;
 }
 
