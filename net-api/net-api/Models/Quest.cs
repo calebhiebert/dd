@@ -9,7 +9,7 @@ namespace net_api.Models
 {
     public class Quest
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [StringLength(30, MinimumLength = 3)]
@@ -26,7 +26,7 @@ namespace net_api.Models
         public bool Active { get; set; }
 
         [Required]
-        public string CampaignId { get; set; }
+        public Guid CampaignId { get; set; }
 
         [JsonIgnore]
         public Campaign Campaign { get; set; }
@@ -35,7 +35,7 @@ namespace net_api.Models
 
         public Quest()
         {
-            Id = Nanoid.Nanoid.Generate();
+            Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
         }
     }

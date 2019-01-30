@@ -10,7 +10,7 @@ namespace net_api.Models
 {
     public class EntityPreset
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [StringLength(20, MinimumLength = 3)]
@@ -21,7 +21,9 @@ namespace net_api.Models
 
         [Required]
         public string UserId { get; set; }
-        public virtual User User { get; set; }
+
+        [JsonIgnore]
+        public User User { get; set; }
 
         [Required]
         public string ImageId { get; set; }
@@ -89,10 +91,15 @@ namespace net_api.Models
         }
 
         [Required]
-        public string CampaignId { get; set; }
+        public Guid CampaignId { get; set; }
 
         [JsonIgnore]
         public Campaign Campaign { get; set; }
+
+        public EntityPreset()
+        {
+            Id = Guid.NewGuid();
+        }
     }
 
     public class EntityAttribute

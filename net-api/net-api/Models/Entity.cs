@@ -9,7 +9,7 @@ namespace net_api.Models
 {
     public class Entity
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [StringLength(20, MinimumLength = 3)]
@@ -24,7 +24,8 @@ namespace net_api.Models
         public User User { get; set; }
 
         [Required]
-        public string CampaignId { get; set; }
+        public Guid CampaignId { get; set; }
+
         [JsonIgnore]
         public Campaign Campaign { get; set; }
 
@@ -41,7 +42,7 @@ namespace net_api.Models
         [Required]
         public bool Spawnable { get; set; }
 
-        public string SpawnedFromId { get; set; }
+        public Guid? SpawnedFromId { get; set; }
         public Entity SpawnedFrom { get; set; }
 
         [Column("Attributes", TypeName = "jsonb")]
@@ -94,10 +95,15 @@ namespace net_api.Models
         public long? XP { get; set; }
 
         [Required]
-        public string EntityPresetId { get; set; }
+        public Guid EntityPresetId { get; set; }
         public EntityPreset Preset { get; set; }
 
         public ICollection<InventoryItem> InventoryItems { get; set; }
+
+        public Entity()
+        {
+            Id = Guid.NewGuid();
+        }
     }
 
     public class Attribute

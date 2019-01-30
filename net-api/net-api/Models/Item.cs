@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,7 +7,7 @@ namespace net_api.Models
 {
     public class Item
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [StringLength(30, MinimumLength = 3)]
@@ -19,13 +20,13 @@ namespace net_api.Models
         public string ImageId { get; set; }
 
         [Required]
-        public string CampaignId { get; set; }
-
-        [Required]
-        public bool PlayerVisible { get; set; }
+        public Guid CampaignId { get; set; }
 
         [JsonIgnore]
         public Campaign Campaign { get; set; }
+
+        [Required]
+        public bool PlayerVisible { get; set; }
 
         [Required]
         [Range(-1, int.MaxValue)]
@@ -38,8 +39,19 @@ namespace net_api.Models
         [Required]
         public double Weight { get; set; }
 
+        [Required]
+        public string UserId { get; set; }
+
+        [JsonIgnore]
+        public User User { get; set; }
+
         [Column("Tags", TypeName = "varchar[]")]
         public string[] Tags { get; set; }
+
+        public Item()
+        {
+            Id = Guid.NewGuid();
+        }
     }
 
     public class ItemType

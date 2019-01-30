@@ -8,12 +8,7 @@ namespace net_api.Models
 {
     public class Campaign
     {
-        public Campaign()
-        {
-            Members = new List<CampaignUser>();
-        }
-
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [StringLength(30, MinimumLength = 3)]
@@ -67,6 +62,13 @@ namespace net_api.Models
         }
 
         public DateTime CreatedAt { get; set; }
+
+        public Campaign()
+        {
+            Members = new List<CampaignUser>();
+            Id = Guid.NewGuid();
+            CreatedAt = DateTime.UtcNow;
+        }
     }
 }
 

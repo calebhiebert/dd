@@ -11,7 +11,7 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'dd-item-form',
   templateUrl: './item-form.component.html',
-  styleUrls: ['./item-form.component.css'],
+  styleUrls: ['./item-form.component.css']
 })
 export class ItemFormComponent implements OnInit {
   public loading = false;
@@ -29,23 +29,27 @@ export class ItemFormComponent implements OnInit {
     private itemService: ItemService,
     private router: Router,
     private campaignService: CampaignService,
-    private location: Location,
+    private location: Location
   ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+      name: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30)
+      ]),
       description: new FormControl(null, Validators.required),
       imageId: new FormControl(null),
       rarity: new FormControl('0', Validators.required),
       playerVisible: new FormControl(true),
       cost: new FormControl(0, [Validators.required, numberValidator]),
       weight: new FormControl(0, [Validators.required, numberValidator]),
-      tags: new FormArray([]),
+      tags: new FormArray([])
     });
 
     if (this.editing) {
-      this.route.params.subscribe((params) => {
+      this.route.params.subscribe(params => {
         const id = params.item_id;
         this.loadItem(id);
       });
@@ -73,13 +77,18 @@ export class ItemFormComponent implements OnInit {
         imageId: v.imageId,
         rarity: v.rarity,
         weight: v.weight,
+        userId: this.item.userId,
         cost: v.cost,
-        tags: v.tags,
+        tags: v.tags
       };
 
       try {
         await this.itemService.updateItem(item);
-        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'items']);
+        this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'items'
+        ]);
       } catch (err) {
         throw err;
       }
@@ -93,13 +102,18 @@ export class ItemFormComponent implements OnInit {
         rarity: v.rarity,
         playerVisible: v.playerVisible,
         weight: v.weight,
+        userId: this.item.userId,
         cost: v.cost,
-        tags: v.tags,
+        tags: v.tags
       };
 
       try {
         const createdItem = await this.itemService.createItem(item);
-        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'items']);
+        this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'items'
+        ]);
       } catch (err) {
         throw err;
       }
@@ -110,7 +124,11 @@ export class ItemFormComponent implements OnInit {
   }
 
   public async delete() {
-    if (await this.confirmModal.getConfirmation('Are you sure you want to delete this item? This cannot be undone.')) {
+    if (
+      await this.confirmModal.getConfirmation(
+        'Are you sure you want to delete this item? This cannot be undone.'
+      )
+    ) {
       this.deleting = true;
       try {
         // TODO add back delete
@@ -140,7 +158,9 @@ export class ItemFormComponent implements OnInit {
       this.formGroup.patchValue(item);
 
       if (this.item.tags) {
-        (this.formGroup.get('tags') as FormArray).controls = this.item.tags.map((t) => new FormControl(t));
+        (this.formGroup.get('tags') as FormArray).controls = this.item.tags.map(
+          t => new FormControl(t)
+        );
       }
     } catch (err) {
       throw err;

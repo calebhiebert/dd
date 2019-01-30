@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace net_api.Controllers
 
         // GET: api/Campaigns/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCampaign([FromRoute] string id)
+        public async Task<IActionResult> GetCampaign([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -66,7 +67,7 @@ namespace net_api.Controllers
 
         // PUT: api/Campaigns/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCampaign([FromRoute] string id, [FromBody] Campaign campaign)
+        public async Task<IActionResult> PutCampaign([FromRoute] Guid id, [FromBody] Campaign campaign)
         {
             if (!ModelState.IsValid)
             {
@@ -144,9 +145,6 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            campaign.Id = Nanoid.Nanoid.Generate();
-            campaign.CreatedAt = new System.DateTime();
-
             var campaignUser = new CampaignUser
             {
                 CampaignId = campaign.Id,
@@ -165,7 +163,7 @@ namespace net_api.Controllers
 
         // DELETE: api/Campaigns/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCampaign([FromRoute] string id)
+        public async Task<IActionResult> DeleteCampaign([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -191,7 +189,7 @@ namespace net_api.Controllers
             return Ok(campaign);
         }
 
-        private bool CampaignExists(string id)
+        private bool CampaignExists(Guid id)
         {
             return _context.Campaigns.Any(e => e.Id == id);
         }

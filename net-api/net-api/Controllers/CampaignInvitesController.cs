@@ -26,7 +26,7 @@ namespace net_api.Controllers
 
         // GET: api/CampaignInvites
         [HttpGet]
-        public IActionResult GetCampaignInvites([FromQuery(Name = "campaignId")] string campaignId)
+        public IActionResult GetCampaignInvites([FromQuery(Name = "campaignId")] Guid? campaignId)
         {
             if (campaignId == null)
             {

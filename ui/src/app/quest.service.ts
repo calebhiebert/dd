@@ -4,7 +4,7 @@ import { ICampaign } from './campaign.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class QuestService {
   constructor(private http: HttpClient) {}
@@ -30,7 +30,7 @@ export class QuestService {
 
   public createQuest(quest: IQuest): Promise<IQuest> {
     return this.http
-      .post<IQuest>(`${environment.apiURL}/quests`, quest)
+      .post<IQuest>(`${environment.apiURL}/quests`, { ...quest, id: undefined })
       .toPromise();
   }
 

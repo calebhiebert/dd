@@ -31,7 +31,7 @@ namespace net_api.Controllers
         // GET: api/Items
         [HttpGet]
         public IActionResult GetItems(
-            [FromQuery(Name = "campaignId")] string campaignId, 
+            [FromQuery(Name = "campaignId")] Guid campaignId, 
             [FromQuery(Name = "limit")] int limit,
             [FromQuery(Name = "offset")] int offset,
             [FromQuery(Name = "tags")] string tags,
@@ -112,7 +112,7 @@ namespace net_api.Controllers
 
         // GET: api/Items/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetItem([FromRoute] string id)
+        public async Task<IActionResult> GetItem([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -133,7 +133,7 @@ namespace net_api.Controllers
 
         // PUT: api/Items/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutItem([FromRoute] string id, [FromBody] Item item)
+        public async Task<IActionResult> PutItem([FromRoute] Guid id, [FromBody] Item item)
         {
             if (!ModelState.IsValid)
             {
@@ -178,8 +178,9 @@ namespace net_api.Controllers
             }
 
             // TODO authenticate requests
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            item.Id = Nanoid.Nanoid.Generate();
+            item.UserId = userId;
 
             _context.Items.Add(item);
             await _context.SaveChangesAsync();
@@ -189,7 +190,7 @@ namespace net_api.Controllers
 
         // DELETE: api/Items/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteItem([FromRoute] string id)
+        public async Task<IActionResult> DeleteItem([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -210,7 +211,7 @@ namespace net_api.Controllers
             return Ok(item);
         }
 
-        private bool ItemExists(string id)
+        private bool ItemExists(Guid id)
         {
             return _context.Items.Any(e => e.Id == id);
         }

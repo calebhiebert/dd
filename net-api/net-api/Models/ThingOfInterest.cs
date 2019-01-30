@@ -9,7 +9,7 @@ namespace net_api.Models
 {
     public class ThingOfInterest
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [StringLength(30, MinimumLength = 3)]
@@ -19,7 +19,7 @@ namespace net_api.Models
         public string Description { get; set; }
 
         [ForeignKey("Location")]
-        public string LocationId { get; set; }
+        public Guid? LocationId { get; set; }
         public Location Location { get; set; }
 
         [Column("ImageIds", TypeName = "varchar[]")]
@@ -40,7 +40,7 @@ namespace net_api.Models
 
         public ThingOfInterest()
         {
-            Id = Nanoid.Nanoid.Generate();
+            Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
         }
     }

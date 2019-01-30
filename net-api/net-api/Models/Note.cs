@@ -9,7 +9,7 @@ namespace net_api.Models
 {
     public class Note
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [StringLength(40)]
@@ -20,22 +20,22 @@ namespace net_api.Models
         public string Text { get; set; }
 
         [Required]
-        public string CampaignId { get; set; }
+        public Guid CampaignId { get; set; }
 
         [JsonIgnore]
         public Campaign Campaign { get; set; }
 
-        public string QuestId { get; set; }
+        public Guid? QuestId { get; set; }
 
         [JsonIgnore]
         public Quest Quest { get; set; }
 
-        public string EntityId { get; set; }
+        public Guid? EntityId { get; set; }
 
         [JsonIgnore]
         public Entity Entity { get; set; }
 
-        public string EntityPresetId { get; set; }
+        public Guid? EntityPresetId { get; set; }
 
         [JsonIgnore]
         public EntityPreset EntityPreset { get; set; }
@@ -57,7 +57,7 @@ namespace net_api.Models
 
         public Note()
         {
-            Id = Nanoid.Nanoid.Generate();
+            Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
             UpdatedAt = DateTime.UtcNow;
         }

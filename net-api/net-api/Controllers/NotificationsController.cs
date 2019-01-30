@@ -34,7 +34,7 @@ namespace net_api.Controllers
 
         // PUT: api/Notifications/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutNotification(string id, Notification notification)
+        public async Task<IActionResult> PutNotification(Guid id, Notification notification)
         {
             if (id != notification.Id)
             {
@@ -71,7 +71,7 @@ namespace net_api.Controllers
 
         // DELETE: api/Notifications/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Notification>> DeleteNotification(string id)
+        public async Task<ActionResult<Notification>> DeleteNotification(Guid id)
         {
             var notification = await _context.Notifications.FindAsync(id);
             if (notification == null)
@@ -87,7 +87,7 @@ namespace net_api.Controllers
             return notification;
         }
 
-        private bool NotificationExists(string id)
+        private bool NotificationExists(Guid id)
         {
             return _context.Notifications.Any(e => e.Id == id);
         }

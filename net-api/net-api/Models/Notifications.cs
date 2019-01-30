@@ -7,7 +7,7 @@ namespace net_api.Models
     public class Notification
     {
         [Required]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [StringLength(240)]
@@ -22,7 +22,7 @@ namespace net_api.Models
 
         public Notification()
         {
-            Id = Nanoid.Nanoid.Generate();
+            Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
         }
     }
@@ -30,7 +30,7 @@ namespace net_api.Models
     public class CampaignNotification : Notification
     {
         [Required]
-        public string CampaignId { get; set; }
+        public Guid CampaignId { get; set; }
         public Campaign Campaign { get; set; }
     }
 }

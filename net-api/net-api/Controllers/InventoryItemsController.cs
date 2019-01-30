@@ -24,7 +24,7 @@ namespace net_api.Controllers
 
         // GET: api/InventoryItems
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<InventoryItem>>> GetInventoryItems([FromQuery(Name = "entityId")]string entityId)
+        public async Task<ActionResult<IEnumerable<InventoryItem>>> GetInventoryItems([FromQuery]Guid entityId)
         {
             // TODO authenticate requests
             // TODO verify that the inventory does not have this item already
@@ -34,7 +34,7 @@ namespace net_api.Controllers
 
         // GET: api/InventoryItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<InventoryItem>> GetInventoryItem(string id)
+        public async Task<ActionResult<InventoryItem>> GetInventoryItem(Guid id)
         {
             // TODO authenticate requests
 
@@ -50,7 +50,7 @@ namespace net_api.Controllers
 
         // PUT: api/InventoryItems/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInventoryItem(string id, InventoryItem inventoryItem)
+        public async Task<IActionResult> PutInventoryItem(Guid id, InventoryItem inventoryItem)
         {
             if (id != inventoryItem.Id)
             {
@@ -98,7 +98,7 @@ namespace net_api.Controllers
 
         // DELETE: api/InventoryItems/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<InventoryItem>> DeleteInventoryItem(string id)
+        public async Task<ActionResult<InventoryItem>> DeleteInventoryItem(Guid id)
         {
             var inventoryItem = await _context.InventoryItems.FindAsync(id);
             if (inventoryItem == null)
@@ -114,7 +114,7 @@ namespace net_api.Controllers
             return inventoryItem;
         }
 
-        private bool InventoryItemExists(string id)
+        private bool InventoryItemExists(Guid id)
         {
             return _context.InventoryItems.Any(e => e.Id == id);
         }

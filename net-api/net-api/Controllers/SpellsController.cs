@@ -24,12 +24,14 @@ namespace net_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Spell>>> GetSpells()
         {
+            // TODO authenticate
+
             return await _context.Spells.ToListAsync();
         }
 
         // GET: api/Spells/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Spell>> GetSpell(string id)
+        public async Task<ActionResult<Spell>> GetSpell(Guid id)
         {
             var spell = await _context.Spells.FindAsync(id);
 
@@ -43,7 +45,7 @@ namespace net_api.Controllers
 
         // PUT: api/Spells/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSpell(string id, Spell spell)
+        public async Task<IActionResult> PutSpell(Guid id, Spell spell)
         {
             if (id != spell.Id)
             {
@@ -83,7 +85,7 @@ namespace net_api.Controllers
 
         // DELETE: api/Spells/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Spell>> DeleteSpell(string id)
+        public async Task<ActionResult<Spell>> DeleteSpell(Guid id)
         {
             var spell = await _context.Spells.FindAsync(id);
             if (spell == null)
@@ -97,7 +99,7 @@ namespace net_api.Controllers
             return spell;
         }
 
-        private bool SpellExists(string id)
+        private bool SpellExists(Guid id)
         {
             return _context.Spells.Any(e => e.Id == id);
         }

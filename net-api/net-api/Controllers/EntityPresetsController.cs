@@ -25,7 +25,7 @@ namespace net_api.Controllers
 
         // GET: api/EntityPresets
         [HttpGet]
-        public async Task<IActionResult> GetEntityPresets([FromQuery(Name = "campaignId")] string campaignId)
+        public async Task<IActionResult> GetEntityPresets([FromQuery] Guid campaignId)
         {
             if (campaignId == null)
             {
@@ -43,7 +43,7 @@ namespace net_api.Controllers
 
         // GET: api/EntityPresets/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetEntityPreset([FromRoute] string id)
+        public async Task<IActionResult> GetEntityPreset([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace net_api.Controllers
 
         // PUT: api/EntityPresets/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEntityPreset([FromRoute] string id, [FromBody] EntityPreset entityPreset)
+        public async Task<IActionResult> PutEntityPreset([FromRoute] Guid id, [FromBody] EntityPreset entityPreset)
         {
             if (!ModelState.IsValid)
             {
@@ -110,8 +110,6 @@ namespace net_api.Controllers
 
             // TODO authenticate requests
 
-            entityPreset.Id = Nanoid.Nanoid.Generate();
-
             _context.EntityPresets.Add(entityPreset);
             await _context.SaveChangesAsync();
 
@@ -120,7 +118,7 @@ namespace net_api.Controllers
 
         // DELETE: api/EntityPresets/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEntityPreset([FromRoute] string id)
+        public async Task<IActionResult> DeleteEntityPreset([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -141,7 +139,7 @@ namespace net_api.Controllers
             return Ok(entityPreset);
         }
 
-        private bool EntityPresetExists(string id)
+        private bool EntityPresetExists(Guid id)
         {
             return _context.EntityPresets.Any(e => e.Id == id);
         }

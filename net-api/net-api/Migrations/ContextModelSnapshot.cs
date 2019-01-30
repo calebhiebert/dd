@@ -16,12 +16,12 @@ namespace netapi.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("net_api.Models.Campaign", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedAt");
@@ -61,8 +61,7 @@ namespace netapi.Migrations
 
                     b.Property<string>("AcceptedUserId");
 
-                    b.Property<string>("CampaignId")
-                        .IsRequired();
+                    b.Property<Guid>("CampaignId");
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -82,10 +81,10 @@ namespace netapi.Migrations
 
             modelBuilder.Entity("net_api.Models.CampaignUser", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CampaignId");
+                    b.Property<Guid>("CampaignId");
 
                     b.Property<string>("UserId");
 
@@ -100,23 +99,21 @@ namespace netapi.Migrations
 
             modelBuilder.Entity("net_api.Models.Entity", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("AttributesJson")
                         .HasColumnName("Attributes")
                         .HasColumnType("jsonb");
 
-                    b.Property<string>("CampaignId")
-                        .IsRequired();
+                    b.Property<Guid>("CampaignId");
 
                     b.Property<double?>("Currency");
 
                     b.Property<string>("Description")
                         .IsRequired();
 
-                    b.Property<string>("EntityPresetId")
-                        .IsRequired();
+                    b.Property<Guid>("EntityPresetId");
 
                     b.Property<string>("HealthJson")
                         .HasColumnName("Health")
@@ -134,7 +131,7 @@ namespace netapi.Migrations
 
                     b.Property<bool>("Spawnable");
 
-                    b.Property<string>("SpawnedFromId");
+                    b.Property<Guid?>("SpawnedFromId");
 
                     b.Property<string>("UserId")
                         .IsRequired();
@@ -156,15 +153,14 @@ namespace netapi.Migrations
 
             modelBuilder.Entity("net_api.Models.EntityPreset", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("AttributeJson")
                         .HasColumnName("Attributes")
                         .HasColumnType("jsonb");
 
-                    b.Property<string>("CampaignId")
-                        .IsRequired();
+                    b.Property<Guid>("CampaignId");
 
                     b.Property<string>("Description")
                         .IsRequired();
@@ -204,14 +200,12 @@ namespace netapi.Migrations
 
             modelBuilder.Entity("net_api.Models.InventoryItem", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("EntityId")
-                        .IsRequired();
+                    b.Property<Guid>("EntityId");
 
-                    b.Property<string>("ItemId")
-                        .IsRequired();
+                    b.Property<Guid>("ItemId");
 
                     b.Property<int>("Quantity");
 
@@ -226,11 +220,10 @@ namespace netapi.Migrations
 
             modelBuilder.Entity("net_api.Models.Item", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CampaignId")
-                        .IsRequired();
+                    b.Property<Guid>("CampaignId");
 
                     b.Property<double>("Cost");
 
@@ -252,34 +245,38 @@ namespace netapi.Migrations
                         .HasColumnName("Tags")
                         .HasColumnType("varchar[]");
 
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
                     b.Property<double>("Weight");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CampaignId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Items");
                 });
 
             modelBuilder.Entity("net_api.Models.Note", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CampaignId")
-                        .IsRequired();
+                    b.Property<Guid>("CampaignId");
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("EntityId");
+                    b.Property<Guid?>("EntityId");
 
-                    b.Property<string>("EntityPresetId");
+                    b.Property<Guid?>("EntityPresetId");
 
                     b.Property<bool>("PublicEdit");
 
                     b.Property<bool>("PublicView");
 
-                    b.Property<string>("QuestId");
+                    b.Property<Guid?>("QuestId");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -310,7 +307,7 @@ namespace netapi.Migrations
 
             modelBuilder.Entity("net_api.Models.Notification", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedAt");
@@ -336,13 +333,12 @@ namespace netapi.Migrations
 
             modelBuilder.Entity("net_api.Models.Quest", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Active");
 
-                    b.Property<string>("CampaignId")
-                        .IsRequired();
+                    b.Property<Guid>("CampaignId");
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -365,18 +361,16 @@ namespace netapi.Migrations
 
             modelBuilder.Entity("net_api.Models.SellableItem", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<double?>("CurrencyOverride");
 
-                    b.Property<string>("ItemId")
-                        .IsRequired();
+                    b.Property<Guid>("ItemId");
 
                     b.Property<int>("Quantity");
 
-                    b.Property<string>("ThingOfInterestId")
-                        .IsRequired();
+                    b.Property<Guid>("ThingOfInterestId");
 
                     b.HasKey("Id");
 
@@ -387,9 +381,49 @@ namespace netapi.Migrations
                     b.ToTable("SellableItems");
                 });
 
+            modelBuilder.Entity("net_api.Models.Spell", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double?>("Area");
+
+                    b.Property<int?>("AreaShape");
+
+                    b.Property<Guid>("CampaignId");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(3000);
+
+                    b.Property<int?>("DurationType");
+
+                    b.Property<double?>("DurationValue");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<double?>("Range");
+
+                    b.Property<string[]>("Tags")
+                        .HasColumnName("Tags")
+                        .HasColumnType("varchar[]");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CampaignId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Spells");
+                });
+
             modelBuilder.Entity("net_api.Models.ThingOfInterest", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedAt");
@@ -404,7 +438,7 @@ namespace netapi.Migrations
                         .HasColumnName("ImageIds")
                         .HasColumnType("varchar[]");
 
-                    b.Property<string>("LocationId");
+                    b.Property<Guid?>("LocationId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -442,8 +476,7 @@ namespace netapi.Migrations
                 {
                     b.HasBaseType("net_api.Models.Notification");
 
-                    b.Property<string>("CampaignId")
-                        .IsRequired();
+                    b.Property<Guid>("CampaignId");
 
                     b.HasIndex("CampaignId");
 
@@ -483,7 +516,8 @@ namespace netapi.Migrations
                 {
                     b.HasOne("net_api.Models.Campaign", "Campaign")
                         .WithMany("Members")
-                        .HasForeignKey("CampaignId");
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("net_api.Models.User", "User")
                         .WithMany()
@@ -544,6 +578,11 @@ namespace netapi.Migrations
                         .WithMany("Items")
                         .HasForeignKey("CampaignId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("net_api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("net_api.Models.Note", b =>
@@ -597,6 +636,18 @@ namespace netapi.Migrations
                         .WithMany("SellableItems")
                         .HasForeignKey("ThingOfInterestId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("net_api.Models.Spell", b =>
+                {
+                    b.HasOne("net_api.Models.Campaign", "Campaign")
+                        .WithMany()
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("net_api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("net_api.Models.ThingOfInterest", b =>

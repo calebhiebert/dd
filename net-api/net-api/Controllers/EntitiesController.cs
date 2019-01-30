@@ -27,9 +27,9 @@ namespace net_api.Controllers
 
         // GET: api/Entities
         [HttpGet]
-        public async Task<IActionResult> GetEntities([FromQuery] string campaignId, [FromQuery] bool spawnable)
+        public async Task<IActionResult> GetEntities([FromQuery] Guid? campaignId, [FromQuery] bool spawnable)
         {
-            if (campaignId == "")
+            if (campaignId == null)
             {
                 return BadRequest("missing campaign id");
             }
@@ -70,7 +70,7 @@ namespace net_api.Controllers
 
         // GET: api/Entities/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetEntity([FromRoute] string id)
+        public async Task<IActionResult> GetEntity([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -122,7 +122,7 @@ namespace net_api.Controllers
 
         // PUT: api/Entities/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEntity([FromRoute] string id, [FromBody] Entity entity)
+        public async Task<IActionResult> PutEntity([FromRoute] Guid id, [FromBody] Entity entity)
         {
             if (!ModelState.IsValid)
             {
@@ -209,8 +209,6 @@ namespace net_api.Controllers
                 entity.Spawnable = false;
             }
 
-            entity.Id = Nanoid.Nanoid.Generate();
-
             _context.Entities.Add(entity);
             await _context.SaveChangesAsync();
 
@@ -222,7 +220,7 @@ namespace net_api.Controllers
 
         // DELETE: api/Entities/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEntity([FromRoute] string id)
+        public async Task<IActionResult> DeleteEntity([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -267,7 +265,7 @@ namespace net_api.Controllers
         }
 
         [HttpPost("spawn/{id}")]
-        public async Task<IActionResult> SpawnSpawnable([FromQuery] int count, [FromRoute] string id)
+        public async Task<IActionResult> SpawnSpawnable([FromQuery] int count, [FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -300,7 +298,6 @@ namespace net_api.Controllers
 
                 var entity = new Entity
                 {
-                    Id = Nanoid.Nanoid.Generate(),
                     Name = preset.Name,
                     Description = preset.Description,
                     UserId = userId,
@@ -328,7 +325,7 @@ namespace net_api.Controllers
             return NoContent();
         }
 
-        private bool EntityExists(string id)
+        private bool EntityExists(Guid id)
         {
             return _context.Entities.Any(e => e.Id == id);
         }

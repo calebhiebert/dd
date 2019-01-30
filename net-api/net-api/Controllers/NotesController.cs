@@ -29,11 +29,11 @@ namespace net_api.Controllers
         // GET: api/Notes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Note>>> GetNotes(
-            [FromQuery] string campaignId,
-            [FromQuery] string questId
+            [FromQuery] Guid? campaignId,
+            [FromQuery] Guid? questId
             )
         {
-            if (campaignId == null || campaignId == string.Empty)
+            if (campaignId == null)
             {
                 return BadRequest("missing campaign id");
             }
@@ -50,7 +50,7 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            if (userId != campaign.Id && !campaign.Members.Any(m => m.UserId == userId))
+            if (userId != campaign.UserId && !campaign.Members.Any(m => m.UserId == userId))
             {
                 return BadRequest("No permissions");
             }
@@ -69,7 +69,7 @@ namespace net_api.Controllers
 
         // GET: api/Notes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Note>> GetNote(string id)
+        public async Task<ActionResult<Note>> GetNote(Guid id)
         {
             var note = await _context.Notes.FindAsync(id);
 
@@ -85,7 +85,7 @@ namespace net_api.Controllers
 
         // PUT: api/Notes/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutNote(string id, Note note)
+        public async Task<IActionResult> PutNote(Guid id, Note note)
         {
             if (id != note.Id)
             {
@@ -147,7 +147,7 @@ namespace net_api.Controllers
 
         // DELETE: api/Notes/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Note>> DeleteNote(string id)
+        public async Task<ActionResult<Note>> DeleteNote(Guid id)
         {
             var note = await _context.Notes.FindAsync(id);
             if (note == null)
@@ -168,7 +168,7 @@ namespace net_api.Controllers
             return note;
         }
 
-        private bool NoteExists(string id)
+        private bool NoteExists(Guid id)
         {
             return _context.Notes.Any(e => e.Id == id);
         }

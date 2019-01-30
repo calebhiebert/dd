@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { IItem } from './item.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class EntityService {
   private _currentViewEntity: IEntity = null;
@@ -28,7 +28,10 @@ export class EntityService {
     preset: IEntityPreset
   ): Promise<IEntityPreset> {
     return this.http
-      .post<IEntityPreset>(`${environment.apiURL}/entitypresets`, preset)
+      .post<IEntityPreset>(`${environment.apiURL}/entitypresets`, {
+        ...preset,
+        id: undefined
+      })
       .toPromise();
   }
 
@@ -64,7 +67,10 @@ export class EntityService {
 
   public async createEntity(entity: IEntity): Promise<IEntity> {
     return this.http
-      .post<IEntity>(`${environment.apiURL}/entities`, entity)
+      .post<IEntity>(`${environment.apiURL}/entities`, {
+        ...entity,
+        id: undefined
+      })
       .toPromise();
   }
 
@@ -92,10 +98,10 @@ export class EntityService {
     inventoryItem: IInventoryItem
   ): Promise<IInventoryItem> {
     return this.http
-      .post<IInventoryItem>(
-        `${environment.apiURL}/inventoryitems`,
-        inventoryItem
-      )
+      .post<IInventoryItem>(`${environment.apiURL}/inventoryitems`, {
+        ...inventoryItem,
+        id: undefined
+      })
       .toPromise();
   }
 
@@ -219,15 +225,15 @@ export enum EntityAttributeClass {
   MAJOR,
   NORMAL,
   MINOR,
-  UNIMPORTANT,
+  UNIMPORTANT
 }
 
 export enum HealthType {
   NORMAL,
-  MULTI_BAR,
+  MULTI_BAR
 }
 
 export enum HealthColorType {
   DYNAMIC,
-  STATIC,
+  STATIC
 }

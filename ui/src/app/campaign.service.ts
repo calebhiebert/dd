@@ -7,7 +7,7 @@ import { IUser } from './user.service';
 import { LoginService } from './login.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class CampaignService {
   public campaign: ICampaign = null;
@@ -60,7 +60,10 @@ export class CampaignService {
 
   public async createCampaign(campaign: ICampaign): Promise<ICampaign> {
     return this.http
-      .post<ICampaign>(`${environment.apiURL}/campaigns`, campaign)
+      .post<ICampaign>(`${environment.apiURL}/campaigns`, {
+        ...campaign,
+        id: undefined
+      })
       .toPromise();
   }
 
@@ -91,7 +94,7 @@ export class CampaignService {
     return this.http
       .post<ICampaignInvite>(`${environment.apiURL}/campaigninvites`, {
         campaignId: this.campaign.id,
-        name,
+        name
       })
       .toPromise();
   }
@@ -144,26 +147,24 @@ export class CampaignService {
 
   /**
    * Returns the entity preset from the current campaign object (if it exists)
-   * @param presetId
    */
   public getEntityPreset(presetId: string): IEntityPreset {
     if (!this.campaign) {
       return null;
     }
 
-    return this.campaign.entityPresets.find((ep) => ep.id === presetId) || null;
+    return this.campaign.entityPresets.find(ep => ep.id === presetId) || null;
   }
 
   /**
    * Returns the user from the current campaign object (if it exists)
-   * @param userId
    */
   public getUser(userId: string): ICampaignUser | null {
     if (!this.campaign) {
       return null;
     }
 
-    return this.campaign.members.find((m) => m.userId === userId) || null;
+    return this.campaign.members.find(m => m.userId === userId) || null;
   }
 
   public get canEdit() {
@@ -183,7 +184,7 @@ export class CampaignService {
       return this.campaign.entities;
     }
 
-    return this.campaign.entities.filter((e) => e.userId === this.login.id);
+    return this.campaign.entities.filter(e => e.userId === this.login.id);
   }
 }
 
@@ -227,7 +228,7 @@ export interface ICampaignUser {
 export enum CampaignInviteStatus {
   PENDING,
   REVOKED,
-  ACCEPTED,
+  ACCEPTED
 }
 
 export interface IItemType {

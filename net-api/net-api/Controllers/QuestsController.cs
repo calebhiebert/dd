@@ -23,7 +23,7 @@ namespace net_api.Controllers
         // GET: api/Quests
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Quest>>> GetQuests(
-            [FromQuery] string campaignId,
+            [FromQuery] Guid campaignId,
             [FromQuery] bool activeOnly = false
             )
         {
@@ -67,7 +67,7 @@ namespace net_api.Controllers
 
         // GET: api/Quests/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Quest>> GetQuest(string id)
+        public async Task<ActionResult<Quest>> GetQuest(Guid id)
         {
             var quest = await _context.Quests.FindAsync(id);
 
@@ -81,7 +81,7 @@ namespace net_api.Controllers
 
         // PUT: api/Quests/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutQuest(string id, Quest quest)
+        public async Task<IActionResult> PutQuest(Guid id, Quest quest)
         {
             if (id != quest.Id)
             {
@@ -113,6 +113,8 @@ namespace net_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Quest>> PostQuest(Quest quest)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             _context.Quests.Add(quest);
             await _context.SaveChangesAsync();
 
@@ -121,7 +123,7 @@ namespace net_api.Controllers
 
         // DELETE: api/Quests/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Quest>> DeleteQuest(string id)
+        public async Task<ActionResult<Quest>> DeleteQuest(Guid id)
         {
             var quest = await _context.Quests.FindAsync(id);
             if (quest == null)
@@ -135,7 +137,7 @@ namespace net_api.Controllers
             return quest;
         }
 
-        private bool QuestExists(string id)
+        private bool QuestExists(Guid id)
         {
             return _context.Quests.Any(e => e.Id == id);
         }
