@@ -67,6 +67,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { NumberQuickSelectComponent } from './number-quick-select/number-quick-select.component';
 import { SpawnableListItemComponent } from './entity/spawnable-list-item/spawnable-list-item.component';
+import { SpellManagerComponent } from './spell/spell-manager/spell-manager.component';
+import { SpellFormComponent } from './spell/spell-form/spell-form.component';
+import { SpellViewComponent } from './spell/spell-view/spell-view.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -126,7 +129,10 @@ import { SpawnableListItemComponent } from './entity/spawnable-list-item/spawnab
     NoteEditorComponent,
     NoteListComponent,
     NumberQuickSelectComponent,
-    SpawnableListItemComponent
+    SpawnableListItemComponent,
+    SpellManagerComponent,
+    SpellFormComponent,
+    SpellViewComponent
   ],
   imports: [
     BrowserModule,

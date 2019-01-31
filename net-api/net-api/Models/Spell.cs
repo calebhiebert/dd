@@ -26,26 +26,7 @@ namespace net_api.Models
         public string UserId { get; set; }
         public User User { get; set; }
 
-        public double? DurationValue { get; set; }
-        public DurationType? DurationType { get; set; }
-
-        public double? Range { get; set; }
-
-        public double? Area { get; set; }
-
-        public AreaShape? AreaShape { get; set; }
-
         [Column("Tags", TypeName = "varchar[]")]
         public string[] Tags { get; set; }
-    }
-
-    public enum DurationType
-    {
-        Instant, Round, Action, BonusAction, Reaction, Second, Minute, Hour, Day
-    }
-
-    public enum AreaShape
-    {
-        Cone, Cube, Cylinder, Line, Sphere, Square
     }
 }

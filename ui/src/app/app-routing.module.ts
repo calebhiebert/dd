@@ -26,6 +26,8 @@ import { QuestViewComponent } from './quest/quest-view/quest-view.component';
 import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-manager.component';
 import { OverviewComponent } from './session/overview/overview.component';
 import { ItemFormComponent } from './items/item-form/item-form.component';
+import { SpellManagerComponent } from './spell/spell-manager/spell-manager.component';
+import { SpellViewComponent } from './spell/spell-view/spell-view.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -190,6 +192,20 @@ const routes: Routes = [
             },
           },
         ],
+      },
+      {
+        path: 'spells',
+        component: SpellManagerComponent,
+        data: {
+          breadcrumb: 'Spells',
+        },
+      },
+      {
+        path: 'spells/:s_id',
+        component: SpellViewComponent,
+        data: {
+          breadcrumb: 'Spell View',
+        },
       },
       {
         path: 'overview',

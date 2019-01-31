@@ -8,7 +8,7 @@ import { CampaignService } from '../campaign.service';
 @Component({
   selector: 'dd-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
-  styleUrls: ['./breadcrumbs.component.css']
+  styleUrls: ['./breadcrumbs.component.css'],
 })
 export class BreadcrumbsComponent implements OnInit {
   private breadcrumbs$: Subscription;
@@ -24,7 +24,7 @@ export class BreadcrumbsComponent implements OnInit {
   ngOnInit() {
     this.breadcrumbs$ = this.router.events
       .pipe(
-        filter(v => v instanceof NavigationEnd),
+        filter((v) => v instanceof NavigationEnd),
         distinctUntilChanged(),
         map(() => this.updateBreadcrumbs(this.route.root))
       )
@@ -39,7 +39,7 @@ export class BreadcrumbsComponent implements OnInit {
       if (cr.data.breadcrumb !== undefined) {
         const crumb: IBreadcrumb = {
           display: cr.data.breadcrumb,
-          navigate: []
+          navigate: [],
         };
 
         switch (cr.data.breadcrumb) {
@@ -49,15 +49,20 @@ export class BreadcrumbsComponent implements OnInit {
           case 'Quest View':
             breadcrumbs.push({
               display: 'Quests',
-              navigate: ['campaigns', cr.parent.paramMap.get('id'), 'quests']
+              navigate: ['campaigns', cr.parent.paramMap.get('id'), 'quests'],
             });
             break;
           case 'Item View':
             breadcrumbs.push({
               display: 'Items',
-              navigate: ['campaigns', cr.parent.paramMap.get('id'), 'items']
+              navigate: ['campaigns', cr.parent.paramMap.get('id'), 'items'],
             });
             break;
+          case 'Spell View':
+            breadcrumbs.push({
+              display: 'Spells',
+              navigate: ['campaigns', cr.parent.paramMap.get('id'), 'spells'],
+            });
         }
 
         breadcrumbs.push(crumb);
