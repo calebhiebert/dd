@@ -82,11 +82,11 @@ namespace net_api.Controllers
                     .Where(s =>
                     s.Name.ToLower().Contains(search) ||
                     s.Description.ToLower().Contains(search) ||
-                    s.Tags.Any(t => t.ToLower().Contains(search))
+                    string.Join(",", s.Tags).ToLower().Contains(search)
                     );
             }
 
-            var count = await spells.CountAsync();
+            var count = spells.Count();
 
             if (limit > 0 || offset > 0)
             {

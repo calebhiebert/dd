@@ -41,7 +41,7 @@ import { TagEditorComponent } from './tag-editor/tag-editor.component';
 import { ItemViewComponent } from './items/item-view/item-view.component';
 import { AboutComponent } from './about/about.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-import { MarkdownModule } from 'ngx-markdown';
+import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { EntityComponent } from './entity/entity.component';
 import { EntityAttributeEditorModalComponent } from './entity/entity-view/entity-attribute-editor-modal/entity-attribute-editor-modal.component';
@@ -71,6 +71,7 @@ import { SpellManagerComponent } from './spell/spell-manager/spell-manager.compo
 import { SpellFormComponent } from './spell/spell-form/spell-form.component';
 import { SpellViewComponent } from './spell/spell-view/spell-view.component';
 import { SpellViewListComponent } from './spell/spell-view-list/spell-view-list.component';
+import { markedOptionsFactory } from './marked-custom';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -134,7 +135,7 @@ import { SpellViewListComponent } from './spell/spell-view-list/spell-view-list.
     SpellManagerComponent,
     SpellFormComponent,
     SpellViewComponent,
-    SpellViewListComponent
+    SpellViewListComponent,
   ],
   imports: [
     BrowserModule,
@@ -143,28 +144,33 @@ import { SpellViewListComponent } from './spell/spell-view-list/spell-view-list.
     FormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-      positionClass: 'toast-top-center'
+      positionClass: 'toast-top-center',
     }),
     TruncateModule,
     HttpClientModule,
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot({
+      markedOptions: {
+        provide: MarkedOptions,
+        useFactory: markedOptionsFactory,
+      },
+    }),
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: ErrorHandler,
-      useClass: SentryErrorHandler
-    }
+      useClass: SentryErrorHandler,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

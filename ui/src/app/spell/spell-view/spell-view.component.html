@@ -23,7 +23,7 @@
         <img
           class="s-rounded"
           width="64"
-          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/placeholder"
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/spell-default"
           *ngIf="!spell.imageId"
           alt="Spell Fallback Picture"
         />
@@ -51,11 +51,17 @@
           [alt]="'picture of' + spell.name"
         />
       </div>
-      <div class="column col-8 col-md-12">
+      <div
+        class="column col-md-12"
+        [ngClass]="{
+          'col-8': spell.imageId !== null,
+          'col-12': spell.imageId === null
+        }"
+      >
         <markdown [data]="spell.description"></markdown>
 
         <!-- Tags -->
-        <div *ngIf="spell.tags">
+        <div class="mt-2" *ngIf="spell.tags">
           <div
             class="label label-rounded mr-1 mb-1"
             *ngFor="let t of spell.tags"
