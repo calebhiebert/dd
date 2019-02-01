@@ -95,6 +95,7 @@ export class ItemViewComponent implements OnInit {
       }
     );
 
+    // If there is only 1 entity available to add the item to, select it automatically
     if (inventoryableEntities.length === 1) {
       entity = inventoryableEntities[0];
     } else {
@@ -110,6 +111,7 @@ export class ItemViewComponent implements OnInit {
     try {
       const inventory = await this.entityService.getInventory(entity.id);
 
+      // Check to make sure the item is not already in the entities inventory
       if (inventory.find((i) => i.itemId === this.item.id)) {
         this.toast.warning(
           `<span class="text-bold">${
@@ -131,12 +133,18 @@ export class ItemViewComponent implements OnInit {
         quantity: 1,
       };
 
-      const createdItem = await this.entityService.createInventoryItem(
+      const createdItem = await this.entityService.updateInventoryItem(
         inventoryItem
       );
 
       this.toast.info(
-        `Added 1x ${this.item.name} to the inventory of ${entity.name}`
+        `Added 1x <span class="text-bold">${
+          this.item.name
+        }</span> to <span class="text-bold">${entity.name}'s</span> inventory`,
+        'Item Added',
+        {
+          enableHtml: true,
+        }
       );
     } catch (err) {
       throw err;

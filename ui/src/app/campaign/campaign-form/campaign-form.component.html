@@ -1,6 +1,6 @@
 <div class="container grid-xl" [formGroup]="formGroup">
   <div class="columns">
-    <div class="column col-3 col-md-12 col-mx-auto">
+    <div class="column col-3 col-md-12 col-mx-auto" *ngIf="includeImage">
       <label class="form-label">Image</label>
       <dd-image-upload [formGroup]="formGroup"></dd-image-upload>
     </div>

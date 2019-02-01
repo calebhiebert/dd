@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { IItem } from './item.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EntityService {
   private _currentViewEntity: IEntity = null;
@@ -30,7 +30,7 @@ export class EntityService {
     return this.http
       .post<IEntityPreset>(`${environment.apiURL}/entitypresets`, {
         ...preset,
-        id: undefined
+        id: undefined,
       })
       .toPromise();
   }
@@ -69,7 +69,7 @@ export class EntityService {
     return this.http
       .post<IEntity>(`${environment.apiURL}/entities`, {
         ...entity,
-        id: undefined
+        id: undefined,
       })
       .toPromise();
   }
@@ -94,29 +94,25 @@ export class EntityService {
       .toPromise();
   }
 
-  public async createInventoryItem(
+  public async updateInventoryItem(
     inventoryItem: IInventoryItem
   ): Promise<IInventoryItem> {
     return this.http
-      .post<IInventoryItem>(`${environment.apiURL}/inventoryitems`, {
-        ...inventoryItem,
-        id: undefined
-      })
-      .toPromise();
-  }
-
-  public async updateInventoryItem(inventoryItem: IInventoryItem) {
-    return this.http
-      .put<void>(
-        `${environment.apiURL}/inventoryitems/${inventoryItem.id}`,
+      .put<IInventoryItem>(
+        `${environment.apiURL}/inventoryitems`,
         inventoryItem
       )
       .toPromise();
   }
 
-  public async deleteInventoryItem(id: string): Promise<void> {
+  public async deleteInventoryItem(
+    entId: string,
+    itemId: string
+  ): Promise<void> {
     return this.http
-      .delete<void>(`${environment.apiURL}/inventoryitems/${id}`)
+      .delete<void>(
+        `${environment.apiURL}/inventoryitems/${entId}/item/${itemId}`
+      )
       .toPromise();
   }
 
@@ -200,7 +196,6 @@ export interface IAttribute {
 }
 
 export interface IInventoryItem {
-  id?: string;
   itemId: string;
   item?: IItem;
   entityId: string;
@@ -225,15 +220,15 @@ export enum EntityAttributeClass {
   MAJOR,
   NORMAL,
   MINOR,
-  UNIMPORTANT
+  UNIMPORTANT,
 }
 
 export enum HealthType {
   NORMAL,
-  MULTI_BAR
+  MULTI_BAR,
 }
 
 export enum HealthColorType {
   DYNAMIC,
-  STATIC
+  STATIC,
 }

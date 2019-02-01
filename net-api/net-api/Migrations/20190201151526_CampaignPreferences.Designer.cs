@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using net_api.Models;
@@ -9,9 +10,10 @@ using net_api.Models;
 namespace netapi.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20190201151526_CampaignPreferences")]
+    partial class CampaignPreferences
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,13 +201,18 @@ namespace netapi.Migrations
 
             modelBuilder.Entity("net_api.Models.InventoryItem", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
                     b.Property<Guid>("EntityId");
 
                     b.Property<Guid>("ItemId");
 
                     b.Property<int>("Quantity");
 
-                    b.HasKey("EntityId", "ItemId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntityId");
 
                     b.HasIndex("ItemId");
 

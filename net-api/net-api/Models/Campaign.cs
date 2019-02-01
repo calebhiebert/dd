@@ -30,14 +30,6 @@ namespace net_api.Models
         [Column("ExperienceTable", TypeName = "bigint[]")]
         public long[] ExperienceTable { get; set; }
 
-        public ICollection<EntityPreset> EntityPresets { get; set; }
-
-        public ICollection<Entity> Entities { get; set; }
-
-        public ICollection<Item> Items { get; set; }
-
-        public ICollection<Quest> Quests { get; set; }
-
         [Column("ItemRarityTable", TypeName = "jsonb")]
         [JsonIgnore]
         public string ItemRarityTableJson { get; set; }
@@ -62,6 +54,20 @@ namespace net_api.Models
         }
 
         public DateTime CreatedAt { get; set; }
+        
+        [Required]
+        public bool PlayersCanEditItems { get; set; }
+
+        [Required]
+        public bool PlayersCanEditSpells { get; set; }
+
+        public ICollection<EntityPreset> EntityPresets { get; set; }
+
+        public ICollection<Entity> Entities { get; set; }
+
+        public ICollection<Item> Items { get; set; }
+
+        public ICollection<Quest> Quests { get; set; }
 
         public Campaign()
         {

@@ -49,6 +49,7 @@ namespace net_api.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CampaignUser>().HasKey(tbl => new { tbl.CampaignId, tbl.UserId });
+            modelBuilder.Entity<InventoryItem>().HasKey(tbl => new { tbl.EntityId, tbl.ItemId });
         }
     }
 }

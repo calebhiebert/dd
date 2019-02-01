@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'dd-inventory-manager',
   templateUrl: './inventory-manager.component.html',
-  styleUrls: ['./inventory-manager.component.css']
+  styleUrls: ['./inventory-manager.component.css'],
 })
 export class InventoryManagerComponent implements OnInit {
   public working = false;
@@ -70,28 +70,27 @@ export class InventoryManagerComponent implements OnInit {
       itemId: item.id,
       item: item,
       entityId: this.entityId,
-      quantity: 1
+      quantity: 1,
     };
 
     // Check if the inventory already has this item
-    if (this.inventory.find(i => i.itemId === inventoryItem.itemId)) {
+    if (this.inventory.find((i) => i.itemId === inventoryItem.itemId)) {
       return;
     }
 
     this.working = true;
 
     try {
-      const addedItem = await this.entityService.createInventoryItem(
+      const createdInventoryItem = await this.entityService.updateInventoryItem(
         inventoryItem
       );
-      inventoryItem.id = addedItem.id;
+
+      this.inventory.push(createdInventoryItem);
     } catch (err) {
       throw err;
     }
 
     this.working = false;
-
-    this.inventory.push(inventoryItem);
   }
 
   public async editItem(item: IInventoryItem) {
@@ -103,8 +102,8 @@ export class InventoryManagerComponent implements OnInit {
       quantity: new FormControl(item.quantity, [
         numberValidator,
         Validators.required,
-        Validators.min(0)
-      ])
+        Validators.min(0),
+      ]),
     });
     this.editingItem = item;
 
@@ -127,8 +126,11 @@ export class InventoryManagerComponent implements OnInit {
 
     try {
       if (item.quantity === 0) {
-        await this.entityService.deleteInventoryItem(item.id);
-        this.inventory = this.inventory.filter(itm => itm !== item);
+        await this.entityService.deleteInventoryItem(
+          this.entityId,
+          item.itemId
+        );
+        this.inventory = this.inventory.filter((itm) => itm !== item);
       } else {
         await this.entityService.updateInventoryItem(item);
       }
@@ -150,13 +152,16 @@ export class InventoryManagerComponent implements OnInit {
 
     try {
       if (inventoryItem.quantity === 1) {
-        await this.entityService.deleteInventoryItem(inventoryItem.id);
-        this.inventory = this.inventory.filter(itm => itm !== inventoryItem);
+        await this.entityService.deleteInventoryItem(
+          this.entityId,
+          inventoryItem.itemId
+        );
+        this.inventory = this.inventory.filter((itm) => itm !== inventoryItem);
         this.toastr.info(`Used 1x ${inventoryItem.item.name}`);
       } else {
         await this.entityService.updateInventoryItem({
           ...inventoryItem,
-          quantity: inventoryItem.quantity - 1
+          quantity: inventoryItem.quantity - 1,
         });
         inventoryItem.quantity--;
         this.toastr.info(`Used 1x ${inventoryItem.item.name}`);

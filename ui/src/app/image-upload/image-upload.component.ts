@@ -1,7 +1,15 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  ElementRef,
+  Input,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { LoginService } from '../login.service';
+import { CampaignService } from '../campaign.service';
 
 @Component({
   selector: 'dd-image-upload',
@@ -26,7 +34,13 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
   @Input()
   public eleId = '';
 
-  constructor(private loginService: LoginService) {}
+  @Input()
+  public campaignId: string;
+
+  constructor(
+    private loginService: LoginService,
+    private campaignService: CampaignService
+  ) {}
 
   ngOnInit() {
     if (!this.formGroup.contains('imageId')) {
@@ -46,7 +60,7 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
         e.stopPropagation();
 
         this.isDragOver = true;
-      }),
+      })
     );
 
     ['dragleave', 'dragend', 'drop'].forEach((evt) =>
@@ -55,7 +69,7 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
         e.stopPropagation();
 
         this.isDragOver = false;
-      }),
+      })
     );
 
     this.fupload.nativeElement.addEventListener('drop', (e) => {
@@ -87,7 +101,9 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
       this.formGroup.get('imageId').value !== undefined &&
       this.formGroup.get('imageId').value !== ''
     ) {
-      return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${this.formGroup.get('imageId').value}`;
+      return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${
+        this.formGroup.get('imageId').value
+      }`;
     } else {
       return null;
     }
@@ -106,10 +122,16 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
 
     const form = new FormData();
     form.append('file', this.file);
+    if (this.campaignService.campaign) {
+      form.append('campaignId', this.campaignService.campaign.id);
+    }
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `${environment.apiURL}/upload`, true);
-    xhr.setRequestHeader('Authorization', `Bearer ${this.loginService.loadToken()}`);
+    xhr.setRequestHeader(
+      'Authorization',
+      `Bearer ${this.loginService.loadToken()}`
+    );
 
     xhr.onload = (e) => {
       const image = JSON.parse(xhr.responseText);

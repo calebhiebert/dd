@@ -25,5 +25,10 @@ namespace net_api.Models
 
         [JsonIgnore]
         public ICollection<Entity> Entities { get; set; }
+
+        public User()
+        {
+            CreatedAt = DateTime.UtcNow;
+        }
     }
 }

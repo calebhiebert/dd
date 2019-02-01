@@ -6,22 +6,20 @@ namespace net_api.Models
 {
     public class InventoryItem
     {
-        public Guid Id { get; set; }
-
         [Required]
+        [Key]
         public Guid ItemId { get; set; }
+
         public Item Item { get; set; }
 
         [Required]
+        [Key]
         public Guid EntityId { get; set; }
+
+        [JsonIgnore]
         public Entity Entity { get; set; }
 
         [Required]
         public int Quantity { get; set; }
-
-        public InventoryItem()
-        {
-            Id = Guid.NewGuid();
-        }
     }
 }

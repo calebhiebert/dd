@@ -28,17 +28,24 @@ namespace net_api.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadImage([FromForm]IFormFile file)
+        public IActionResult UploadImage([FromForm]IFormFile file, [FromForm]Guid? campaignId)
         {
             if (file == null)
             {
                 return BadRequest("missing file");
             }
 
+            if (campaignId == null)
+            {
+                return BadRequest("missing campaign id");
+            }
+
             var uploadParams = new ImageUploadParams();
             uploadParams.File = new FileDescription(file.Name, file.OpenReadStream());
             uploadParams.Colors = true;
             uploadParams.UploadPreset = "server_upload";
+            uploadParams.Folder = $"Public/{campaignId.ToString()}";
+            uploadParams.Tags = $"{campaignId.ToString()}";
 
             var uploadResult = _cloudinary.Upload(uploadParams);
 

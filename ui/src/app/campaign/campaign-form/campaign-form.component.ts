@@ -14,6 +14,9 @@ export class CampaignFormComponent implements OnInit {
   @Input()
   public campaign: ICampaign;
 
+  @Input()
+  public includeImage: boolean;
+
   constructor() {}
 
   ngOnInit() {
@@ -34,15 +37,22 @@ export class CampaignFormComponent implements OnInit {
       ])
     );
 
-    this.formGroup.addControl(
-      'imageId',
-      new FormControl(
-        this.campaign.imageId === '' || !this.campaign
-          ? null
-          : this.campaign.imageId,
-        [Validators.required]
-      )
-    );
+    if (this.includeImage) {
+      this.formGroup.addControl(
+        'imageId',
+        new FormControl(
+          this.campaign.imageId === '' || !this.campaign
+            ? null
+            : this.campaign.imageId,
+          [Validators.required]
+        )
+      );
+    } else {
+      this.formGroup.addControl(
+        'imageId',
+        new FormControl('placeholder', [Validators.required])
+      );
+    }
   }
 
   public get name() {
