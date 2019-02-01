@@ -93,7 +93,7 @@
     <h5 class="mb-1 text-bold" *ngIf="hpPercent > 50">
       {{ bar.current }} / {{ bar.max }}
     </h5>
-    <h5 class="mb-1 text-bold" *ngIf="hpPercent < 50" style="opacity: 0;">
+    <h5 class="mb-1 text-bold" *ngIf="hpPercent <= 50" style="opacity: 0;">
       .
     </h5>
   </div>
@@ -101,7 +101,7 @@
   <!-- Extras container -->
   <div
     class="d-flex justify-content-center align-items-center p-1"
-    *ngIf="hpPercent < 50"
+    *ngIf="hpPercent <= 50"
   >
     <h5 class="mb-1 text-bold">{{ bar.current }} / {{ bar.max }}</h5>
   </div>
