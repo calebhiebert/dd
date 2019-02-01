@@ -135,7 +135,9 @@ export class SpellManagerComponent implements OnInit {
 
   public set search(value: string) {
     this._search = value;
-    this.load();
+
+    // Setting the page triggers a re-fetch
+    this.page = 1;
   }
 
   public get page() {

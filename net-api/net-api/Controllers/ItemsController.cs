@@ -54,12 +54,17 @@ namespace net_api.Controllers
                 return BadRequest("not authorized");
             }
 
-            if (limit == 0)
+            if (limit <= 0)
             {
                 limit = 50;
             } else if (limit > 50)
             {
                 limit = 50;
+            }
+
+            if (offset < 0)
+            {
+                offset = 0;
             }
 
             IQueryable<Item> items;
@@ -90,9 +95,16 @@ namespace net_api.Controllers
                     .Take(limit);
             }
 
+            var itemArray = items.ToArray();
+
+            foreach (var item in itemArray)
+            {
+                item.Description = item.Description.Substring(0, Math.Min(item.Description.Length, 150));
+            }
+
             return Ok(new
             {
-                Items = items.ToArray(),
+                Items = itemArray,
                 Total = count,
             });
         }

@@ -64,11 +64,17 @@
           [alt]="'picture of' + item.name"
         />
       </div>
-      <div class="column col-8 col-md-12">
+      <div
+        class="column col-md-12"
+        [ngClass]="{
+          'col-8': item.imageId !== null,
+          'col-12': item.imageId === null
+        }"
+      >
         <markdown [data]="item.description"></markdown>
 
         <!-- Tags -->
-        <div *ngIf="item.tags">
+        <div class="mt-2" *ngIf="item.tags">
           <div
             class="label label-rounded mr-1 mb-1"
             *ngFor="let t of item.tags"

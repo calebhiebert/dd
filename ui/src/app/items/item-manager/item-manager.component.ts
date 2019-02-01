@@ -146,7 +146,9 @@ export class ItemManagerComponent implements OnInit {
 
   public set search(value: string) {
     this._search = value;
-    this.loadItems();
+
+    // Setting the page triggers a refetch
+    this.page = 1;
   }
 
   public get page() {

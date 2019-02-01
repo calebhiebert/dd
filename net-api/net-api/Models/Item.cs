@@ -14,7 +14,7 @@ namespace net_api.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(3000, MinimumLength = 3)]
+        [Column("Description", TypeName = "TEXT")]
         public string Description { get; set; }
 
         public string ImageId { get; set; }
