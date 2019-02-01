@@ -58,7 +58,7 @@
       (click)="editAttribute(a)"
     >
       <div class="h5 no-select">
-        <figure class="avatar avatar-sm" *ngIf="a.pattr && a.pattr.imageId">
+        <figure class="avatar avatar" *ngIf="a.pattr && a.pattr.imageId">
           <img
             src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
               a.pattr.imageId
@@ -76,19 +76,21 @@
   <!-- Normal Attributes -->
   <div class="columns" *ngIf="normalAttributes.length > 0">
     <div
-      class="column col-1 col-md-2 col-sm-4 col-mx-auto text-center"
+      class="column col-2 col-md-3 col-sm-4 col-mx-auto text-center"
       [ngClass]="{ 'c-hand': editable }"
       *ngFor="let a of normalAttributes"
       (click)="editAttribute(a)"
     >
       <div class="h6 no-select">
-        <figure class="avatar avatar-xs" *ngIf="a.pattr && a.pattr.imageId">
-          <img
-            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-              a.pattr.imageId
-            }}"
-          />
-        </figure>
+        <div>
+          <figure class="avatar avatar-sm" *ngIf="a.pattr && a.pattr.imageId">
+            <img
+              src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+                a.pattr.imageId
+              }}"
+            />
+          </figure>
+        </div>
         {{ a.attr.name }}
       </div>
       <div class="h5">{{ a.attr.data }}</div>
