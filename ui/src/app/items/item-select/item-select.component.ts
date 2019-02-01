@@ -45,7 +45,6 @@ export class ItemSelectComponent implements OnInit {
     try {
       const items = await this.itemService.getItems(
         this.campaignService.campaign.id,
-        null,
         6,
         0,
         this._search

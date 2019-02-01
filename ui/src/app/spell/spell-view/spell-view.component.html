@@ -1,3 +1,83 @@
-<p>
-  spell-view works!
-</p>
+<dd-editable-entity-selector #entityselect></dd-editable-entity-selector>
+
+<!-- Main View -->
+<div class="container grid-xl">
+  <div class="loading loading-lg" *ngIf="loading"></div>
+
+  <div *ngIf="spell">
+    <!-- Spell Header -->
+    <div class="columns">
+      <!-- Upper Image -->
+      <div class="column col-auto">
+        <img
+          class="s-rounded"
+          width="64"
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+            spell.imageId
+          }}"
+          *ngIf="spell.imageId"
+          alt="spell Picture"
+        />
+
+        <!-- Fallback Image -->
+        <img
+          class="s-rounded"
+          width="64"
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/placeholder"
+          *ngIf="!spell.imageId"
+          alt="Spell Fallback Picture"
+        />
+      </div>
+
+      <!-- Upper Column view -->
+      <div class="column">
+        <h2 class="mb-0">{{ spell.name }}</h2>
+        <div class="text-gray text-italic">
+          <span *ngIf="editable"
+            >•<a class="ml-2 c-hand" (click)="edit()">Edit</a></span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Spell Body -->
+    <div class="columns mt-2">
+      <div class="column col-4 hide-md" *ngIf="spell.imageId">
+        <img
+          class="img-responsive s-rounded"
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
+            spell.imageId
+          }}"
+          [alt]="'picture of' + spell.name"
+        />
+      </div>
+      <div class="column col-8 col-md-12">
+        <markdown [data]="spell.description"></markdown>
+
+        <!-- Tags -->
+        <div *ngIf="spell.tags">
+          <div
+            class="label label-rounded mr-1 mb-1"
+            *ngFor="let t of spell.tags"
+          >
+            {{ t }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Lower full size image -->
+      <div
+        class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2"
+        *ngIf="spell.imageId"
+      >
+        <img
+          class="img-responsive s-rounded"
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
+            spell.imageId
+          }}"
+          [alt]="'picture of' + spell.name"
+        />
+      </div>
+    </div>
+  </div>
+</div>

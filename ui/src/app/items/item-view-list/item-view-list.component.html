@@ -1,5 +1,6 @@
 <div class="container grid-xl">
   <div class="columns hoverable p-1">
+    <!-- Spell Image -->
     <div class="column col-auto">
       <img
         *ngIf="item.imageId"
@@ -14,14 +15,20 @@
         src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/placeholder"
       />
     </div>
+
+    <!-- Name / Basic Info -->
     <div class="column d-flex flex-col">
+      <!-- Upper Info -->
       <div class="columns">
+        <!-- Name -->
         <div class="column col-auto">
           <h5 class="mb-0">
             {{ item.name }}
             <span class="text-gray" *ngIf="!item.playerVisible">(Hidden)</span>
           </h5>
         </div>
+
+        <!-- Special Info (Mobile) -->
         <div class="column col-12 show-sm">
           <div class="text-gray text-italic" *ngIf="rarity">
             <span class="text-bold" [style.color]="rarity.color">{{
@@ -34,6 +41,8 @@
             <a class="ml-2 c-hand" (click)="edit()" *ngIf="editable">Edit</a>
           </div>
         </div>
+
+        <!-- Special Info (Desktop) -->
         <div class="column col-auto col-ml-auto hide-sm">
           <div class="text-gray text-italic" *ngIf="rarity">
             <span class="text-bold" [style.color]="rarity.color">{{
@@ -47,6 +56,8 @@
           </div>
         </div>
       </div>
+
+      <!-- Description -->
       <span class="text-gray">{{ item.description | truncate: 150 }}</span>
     </div>
   </div>

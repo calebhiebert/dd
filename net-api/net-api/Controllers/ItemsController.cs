@@ -10,12 +10,6 @@ using net_api.Models;
 
 namespace net_api.Controllers
 {
-    public struct ItemsQueryResponse
-    {
-        public Item[] Items { get; set; }
-        public int Total { get; set; }
-    }
-
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -31,11 +25,10 @@ namespace net_api.Controllers
         // GET: api/Items
         [HttpGet]
         public IActionResult GetItems(
-            [FromQuery(Name = "campaignId")] Guid campaignId, 
-            [FromQuery(Name = "limit")] int limit,
-            [FromQuery(Name = "offset")] int offset,
-            [FromQuery(Name = "tags")] string tags,
-            [FromQuery(Name = "search")] string search
+            [FromQuery] Guid campaignId, 
+            [FromQuery] int limit,
+            [FromQuery] int offset,
+            [FromQuery] string search
             )
         {
             if (campaignId == null)
@@ -55,7 +48,7 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            // Authorize requests
+            // Authorize request
             if (userId != campaign.UserId && !campaign.Members.Any(m => m.UserId == userId))
             {
                 return BadRequest("not authorized");
@@ -63,7 +56,7 @@ namespace net_api.Controllers
 
             if (limit == 0)
             {
-                limit = 1000;
+                limit = 50;
             } else if (limit > 50)
             {
                 limit = 50;
@@ -77,12 +70,6 @@ namespace net_api.Controllers
             if (userId != campaign.UserId)
             {
                 items = items.Where(i => i.PlayerVisible == true);
-            }
-
-            if (tags != null)
-            {
-                var tagList = tags.Split(",");
-                items = items.Where(i => i.Tags.Any(t => tagList.Contains(t)));
             }
 
             if (search != null)
@@ -103,7 +90,7 @@ namespace net_api.Controllers
                     .Take(limit);
             }
 
-            return Ok(new ItemsQueryResponse
+            return Ok(new
             {
                 Items = items.ToArray(),
                 Total = count,

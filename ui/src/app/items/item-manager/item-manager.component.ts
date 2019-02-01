@@ -17,10 +17,9 @@ export class ItemManagerComponent implements OnInit {
 
   public items: IItem[];
   public totalItemCount: number;
+  public queryLimit = 10;
 
-  private queryTags: string[];
-  private queryLimit = 10;
-  private queryOffset: number;
+  private _queryOffset: number;
   private _page = 1;
   private _search: string;
 
@@ -53,16 +52,6 @@ export class ItemManagerComponent implements OnInit {
   private readURLParams() {
     const query = this.route.snapshot.queryParamMap;
 
-    if (query.get('tags')) {
-      this.queryTags = query
-        .get('tags')
-        .split(',')
-        .map((t) => t.trim())
-        .filter((t) => t !== '' && t !== null && t !== undefined);
-    } else {
-      this.queryTags = undefined;
-    }
-
     if (query.get('search')) {
       this._search = query.get('search');
     }
@@ -71,7 +60,7 @@ export class ItemManagerComponent implements OnInit {
       try {
         this.queryLimit = parseInt(query.get('limit'), 10);
       } catch (err) {
-        throw err;
+        // Do nothing
       }
     } else {
       this.queryLimit = 10;
@@ -79,15 +68,15 @@ export class ItemManagerComponent implements OnInit {
 
     if (query.get('offset')) {
       try {
-        this.queryOffset = parseInt(query.get('offset'), 10);
+        this._queryOffset = parseInt(query.get('offset'), 10);
       } catch (err) {
-        throw err;
+        // Do nothing
       }
     } else {
-      this.queryOffset = 0;
+      this._queryOffset = 0;
     }
 
-    this._page = (this.queryOffset || 0) / (this.queryLimit || 10) + 1;
+    this._page = (this._queryOffset || 0) / (this.queryLimit || 10) + 1;
   }
 
   private async loadItems(navigate: boolean = true) {
@@ -100,9 +89,8 @@ export class ItemManagerComponent implements OnInit {
     try {
       const items = await this.itemService.getItems(
         this.campaignService.campaign.id,
-        this.queryTags,
         this.queryLimit,
-        this.queryOffset,
+        this._queryOffset,
         this.search
       );
       this.items = items.items;
@@ -167,7 +155,7 @@ export class ItemManagerComponent implements OnInit {
 
   public set page(value: number) {
     this._page = value;
-    this.queryOffset = this.queryLimit * (this.page - 1);
+    this._queryOffset = this.queryLimit * (this.page - 1);
     this.loadItems();
   }
 

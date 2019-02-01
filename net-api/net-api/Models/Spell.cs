@@ -14,8 +14,13 @@ namespace net_api.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(3000)]
+        [Column("Description", TypeName = "TEXT")]
         public string Description { get; set; }
+
+        public string ImageId { get; set; }
+
+        [Required]
+        public bool PlayerVisible { get; set; }
 
         [Required]
         public Guid CampaignId { get; set; }

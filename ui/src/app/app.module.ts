@@ -70,6 +70,7 @@ import { SpawnableListItemComponent } from './entity/spawnable-list-item/spawnab
 import { SpellManagerComponent } from './spell/spell-manager/spell-manager.component';
 import { SpellFormComponent } from './spell/spell-form/spell-form.component';
 import { SpellViewComponent } from './spell/spell-view/spell-view.component';
+import { SpellViewListComponent } from './spell/spell-view-list/spell-view-list.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -132,7 +133,8 @@ import { SpellViewComponent } from './spell/spell-view/spell-view.component';
     SpawnableListItemComponent,
     SpellManagerComponent,
     SpellFormComponent,
-    SpellViewComponent
+    SpellViewComponent,
+    SpellViewListComponent
   ],
   imports: [
     BrowserModule,

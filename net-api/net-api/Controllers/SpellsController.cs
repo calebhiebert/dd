@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,11 +23,83 @@ namespace net_api.Controllers
 
         // GET: api/Spells
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Spell>>> GetSpells()
+        public async Task<ActionResult<IEnumerable<Spell>>> GetSpells(
+            [FromQuery] Guid? campaignId,
+            [FromQuery] int limit,
+            [FromQuery] int offset,
+            [FromQuery] string search
+            )
         {
-            // TODO authenticate
+            if (campaignId == null)
+            {
+                return BadRequest("missing campaign id");
+            }
 
-            return await _context.Spells.ToListAsync();
+            var campaign = _context.Campaigns
+                .Where(c => c.Id == campaignId)
+                .Include(c => c.Members)
+                .FirstOrDefault();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Authorize request
+            if (userId != campaign.UserId && !campaign.Members.Any(m => m.UserId == userId))
+            {
+                return BadRequest("not authorized");
+            }
+
+            if (limit == 0)
+            {
+                limit = 50;
+            } else if (limit > 50)
+            {
+                limit = 50;
+            }
+
+            IQueryable<Spell> spells;
+
+            spells = _context.Spells
+                .Where(s => s.CampaignId == campaign.Id)
+                .OrderBy(s => s.Name);
+
+            // Only let the campaign owner see spells with playerVisible = false
+            if (userId != campaign.UserId)
+            {
+                spells = spells
+                    .Where(s => s.PlayerVisible == true);
+            }
+
+            if (search != null)
+            {
+                search = search.ToLower().Trim();
+
+                spells = spells
+                    .Where(s =>
+                    s.Name.ToLower().Contains(search) ||
+                    s.Description.ToLower().Contains(search) ||
+                    s.Tags.Any(t => t.ToLower().Contains(search))
+                    );
+            }
+
+            var count = await spells.CountAsync();
+
+            if (limit > 0 || offset > 0)
+            {
+                spells = spells
+                    .Skip(offset)
+                    .Take(limit);
+            }
+
+            return Ok(new
+            {
+                Spells = spells.ToArray(),
+                Total = count,
+            });
         }
 
         // GET: api/Spells/5

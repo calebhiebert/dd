@@ -1,11 +1,13 @@
 <dd-editable-entity-selector #entityselect></dd-editable-entity-selector>
 
+<!-- Main View -->
 <div class="container grid-xl">
   <div class="loading loading-lg" *ngIf="loading"></div>
 
   <div *ngIf="item">
     <!-- Item Header -->
     <div class="columns">
+      <!-- Upper Image -->
       <div class="column col-auto">
         <img
           class="s-rounded"
@@ -16,6 +18,8 @@
           *ngIf="item.imageId"
           alt="Item Picture"
         />
+
+        <!-- Fallback Image -->
         <img
           class="s-rounded"
           width="64"
@@ -24,6 +28,8 @@
           alt="Item Fallback Picture"
         />
       </div>
+
+      <!-- Upper Column view -->
       <div class="column">
         <h2 class="mb-0">{{ item.name }}</h2>
         <div class="text-gray text-italic" *ngIf="rarity">
@@ -71,6 +77,8 @@
           </div>
         </div>
       </div>
+
+      <!-- Lower full size image -->
       <div
         class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2"
         *ngIf="item.imageId"

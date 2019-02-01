@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { LoginService } from './login.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ItemService {
   constructor(private http: HttpClient, private login: LoginService) {}
@@ -15,7 +15,7 @@ export class ItemService {
       .post<IItem>(`${environment.apiURL}/items`, {
         ...item,
         userId: this.login.id,
-        id: undefined
+        id: undefined,
       })
       .toPromise();
   }
@@ -28,28 +28,21 @@ export class ItemService {
 
   public async getItems(
     campaignId: string,
-    tags?: string[],
     limit: number = 10,
     offset: number = 0,
     search?: string
   ): Promise<IItemQueryResult> {
-    let tagString = '';
-
-    if (tags) {
-      tagString = `&tags=${tags.join(',')}`;
-    }
-
-    let searchString = '';
+    let searchQuery = '';
 
     if (search) {
-      searchString = `&search=${search}`;
+      searchQuery = `&search=${search}`;
     }
 
     return this.http
       .get<IItemQueryResult>(
         `${
           environment.apiURL
-        }/items?campaignId=${campaignId}${tagString}${searchString}&limit=${limit}&offset=${offset}`
+        }/items?campaignId=${campaignId}${searchQuery}&limit=${limit}&offset=${offset}`
       )
       .toPromise();
   }

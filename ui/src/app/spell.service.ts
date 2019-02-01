@@ -15,8 +15,25 @@ export class SpellService {
       .toPromise();
   }
 
-  public getSpells(): Promise<ISpell[]> {
-    return this.http.get<ISpell[]>(`${environment.apiURL}/spells`).toPromise();
+  public getSpells(
+    campaignId: string,
+    limit: number = 10,
+    offset: number = 0,
+    search?: string
+  ): Promise<ISpellQueryResult> {
+    let searchQuery = '';
+
+    if (search) {
+      searchQuery = `&search=${search}`;
+    }
+
+    return this.http
+      .get<ISpellQueryResult>(
+        `${
+          environment.apiURL
+        }/spells?campaignId=${campaignId}${searchQuery}&limit=${limit}&offset=${offset}`
+      )
+      .toPromise();
   }
 
   public createSpell(spell: ISpell): Promise<ISpell> {
@@ -37,7 +54,14 @@ export interface ISpell {
   name: string;
   description: string;
   campaignId: string;
+  playerVisible: boolean;
+  imageId?: string;
   userId: string;
   user?: IUser;
   tags: string[];
+}
+
+export interface ISpellQueryResult {
+  spells: ISpell[];
+  total: number;
 }

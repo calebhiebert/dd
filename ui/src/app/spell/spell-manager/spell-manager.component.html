@@ -1,11 +1,71 @@
-<div class="container grid-xl">
-  <!-- Title Controls -->
+<div class="container grid-xl mt-2">
   <div class="columns">
-    <div class="column"><h3>Spells</h3></div>
-    <div class="column col-auto">
-      <button class="btn btn-sm">
-        <i class="icon icon-plus"></i> Add Spell
+    <!-- Title -->
+    <div class="column col-auto"><h3>Spells</h3></div>
+
+    <div class="column show-md col-8" *ngIf="editable">
+      <button class="btn btn-sm mt-1" (click)="addSpell()">
+        <i class="icon icon-plus"></i> Create Spell
       </button>
     </div>
+
+    <div class="column hide-md" *ngIf="editable">
+      <button class="btn btn-sm mt-1" (click)="addSpell()">
+        <i class="icon icon-plus"></i> Create Spell
+      </button>
+    </div>
+
+    <!-- Search -->
+    <div class="column col-6 col-md-12 col-ml-auto mb-2">
+      <div class="has-icon-left">
+        <input
+          class="form-input"
+          type="search"
+          name="search"
+          id="search"
+          placeholder="Search"
+          [formControl]="searchControl"
+        />
+        <i class="form-icon icon icon-search" *ngIf="!loading"></i>
+        <div class="form-icon loading" *ngIf="loading && spells"></div>
+      </div>
+    </div>
+  </div>
+  <div class="loading loading-lg" *ngIf="loading && !spells"></div>
+
+  <div *ngIf="spells">
+    <!-- No Spells at all -->
+    <div class="empty" *ngIf="spells.length === 0 && !search">
+      <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
+      <p class="empty-title h5">There are no spells</p>
+      <p class="empty-subtitle" *ngIf="editable">
+        Click the button to create one
+      </p>
+      <div class="empty-action">
+        <button class="btn btn-primary" (click)="addSpell()" *ngIf="editable">
+          Create Spell
+        </button>
+      </div>
+    </div>
+
+    <!-- No Spells from search -->
+    <div class="empty" *ngIf="spells.length === 0 && search">
+      <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
+      <p class="empty-title h5">Your search returned nothing :(</p>
+    </div>
+
+    <div *ngFor="let spell of spells">
+      <dd-spell-view-list
+        [spell]="spell"
+        (click)="selectSpell(spell)"
+      ></dd-spell-view-list>
+    </div>
+
+    <dd-paginator
+      [totalItems]="totalSpellCount"
+      [itemsPerPage]="queryLimit"
+      [page]="page"
+      (pageChange)="page = $event"
+    ></dd-paginator>
   </div>
 </div>
