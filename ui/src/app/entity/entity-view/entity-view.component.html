@@ -82,8 +82,8 @@
       (click)="editAttribute(a)"
     >
       <div class="h6 no-select">
-        <div>
-          <figure class="avatar avatar-sm" *ngIf="a.pattr && a.pattr.imageId">
+        <div *ngIf="a.pattr && a.pattr.imageId">
+          <figure class="avatar avatar-sm">
             <img
               src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
                 a.pattr.imageId

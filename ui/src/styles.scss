@@ -73,6 +73,11 @@
   height: 100%;
 }
 
+// Firefox image loading glitch https://stackoverflow.com/questions/13522532/border-and-title-showing-while-image-loading-in-firefox/13522578#13522578
+img:-moz-loading {
+  visibility: hidden;
+}
+
 $hover-scale: 1.005;
 
 .hoverable {
