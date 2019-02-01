@@ -123,11 +123,22 @@
     <!-- Currency Desktop -->
     <div class="column col-3 col-md-5 hide-sm" *ngIf="preset.isCurrencyEnabled">
       <div
-        class="card p-2 currency-box text-center"
+        class="card h-100 p-1 currency-box text-center"
         (click)="editCurrency()"
         [ngClass]="{ 'c-hand': editable }"
       >
-        <h4 class="mb-0 mr-2 text-bold">{{ formattedCurrency }}</h4>
+        <div class="columns col-gapless">
+          <div class="column">
+            <h4 class="mb-0 text-bold">{{ formattedCurrency }}</h4>
+          </div>
+          <div class="column col-auto">
+            <img
+              src="/assets/metal-disc.png"
+              style="margin-bottom: -0.65rem"
+              width="30"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -135,11 +146,18 @@
   <!-- Currency Mobile -->
   <div class="column col-12 show-sm mt-2 px-0" *ngIf="preset.isCurrencyEnabled">
     <div
-      class="card p-2 currency-box text-center"
+      class="card p-1 currency-box text-center"
       (click)="editCurrency()"
       [ngClass]="{ 'c-hand': editable }"
     >
-      <h5 class="mb-0 mr-2 text-bold">{{ formattedCurrency }}</h5>
+      <div class="columns col-gapless">
+        <div class="column">
+          <h4 class="mb-0 text-bold">{{ formattedCurrency }}</h4>
+        </div>
+        <div class="column col-auto">
+          <img src="/assets/metal-disc.png" class="coin-icon" width="25" />
+        </div>
+      </div>
     </div>
   </div>
   <div class="divider" *ngIf="preset.isCurrencyEnabled"></div>

@@ -19,7 +19,12 @@
 }
 
 .currency-box {
-  background-image: url('/assets/two-coins.png');
-  background-position: center;
-  background-size: cover;
+  background-color: $warning-color;
+  background-image: url('/assets/hp-pattern.png');
+  background-repeat: repeat;
+  background-blend-mode: multiply;
+}
+
+.coin-icon {
+  margin-bottom: -0.4rem;
 }

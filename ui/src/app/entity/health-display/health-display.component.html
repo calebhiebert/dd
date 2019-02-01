@@ -85,11 +85,11 @@
   *ngFor="let bar of bars; trackBy: trackBarElement"
 >
   <div
-    class="bar-item d-flex p-2 align-items-center justify-content-center"
+    class="bar-item d-flex p-1 align-items-center justify-content-center"
     [ngClass]="{ 'bar-animated': !disableAnimation }"
     [style.width]="bar.percentCSS"
     [style.backgroundColor]="bar.colorCSS"
   >
-    <span class="text-bold">{{ bar.current }} / {{ bar.max }}</span>
+    <h4 class="mb-1 text-bold">{{ bar.current }} / {{ bar.max }}</h4>
   </div>
 </div>
