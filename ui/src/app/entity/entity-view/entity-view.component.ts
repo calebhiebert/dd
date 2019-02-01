@@ -97,6 +97,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
         description: `How many money you have`,
         type: AttributeType.NUMBER,
         required: true,
+        imageId: 'coin',
         min: 0,
         class: EntityAttributeClass.NORMAL,
       },

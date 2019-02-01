@@ -6,12 +6,12 @@ import {
   Output,
   EventEmitter,
   ElementRef,
-  AfterViewInit
+  AfterViewInit,
 } from '@angular/core';
 import {
   IHealth,
   IHealthPreset,
-  HealthColorType
+  HealthColorType,
 } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl } from '@angular/forms';
@@ -39,13 +39,13 @@ enum HPOperation {
   DIVIDE,
   MULTIPLY,
   FILL,
-  SET
+  SET,
 }
 
 @Component({
   selector: 'dd-health-display',
   templateUrl: './health-display.component.html',
-  styleUrls: ['./health-display.component.scss']
+  styleUrls: ['./health-display.component.scss'],
 })
 export class HealthDisplayComponent implements OnInit {
   @Input()
@@ -81,7 +81,7 @@ export class HealthDisplayComponent implements OnInit {
     this.operationControl = new FormControl(null);
     this.sliderControl = new FormControl(this.health.current);
 
-    this.sliderControl.valueChanges.subscribe(v => {
+    this.sliderControl.valueChanges.subscribe((v) => {
       this.updateOperationFromSliderValue(v);
     });
   }
@@ -120,7 +120,7 @@ export class HealthDisplayComponent implements OnInit {
 
     this.sliderControl.setValue(this.health.current);
 
-    this.editModal.open().then(hp => {
+    this.editModal.open().then((hp) => {
       if (hp !== null) {
         this.healthChange.emit(hp);
       }
@@ -145,7 +145,7 @@ export class HealthDisplayComponent implements OnInit {
 
     const operation: IHPOperation = {
       type: HPOperation.ADD,
-      amount: 10
+      amount: 10,
     };
 
     const [
@@ -159,7 +159,7 @@ export class HealthDisplayComponent implements OnInit {
       mul,
       mulValue,
       fill,
-      set
+      set,
     ] = matches;
 
     if (add) {
@@ -236,9 +236,17 @@ export class HealthDisplayComponent implements OnInit {
     return this.applyOperation(operation, this.health);
   }
 
+  public get hpPercent(): number {
+    if (!this.health) {
+      return 0;
+    }
+
+    return (this.health.current / this.health.max) * 100;
+  }
+
   public get bars(): IBarStats[] {
     let colorCSS;
-    const hpPercent = (this.health.current / this.health.max) * 100;
+    const hpPercent = this.hpPercent;
 
     switch (this.preset.colorType) {
       case HealthColorType.DYNAMIC:
@@ -264,8 +272,8 @@ export class HealthDisplayComponent implements OnInit {
         max: this.health.max,
         current: this.health.current,
         percentCSS: hpPercent.toFixed(2) + '%',
-        colorCSS: colorCSS
-      }
+        colorCSS: colorCSS,
+      },
     ];
   }
 
