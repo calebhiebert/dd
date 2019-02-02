@@ -50,6 +50,16 @@
             }}</option>
           </select>
 
+          <!-- Big Text Input -->
+          <textarea
+            class="form-input"
+            name="bigtext"
+            rows="3"
+            [formControl]="control"
+            [placeholder]="attribute.name"
+            *ngSwitchCase="3"
+          ></textarea>
+
           <figure class="form-icon avatar" *ngIf="attribute.imageId">
             <img
               src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{

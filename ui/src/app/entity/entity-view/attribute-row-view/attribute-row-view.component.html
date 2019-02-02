@@ -1,0 +1,45 @@
+<!-- Major Sized Attributes -->
+<div class="columns mt-2" *ngIf="mode === 'major'">
+  <div
+    class="column col-2 col-md-3 col-sm-5 col-mx-auto text-center"
+    [ngClass]="{ 'c-hand': editable }"
+    *ngFor="let a of attributes; trackBy: trackAttribute"
+    (click)="editAttribute(a)"
+  >
+    <div class="h5 no-select">
+      <figure class="avatar avatar" *ngIf="a.pattr && a.pattr.imageId">
+        <img
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+            a.pattr.imageId
+          }}"
+        />
+      </figure>
+      {{ a.attr.name }}
+    </div>
+    <div class="h4 text-bold">{{ a.attr.data }}</div>
+  </div>
+</div>
+
+<!-- Normal Size Attributes -->
+<div class="columns mt-2" *ngIf="mode === 'normal'">
+  <div
+    class="column col-2 col-md-3 col-sm-4 col-mx-auto text-center"
+    [ngClass]="{ 'c-hand': editable }"
+    *ngFor="let a of attributes; trackBy: trackAttribute"
+    (click)="editAttribute(a)"
+  >
+    <div class="h6 no-select">
+      <div *ngIf="a.pattr && a.pattr.imageId">
+        <figure class="avatar avatar-sm">
+          <img
+            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+              a.pattr.imageId
+            }}"
+          />
+        </figure>
+      </div>
+      {{ a.attr.name }}
+    </div>
+    <div class="h5">{{ a.attr.data }}</div>
+  </div>
+</div>

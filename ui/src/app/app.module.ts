@@ -73,6 +73,8 @@ import { SpellViewComponent } from './spell/spell-view/spell-view.component';
 import { SpellViewListComponent } from './spell/spell-view-list/spell-view-list.component';
 import { markedOptionsFactory } from './marked-custom';
 import { SpellsetManagerComponent } from './spell/spellset-manager/spellset-manager.component';
+import { AttributeRowViewComponent } from './entity/entity-view/attribute-row-view/attribute-row-view.component';
+import { AttributeTableViewComponent } from './entity/entity-view/attribute-table-view/attribute-table-view.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -138,6 +140,8 @@ import { SpellsetManagerComponent } from './spell/spellset-manager/spellset-mana
     SpellViewComponent,
     SpellViewListComponent,
     SpellsetManagerComponent,
+    AttributeRowViewComponent,
+    AttributeTableViewComponent,
   ],
   imports: [
     BrowserModule,

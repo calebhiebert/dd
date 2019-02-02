@@ -14,6 +14,9 @@ export class EntityAttributeRowEditorComponent implements OnInit {
   public validateMin = false;
   public validateMax = false;
 
+  @Input()
+  public collapsed = true;
+
   @Output()
   public remove = new EventEmitter<any>();
 
@@ -92,6 +95,10 @@ export class EntityAttributeRowEditorComponent implements OnInit {
 
       this.formGroup.addControl('imageId', new FormControl(null));
     }
+  }
+
+  public toggleExpand() {
+    this.collapsed = !this.collapsed;
   }
 
   public get name() {

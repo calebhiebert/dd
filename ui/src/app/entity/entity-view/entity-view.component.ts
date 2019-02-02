@@ -6,6 +6,7 @@ import {
   IEntityAttribute,
   EntityAttributeClass,
   IHealth,
+  IViewAttribute,
 } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { AttributeType, Attribute } from 'src/app/attributes';
@@ -56,10 +57,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     this.loading = false;
   }
 
-  public async editAttribute(attr: {
-    attr: Attribute;
-    pattr: IEntityAttribute;
-  }) {
+  public async editAttribute(attr: IViewAttribute) {
     if (!this.editable) {
       return;
     }
@@ -174,14 +172,11 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     this.saving = false;
   }
 
-  private getEntityAttribute(name: string) {
+  private getEntityAttribute(name: string): IEntityAttribute {
     return this.entity.preset.attributes.find((e) => e.name === name);
   }
 
-  public get processedAttributes(): {
-    attr: Attribute;
-    pattr: IEntityAttribute;
-  }[] {
+  public get processedAttributes(): IViewAttribute[] {
     return this.entity.attributes.map((a) => {
       return {
         attr: a,
@@ -190,7 +185,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  public get majorAttributes(): { attr: Attribute; pattr: IEntityAttribute }[] {
+  public get majorAttributes(): IViewAttribute[] {
     return this.entity.attributes
       .map((a) => {
         return {
@@ -198,13 +193,15 @@ export class EntityViewComponent implements OnInit, OnDestroy {
           pattr: this.getEntityAttribute(a.name),
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 0);
+      .filter(
+        (a) =>
+          a.pattr &&
+          a.pattr.class === 0 &&
+          a.pattr.type !== AttributeType.BIG_TEXT
+      );
   }
 
-  public get normalAttributes(): {
-    attr: Attribute;
-    pattr: IEntityAttribute;
-  }[] {
+  public get normalAttributes(): IViewAttribute[] {
     return this.entity.attributes
       .map((a) => {
         return {
@@ -212,10 +209,15 @@ export class EntityViewComponent implements OnInit, OnDestroy {
           pattr: this.getEntityAttribute(a.name),
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 1);
+      .filter(
+        (a) =>
+          a.pattr &&
+          a.pattr.class === 1 &&
+          a.pattr.type !== AttributeType.BIG_TEXT
+      );
   }
 
-  public get minorAttributes(): { attr: Attribute; pattr: IEntityAttribute }[] {
+  public get bigTextAttributes(): IViewAttribute[] {
     return this.entity.attributes
       .map((a) => {
         return {
@@ -223,13 +225,32 @@ export class EntityViewComponent implements OnInit, OnDestroy {
           pattr: this.getEntityAttribute(a.name),
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 2);
+      .filter(
+        (a) =>
+          a.pattr &&
+          a.pattr.class !== 3 &&
+          a.pattr.type === AttributeType.BIG_TEXT &&
+          a.attr.data
+      );
   }
 
-  public get unimportantAttributes(): {
-    attr: Attribute;
-    pattr: IEntityAttribute;
-  }[] {
+  public get minorAttributes(): IViewAttribute[] {
+    return this.entity.attributes
+      .map((a) => {
+        return {
+          attr: a,
+          pattr: this.getEntityAttribute(a.name),
+        };
+      })
+      .filter(
+        (a) =>
+          a.pattr &&
+          a.pattr.class === 2 &&
+          a.pattr.type !== AttributeType.BIG_TEXT
+      );
+  }
+
+  public get unimportantAttributes(): IViewAttribute[] {
     return this.entity.attributes
       .map((a) => {
         return {

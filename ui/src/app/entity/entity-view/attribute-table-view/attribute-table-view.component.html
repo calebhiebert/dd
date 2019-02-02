@@ -1,0 +1,30 @@
+<div class="table table-striped" [ngClass]="{ 'table-hover': editable }">
+  <thead>
+    <tr>
+      <th class="w-100">Minor Attributes</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      [ngClass]="{ 'c-hand': editable }"
+      *ngFor="let attr of attributes"
+      (click)="editAttribute(attr)"
+    >
+      <td class="no-select py-0">
+        <figure
+          class="avatar avatar-xs"
+          *ngIf="attr.pattr && attr.pattr.imageId"
+        >
+          <img
+            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+              attr.pattr.imageId
+            }}"
+          />
+        </figure>
+        {{ attr.attr.name }}
+      </td>
+      <td class="text-bold py-0">{{ attr.attr.data }}</td>
+    </tr>
+  </tbody>
+</div>

@@ -6,7 +6,6 @@ import {
   Output,
   EventEmitter,
   ElementRef,
-  AfterViewInit,
 } from '@angular/core';
 import {
   IHealth,
@@ -15,7 +14,6 @@ import {
 } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl } from '@angular/forms';
-import { throttle, throttleTime } from 'rxjs/operators';
 
 interface IBarStats {
   max: number;

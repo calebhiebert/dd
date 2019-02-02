@@ -8,5 +8,5 @@ export enum AttributeType {
   STRING,
   NUMBER,
   ENUM,
-  CURRENCY,
+  BIG_TEXT,
 }

@@ -8,7 +8,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MAJOR,
     required: true,
-    min: 0
+    min: 0,
   },
   {
     name: 'Init',
@@ -16,7 +16,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MAJOR,
     required: true,
-    min: 0
+    min: 0,
   },
   {
     name: 'Speed',
@@ -24,7 +24,27 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MAJOR,
     required: true,
-    min: 0
+    min: 0,
+  },
+  {
+    name: 'Class',
+    description: 'Class',
+    type: AttributeType.ENUM,
+    class: EntityAttributeClass.NORMAL,
+    required: true,
+    options: [
+      'Barbarian',
+      'Bard',
+      'Cleric',
+      'Druid',
+      'Fighter',
+      'Paladin',
+      'Ranger',
+      'Rogue',
+      'Sorcerer',
+      'Warlock',
+      'Wizard',
+    ],
   },
   {
     name: 'Strength',
@@ -32,7 +52,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.NORMAL,
     required: true,
-    min: 0
+    min: 0,
   },
   {
     name: 'Dexterity',
@@ -40,7 +60,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.NORMAL,
     required: true,
-    min: 0
+    min: 0,
   },
   {
     name: 'Constitution',
@@ -48,7 +68,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.NORMAL,
     required: true,
-    min: 0
+    min: 0,
   },
   {
     name: 'Intelligence',
@@ -56,7 +76,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.NORMAL,
     required: true,
-    min: 0
+    min: 0,
   },
   {
     name: 'Wisdom',
@@ -64,7 +84,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.NORMAL,
     required: true,
-    min: 0
+    min: 0,
   },
   {
     name: 'Charisma',
@@ -72,7 +92,15 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.NORMAL,
     required: true,
-    min: 0
+    min: 0,
+  },
+  {
+    name: 'Perception',
+    description: 'Perception',
+    type: AttributeType.NUMBER,
+    class: EntityAttributeClass.NORMAL,
+    required: false,
+    min: 0,
   },
   {
     name: 'Acrobatics',
@@ -80,7 +108,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Animal Handling',
@@ -88,7 +116,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Arcana',
@@ -96,7 +124,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Athletics',
@@ -104,7 +132,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Deception',
@@ -112,7 +140,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'History',
@@ -120,7 +148,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Insight',
@@ -128,7 +156,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Intimidation',
@@ -136,7 +164,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Investigation',
@@ -144,7 +172,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Medicine',
@@ -152,7 +180,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Nature',
@@ -160,7 +188,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Perception',
@@ -168,7 +196,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Performance',
@@ -176,7 +204,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Persuasion',
@@ -184,7 +212,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Religion',
@@ -192,7 +220,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Sleight of Hand',
@@ -200,7 +228,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Stealth',
@@ -208,7 +236,7 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
+    min: 0,
   },
   {
     name: 'Survival',
@@ -216,6 +244,96 @@ export const DND_5E: IEntityAttribute[] = [
     type: AttributeType.NUMBER,
     class: EntityAttributeClass.MINOR,
     required: false,
-    min: 0
-  }
+    min: 0,
+  },
+  {
+    name: 'Alignment',
+    description: 'Alignment',
+    type: AttributeType.STRING,
+    class: EntityAttributeClass.MINOR,
+    required: false,
+  },
+  {
+    name: 'Race',
+    description: 'Race',
+    type: AttributeType.ENUM,
+    class: EntityAttributeClass.MINOR,
+    required: false,
+    options: [
+      'Dragonborn',
+      'Dwarf',
+      'Eladrin',
+      'Elf',
+      'Gnome',
+      'Half-elf',
+      'Half-orc',
+      'Halfling',
+      'Human',
+      'Tiefling',
+    ],
+  },
+  {
+    name: 'Age',
+    description: 'Age',
+    type: AttributeType.NUMBER,
+    class: EntityAttributeClass.MINOR,
+    required: false,
+    min: 0,
+  },
+  {
+    name: 'Height',
+    description: 'Height',
+    type: AttributeType.STRING,
+    class: EntityAttributeClass.MINOR,
+    required: false,
+  },
+  {
+    name: 'Weight',
+    description: 'Weight',
+    type: AttributeType.STRING,
+    class: EntityAttributeClass.MINOR,
+    required: false,
+  },
+  {
+    name: 'Eyes',
+    description: 'Eyes',
+    type: AttributeType.STRING,
+    class: EntityAttributeClass.MINOR,
+    required: false,
+  },
+  {
+    name: 'Skin',
+    description: 'Skin',
+    type: AttributeType.STRING,
+    class: EntityAttributeClass.MINOR,
+    required: false,
+  },
+  {
+    name: 'Hair',
+    description: 'Hair',
+    type: AttributeType.STRING,
+    class: EntityAttributeClass.MINOR,
+    required: false,
+  },
+  {
+    name: 'Allies & Orgs',
+    description: 'Allies & Organizations',
+    type: AttributeType.BIG_TEXT,
+    class: EntityAttributeClass.MINOR,
+    required: false,
+  },
+  {
+    name: 'Features & Traits',
+    description: 'Features & Traits',
+    type: AttributeType.BIG_TEXT,
+    class: EntityAttributeClass.MINOR,
+    required: false,
+  },
+  {
+    name: 'Backstory',
+    description: 'Backstory',
+    type: AttributeType.BIG_TEXT,
+    class: EntityAttributeClass.MINOR,
+    required: false,
+  },
 ];

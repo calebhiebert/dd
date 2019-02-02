@@ -7,10 +7,11 @@ import { IUser } from './user.service';
 import { LoginService } from './login.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CampaignService {
-  public campaign: ICampaign = null;
+  private _campaign: ICampaign = null;
+
   public loadingCampaign = false;
   public previousCampaignId: string;
   public events = new EventEmitter<ICampaign>();
@@ -62,7 +63,7 @@ export class CampaignService {
     return this.http
       .post<ICampaign>(`${environment.apiURL}/campaigns`, {
         ...campaign,
-        id: undefined
+        id: undefined,
       })
       .toPromise();
   }
@@ -94,7 +95,7 @@ export class CampaignService {
     return this.http
       .post<ICampaignInvite>(`${environment.apiURL}/campaigninvites`, {
         campaignId: this.campaign.id,
-        name
+        name,
       })
       .toPromise();
   }
@@ -153,7 +154,7 @@ export class CampaignService {
       return null;
     }
 
-    return this.campaign.entityPresets.find(ep => ep.id === presetId) || null;
+    return this.campaign.entityPresets.find((ep) => ep.id === presetId) || null;
   }
 
   /**
@@ -164,7 +165,7 @@ export class CampaignService {
       return null;
     }
 
-    return this.campaign.members.find(m => m.userId === userId) || null;
+    return this.campaign.members.find((m) => m.userId === userId) || null;
   }
 
   public get canEdit() {
@@ -184,7 +185,15 @@ export class CampaignService {
       return this.campaign.entities;
     }
 
-    return this.campaign.entities.filter(e => e.userId === this.login.id);
+    return this.campaign.entities.filter((e) => e.userId === this.login.id);
+  }
+
+  public get campaign() {
+    return this._campaign;
+  }
+
+  public set campaign(value: ICampaign) {
+    this._campaign = value;
   }
 }
 
@@ -227,7 +236,7 @@ export interface ICampaignUser {
 export enum CampaignInviteStatus {
   PENDING,
   REVOKED,
-  ACCEPTED
+  ACCEPTED,
 }
 
 export interface IItemType {

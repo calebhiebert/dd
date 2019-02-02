@@ -5,6 +5,11 @@
       <h3 class="mb-0">{{ formGroup.get('name').value }}</h3>
     </div>
     <div class="column col-auto col-ml-auto">
+      <button class="btn btn-sm mr-2" (click)="toggleExpand()">
+        {{ collapsed ? 'Expand' : 'Collapse' }}
+        <i class="icon icon-arrow-down" *ngIf="collapsed"></i>
+        <i class="icon icon-arrow-up" *ngIf="!collapsed"></i>
+      </button>
       <button class="btn btn-error btn-sm" (click)="remove.emit()">
         Remove {{ formGroup.get('name').value }} <i class="icon icon-cross"></i>
       </button>
@@ -12,7 +17,7 @@
   </div>
 
   <!-- Inputs -->
-  <div class="columns">
+  <div class="columns" *ngIf="!collapsed">
     <div class="column col-3 col-md-12">
       <label class="form-label">Icon</label>
       <dd-image-upload [formGroup]="formGroup" [eleId]="id"></dd-image-upload>
@@ -23,6 +28,7 @@
           <option value="0">Word</option>
           <option value="1">Number</option>
           <option value="2">Selection</option>
+          <option value="3">Free Text (Formatted)</option>
         </select>
       </div>
 
@@ -83,7 +89,7 @@
           class="form-input"
           placeholder="Description"
           formControlName="description"
-          rows="3"
+          rows="2"
         ></textarea>
       </div>
 
@@ -172,4 +178,4 @@
     </div>
   </div>
 </div>
-<div class="divider"></div>
+<div class="divider" *ngIf="!collapsed"></div>

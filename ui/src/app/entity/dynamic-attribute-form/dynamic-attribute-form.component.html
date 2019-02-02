@@ -52,6 +52,16 @@
             <option *ngFor="let o of att.options" [value]="o">{{ o }}</option>
           </select>
 
+          <!-- Big Text Input -->
+          <textarea
+            class="form-input"
+            name="bigtext"
+            rows="3"
+            [formControlName]="att.name"
+            [placeholder]="att.name"
+            *ngSwitchCase="3"
+          ></textarea>
+
           <figure class="form-icon avatar" *ngIf="att.imageId">
             <img
               src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{

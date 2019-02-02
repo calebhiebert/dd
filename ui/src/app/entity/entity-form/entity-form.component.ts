@@ -1,20 +1,23 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationModalComponent } from 'src/app/confirmation-modal/confirmation-modal.component';
-import {
-  EntityService,
-  IEntityPreset,
-  HealthType,
-} from 'src/app/entity.service';
+import { EntityService, IEntityPreset } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
-import { numberValidator } from '../dynamic-attribute-form/dynamic-attribute-form.component';
 import { LoginService } from 'src/app/login.service';
 import {
   IEntityAttributePreset,
   EntityAttributePresetsService,
 } from 'src/app/entity-attribute-presets.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
+import { EntityAttributeRowEditorComponent } from '../entity-attribute-row-editor/entity-attribute-row-editor.component';
+import { AttributeType } from 'src/app/attributes';
 
 @Component({
   selector: 'dd-entity-form',
@@ -37,6 +40,9 @@ export class EntityFormComponent implements OnInit {
 
   @ViewChild('confirmmodal')
   public confirmModal: ConfirmationModalComponent;
+
+  @ViewChildren('atteditor')
+  public attributeEditors: QueryList<EntityAttributeRowEditorComponent>;
 
   constructor(
     private entityService: EntityService,
@@ -105,6 +111,7 @@ export class EntityFormComponent implements OnInit {
 
       setTimeout(() => {
         this.formGroup.patchValue(preset);
+        console.log(this.attributeEditors);
       }, 1);
     } catch (err) {
       throw err;
@@ -117,7 +124,13 @@ export class EntityFormComponent implements OnInit {
   public usePreset(p: IEntityAttributePreset) {
     (this.formGroup.get('attributes') as FormArray).controls = p.attributes.map(
       (attr) => {
-        return new FormGroup({});
+        if (attr.type === AttributeType.ENUM) {
+          return new FormGroup({
+            options: new FormArray(attr.options.map((o) => new FormControl(o))),
+          });
+        } else {
+          return new FormGroup({});
+        }
       }
     );
 
@@ -233,6 +246,23 @@ export class EntityFormComponent implements OnInit {
 
   public addAttribute() {
     (this.formGroup.get('attributes') as FormArray).push(new FormGroup({}));
+
+    // Wait for the dom to be updated
+    setTimeout(() => {
+      this.attributeEditors.last.collapsed = false;
+
+      // Wait for the dom to update again
+      setTimeout(() => {
+        // Scroll to the bottom of the page, where the attribute is
+        document
+          .getElementById('app-content')
+          .scrollTo(0, document.getElementById('app-content').scrollHeight);
+      }, 1);
+    }, 1);
+  }
+
+  public backToTop() {
+    document.getElementById('app-content').scrollTo(0, 0);
   }
 
   public get attributeControls() {

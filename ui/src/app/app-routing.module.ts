@@ -90,6 +90,7 @@ const routes: Routes = [
         component: CampaignSettingsComponent,
         data: {
           editing: true,
+          breadcrumb: 'Settings',
         },
       },
       {
@@ -118,6 +119,7 @@ const routes: Routes = [
         component: EntityFormComponent,
         data: {
           editing: true,
+          breadcrumb: 'Edit Preset',
         },
       },
       {

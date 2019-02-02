@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Attribute } from '@angular/core';
 import { AttributeType } from './attributes';
 import { HttpClient } from '@angular/common/http';
 import { IUser } from './user.service';
@@ -214,6 +214,11 @@ export interface IHealth {
   max: number;
   current: number;
   bars?: number[];
+}
+
+export interface IViewAttribute {
+  attr: IAttribute;
+  pattr: IEntityAttribute;
 }
 
 export enum EntityAttributeClass {

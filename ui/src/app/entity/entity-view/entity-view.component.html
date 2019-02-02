@@ -50,52 +50,23 @@
 
 <div class="container grid-xl" *ngIf="entity">
   <!-- Major attributes -->
-  <div class="columns mt-2" *ngIf="majorAttributes.length > 0">
-    <div
-      class="column col-2 col-md-3 col-sm-5 col-mx-auto text-center"
-      [ngClass]="{ 'c-hand': editable }"
-      *ngFor="let a of majorAttributes"
-      (click)="editAttribute(a)"
-    >
-      <div class="h5 no-select">
-        <figure class="avatar avatar" *ngIf="a.pattr && a.pattr.imageId">
-          <img
-            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-              a.pattr.imageId
-            }}"
-          />
-        </figure>
-        {{ a.attr.name }}
-      </div>
-      <div class="h4 text-bold">{{ a.attr.data }}</div>
-    </div>
-  </div>
+  <dd-attribute-row-view
+    *ngIf="majorAttributes.length > 0"
+    [attributes]="majorAttributes"
+    [editable]="editable"
+    (edit)="editAttribute($event)"
+  ></dd-attribute-row-view>
 
   <div class="divider" *ngIf="majorAttributes.length > 0"></div>
 
   <!-- Normal Attributes -->
-  <div class="columns" *ngIf="normalAttributes.length > 0">
-    <div
-      class="column col-2 col-md-3 col-sm-4 col-mx-auto text-center"
-      [ngClass]="{ 'c-hand': editable }"
-      *ngFor="let a of normalAttributes"
-      (click)="editAttribute(a)"
-    >
-      <div class="h6 no-select">
-        <div *ngIf="a.pattr && a.pattr.imageId">
-          <figure class="avatar avatar-sm">
-            <img
-              src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-                a.pattr.imageId
-              }}"
-            />
-          </figure>
-        </div>
-        {{ a.attr.name }}
-      </div>
-      <div class="h5">{{ a.attr.data }}</div>
-    </div>
-  </div>
+  <dd-attribute-row-view
+    *ngIf="normalAttributes.length > 0"
+    [attributes]="normalAttributes"
+    [editable]="editable"
+    (edit)="editAttribute($event)"
+    mode="normal"
+  ></dd-attribute-row-view>
   <div class="divider" *ngIf="normalAttributes.length > 0"></div>
 
   <!-- Health/Currency -->
@@ -141,25 +112,26 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Currency Mobile -->
-  <div class="column col-12 show-sm mt-2 px-0" *ngIf="preset.isCurrencyEnabled">
-    <div
-      class="card p-1 currency-box text-center"
-      (click)="editCurrency()"
-      [ngClass]="{ 'c-hand': editable }"
-    >
-      <div class="columns col-gapless">
-        <div class="column">
-          <h4 class="mb-0 text-bold">{{ formattedCurrency }}</h4>
-        </div>
-        <div class="column col-auto">
-          <img src="/assets/metal-disc.png" class="coin-icon" width="25" />
+    <!-- Currency Mobile -->
+    <div class="column col-12 show-sm mt-2" *ngIf="preset.isCurrencyEnabled">
+      <div
+        class="card p-1 currency-box text-center"
+        (click)="editCurrency()"
+        [ngClass]="{ 'c-hand': editable }"
+      >
+        <div class="columns col-gapless">
+          <div class="column">
+            <h4 class="mb-0 text-bold">{{ formattedCurrency }}</h4>
+          </div>
+          <div class="column col-auto">
+            <img src="/assets/metal-disc.png" class="coin-icon" width="25" />
+          </div>
         </div>
       </div>
     </div>
   </div>
+
   <div class="divider" *ngIf="preset.isCurrencyEnabled"></div>
 
   <!-- Inventory Management -->
@@ -170,8 +142,8 @@
     *ngIf="entity && preset.isInventoryEnabled"
   ></dd-inventory-manager>
 
-  <div class="divider"></div>
   <!-- Spellset Management -->
+  <div class="divider"></div>
   <dd-spellset-manager
     [editable]="editable"
     *ngIf="entity"
@@ -191,43 +163,27 @@
           entity.imageId
         }}"
       />
+
+      <!-- Big description fields -->
+      <div class="divider" *ngIf="bigTextAttributes.length > 0"></div>
+
+      <div *ngFor="let bta of bigTextAttributes">
+        <h3>{{ bta.attr.name }}</h3>
+        <markdown [data]="bta.attr.data"></markdown>
+      </div>
     </div>
 
-    <!-- Sidebar -->
+    <!-- Minor Attributes -->
     <div
       class="column col-4 col-md-6 col-sm-12 col-ml-auto"
       *ngIf="minorAttributes.length > 0"
     >
-      <div class="table table-striped" [ngClass]="{ 'table-hover': editable }">
-        <thead>
-          <tr>
-            <th class="w-100">Minor Attributes</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            [ngClass]="{ 'c-hand': editable }"
-            *ngFor="let attr of minorAttributes"
-            (click)="editAttribute(attr)"
-          >
-            <td class="no-select">
-              <figure
-                class="avatar avatar-xs"
-                *ngIf="attr.pattr && attr.pattr.imageId"
-              >
-                <img
-                  src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-                    attr.pattr.imageId
-                  }}"
-                />
-              </figure>
-              {{ attr.attr.name }}
-            </td>
-            <td class="text-bold">{{ attr.attr.data }}</td>
-          </tr>
-        </tbody>
-      </div>
+      <dd-attribute-table-view
+        *ngIf="minorAttributes.length > 0"
+        [attributes]="minorAttributes"
+        [editable]="editable"
+        (edit)="editAttribute($event)"
+      ></dd-attribute-table-view>
     </div>
 
     <!-- Image and description lower -->
@@ -243,6 +199,14 @@
           entity.imageId
         }}"
       />
+
+      <!-- Big description fields -->
+      <div class="divider" *ngIf="bigTextAttributes.length > 0"></div>
+
+      <div *ngFor="let bta of bigTextAttributes">
+        <h3>{{ bta.attr.name }}</h3>
+        <markdown [data]="bta.attr.data"></markdown>
+      </div>
     </div>
   </div>
 </div>

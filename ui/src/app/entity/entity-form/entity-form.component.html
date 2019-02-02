@@ -253,7 +253,12 @@
         *ngFor="let attr of attributeControls; let i = index"
         (remove)="removeAttribute(i)"
         [formGroup]="attr"
+        #atteditor
       ></dd-entity-attribute-row-editor>
     </div>
+  </div>
+
+  <div class="text-center">
+    <button class="btn btn-link" (click)="backToTop()">Back to Top</button>
   </div>
 </div>
