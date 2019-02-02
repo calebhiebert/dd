@@ -72,6 +72,7 @@ import { SpellFormComponent } from './spell/spell-form/spell-form.component';
 import { SpellViewComponent } from './spell/spell-view/spell-view.component';
 import { SpellViewListComponent } from './spell/spell-view-list/spell-view-list.component';
 import { markedOptionsFactory } from './marked-custom';
+import { SpellsetManagerComponent } from './spell/spellset-manager/spellset-manager.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -136,6 +137,7 @@ import { markedOptionsFactory } from './marked-custom';
     SpellFormComponent,
     SpellViewComponent,
     SpellViewListComponent,
+    SpellsetManagerComponent,
   ],
   imports: [
     BrowserModule,

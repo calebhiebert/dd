@@ -170,6 +170,13 @@
     *ngIf="entity && preset.isInventoryEnabled"
   ></dd-inventory-manager>
 
+  <div class="divider"></div>
+  <!-- Spellset Management -->
+  <dd-spellset-manager
+    [editable]="editable"
+    *ngIf="entity"
+  ></dd-spellset-manager>
+
   <div class="columns">
     <!-- Image and description -->
     <div class="column col-8 col-md-6 col-sm-12 hide-sm">

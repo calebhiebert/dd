@@ -47,6 +47,24 @@ export class SpellService {
       .put<void>(`${environment.apiURL}/spells/${spell.id}`, spell)
       .toPromise();
   }
+
+  public getSpellset(entityId: string): Promise<IEntitySpell[]> {
+    return this.http
+      .get<IEntitySpell[]>(`${environment.apiURL}/spellset/${entityId}`)
+      .toPromise();
+  }
+
+  public updateSpellsetItem(spellsetItem: IEntitySpell): Promise<IEntitySpell> {
+    return this.http
+      .put<IEntitySpell>(`${environment.apiURL}/spellset`, spellsetItem)
+      .toPromise();
+  }
+}
+
+export interface IEntitySpell {
+  entityId: string;
+  spellId: string;
+  spell?: ISpell;
 }
 
 export interface ISpell {

@@ -28,6 +28,7 @@ namespace net_api.Models
         public DbSet<Location> Locations { get; set; }
         public DbSet<SellableItem> SellableItems { get; set; }
         public DbSet<Spell> Spells { get; set; }
+        public DbSet<EntitySpell> EntitySpells { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -50,6 +51,7 @@ namespace net_api.Models
         {
             modelBuilder.Entity<CampaignUser>().HasKey(tbl => new { tbl.CampaignId, tbl.UserId });
             modelBuilder.Entity<InventoryItem>().HasKey(tbl => new { tbl.EntityId, tbl.ItemId });
+            modelBuilder.Entity<EntitySpell>().HasKey(tbl => new { tbl.EntityId, tbl.SpellId });
         }
     }
 }
