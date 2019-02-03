@@ -147,7 +147,7 @@ const routes: Routes = [
         },
       },
       {
-        path: 'map/upload',
+        path: 'maps/upload',
         component: MapUploadComponent,
         data: {
           breadcrumb: 'Upload Map',
@@ -254,6 +254,10 @@ const routes: Routes = [
         data: {
           breadcrumb: 'Item View',
         },
+      },
+      {
+        path: 'maps/:m_id',
+        component: MapComponent,
       },
     ],
   },

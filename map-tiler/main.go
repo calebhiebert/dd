@@ -9,8 +9,8 @@ import (
 )
 
 var endpoint = "sfo2.digitaloceanspaces.com"
-var accessKey = "6CNWOLTKKM225GX4UWAL"
-var secretKey = "iJJZwVopbCyj3rkitIuG/vLTHtQMG/cIV3oYf3Y/aRI"
+var accessKey = "REPLACE_ME"
+var secretKey = "REPLACE_ME"
 var useSSL = true
 var minioClient *minio.Client
 

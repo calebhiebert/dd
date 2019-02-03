@@ -6,6 +6,8 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import Leaflet from 'leaflet';
+import { ActivatedRoute } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'dd-map',
@@ -16,9 +18,16 @@ export class MapComponent implements OnInit, AfterViewInit {
   @ViewChild('map')
   private map: ElementRef<HTMLDivElement>;
 
-  constructor() {}
+  private _mapId: string;
 
-  ngOnInit() {}
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.paramMap.subscribe((params) => {
+      this._mapId = params.get('m_id');
+      console.log(this._mapId);
+    });
+  }
 
   ngAfterViewInit() {
     const map = Leaflet.map(this.map.nativeElement, {
@@ -30,9 +39,10 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     map.setView([0, 0], 1);
 
-    Leaflet.tileLayer('http://localhost:8081/map/{z}/{x}/{y}', {
+    Leaflet.tileLayer(`${environment.apiURL}/maps/{id}/tile/{z}/{x}/{y}`, {
       maxZoom: 4,
       minZoom: 0,
+      id: this._mapId,
     }).addTo(map);
   }
 }

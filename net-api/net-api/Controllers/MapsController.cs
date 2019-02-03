@@ -9,15 +9,20 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
+using Amazon.S3;
+using Amazon.Runtime;
+using Amazon.S3.Model;
+using System.IO;
 
 namespace net_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class MapsController : ControllerBase
     {
         private readonly Context _context;
+
+        public object AWSClientFactory { get; private set; }
 
         public MapsController(Context context)
         {
@@ -29,6 +34,58 @@ namespace net_api.Controllers
         public async Task<ActionResult<IEnumerable<Map>>> GetMaps()
         {
             return await _context.Maps.ToListAsync();
+        }
+
+        [HttpGet("{id}/tile/{zoom}/{x}/{y}")]
+        public async Task<IActionResult> GetTile([FromRoute] Guid id, [FromRoute] int zoom, [FromRoute] int x, [FromRoute] int y)
+        {
+            if (id == null)
+            {
+                return BadRequest("missing map id");
+            }
+
+            var map = await _context.Maps.Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            if (map == null)
+            {
+                return NotFound();
+            }
+
+            var mapping = map.Mapping;
+
+            if (!mapping.ContainsKey($"{zoom}_{x}_{y}"))
+            {
+                return NotFound();
+            }
+
+            var fileData = mapping[$"{zoom}_{x}_{y}"];
+
+            var client = new AmazonS3Client(Environment.GetEnvironmentVariable("S3_ACCESS_KEY"), Environment.GetEnvironmentVariable("S3_ACCESS_SECRET"), new AmazonS3Config
+            {
+                ServiceURL = "https://sfo2.digitaloceanspaces.com"
+            });
+
+            var obj = await client.GetObjectAsync(new GetObjectRequest
+            {
+                BucketName = "dd-files",
+                Key = id.ToString() + ".map",
+                ByteRange = new ByteRange((long)fileData[0], (long)fileData[1])
+            });
+
+            byte[] bytes;
+
+            using (var stream = obj.ResponseStream)
+            {
+                using(var memStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memStream);
+                    bytes = memStream.ToArray();
+                }
+            }
+
+            Response.Headers.Add("Cache-Control", "max-age=31557600");
+
+            return File(bytes, "image/png");
         }
 
         // GET: api/Maps/5
@@ -47,6 +104,7 @@ namespace net_api.Controllers
 
         // POST: api/Maps
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostMap([FromForm]IFormFile file, [FromForm]Guid? campaignId)
         {
             if (file == null)
