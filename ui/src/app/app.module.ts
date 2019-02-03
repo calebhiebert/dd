@@ -75,6 +75,7 @@ import { markedOptionsFactory } from './marked-custom';
 import { SpellsetManagerComponent } from './spell/spellset-manager/spellset-manager.component';
 import { AttributeRowViewComponent } from './entity/entity-view/attribute-row-view/attribute-row-view.component';
 import { AttributeTableViewComponent } from './entity/entity-view/attribute-table-view/attribute-table-view.component';
+import { MapComponent } from './map/map.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -142,6 +143,7 @@ import { AttributeTableViewComponent } from './entity/entity-view/attribute-tabl
     SpellsetManagerComponent,
     AttributeRowViewComponent,
     AttributeTableViewComponent,
+    MapComponent,
   ],
   imports: [
     BrowserModule,

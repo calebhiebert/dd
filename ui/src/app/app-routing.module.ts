@@ -28,11 +28,13 @@ import { OverviewComponent } from './session/overview/overview.component';
 import { ItemFormComponent } from './items/item-form/item-form.component';
 import { SpellManagerComponent } from './spell/spell-manager/spell-manager.component';
 import { SpellViewComponent } from './spell/spell-view/spell-view.component';
+import { MapComponent } from './map/map.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'invite/:invite_id', component: InviteComponent },
   { path: 'about', component: AboutComponent },
+  { path: 'map', component: MapComponent },
   {
     path: 'login',
     component: LoginComponent,
