@@ -29,6 +29,7 @@ import { ItemFormComponent } from './items/item-form/item-form.component';
 import { SpellManagerComponent } from './spell/spell-manager/spell-manager.component';
 import { SpellViewComponent } from './spell/spell-view/spell-view.component';
 import { MapComponent } from './map/map.component';
+import { MapUploadComponent } from './map/map-upload/map-upload.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -143,6 +144,13 @@ const routes: Routes = [
         component: SpawnableManagerComponent,
         data: {
           breadcrumb: 'Spawnables',
+        },
+      },
+      {
+        path: 'map/upload',
+        component: MapUploadComponent,
+        data: {
+          breadcrumb: 'Upload Map',
         },
       },
     ],

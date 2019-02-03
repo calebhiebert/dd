@@ -76,6 +76,7 @@ import { SpellsetManagerComponent } from './spell/spellset-manager/spellset-mana
 import { AttributeRowViewComponent } from './entity/entity-view/attribute-row-view/attribute-row-view.component';
 import { AttributeTableViewComponent } from './entity/entity-view/attribute-table-view/attribute-table-view.component';
 import { MapComponent } from './map/map.component';
+import { MapUploadComponent } from './map/map-upload/map-upload.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -144,6 +145,7 @@ import { MapComponent } from './map/map.component';
     AttributeRowViewComponent,
     AttributeTableViewComponent,
     MapComponent,
+    MapUploadComponent,
   ],
   imports: [
     BrowserModule,

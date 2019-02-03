@@ -2,7 +2,7 @@ package main
 import (
 	"bytes"
 	"io"
-	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	minio "github.com/minio/minio-go"
@@ -28,34 +28,32 @@ func main() {
 func startServer() {
 	r := gin.Default()
 
-	// r.GET("/map/:z/:x/:y", func(c *gin.Context) {
-	// 	zoom, _ := strconv.Atoi(c.Param("z"))
-	// 	x, _ := strconv.Atoi(c.Param("x"))
-	// 	y, _ := strconv.Atoi(c.Param("y"))
+	r.GET("/bytez/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		start, err := strconv.ParseUint(c.Query("start"), 10, 64)
+		if err != nil {
+			c.JSON(400, gin.H{"error": err})
+			return
+		}
 
-	// 	c.Header("Content-Type", "image/png")
+		end, err := strconv.ParseUint(c.Query("end"), 10, 64)
+		if err != nil {
+			c.JSON(400, gin.H{"error": err})
+			return
+		}
 
-	// 	file, exists := mapping.Mapping[fmt.Sprintf("%d_%d_%d", zoom, x, y)]
-	// 	if !exists {
-	// 		c.JSON(404, gin.H{"error": "Not found"})
-	// 		return
-	// 	}
+		reader, err := getS3Reader(id, start, end)
+		if err != nil {
+			c.JSON(500, gin.H{"error": err})
+			return
+		}
 
-	// 	fmt.Printf("File: %+v\n", file)
-
-	// 	reader, err := getS3Reader(file[0], file[1])
-	// 	if err != nil {
-	// 		c.JSON(500, gin.H{"error": err})
-	// 		return
-	// 	}
-	// 	// defer reader.Close()
-
-	// 	_, err = io.Copy(c.Writer, reader)
-	// 	if err != nil {
-	// 		c.JSON(500, gin.H{"error": err})
-	// 		return
-	// 	}
-	// })
+		_, err = io.Copy(c.Writer, reader)
+		if err != nil {
+			c.JSON(500, gin.H{"error": err})
+			return
+		}
+	})
 
 	r.POST("/upload", func(c *gin.Context) {
 		file, _ := c.FormFile("file")
@@ -65,50 +63,35 @@ func startServer() {
 			panic(err)
 		}
 
-		packFile(openFile)
+		meta, err := packFile(openFile)
+		if err != nil {
+			panic(err)
+		}
+
+		c.JSON(200, meta)
 	})
 
 	r.Run(":8081")
 }
 
-func getS3Reader(start, end uint64) (io.Reader, error) {
-
-	file, err := os.OpenFile("./out/packed.map", os.O_RDONLY, os.ModePerm)
+func getS3Reader(id string, start, end uint64) (io.Reader, error) {
+	obj, err := minioClient.GetObject("dd-files", id+".map", minio.GetObjectOptions{})
 	if err != nil {
 		return nil, err
 	}
 
-	_, err = file.Seek(int64(start), 0)
+	_, err = obj.Seek(int64(start), 0)
 	if err != nil {
 		return nil, err
 	}
 
-	readBytes := end - start
-	var byteSlice = make([]byte, readBytes)
+	data := make([]byte, end-start)
 
-	_, err = file.Read(byteSlice)
+	_, err = obj.Read(data)
 	if err != nil {
 		return nil, err
 	}
 
-	return bytes.NewReader(byteSlice), nil
-
-	// client := &http.Client{
-	// 	Timeout: 5 * time.Second,
-	// }
-
-	// request, err := http.NewRequest("GET", "https://dd-files.sfo2.cdn.digitaloceanspaces.com/packed.map", nil)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// request.Header.Set("Range", fmt.Sprintf("bytes=%d-%d", start, end))
-
-	// response, err := client.Do(request)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// return response.Body, nil
+	return bytes.NewReader(data), nil
 }
 

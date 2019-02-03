@@ -5,9 +5,10 @@ import (
 )
 
 type MapMetadata struct {
-	Mapping map[string][]uint64 `json:"m"`
-	MinZoom int
-	MaxZoom int
+	ID      string              `json:"id"`
+	Mapping map[string][]uint64 `json:"mapping"`
+	MinZoom int                 `json:"minZoom"`
+	MaxZoom int                 `json:"maxZoom"`
 }
 
 func getMapping() (*MapMetadata, error) {

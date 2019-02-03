@@ -7,20 +7,19 @@ import (
 	"image"
 	"image/color"
 	"io"
-	"io/ioutil"
 	"math"
 	"mime/multipart"
-	"os"
 	"time"
 
 	"github.com/disintegration/imaging"
+	minio "github.com/minio/minio-go"
 	uuid "github.com/satori/go.uuid"
 )
 
 var zoomLevels = []int{256, 512, 1024, 2048, 4096, 8192, 16384, 16384 * 2}
 var tileSize = 256
 
-func pack(src image.Image, id string) error {
+func pack(src image.Image, id string) (*MapMetadata, error) {
 	start := time.Now().UnixNano()
 
 	imageHeight := src.Bounds().Dy()
@@ -54,10 +53,16 @@ func pack(src image.Image, id string) error {
 
 	fmt.Printf("Initial processing: %d\n", (end-start)/1000000)
 
-	packFile, err := os.OpenFile(fmt.Sprintf("./out/%s.map", id), os.O_CREATE|os.O_WRONLY, os.ModePerm)
-	if err != nil {
-		return err
-	}
+	uploadChan := make(chan error)
+	reader, writer := io.Pipe()
+
+	go func(uploadChan chan error) {
+		_, err := minioClient.PutObject("dd-files", id+".map", reader, -1, minio.PutObjectOptions{
+			ContentType: "application/x-packmap",
+		})
+
+		uploadChan <- err
+	}(uploadChan)
 
 	var meta MapMetadata
 	var byteCursor uint64
@@ -66,6 +71,7 @@ func pack(src image.Image, id string) error {
 	meta.Mapping = make(map[string][]uint64)
 	meta.MaxZoom = maxZoomLevel
 	meta.MinZoom = 0
+	meta.ID = id
 
 	for _, level := range zoomLevels[:maxZoomLevel] {
 		fmt.Printf("\nProcessing zoom level %d\n", level)
@@ -95,21 +101,22 @@ func pack(src image.Image, id string) error {
 				tile = imaging.Resize(tile, tileSize, tileSize, imaging.Linear)
 
 				var b bytes.Buffer
-				writer := bufio.NewWriter(&b)
+				tempWriter := bufio.NewWriter(&b)
 
-				err = imaging.Encode(writer, tile, imaging.PNG)
+				err := imaging.Encode(tempWriter, tile, imaging.PNG)
 				if err != nil {
-					return err
+					return nil, err
 				}
 
-				writer.Flush()
+				tempWriter.Flush()
 
 				meta.Mapping[fmt.Sprintf("%d_%d_%d", levelCounter, x, y)] = []uint64{byteCursor, byteCursor + uint64(b.Len())}
 				byteCursor += uint64(b.Len())
 
-				_, err = io.Copy(packFile, bufio.NewReader(&b))
+				// Copy to upload stream
+				_, err = io.Copy(writer, bufio.NewReader(&b))
 				if err != nil {
-					return err
+					return nil, err
 				}
 
 				fmt.Printf("\rWrote Tile %d %dx%d", level, x+1, y+1)
@@ -119,37 +126,45 @@ func pack(src image.Image, id string) error {
 		levelCounter++
 	}
 
-	packFile.Close()
+	writer.Close()
+
+	// Wait for the upload to complete
+	err := <-uploadChan
+	if err != nil {
+		return nil, err
+	}
 
 	jsonBytes, err := json.Marshal(meta)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	err = ioutil.WriteFile(fmt.Sprintf("./out/%s.json", id), jsonBytes, os.ModePerm)
+	_, err = minioClient.PutObject("dd-files", id+".json", bytes.NewReader(jsonBytes), int64(len(jsonBytes)), minio.PutObjectOptions{
+		ContentType: "application/json",
+	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &meta, nil
 }
 
-func packFile(file multipart.File) error {
+func packFile(file multipart.File) (*MapMetadata, error) {
 	img, err := imaging.Decode(file)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	id := uuid.NewV4()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	err = pack(img, id.String())
+	meta, err := pack(img, id.String())
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return meta, nil
 }
 
