@@ -23,7 +23,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     const map = Leaflet.map(this.map.nativeElement, {
       crs: Leaflet.CRS.Simple,
-      maxBounds: [[0, 0], [-1024, 1024]],
+      maxBounds: [[0, 0], [-256, 256]],
     });
 
     map.on('click', (e) => console.log(e.latlng));
@@ -31,7 +31,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     map.setView([0, 0], 1);
 
     Leaflet.tileLayer('http://localhost:8081/map/{z}/{x}/{y}', {
-      maxZoom: 7,
+      maxZoom: 4,
       minZoom: 0,
     }).addTo(map);
   }

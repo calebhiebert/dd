@@ -9,29 +9,26 @@ import (
 	"io"
 	"io/ioutil"
 	"math"
+	"mime/multipart"
 	"os"
 	"time"
 
 	"github.com/disintegration/imaging"
+	uuid "github.com/satori/go.uuid"
 )
 
 var zoomLevels = []int{256, 512, 1024, 2048, 4096, 8192, 16384, 16384 * 2}
 var tileSize = 256
 
-func pack() error {
+func pack(src image.Image, id string) error {
 	start := time.Now().UnixNano()
-
-	src, err := imaging.Open("./large.png")
-	if err != nil {
-		return err
-	}
 
 	imageHeight := src.Bounds().Dy()
 	imageWidth := src.Bounds().Dx()
 
 	topDimension := int(math.Max(float64(imageHeight), float64(imageWidth)))
 
-	maxZoomLevel := 0
+	maxZoomLevel := len(zoomLevels) - 1
 
 	for idx, zoom := range zoomLevels {
 		if zoom > topDimension*2 {
@@ -57,14 +54,18 @@ func pack() error {
 
 	fmt.Printf("Initial processing: %d\n", (end-start)/1000000)
 
-	packFile, err := os.OpenFile("./out/packed.map", os.O_CREATE|os.O_WRONLY, os.ModePerm)
+	packFile, err := os.OpenFile(fmt.Sprintf("./out/%s.map", id), os.O_CREATE|os.O_WRONLY, os.ModePerm)
 	if err != nil {
 		return err
 	}
 
-	index := make(map[string][]uint64)
+	var meta MapMetadata
 	var byteCursor uint64
 	levelCounter := 0
+
+	meta.Mapping = make(map[string][]uint64)
+	meta.MaxZoom = maxZoomLevel
+	meta.MinZoom = 0
 
 	for _, level := range zoomLevels[:maxZoomLevel] {
 		fmt.Printf("\nProcessing zoom level %d\n", level)
@@ -103,8 +104,8 @@ func pack() error {
 
 				writer.Flush()
 
-				index[fmt.Sprintf("%d_%d_%d", levelCounter, x, y)] = []uint64{byteCursor, byteCursor + uint64(b.Len())}
-				byteCursor += uint64(b.Len()) + 1
+				meta.Mapping[fmt.Sprintf("%d_%d_%d", levelCounter, x, y)] = []uint64{byteCursor, byteCursor + uint64(b.Len())}
+				byteCursor += uint64(b.Len())
 
 				_, err = io.Copy(packFile, bufio.NewReader(&b))
 				if err != nil {
@@ -120,12 +121,31 @@ func pack() error {
 
 	packFile.Close()
 
-	jsonBytes, err := json.Marshal(index)
+	jsonBytes, err := json.Marshal(meta)
 	if err != nil {
 		return err
 	}
 
-	err = ioutil.WriteFile("./out/packed.index.json", jsonBytes, os.ModePerm)
+	err = ioutil.WriteFile(fmt.Sprintf("./out/%s.json", id), jsonBytes, os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func packFile(file multipart.File) error {
+	img, err := imaging.Decode(file)
+	if err != nil {
+		return err
+	}
+
+	id := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+
+	err = pack(img, id.String())
 	if err != nil {
 		return err
 	}
