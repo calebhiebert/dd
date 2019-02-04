@@ -20,9 +20,9 @@ namespace net_api.Controllers
     [ApiController]
     public class MapsController : ControllerBase
     {
-        private readonly Context _context;
+        private static AmazonS3Client _S3;
 
-        public object AWSClientFactory { get; private set; }
+        private readonly Context _context;
 
         public MapsController(Context context)
         {
@@ -31,9 +31,25 @@ namespace net_api.Controllers
 
         // GET: api/Maps
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Map>>> GetMaps()
+        public async Task<ActionResult<IEnumerable<Map>>> GetMaps([FromQuery] Guid? campaignId)
         {
-            return await _context.Maps.ToListAsync();
+            if (campaignId == null)
+            {
+                return BadRequest("missing campaign id");
+            }
+
+            var maps = await _context.Maps
+                .Where(m => m.CampaignId == campaignId)
+                .Select(m => new Map{
+                    Id = m.Id,
+                    CampaignId = m.CampaignId,
+                    UserId = m.UserId,
+                    MinZoom = 0,
+                    MaxZoom = m.MaxZoom,
+                })
+                .ToListAsync();
+
+            return maps;
         }
 
         [HttpGet("{id}/tile/{zoom}/{x}/{y}")]
@@ -44,32 +60,24 @@ namespace net_api.Controllers
                 return BadRequest("missing map id");
             }
 
-            var map = await _context.Maps.Where(m => m.Id == id).FirstOrDefaultAsync();
+            var tileBytes =
+                await _context
+                .Query<MapBytePosition>()
+                .FromSql("SELECT JSONB_ARRAY_ELEMENTS(JSONB_EXTRACT_PATH(\"Mapping\", {0})) AS \"BytePosition\" FROM \"Maps\" WHERE \"Id\" = {1}", $"{zoom}_{x}_{y}", id)
+                .ToArrayAsync();
 
-            if (map == null)
+            if (tileBytes.Length == 0)
             {
                 return NotFound();
             }
 
-            var mapping = map.Mapping;
+            var fileData = tileBytes.Select(t => long.Parse(t.BytePosition)).ToArray();
 
-            if (!mapping.ContainsKey($"{zoom}_{x}_{y}"))
+            var obj = await S3.GetObjectAsync(new GetObjectRequest
             {
-                return NotFound();
-            }
-
-            var fileData = mapping[$"{zoom}_{x}_{y}"];
-
-            var client = new AmazonS3Client(Environment.GetEnvironmentVariable("S3_ACCESS_KEY"), Environment.GetEnvironmentVariable("S3_ACCESS_SECRET"), new AmazonS3Config
-            {
-                ServiceURL = "https://sfo2.digitaloceanspaces.com"
-            });
-
-            var obj = await client.GetObjectAsync(new GetObjectRequest
-            {
-                BucketName = "dd-files",
+                BucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME"),
                 Key = id.ToString() + ".map",
-                ByteRange = new ByteRange((long)fileData[0], (long)fileData[1])
+                ByteRange = new ByteRange(fileData[0], fileData[1])
             });
 
             byte[] bytes;
@@ -123,7 +131,7 @@ namespace net_api.Controllers
             var content = new MultipartFormDataContent();
             content.Add(new StreamContent(file.OpenReadStream()), "file", "mapfile");
 
-            var result = await client.PostAsync("http://127.0.0.1:8081/upload", content);
+            var result = await client.PostAsync($"{Environment.GetEnvironmentVariable("MAP_TILER_ENDPOINT")}?password={Environment.GetEnvironmentVariable("MAP_TILER_PASSWORD")}", content);
             if (result.IsSuccessStatusCode)
             {
                 var resultValue = await result.Content.ReadAsAsync<Map>();
@@ -162,6 +170,25 @@ namespace net_api.Controllers
         private bool MapExists(Guid id)
         {
             return _context.Maps.Any(e => e.Id == id);
+        }
+
+        private AmazonS3Client S3
+        {
+            get
+            {
+                if (_S3 == null)
+                {
+                    _S3 = new AmazonS3Client(
+                        Environment.GetEnvironmentVariable("S3_ACCESS_KEY"),
+                        Environment.GetEnvironmentVariable("S3_ACCESS_SECRET"),
+                        new AmazonS3Config
+                            {
+                                ServiceURL = Environment.GetEnvironmentVariable("S3_SERVICE_URL")
+                            });
+                }
+
+                return _S3;
+            }
         }
     }
 }

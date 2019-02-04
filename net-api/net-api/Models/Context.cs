@@ -53,6 +53,8 @@ namespace net_api.Models
             modelBuilder.Entity<CampaignUser>().HasKey(tbl => new { tbl.CampaignId, tbl.UserId });
             modelBuilder.Entity<InventoryItem>().HasKey(tbl => new { tbl.EntityId, tbl.ItemId });
             modelBuilder.Entity<EntitySpell>().HasKey(tbl => new { tbl.EntityId, tbl.SpellId });
+
+            modelBuilder.Query<MapBytePosition>();
         }
     }
 }

@@ -1,20 +1,33 @@
 package main
 import (
-	"bytes"
-	"io"
+	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	minio "github.com/minio/minio-go"
 )
 
-var endpoint = "sfo2.digitaloceanspaces.com"
-var accessKey = "REPLACE_ME"
-var secretKey = "REPLACE_ME"
+var endpoint string
+var accessKey string
+var secretKey string
+var bucketName string
 var useSSL = true
 var minioClient *minio.Client
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Could not load .env", err)
+	}
+
+	endpoint = os.Getenv("S3_SERVICE_URL")
+	accessKey = os.Getenv("S3_ACCESS_KEY")
+	secretKey = os.Getenv("S3_ACCESS_SECRET")
+	bucketName = os.Getenv("S3_BUCKET_NAME")
+
+	// Create a new s3 client to be reused
 	client, err := minio.New(endpoint, accessKey, secretKey, useSSL)
 	if err != nil {
 		panic(err)
@@ -28,34 +41,14 @@ func main() {
 func startServer() {
 	r := gin.Default()
 
-	r.GET("/bytez/:id", func(c *gin.Context) {
-		id := c.Param("id")
-		start, err := strconv.ParseUint(c.Query("start"), 10, 64)
-		if err != nil {
-			c.JSON(400, gin.H{"error": err})
-			return
-		}
-
-		end, err := strconv.ParseUint(c.Query("end"), 10, 64)
-		if err != nil {
-			c.JSON(400, gin.H{"error": err})
-			return
-		}
-
-		reader, err := getS3Reader(id, start, end)
-		if err != nil {
-			c.JSON(500, gin.H{"error": err})
-			return
-		}
-
-		_, err = io.Copy(c.Writer, reader)
-		if err != nil {
-			c.JSON(500, gin.H{"error": err})
-			return
-		}
-	})
-
 	r.POST("/upload", func(c *gin.Context) {
+		if c.Query("password") != os.Getenv("PASSWORD") {
+			c.JSON(401, gin.H{
+				"error": "Unauthorized",
+			})
+			return
+		}
+
 		file, _ := c.FormFile("file")
 
 		openFile, err := file.Open()
@@ -71,27 +64,20 @@ func startServer() {
 		c.JSON(200, meta)
 	})
 
-	r.Run(":8081")
-}
+	var port int
 
-func getS3Reader(id string, start, end uint64) (io.Reader, error) {
-	obj, err := minioClient.GetObject("dd-files", id+".map", minio.GetObjectOptions{})
-	if err != nil {
-		return nil, err
+	if os.Getenv("PORT") != "" {
+		p, err := strconv.Atoi(os.Getenv("PORT"))
+		if err != nil {
+			fmt.Println("Port Error", err)
+			port = 8080
+		} else {
+			port = p
+		}
+	} else {
+		port = 8080
 	}
 
-	_, err = obj.Seek(int64(start), 0)
-	if err != nil {
-		return nil, err
-	}
-
-	data := make([]byte, end-start)
-
-	_, err = obj.Read(data)
-	if err != nil {
-		return nil, err
-	}
-
-	return bytes.NewReader(data), nil
+	r.Run(fmt.Sprintf(":%d", port))
 }
 
