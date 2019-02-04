@@ -36,7 +36,6 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'invite/:invite_id', component: InviteComponent },
   { path: 'about', component: AboutComponent },
-  { path: 'map', component: MapComponent },
   {
     path: 'login',
     component: LoginComponent,

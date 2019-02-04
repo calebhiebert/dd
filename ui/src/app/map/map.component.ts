@@ -8,28 +8,49 @@ import {
 import Leaflet from 'leaflet';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { MapService, IMap } from '../map.service';
 
 @Component({
   selector: 'dd-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit, AfterViewInit {
+export class MapComponent implements AfterViewInit {
   @ViewChild('map')
   private map: ElementRef<HTMLDivElement>;
 
-  private _mapId: string;
+  private _map: IMap;
 
-  constructor(private route: ActivatedRoute) {}
+  public loading = false;
 
-  ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      this._mapId = params.get('m_id');
-      console.log(this._mapId);
+  constructor(private route: ActivatedRoute, private mapService: MapService) {}
+
+  ngAfterViewInit() {
+    this.route.paramMap.subscribe(async (params) => {
+      this.loadMap(params.get('m_id'));
     });
   }
 
-  ngAfterViewInit() {
+  private async loadMap(id: string) {
+    await this.load(id);
+    this.constructMap();
+  }
+
+  private async load(id: string) {
+    this.loading = true;
+
+    try {
+      this._map = await this.mapService.getMap(id);
+    } catch (err) {
+      throw err;
+    }
+
+    this.loading = false;
+  }
+
+  private constructMap() {
+    console.log(this._map);
+
     const map = Leaflet.map(this.map.nativeElement, {
       crs: Leaflet.CRS.Simple,
       maxBounds: [[0, 0], [-256, 256]],
@@ -40,10 +61,10 @@ export class MapComponent implements OnInit, AfterViewInit {
     map.setView([0, 0], 1);
 
     Leaflet.tileLayer(`${environment.apiURL}/maps/{id}/tile/{z}/{x}/{y}`, {
-      maxZoom: 4,
-      minZoom: 0,
+      maxZoom: this._map.maxZoom,
+      minZoom: this._map.minZoom,
       bounds: [[0, 0], [-256, 256]],
-      id: this._mapId,
+      id: this._map.id,
     }).addTo(map);
   }
 }
