@@ -9,6 +9,7 @@ import Leaflet from 'leaflet';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { MapService, IMap } from '../map.service';
+import { MapEditorMenuComponent } from './map-editor-menu/map-editor-menu.component';
 
 @Component({
   selector: 'dd-map',
@@ -18,6 +19,9 @@ import { MapService, IMap } from '../map.service';
 export class MapComponent implements AfterViewInit {
   @ViewChild('map')
   private map: ElementRef<HTMLDivElement>;
+
+  @ViewChild('editor')
+  private editor: MapEditorMenuComponent;
 
   private _map: IMap;
 
@@ -49,14 +53,20 @@ export class MapComponent implements AfterViewInit {
   }
 
   private constructMap() {
-    console.log(this._map);
-
     const map = Leaflet.map(this.map.nativeElement, {
       crs: Leaflet.CRS.Simple,
       maxBounds: [[0, 0], [-256, 256]],
     });
 
-    map.on('click', (e) => console.log(e.latlng));
+    Leaflet.control.scale().addTo(map);
+
+    map.on('contextmenu', (e) => {
+      this.editor.showMenu().then(() => {
+        const marker = new Leaflet.Marker(e.latlng).addTo(map);
+
+        marker.bindPopup('Example Marker');
+      });
+    });
 
     map.setView([0, 0], 1);
 

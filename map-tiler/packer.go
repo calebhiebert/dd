@@ -94,7 +94,7 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 	meta.ID = id
 
 	// Generate the tiles
-	for _, level := range zoomLevels[:maxZoomLevel] {
+	for _, level := range zoomLevels[:maxZoomLevel+1] {
 		fmt.Printf("\nProcessing zoom level %d\n", level)
 
 		// Calculate the max number of tiles to be generated
