@@ -70,6 +70,7 @@ export class MapUploadComponent implements OnInit {
 
     const form = new FormData();
     form.append('file', this.file);
+    form.append('name', this.name.value);
 
     if (this.campaignService.campaign) {
       form.append('campaignId', this.campaignService.campaign.id);
