@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CampaignService } from 'src/app/campaign.service';
 import { environment } from 'src/environments/environment';
 import { LoginService } from 'src/app/login.service';
+import { Router } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'dd-map-upload',
@@ -13,20 +15,46 @@ export class MapUploadComponent implements OnInit {
   public uploadProgress: number;
   public file: any;
   public isUploading = false;
+  public mapId: string = null;
+
+  public formGroup: FormGroup;
 
   constructor(
     private campaignService: CampaignService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private router: Router
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.formGroup = new FormGroup({
+      name: new FormControl(null, [Validators.required]),
+      file: new FormControl(null, [Validators.required]),
+    });
+  }
+
+  public viewMap() {
+    this.router.navigate([
+      'campaigns',
+      this.campaignService.campaign.id,
+      'maps',
+      this.mapId,
+    ]);
+  }
 
   public onFileChange(event: Event) {
     const files = (event.target as HTMLInputElement).files;
 
     if (files.length > 0) {
-      this.handleFileUpload(files[0]);
+      this.file = files[0];
     }
+  }
+
+  public submit() {
+    if (this.formGroup.invalid) {
+      return;
+    }
+
+    this.handleFileUpload(this.file);
   }
 
   public handleFileUpload(file: File) {
@@ -58,6 +86,8 @@ export class MapUploadComponent implements OnInit {
       const result = JSON.parse(xhr.responseText);
       console.log(result);
 
+      this.mapId = result.id;
+
       this.isUploading = false;
       this.file = null;
     };
@@ -70,5 +100,13 @@ export class MapUploadComponent implements OnInit {
 
     this.isUploading = true;
     xhr.send(form);
+  }
+
+  public get fileControl() {
+    return this.formGroup.get('file');
+  }
+
+  public get name() {
+    return this.formGroup.get('name');
   }
 }

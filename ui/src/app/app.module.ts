@@ -77,6 +77,7 @@ import { AttributeRowViewComponent } from './entity/entity-view/attribute-row-vi
 import { AttributeTableViewComponent } from './entity/entity-view/attribute-table-view/attribute-table-view.component';
 import { MapComponent } from './map/map.component';
 import { MapUploadComponent } from './map/map-upload/map-upload.component';
+import { MapManagerComponent } from './map/map-manager/map-manager.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -146,6 +147,7 @@ import { MapUploadComponent } from './map/map-upload/map-upload.component';
     AttributeTableViewComponent,
     MapComponent,
     MapUploadComponent,
+    MapManagerComponent,
   ],
   imports: [
     BrowserModule,

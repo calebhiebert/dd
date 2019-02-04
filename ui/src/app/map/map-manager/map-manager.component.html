@@ -1,0 +1,55 @@
+<div class="container grid-xl">
+  <!-- Header Controls -->
+  <div class="columns">
+    <div class="column">
+      <h3>Maps</h3>
+    </div>
+
+    <!-- New Map button -->
+    <div class="column col-auto" *ngIf="editable">
+      <button class="btn btn-sm" (click)="newMap()">
+        <i class="icon icon-plus"></i> New Map
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading loading-lg" *ngIf="loading"></div>
+
+  <!-- Empty State -->
+  <div class="empty" *ngIf="maps && maps.length === 0">
+    <div class="empty-icon">
+      <i class="icon icon-search icon-4x"></i>
+    </div>
+    <p class="empty-title h5">There are no maps</p>
+    <p class="empty-subtitle" *ngIf="editable">
+      Click the button to create one.
+    </p>
+    <div class="empty-action" *ngIf="editable">
+      <button class="btn btn-primary" (click)="newMap()">New Map</button>
+    </div>
+  </div>
+
+  <!-- Map List -->
+  <div *ngIf="maps">
+    <div
+      class="card p-2 hoverable mb-2"
+      *ngFor="let m of maps"
+      (click)="selectMap(m)"
+    >
+      <div class="columns">
+        <div class="column col-auto">
+          <img
+            class="s-rounded"
+            width="64"
+            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/map-default"
+            alt="Map Fallback Picture"
+          />
+        </div>
+        <div class="column">
+          <h5>{{ m.name }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

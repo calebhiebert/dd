@@ -1,8 +1,83 @@
 <div class="container grid-xl">
-  <input
-    type="file"
-    accept="image/*"
-    class="file-input"
-    (change)="onFileChange($event)"
-  />
+  <h3>Upload Map</h3>
+
+  <form
+    (ngSubmit)="submit()"
+    [formGroup]="formGroup"
+    *ngIf="!isUploading && !mapId"
+  >
+    <div
+      class="form-group"
+      [ngClass]="{
+        'has-error': name.invalid && (name.touched || name.dirty)
+      }"
+    >
+      <input
+        class="form-input"
+        type="text"
+        name="name"
+        id="name"
+        formControlName="name"
+        placeholder="Name"
+      />
+      <p
+        class="form-input-hint"
+        *ngIf="
+          name.invalid && (name.touched || name.dirty) && name.errors.required
+        "
+      >
+        A name is required
+      </p>
+    </div>
+
+    <div
+      class="form-group"
+      [ngClass]="{
+        'has-error':
+          fileControl.invalid && (fileControl.touched || fileControl.dirty)
+      }"
+    >
+      <label class="form-label" for="map-upload">Choose Image</label>
+      <!-- Form Area -->
+      <input
+        type="file"
+        class="form-input"
+        accept="image/*"
+        id="map-upload"
+        name="map-upload"
+        class="file-input"
+        (change)="onFileChange($event)"
+        formControlName="file"
+      />
+    </div>
+
+    <button class="btn btn-primary">Upload Map</button>
+  </form>
+
+  <!-- Upload Progress -->
+  <div *ngIf="isUploading">
+    <h5 *ngIf="uploadProgress < 100">Uploading Map</h5>
+    <h5 *ngIf="uploadProgress === 100">Processing Map</h5>
+    <p *ngIf="uploadProgress === 100">
+      This can take up to 5 minutes, please don't close your browser
+    </p>
+    <progress
+      class="progress"
+      [value]="uploadProgress"
+      max="100"
+      *ngIf="uploadProgress < 100"
+    ></progress>
+    <progress
+      class="progress"
+      max="100"
+      *ngIf="uploadProgress === 100"
+    ></progress>
+  </div>
+
+  <div *ngIf="mapId">
+    <h5>All Done!</h5>
+    <button class="btn" (click)="viewMap()">
+      View Map <i class="icon icon-arrow-right"></i>
+    </button>
+  </div>
 </div>

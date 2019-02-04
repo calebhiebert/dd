@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"image/png"
 	"io"
 	"math"
 	"mime/multipart"
@@ -136,7 +137,7 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 				tempWriter := bufio.NewWriter(&b)
 
 				// Encode the image into the buffer
-				err := imaging.Encode(tempWriter, tile, imaging.PNG)
+				err := imaging.Encode(tempWriter, tile, imaging.PNG, imaging.PNGCompressionLevel(png.BestCompression))
 				if err != nil {
 					return nil, err
 				}

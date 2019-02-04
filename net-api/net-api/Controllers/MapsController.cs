@@ -46,6 +46,7 @@ namespace net_api.Controllers
                     UserId = m.UserId,
                     MinZoom = 0,
                     MaxZoom = m.MaxZoom,
+                    Name = m.Name,
                 })
                 .ToListAsync();
 
@@ -113,7 +114,7 @@ namespace net_api.Controllers
         // POST: api/Maps
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostMap([FromForm]IFormFile file, [FromForm]Guid? campaignId)
+        public async Task<IActionResult> PostMap([FromForm]IFormFile file, [FromForm]Guid? campaignId, [FromForm] string name)
         {
             if (file == null)
             {
@@ -123,6 +124,11 @@ namespace net_api.Controllers
             if (campaignId == null)
             {
                 return BadRequest("missing campaign id");
+            }
+
+            if (name == null || name.Trim().Length == 0)
+            {
+                return BadRequest("missing name");
             }
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -137,6 +143,7 @@ namespace net_api.Controllers
                 var resultValue = await result.Content.ReadAsAsync<Map>();
                 resultValue.UserId = userId;
                 resultValue.CampaignId = (Guid)campaignId;
+                resultValue.Name = name;
 
                 _context.Maps.Add(resultValue);
                 await _context.SaveChangesAsync();

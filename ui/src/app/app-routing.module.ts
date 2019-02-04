@@ -30,6 +30,7 @@ import { SpellManagerComponent } from './spell/spell-manager/spell-manager.compo
 import { SpellViewComponent } from './spell/spell-view/spell-view.component';
 import { MapComponent } from './map/map.component';
 import { MapUploadComponent } from './map/map-upload/map-upload.component';
+import { MapManagerComponent } from './map/map-manager/map-manager.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -256,8 +257,18 @@ const routes: Routes = [
         },
       },
       {
+        path: 'maps',
+        component: MapManagerComponent,
+        data: {
+          breadcrumb: 'Maps',
+        },
+      },
+      {
         path: 'maps/:m_id',
         component: MapComponent,
+        data: {
+          breadcrumb: 'Map View',
+        },
       },
     ],
   },

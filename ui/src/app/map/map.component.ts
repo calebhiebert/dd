@@ -42,6 +42,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     Leaflet.tileLayer(`${environment.apiURL}/maps/{id}/tile/{z}/{x}/{y}`, {
       maxZoom: 4,
       minZoom: 0,
+      bounds: [[0, 0], [-256, 256]],
       id: this._mapId,
     }).addTo(map);
   }
