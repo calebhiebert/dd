@@ -75,7 +75,9 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 
 		uploadChan <- err
 
-		panic(err)
+		if err != nil {
+			panic(err)
+		}
 	}(uploadChan)
 
 	// Create a metadata object to store file information

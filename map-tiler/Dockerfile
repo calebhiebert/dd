@@ -17,7 +17,7 @@ RUN go get ./...
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix nocgo -ldflags="-w -s" -o /go/bin/map-tiler
 
 # Start from a scratch container for a nice and small image
-FROM scratch
+FROM golang
 
 # Copy the binary build
 COPY --from=build /go/bin/map-tiler /go/bin/map-tiler
