@@ -13,6 +13,9 @@ using Amazon.S3;
 using Amazon.Runtime;
 using Amazon.S3.Model;
 using System.IO;
+using Newtonsoft.Json;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace net_api.Controllers
 {
@@ -51,6 +54,43 @@ namespace net_api.Controllers
                 .ToListAsync();
 
             return maps;
+        }
+
+        [HttpPost("finished")]
+        public async Task<IActionResult> ProcessingCompletedWebhook([FromQuery] Guid id)
+        {
+            var map = await _context.Maps.Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            if (map == null)
+            {
+                return NotFound();
+            }
+
+            var obj = await S3.GetObjectAsync(new GetObjectRequest
+            {
+                BucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME"),
+                Key = id.ToString() + ".json",
+            });
+
+            Map parsedMap;
+
+            using (var reader = new StreamReader(obj.ResponseStream))
+            {
+                string json = await reader.ReadToEndAsync();
+
+                parsedMap = JsonConvert.DeserializeObject<Map>(json);
+            }
+
+            map.MaxZoom = parsedMap.MaxZoom;
+            map.MinZoom = parsedMap.MinZoom;
+            map.Mapping = parsedMap.Mapping;
+            map.Status = MapStatus.Processed;
+
+            _context.Entry(map).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         [HttpGet("{id}/tile/{zoom}/{x}/{y}")]
@@ -133,29 +173,64 @@ namespace net_api.Controllers
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var client = new HttpClient();
-            var content = new MultipartFormDataContent();
-            content.Add(new StreamContent(file.OpenReadStream()), "file", "mapfile");
+            var id = Guid.NewGuid();
 
-            var result = await client.PostAsync($"{Environment.GetEnvironmentVariable("MAP_TILER_ENDPOINT")}?password={Environment.GetEnvironmentVariable("MAP_TILER_PASSWORD")}", content);
-            if (result.IsSuccessStatusCode)
+            using (var fileStream = file.OpenReadStream())
             {
-                var resultValue = await result.Content.ReadAsAsync<Map>();
-                resultValue.UserId = userId;
-                resultValue.CampaignId = (Guid)campaignId;
-                resultValue.Name = name;
+                if (!Directory.Exists("./tmp"))
+                {
+                    Directory.CreateDirectory("./tmp");
+                }
 
-                _context.Maps.Add(resultValue);
-                await _context.SaveChangesAsync();
-
-                // Clear mapping value before it's sent to the client
-                resultValue.Mapping = null;
-
-                return Ok(resultValue);
-            } else
-            {
-                return BadRequest(result);
+                using (var fs = new FileStream($"./tmp/{id.ToString()}", FileMode.Create, FileAccess.ReadWrite))
+                {
+                    await file.OpenReadStream().CopyToAsync(fs);
+                }
             }
+
+            string hash;
+
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = System.IO.File.OpenRead($"./tmp/{id.ToString()}"))
+                {
+                    var h = md5.ComputeHash(stream);
+
+                    hash = Convert.ToBase64String(h);
+                }
+            }
+
+            try
+            {
+                var response = await S3.PutObjectAsync(new PutObjectRequest
+                {
+                    MD5Digest = hash,
+                    ContentType = file.ContentType,
+                    FilePath = $"./tmp/{id.ToString()}",
+                    BucketName = Environment.GetEnvironmentVariable("S3_INGEST_BUCKET_NAME"),
+                    Key = id.ToString(),
+                });
+
+            } catch (AmazonS3Exception ex)
+            {
+                throw ex;
+            }
+
+            var map = new Map
+            {
+                Id = id,
+                CampaignId = (Guid)campaignId,
+                UserId = userId,
+                Status = MapStatus.Processing,
+                PlayerVisible = false,
+                Name = name
+            };
+
+            _context.Maps.Add(map);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(map);
         }
 
         // DELETE: api/Maps/5

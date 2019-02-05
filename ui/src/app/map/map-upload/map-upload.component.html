@@ -58,9 +58,6 @@
   <div *ngIf="isUploading">
     <h5 *ngIf="uploadProgress < 100">Uploading Map</h5>
     <h5 *ngIf="uploadProgress === 100">Processing Map</h5>
-    <p *ngIf="uploadProgress === 100">
-      This can take up to 5 minutes, please don't close your browser
-    </p>
     <progress
       class="progress"
       [value]="uploadProgress"

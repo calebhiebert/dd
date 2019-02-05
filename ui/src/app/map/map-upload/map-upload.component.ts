@@ -85,7 +85,6 @@ export class MapUploadComponent implements OnInit {
 
     xhr.onload = (e) => {
       const result = JSON.parse(xhr.responseText);
-      console.log(result);
 
       this.mapId = result.id;
 
@@ -95,8 +94,6 @@ export class MapUploadComponent implements OnInit {
 
     xhr.upload.addEventListener('progress', (e) => {
       this.uploadProgress = (e.loaded / e.total) * 100;
-
-      console.log(this.uploadProgress);
     });
 
     this.isUploading = true;

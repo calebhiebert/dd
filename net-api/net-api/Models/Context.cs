@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace net_api.Models
@@ -46,6 +47,7 @@ namespace net_api.Models
 
             optionsBuilder.UseNpgsql(connectionString, opt => opt.EnableRetryOnFailure(10));
             base.OnConfiguring(optionsBuilder);
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

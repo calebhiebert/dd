@@ -27,6 +27,13 @@ export interface IMap {
   minZoom: number;
   maxZoom: number;
   campaignId: string;
+  status: MapStatus;
+  playerVisible: boolean;
   userId: string;
   mapping?: { [key: string]: number[] };
+}
+
+export enum MapStatus {
+  PROCESSING,
+  PROCESSED,
 }

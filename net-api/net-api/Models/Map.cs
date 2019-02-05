@@ -17,10 +17,13 @@ namespace net_api.Models
         public string Name { get; set; }
 
         [Required]
-        public int MinZoom { get; set; }
+        public bool PlayerVisible { get; set; }
 
         [Required]
-        public int MaxZoom { get; set; }
+        public MapStatus Status { get; set; }
+
+        public int? MinZoom { get; set; }
+        public int? MaxZoom { get; set; }
 
         [Required]
         public Guid CampaignId { get; set; }
@@ -56,4 +59,6 @@ namespace net_api.Models
             }
         }
     }
+
+    public enum MapStatus { Processing, Processed }
 }

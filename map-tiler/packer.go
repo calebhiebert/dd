@@ -1,4 +1,4 @@
-package main
+package tiler
 
 import (
 	"bufio"
@@ -10,11 +10,9 @@ import (
 	"image/png"
 	"io"
 	"math"
-	"mime/multipart"
 
 	"github.com/disintegration/imaging"
 	minio "github.com/minio/minio-go"
-	uuid "github.com/satori/go.uuid"
 )
 
 // MapMetadata stores information about a map
@@ -70,7 +68,7 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 
 	// Upload the object stream to s3 in parallel
 	go func(uploadChan chan error) {
-		_, err := minioClient.PutObject(bucketName, id+".map", reader, -1, minio.PutObjectOptions{
+		_, err := s3.PutObject(bucketName, id+".map", reader, -1, minio.PutObjectOptions{
 			ContentType: "application/x-packmap",
 		})
 
@@ -156,8 +154,8 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 					return nil, err
 				}
 
-				fmt.Printf("\rProcessed Tile %d %dx%d", level, x+1, y+1)
 			}
+			fmt.Printf("Processed Row %d x%d", level, x+1)
 		}
 
 		levelCounter++
@@ -180,7 +178,7 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 	}
 
 	// Upload the meta object to s3 as well
-	_, err = minioClient.PutObject(bucketName, id+".json", bytes.NewReader(jsonBytes), int64(len(jsonBytes)), minio.PutObjectOptions{
+	_, err = s3.PutObject(bucketName, id+".json", bytes.NewReader(jsonBytes), int64(len(jsonBytes)), minio.PutObjectOptions{
 		ContentType: "application/json",
 	})
 	if err != nil {
@@ -191,7 +189,7 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 }
 
 // packFile takes an uploaded file and begins the tiling process
-func packFile(file multipart.File) (*MapMetadata, error) {
+func packFile(file io.Reader, id string) (*MapMetadata, error) {
 
 	// Decode the image
 	img, err := imaging.Decode(file)
@@ -199,14 +197,8 @@ func packFile(file multipart.File) (*MapMetadata, error) {
 		return nil, err
 	}
 
-	// Generate a new ID
-	id := uuid.NewV4()
-	if err != nil {
-		return nil, err
-	}
-
 	// Pack the tiles and retrieve the meta object
-	meta, err := pack(img, id.String())
+	meta, err := pack(img, id)
 	if err != nil {
 		return nil, err
 	}
