@@ -1,4 +1,5 @@
 package tiler
+
 import (
 	"bytes"
 	"context"
@@ -49,10 +50,10 @@ func MakeTiles(ctx context.Context, e GCSEvent) error {
 		fmt.Println("Webhook request failed!")
 	}
 
-	err = s3.RemoveObject(e.Bucket, e.Name)
-	if err != nil {
-		return err
-	}
+	// err = s3.RemoveObject(e.Bucket, e.Name)
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil
 }
@@ -98,4 +99,3 @@ func makeWebhookRequest(meta *MapMetadata) error {
 
 	return nil
 }
-

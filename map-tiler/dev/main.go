@@ -1,4 +1,5 @@
 package main
+
 import (
 	"context"
 	"fmt"
@@ -12,9 +13,8 @@ func main() {
 	godotenv.Load()
 
 	err := tiler.MakeTiles(context.Background(), tiler.GCSEvent{
-		Bucket: "dd-map-tiles-ingest",
-		Name:   "1bb8ab4a-1b8f-43ba-a989-421f6fb185ba",
+		Bucket: "dd-map-tiler",
+		Name:   "large.png",
 	})
 	fmt.Println(err)
 }
-

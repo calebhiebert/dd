@@ -1,7 +1,6 @@
 package tiler
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -23,7 +22,26 @@ type MapMetadata struct {
 	MaxZoom int                 `json:"maxZoom"`
 }
 
-var zoomLevels = []int{256, 512, 1024, 2048, 4096, 8192, 16384, 32768}
+// TileConfig configuration for cutting out a tile
+type TileConfig struct {
+	ZoomLevel int
+	ZoomSize  int
+	X1        int
+	X2        int
+	Y1        int
+	Y2        int
+	TileX     int
+	TileY     int
+}
+
+type EncodedTile struct {
+	ZoomLevel int
+	X         int
+	Y         int
+	Data      []byte
+}
+
+var zoomLevels = []int{256, 512, 1024, 2048, 4096, 8192, 16384}
 var tileSize = 256
 
 // pack will pack up the image and upload it to s3
@@ -57,49 +75,16 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 	yLowerBound := yDiff / 2
 	yUpperBound := imageHeight + (yDiff / 2)
 
-	// Create a new square image and paste the old one into it
-	boxImage := imaging.New(topDimension, topDimension, color.NRGBA{0, 0, 0, 0})
-	src = imaging.PasteCenter(boxImage, src)
+	fmt.Println("Initial processing completed")
 
-	// Make an upload channel to allow for waiting during the upload process
-	uploadChan := make(chan error)
-
-	reader, writer := io.Pipe()
-
-	// Upload the object stream to s3 in parallel
-	go func(uploadChan chan error) {
-		_, err := s3.PutObject(bucketName, id+".map", reader, -1, minio.PutObjectOptions{
-			ContentType: "application/x-packmap",
-		})
-
-		uploadChan <- err
-
-		if err != nil {
-			panic(err)
-		}
-	}(uploadChan)
-
-	// Create a metadata object to store file information
-	var meta MapMetadata
-
-	// Create a byte cursor to store the current position of writer
-	var byteCursor uint64
+	tileConfigs := []TileConfig{}
 	var levelCounter int
 
-	meta.Mapping = make(map[string][]uint64)
-	meta.MaxZoom = maxZoomLevel
-	meta.MinZoom = 0
-	meta.ID = id
-
-	// Generate the tiles
+	// Do tile math
 	for _, level := range zoomLevels[:maxZoomLevel+1] {
-		fmt.Printf("\nProcessing zoom level %d\n", level)
-
 		// Calculate the max number of tiles to be generated
 		xTiles := level / tileSize
 		yTiles := level / tileSize
-
-		fmt.Printf("Tiles %dx%d\n", xTiles, yTiles)
 
 		// Cut out the tiles
 		for x := 0; x < xTiles; x++ {
@@ -122,54 +107,102 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 					continue
 				}
 
-				// Cut out the area that the tile will occupy from the original image
-				tile := imaging.Crop(src, image.Rect(int(x1*ratio), int(y1*ratio), int(x2*ratio), int(y2*ratio)))
-
-				// Resize the image to be the correct size for the tile
-				tile = imaging.Resize(tile, tileSize, tileSize, imaging.Linear)
-
-				// Create a buffer to hold the encoded tile
-				var b bytes.Buffer
-
-				// Create a writer to write to the buffer
-				tempWriter := bufio.NewWriter(&b)
-
-				// Encode the image into the buffer
-				err := imaging.Encode(tempWriter, tile, imaging.PNG, imaging.PNGCompressionLevel(png.BestCompression))
-				if err != nil {
-					return nil, err
-				}
-
-				tempWriter.Flush()
-
-				// Create the mapping entry in the meta object
-				meta.Mapping[fmt.Sprintf("%d_%d_%d", levelCounter, x, y)] = []uint64{byteCursor, byteCursor + uint64(b.Len())}
-
-				// Incriment the byte counter
-				byteCursor += uint64(b.Len())
-
-				// Copy to the s3 upload stream
-				_, err = io.Copy(writer, bufio.NewReader(&b))
-				if err != nil {
-					return nil, err
-				}
-
+				tileConfigs = append(tileConfigs, TileConfig{
+					ZoomLevel: levelCounter,
+					ZoomSize:  level,
+					X1:        int(x1 * ratio),
+					X2:        int(x2 * ratio),
+					Y1:        int(y1 * ratio),
+					Y2:        int(y2 * ratio),
+					TileX:     x,
+					TileY:     y,
+				})
 			}
-			fmt.Printf("Processed Row %d x%d", level, x+1)
 		}
 
 		levelCounter++
 	}
 
-	writer.Close()
+	fmt.Printf("Planned to process %d tiles\n", len(tileConfigs))
 
-	fmt.Println("Waiting for upload to complete...")
+	// Create a metadata object to store file information
+	var meta MapMetadata
+	meta.Mapping = make(map[string][]uint64)
+	meta.MaxZoom = maxZoomLevel
+	meta.MinZoom = 0
+	meta.ID = id
 
-	// Wait for the upload to complete
-	err := <-uploadChan
-	if err != nil {
-		return nil, err
+	// Create a new square image and paste the old one into it
+	boxImage := imaging.New(topDimension, topDimension, color.NRGBA{0, 0, 0, 0})
+	src = imaging.PasteCenter(boxImage, src)
+
+	sem := make(chan int, 4)
+	processedTiles := make(chan *EncodedTile, 15)
+
+	// Make an upload channel to allow for waiting during the upload process
+	uploadChan := make(chan error)
+
+	reader, writer := io.Pipe()
+
+	// Upload the object stream to s3 in parallel
+	go func(uploadChan chan error) {
+		_, err := s3.PutObject(bucketName, id+".map", reader, -1, minio.PutObjectOptions{
+			ContentType: "application/x-packmap",
+		})
+
+		uploadChan <- err
+
+		if err != nil {
+			panic(err)
+		}
+	}(uploadChan)
+
+	// Copy completed tiles to the output
+	go func() {
+		var byteCursor uint64
+
+		for encodedTile := range processedTiles {
+			dataLength := uint64(len(encodedTile.Data))
+
+			meta.Mapping[fmt.Sprintf("%d_%d_%d", encodedTile.ZoomLevel, encodedTile.X, encodedTile.Y)] = []uint64{byteCursor, byteCursor + dataLength}
+			_, err := io.Copy(writer, bytes.NewReader(encodedTile.Data))
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			byteCursor += dataLength
+		}
+
+		writer.Close()
+	}()
+
+	currentTile := 0
+
+	// Process the tiles and send output to the output channel
+	for _, tile := range tileConfigs {
+		sem <- 1
+
+		go func() {
+			config, err := encodeTile(&src, &tile)
+			if err != nil {
+				fmt.Println("Encoding Error", err)
+			} else {
+				processedTiles <- config
+			}
+
+			currentTile++
+			fmt.Printf("\rProgress: %f", (float64(currentTile) / float64(len(tileConfigs)) * 100))
+
+			<-sem
+		}()
 	}
+
+	// Wait for rest of semaphore
+	for i := 0; i < cap(sem); i++ {
+		sem <- 1
+	}
+
+	close(processedTiles)
 
 	// Serialize the meta object
 	jsonBytes, err := json.Marshal(meta)
@@ -206,3 +239,26 @@ func packFile(file io.Reader, id string) (*MapMetadata, error) {
 	return meta, nil
 }
 
+func encodeTile(source *image.Image, config *TileConfig) (*EncodedTile, error) {
+	// Cut out the area that the tile will occupy from the original image
+	tile := imaging.Crop(*source, image.Rect(config.X1, config.Y1, config.X2, config.Y2))
+
+	// Resize the image to be the correct size for the tile
+	tile = imaging.Resize(tile, tileSize, tileSize, imaging.Linear)
+
+	// Create a buffer to hold the encoded tile
+	var b bytes.Buffer
+
+	// Encode the image into the buffer
+	err := imaging.Encode(&b, tile, imaging.PNG, imaging.PNGCompressionLevel(png.BestCompression))
+	if err != nil {
+		return nil, err
+	}
+
+	return &EncodedTile{
+		ZoomLevel: config.ZoomLevel,
+		X:         config.TileX,
+		Y:         config.TileY,
+		Data:      b.Bytes(),
+	}, nil
+}
