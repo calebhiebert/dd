@@ -182,19 +182,19 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 	for _, tile := range tileConfigs {
 		sem <- 1
 
-		go func() {
-			config, err := encodeTile(&src, &tile)
+		go func(t TileConfig) {
+			encodedTile, err := encodeTile(&src, &t)
 			if err != nil {
 				fmt.Println("Encoding Error", err)
 			} else {
-				processedTiles <- config
+				processedTiles <- encodedTile
 			}
 
 			currentTile++
-			fmt.Printf("\rProgress: %f", (float64(currentTile) / float64(len(tileConfigs)) * 100))
+			fmt.Printf("\rProgress: %.2f", (float64(currentTile) / float64(len(tileConfigs)) * 100))
 
 			<-sem
-		}()
+		}(tile)
 	}
 
 	// Wait for rest of semaphore

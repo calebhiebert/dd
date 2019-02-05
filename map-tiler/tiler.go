@@ -47,13 +47,13 @@ func MakeTiles(ctx context.Context, e GCSEvent) error {
 
 	err = makeWebhookRequest(meta)
 	if err != nil {
-		fmt.Println("Webhook request failed!")
+		fmt.Println("\nWebhook request failed!")
 	}
 
-	// err = s3.RemoveObject(e.Bucket, e.Name)
-	// if err != nil {
-	// 	return err
-	// }
+	err = s3.RemoveObject(e.Bucket, e.Name)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
