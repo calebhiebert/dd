@@ -16,6 +16,8 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Security.Cryptography;
 using System.Text;
+using Google.Cloud.Storage.V1;
+using Google.Apis.Auth.OAuth2;
 
 namespace net_api.Controllers
 {
@@ -24,6 +26,7 @@ namespace net_api.Controllers
     public class MapsController : ControllerBase
     {
         private static AmazonS3Client _S3;
+        private static StorageClient _Storage;
 
         private readonly Context _context;
 
@@ -175,46 +178,14 @@ namespace net_api.Controllers
 
             var id = Guid.NewGuid();
 
-            using (var fileStream = file.OpenReadStream())
-            {
-                if (!Directory.Exists("./tmp"))
-                {
-                    Directory.CreateDirectory("./tmp");
-                }
+            var uploader = Storage.CreateObjectUploader(
+                Environment.GetEnvironmentVariable("S3_INGEST_BUCKET_NAME"),
+                id.ToString(),
+                file.ContentType,
+                file.OpenReadStream()
+                );
 
-                using (var fs = new FileStream($"./tmp/{id.ToString()}", FileMode.Create, FileAccess.ReadWrite))
-                {
-                    await file.OpenReadStream().CopyToAsync(fs);
-                }
-            }
-
-            string hash;
-
-            using (var md5 = MD5.Create())
-            {
-                using (var stream = System.IO.File.OpenRead($"./tmp/{id.ToString()}"))
-                {
-                    var h = md5.ComputeHash(stream);
-
-                    hash = Convert.ToBase64String(h);
-                }
-            }
-
-            try
-            {
-                var response = await S3.PutObjectAsync(new PutObjectRequest
-                {
-                    MD5Digest = hash,
-                    ContentType = file.ContentType,
-                    FilePath = $"./tmp/{id.ToString()}",
-                    BucketName = Environment.GetEnvironmentVariable("S3_INGEST_BUCKET_NAME"),
-                    Key = id.ToString(),
-                });
-
-            } catch (AmazonS3Exception ex)
-            {
-                throw ex;
-            }
+            var progress = await uploader.UploadAsync();
 
             var map = new Map
             {
@@ -252,6 +223,21 @@ namespace net_api.Controllers
         private bool MapExists(Guid id)
         {
             return _context.Maps.Any(e => e.Id == id);
+        }
+
+        private StorageClient Storage
+        {
+            get
+            {
+                if (_Storage == null)
+                {
+
+                    _Storage = StorageClient
+                        .Create(credential: GoogleCredential.FromJson(Environment.GetEnvironmentVariable("STORAGE_SERVICE_ACCOUNT")));
+                }
+
+                return _Storage;
+            }
         }
 
         private AmazonS3Client S3

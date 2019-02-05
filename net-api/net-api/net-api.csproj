@@ -27,6 +27,7 @@
     <PackageReference Include="AWSSDK.S3" Version="3.3.31.14" />
     <PackageReference Include="CloudinaryDotNet" Version="1.6.0" />
     <PackageReference Include="dotenv.net" Version="1.0.4" />
+    <PackageReference Include="Google.Cloud.Storage.V1" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />

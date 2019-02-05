@@ -33,7 +33,8 @@
   <!-- Map List -->
   <div *ngIf="maps">
     <div
-      class="card p-2 hoverable mb-2"
+      class="card p-2 mb-2"
+      [ngClass]="{ hoverable: m.status === 1 }"
       *ngFor="let m of maps"
       (click)="selectMap(m)"
     >
@@ -46,7 +47,10 @@
             alt="Map Fallback Picture"
           />
         </div>
-        <div class="column">
+        <div class="column" *ngIf="m.status === 0">
+          <h5 class="text-gray">{{ m.name }} (Processing)</h5>
+        </div>
+        <div class="column" *ngIf="m.status === 1">
           <h5>{{ m.name }}</h5>
         </div>
       </div>

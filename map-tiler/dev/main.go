@@ -13,7 +13,7 @@ func main() {
 
 	err := tiler.MakeTiles(context.Background(), tiler.GCSEvent{
 		Bucket: "dd-map-tiles-ingest",
-		Name:   "05ef2c7d-5ddd-48c3-846a-550e2c5b8520",
+		Name:   "1bb8ab4a-1b8f-43ba-a989-421f6fb185ba",
 	})
 	fmt.Println(err)
 }
