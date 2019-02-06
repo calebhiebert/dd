@@ -1,6 +1,6 @@
 package tiler
+
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -49,9 +49,7 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 	meta.MinZoom = 0
 	meta.ID = id
 
-	buf := bytes.Buffer{}
 	sem := make(chan int, 4)
-	writer := bufio.NewWriter(&buf)
 	tiles := make(chan Tile, len(tileConfigs))
 
 	byteCursor := 0
@@ -74,20 +72,17 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 		sem <- 1
 	}
 
+	packData := []byte{}
+
 	for t := range tiles {
 		meta.Mapping[fmt.Sprintf("%d_%d_%d", t.Z, t.X, t.Y)] = []int{byteCursor, byteCursor + len(t.Data)}
-		_, err := writer.Write(t.Data)
-		if err != nil {
-			fmt.Println(err)
-		}
+		packData = append(packData, t.Data...)
 		byteCursor += len(t.Data)
 	}
 
-	fmt.Println(len(meta.Mapping))
-
 	fmt.Println("Starting Upload")
 
-	_, err := s3.PutObject(bucketName, id+".map", &buf, -1, minio.PutObjectOptions{
+	_, err := s3.PutObject(bucketName, id+".map", bytes.NewReader(packData), -1, minio.PutObjectOptions{
 		ContentType: "application/x-packmap",
 	})
 
@@ -127,4 +122,3 @@ func packFile(file io.Reader, id string) (*MapMetadata, error) {
 
 	return meta, nil
 }
-
