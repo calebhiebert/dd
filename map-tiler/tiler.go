@@ -1,5 +1,4 @@
 package tiler
-
 import (
 	"bytes"
 	"context"
@@ -19,6 +18,11 @@ type GCSEvent struct {
 	Bucket string `json:"bucket"`
 	Name   string `json:"name"`
 }
+
+// Zoom levels must be powers of 2
+var zoomLevel0Pow2 = 9
+var zoomLevelCapPow2 = 15
+var tileSize = 256
 
 var endpoint string
 var accessKey string
@@ -50,10 +54,10 @@ func MakeTiles(ctx context.Context, e GCSEvent) error {
 		fmt.Println("\nWebhook request failed!")
 	}
 
-	err = s3.RemoveObject(e.Bucket, e.Name)
-	if err != nil {
-		return err
-	}
+	// err = s3.RemoveObject(e.Bucket, e.Name)
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil
 }
@@ -99,3 +103,4 @@ func makeWebhookRequest(meta *MapMetadata) error {
 
 	return nil
 }
+
