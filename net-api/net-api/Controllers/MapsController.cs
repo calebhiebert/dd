@@ -248,6 +248,15 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
+            try
+            {
+                await Storage.DeleteObjectAsync(Environment.GetEnvironmentVariable("S3_BUCKET_NAME"), $"{id.ToString()}.map");
+                await Storage.DeleteObjectAsync(Environment.GetEnvironmentVariable("S3_BUCKET_NAME"), $"{id.ToString()}.json");
+            } catch(Exception ex)
+            {
+                Console.WriteLine("Error during map delete", ex.Message);
+            }
+
             _context.Maps.Remove(map);
             await _context.SaveChangesAsync();
 

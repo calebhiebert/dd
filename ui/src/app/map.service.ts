@@ -19,6 +19,12 @@ export class MapService {
       .get<IMap>(`${environment.apiURL}/maps/${mapId}`)
       .toPromise();
   }
+
+  public deleteMap(mapId: string): Promise<void> {
+    return this.http
+      .delete<void>(`${environment.apiURL}/maps/${mapId}`)
+      .toPromise();
+  }
 }
 
 export interface IMap {

@@ -2,3 +2,7 @@
 
 <dd-map-editor-menu #editor></dd-map-editor-menu>
 <div class="map" #map></div>
+
+<div *ngIf="editable && map">
+  <button class="btn btn-sm btn-primary" (click)="delete()">Delete</button>
+</div>

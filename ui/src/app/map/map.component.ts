@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { MapService, IMap } from '../map.service';
 import { MapEditorMenuComponent } from './map-editor-menu/map-editor-menu.component';
+import { CampaignService } from '../campaign.service';
 
 @Component({
   selector: 'dd-map',
@@ -27,7 +28,11 @@ export class MapComponent implements AfterViewInit {
 
   public loading = false;
 
-  constructor(private route: ActivatedRoute, private mapService: MapService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private mapService: MapService,
+    private campaignService: CampaignService
+  ) {}
 
   ngAfterViewInit() {
     this.route.paramMap.subscribe(async (params) => {
@@ -76,5 +81,17 @@ export class MapComponent implements AfterViewInit {
       bounds: [[0, 0], [-256, 256]],
       id: this._map.id,
     }).addTo(map);
+  }
+
+  public async delete() {
+    try {
+      await this.mapService.deleteMap(this._map.id);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  public get editable() {
+    return this.campaignService.canEdit;
   }
 }
