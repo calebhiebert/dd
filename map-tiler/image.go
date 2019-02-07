@@ -1,4 +1,5 @@
 package tiler
+
 import (
 	"fmt"
 	"image"
@@ -107,8 +108,6 @@ func GetTileConfig(source image.Image) []TileConfig {
 }
 
 func getPreparedImage(id, bucket string) (image.Image, error) {
-	setupS3Client()
-
 	obj, err := s3.GetObject(bucket, id, minio.GetObjectOptions{})
 	if err != nil {
 		return nil, err
@@ -125,8 +124,7 @@ func getPreparedImage(id, bucket string) (image.Image, error) {
 
 	// Create a new square image and paste the old one into it
 	boxImage := imaging.New(details.topDimension(), details.topDimension(), color.NRGBA{0, 0, 0, 1})
-	src := imaging.PasteCenter(boxImage, img)
+	img = imaging.PasteCenter(boxImage, img)
 
-	return src, nil
+	return img, nil
 }
-

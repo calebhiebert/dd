@@ -18,6 +18,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Google.Cloud.Storage.V1;
 using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.SignalR;
 
 namespace net_api.Controllers
 {
@@ -29,10 +30,12 @@ namespace net_api.Controllers
         private static StorageClient _Storage;
 
         private readonly Context _context;
+        private readonly IHubContext<UpdateHub> _hub;
 
-        public MapsController(Context context)
+        public MapsController(Context context, IHubContext<UpdateHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         // GET: api/Maps
@@ -44,8 +47,25 @@ namespace net_api.Controllers
                 return BadRequest("missing campaign id");
             }
 
-            var maps = await _context.Maps
-                .Where(m => m.CampaignId == campaignId)
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var campaign = await _context.Campaigns.AsNoTracking()
+                .Where(c => c.Id == campaignId).Include(c => c.Members).FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var mapQuery = _context.Maps
+                .Where(m => m.CampaignId == campaignId);
+
+            if (userId != campaign.UserId)
+            {
+                mapQuery = mapQuery.Where(m => m.Status == MapStatus.Processed && m.PlayerVisible == true);
+            }
+
+            var maps = await mapQuery
                 .Select(m => new Map{
                     Id = m.Id,
                     CampaignId = m.CampaignId,
@@ -93,7 +113,19 @@ namespace net_api.Controllers
 
             _context.Entry(map).State = EntityState.Modified;
 
+            // Create notification
+            var notification = new Notification
+            {
+                UserId = map.UserId,
+                Message = $"The map {map.Name} has finished processing and is now ready for use"
+            };
+
+            _context.Notifications.Add(notification);
+
             await _context.SaveChangesAsync();
+
+            await _hub.Clients.Group($"notifications-{map.UserId}")
+                .SendAsync("Notify");
 
             return NoContent();
         }
@@ -195,7 +227,7 @@ namespace net_api.Controllers
                 CampaignId = (Guid)campaignId,
                 UserId = userId,
                 Status = MapStatus.Processing,
-                PlayerVisible = false,
+                PlayerVisible = true,
                 Name = name
             };
 

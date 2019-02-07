@@ -1,4 +1,5 @@
 package main
+
 import (
 	"context"
 	"fmt"
@@ -13,8 +14,7 @@ func main() {
 
 	err := tiler.MakeTiles(context.Background(), tiler.GCSEvent{
 		Bucket: "dd-map-tiles-ingest",
-		Name:   "c0e6c183-a64b-4cc7-a22f-5c0e40bf6d10",
+		Name:   "9cba79f5-ea78-441f-ab08-52f59535919e",
 	})
 	fmt.Println(err)
 }
-

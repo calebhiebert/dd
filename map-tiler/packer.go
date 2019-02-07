@@ -13,10 +13,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/avast/retry-go"
 	minio "github.com/minio/minio-go"
 )
 
-var tileConfigsPerWorker = 100
+var tileConfigsPerWorker = 325
+var maxConcurrentWorkers = 15
 
 // MapMetadata stores information about a map
 type MapMetadata struct {
@@ -57,31 +59,60 @@ func pack(src image.Image, id, bucket string) (*MapMetadata, error) {
 	ioutil.WriteFile("./json.json", jbytez, os.ModePerm)
 
 	workerCount := math.Ceil(float64(len(tileConfigs)) / float64(tileConfigsPerWorker))
+	workerResponses := make(chan ProcessingResponse, int(workerCount))
+	workerErrors := []error{}
+	workerSem := make(chan bool, maxConcurrentWorkers)
 
-	workerResponses := make(chan ProcessingResponse)
+	fmt.Println("Running with", workerCount, "workers for", len(tileConfigs), "tiles")
 
 	for w := 0; w < int(workerCount); w++ {
+		workerSem <- true
+
 		configs := tileConfigs[w*tileConfigsPerWorker : int(math.Min(float64(len(tileConfigs)), float64((w+1)*tileConfigsPerWorker)))]
 
 		go func(cfgs []TileConfig, worker int) {
-			res, err := processTilesExternal(ProcessingRequest{
-				ID:     id,
-				Bucket: bucket,
-				Tiles:  cfgs,
-			})
+			defer func() { <-workerSem }()
+			fmt.Println("Starting worker", worker)
+
+			var res ProcessingResponse
+
+			err := retry.Do(func() error {
+				response, err := processTilesExternal(ProcessingRequest{
+					ID:     id,
+					Bucket: bucket,
+					Tiles:  cfgs,
+				})
+				if err != nil {
+					return err
+				}
+
+				res = response
+				return nil
+			}, retry.OnRetry(func(n uint, err error) {
+				fmt.Printf("Retrying worker %d: attempt %d, err: %+v\n", worker, n, err)
+			}))
 			if err != nil {
-				fmt.Println("ERR", err)
+				workerErrors = append(workerErrors, err)
+				fmt.Printf("Worker (%d) failed. %+v", worker, err)
+			} else {
+				fmt.Printf("Worker Done (%d) %.0f\n", worker, workerCount)
+				workerResponses <- res
 			}
 
-			fmt.Println("Worker", worker, "Done", workerCount)
-
-			workerResponses <- res
 		}(configs, w)
+	}
+
+	for i := 0; i < maxConcurrentWorkers; i++ {
+		workerSem <- true
 	}
 
 	responses := []ProcessingResponse{}
 	for w := 0; w < int(workerCount); w++ {
 		responses = append(responses, <-workerResponses)
+	}
+
+	if len(workerErrors) != 0 {
+		return nil, errors.New("Stopping processing due to worker error")
 	}
 
 	mapping, data, err := mergeProcessingResponses(responses...)
@@ -231,4 +262,3 @@ func mergeProcessingResponses(procResponses ...ProcessingResponse) (Mapping, []b
 
 	return mapping, data, nil
 }
-

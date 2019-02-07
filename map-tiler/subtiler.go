@@ -1,7 +1,7 @@
 package tiler
+
 import (
 	"bytes"
-	"fmt"
 	"image"
 	"image/png"
 
@@ -39,22 +39,3 @@ func GenerateTile(config TileConfig, source image.Image) (Tile, error) {
 		Data: b.Bytes(),
 	}, nil
 }
-
-// GenerateSubtiles does some stuff
-func GenerateSubtiles(tileConfigs []TileConfig, source image.Image) ([]Tile, error) {
-	fmt.Println("Generating Tiles", len(tileConfigs))
-
-	tiles := []Tile{}
-
-	for _, tcfg := range tileConfigs {
-		tile, err := GenerateTile(tcfg, source)
-		if err != nil {
-			return nil, err
-		}
-
-		tiles = append(tiles, tile)
-	}
-
-	return tiles, nil
-}
-

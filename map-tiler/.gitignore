@@ -18,3 +18,5 @@ tmp
 *.jpg
 
 .env
+
+*.zip
