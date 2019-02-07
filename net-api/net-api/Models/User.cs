@@ -26,6 +26,9 @@ namespace net_api.Models
         [JsonIgnore]
         public ICollection<Entity> Entities { get; set; }
 
+        [JsonIgnore]
+        public ICollection<Notification> Notifications { get; set; }
+
         public User()
         {
             CreatedAt = DateTime.UtcNow;

@@ -28,8 +28,23 @@ namespace net_api.Controllers
         public async Task<ActionResult<IEnumerable<Notification>>> GetNotifications()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.Notifications)
+                .FirstOrDefaultAsync();
 
-            return await _context.Notifications.Where(n => n.UserId == userId).ToListAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Include campaigns
+            await _context.Entry(user)
+                    .Collection(u => u.Notifications)
+                    .Query().OfType<CampaignNotification>()
+                    .Include(n => n.Campaign).LoadAsync();
+
+            return Ok(user.Notifications);
         }
 
         // PUT: api/Notifications/5

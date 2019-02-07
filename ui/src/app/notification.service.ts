@@ -55,7 +55,7 @@ export class NotificationService {
   }
 }
 
-export type Notification = INotification | ICampaignInviteNotification;
+export type Notification = INotification | ICampaignNotification;
 
 export interface INotification {
   id: string;
@@ -65,10 +65,7 @@ export interface INotification {
   createdAt: Date;
 }
 
-export interface ICampaignInviteNotification extends INotification {
+export interface ICampaignNotification extends INotification {
   campaignId: string;
   campaign?: ICampaign;
-  inviteUserId: string;
-  inviteUser?: IUser;
-  accepted?: boolean;
 }

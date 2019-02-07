@@ -33,4 +33,11 @@ namespace net_api.Models
         public Guid CampaignId { get; set; }
         public Campaign Campaign { get; set; }
     }
+
+    public class MapNotification : Notification
+    {
+        [Required]
+        public Guid MapId { get; set; }
+        public Map Map { get; set; }
+    }
 }

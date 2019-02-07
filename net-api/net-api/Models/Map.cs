@@ -58,6 +58,11 @@ namespace net_api.Models
                 MappingJson = JsonConvert.SerializeObject(value);
             }
         }
+
+        public bool ShouldSerializeMapping()
+        {
+            return false;
+        }
     }
 
     public enum MapStatus { Processing, Processed }

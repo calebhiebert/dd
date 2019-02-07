@@ -25,6 +25,7 @@ namespace net_api.Models
 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<CampaignNotification> CampaignInviteNotifications { get; set; }
+        public DbSet<MapNotification> MapNotifications { get; set; }
 
         public DbSet<ThingOfInterest> ThingsOfInterest { get; set; }
         public DbSet<Location> Locations { get; set; }

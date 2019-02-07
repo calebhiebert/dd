@@ -26,6 +26,20 @@
           </button>
         </div>
         <div class="column d-flex align-items-center">{{ n.message }}</div>
+
+        <!-- Campaign Related Notification Things -->
+        <div class="column col-auto" *ngIf="n.campaign !== null">
+          <button class="btn btn-sm btn-primary" (click)="viewCampaign(n)">
+            {{ n.campaign.name }} <i class="icon icon-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Map related notifications -->
+        <div class="column col-auto" *ngIf="n.mapId !== null">
+          <button class="btn btn-sm btn-primary" (click)="viewMap(m)">
+            View Map <i class="icon icon-arrow-right"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>

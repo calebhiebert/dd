@@ -1,4 +1,5 @@
 package tiler
+
 import (
 	"bytes"
 	"context"
@@ -60,15 +61,15 @@ func MakeTiles(ctx context.Context, e GCSEvent) error {
 		fmt.Println("\nWebhook request failed!")
 	}
 
-	// err = s3.RemoveObject(e.Bucket, e.Name)
-	// if err != nil {
-	// 	return err
-	// }
+	err = s3.RemoveObject(e.Bucket, e.Name)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
-// Processes a tile list
+// ProcessTileList processes a tile list
 func ProcessTileList(w http.ResponseWriter, r *http.Request) {
 	var req ProcessingRequest
 
@@ -161,4 +162,3 @@ func makeWebhookRequest(meta *MapMetadata) error {
 
 	return nil
 }
-
