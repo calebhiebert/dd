@@ -5,3 +5,6 @@ S3_BUCKET_NAME=CHANGEME
 
 # Called upon completed operation
 WEBHOOK_URL=http://changeme.com/api/maps/finished
+
+# External Processing function
+EXTERNAL_PROC_URL=http://localhost:8080

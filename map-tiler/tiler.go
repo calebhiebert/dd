@@ -2,9 +2,11 @@ package tiler
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"time"
@@ -19,8 +21,13 @@ type GCSEvent struct {
 	Name   string `json:"name"`
 }
 
+type ProcessingResponse struct {
+	Mapping Mapping `json:"mapping"`
+	Data    string  `json:"data"`
+}
+
 // Zoom levels must be powers of 2
-var zoomLevel0Pow2 = 9
+var zoomLevel0Pow2 = 8
 var zoomLevelCapPow2 = 15
 var tileSize = 256
 
@@ -38,13 +45,12 @@ func MakeTiles(ctx context.Context, e GCSEvent) error {
 		return err
 	}
 
-	obj, err := s3.GetObject(e.Bucket, e.Name, minio.GetObjectOptions{})
+	img, err := getPreparedImage(e.Name, e.Bucket)
 	if err != nil {
 		return err
 	}
-	defer obj.Close()
 
-	meta, err := packFile(obj, e.Name)
+	meta, err := pack(img, e.Name, e.Bucket)
 	if err != nil {
 		return err
 	}
@@ -60,6 +66,58 @@ func MakeTiles(ctx context.Context, e GCSEvent) error {
 	// }
 
 	return nil
+}
+
+// Processes a tile list
+func ProcessTileList(w http.ResponseWriter, r *http.Request) {
+	var req ProcessingRequest
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+		return
+	}
+
+	setupS3Client()
+
+	fmt.Println("Preparing image...")
+	image, err := getPreparedImage(req.ID, req.Bucket)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+		return
+	}
+	fmt.Println("Image Prepared")
+
+	fmt.Println("Processing Tiles")
+	mapping, data, err := processTiles(image, req.Tiles)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+		return
+	}
+	fmt.Println("Tiles Processed")
+
+	fmt.Println("Encoding Response")
+	base64String := base64.StdEncoding.EncodeToString(data)
+
+	response := ProcessingResponse{
+		Mapping: mapping,
+		Data:    base64String,
+	}
+
+	fmt.Println("Returning Response")
+
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(jsonResponse)))
+
+	_, err = io.Copy(w, bytes.NewReader(jsonResponse))
+	if err != nil {
+		fmt.Println("Error during response!", err)
+	}
 }
 
 func setupS3Client() error {

@@ -52,6 +52,8 @@ namespace net_api.Controllers
                     UserId = m.UserId,
                     MinZoom = 0,
                     MaxZoom = m.MaxZoom,
+                    Status = m.Status,
+                    PlayerVisible = m.PlayerVisible,
                     Name = m.Name,
                 })
                 .ToListAsync();

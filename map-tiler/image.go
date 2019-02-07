@@ -2,7 +2,11 @@ package tiler
 import (
 	"fmt"
 	"image"
+	"image/color"
 	"math"
+
+	"github.com/disintegration/imaging"
+	minio "github.com/minio/minio-go"
 )
 
 // ImageDetails contains verious helpers to calculate image things
@@ -56,7 +60,7 @@ func GetTileConfig(source image.Image) []TileConfig {
 	img := GetImageDetails(source)
 	tileConfigs := []TileConfig{}
 
-	for z := zoomLevel0Pow2; z < img.maxZoomLevelPow2(); z++ {
+	for z := zoomLevel0Pow2; z < img.maxZoomLevelPow2()+1; z++ {
 		zoomSize := int(math.Pow(2, float64(z)))
 
 		xTiles := zoomSize / tileSize
@@ -65,7 +69,7 @@ func GetTileConfig(source image.Image) []TileConfig {
 		// the ratio will convert between "tile size" and the actual size of the image
 		ratio := float64(img.topDimension()) / float64(zoomSize)
 
-		fmt.Println(zoomSize, xTiles, yTiles, ratio, z, img.maxZoomLevelPow2())
+		fmt.Printf("%d (%.2f) %dx%d\n", zoomSize, ratio, xTiles, yTiles)
 
 		// Cut out the tiles
 		for x := 0; x < xTiles; x++ {
@@ -100,5 +104,29 @@ func GetTileConfig(source image.Image) []TileConfig {
 	}
 
 	return tileConfigs
+}
+
+func getPreparedImage(id, bucket string) (image.Image, error) {
+	setupS3Client()
+
+	obj, err := s3.GetObject(bucket, id, minio.GetObjectOptions{})
+	if err != nil {
+		return nil, err
+	}
+	defer obj.Close()
+
+	// Decode the image
+	img, err := imaging.Decode(obj)
+	if err != nil {
+		return nil, err
+	}
+
+	details := GetImageDetails(img)
+
+	// Create a new square image and paste the old one into it
+	boxImage := imaging.New(details.topDimension(), details.topDimension(), color.NRGBA{0, 0, 0, 1})
+	src := imaging.PasteCenter(boxImage, img)
+
+	return src, nil
 }
 

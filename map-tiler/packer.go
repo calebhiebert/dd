@@ -2,89 +2,104 @@ package tiler
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"image"
-	"image/color"
-	"io"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"time"
 
-	"github.com/disintegration/imaging"
 	minio "github.com/minio/minio-go"
 )
 
+var tileConfigsPerSet = 2000
+
 // MapMetadata stores information about a map
 type MapMetadata struct {
-	ID      string           `json:"id"`
-	Mapping map[string][]int `json:"mapping"`
-	MinZoom int              `json:"minZoom"`
-	MaxZoom int              `json:"maxZoom"`
+	ID      string  `json:"id"`
+	Mapping Mapping `json:"mapping"`
+	MinZoom int     `json:"minZoom"`
+	MaxZoom int     `json:"maxZoom"`
 }
+
+type ProcessingRequest struct {
+	ID     string       `json:"id"`
+	Bucket string       `json:"bucket"`
+	Tiles  []TileConfig `json:"tiles"`
+}
+
+// Mapping contains data about tiles
+type Mapping map[string][]int
 
 // TileConfig configuration for cutting out a tile
 type TileConfig struct {
-	ZoomLevel int
-	ZoomSize  int
-	X1        int
-	X2        int
-	Y1        int
-	Y2        int
-	TileX     int
-	TileY     int
+	ZoomLevel int `json:"z"`
+	ZoomSize  int `json:"s"`
+	X1        int `json:"x"`
+	X2        int `json:"x2"`
+	Y1        int `json:"y"`
+	Y2        int `json:"y2"`
+	TileX     int `json:"tx"`
+	TileY     int `json:"ty"`
 }
 
 // pack will pack up the image and upload it to s3
-func pack(src image.Image, id string) (*MapMetadata, error) {
+func pack(src image.Image, id, bucket string) (*MapMetadata, error) {
 	img := GetImageDetails(src)
-
-	// Create a new square image and paste the old one into it
-	boxImage := imaging.New(img.topDimension(), img.topDimension(), color.NRGBA{0, 0, 0, 0})
-	src = imaging.PasteCenter(boxImage, src)
-
 	tileConfigs := GetTileConfig(src)
+
+	jbytez, _ := json.Marshal(tileConfigs)
+
+	ioutil.WriteFile("./json.json", jbytez, os.ModePerm)
 
 	// Create a metadata object to store file information
 	var meta MapMetadata
-	meta.Mapping = make(map[string][]int)
 	meta.MaxZoom = img.maxZoomLevelPow2() - zoomLevel0Pow2
 	meta.MinZoom = 0
 	meta.ID = id
 
-	sem := make(chan int, 4)
-	tiles := make(chan Tile, len(tileConfigs))
+	var tileData []byte
 
-	byteCursor := 0
+	// if len(tileConfigs) <= tileConfigsPerSet {
+	// 	mapping, data, err := processTiles(src, tileConfigs)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
 
-	for _, tile := range tileConfigs {
-		sem <- 1
-		go func() {
-			t, err := GenerateTile(tile, src)
-			if err != nil {
-				fmt.Println(err)
-			}
+	// 	meta.Mapping = mapping
+	// 	tileData = data
+	// } else {
 
-			tiles <- t
-			<-sem
-		}()
+	// }
+
+	res, err := processTilesExternal(ProcessingRequest{
+		ID:     id,
+		Bucket: bucket,
+		Tiles:  tileConfigs,
+	})
+	if err != nil {
+		fmt.Println("ERR", err)
 	}
 
-	// Wait for rest of semaphore
-	for i := 0; i < cap(sem); i++ {
-		sem <- 1
+	mapping, data, err := mergeProcessingResponses(res)
+	if err != nil {
+		return nil, err
 	}
 
-	packData := []byte{}
+	meta.Mapping = mapping
+	tileData = data
 
-	for t := range tiles {
-		meta.Mapping[fmt.Sprintf("%d_%d_%d", t.Z, t.X, t.Y)] = []int{byteCursor, byteCursor + len(t.Data)}
-		packData = append(packData, t.Data...)
-		byteCursor += len(t.Data)
-	}
+	fmt.Println("Starting Upload", len(tileData))
 
-	fmt.Println("Starting Upload")
-
-	_, err := s3.PutObject(bucketName, id+".map", bytes.NewReader(packData), -1, minio.PutObjectOptions{
+	_, err = s3.PutObject(bucketName, id+".map", bytes.NewReader(tileData), -1, minio.PutObjectOptions{
 		ContentType: "application/x-packmap",
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	fmt.Println("Upload Complete")
 
@@ -105,20 +120,108 @@ func pack(src image.Image, id string) (*MapMetadata, error) {
 	return &meta, nil
 }
 
-// packFile takes an uploaded file and begins the tiling process
-func packFile(file io.Reader, id string) (*MapMetadata, error) {
+func processTiles(src image.Image, tileConfigs []TileConfig) (Mapping, []byte, error) {
+	fmt.Println("Processing Tiles", len(tileConfigs))
 
-	// Decode the image
-	img, err := imaging.Decode(file)
-	if err != nil {
-		return nil, err
+	sem := make(chan int, 4)
+	tiles := make(chan Tile, len(tileConfigs))
+
+	byteCursor := 0
+
+	for _, tile := range tileConfigs {
+		sem <- 1
+		go func(tile TileConfig, src image.Image) {
+			t, err := GenerateTile(tile, src)
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			tiles <- t
+			<-sem
+		}(tile, src)
 	}
 
-	// Pack the tiles and retrieve the meta object
-	meta, err := pack(img, id)
-	if err != nil {
-		return nil, err
+	// Wait for rest of semaphore
+	for i := 0; i < cap(sem); i++ {
+		sem <- 1
 	}
 
-	return meta, nil
+	close(tiles)
+
+	packData := []byte{}
+	mapping := Mapping{}
+
+	for t := range tiles {
+		mapping[fmt.Sprintf("%d_%d_%d", t.Z, t.X, t.Y)] = []int{byteCursor, byteCursor + len(t.Data)}
+		packData = append(packData, t.Data...)
+		byteCursor += len(t.Data)
+	}
+
+	return mapping, packData, nil
 }
+
+func processTilesExternal(req ProcessingRequest) (ProcessingResponse, error) {
+	client := &http.Client{
+		Timeout: 400 * time.Second,
+	}
+
+	jsonBytes, err := json.Marshal(req)
+	if err != nil {
+		return ProcessingResponse{}, err
+	}
+
+	httpRequest, err := http.NewRequest("POST", os.Getenv("EXTERNAL_PROC_URL"), bytes.NewReader(jsonBytes))
+	if err != nil {
+		return ProcessingResponse{}, err
+	}
+
+	resp, err := client.Do(httpRequest)
+	if err != nil {
+		return ProcessingResponse{}, err
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return ProcessingResponse{}, err
+	}
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return ProcessingResponse{}, errors.New(string(body))
+	}
+
+	var procResponse ProcessingResponse
+
+	err = json.Unmarshal(body, &procResponse)
+	if err != nil {
+		return ProcessingResponse{}, err
+	}
+
+	return procResponse, nil
+}
+
+func mergeProcessingResponses(procResponses ...ProcessingResponse) (Mapping, []byte, error) {
+	mapping := Mapping{}
+	data := []byte{}
+
+	byteCursor := 0
+
+	for _, res := range procResponses {
+		byteData, err := base64.StdEncoding.DecodeString(res.Data)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		data = append(data, byteData...)
+
+		for k, v := range res.Mapping {
+			mapping[k] = []int{v[0] + byteCursor, v[1] + byteCursor}
+		}
+
+		byteCursor += len(byteData)
+	}
+
+	return mapping, data, nil
+}
+
