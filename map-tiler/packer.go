@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"image"
 	"io/ioutil"
+	"math"
 	"net/http"
 	"os"
 	"time"
@@ -15,7 +16,7 @@ import (
 	minio "github.com/minio/minio-go"
 )
 
-var tileConfigsPerSet = 2000
+var tileConfigsPerWorker = 100
 
 // MapMetadata stores information about a map
 type MapMetadata struct {
@@ -51,43 +52,49 @@ func pack(src image.Image, id, bucket string) (*MapMetadata, error) {
 	img := GetImageDetails(src)
 	tileConfigs := GetTileConfig(src)
 
-	jbytez, _ := json.Marshal(tileConfigs)
+	jbytez, _ := json.Marshal(tileConfigs[:100])
 
 	ioutil.WriteFile("./json.json", jbytez, os.ModePerm)
 
+	workerCount := math.Ceil(float64(len(tileConfigs)) / float64(tileConfigsPerWorker))
+
+	workerResponses := make(chan ProcessingResponse)
+
+	for w := 0; w < int(workerCount); w++ {
+		configs := tileConfigs[w*tileConfigsPerWorker : int(math.Min(float64(len(tileConfigs)), float64((w+1)*tileConfigsPerWorker)))]
+
+		go func(cfgs []TileConfig, worker int) {
+			res, err := processTilesExternal(ProcessingRequest{
+				ID:     id,
+				Bucket: bucket,
+				Tiles:  cfgs,
+			})
+			if err != nil {
+				fmt.Println("ERR", err)
+			}
+
+			fmt.Println("Worker", worker, "Done", workerCount)
+
+			workerResponses <- res
+		}(configs, w)
+	}
+
+	responses := []ProcessingResponse{}
+	for w := 0; w < int(workerCount); w++ {
+		responses = append(responses, <-workerResponses)
+	}
+
+	mapping, data, err := mergeProcessingResponses(responses...)
+	if err != nil {
+		return nil, err
+	}
+
+	var tileData []byte
 	// Create a metadata object to store file information
 	var meta MapMetadata
 	meta.MaxZoom = img.maxZoomLevelPow2() - zoomLevel0Pow2
 	meta.MinZoom = 0
 	meta.ID = id
-
-	var tileData []byte
-
-	// if len(tileConfigs) <= tileConfigsPerSet {
-	// 	mapping, data, err := processTiles(src, tileConfigs)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-
-	// 	meta.Mapping = mapping
-	// 	tileData = data
-	// } else {
-
-	// }
-
-	res, err := processTilesExternal(ProcessingRequest{
-		ID:     id,
-		Bucket: bucket,
-		Tiles:  tileConfigs,
-	})
-	if err != nil {
-		fmt.Println("ERR", err)
-	}
-
-	mapping, data, err := mergeProcessingResponses(res)
-	if err != nil {
-		return nil, err
-	}
 
 	meta.Mapping = mapping
 	tileData = data
