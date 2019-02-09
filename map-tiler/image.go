@@ -1,9 +1,7 @@
-package tiler
-
+package main
 import (
 	"fmt"
 	"image"
-	"image/color"
 	"math"
 
 	"github.com/disintegration/imaging"
@@ -49,6 +47,7 @@ func (d ImageDetails) yUpperBound() int {
 	return ((d.topDimension() - d.Height) / 2) + d.Height
 }
 
+// GetImageDetails Returns an interface that can be used to calculate image details
 func GetImageDetails(img image.Image) ImageDetails {
 	return ImageDetails{
 		Width:  img.Bounds().Dx(),
@@ -57,18 +56,17 @@ func GetImageDetails(img image.Image) ImageDetails {
 }
 
 // GetTileConfig returns a list of all tiles that need to be made
-func GetTileConfig(source image.Image) []TileConfig {
-	img := GetImageDetails(source)
+func GetTileConfig(details ImageDetails) []TileConfig {
 	tileConfigs := []TileConfig{}
 
-	for z := zoomLevel0Pow2; z < img.maxZoomLevelPow2()+1; z++ {
+	for z := zoomLevel0Pow2; z < details.maxZoomLevelPow2()+1; z++ {
 		zoomSize := int(math.Pow(2, float64(z)))
 
 		xTiles := zoomSize / tileSize
 		yTiles := zoomSize / tileSize
 
 		// the ratio will convert between "tile size" and the actual size of the image
-		ratio := float64(img.topDimension()) / float64(zoomSize)
+		ratio := float64(details.topDimension()) / float64(zoomSize)
 
 		fmt.Printf("%d (%.2f) %dx%d\n", zoomSize, ratio, xTiles, yTiles)
 
@@ -83,20 +81,20 @@ func GetTileConfig(source image.Image) []TileConfig {
 				y2 := float64((y + 1) * tileSize)
 
 				// Skip tile generation if the tile is outside the bounds
-				if int(math.Ceil(x2*ratio)) < img.xLowerBound() ||
-					int(math.Floor(x1*ratio)) > img.xUpperBound() ||
-					int(math.Ceil(y2*ratio)) < img.yLowerBound() ||
-					int(math.Floor(y1*ratio)) > img.yUpperBound() {
+				if int(math.Ceil(x2*ratio)) < details.xLowerBound() ||
+					int(math.Floor(x1*ratio)) > details.xUpperBound() ||
+					int(math.Ceil(y2*ratio)) < details.yLowerBound() ||
+					int(math.Floor(y1*ratio)) > details.yUpperBound() {
 					continue
 				}
 
 				tileConfigs = append(tileConfigs, TileConfig{
 					ZoomLevel: z - zoomLevel0Pow2,
 					ZoomSize:  zoomSize,
-					X1:        int(x1 * ratio),
-					X2:        int(x2 * ratio),
-					Y1:        int(y1 * ratio),
-					Y2:        int(y2 * ratio),
+					X1:        int(x1*ratio) - details.xLowerBound(),
+					X2:        int(x2*ratio) - details.xLowerBound(),
+					Y1:        int(y1*ratio) - details.yLowerBound(),
+					Y2:        int(y2*ratio) - details.yLowerBound(),
 					TileX:     x,
 					TileY:     y,
 				})
@@ -107,7 +105,8 @@ func GetTileConfig(source image.Image) []TileConfig {
 	return tileConfigs
 }
 
-func getPreparedImage(id, bucket string) (image.Image, error) {
+// GetPreparedImage Downloads an image from an S3 bucket and prepares it for processing
+func GetPreparedImage(id, bucket string) (image.Image, error) {
 	obj, err := s3.GetObject(bucket, id, minio.GetObjectOptions{})
 	if err != nil {
 		return nil, err
@@ -120,11 +119,6 @@ func getPreparedImage(id, bucket string) (image.Image, error) {
 		return nil, err
 	}
 
-	details := GetImageDetails(img)
-
-	// Create a new square image and paste the old one into it
-	boxImage := imaging.New(details.topDimension(), details.topDimension(), color.NRGBA{0, 0, 0, 1})
-	img = imaging.PasteCenter(boxImage, img)
-
 	return img, nil
 }
+

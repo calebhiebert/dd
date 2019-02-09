@@ -1,18 +1,18 @@
-package tiler
-
+package main
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"runtime"
 	"time"
 
 	minio "github.com/minio/minio-go"
+	"github.com/vmihailenco/msgpack"
 )
 
 // GCSEvent is the payload of a GCS event. Please refer to the docs for
@@ -23,8 +23,8 @@ type GCSEvent struct {
 }
 
 type ProcessingResponse struct {
-	Mapping Mapping `json:"mapping"`
-	Data    string  `json:"data"`
+	M Mapping `json:"mapping"`
+	D []byte  `json:"data"`
 }
 
 // Zoom levels must be powers of 2
@@ -41,17 +41,23 @@ var s3 *minio.Client
 
 // MakeTiles will download the stuff from s3 and make the tiles
 func MakeTiles(ctx context.Context, e GCSEvent) error {
-	err := setupS3Client()
+	err := SetupS3Client()
 	if err != nil {
 		return err
 	}
 
-	img, err := getPreparedImage(e.Name, e.Bucket)
+	img, err := GetPreparedImage(e.Name, e.Bucket)
 	if err != nil {
 		return err
 	}
 
-	meta, err := pack(img, e.Name, e.Bucket)
+	details := GetImageDetails(img)
+
+	// Clear the image and garbage collect it to save on ram
+	img = nil
+	runtime.GC()
+
+	meta, err := pack(details, e.Name, e.Bucket)
 	if err != nil {
 		return err
 	}
@@ -79,10 +85,10 @@ func ProcessTileList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	setupS3Client()
+	SetupS3Client()
 
 	fmt.Println("Preparing image...")
-	image, err := getPreparedImage(req.ID, req.Bucket)
+	image, err := GetPreparedImage(req.ID, req.Bucket)
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
 		return
@@ -98,30 +104,23 @@ func ProcessTileList(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Tiles Processed")
 
 	fmt.Println("Encoding Response")
-	base64String := base64.StdEncoding.EncodeToString(data)
-
-	response := ProcessingResponse{
-		Mapping: mapping,
-		Data:    base64String,
-	}
+	b, err := msgpack.Marshal(&ProcessingResponse{
+		M: mapping,
+		D: data,
+	})
 
 	fmt.Println("Returning Response")
 
-	jsonResponse, err := json.Marshal(response)
-	if err != nil {
-		fmt.Fprintf(w, err.Error())
-	}
+	w.Header().Set("Content-Type", "application/msgpack")
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(b)))
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(jsonResponse)))
-
-	_, err = io.Copy(w, bytes.NewReader(jsonResponse))
+	_, err = io.Copy(w, bytes.NewReader(b))
 	if err != nil {
 		fmt.Println("Error during response!", err)
 	}
 }
 
-func setupS3Client() error {
+func SetupS3Client() error {
 	if s3 != nil {
 		return nil
 	}
@@ -162,3 +161,4 @@ func makeWebhookRequest(meta *MapMetadata) error {
 
 	return nil
 }
+

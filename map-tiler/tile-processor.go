@@ -1,8 +1,7 @@
-package tiler
+package main
 
 import (
 	"bytes"
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,10 +14,8 @@ import (
 
 	"github.com/avast/retry-go"
 	minio "github.com/minio/minio-go"
+	"github.com/vmihailenco/msgpack"
 )
-
-var tileConfigsPerWorker = 325
-var maxConcurrentWorkers = 15
 
 // MapMetadata stores information about a map
 type MapMetadata struct {
@@ -50,13 +47,8 @@ type TileConfig struct {
 }
 
 // pack will pack up the image and upload it to s3
-func pack(src image.Image, id, bucket string) (*MapMetadata, error) {
-	img := GetImageDetails(src)
-	tileConfigs := GetTileConfig(src)
-
-	jbytez, _ := json.Marshal(tileConfigs[:100])
-
-	ioutil.WriteFile("./json.json", jbytez, os.ModePerm)
+func pack(details ImageDetails, id, bucket string) (*MapMetadata, error) {
+	tileConfigs := GetTileConfig(details)
 
 	workerCount := math.Ceil(float64(len(tileConfigs)) / float64(tileConfigsPerWorker))
 	workerResponses := make(chan ProcessingResponse, int(workerCount))
@@ -106,13 +98,13 @@ func pack(src image.Image, id, bucket string) (*MapMetadata, error) {
 		workerSem <- true
 	}
 
+	if len(workerErrors) != 0 {
+		return nil, errors.New("Stopping processing due to worker error")
+	}
+
 	responses := []ProcessingResponse{}
 	for w := 0; w < int(workerCount); w++ {
 		responses = append(responses, <-workerResponses)
-	}
-
-	if len(workerErrors) != 0 {
-		return nil, errors.New("Stopping processing due to worker error")
 	}
 
 	mapping, data, err := mergeProcessingResponses(responses...)
@@ -123,7 +115,7 @@ func pack(src image.Image, id, bucket string) (*MapMetadata, error) {
 	var tileData []byte
 	// Create a metadata object to store file information
 	var meta MapMetadata
-	meta.MaxZoom = img.maxZoomLevelPow2() - zoomLevel0Pow2
+	meta.MaxZoom = details.maxZoomLevelPow2() - zoomLevel0Pow2
 	meta.MinZoom = 0
 	meta.ID = id
 
@@ -231,7 +223,7 @@ func processTilesExternal(req ProcessingRequest) (ProcessingResponse, error) {
 
 	var procResponse ProcessingResponse
 
-	err = json.Unmarshal(body, &procResponse)
+	err = msgpack.Unmarshal(body, &procResponse)
 	if err != nil {
 		return ProcessingResponse{}, err
 	}
@@ -246,19 +238,15 @@ func mergeProcessingResponses(procResponses ...ProcessingResponse) (Mapping, []b
 	byteCursor := 0
 
 	for _, res := range procResponses {
-		byteData, err := base64.StdEncoding.DecodeString(res.Data)
-		if err != nil {
-			return nil, nil, err
-		}
+		data = append(data, res.D...)
 
-		data = append(data, byteData...)
-
-		for k, v := range res.Mapping {
+		for k, v := range res.M {
 			mapping[k] = []int{v[0] + byteCursor, v[1] + byteCursor}
 		}
 
-		byteCursor += len(byteData)
+		byteCursor += len(res.D)
 	}
 
 	return mapping, data, nil
 }
+

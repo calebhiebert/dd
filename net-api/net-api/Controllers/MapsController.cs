@@ -10,14 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
 using Amazon.S3;
-using Amazon.Runtime;
 using Amazon.S3.Model;
 using System.IO;
 using Newtonsoft.Json;
-using System.Security.Cryptography;
-using System.Text;
-using Google.Cloud.Storage.V1;
-using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.SignalR;
 
 namespace net_api.Controllers
@@ -27,7 +22,6 @@ namespace net_api.Controllers
     public class MapsController : ControllerBase
     {
         private static AmazonS3Client _S3;
-        private static StorageClient _Storage;
 
         private readonly Context _context;
         private readonly IHubContext<UpdateHub> _hub;
@@ -212,14 +206,12 @@ namespace net_api.Controllers
 
             var id = Guid.NewGuid();
 
-            var uploader = Storage.CreateObjectUploader(
-                Environment.GetEnvironmentVariable("S3_INGEST_BUCKET_NAME"),
-                id.ToString(),
-                file.ContentType,
-                file.OpenReadStream()
-                );
+            var putRequest = new PutObjectRequest();
+            putRequest.BucketName = Environment.GetEnvironmentVariable("S3_INGEST_BUCKET_NAME");
+            putRequest.InputStream = file.OpenReadStream();
+            putRequest.Key = id.ToString();
 
-            var progress = await uploader.UploadAsync();
+            var putResult = await S3.PutObjectAsync(putRequest);
 
             var map = new Map
             {
@@ -250,8 +242,12 @@ namespace net_api.Controllers
 
             try
             {
-                await Storage.DeleteObjectAsync(Environment.GetEnvironmentVariable("S3_BUCKET_NAME"), $"{id.ToString()}.map");
-                await Storage.DeleteObjectAsync(Environment.GetEnvironmentVariable("S3_BUCKET_NAME"), $"{id.ToString()}.json");
+                var deleteRequest = new DeleteObjectsRequest();
+                deleteRequest.BucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME");
+                deleteRequest.AddKey($"{id.ToString()}.map");
+                deleteRequest.AddKey($"{id.ToString()}.json");
+
+                await S3.DeleteObjectsAsync(deleteRequest);
             } catch(Exception ex)
             {
                 Console.WriteLine("Error during map delete", ex.Message);
@@ -266,21 +262,6 @@ namespace net_api.Controllers
         private bool MapExists(Guid id)
         {
             return _context.Maps.Any(e => e.Id == id);
-        }
-
-        private StorageClient Storage
-        {
-            get
-            {
-                if (_Storage == null)
-                {
-
-                    _Storage = StorageClient
-                        .Create(credential: GoogleCredential.FromJson(Environment.GetEnvironmentVariable("STORAGE_SERVICE_ACCOUNT")));
-                }
-
-                return _Storage;
-            }
         }
 
         private AmazonS3Client S3
