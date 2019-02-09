@@ -3,6 +3,7 @@ import { IUser } from './user.service';
 import { ICampaign } from './campaign.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { IMap } from './map.service';
 
 @Injectable({
   providedIn: 'root',
@@ -55,7 +56,10 @@ export class NotificationService {
   }
 }
 
-export type Notification = INotification | ICampaignNotification;
+export type Notification =
+  | INotification
+  | ICampaignNotification
+  | IMapNotification;
 
 export interface INotification {
   id: string;
@@ -68,4 +72,9 @@ export interface INotification {
 export interface ICampaignNotification extends INotification {
   campaignId: string;
   campaign?: ICampaign;
+}
+
+export interface IMapNotification extends ICampaignNotification {
+  mapId: string;
+  map?: IMap;
 }

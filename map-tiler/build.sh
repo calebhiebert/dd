@@ -1,4 +1,2 @@
-mkdir ./dist
-GOOS=linux go build -ldflags '-w -s' -o ./dist/build
-$GOPATH/bin/build-lambda-zip.exe -o dist.zip ./dist/build
-rm -rf ./dist
+mkdir dist
+GOOS=linux CGO_ENABLED=1 go build -ldflags '-w -s' -o ./dist/build

@@ -3,6 +3,7 @@ import {
   NotificationService,
   Notification,
   ICampaignNotification,
+  IMapNotification,
 } from '../notification.service';
 import { Router } from '@angular/router';
 
@@ -25,6 +26,10 @@ export class NotificationsComponent implements OnInit {
 
   public viewCampaign(n: ICampaignNotification) {
     this.router.navigate(['campaigns', n.campaignId, 'landing']);
+  }
+
+  public viewMap(m: IMapNotification) {
+    this.router.navigate(['campaigns', m.campaignId, 'maps', m.mapId]);
   }
 
   public get notifications() {

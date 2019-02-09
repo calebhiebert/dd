@@ -100,6 +100,7 @@ func HandleTileProcessing(ctx context.Context, req events.APIGatewayProxyRequest
 
 	SetupS3Client()
 
+	fmt.Println("I am worker", procRequest.WorkerID)
 	fmt.Println("Preparing image...")
 	image, err := GetPreparedImage(procRequest.ID, procRequest.Bucket)
 	if err != nil {
@@ -127,6 +128,15 @@ func HandleTileProcessing(ctx context.Context, req events.APIGatewayProxyRequest
 	response.StatusCode = 200
 	response.Headers = make(map[string]string)
 	response.Headers["Content-Type"] = "application/msgpack"
+
+	logmem()
+	fmt.Println("Cleaning Up Memory")
+	b = nil
+	mapping = nil
+	data = nil
+	image = nil
+	runtime.GC()
+	logmem()
 
 	fmt.Println("Encoded Body Size", len(responseBase64), "bytes")
 	fmt.Println("Actual Body Size", len(b), "bytes")
@@ -175,5 +185,11 @@ func makeWebhookRequest(meta *MapMetadata) error {
 	}
 
 	return nil
+}
+
+func logmem() {
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	fmt.Println("MemUsage", m.Sys/1024/1024, "MiB")
 }
 

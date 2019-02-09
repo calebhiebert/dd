@@ -38,8 +38,11 @@
         </div>
 
         <!-- Map related notifications -->
-        <div class="column col-auto" *ngIf="n.mapId !== null">
-          <button class="btn btn-sm btn-primary" (click)="viewMap(m)">
+        <div
+          class="column col-auto"
+          *ngIf="n.mapId !== null && n.mapId !== undefined"
+        >
+          <button class="btn btn-sm btn-primary" (click)="viewMap(n)">
             View Map <i class="icon icon-arrow-right"></i>
           </button>
         </div>

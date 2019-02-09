@@ -14,7 +14,7 @@ COPY . .
 RUN go get ./...
 
 # Build the app
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix nocgo -ldflags="-w -s" -o /go/bin/map-tiler
+RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -a -ldflags="-w -s" -o /go/bin/map-tiler
 
 # Start from a scratch container for a nice and small image
 FROM golang

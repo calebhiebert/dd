@@ -1,8 +1,8 @@
 package main
 import (
-	"bytes"
 	"image"
 
+	"github.com/chai2010/webp"
 	"github.com/disintegration/imaging"
 )
 
@@ -34,11 +34,7 @@ func GenerateTile(config TileConfig, source image.Image) (Tile, error) {
 		tile = imaging.Resize(tile, tileSize, tileSize, imaging.Linear)
 	}
 
-	// Create a buffer to hold the encoded tile
-	var b bytes.Buffer
-
-	// Encode the image into the buffer
-	err := imaging.Encode(&b, tile, imaging.JPEG, imaging.JPEGQuality(80))
+	data, err := webp.EncodeLosslessRGB(tile)
 	if err != nil {
 		return Tile{}, err
 	}
@@ -47,7 +43,7 @@ func GenerateTile(config TileConfig, source image.Image) (Tile, error) {
 		Z:    config.ZoomLevel,
 		X:    config.TileX,
 		Y:    config.TileY,
-		Data: b.Bytes(),
+		Data: data,
 	}, nil
 }
 

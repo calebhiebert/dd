@@ -18,3 +18,9 @@ tmp
 *.jpg
 
 .env
+
+*.zip
+
+memtest
+
+dist

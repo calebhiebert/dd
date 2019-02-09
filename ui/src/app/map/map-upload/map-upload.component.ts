@@ -11,9 +11,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./map-upload.component.css'],
 })
 export class MapUploadComponent implements OnInit {
-  public fileError: string;
+  public fileError: string = null;
   public uploadProgress: number;
-  public file: any;
+  public file: File;
   public isUploading = false;
   public mapId: string = null;
 
@@ -42,10 +42,19 @@ export class MapUploadComponent implements OnInit {
   }
 
   public onFileChange(event: Event) {
+    this.fileError = null;
     const files = (event.target as HTMLInputElement).files;
 
     if (files.length > 0) {
       this.file = files[0];
+
+      if (this.file.size > 50000000) {
+        this.fileError = 'Size cannot exceed 50mb';
+      } else if (
+        ['image/png', 'image/jpg', 'image/jpeg'].indexOf(this.file.type) === -1
+      ) {
+        this.fileError = 'Image file must be a .png or a .jpg';
+      }
     }
   }
 

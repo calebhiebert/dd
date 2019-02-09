@@ -1,16 +1,11 @@
-import {
-  Component,
-  OnInit,
-  ElementRef,
-  ViewChild,
-  AfterViewInit,
-} from '@angular/core';
-import Leaflet from 'leaflet';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import L from 'leaflet';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { MapService, IMap } from '../map.service';
 import { MapEditorMenuComponent } from './map-editor-menu/map-editor-menu.component';
 import { CampaignService } from '../campaign.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'dd-map',
@@ -30,12 +25,13 @@ export class MapComponent implements AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private mapService: MapService,
     private campaignService: CampaignService
   ) {}
 
   ngAfterViewInit() {
-    this.route.paramMap.subscribe(async (params) => {
+    this.route.paramMap.subscribe((params) => {
       this.loadMap(params.get('m_id'));
     });
   }
@@ -54,28 +50,29 @@ export class MapComponent implements AfterViewInit {
       throw err;
     }
 
-    this.loading = false;
+    setTimeout(() => {
+      this.loading = false;
+    }, 1);
   }
 
   private constructMap() {
-    const map = Leaflet.map(this.map.nativeElement, {
-      crs: Leaflet.CRS.Simple,
+    const map = L.map(this.map.nativeElement, {
+      crs: L.CRS.Simple,
       maxBounds: [[0, 0], [-256, 256]],
     });
 
-    Leaflet.control.scale().addTo(map);
-
     map.on('contextmenu', (e) => {
-      this.editor.showMenu().then(() => {
-        const marker = new Leaflet.Marker(e.latlng).addTo(map);
-
-        marker.bindPopup('Example Marker');
+      this.editor.showMenu().then((operation) => {
+        if (operation != null) {
+          const marker = new L.Marker(e.latlng).addTo(map);
+          marker.bindPopup('Example Marker');
+        }
       });
     });
 
     map.setView([0, 0], 1);
 
-    Leaflet.tileLayer(`${environment.apiURL}/maps/{id}/tile/{z}/{x}/{y}`, {
+    L.tileLayer(`${environment.apiURL}/maps/{id}/tile/{z}/{x}/{y}`, {
       maxZoom: this._map.maxZoom,
       minZoom: this._map.minZoom,
       bounds: [[0, 0], [-256, 256]],
@@ -84,10 +81,17 @@ export class MapComponent implements AfterViewInit {
   }
 
   public async delete() {
-    try {
-      await this.mapService.deleteMap(this._map.id);
-    } catch (err) {
-      throw err;
+    if (await Swal.fire({ title: 'Are you sure?', showCancelButton: true })) {
+      try {
+        await this.mapService.deleteMap(this._map.id);
+        this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'maps',
+        ]);
+      } catch (err) {
+        throw err;
+      }
     }
   }
 

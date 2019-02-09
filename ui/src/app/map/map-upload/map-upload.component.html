@@ -1,5 +1,9 @@
 <div class="container grid-xl">
-  <h3>Upload Map</h3>
+  <h3>Create Map</h3>
+  <p>
+    A map can be any .png or .jpg image. Maps can be up to 30,000px wide, and
+    30,000px tall. The image file can be up to 50mb.
+  </p>
 
   <form
     (ngSubmit)="submit()"
@@ -34,7 +38,8 @@
       class="form-group"
       [ngClass]="{
         'has-error':
-          fileControl.invalid && (fileControl.touched || fileControl.dirty)
+          (fileControl.invalid && (fileControl.touched || fileControl.dirty)) ||
+          fileError !== null
       }"
     >
       <label class="form-label" for="map-upload">Choose Image</label>
@@ -43,21 +48,22 @@
         type="file"
         class="form-input"
         accept="image/*"
-        id="map-upload"
         name="map-upload"
-        class="file-input"
         (change)="onFileChange($event)"
         formControlName="file"
       />
+      <p class="form-input-hint" *ngIf="fileError !== null">
+        {{ fileError }}
+      </p>
     </div>
 
-    <button class="btn btn-primary">Upload Map</button>
+    <button class="btn btn-primary mt-2">Upload</button>
   </form>
 
   <!-- Upload Progress -->
   <div *ngIf="isUploading">
     <h5 *ngIf="uploadProgress < 100">Uploading Map</h5>
-    <h5 *ngIf="uploadProgress === 100">Processing Map</h5>
+    <h5 *ngIf="uploadProgress === 100">Getting Ready</h5>
     <progress
       class="progress"
       [value]="uploadProgress"
@@ -74,8 +80,7 @@
   <div *ngIf="mapId">
     <h5>Your map is processing!</h5>
     <p>
-      This should not take more than 5 minutes, you will receive a notification
-      when it is complete
+      You will receive a notification when it is ready
     </p>
   </div>
 </div>

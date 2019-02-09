@@ -108,10 +108,12 @@ namespace net_api.Controllers
             _context.Entry(map).State = EntityState.Modified;
 
             // Create notification
-            var notification = new Notification
+            var notification = new MapNotification
             {
                 UserId = map.UserId,
-                Message = $"The map {map.Name} has finished processing and is now ready for use"
+                Message = $"The map {map.Name} has finished processing and is now ready for use",
+                MapId = map.Id,
+                CampaignId = map.CampaignId
             };
 
             _context.Notifications.Add(notification);
@@ -165,7 +167,7 @@ namespace net_api.Controllers
 
             Response.Headers.Add("Cache-Control", "max-age=31557600");
 
-            return File(bytes, "image/png");
+            return File(bytes, "image/webp");
         }
 
         // GET: api/Maps/5
@@ -185,6 +187,7 @@ namespace net_api.Controllers
         // POST: api/Maps
         [HttpPost]
         [Authorize]
+        [RequestSizeLimit(50000000)]
         public async Task<IActionResult> PostMap([FromForm]IFormFile file, [FromForm]Guid? campaignId, [FromForm] string name)
         {
             if (file == null)
