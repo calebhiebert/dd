@@ -79,6 +79,7 @@ import { MapComponent } from './map/map.component';
 import { MapUploadComponent } from './map/map-upload/map-upload.component';
 import { MapManagerComponent } from './map/map-manager/map-manager.component';
 import { MapEditorMenuComponent } from './map/map-editor-menu/map-editor-menu.component';
+import { SpellSelectComponent } from './spell/spell-select/spell-select.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -150,6 +151,7 @@ import { MapEditorMenuComponent } from './map/map-editor-menu/map-editor-menu.co
     MapUploadComponent,
     MapManagerComponent,
     MapEditorMenuComponent,
+    SpellSelectComponent,
   ],
   imports: [
     BrowserModule,

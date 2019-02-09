@@ -1,15 +1,74 @@
+<!-- Add Spell Selection Modal -->
+<dd-modal #spellselect>
+  <div modal-header>
+    Click to add
+  </div>
+
+  <div modal-body>
+    <dd-spell-select *ngIf="spellselect.isOpen" (selected)="addSpell($event)">
+    </dd-spell-select>
+  </div>
+</dd-modal>
+
 <!-- Title And Controls -->
 <div class="columns">
   <div class="column">
     <h5>Spells</h5>
   </div>
   <div class="column col-auto" *ngIf="editable">
-    <button class="btn btn-sm" disabled>
+    <button class="btn btn-sm" (click)="spellselect.open()">
       <i class="icon icon-plus"></i> Add Spell
     </button>
   </div>
 </div>
 
-<div class="card p-2 text-center">
-  🚧 Under Construction 🚧
+<div class="loading" *ngIf="loading"></div>
+
+<!-- Spells -->
+<div>
+  <div class="card px-1 pt-1 mb-1" *ngFor="let s of spells">
+    <div class="columns col-gapless">
+      <!-- Image Column -->
+      <div class="column col-auto mr-2">
+        <!-- Custom Image -->
+        <img
+          class="s-rounded"
+          width="32"
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+            s.spell.imageId
+          }}"
+          *ngIf="s.spell.imageId"
+        />
+
+        <!-- Fallback Image -->
+        <img
+          class="s-rounded"
+          width="32"
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/spell-default"
+          *ngIf="!s.spell.imageId"
+        />
+      </div>
+
+      <!-- Info Column -->
+      <div class="column pt-1">
+        <span>{{ s.spell.name }}</span>
+      </div>
+
+      <!-- Controls Column -->
+      <div class="column col-auto">
+        <!-- Remove Button -->
+        <button class="btn btn-sm mr-1" (click)="remove(s)">
+          <i class="icon icon-cross"></i>
+        </button>
+
+        <!-- View Button -->
+        <button
+          class="btn btn-sm"
+          [routerLink]="['/campaigns', campaign.id, 'spells', s.spell.id]"
+        >
+          <i class="icon icon-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

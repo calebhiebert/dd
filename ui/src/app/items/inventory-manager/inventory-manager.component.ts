@@ -5,6 +5,7 @@ import { IItem } from 'src/app/item.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-attribute-form.component';
 import { ToastrService } from 'ngx-toastr';
+import { CampaignService } from 'src/app/campaign.service';
 
 @Component({
   selector: 'dd-inventory-manager',
@@ -35,7 +36,8 @@ export class InventoryManagerComponent implements OnInit {
 
   constructor(
     private entityService: EntityService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private campaignService: CampaignService
   ) {}
 
   ngOnInit() {
@@ -171,5 +173,9 @@ export class InventoryManagerComponent implements OnInit {
     }
 
     this.working = false;
+  }
+
+  public get campaign() {
+    return this.campaignService.campaign;
   }
 }

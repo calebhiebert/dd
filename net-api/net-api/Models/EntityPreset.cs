@@ -59,6 +59,9 @@ namespace net_api.Models
         public bool IsInventoryEnabled { get; set; }
 
         [Required]
+        public bool IsSpellsetsEnabled { get; set; }
+
+        [Required]
         public bool IsCurrencyEnabled { get; set; }
 
         [Required]

@@ -33,8 +33,16 @@
       <div class="column">
         <h2 class="mb-0">{{ spell.name }}</h2>
         <div class="text-gray text-italic">
+          <!-- Edit Text -->
           <span *ngIf="editable"
-            >•<a class="ml-2 c-hand" (click)="edit()">Edit</a></span
+            ><a class="c-hand" (click)="edit()">Edit</a>
+          </span>
+
+          <!-- Add To Inventory -->
+          <span *ngIf="canAddToInventory">
+            •<a class="ml-2 c-hand" (click)="addToEntitySpells()"
+              >Add to my Spells</a
+            ></span
           >
         </div>
       </div>

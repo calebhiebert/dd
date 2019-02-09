@@ -54,9 +54,19 @@ export class SpellService {
       .toPromise();
   }
 
+  // TODO either move this into entity service to align with how inventories are done
+  // or move inventory mangement into the item service
   public updateSpellsetItem(spellsetItem: IEntitySpell): Promise<IEntitySpell> {
     return this.http
       .put<IEntitySpell>(`${environment.apiURL}/spellset`, spellsetItem)
+      .toPromise();
+  }
+
+  public deleteSpellsetItem(entityId: string, spellId: string): Promise<void> {
+    return this.http
+      .delete<void>(
+        `${environment.apiURL}/spellset/${entityId}/spell/${spellId}`
+      )
       .toPromise();
   }
 }

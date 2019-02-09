@@ -146,6 +146,7 @@ export interface IEntityPreset {
   imageId: string;
   playerCreatable: boolean;
   isInventoryEnabled: boolean;
+  isSpellsetsEnabled: boolean;
   isCurrencyEnabled: boolean;
   isXPEnabled: boolean;
   isHealthEnabled: boolean;

@@ -143,10 +143,11 @@
   ></dd-inventory-manager>
 
   <!-- Spellset Management -->
-  <div class="divider"></div>
+  <div class="divider" *ngIf="entity && preset.isSpellsetsEnabled"></div>
   <dd-spellset-manager
     [editable]="editable"
-    *ngIf="entity"
+    [entityId]="entity.id"
+    *ngIf="entity && preset.isSpellsetsEnabled"
   ></dd-spellset-manager>
 
   <div class="columns">

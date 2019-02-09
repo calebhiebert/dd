@@ -32,6 +32,7 @@ namespace net_api.Controllers
 
             return await _context.EntitySpells
                 .Where(es => es.EntityId == entityId)
+                .Include(es => es.Spell)
                 .ToListAsync();
         }
 
@@ -93,10 +94,12 @@ namespace net_api.Controllers
         }
 
         // DELETE: api/Spellset/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<EntitySpell>> DeleteEntitySpell(Guid id)
+        [HttpDelete("{entityId}/spell/{spellId}")]
+        public async Task<ActionResult<EntitySpell>> DeleteEntitySpell(Guid entityId, Guid spellId)
         {
-            var entitySpell = await _context.EntitySpells.FindAsync(id);
+            var entitySpell = await _context.EntitySpells
+                .Where(es => es.SpellId == spellId && es.EntityId == entityId)
+                .FirstOrDefaultAsync();
             if (entitySpell == null)
             {
                 return NotFound();

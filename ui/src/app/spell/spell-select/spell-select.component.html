@@ -1,0 +1,48 @@
+<!-- Search Bar -->
+<div class="form-group">
+  <div class="has-icon-right">
+    <input
+      type="text"
+      name="search"
+      id="search"
+      placeholder="Search"
+      [formControl]="searchControl"
+      class="form-input"
+    />
+    <i class="form-icon loading" *ngIf="loading"></i>
+  </div>
+</div>
+
+<!-- Spell List -->
+<div>
+  <div
+    class="card px-1 pt-1 hoverable mb-1"
+    *ngFor="let spell of spells"
+    (click)="selectSpell(spell)"
+  >
+    <div class="columns col-gapless">
+      <div class="column col-auto mr-1">
+        <img
+          class="s-rounded"
+          width="32"
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+            spell.imageId
+          }}"
+          *ngIf="spell.imageId"
+        />
+        <img
+          class="s-rounded"
+          width="32"
+          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/spell-default"
+          *ngIf="!spell.imageId"
+        />
+      </div>
+      <div class="column">
+        {{ spell.name }} -
+        <span class="text-gray text-italic">{{
+          spell.description | truncate: 50
+        }}</span>
+      </div>
+    </div>
+  </div>
+</div>

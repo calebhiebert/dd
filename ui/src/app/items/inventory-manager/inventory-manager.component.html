@@ -41,8 +41,6 @@
 </dd-modal>
 
 <div>
-  <div class="loading" *ngIf="loading"></div>
-
   <!-- Control Title -->
   <div class="columns">
     <div class="column">
@@ -55,12 +53,14 @@
     </div>
   </div>
 
+  <div class="loading" *ngIf="loading"></div>
+
   <!-- Items -->
   <div>
     <div class="card px-1 pt-1 mb-1" *ngFor="let i of inventory">
       <div class="columns col-gapless">
         <div
-          class="column col-auto mr-1"
+          class="column col-auto mr-2"
           [ngClass]="{ 'c-hand': editable }"
           (click)="editItem(i)"
         >
@@ -93,7 +93,7 @@
           </button>
           <button
             class="btn btn-sm ml-1"
-            [routerLink]="['../..', 'items', i.item.id]"
+            [routerLink]="['/campaigns', campaign.id, 'items', i.item.id]"
           >
             <i class="icon icon-arrow-right"></i>
           </button>
