@@ -113,11 +113,15 @@ func GetPreparedImage(id, bucket string) (image.Image, error) {
 	}
 	defer obj.Close()
 
+	fmt.Println("Object retrieval started")
+
 	// Decode the image
 	img, err := imaging.Decode(obj)
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Println("Image decoded")
 
 	return img, nil
 }

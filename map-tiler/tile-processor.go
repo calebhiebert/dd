@@ -26,9 +26,15 @@ type MapMetadata struct {
 }
 
 type ProcessingRequest struct {
-	ID     string       `json:"id"`
-	Bucket string       `json:"bucket"`
-	Tiles  []TileConfig `json:"tiles"`
+	ID       string       `json:"id"`
+	Bucket   string       `json:"bucket"`
+	Tiles    []TileConfig `json:"tiles"`
+	WorkerID int          `json:"wid"`
+}
+
+type ProcessingResponse struct {
+	M Mapping `json:"mapping"`
+	D []byte  `json:"data"`
 }
 
 // Mapping contains data about tiles
@@ -70,9 +76,10 @@ func pack(details ImageDetails, id, bucket string) (*MapMetadata, error) {
 
 			err := retry.Do(func() error {
 				response, err := processTilesExternal(ProcessingRequest{
-					ID:     id,
-					Bucket: bucket,
-					Tiles:  cfgs,
+					ID:       id,
+					Bucket:   bucket,
+					Tiles:    cfgs,
+					WorkerID: worker,
 				})
 				if err != nil {
 					return err
@@ -82,7 +89,7 @@ func pack(details ImageDetails, id, bucket string) (*MapMetadata, error) {
 				return nil
 			}, retry.OnRetry(func(n uint, err error) {
 				fmt.Printf("Retrying worker %d: attempt %d, err: %+v\n", worker, n, err)
-			}))
+			}), retry.Attempts(3))
 			if err != nil {
 				workerErrors = append(workerErrors, err)
 				fmt.Printf("Worker (%d) failed. %+v", worker, err)
@@ -179,7 +186,7 @@ func processTiles(src image.Image, tileConfigs []TileConfig) (Mapping, []byte, e
 	close(tiles)
 
 	packData := []byte{}
-	mapping := Mapping{}
+	mapping := make(Mapping)
 
 	for t := range tiles {
 		mapping[fmt.Sprintf("%d_%d_%d", t.Z, t.X, t.Y)] = []int{byteCursor, byteCursor + len(t.Data)}
@@ -192,7 +199,7 @@ func processTiles(src image.Image, tileConfigs []TileConfig) (Mapping, []byte, e
 
 func processTilesExternal(req ProcessingRequest) (ProcessingResponse, error) {
 	client := &http.Client{
-		Timeout: 400 * time.Second,
+		Timeout: 62 * time.Second,
 	}
 
 	jsonBytes, err := json.Marshal(req)
@@ -204,6 +211,8 @@ func processTilesExternal(req ProcessingRequest) (ProcessingResponse, error) {
 	if err != nil {
 		return ProcessingResponse{}, err
 	}
+
+	httpRequest.Header.Set("Accept", "application/msgpack")
 
 	resp, err := client.Do(httpRequest)
 	if err != nil {

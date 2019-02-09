@@ -3,6 +3,7 @@ module map-tiler
 require (
 	github.com/avast/retry-go v2.2.0+incompatible
 	github.com/aws/aws-lambda-go v1.8.2
+	github.com/chai2010/webp v1.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/disintegration/imaging v1.6.0
 	github.com/go-ini/ini v1.41.0 // indirect

@@ -2,7 +2,6 @@ package main
 import (
 	"bytes"
 	"image"
-	"image/png"
 
 	"github.com/disintegration/imaging"
 )
@@ -39,7 +38,7 @@ func GenerateTile(config TileConfig, source image.Image) (Tile, error) {
 	var b bytes.Buffer
 
 	// Encode the image into the buffer
-	err := imaging.Encode(&b, tile, imaging.PNG, imaging.PNGCompressionLevel(png.BestCompression))
+	err := imaging.Encode(&b, tile, imaging.JPEG, imaging.JPEGQuality(80))
 	if err != nil {
 		return Tile{}, err
 	}
