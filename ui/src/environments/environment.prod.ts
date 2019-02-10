@@ -4,6 +4,7 @@ export const environment = {
   auth0ClientId: '9vKGU44oDoiGxliIyFL7hjWQQSdmvWEz',
   apiURL: 'https://panch-dd.herokuapp.com/api',
   hubURL: 'https://panch-dd.herokuapp.com/hub',
+  tileURL: 'https://d2z1tfzzgmqozf.cloudfront.net/api',
   gitHash: 'REPLACE_GIT_HASH',
   gitTag: 'REPLACE_GIT_TAG',
   sentryDSN: 'https://afdf2c17948049938e2f1d3151093cc1@sentry.io/1378358',

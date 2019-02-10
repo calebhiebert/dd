@@ -72,7 +72,7 @@ export class MapComponent implements AfterViewInit {
 
     map.setView([0, 0], 1);
 
-    L.tileLayer(`${environment.apiURL}/maps/{id}/tile/{z}/{x}/{y}`, {
+    L.tileLayer(`${environment.tileURL}/maps/{id}/tile/{z}/{x}/{y}`, {
       maxZoom: this._map.maxZoom,
       minZoom: this._map.minZoom,
       bounds: [[0, 0], [-256, 256]],

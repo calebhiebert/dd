@@ -8,6 +8,7 @@ export const environment = {
   auth0ClientId: 'wtWPWeaJjR4hbWYi4hJuduRDDFVn97Fn',
   apiURL: 'http://localhost:5000/api',
   hubURL: 'http://localhost:5000/hub',
+  tileURL: 'http://localhost:5000/api',
   gitHash: 'REPLACE_GIT_HASH',
   gitTag: 'REPLACE_GIT_TAG',
   sentryDSN: 'https://afdf2c17948049938e2f1d3151093cc1@sentry.io/1378358',
