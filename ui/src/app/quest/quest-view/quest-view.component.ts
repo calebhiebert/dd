@@ -35,10 +35,9 @@ export class QuestViewComponent implements OnInit {
 
     try {
       this.quest = await this.questService.getQuest(id);
-      this.noteService.getNotes(
-        this.campaignService.campaign.id,
-        this.quest.id
-      );
+      this.noteService.getNotes(this.campaignService.campaign.id, {
+        questId: this.quest.id,
+      });
     } catch (err) {
       throw err;
     }

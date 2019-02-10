@@ -34,11 +34,15 @@ export class NoteService {
     return this._noteCache.filter((n) => n.questId === questId);
   }
 
-  public getNotes(campaignId: string, questId?: string): Promise<INote[]> {
+  public getNotes(campaignId: string, query: INoteQuery): Promise<INote[]> {
     let queryString = `?campaignId=${campaignId}`;
 
-    if (questId) {
-      queryString += `&questId=${questId}`;
+    if (query.questId) {
+      queryString += `&questId=${query.questId}`;
+    }
+
+    if (query.mapId) {
+      queryString += `&mapId=${query.mapId}`;
     }
 
     return this.http
@@ -107,11 +111,19 @@ export class NoteService {
 
 export interface INoteOptions {
   type: NoteType;
+
+  // Quest
   questId?: string;
+
+  // Map
+  mapId?: string;
+  lat?: number;
+  lng?: number;
 }
 
 export enum NoteType {
   QUEST,
+  MAP,
 }
 
 export interface INote {
@@ -127,4 +139,12 @@ export interface INote {
   userId?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  mapId?: string;
+  lat?: number;
+  lng?: number;
+}
+
+export interface INoteQuery {
+  questId?: string;
+  mapId?: string;
 }

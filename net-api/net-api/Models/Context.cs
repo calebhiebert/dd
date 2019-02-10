@@ -20,8 +20,9 @@ namespace net_api.Models
         public DbSet<Item> Items { get; set; }
         public DbSet<InventoryItem> InventoryItems { get; set; }
         public DbSet<Quest> Quests { get; set; }
-        public DbSet<Note> Notes { get; set; }
         public DbSet<Map> Maps { get; set; }
+
+        public DbSet<Note> Notes { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<CampaignNotification> CampaignInviteNotifications { get; set; }

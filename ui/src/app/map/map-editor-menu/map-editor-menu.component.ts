@@ -18,7 +18,7 @@ export class MapEditorMenuComponent implements OnInit {
   ngOnInit() {}
 
   public showMenu(): Promise<IMapEditorOperation> {
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise<IMapEditorOperation>((resolve, reject) => {
       this._opResolver = resolve;
     });
 
@@ -32,9 +32,25 @@ export class MapEditorMenuComponent implements OnInit {
   }
 
   public placeMarker() {
-    this._opResolver({});
+    this._opResolver({
+      type: MapEditorOperationType.NONE,
+    });
+    this.modal.close(null);
+  }
+
+  public placeNote() {
+    this._opResolver({
+      type: MapEditorOperationType.PLACE_NOTE,
+    });
     this.modal.close(null);
   }
 }
 
-export interface IMapEditorOperation {}
+export interface IMapEditorOperation {
+  type: MapEditorOperationType;
+}
+
+export enum MapEditorOperationType {
+  NONE,
+  PLACE_NOTE,
+}

@@ -3,9 +3,14 @@ import L from 'leaflet';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { MapService, IMap } from '../map.service';
-import { MapEditorMenuComponent } from './map-editor-menu/map-editor-menu.component';
+import {
+  MapEditorMenuComponent,
+  IMapEditorOperation,
+  MapEditorOperationType,
+} from './map-editor-menu/map-editor-menu.component';
 import { CampaignService } from '../campaign.service';
 import Swal from 'sweetalert2';
+import { NoteService, NoteType, INote } from '../note.service';
 
 @Component({
   selector: 'dd-map',
@@ -20,6 +25,8 @@ export class MapComponent implements AfterViewInit {
   private editor: MapEditorMenuComponent;
 
   private _map: IMap;
+  private _lMap: any;
+  private _notes: INote[];
 
   public loading = false;
 
@@ -27,7 +34,8 @@ export class MapComponent implements AfterViewInit {
     private route: ActivatedRoute,
     private router: Router,
     private mapService: MapService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private noteService: NoteService
   ) {}
 
   ngAfterViewInit() {
@@ -39,6 +47,8 @@ export class MapComponent implements AfterViewInit {
   private async loadMap(id: string) {
     await this.load(id);
     this.constructMap();
+    await this.loadNotes(id);
+    this.addNotesToMap(this._notes);
   }
 
   private async load(id: string) {
@@ -50,34 +60,70 @@ export class MapComponent implements AfterViewInit {
       throw err;
     }
 
-    setTimeout(() => {
-      this.loading = false;
-    }, 1);
+    this.loading = false;
+  }
+
+  private async loadNotes(mapId: string) {
+    try {
+      this._notes = await this.noteService.getNotes(
+        this.campaignService.campaign.id,
+        {
+          mapId: mapId,
+        }
+      );
+    } catch (err) {
+      throw err;
+    }
   }
 
   private constructMap() {
-    const map = L.map(this.map.nativeElement, {
+    this._lMap = L.map(this.map.nativeElement, {
       crs: L.CRS.Simple,
       maxBounds: [[0, 0], [-256, 256]],
     });
 
-    map.on('contextmenu', (e) => {
+    this._lMap.on('contextmenu', (e) => {
       this.editor.showMenu().then((operation) => {
         if (operation != null) {
-          const marker = new L.Marker(e.latlng).addTo(map);
-          marker.bindPopup('Example Marker');
+          this.handleEditorOperation(operation, e);
         }
       });
     });
 
-    map.setView([0, 0], 1);
+    this._lMap.setView([0, 0], 1);
 
     L.tileLayer(`${environment.tileURL}/maps/{id}/tile/{z}/{x}/{y}`, {
       maxZoom: this._map.maxZoom,
       minZoom: this._map.minZoom,
       bounds: [[0, 0], [-256, 256]],
       id: this._map.id,
-    }).addTo(map);
+    }).addTo(this._lMap);
+  }
+
+  private addNotesToMap(notes: INote[]) {
+    for (const note of notes) {
+      if (note.lat && note.lng) {
+        const marker = L.marker([note.lat, note.lng]).addTo(this._lMap);
+        marker.on('click', () => {
+          this.noteService.editNote(note);
+        });
+      }
+    }
+  }
+
+  private handleEditorOperation(op: IMapEditorOperation, event: any) {
+    console.log(event);
+
+    switch (op.type) {
+      case MapEditorOperationType.PLACE_NOTE:
+        this.noteService.addNote({
+          type: NoteType.MAP,
+          mapId: this._map.id,
+          lat: event.latlng.lat,
+          lng: event.latlng.lng,
+        });
+        break;
+    }
   }
 
   public async delete() {

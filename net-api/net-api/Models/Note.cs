@@ -55,6 +55,12 @@ namespace net_api.Models
 
         public DateTime UpdatedAt { get; set; }
 
+        // Data for if a note is positioned on a map
+        public Guid? MapId { get; set; }
+
+        public double? Lat { get; set; }
+        public double? Lng { get; set; }
+
         public Note()
         {
             Id = Guid.NewGuid();

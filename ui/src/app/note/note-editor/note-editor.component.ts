@@ -53,6 +53,11 @@ export class NoteEditorComponent implements OnInit {
       case NoteType.QUEST:
         noteCreation.questId = opts.questId;
         break;
+      case NoteType.MAP:
+        noteCreation.mapId = opts.mapId;
+        noteCreation.lat = opts.lat;
+        noteCreation.lng = opts.lng;
+        break;
     }
 
     try {
