@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from 'src/app/modal/modal.component';
-import { IPromise } from 'q';
 
 @Component({
   selector: 'dd-map-editor-menu',

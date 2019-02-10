@@ -11,7 +11,11 @@ import {
 import { CampaignService } from '../campaign.service';
 import Swal from 'sweetalert2';
 import { NoteService, NoteType, INote } from '../note.service';
-import { filter, tap, map } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
+
+let ownNoteIcon: any;
+let otherNoteIcon: any;
+let map: any;
 
 @Component({
   selector: 'dd-map',
@@ -96,13 +100,13 @@ export class MapComponent implements AfterViewInit {
   }
 
   private constructMap() {
-    this._lMap = L.map(this.map.nativeElement, {
+    map = L.map(this.map.nativeElement, {
       crs: L.CRS.Simple,
       maxBounds: [[0, 0], [-256, 256]],
       zoomSnap: 0.25,
     });
 
-    this._lMap.on('contextmenu', (e) => {
+    map.on('contextmenu', (e) => {
       this.editor.showMenu().then((operation) => {
         if (operation != null) {
           this.handleEditorOperation(operation, e);
@@ -110,7 +114,7 @@ export class MapComponent implements AfterViewInit {
       });
     });
 
-    this._lMap.setView([0, 0], 1);
+    map.setView([0, 0], 1);
 
     const tileLayer = L.tileLayer(
       `${environment.tileURL}/maps/{id}/tile/{z}/{x}/{y}`,
@@ -120,15 +124,15 @@ export class MapComponent implements AfterViewInit {
         bounds: [[0, 0], [-256, 256]],
         id: this._map.id,
       }
-    ).addTo(this._lMap);
+    ).addTo(map);
 
-    this._mapLayerControl = L.control.layers().addTo(this._lMap);
+    this._mapLayerControl = L.control.layers().addTo(map);
     this._mapLayerControl.addBaseLayer(tileLayer, 'Base');
   }
 
   private createNotesLayer() {
     this._notesLayerGroup = L.layerGroup();
-    this._notesLayerGroup.addTo(this._lMap);
+    this._notesLayerGroup.addTo(map);
     this._mapLayerControl.addOverlay(this._notesLayerGroup, 'Notes');
   }
 
@@ -179,7 +183,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   public set notes(val: INote[]) {
-    console.log(this._lMap);
+    console.log(map);
     this._notes = val;
   }
 
