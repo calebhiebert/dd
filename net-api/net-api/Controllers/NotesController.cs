@@ -95,6 +95,7 @@ namespace net_api.Controllers
             // TODO authorize request
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             note.UserId = userId;
+            note.User = null;
 
             _context.Entry(note).State = EntityState.Modified;
 
@@ -131,6 +132,7 @@ namespace net_api.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             note.UserId = userId;
+            note.User = null;
 
             _context.Notes.Add(note);
             await _context.SaveChangesAsync();

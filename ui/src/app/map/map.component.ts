@@ -11,6 +11,7 @@ import {
 import { CampaignService } from '../campaign.service';
 import Swal from 'sweetalert2';
 import { NoteService, NoteType, INote } from '../note.service';
+import { filter, tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'dd-map',
@@ -26,6 +27,8 @@ export class MapComponent implements AfterViewInit {
 
   private _map: IMap;
   private _lMap: any;
+  private _notesLayerGroup: any;
+  private _mapLayerControl: any;
   private _notes: INote[];
 
   public loading = false;
@@ -42,13 +45,29 @@ export class MapComponent implements AfterViewInit {
     this.route.paramMap.subscribe((params) => {
       this.loadMap(params.get('m_id'));
     });
+
+    this.noteService.noteCreate
+      .pipe(filter((n) => n.mapId === this._map.id))
+      .subscribe((n) => {
+        this.addNoteToMap(n);
+      });
+
+    this.noteService.noteDelete
+      .pipe(filter((n) => n.mapId === this._map.id))
+      .subscribe((n) => {
+        for (const layer of this._notesLayerGroup.getLayers()) {
+          if (layer['_noteId'] === n.id) {
+            this._notesLayerGroup.removeLayer(layer);
+          }
+        }
+      });
   }
 
   private async loadMap(id: string) {
     await this.load(id);
     this.constructMap();
+    this.createNotesLayer();
     await this.loadNotes(id);
-    this.addNotesToMap(this._notes);
   }
 
   private async load(id: string) {
@@ -80,6 +99,7 @@ export class MapComponent implements AfterViewInit {
     this._lMap = L.map(this.map.nativeElement, {
       crs: L.CRS.Simple,
       maxBounds: [[0, 0], [-256, 256]],
+      zoomSnap: 0.25,
     });
 
     this._lMap.on('contextmenu', (e) => {
@@ -92,28 +112,41 @@ export class MapComponent implements AfterViewInit {
 
     this._lMap.setView([0, 0], 1);
 
-    L.tileLayer(`${environment.tileURL}/maps/{id}/tile/{z}/{x}/{y}`, {
-      maxZoom: this._map.maxZoom,
-      minZoom: this._map.minZoom,
-      bounds: [[0, 0], [-256, 256]],
-      id: this._map.id,
-    }).addTo(this._lMap);
+    const tileLayer = L.tileLayer(
+      `${environment.tileURL}/maps/{id}/tile/{z}/{x}/{y}`,
+      {
+        maxZoom: this._map.maxZoom,
+        minZoom: this._map.minZoom,
+        bounds: [[0, 0], [-256, 256]],
+        id: this._map.id,
+      }
+    ).addTo(this._lMap);
+
+    this._mapLayerControl = L.control.layers().addTo(this._lMap);
+    this._mapLayerControl.addBaseLayer(tileLayer, 'Base');
   }
 
-  private addNotesToMap(notes: INote[]) {
-    for (const note of notes) {
-      if (note.lat && note.lng) {
-        const marker = L.marker([note.lat, note.lng]).addTo(this._lMap);
-        marker.on('click', () => {
-          this.noteService.editNote(note);
-        });
-      }
+  private createNotesLayer() {
+    this._notesLayerGroup = L.layerGroup();
+    this._notesLayerGroup.addTo(this._lMap);
+    this._mapLayerControl.addOverlay(this._notesLayerGroup, 'Notes');
+  }
+
+  private addNoteToMap(note: INote) {
+    if (note.lat && note.lng) {
+      const marker = L.marker([note.lat, note.lng]);
+
+      marker['_noteId'] = note.id;
+
+      marker.on('click', () => {
+        this.noteService.editNote(note);
+      });
+
+      this._notesLayerGroup.addLayer(marker);
     }
   }
 
   private handleEditorOperation(op: IMapEditorOperation, event: any) {
-    console.log(event);
-
     switch (op.type) {
       case MapEditorOperationType.PLACE_NOTE:
         this.noteService.addNote({
@@ -139,6 +172,15 @@ export class MapComponent implements AfterViewInit {
         throw err;
       }
     }
+  }
+
+  public get notes() {
+    return this._notes;
+  }
+
+  public set notes(val: INote[]) {
+    console.log(this._lMap);
+    this._notes = val;
   }
 
   public get editable() {

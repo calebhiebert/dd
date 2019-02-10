@@ -1,6 +1,8 @@
 <dd-modal #modal>
-  <div modal-body *ngIf="note">
+  <div modal-header *ngIf="note">
     <div class="text-gray text-italic">{{ statusText }}</div>
+  </div>
+  <div modal-body *ngIf="note">
     <div class="loading" *ngIf="loading"></div>
     <dd-note-form
       *ngIf="note && editable"
@@ -9,14 +11,31 @@
     ></dd-note-form>
     <div class="note-display" *ngIf="!editable">{{ note.text }}</div>
   </div>
-  <div modal-footer>
-    <button
-      class="btn btn-error mr-2"
-      (click)="delete()"
-      *ngIf="note && editable"
-    >
-      Delete
-    </button>
-    <button class="btn" (click)="modal.close(null)">Close</button>
+  <div modal-footer *ngIf="note">
+    <!-- User Display -->
+    <div class="columns col-gapless mt-2">
+      <!-- Image -->
+      <div
+        class="column col-auto pr-1 d-flex align-items-center"
+        *ngIf="!editable && user"
+      >
+        <figure class="avatar avatar-sm">
+          <img [src]="user.pictureURL" alt="User Image" />
+        </figure>
+      </div>
+      <div class="column d-flex align-items-center" *ngIf="!editable && user">
+        <span>{{ user.username }}</span>
+      </div>
+      <div class="column col-auto col-ml-auto">
+        <button
+          class="btn btn-error mr-2"
+          (click)="delete()"
+          *ngIf="note && editable"
+        >
+          Delete
+        </button>
+        <button class="btn" (click)="modal.close(null)">Close</button>
+      </div>
+    </div>
   </div>
 </dd-modal>

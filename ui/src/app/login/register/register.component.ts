@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit {
         const newUser = await this.userService.createUser({
           id: this.login.id,
           username: this.usernameControl.value,
-          pictureURl: this.login.authData.picture,
+          pictureURL: this.login.authData.picture,
         });
 
         this.login.setUserData(newUser);

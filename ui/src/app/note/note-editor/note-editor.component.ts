@@ -146,4 +146,22 @@ export class NoteEditorComponent implements OnInit {
   public get editable() {
     return this.note.userId === this.loginService.id || this.note.publicEdit;
   }
+
+  public get user() {
+    if (!this.note) {
+      return null;
+    }
+
+    if (this.note.user) {
+      return this.note.user;
+    }
+
+    const userFromMembers = this.campaignService.campaign.members.find(
+      (m) => m.userId === this.note.userId
+    );
+
+    if (userFromMembers && userFromMembers.user) {
+      return userFromMembers.user;
+    }
+  }
 }

@@ -31,13 +31,6 @@ export class MapEditorMenuComponent implements OnInit {
     return promise;
   }
 
-  public placeMarker() {
-    this._opResolver({
-      type: MapEditorOperationType.NONE,
-    });
-    this.modal.close(null);
-  }
-
   public placeNote() {
     this._opResolver({
       type: MapEditorOperationType.PLACE_NOTE,

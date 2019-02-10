@@ -48,7 +48,6 @@ namespace net_api.Models
 
         public string UserId { get; set; }
 
-        [JsonIgnore]
         public User User { get; set; }
 
         public DateTime CreatedAt { get; set; }

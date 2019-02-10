@@ -8,7 +8,7 @@
 >
   <a (click)="close(null)" class="modal-overlay" aria-label="Close"></a>
   <div class="modal-container">
-    <div class="modal-header">
+    <div class="modal-header p-2">
       <a
         (click)="close(null)"
         class="btn btn-clear float-right"
@@ -16,10 +16,10 @@
       ></a>
       <ng-content select="[modal-header]"></ng-content>
     </div>
-    <div class="modal-body">
+    <div class="modal-body p-2">
       <div class="content"><ng-content select="[modal-body]"></ng-content></div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer px-2 pt-2">
       <ng-content select="[modal-footer]"></ng-content>
     </div>
   </div>
