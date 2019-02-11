@@ -1,0 +1,23 @@
+<div>
+  <p class="note-display">
+    {{ note.text }}
+  </p>
+
+  <!-- User Display -->
+  <div class="columns col-gapless mt-2">
+    <!-- Image -->
+    <div class="column col-auto pr-1 d-flex align-items-center" *ngIf="user">
+      <figure class="avatar avatar-xs">
+        <img [src]="user.pictureURL" alt="User Image" />
+      </figure>
+    </div>
+    <div class="column d-flex align-items-center" *ngIf="user">
+      <span>{{ user.username }}</span>
+    </div>
+  </div>
+
+  <!-- Edit Link -->
+  <div class="mt-2" *ngIf="editable">
+    <a class="c-hand" (click)="edit()">Edit</a>
+  </div>
+</div>

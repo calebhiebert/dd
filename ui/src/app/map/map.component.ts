@@ -1,4 +1,13 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+  ComponentFactoryResolver,
+  Injector,
+  ApplicationRef,
+  EmbeddedViewRef,
+} from '@angular/core';
 import L from 'leaflet';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -12,9 +21,25 @@ import { CampaignService } from '../campaign.service';
 import Swal from 'sweetalert2';
 import { NoteService, NoteType, INote } from '../note.service';
 import { filter } from 'rxjs/operators';
+import { LoginService } from '../login.service';
+import { NoteViewMiniComponent } from '../note/note-view-mini/note-view-mini.component';
 
-let ownNoteIcon: any;
-let otherNoteIcon: any;
+let ownNoteIcon = L.icon({
+  iconUrl: '/assets/note-icon.png',
+
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+  popupAnchor: [0, -20],
+});
+
+let otherNoteIcon = L.icon({
+  iconUrl: '/assets/note-icon-2.png',
+
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+  popupAnchor: [0, -20],
+});
+
 let map: any;
 
 @Component({
@@ -30,7 +55,6 @@ export class MapComponent implements AfterViewInit {
   private editor: MapEditorMenuComponent;
 
   private _map: IMap;
-  private _lMap: any;
   private _notesLayerGroup: any;
   private _mapLayerControl: any;
   private _notes: INote[];
@@ -42,7 +66,11 @@ export class MapComponent implements AfterViewInit {
     private router: Router,
     private mapService: MapService,
     private campaignService: CampaignService,
-    private noteService: NoteService
+    private noteService: NoteService,
+    private login: LoginService,
+    private resolver: ComponentFactoryResolver,
+    private injector: Injector,
+    private appRef: ApplicationRef
   ) {}
 
   ngAfterViewInit() {
@@ -114,8 +142,6 @@ export class MapComponent implements AfterViewInit {
       });
     });
 
-    map.setView([0, 0], 1);
-
     const tileLayer = L.tileLayer(
       `${environment.tileURL}/maps/{id}/tile/{z}/{x}/{y}`,
       {
@@ -130,6 +156,8 @@ export class MapComponent implements AfterViewInit {
 
     this._mapLayerControl = L.control.layers().addTo(map);
     this._mapLayerControl.addBaseLayer(tileLayer, 'Base');
+
+    map.fitBounds([[-10, 10], [-246, 246]]);
   }
 
   private createNotesLayer() {
@@ -140,13 +168,29 @@ export class MapComponent implements AfterViewInit {
 
   private addNoteToMap(note: INote) {
     if (note.lat && note.lng) {
-      const marker = L.marker([note.lat, note.lng]);
+      const isNoteMine = note.userId === this.login.id;
+
+      const marker = L.marker([note.lat, note.lng], {
+        icon: isNoteMine ? ownNoteIcon : otherNoteIcon,
+      });
 
       marker['_noteId'] = note.id;
 
-      marker.on('click', () => {
-        this.noteService.editNote(note);
+      const component = this.resolver
+        .resolveComponentFactory(NoteViewMiniComponent)
+        .create(this.injector);
+      component.instance.note = note;
+
+      this.appRef.attachView(component.hostView);
+
+      const popup = L.popup({
+        minWidth: 150,
       });
+
+      popup.setContent((component.hostView as EmbeddedViewRef<any>)
+        .rootNodes[0] as HTMLElement);
+
+      marker.bindPopup(popup);
 
       this._notesLayerGroup.addLayer(marker);
     }

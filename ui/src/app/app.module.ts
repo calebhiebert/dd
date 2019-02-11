@@ -80,9 +80,11 @@ import { MapUploadComponent } from './map/map-upload/map-upload.component';
 import { MapManagerComponent } from './map/map-manager/map-manager.component';
 import { MapEditorMenuComponent } from './map/map-editor-menu/map-editor-menu.component';
 import { SpellSelectComponent } from './spell/spell-select/spell-select.component';
+import { NoteViewMiniComponent } from './note/note-view-mini/note-view-mini.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
+  entryComponents: [NoteViewMiniComponent],
   declarations: [
     AppComponent,
     ItemViewListComponent,
@@ -152,6 +154,7 @@ import { SpellSelectComponent } from './spell/spell-select/spell-select.componen
     MapManagerComponent,
     MapEditorMenuComponent,
     SpellSelectComponent,
+    NoteViewMiniComponent,
   ],
   imports: [
     BrowserModule,

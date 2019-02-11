@@ -8,6 +8,7 @@ import {
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'dd-note-editor',
@@ -35,7 +36,15 @@ export class NoteEditorComponent implements OnInit {
     noteService.setNoteEditor(this);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.noteService.noteUpdate
+      .pipe(filter((note) => this.note && note.id === this.note.id))
+      .subscribe((note) => {
+        if (!this.editable) {
+          this.note = note;
+        }
+      });
+  }
 
   private async createNote(opts: INoteOptions) {
     this.loading = true;
@@ -121,11 +130,20 @@ export class NoteEditorComponent implements OnInit {
     });
   }
 
-  public editNote(note: INote) {
-    this.note = { ...note };
+  public async editNote(note: INote) {
     this.modal.open().then(() => {
       this.note = undefined;
     });
+
+    this.loading = true;
+
+    try {
+      this.note = await this.noteService.getNote(note.id);
+    } catch (err) {
+      throw err;
+    }
+
+    this.loading = false;
   }
 
   public async delete() {
