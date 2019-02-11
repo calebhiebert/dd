@@ -4,7 +4,11 @@
   </div>
   <div modal-body>
     <div class="card p-2 hoverable mb-2" (click)="placeNote()">Make Note</div>
-    <div class="card p-2 hoverable mb-2" (click)="updateEntityPosition()">
+    <div
+      class="card p-2 hoverable mb-2"
+      (click)="updateEntityPosition()"
+      *ngIf="canUpdateEntityPosition"
+    >
       Put me Here
     </div>
   </div>

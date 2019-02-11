@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using net_api.Models;
@@ -9,9 +10,10 @@ using net_api.Models;
 namespace netapi.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20190211234204_EntityMapForeignKey")]
+    partial class EntityMapForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -388,8 +390,6 @@ namespace netapi.Migrations
 
                     b.HasIndex("EntityPresetId");
 
-                    b.HasIndex("MapId");
-
                     b.HasIndex("QuestId");
 
                     b.HasIndex("UserId");
@@ -678,10 +678,6 @@ namespace netapi.Migrations
                     b.HasOne("net_api.Models.EntityPreset", "EntityPreset")
                         .WithMany()
                         .HasForeignKey("EntityPresetId");
-
-                    b.HasOne("net_api.Models.Map", "Map")
-                        .WithMany()
-                        .HasForeignKey("MapId");
 
                     b.HasOne("net_api.Models.Quest", "Quest")
                         .WithMany()

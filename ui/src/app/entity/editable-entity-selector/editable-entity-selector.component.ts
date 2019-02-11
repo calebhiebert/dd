@@ -35,7 +35,9 @@ export class EditableEntitySelectorComponent implements OnInit {
     if (this._entityOverride) {
       return this._entityOverride;
     } else {
-      return this.campaignService.editableEntities;
+      return this.campaignService.editableEntities
+        .slice()
+        .filter((e) => e.spawnable === false);
     }
   }
 }

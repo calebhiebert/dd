@@ -100,6 +100,9 @@ namespace net_api.Models
 
         // For setting the entity's current position
         public Guid? MapId { get; set; }
+        [JsonIgnore]
+        public Map Map { get; set; }
+
         public double? Lat { get; set; }
         public double? Lng { get; set; }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MapService, IMap } from 'src/app/map.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'dd-map-manager',
@@ -53,6 +54,20 @@ export class MapManagerComponent implements OnInit {
       'maps',
       'upload',
     ]);
+  }
+
+  public async delete(map: IMap) {
+    if (
+      (await Swal.fire({ title: 'Are you sure?', showCancelButton: true }))
+        .value === true
+    ) {
+      try {
+        await this.mapService.deleteMap(map.id);
+        this.load();
+      } catch (err) {
+        throw err;
+      }
+    }
   }
 
   public get editable() {

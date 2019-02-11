@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from 'src/app/modal/modal.component';
+import { CampaignService } from 'src/app/campaign.service';
 
 @Component({
   selector: 'dd-map-editor-menu',
@@ -12,7 +13,7 @@ export class MapEditorMenuComponent implements OnInit {
 
   private _opResolver: (op: IMapEditorOperation) => void;
 
-  constructor() {}
+  constructor(private campaignService: CampaignService) {}
 
   ngOnInit() {}
 
@@ -42,6 +43,10 @@ export class MapEditorMenuComponent implements OnInit {
       type: MapEditorOperationType.UPDATE_ENTITY_POSITION,
     });
     this.modal.close(null);
+  }
+
+  public get canUpdateEntityPosition() {
+    return this.campaignService.editableEntities.length > 0;
   }
 }
 

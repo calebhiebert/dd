@@ -34,25 +34,34 @@
   <div *ngIf="maps">
     <div
       class="card p-2 mb-2"
-      [ngClass]="{ hoverable: m.status === 1 }"
       *ngFor="let m of maps"
-      (click)="selectMap(m)"
+      [ngClass]="{ hoverable: m.status === 1 }"
     >
-      <div class="columns">
+      <div class="columns" (click)="selectMap(m)">
         <div class="column col-auto">
           <img
             class="s-rounded"
-            width="64"
+            width="32"
             src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/map-default"
             alt="Map Fallback Picture"
           />
         </div>
+
+        <!-- Displayed if the map is processing -->
         <div class="column" *ngIf="m.status === 0">
           <h5 class="text-gray">{{ m.name }} (Processing)</h5>
         </div>
+
+        <!-- Displayed for normal maps -->
         <div class="column" *ngIf="m.status === 1">
           <h5>{{ m.name }}</h5>
         </div>
+      </div>
+
+      <!-- Controls -->
+      <div *ngIf="editable">
+        <button class="btn btn-sm mr-2" (click)="delete(m)">Delete</button>
+        <button class="btn btn-sm">Edit</button>
       </div>
     </div>
   </div>

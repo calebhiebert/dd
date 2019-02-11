@@ -20,7 +20,6 @@ import {
   MapEditorOperationType,
 } from './map-editor-menu/map-editor-menu.component';
 import { CampaignService } from '../campaign.service';
-import Swal from 'sweetalert2';
 import { NoteService, NoteType, INote } from '../note.service';
 import { filter } from 'rxjs/operators';
 import { LoginService } from '../login.service';
@@ -29,6 +28,7 @@ import { Subscription } from 'rxjs';
 import { IEntity, EntityService } from '../entity.service';
 import { EditableEntitySelectorComponent } from '../entity/editable-entity-selector/editable-entity-selector.component';
 import { UpdateHubService } from '../update-hub.service';
+import { ToastrService } from 'ngx-toastr';
 
 let ownNoteIcon = L.icon({
   iconUrl: '/assets/note-icon.png',
@@ -91,7 +91,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     private injector: Injector,
     private appRef: ApplicationRef,
     private entityService: EntityService,
-    private updateHub: UpdateHubService
+    private updateHub: UpdateHubService,
+    private toast: ToastrService
   ) {}
 
   ngAfterViewInit() {
@@ -355,7 +356,15 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         });
         break;
       case MapEditorOperationType.UPDATE_ENTITY_POSITION:
-        const entity = await this.entitySelect.selectEntity();
+        const entities = this.campaignService.editableEntities;
+        let entity: IEntity;
+
+        if (entities.length === 1) {
+          entity = entities[0];
+        } else {
+          entity = await this.entitySelect.selectEntity();
+        }
+
         if (entity) {
           await this.entityService.updateEntity({
             ...entity,
@@ -363,26 +372,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             lat: event.latlng.lat,
             lng: event.latlng.lng,
           });
+
+          this.toast.info(`Updated ${entity.name}'s position`);
         }
         break;
-    }
-  }
-
-  public async delete() {
-    if (
-      (await Swal.fire({ title: 'Are you sure?', showCancelButton: true }))
-        .value === true
-    ) {
-      try {
-        await this.mapService.deleteMap(this._map.id);
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'maps',
-        ]);
-      } catch (err) {
-        throw err;
-      }
     }
   }
 
