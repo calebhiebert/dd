@@ -76,6 +76,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private _noteUpdateSubscription: Subscription;
   private _entityUpdateSubscription: Subscription;
 
+  private _queryLatLng: any[];
+
   public loading = false;
 
   constructor(
@@ -156,6 +158,18 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this.route.paramMap.subscribe((params) => {
       this.loadMap(params.get('m_id'));
+    });
+
+    this.route.queryParamMap.subscribe((params) => {
+      if (params.has('lat') && params.has('lng')) {
+        this._queryLatLng = [
+          parseFloat(params.get('lat')),
+          parseFloat(params.get('lng')),
+        ];
+
+        // Clear the query parameters
+        this.router.navigate([], { replaceUrl: true });
+      }
     });
   }
 
@@ -252,6 +266,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this._mapLayerControl.addBaseLayer(tileLayer, 'Base');
 
     map.fitBounds([[-10, 10], [-246, 246]]);
+
+    // Scroll to the place that was queried
+    if (this._queryLatLng) {
+      console.log(this._queryLatLng);
+      map.flyTo(this._queryLatLng, this._map.maxZoom);
+    }
   }
 
   private createNotesLayer() {

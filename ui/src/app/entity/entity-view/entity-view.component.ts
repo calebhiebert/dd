@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EntityAttributeEditorModalComponent } from './entity-attribute-editor-modal/entity-attribute-editor-modal.component';
 import {
   EntityService,
@@ -9,7 +9,7 @@ import {
   IViewAttribute,
 } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
-import { AttributeType, Attribute } from 'src/app/attributes';
+import { AttributeType } from 'src/app/attributes';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoginService } from 'src/app/login.service';
 
@@ -31,7 +31,8 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     private entityService: EntityService,
     private campaignService: CampaignService,
     private sanitizer: DomSanitizer,
-    private login: LoginService
+    private login: LoginService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -42,6 +43,24 @@ export class EntityViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.entityService.currentViewEntity = null;
+  }
+
+  private getEntityAttribute(name: string): IEntityAttribute {
+    return this.entity.preset.attributes.find((e) => e.name === name);
+  }
+
+  private async updateEntity() {
+    this.saving = true;
+
+    const entityToSave = { ...this.entity, preset: undefined };
+
+    try {
+      await this.entityService.updateEntity(entityToSave);
+    } catch (err) {
+      throw err;
+    }
+
+    this.saving = false;
   }
 
   private async loadEntity(id: string) {
@@ -158,22 +177,21 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async updateEntity() {
-    this.saving = true;
-
-    const entityToSave = { ...this.entity, preset: undefined };
-
-    try {
-      await this.entityService.updateEntity(entityToSave);
-    } catch (err) {
-      throw err;
-    }
-
-    this.saving = false;
-  }
-
-  private getEntityAttribute(name: string): IEntityAttribute {
-    return this.entity.preset.attributes.find((e) => e.name === name);
+  public openLocationOnMap() {
+    this.router.navigate(
+      [
+        'campaigns',
+        this.campaignService.campaign.id,
+        'maps',
+        this.entity.mapId,
+      ],
+      {
+        queryParams: {
+          lat: this.entity.lat,
+          lng: this.entity.lng,
+        },
+      }
+    );
   }
 
   public get processedAttributes(): IViewAttribute[] {

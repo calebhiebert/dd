@@ -21,27 +21,42 @@
     <!-- Bottom Row -->
     <div class="container grid-xl">
       <div class="columns text-light">
-        <div class="column text-light mb-1">
-          <h3
-            class="mb-0 text-bold"
-            [ngClass]="{ 'c-hand': editable }"
-            (click)="editName()"
-          >
-            {{ entity.name }}
-            <a class="text-light" *ngIf="editable" [routerLink]="['edit']"
-              ><i class="icon icon-edit"></i
-            ></a>
-          </h3>
-          <span class="text-italic no-select">{{ entity.preset.name }}</span>
+        <div class="column text-light mb-1 d-flex flex-col justify-end">
+          <div>
+            <h3
+              class="mb-0 text-bold"
+              [ngClass]="{ 'c-hand': editable }"
+              (click)="editName()"
+            >
+              {{ entity.name }}
+              <a class="text-light" *ngIf="editable" [routerLink]="['edit']"
+                ><i class="icon icon-edit"></i
+              ></a>
+            </h3>
+            <span class="text-italic no-select">{{ entity.preset.name }}</span>
+          </div>
         </div>
         <div
           class="column col-auto d-flex justify-end align-items-end col-ml-auto"
-          *ngIf="preset.isXPEnabled"
         >
-          <span [ngClass]="{ 'c-hand': editable }" (click)="editXP()">
-            <span class="h5 no-select">LV. </span>
-            <span class="h3 text-bold">{{ level }}</span>
-          </span>
+          <div class="mb-1">
+            <!-- Display current entity level -->
+            <div class="text-right" *ngIf="preset.isXPEnabled">
+              <span [ngClass]="{ 'c-hand': editable }" (click)="editXP()">
+                <span class="h5 no-select">LV. </span>
+                <span class="h3 text-bold">{{ level }}</span>
+              </span>
+            </div>
+
+            <!-- Display current entity location (if any) -->
+            <div
+              class="text-italic no-select c-hand"
+              *ngIf="entity.mapId !== null"
+              (click)="openLocationOnMap()"
+            >
+              Location <i class="icon icon-location"></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
