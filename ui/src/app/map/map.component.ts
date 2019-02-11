@@ -7,6 +7,8 @@ import {
   Injector,
   ApplicationRef,
   EmbeddedViewRef,
+  ComponentRef,
+  OnDestroy,
 } from '@angular/core';
 import L from 'leaflet';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,6 +25,7 @@ import { NoteService, NoteType, INote } from '../note.service';
 import { filter } from 'rxjs/operators';
 import { LoginService } from '../login.service';
 import { NoteViewMiniComponent } from '../note/note-view-mini/note-view-mini.component';
+import { Subscription } from 'rxjs';
 
 let ownNoteIcon = L.icon({
   iconUrl: '/assets/note-icon.png',
@@ -47,7 +50,7 @@ let map: any;
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('map')
   private map: ElementRef<HTMLDivElement>;
 
@@ -58,6 +61,9 @@ export class MapComponent implements AfterViewInit {
   private _notesLayerGroup: any;
   private _mapLayerControl: any;
   private _notes: INote[];
+  private _noteComponents: ComponentRef<NoteViewMiniComponent>[] = [];
+  private _noteCreateSubscription: Subscription;
+  private _noteDeleteSubscription: Subscription;
 
   public loading = false;
 
@@ -78,21 +84,43 @@ export class MapComponent implements AfterViewInit {
       this.loadMap(params.get('m_id'));
     });
 
-    this.noteService.noteCreate
+    this._noteCreateSubscription = this.noteService.noteCreate
       .pipe(filter((n) => n.mapId === this._map.id))
       .subscribe((n) => {
         this.addNoteToMap(n);
       });
 
-    this.noteService.noteDelete
+    this._noteDeleteSubscription = this.noteService.noteDelete
       .pipe(filter((n) => n.mapId === this._map.id))
       .subscribe((n) => {
         for (const layer of this._notesLayerGroup.getLayers()) {
           if (layer['_noteId'] === n.id) {
+            const popupComponent: ComponentRef<NoteViewMiniComponent> =
+              layer['_noteComponent'];
+
+            this._noteComponents = this._noteComponents.filter(
+              (nc) => nc !== popupComponent
+            );
+
+            popupComponent.destroy();
             this._notesLayerGroup.removeLayer(layer);
           }
         }
       });
+  }
+
+  ngOnDestroy() {
+    for (const nc of this._noteComponents) {
+      nc.destroy();
+    }
+
+    if (this._noteCreateSubscription) {
+      this._noteCreateSubscription.unsubscribe();
+    }
+
+    if (this._noteDeleteSubscription) {
+      this._noteDeleteSubscription.unsubscribe();
+    }
   }
 
   private async loadMap(id: string) {
@@ -180,6 +208,9 @@ export class MapComponent implements AfterViewInit {
         .resolveComponentFactory(NoteViewMiniComponent)
         .create(this.injector);
       component.instance.note = note;
+
+      this._noteComponents.push(component);
+      marker['_noteComponent'] = component;
 
       this.appRef.attachView(component.hostView);
 
