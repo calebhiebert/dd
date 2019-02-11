@@ -11,7 +11,7 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'dd-item-form',
   templateUrl: './item-form.component.html',
-  styleUrls: ['./item-form.component.css']
+  styleUrls: ['./item-form.component.css'],
 })
 export class ItemFormComponent implements OnInit {
   public loading = false;
@@ -37,7 +37,7 @@ export class ItemFormComponent implements OnInit {
       name: new FormControl(null, [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(30)
+        Validators.maxLength(30),
       ]),
       description: new FormControl(null, Validators.required),
       imageId: new FormControl(null),
@@ -45,11 +45,11 @@ export class ItemFormComponent implements OnInit {
       playerVisible: new FormControl(true),
       cost: new FormControl(0, [Validators.required, numberValidator]),
       weight: new FormControl(0, [Validators.required, numberValidator]),
-      tags: new FormArray([])
+      tags: new FormArray([]),
     });
 
     if (this.editing) {
-      this.route.params.subscribe(params => {
+      this.route.params.subscribe((params) => {
         const id = params.item_id;
         this.loadItem(id);
       });
@@ -79,7 +79,7 @@ export class ItemFormComponent implements OnInit {
         weight: v.weight,
         userId: this.item.userId,
         cost: v.cost,
-        tags: v.tags
+        tags: v.tags,
       };
 
       try {
@@ -87,7 +87,7 @@ export class ItemFormComponent implements OnInit {
         this.router.navigate([
           'campaigns',
           this.campaignService.campaign.id,
-          'items'
+          'items',
         ]);
       } catch (err) {
         throw err;
@@ -104,7 +104,7 @@ export class ItemFormComponent implements OnInit {
         weight: v.weight,
         userId: this.item.userId,
         cost: v.cost,
-        tags: v.tags
+        tags: v.tags,
       };
 
       try {
@@ -112,7 +112,7 @@ export class ItemFormComponent implements OnInit {
         this.router.navigate([
           'campaigns',
           this.campaignService.campaign.id,
-          'items'
+          'items',
         ]);
       } catch (err) {
         throw err;
@@ -159,7 +159,7 @@ export class ItemFormComponent implements OnInit {
 
       if (this.item.tags) {
         (this.formGroup.get('tags') as FormArray).controls = this.item.tags.map(
-          t => new FormControl(t)
+          (t) => new FormControl(t)
         );
       }
     } catch (err) {

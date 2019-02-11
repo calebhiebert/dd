@@ -50,6 +50,17 @@ export class SpellViewComponent implements OnInit {
     this.loading = false;
   }
 
+  public edit() {
+    this.router.navigate([
+      'campaign',
+      'manage',
+      this.campaignService.campaign.id,
+      'spells',
+      this.spell.id,
+      'edit',
+    ]);
+  }
+
   public async addToEntitySpells() {
     let entity: IEntity;
 

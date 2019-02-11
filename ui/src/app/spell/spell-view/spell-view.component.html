@@ -31,7 +31,12 @@
 
       <!-- Upper Column view -->
       <div class="column">
-        <h2 class="mb-0">{{ spell.name }}</h2>
+        <h2 class="mb-0">
+          {{ spell.name }}
+          <span class="text-gray text-italic" *ngIf="!spell.playerVisible"
+            >(Hidden)</span
+          >
+        </h2>
         <div class="text-gray text-italic">
           <!-- Edit Text -->
           <span *ngIf="editable"

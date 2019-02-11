@@ -31,6 +31,7 @@ import { SpellViewComponent } from './spell/spell-view/spell-view.component';
 import { MapComponent } from './map/map.component';
 import { MapUploadComponent } from './map/map-upload/map-upload.component';
 import { MapManagerComponent } from './map/map-manager/map-manager.component';
+import { SpellFormComponent } from './spell/spell-form/spell-form.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -151,6 +152,22 @@ const routes: Routes = [
         component: MapUploadComponent,
         data: {
           breadcrumb: 'Upload Map',
+        },
+      },
+      {
+        path: 'spells/create',
+        component: SpellFormComponent,
+        data: {
+          breadcrumb: 'Create Spell',
+          editing: false,
+        },
+      },
+      {
+        path: 'spells/:s_id/edit',
+        component: SpellFormComponent,
+        data: {
+          breadcrumb: 'Edit Spell',
+          editing: true,
         },
       },
     ],

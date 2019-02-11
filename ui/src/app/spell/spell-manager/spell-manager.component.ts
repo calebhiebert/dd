@@ -123,7 +123,15 @@ export class SpellManagerComponent implements OnInit {
     this.loading = false;
   }
 
-  public addSpell() {}
+  public addSpell() {
+    this.router.navigate([
+      'campaign',
+      'manage',
+      this.campaignService.campaign.id,
+      'spells',
+      'create',
+    ]);
+  }
 
   public selectSpell(spell: ISpell) {
     this.router.navigate(['campaigns', spell.campaignId, 'spells', spell.id]);
