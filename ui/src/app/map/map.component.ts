@@ -133,6 +133,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       });
 
     // The updatehub service emits an event every time an entity is updated
+    // TODO handle when an entity updates position to another map
+    // TODO handle when an entity is deleted/position is cleared
     this._entityUpdateSubscription = this.updateHub.entityUpdated
       .pipe(filter((e) => e.mapId === this._map.id))
       .subscribe((e) => {
@@ -302,10 +304,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (entity.lat && entity.lng) {
       const marker = L.marker([entity.lat, entity.lng], {
         icon: L.icon({
-          iconUrl: `https://res.cloudinary.com/dqhk8k6iv/image/upload/bo_1px_solid_rgb:000,c_lfill,g_faces:auto,h_${ENTITY_ICON_SIZE},r_${ENTITY_ICON_SIZE /
+          iconUrl: `https://res.cloudinary.com/dqhk8k6iv/image/upload/bo_2px_solid_rgb:303742,c_lfill,g_faces:auto,h_${ENTITY_ICON_SIZE},r_${ENTITY_ICON_SIZE /
             2},w_${ENTITY_ICON_SIZE}/${entity.imageId}`,
           iconSize: [ENTITY_ICON_SIZE, ENTITY_ICON_SIZE],
           iconAnchor: [ENTITY_ICON_SIZE / 2, ENTITY_ICON_SIZE / 2],
+          popupAnchor: [0, -(ENTITY_ICON_SIZE / 2)],
         }),
       });
 
@@ -316,6 +319,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       }
 
       this._entityLayerGroups[entity.preset.name].addLayer(marker);
+
+      marker.bindPopup(`<h5>${entity.name}</h5>`);
     }
   }
 
