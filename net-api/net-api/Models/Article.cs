@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace net_api.Models
 {
-    public class ThingOfInterest
+    public class Article
     {
         public Guid Id { get; set; }
 
@@ -15,17 +15,22 @@ namespace net_api.Models
         [StringLength(30, MinimumLength = 3)]
         public string Name { get; set; }
 
-        [StringLength(3000)]
+        [StringLength(6000)]
         public string Description { get; set; }
-
-        [ForeignKey("Location")]
-        public Guid? LocationId { get; set; }
-        public Location Location { get; set; }
 
         [Column("ImageIds", TypeName = "varchar[]")]
         public string[] ImageIds { get; set; }
 
-        public ICollection<SellableItem> SellableItems { get; set; }
+        [Required]
+        public Guid CampaignId { get; set; }
+
+        [JsonIgnore]
+        public Campaign Campaign { get; set; }
+
+        [Required]
+        public string UserId { get; set; }
+        
+        public User User { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
@@ -38,21 +43,10 @@ namespace net_api.Models
             }
         }
 
-        public ThingOfInterest()
+        public Article()
         {
             Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
         }
-    }
-
-    public class Location : ThingOfInterest
-    {
-        [Required]
-        public LocationType Type { get; set; }
-    }
-
-    public enum LocationType
-    {
-        Region, Country, City, Town, Village, Farm, Shop, House, Market, Wonder
     }
 }

@@ -98,6 +98,11 @@ namespace net_api.Models
         public Guid EntityPresetId { get; set; }
         public EntityPreset Preset { get; set; }
 
+        // For setting the entity's current position
+        public Guid? MapId { get; set; }
+        public double? Lat { get; set; }
+        public double? Lng { get; set; }
+
         public ICollection<InventoryItem> InventoryItems { get; set; }
 
         public Entity()

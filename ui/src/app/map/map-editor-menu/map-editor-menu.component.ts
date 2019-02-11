@@ -36,6 +36,13 @@ export class MapEditorMenuComponent implements OnInit {
     });
     this.modal.close(null);
   }
+
+  public updateEntityPosition() {
+    this._opResolver({
+      type: MapEditorOperationType.UPDATE_ENTITY_POSITION,
+    });
+    this.modal.close(null);
+  }
 }
 
 export interface IMapEditorOperation {
@@ -45,4 +52,5 @@ export interface IMapEditorOperation {
 export enum MapEditorOperationType {
   NONE,
   PLACE_NOTE,
+  UPDATE_ENTITY_POSITION,
 }

@@ -1,4 +1,4 @@
-import { Injectable, Attribute } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AttributeType } from './attributes';
 import { HttpClient } from '@angular/common/http';
 import { IUser } from './user.service';
@@ -187,6 +187,9 @@ export interface IEntity {
   currency?: number;
   entityPresetId: string;
   preset?: IEntityPreset;
+  mapId?: string;
+  lat?: number;
+  lng?: number;
   inventoryItems?: IInventoryItem[];
 }
 

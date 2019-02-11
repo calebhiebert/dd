@@ -1,8 +1,12 @@
-<div class="loading loading-lg" *ngIf="!map"></div>
+<dd-editable-entity-selector #entityselect></dd-editable-entity-selector>
 
-<dd-map-editor-menu #editor></dd-map-editor-menu>
-<div class="map" #map></div>
+<div class="map-container">
+  <div class="loading loading-lg" *ngIf="!map"></div>
 
-<div *ngIf="editable && map">
-  <button class="btn btn-sm btn-primary" (click)="delete()">Delete</button>
+  <dd-map-editor-menu #editor></dd-map-editor-menu>
+  <div class="map" #map></div>
+
+  <div *ngIf="editable && map">
+    <button class="btn btn-sm btn-primary" (click)="delete()">Delete</button>
+  </div>
 </div>

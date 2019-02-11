@@ -26,6 +26,9 @@ import { filter } from 'rxjs/operators';
 import { LoginService } from '../login.service';
 import { NoteViewMiniComponent } from '../note/note-view-mini/note-view-mini.component';
 import { Subscription } from 'rxjs';
+import { IEntity, EntityService } from '../entity.service';
+import { EditableEntitySelectorComponent } from '../entity/editable-entity-selector/editable-entity-selector.component';
+import { UpdateHubService } from '../update-hub.service';
 
 let ownNoteIcon = L.icon({
   iconUrl: '/assets/note-icon.png',
@@ -45,6 +48,8 @@ let otherNoteIcon = L.icon({
 
 let map: any;
 
+const ENTITY_ICON_SIZE = 40;
+
 @Component({
   selector: 'dd-map',
   templateUrl: './map.component.html',
@@ -57,13 +62,19 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('editor')
   private editor: MapEditorMenuComponent;
 
+  @ViewChild('entityselect')
+  private entitySelect: EditableEntitySelectorComponent;
+
   private _map: IMap;
   private _notesLayerGroup: any;
+  private _entityLayerGroups: { [key: string]: any } = {};
   private _mapLayerControl: any;
   private _notes: INote[];
   private _noteComponents: ComponentRef<NoteViewMiniComponent>[] = [];
   private _noteCreateSubscription: Subscription;
   private _noteDeleteSubscription: Subscription;
+  private _noteUpdateSubscription: Subscription;
+  private _entityUpdateSubscription: Subscription;
 
   public loading = false;
 
@@ -76,20 +87,20 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     private login: LoginService,
     private resolver: ComponentFactoryResolver,
     private injector: Injector,
-    private appRef: ApplicationRef
+    private appRef: ApplicationRef,
+    private entityService: EntityService,
+    private updateHub: UpdateHubService
   ) {}
 
   ngAfterViewInit() {
-    this.route.paramMap.subscribe((params) => {
-      this.loadMap(params.get('m_id'));
-    });
-
+    // The note service emits an event every time a note is created
     this._noteCreateSubscription = this.noteService.noteCreate
       .pipe(filter((n) => n.mapId === this._map.id))
       .subscribe((n) => {
         this.addNoteToMap(n);
       });
 
+    // The note service emits an event every time a note is deleted
     this._noteDeleteSubscription = this.noteService.noteDelete
       .pipe(filter((n) => n.mapId === this._map.id))
       .subscribe((n) => {
@@ -107,6 +118,43 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           }
         }
       });
+
+    // The note service emits an event every time a note is updated
+    this._noteUpdateSubscription = this.noteService.noteUpdate
+      .pipe(filter((n) => n.mapId === this._map.id))
+      .subscribe((n) => {
+        const noteLayer = this._notesLayerGroup
+          .getLayers()
+          .find((l) => l['_noteId'] === n.id);
+
+        if (noteLayer === undefined) {
+          this.addNoteToMap(n);
+        }
+      });
+
+    // The updatehub service emits an event every time an entity is updated
+    this._entityUpdateSubscription = this.updateHub.entityUpdated
+      .pipe(filter((e) => e.mapId === this._map.id))
+      .subscribe((e) => {
+        if (!this._entityLayerGroups[e.preset.name]) {
+          this.addEntityToMap(e);
+          return;
+        }
+
+        const marker = this._entityLayerGroups[e.preset.name]
+          .getLayers()
+          .find((l) => l['_entity'].id === e.id);
+
+        if (!marker) {
+          this.addEntityToMap(e);
+        } else {
+          marker.setLatLng([e.lat, e.lng]);
+        }
+      });
+
+    this.route.paramMap.subscribe((params) => {
+      this.loadMap(params.get('m_id'));
+    });
   }
 
   ngOnDestroy() {
@@ -121,6 +169,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (this._noteDeleteSubscription) {
       this._noteDeleteSubscription.unsubscribe();
     }
+
+    if (this._noteUpdateSubscription) {
+      this._noteUpdateSubscription.unsubscribe();
+    }
+
+    if (this._entityUpdateSubscription) {
+      this._entityUpdateSubscription.unsubscribe();
+    }
   }
 
   private async loadMap(id: string) {
@@ -128,6 +184,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.constructMap();
     this.createNotesLayer();
     await this.loadNotes(id);
+
+    // Do entity setup
+    // TODO move this into it's own function
+    for (const entity of this.campaignService.campaign.entities) {
+      if (entity.mapId === this._map.id && entity.lat && entity.lng) {
+        this.addEntityToMap(entity);
+      }
+    }
   }
 
   private async load(id: string) {
@@ -194,6 +258,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this._mapLayerControl.addOverlay(this._notesLayerGroup, 'Notes');
   }
 
+  private createEntityLayer(name: string) {
+    const layer = L.layerGroup();
+    this._entityLayerGroups[name] = layer;
+    layer.addTo(map);
+    this._mapLayerControl.addOverlay(layer, name);
+  }
+
   private addNoteToMap(note: INote) {
     if (note.lat && note.lng) {
       const isNoteMine = note.userId === this.login.id;
@@ -227,7 +298,28 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private handleEditorOperation(op: IMapEditorOperation, event: any) {
+  private addEntityToMap(entity: IEntity) {
+    if (entity.lat && entity.lng) {
+      const marker = L.marker([entity.lat, entity.lng], {
+        icon: L.icon({
+          iconUrl: `https://res.cloudinary.com/dqhk8k6iv/image/upload/bo_1px_solid_rgb:000,c_lfill,g_faces:auto,h_${ENTITY_ICON_SIZE},r_${ENTITY_ICON_SIZE /
+            2},w_${ENTITY_ICON_SIZE}/${entity.imageId}`,
+          iconSize: [ENTITY_ICON_SIZE, ENTITY_ICON_SIZE],
+          iconAnchor: [ENTITY_ICON_SIZE / 2, ENTITY_ICON_SIZE / 2],
+        }),
+      });
+
+      marker['_entity'] = entity;
+
+      if (!this._entityLayerGroups[entity.preset.name]) {
+        this.createEntityLayer(entity.preset.name);
+      }
+
+      this._entityLayerGroups[entity.preset.name].addLayer(marker);
+    }
+  }
+
+  private async handleEditorOperation(op: IMapEditorOperation, event: any) {
     switch (op.type) {
       case MapEditorOperationType.PLACE_NOTE:
         this.noteService.addNote({
@@ -236,6 +328,17 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           lat: event.latlng.lat,
           lng: event.latlng.lng,
         });
+        break;
+      case MapEditorOperationType.UPDATE_ENTITY_POSITION:
+        const entity = await this.entitySelect.selectEntity();
+        if (entity) {
+          await this.entityService.updateEntity({
+            ...entity,
+            mapId: this._map.id,
+            lat: event.latlng.lat,
+            lng: event.latlng.lng,
+          });
+        }
         break;
     }
   }
@@ -263,7 +366,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   public set notes(val: INote[]) {
-    console.log(map);
     this._notes = val;
   }
 
