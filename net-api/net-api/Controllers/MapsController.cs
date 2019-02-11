@@ -165,9 +165,10 @@ namespace net_api.Controllers
                 }
             }
 
+            // Cache for a year
             Response.Headers.Add("Cache-Control", "max-age=31557600");
 
-            return File(bytes, "image/webp");
+            return File(bytes, "image/png");
         }
 
         // GET: api/Maps/5

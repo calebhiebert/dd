@@ -119,8 +119,10 @@ export class MapComponent implements AfterViewInit {
     const tileLayer = L.tileLayer(
       `${environment.tileURL}/maps/{id}/tile/{z}/{x}/{y}`,
       {
-        maxZoom: this._map.maxZoom,
+        maxZoom: this._map.maxZoom + 2,
         minZoom: this._map.minZoom,
+        minNativeZoom: 1,
+        maxNativeZoom: this._map.maxZoom,
         bounds: [[0, 0], [-256, 256]],
         id: this._map.id,
       }

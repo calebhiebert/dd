@@ -1,10 +1,10 @@
 package main
-
 import (
+	"bytes"
 	"image"
 	"image/color"
+	"image/png"
 
-	"github.com/chai2010/webp"
 	"github.com/disintegration/imaging"
 )
 
@@ -41,14 +41,19 @@ func GenerateTile(config TileConfig, source image.Image) (Tile, error) {
 			pasteX = tileSize - tile.Bounds().Dx()
 		}
 
-		fullSizeTile := imaging.New(tileSize, tileSize, color.NRGBA{221, 221, 221, 255})
+		fullSizeTile := imaging.New(tileSize, tileSize, color.NRGBA{0, 0, 0, 0})
 		tile = imaging.Paste(fullSizeTile, tile, image.Point{X: pasteX, Y: pasteY})
 	} else {
 		// Resize the image to be the correct size for the tile
 		tile = imaging.Resize(tile, tileSize, tileSize, imaging.Linear)
 	}
 
-	data, err := webp.EncodeLosslessRGB(tile)
+	var buf bytes.Buffer
+	encoder := &png.Encoder{
+		CompressionLevel: png.BestCompression,
+	}
+
+	err := encoder.Encode(&buf, tile)
 	if err != nil {
 		return Tile{}, err
 	}
@@ -57,6 +62,7 @@ func GenerateTile(config TileConfig, source image.Image) (Tile, error) {
 		Z:    config.ZoomLevel,
 		X:    config.TileX,
 		Y:    config.TileY,
-		Data: data,
+		Data: buf.Bytes(),
 	}, nil
 }
+
