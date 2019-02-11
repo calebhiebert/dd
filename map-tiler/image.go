@@ -1,4 +1,5 @@
 package main
+
 import (
 	"fmt"
 	"image"
@@ -88,15 +89,30 @@ func GetTileConfig(details ImageDetails) []TileConfig {
 					continue
 				}
 
+				var gravity TileGravity
+
+				if int(x1*ratio) <= details.xLowerBound() && details.xLowerBound() != 0 && zoomSize > 0 {
+					gravity = GravityLeft
+				} else if int(x2*ratio) >= details.xUpperBound() && details.xUpperBound() != 0 && zoomSize > 0 {
+					gravity = GravityRight
+				} else if int(y1*ratio) <= details.yLowerBound() && details.yLowerBound() != 0 && zoomSize > 0 {
+					gravity = GravityTop
+				} else if int(y2*ratio) >= details.yUpperBound() && details.yUpperBound() != 0 && zoomSize > 0 {
+					gravity = GravityBottom
+				} else {
+					gravity = GravityNone
+				}
+
 				tileConfigs = append(tileConfigs, TileConfig{
-					ZoomLevel: z - zoomLevel0Pow2,
-					ZoomSize:  zoomSize,
-					X1:        int(x1*ratio) - details.xLowerBound(),
-					X2:        int(x2*ratio) - details.xLowerBound(),
-					Y1:        int(y1*ratio) - details.yLowerBound(),
-					Y2:        int(y2*ratio) - details.yLowerBound(),
-					TileX:     x,
-					TileY:     y,
+					ZoomLevel:   z - zoomLevel0Pow2,
+					ZoomSize:    zoomSize,
+					X1:          int(x1*ratio) - details.xLowerBound(),
+					X2:          int(x2*ratio) - details.xLowerBound(),
+					Y1:          int(y1*ratio) - details.yLowerBound(),
+					Y2:          int(y2*ratio) - details.yLowerBound(),
+					TileX:       x,
+					TileY:       y,
+					TileGravity: gravity,
 				})
 			}
 		}
@@ -125,4 +141,3 @@ func GetPreparedImage(id, bucket string) (image.Image, error) {
 
 	return img, nil
 }
-

@@ -42,15 +42,26 @@ type Mapping map[string][]int
 
 // TileConfig configuration for cutting out a tile
 type TileConfig struct {
-	ZoomLevel int `json:"z"`
-	ZoomSize  int `json:"s"`
-	X1        int `json:"x"`
-	X2        int `json:"x2"`
-	Y1        int `json:"y"`
-	Y2        int `json:"y2"`
-	TileX     int `json:"tx"`
-	TileY     int `json:"ty"`
+	ZoomLevel   int         `json:"z"`
+	ZoomSize    int         `json:"s"`
+	X1          int         `json:"x"`
+	X2          int         `json:"x2"`
+	Y1          int         `json:"y"`
+	Y2          int         `json:"y2"`
+	TileX       int         `json:"tx"`
+	TileY       int         `json:"ty"`
+	TileGravity TileGravity `json:"g"`
 }
+
+type TileGravity int
+
+const (
+	GravityTop = iota
+	GravityBottom
+	GravityLeft
+	GravityRight
+	GravityNone
+)
 
 // pack will pack up the image and upload it to s3
 func pack(details ImageDetails, id, bucket string) (*MapMetadata, error) {
@@ -258,4 +269,3 @@ func mergeProcessingResponses(procResponses ...ProcessingResponse) (Mapping, []b
 
 	return mapping, data, nil
 }
-
