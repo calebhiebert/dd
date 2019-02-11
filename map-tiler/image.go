@@ -93,11 +93,11 @@ func GetTileConfig(details ImageDetails) []TileConfig {
 
 				if int(x1*ratio) <= details.xLowerBound() && details.xLowerBound() != 0 && zoomSize > 0 {
 					gravity = GravityLeft
-				} else if int(x2*ratio) >= details.xUpperBound() && details.xUpperBound() != 0 && zoomSize > 0 {
+				} else if int(x2*ratio) >= details.xUpperBound() && details.xUpperBound() != details.Width && zoomSize > 0 {
 					gravity = GravityRight
 				} else if int(y1*ratio) <= details.yLowerBound() && details.yLowerBound() != 0 && zoomSize > 0 {
 					gravity = GravityTop
-				} else if int(y2*ratio) >= details.yUpperBound() && details.yUpperBound() != 0 && zoomSize > 0 {
+				} else if int(y2*ratio) >= details.yUpperBound() && details.yUpperBound() != details.Height && zoomSize > 0 {
 					gravity = GravityBottom
 				} else {
 					gravity = GravityNone
