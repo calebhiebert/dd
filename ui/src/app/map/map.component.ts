@@ -241,7 +241,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   public async delete() {
-    if (await Swal.fire({ title: 'Are you sure?', showCancelButton: true })) {
+    if (
+      (await Swal.fire({ title: 'Are you sure?', showCancelButton: true }))
+        .value === true
+    ) {
       try {
         await this.mapService.deleteMap(this._map.id);
         this.router.navigate([

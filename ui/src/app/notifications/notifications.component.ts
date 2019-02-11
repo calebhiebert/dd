@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import {
   NotificationService,
   Notification,
@@ -13,6 +13,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./notifications.component.css'],
 })
 export class NotificationsComponent implements OnInit {
+  @Output()
+  public done = new EventEmitter<boolean>();
+
   constructor(
     private notificationService: NotificationService,
     private router: Router
@@ -25,11 +28,15 @@ export class NotificationsComponent implements OnInit {
   }
 
   public viewCampaign(n: ICampaignNotification) {
+    this.notificationService.removeNotification(n);
     this.router.navigate(['campaigns', n.campaignId, 'landing']);
+    this.done.emit(true);
   }
 
   public viewMap(m: IMapNotification) {
+    this.notificationService.removeNotification(m);
     this.router.navigate(['campaigns', m.campaignId, 'maps', m.mapId]);
+    this.done.emit(true);
   }
 
   public get notifications() {

@@ -9,6 +9,7 @@ import { ModalComponent } from 'src/app/modal/modal.component';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 import { filter } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'dd-note-editor',
@@ -147,7 +148,11 @@ export class NoteEditorComponent implements OnInit {
   }
 
   public async delete() {
-    if (this.note) {
+    if (
+      this.note &&
+      (await Swal.fire({ text: 'Are you sure?', showCancelButton: true }))
+        .value === true
+    ) {
       try {
         await this.noteService.deleteNote(this.note.id);
         this.modal.close(null);

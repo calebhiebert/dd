@@ -52,7 +52,10 @@ export class SpellsetManagerComponent implements OnInit {
   }
 
   public async remove(entitySpell: IEntitySpell) {
-    if (await Swal.fire({ title: 'Are you sure?', showCancelButton: true })) {
+    if (
+      (await Swal.fire({ title: 'Are you sure?', showCancelButton: true }))
+        .value === true
+    ) {
       try {
         await this.spellService.deleteSpellsetItem(
           entitySpell.entityId,

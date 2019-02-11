@@ -1,7 +1,4 @@
-<div class="container grid-xl">
-  <div class="columns">
-    <div class="column"><h3>Notifications</h3></div>
-  </div>
+<div>
   <div class="loading" *ngIf="loading"></div>
 
   <!-- Notifications -->
@@ -15,7 +12,8 @@
 
     <!-- Notification List -->
     <div class="card p-2 mb-2" *ngFor="let n of notifications">
-      <div class="columns">
+      <div class="columns col-gapless">
+        <!-- Clear Button -->
         <div class="column col-auto">
           <button
             class="btn btn-sm btn-link"
@@ -25,26 +23,29 @@
             <i class="icon icon-cross"></i>
           </button>
         </div>
-        <div class="column d-flex align-items-center">{{ n.message }}</div>
 
-        <!-- Campaign Related Notification Things -->
-        <div
-          class="column col-auto"
-          *ngIf="n.campaign !== null && n.campaign !== undefined"
-        >
-          <button class="btn btn-sm btn-primary" (click)="viewCampaign(n)">
-            {{ n.campaign.name }} <i class="icon icon-arrow-right"></i>
-          </button>
+        <!-- Message -->
+        <div class="column d-flex align-items-center col-8 col-sm-11">
+          {{ n.message }}
         </div>
 
-        <!-- Map related notifications -->
+        <!-- Controls Column -->
         <div
-          class="column col-auto"
-          *ngIf="n.mapId !== null && n.mapId !== undefined"
+          class="column col-sm-12 col-md-auto col-lg-auto col-xl-auto col-auto col-ml-auto"
         >
-          <button class="btn btn-sm btn-primary" (click)="viewMap(n)">
-            View Map <i class="icon icon-arrow-right"></i>
-          </button>
+          <!-- Campaign Related Notification Things -->
+          <div *ngIf="n.campaign !== null && n.campaign !== undefined">
+            <button class="btn btn-sm btn-primary" (click)="viewCampaign(n)">
+              {{ n.campaign.name }} <i class="icon icon-arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- Map related notifications -->
+          <div *ngIf="n.mapId !== null && n.mapId !== undefined">
+            <button class="btn btn-sm btn-primary" (click)="viewMap(n)">
+              View Map <i class="icon icon-arrow-right"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
