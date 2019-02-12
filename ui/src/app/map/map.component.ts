@@ -29,6 +29,7 @@ import { IEntity, EntityService } from '../entity.service';
 import { EditableEntitySelectorComponent } from '../entity/editable-entity-selector/editable-entity-selector.component';
 import { UpdateHubService } from '../update-hub.service';
 import { ToastrService } from 'ngx-toastr';
+import 'leaflet-draw';
 
 let ownNoteIcon = L.icon({
   iconUrl: '/assets/note-icon.png',
@@ -265,6 +266,53 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this._mapLayerControl = L.control.layers().addTo(map);
     this._mapLayerControl.addBaseLayer(tileLayer, 'Base');
+
+    var editableLayers = new L.FeatureGroup();
+    map.addLayer(editableLayers);
+
+    var options = {
+      position: 'topleft',
+      draw: {
+        polyline: {
+          shapeOptions: {
+            color: '#f357a1',
+            weight: 10,
+          },
+        },
+        polygon: {
+          allowIntersection: false, // Restricts shapes to simple polygons
+          drawError: {
+            color: '#e1e100', // Color the shape will turn when intersects
+            message: "<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
+          },
+          shapeOptions: {
+            color: '#bada55',
+          },
+        },
+        rectangle: {
+          shapeOptions: {
+            clickable: false,
+          },
+        },
+      },
+      edit: {
+        featureGroup: editableLayers, //REQUIRED!!
+        remove: true,
+      },
+    };
+
+    map.addControl(new L.Control.Draw(options));
+
+    map.on(L.Draw.Event.CREATED, function(e) {
+      var type = e.layerType,
+        layer = e.layer;
+
+      editableLayers.addLayer(layer);
+    });
+
+    map.on('draw:edited', function(e) {
+      e.layers.eachLayer((layer) => console.log(editableLayers));
+    });
 
     map.fitBounds([[-10, 10], [-246, 246]]);
 

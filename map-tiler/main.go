@@ -17,7 +17,7 @@ import (
 	"github.com/vmihailenco/msgpack"
 )
 
-var tileConfigsPerWorker = 100
+var tileConfigsPerWorker = 75
 var maxConcurrentWorkers = 75
 
 // Zoom levels must be powers of 2
