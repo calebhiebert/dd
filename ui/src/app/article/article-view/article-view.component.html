@@ -1,0 +1,22 @@
+<div class="container grid-xl">
+  <div class="loading loading-lg" *ngIf="loading"></div>
+
+  <!-- Display -->
+  <div *ngIf="article">
+    <div class="columns">
+      <!-- Name -->
+      <div class="column">
+        <h3>{{ article.name }}</h3>
+      </div>
+
+      <div class="column col-auto">
+        <button class="btn btn-sm" (click)="edit()" *ngIf="editable">
+          Edit
+        </button>
+      </div>
+    </div>
+
+    <!-- Article Content -->
+    <div [froalaView]="article.text"></div>
+  </div>
+</div>

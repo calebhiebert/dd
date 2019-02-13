@@ -1,3 +1,92 @@
+<!-- Load Styles -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/froala-editor@2.9.3/css/froala_editor.pkgd.min.css"
+  integrity="sha256-Wgt83+Vwau8f6eopOb+LOIjva7hfnY0Fm7lYt+lmbXQ="
+  crossorigin="anonymous"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/froala-editor@2.9.3/css/froala_style.min.css"
+  integrity="sha256-cYYpk9qpebCK+HmvWrgBP5taXVBEwUA8kHD2uxvbQOs="
+  crossorigin="anonymous"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+  integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0="
+  crossorigin="anonymous"
+/>
+
+<!-- Editor -->
 <div class="container grid-xl p-2" [formGroup]="formGroup">
-  <div [froalaEditor]="froalaOptions" formControlName="body"></div>
+  <div class="columns">
+    <div class="column">
+      <h3>{{ editing ? 'Edit' : 'Create' }} Article</h3>
+    </div>
+
+    <div class="column col-auto">
+      <button
+        class="btn btn-error mr-2"
+        *ngIf="editing"
+        (click)="delete()"
+        [disabled]="loading || saving"
+      >
+        Delete
+      </button>
+      <button
+        class="btn mr-2"
+        (click)="cancel()"
+        [disabled]="loading || saving"
+      >
+        Cancel
+      </button>
+      <button
+        class="btn"
+        [ngClass]="{ loading: saving }"
+        (click)="save()"
+        [disabled]="loading || saving"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+
+  <!-- Name -->
+  <div
+    class="form-group"
+    [ngClass]="{ 'has-error': name.invalid && (name.dirty || name.touched) }"
+  >
+    <label class="form-label" for="name">Name</label>
+    <input
+      type="text"
+      name="name"
+      class="form-input"
+      id="name"
+      placeholder="Name"
+      formControlName="name"
+    />
+    <p
+      class="form-input-hint"
+      *ngIf="
+        name.invalid && (name.dirty || name.touched) && name.errors.required
+      "
+    >
+      A name is required
+    </p>
+    <p
+      class="form-input-hint"
+      *ngIf="
+        name.invalid && (name.dirty || name.touched) && name.errors.maxlength
+      "
+    >
+      The name cannot be more than 30 characters long
+    </p>
+  </div>
+
+  <!-- Text -->
+  <div class="form-group">
+    <label class="form-label" for="text">Content</label>
+    <div id="text" [froalaEditor]="froalaOptions" formControlName="text"></div>
+  </div>
 </div>

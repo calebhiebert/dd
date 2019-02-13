@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace net_api.Models
 {
+    [Table("Articles")]
     public class Article
     {
         public Guid Id { get; set; }
@@ -33,15 +34,6 @@ namespace net_api.Models
         public bool Published { get; set; }
 
         public DateTime CreatedAt { get; set; }
-
-        [NotMapped]
-        public string TOIType
-        {
-            get
-            {
-                return GetType().Name;
-            }
-        }
 
         public Article()
         {

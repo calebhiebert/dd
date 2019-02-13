@@ -84,6 +84,7 @@ import { NoteViewMiniComponent } from './note/note-view-mini/note-view-mini.comp
 import { EntityViewMiniComponent } from './entity/entity-view-mini/entity-view-mini.component';
 import { ArticleEditorComponent } from './article/article-editor/article-editor.component';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { ArticleViewComponent } from './article/article-view/article-view.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -160,6 +161,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     NoteViewMiniComponent,
     EntityViewMiniComponent,
     ArticleEditorComponent,
+    ArticleViewComponent,
   ],
   imports: [
     BrowserModule,

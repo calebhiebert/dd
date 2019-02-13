@@ -33,12 +33,12 @@ import { MapUploadComponent } from './map/map-upload/map-upload.component';
 import { MapManagerComponent } from './map/map-manager/map-manager.component';
 import { SpellFormComponent } from './spell/spell-form/spell-form.component';
 import { ArticleEditorComponent } from './article/article-editor/article-editor.component';
+import { ArticleViewComponent } from './article/article-view/article-view.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'invite/:invite_id', component: InviteComponent },
   { path: 'about', component: AboutComponent },
-  { path: 'aa', component: ArticleEditorComponent },
   {
     path: 'login',
     component: LoginComponent,
@@ -172,6 +172,22 @@ const routes: Routes = [
           editing: true,
         },
       },
+      {
+        path: 'articles/create',
+        component: ArticleEditorComponent,
+        data: {
+          editing: false,
+          breadcrumb: 'Create Article',
+        },
+      },
+      {
+        path: 'articles/:a_id/edit',
+        component: ArticleEditorComponent,
+        data: {
+          editing: true,
+          breadcrumb: 'Edit Article',
+        },
+      },
     ],
   },
   {
@@ -286,6 +302,13 @@ const routes: Routes = [
         component: MapComponent,
         data: {
           breadcrumb: 'Map View',
+        },
+      },
+      {
+        path: 'articles/:a_id',
+        component: ArticleViewComponent,
+        data: {
+          breadcrumb: 'View Article',
         },
       },
     ],
