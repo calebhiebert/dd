@@ -58,6 +58,9 @@ export class HealthDisplayComponent implements OnInit {
   @Input()
   public disableAnimation = false;
 
+  @Input()
+  public mini = false;
+
   @Output()
   public healthChange = new EventEmitter<IHealth>();
 

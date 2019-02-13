@@ -85,17 +85,25 @@
   *ngFor="let bar of bars; trackBy: trackBarElement"
 >
   <div
-    class="bar-item d-flex p-1 align-items-center justify-content-center"
-    [ngClass]="{ 'bar-animated': !disableAnimation }"
+    class="bar-item d-flex align-items-center justify-content-center"
+    [ngClass]="{ 'bar-animated': !disableAnimation, 'p-1': !mini }"
     [style.width]="bar.percentCSS"
     [style.backgroundColor]="bar.colorCSS"
   >
-    <h5 class="mb-1 text-bold" *ngIf="hpPercent > 50">
+    <h5 class="mb-1 text-bold" *ngIf="hpPercent > 50 && !mini">
       {{ bar.current }} / {{ bar.max }}
     </h5>
-    <h5 class="mb-1 text-bold" *ngIf="hpPercent <= 50" style="opacity: 0;">
+    <h5
+      class="mb-1 text-bold"
+      *ngIf="hpPercent <= 50 && !mini"
+      style="opacity: 0;"
+    >
       .
     </h5>
+    <div *ngIf="hpPercent > 50 && mini">{{ bar.current }} / {{ bar.max }}</div>
+    <div *ngIf="hpPercent <= 50 && mini" style="opacity: 0;">
+      .
+    </div>
   </div>
 
   <!-- Extras container -->

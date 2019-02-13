@@ -1,0 +1,64 @@
+<div>
+  <div>
+    <!-- Fancy Image -->
+    <img
+      src="https://res.cloudinary.com/dqhk8k6iv/image/upload/bo_1px_solid_rgb:000000,c_lfill,g_faces:auto,h_20,r_0,w_250/{{
+        entity.imageId
+      }}"
+      alt="Picture Of {{ entity.name }}"
+    />
+  </div>
+
+  <div class="columns">
+    <!-- Name -->
+    <div class="column">
+      <h5 class="mt-0 mb-1">{{ entity.name }}</h5>
+    </div>
+
+    <!-- Info Column -->
+    <div class="column text-right">
+      <!-- Level -->
+      <span *ngIf="entity.preset.isXPEnabled"> LV {{ level }}</span>
+      <span class="text-gray" *ngIf="entity.preset.isXPEnabled"> • </span>
+      <!-- Entity Type -->
+      <span class="text-italic">{{ entity.preset.name }}</span>
+    </div>
+  </div>
+
+  <!-- HP -->
+  <div class="mb-2" *ngIf="entity.preset.isHealthEnabled">
+    <dd-health-display
+      [editable]="false"
+      [health]="entity.health"
+      [preset]="entity.preset.health"
+      [mini]="true"
+    ></dd-health-display>
+  </div>
+
+  <!-- Footer -->
+  <div class="columns">
+    <!-- User -->
+    <div *ngIf="user" class="mt-auto">
+      <figure class="avatar avatar-xs">
+        <img [src]="user.pictureURL" />
+      </figure>
+      {{ user.username }}
+    </div>
+
+    <div class="column col-auto col-ml-auto">
+      <button
+        class="btn btn-sm btn-error mr-1 tooltip"
+        data-tooltip="Remove from map"
+        [ngClass]="{ loading: removing }"
+        (click)="removeFromMap()"
+      >
+        <i class="icon icon-cross"></i>
+      </button>
+
+      <!-- See More -->
+      <button class="btn btn-sm" (click)="viewMore()">
+        More <i class="icon icon-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</div>

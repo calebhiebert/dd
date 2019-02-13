@@ -30,6 +30,7 @@ import { EditableEntitySelectorComponent } from '../entity/editable-entity-selec
 import { UpdateHubService } from '../update-hub.service';
 import { ToastrService } from 'ngx-toastr';
 import 'leaflet-draw';
+import { EntityViewMiniComponent } from '../entity/entity-view-mini/entity-view-mini.component';
 
 let ownNoteIcon = L.icon({
   iconUrl: '/assets/note-icon.png',
@@ -72,6 +73,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private _mapLayerControl: any;
   private _shapeLayers: any;
   private _notes: INote[];
+  private _entityComponents: ComponentRef<EntityViewMiniComponent>[] = [];
   private _noteComponents: ComponentRef<NoteViewMiniComponent>[] = [];
   private _noteCreateSubscription: Subscription;
   private _noteDeleteSubscription: Subscription;
@@ -138,26 +140,42 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       });
 
     // The updatehub service emits an event every time an entity is updated
-    // TODO handle when an entity updates position to another map
-    // TODO handle when an entity is deleted/position is cleared
-    this._entityUpdateSubscription = this.updateHub.entityUpdated
-      .pipe(filter((e) => e.mapId === this._map.id))
-      .subscribe((e) => {
-        if (!this._entityLayerGroups[e.preset.name]) {
-          this.addEntityToMap(e);
-          return;
-        }
+    this._entityUpdateSubscription = this.updateHub.entityUpdated.subscribe(
+      (e: IEntity) => {
+        if (e.mapId === this._map.id) {
+          if (!this._entityLayerGroups[e.preset.name]) {
+            this.addEntityToMap(e);
+            return;
+          }
 
-        const marker = this._entityLayerGroups[e.preset.name]
-          .getLayers()
-          .find((l) => l['_entity'].id === e.id);
+          const marker = this._entityLayerGroups[e.preset.name]
+            .getLayers()
+            .find((l) => l['_entity'].id === e.id);
 
-        if (!marker) {
-          this.addEntityToMap(e);
+          if (!marker) {
+            this.addEntityToMap(e);
+          } else {
+            marker.setLatLng([e.lat, e.lng]);
+            marker['_entityComponent'].instance.entity = e;
+          }
         } else {
-          marker.setLatLng([e.lat, e.lng]);
+          if (this._entityLayerGroups[e.preset.name]) {
+            // Remove them from this map if neccecary
+            const marker = this._entityLayerGroups[e.preset.name]
+              .getLayers()
+              .find((l) => l['_entity'].id === e.id);
+
+            if (marker) {
+              this._entityLayerGroups[e.preset.name].removeLayer(marker);
+              this._entityComponents = this._entityComponents.filter(
+                (ec) => ec !== marker['_entityComponent']
+              );
+              marker['_entityComponent'].destroy();
+            }
+          }
         }
-      });
+      }
+    );
 
     this.route.paramMap.subscribe((params) => {
       this.loadMap(params.get('m_id'));
@@ -179,6 +197,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {
     for (const nc of this._noteComponents) {
       nc.destroy();
+    }
+
+    for (const ec of this._entityComponents) {
+      ec.destroy();
     }
 
     if (this._noteCreateSubscription) {
@@ -288,8 +310,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   private redrawShapes() {
     const shapes = this._map.shapes;
-
-    console.log(shapes);
 
     if (shapes === null) {
       return;
@@ -467,13 +487,29 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       marker['_entity'] = entity;
 
+      const component = this.resolver
+        .resolveComponentFactory(EntityViewMiniComponent)
+        .create(this.injector);
+
+      component.instance.entity = entity;
+      this._entityComponents.push(component);
+      marker['_entityComponent'] = component;
+      this.appRef.attachView(component.hostView);
+
       if (!this._entityLayerGroups[entity.preset.name]) {
         this.createEntityLayer(entity.preset.name);
       }
 
       this._entityLayerGroups[entity.preset.name].addLayer(marker);
 
-      marker.bindPopup(`<h5>${entity.name}</h5>`);
+      const popup = L.popup({
+        minWidth: 250,
+      });
+
+      popup.setContent((component.hostView as EmbeddedViewRef<any>)
+        .rootNodes[0] as HTMLElement);
+
+      marker.bindPopup(popup);
     }
   }
 
