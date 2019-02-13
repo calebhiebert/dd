@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using net_api.Authorization;
 using net_api.Models;
 
 namespace net_api.Controllers
@@ -15,10 +17,12 @@ namespace net_api.Controllers
     public class ArticlesController : ControllerBase
     {
         private readonly Context _context;
+        private readonly IAuthorizationService _auth;
 
-        public ArticlesController(Context context)
+        public ArticlesController(Context context, IAuthorizationService auth)
         {
             _context = context;
+            _auth = auth;
         }
 
         // GET: api/Articles
@@ -40,12 +44,14 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
 
-            if (campaign.UserId != userId && !campaign.Members.Any(m => m.UserId == userId))
+            if (!authResult.Succeeded)
             {
-                return BadRequest("no permissions");
+                return Forbid();
             }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var query = _context.Articles.Where(a => a.CampaignId == campaign.Id);
 
@@ -86,7 +92,10 @@ namespace net_api.Controllers
         public async Task<IActionResult> GetMapArticles(Guid id)
         {
             var map = await _context.Maps.Where(m => m.Id == id)
+                .Include(m => m.Campaign).ThenInclude(c => c.Members)
                 .FirstOrDefaultAsync();
+
+            var authResult = await _auth.AuthorizeAsync(User, map.Campaign, "CampaignViewPolicy");
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -113,6 +122,18 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == article.CampaignId)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             return article;
         }
 
@@ -125,11 +146,22 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
-            var originalArticle = await _context.Articles.Where(a => a.Id == id).AsNoTracking().FirstOrDefaultAsync();
+            var originalArticle = await _context.Articles
+                .Where(a => a.Id == id)
+                .Include(a => a.Campaign)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
 
             if (originalArticle == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, originalArticle.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             if (article.Text == null)
@@ -162,6 +194,15 @@ namespace net_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Article>> PostArticle(Article article)
         {
+            var campaign = await _context.Campaigns.Where(c => c.Id == article.CampaignId).FirstOrDefaultAsync();
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             article.UserId = userId;
@@ -176,10 +217,17 @@ namespace net_api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Article>> DeleteArticle(Guid id)
         {
-            var article = await _context.Articles.FindAsync(id);
+            var article = await _context.Articles.Where(a => a.Id == id).Include(a => a.Campaign).FirstOrDefaultAsync();
             if (article == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, article.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             _context.Articles.Remove(article);

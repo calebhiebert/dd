@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using net_api.Controllers;
 using net_api.Models;
 using dotenv.net;
+using Microsoft.AspNetCore.Authorization;
+using net_api.Authorization;
 
 namespace net_api
 {
@@ -41,6 +43,15 @@ namespace net_api
             });
 
             services.AddSignalR();
+
+            services.AddSingleton<IAuthorizationHandler, CampaignEditableHandler>();
+            services.AddSingleton<IAuthorizationHandler, CampaignViewableHandler>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CampaignEditPolicy", policy => policy.Requirements.Add(new CampaignEditorRequirement()));
+                options.AddPolicy("CampaignViewPolicy", policy => policy.Requirements.Add(new CampaignViewerRequirement()));
+            });
 
             services.AddScoped<Context>();
             services.AddAuthentication(options =>
