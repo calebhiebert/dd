@@ -85,6 +85,7 @@ import { EntityViewMiniComponent } from './entity/entity-view-mini/entity-view-m
 import { ArticleEditorComponent } from './article/article-editor/article-editor.component';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { ArticleViewComponent } from './article/article-view/article-view.component';
+import { ArticleSelectComponent } from './article/article-select/article-select.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -162,6 +163,7 @@ import { ArticleViewComponent } from './article/article-view/article-view.compon
     EntityViewMiniComponent,
     ArticleEditorComponent,
     ArticleViewComponent,
+    ArticleSelectComponent,
   ],
   imports: [
     BrowserModule,

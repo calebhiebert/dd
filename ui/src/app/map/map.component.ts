@@ -31,8 +31,10 @@ import { UpdateHubService } from '../update-hub.service';
 import { ToastrService } from 'ngx-toastr';
 import 'leaflet-draw';
 import { EntityViewMiniComponent } from '../entity/entity-view-mini/entity-view-mini.component';
+import { ArticleSelectComponent } from '../article/article-select/article-select.component';
+import { ArticleService, IArticle } from '../article.service';
 
-let ownNoteIcon = L.icon({
+const ownNoteIcon = L.icon({
   iconUrl: '/assets/note-icon.png',
 
   iconSize: [32, 32],
@@ -40,7 +42,7 @@ let ownNoteIcon = L.icon({
   popupAnchor: [0, -20],
 });
 
-let otherNoteIcon = L.icon({
+const otherNoteIcon = L.icon({
   iconUrl: '/assets/note-icon-2.png',
 
   iconSize: [32, 32],
@@ -67,12 +69,17 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('entityselect')
   private entitySelect: EditableEntitySelectorComponent;
 
+  @ViewChild('articleselect')
+  private articleSelect: ArticleSelectComponent;
+
   private _map: IMap;
   private _notesLayerGroup: any;
+  private _articlesLayerGroup: any;
   private _entityLayerGroups: { [key: string]: any } = {};
   private _mapLayerControl: any;
   private _shapeLayers: any;
   private _notes: INote[];
+  private _articles: IArticle[];
   private _entityComponents: ComponentRef<EntityViewMiniComponent>[] = [];
   private _noteComponents: ComponentRef<NoteViewMiniComponent>[] = [];
   private _noteCreateSubscription: Subscription;
@@ -96,7 +103,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     private appRef: ApplicationRef,
     private entityService: EntityService,
     private updateHub: UpdateHubService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private articleService: ArticleService
   ) {}
 
   ngAfterViewInit() {
@@ -224,13 +232,29 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     await this.load(id);
     this.constructMap();
     this.createNotesLayer();
+    this.createArticlesLayer();
     await this.loadNotes(id);
+    await this.loadArticles();
 
     // Do entity setup
     // TODO move this into it's own function
     for (const entity of this.campaignService.campaign.entities) {
       if (entity.mapId === this._map.id && entity.lat && entity.lng) {
         this.addEntityToMap(entity);
+      }
+    }
+  }
+
+  private async loadArticles() {
+    try {
+      this._articles = await this.articleService.getMapArticles(this._map.id);
+    } catch (err) {
+      throw err;
+    }
+
+    if (this._articles) {
+      for (const a of this._articles) {
+        this.addArticleToMap(a);
       }
     }
   }
@@ -342,21 +366,33 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  private addArticleToMap(article: IArticle) {
+    if (article.lat && article.lng) {
+      const marker = L.marker([article.lat, article.lng]);
+
+      marker['_article'] = article;
+
+      this._articlesLayerGroup.addLayer(marker);
+
+      marker.bindPopup(article.name);
+    }
+  }
+
   private addDrawControls() {
-    var options = {
+    const options = {
       position: 'topleft',
       draw: {
         polygon: {
           allowIntersection: false, // Restricts shapes to simple polygons
           drawError: {
             color: '#e1e100', // Color the shape will turn when intersects
-            message: "<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
+            message: '<strong>Oh snap!<strong> you can\'t draw that!', // Message that will show when intersect
           },
         },
         circlemarker: false,
       },
       edit: {
-        featureGroup: this._shapeLayers, //REQUIRED!!
+        featureGroup: this._shapeLayers, // REQUIRED!!
         remove: true,
       },
     };
@@ -391,6 +427,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this._notesLayerGroup = L.layerGroup();
     this._notesLayerGroup.addTo(map);
     this._mapLayerControl.addOverlay(this._notesLayerGroup, 'Notes');
+  }
+
+  private createArticlesLayer() {
+    this._articlesLayerGroup = L.layerGroup();
+    this._articlesLayerGroup.addTo(map);
+    this._mapLayerControl.addOverlay(this._articlesLayerGroup, 'Articles');
   }
 
   private createEntityLayer(name: string) {
@@ -542,6 +584,20 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           });
 
           this.toast.info(`Updated ${entity.name}'s position`);
+        }
+        break;
+      case MapEditorOperationType.LINK_ARTICLE:
+        const article = await this.articleSelect.openArticleSelector();
+
+        if (article !== null) {
+          await this.articleService.updateArticle({
+            ...article,
+            mapId: this._map.id,
+            lat: event.latlng.lat,
+            lng: event.latlng.lng,
+          });
+
+          this.toast.info(`Linked article ${article.name}`);
         }
         break;
     }

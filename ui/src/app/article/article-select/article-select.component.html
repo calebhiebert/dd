@@ -1,0 +1,42 @@
+<dd-modal #modal>
+  <h5 modal-header>
+    Which Article?
+  </h5>
+  <div modal-body>
+    <!-- Article Search -->
+    <div class="has-icon-right mb-1">
+      <input
+        type="text"
+        class="form-input"
+        placeholder="Search"
+        [formControl]="searchControl"
+      />
+      <i class="form-icon loading" *ngIf="loading"></i>
+    </div>
+
+    <!-- Article List -->
+    <div
+      class="card p-1 hoverable mb-1"
+      *ngFor="let a of articles"
+      (click)="selectArticle(a)"
+    >
+      {{ a.name }}
+    </div>
+
+    <!-- Empty Search -->
+    <div class="empty" *ngIf="search && !loading && articles.length === 0">
+      <div class="empty-icon">
+        <i class="icon icon-search icon-4x"></i>
+      </div>
+      <p class="empty-title h5">Couldn't find anything, sorry!</p>
+    </div>
+
+    <!-- Empty Articles -->
+    <div class="empty" *ngIf="!search && !loading && articles.length === 0">
+      <div class="empty-icon">
+        <i class="icon icon-search icon-4x"></i>
+      </div>
+      <p class="empty-title h5">There are no articles :(</p>
+    </div>
+  </div>
+</dd-modal>

@@ -34,43 +34,6 @@
       [max]="health.max"
       [formControl]="sliderControl"
     />
-
-    <!-- <table class="table">
-      <thead>
-        <tr>
-          <th>Operation</th>
-          <th>Effect</th>
-          <th>Example</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Add</td>
-          <td>Adds the amount to the hp</td>
-          <td>+30</td>
-        </tr>
-        <tr>
-          <td>Subtract</td>
-          <td>Subtracts the amount from the hp</td>
-          <td>-7</td>
-        </tr>
-        <tr>
-          <td>Divide</td>
-          <td>Divides the current hp by the amount</td>
-          <td>/2</td>
-        </tr>
-        <tr>
-          <td>Multiply</td>
-          <td>Multiplies the current hp by the amount</td>
-          <td>*2</td>
-        </tr>
-        <tr>
-          <td>Fill</td>
-          <td>Fills up to max hp</td>
-          <td>++</td>
-        </tr>
-      </tbody>
-    </table> -->
   </div>
   <div modal-footer>
     <button class="btn" (click)="editmodal.close(null)">Cancel</button>
@@ -114,9 +77,9 @@
     <h5 class="mb-1 text-bold">{{ bar.current }} / {{ bar.max }}</h5>
   </div>
   <div
-    class="d-flex justify-content-center align-items-center p-1"
+    class="d-flex justify-content-center align-items-center pl-1"
     *ngIf="hpPercent <= 50 && mini"
   >
-    <div class="text-bold">{{ bar.current }} / {{ bar.max }}</div>
+    <div>{{ bar.current }} / {{ bar.max }}</div>
   </div>
 </div>

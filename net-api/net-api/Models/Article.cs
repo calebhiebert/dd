@@ -35,6 +35,12 @@ namespace net_api.Models
 
         public DateTime CreatedAt { get; set; }
 
+        public Guid? MapId { get; set; }
+        public Map Map { get; set; }
+
+        public double? Lat { get; set; }
+        public double? Lng { get; set; }
+
         public Article()
         {
             Id = Guid.NewGuid();

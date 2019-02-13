@@ -45,8 +45,19 @@ export class MapEditorMenuComponent implements OnInit {
     this.modal.close(null);
   }
 
+  public linkArticle() {
+    this._opResolver({
+      type: MapEditorOperationType.LINK_ARTICLE,
+    });
+    this.modal.close(null);
+  }
+
   public get canUpdateEntityPosition() {
     return this.campaignService.editableEntities.length > 0;
+  }
+
+  public get campaignEditable() {
+    return this.campaignService.canEdit;
   }
 }
 
@@ -58,4 +69,5 @@ export enum MapEditorOperationType {
   NONE,
   PLACE_NOTE,
   UPDATE_ENTITY_POSITION,
+  LINK_ARTICLE,
 }

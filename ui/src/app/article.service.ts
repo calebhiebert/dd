@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { IMap } from './map.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,9 +15,20 @@ export class ArticleService {
       .toPromise();
   }
 
-  public getArticles(): Promise<IArticle[]> {
+  public getArticles(
+    campaignId: string,
+    limit: number = 10,
+    offset: number = 0,
+    search?: string
+  ): Promise<IArticle[]> {
+    const searchString = search ? `&search=${encodeURIComponent(search)}` : '';
+
     return this.http
-      .get<IArticle[]>(`${environment.apiURL}/articles`)
+      .get<IArticle[]>(
+        `${
+          environment.apiURL
+        }/articles?campaignId=${campaignId}&limit=${limit}&offset=${offset}${searchString}`
+      )
       .toPromise();
   }
 
@@ -31,6 +43,12 @@ export class ArticleService {
       .put<void>(`${environment.apiURL}/articles/${article.id}`, article)
       .toPromise();
   }
+
+  public getMapArticles(mapId: string): Promise<IArticle[]> {
+    return this.http
+      .get<IArticle[]>(`${environment.apiURL}/articles/map/${mapId}`)
+      .toPromise();
+  }
 }
 
 export interface IArticle {
@@ -42,4 +60,8 @@ export interface IArticle {
   user?: string;
   published: boolean;
   createdAt?: Date;
+  mapId?: string;
+  map?: IMap;
+  lat?: number;
+  lng?: number;
 }
