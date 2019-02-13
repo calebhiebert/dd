@@ -109,8 +109,14 @@
   <!-- Extras container -->
   <div
     class="d-flex justify-content-center align-items-center p-1"
-    *ngIf="hpPercent <= 50"
+    *ngIf="hpPercent <= 50 && !mini"
   >
     <h5 class="mb-1 text-bold">{{ bar.current }} / {{ bar.max }}</h5>
+  </div>
+  <div
+    class="d-flex justify-content-center align-items-center p-1"
+    *ngIf="hpPercent <= 50 && mini"
+  >
+    <div class="text-bold">{{ bar.current }} / {{ bar.max }}</div>
   </div>
 </div>
