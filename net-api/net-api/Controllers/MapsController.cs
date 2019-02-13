@@ -234,6 +234,48 @@ namespace net_api.Controllers
             return Ok(map);
         }
 
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateMap([FromBody] Map map, [FromRoute] Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (map.Id != id)
+            {
+                return BadRequest("submitted body id does not match route id");
+            }
+
+            var originalMap = await _context.Maps.Where(m => m.Id == id).AsNoTracking().FirstOrDefaultAsync();
+
+            if (originalMap == null)
+            {
+                return NotFound();
+            } else if (originalMap.Status == MapStatus.Processing)
+            {
+                return BadRequest("cannot update map while procesing");
+            }
+
+            map.Mapping = originalMap.Mapping;
+            map.UserId = originalMap.UserId;
+            map.Status = originalMap.Status;
+
+            _context.Entry(map).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
         // DELETE: api/Maps/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Map>> DeleteMap(Guid id)

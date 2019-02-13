@@ -25,6 +25,12 @@ export class MapService {
       .delete<void>(`${environment.apiURL}/maps/${mapId}`)
       .toPromise();
   }
+
+  public updateMap(map: IMap): Promise<void> {
+    return this.http
+      .put<void>(`${environment.apiURL}/maps/${map.id}`, map)
+      .toPromise();
+  }
 }
 
 export interface IMap {
@@ -34,6 +40,7 @@ export interface IMap {
   maxZoom: number;
   campaignId: string;
   status: MapStatus;
+  shapes?: IMapShape[];
   playerVisible: boolean;
   userId: string;
   mapping?: { [key: string]: number[] };
@@ -42,4 +49,20 @@ export interface IMap {
 export enum MapStatus {
   PROCESSING,
   PROCESSED,
+}
+
+export interface IMapShape {
+  type: MapShapeType;
+  lat?: number;
+  lng?: number;
+  points?: number[][];
+  radius?: number;
+}
+
+export enum MapShapeType {
+  POLYLINE,
+  CIRCLE,
+  MARKER,
+  POLYGON,
+  RECTANGLE,
 }

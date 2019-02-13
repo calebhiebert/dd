@@ -13,7 +13,7 @@ import {
 import L from 'leaflet';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { MapService, IMap } from '../map.service';
+import { MapService, IMap, MapShapeType, IMapShape } from '../map.service';
 import {
   MapEditorMenuComponent,
   IMapEditorOperation,
@@ -70,6 +70,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private _notesLayerGroup: any;
   private _entityLayerGroups: { [key: string]: any } = {};
   private _mapLayerControl: any;
+  private _shapeLayers: any;
   private _notes: INote[];
   private _noteComponents: ComponentRef<NoteViewMiniComponent>[] = [];
   private _noteCreateSubscription: Subscription;
@@ -267,59 +268,102 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this._mapLayerControl = L.control.layers().addTo(map);
     this._mapLayerControl.addBaseLayer(tileLayer, 'Base');
 
-    var editableLayers = new L.FeatureGroup();
-    map.addLayer(editableLayers);
+    map.fitBounds([[-10, 10], [-246, 246]]);
 
+    this._shapeLayers = new L.FeatureGroup();
+    map.addLayer(this._shapeLayers);
+
+    // Scroll to the place that was queried
+    if (this._queryLatLng) {
+      map.flyTo(this._queryLatLng, this._map.maxZoom);
+    }
+
+    // If the user viewing the map created it
+    if (this._map.userId === this.login.id) {
+      this.addDrawControls();
+    }
+
+    this.redrawShapes();
+  }
+
+  private redrawShapes() {
+    const shapes = this._map.shapes;
+
+    console.log(shapes);
+
+    if (shapes === null) {
+      return;
+    }
+
+    this._shapeLayers.clearLayers();
+
+    for (const s of shapes) {
+      let layerToAdd;
+
+      switch (s.type) {
+        case MapShapeType.MARKER:
+          layerToAdd = L.marker([s.lat, s.lng]);
+          break;
+        case MapShapeType.CIRCLE:
+          layerToAdd = L.circle([s.lat, s.lng], { radius: s.radius });
+          break;
+        case MapShapeType.POLYGON:
+          layerToAdd = L.polygon(s.points);
+          break;
+        case MapShapeType.POLYLINE:
+          layerToAdd = L.polyline(s.points);
+          break;
+        case MapShapeType.RECTANGLE:
+          layerToAdd = L.rectangle(s.points);
+          break;
+      }
+
+      this._shapeLayers.addLayer(layerToAdd);
+    }
+  }
+
+  private addDrawControls() {
     var options = {
       position: 'topleft',
       draw: {
-        polyline: {
-          shapeOptions: {
-            color: '#f357a1',
-            weight: 10,
-          },
-        },
         polygon: {
           allowIntersection: false, // Restricts shapes to simple polygons
           drawError: {
             color: '#e1e100', // Color the shape will turn when intersects
             message: "<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
           },
-          shapeOptions: {
-            color: '#bada55',
-          },
         },
-        rectangle: {
-          shapeOptions: {
-            clickable: false,
-          },
-        },
+        circlemarker: false,
       },
       edit: {
-        featureGroup: editableLayers, //REQUIRED!!
+        featureGroup: this._shapeLayers, //REQUIRED!!
         remove: true,
       },
     };
 
     map.addControl(new L.Control.Draw(options));
 
-    map.on(L.Draw.Event.CREATED, function(e) {
-      var type = e.layerType,
-        layer = e.layer;
-
-      editableLayers.addLayer(layer);
+    map.on('draw:edited', (e) => {
+      this.updateMapShapes(this.getDrawnShapes());
     });
 
-    map.on('draw:edited', function(e) {
-      e.layers.eachLayer((layer) => console.log(editableLayers));
+    map.on('draw:created', (e) => {
+      this._shapeLayers.addLayer(e.layer);
+      this.updateMapShapes(this.getDrawnShapes());
     });
 
-    map.fitBounds([[-10, 10], [-246, 246]]);
+    map.on('draw:deleted', (e) => {
+      this.updateMapShapes(this.getDrawnShapes());
+    });
+  }
 
-    // Scroll to the place that was queried
-    if (this._queryLatLng) {
-      console.log(this._queryLatLng);
-      map.flyTo(this._queryLatLng, this._map.maxZoom);
+  private async updateMapShapes(shapes: IMapShape[]) {
+    this._map.shapes = shapes;
+
+    try {
+      await this.mapService.updateMap(this._map);
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -334,6 +378,46 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this._entityLayerGroups[name] = layer;
     layer.addTo(map);
     this._mapLayerControl.addOverlay(layer, name);
+  }
+
+  private getDrawnShapes() {
+    const shapes: IMapShape[] = [];
+
+    this._shapeLayers.eachLayer((l) => {
+      if (l instanceof L.Circle) {
+        shapes.push({
+          type: MapShapeType.CIRCLE,
+          lat: l.getLatLng().lat,
+          lng: l.getLatLng().lng,
+          radius: l.getRadius(),
+        });
+      } else if (l instanceof L.Marker) {
+        shapes.push({
+          type: MapShapeType.MARKER,
+          lat: l.getLatLng().lat,
+          lng: l.getLatLng().lng,
+        });
+      } else if (l instanceof L.Rectangle) {
+        const latLngs = l.getLatLngs()[0];
+
+        shapes.push({
+          type: MapShapeType.RECTANGLE,
+          points: latLngs.map((latLng) => [latLng.lat, latLng.lng]),
+        });
+      } else if (l instanceof L.Polygon) {
+        shapes.push({
+          type: MapShapeType.POLYGON,
+          points: l.getLatLngs()[0].map((latLng) => [latLng.lat, latLng.lng]),
+        });
+      } else if (l instanceof L.Polyline) {
+        shapes.push({
+          type: MapShapeType.POLYLINE,
+          points: l.getLatLngs().map((latLng) => [latLng.lat, latLng.lng]),
+        });
+      }
+    });
+
+    return shapes;
   }
 
   private addNoteToMap(note: INote) {
