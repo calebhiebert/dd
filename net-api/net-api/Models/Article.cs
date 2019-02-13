@@ -16,10 +16,7 @@ namespace net_api.Models
         public string Name { get; set; }
 
         [StringLength(6000)]
-        public string Description { get; set; }
-
-        [Column("ImageIds", TypeName = "varchar[]")]
-        public string[] ImageIds { get; set; }
+        public string Text { get; set; }
 
         [Required]
         public Guid CampaignId { get; set; }
@@ -31,6 +28,9 @@ namespace net_api.Models
         public string UserId { get; set; }
         
         public User User { get; set; }
+
+        [Required]
+        public bool Published { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

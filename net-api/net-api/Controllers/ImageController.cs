@@ -56,5 +56,35 @@ namespace net_api.Controllers
 
             return Ok(uploadResult);
         }
+
+        [HttpPost("froala")]
+        public IActionResult UploadImageFroala([FromForm]IFormFile file, [FromForm]Guid? campaignId)
+        {
+            if (file == null)
+            {
+                return BadRequest("missing file");
+            }
+
+            if (campaignId == null)
+            {
+                return BadRequest("missing campaign id");
+            }
+
+            var uploadParams = new ImageUploadParams();
+            uploadParams.File = new FileDescription(file.Name, file.OpenReadStream());
+            uploadParams.Colors = true;
+            uploadParams.UploadPreset = "server_upload";
+            uploadParams.Folder = $"Public/{campaignId.ToString()}";
+            uploadParams.Tags = $"{campaignId.ToString()}";
+
+            var uploadResult = _cloudinary.Upload(uploadParams);
+
+            if (uploadResult.Error != null)
+            {
+                return BadRequest(uploadResult);
+            }
+
+            return Ok(new { link = uploadResult.SecureUri });
+        }
     }
 }

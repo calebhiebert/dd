@@ -42,7 +42,11 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
-            "scripts": ["node_modules/marked/lib/marked.js"]
+            "scripts": [
+              "node_modules/marked/lib/marked.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/froala-editor/js/froala_editor.pkgd.min.js"
+            ]
           },
           "configurations": {
             "production": {

@@ -82,6 +82,8 @@ import { MapEditorMenuComponent } from './map/map-editor-menu/map-editor-menu.co
 import { SpellSelectComponent } from './spell/spell-select/spell-select.component';
 import { NoteViewMiniComponent } from './note/note-view-mini/note-view-mini.component';
 import { EntityViewMiniComponent } from './entity/entity-view-mini/entity-view-mini.component';
+import { ArticleEditorComponent } from './article/article-editor/article-editor.component';
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -157,6 +159,7 @@ import { EntityViewMiniComponent } from './entity/entity-view-mini/entity-view-m
     SpellSelectComponent,
     NoteViewMiniComponent,
     EntityViewMiniComponent,
+    ArticleEditorComponent,
   ],
   imports: [
     BrowserModule,
@@ -175,6 +178,8 @@ import { EntityViewMiniComponent } from './entity/entity-view-mini/entity-view-m
         useFactory: markedOptionsFactory,
       },
     }),
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot(),
   ],
   providers: [
     {

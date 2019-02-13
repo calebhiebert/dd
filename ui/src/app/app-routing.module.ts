@@ -32,11 +32,13 @@ import { MapComponent } from './map/map.component';
 import { MapUploadComponent } from './map/map-upload/map-upload.component';
 import { MapManagerComponent } from './map/map-manager/map-manager.component';
 import { SpellFormComponent } from './spell/spell-form/spell-form.component';
+import { ArticleEditorComponent } from './article/article-editor/article-editor.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'invite/:invite_id', component: InviteComponent },
   { path: 'about', component: AboutComponent },
+  { path: 'aa', component: ArticleEditorComponent },
   {
     path: 'login',
     component: LoginComponent,
