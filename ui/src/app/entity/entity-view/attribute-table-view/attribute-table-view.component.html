@@ -8,7 +8,7 @@
   <tbody>
     <tr
       [ngClass]="{ 'c-hand': editable }"
-      *ngFor="let attr of attributes"
+      *ngFor="let attr of attributes; trackBy: trackAttribute"
       (click)="editAttribute(attr)"
     >
       <td class="no-select py-0">
@@ -24,7 +24,7 @@
         </figure>
         {{ attr.attr.name }}
       </td>
-      <td class="text-bold py-0">{{ attr.attr.data }}</td>
+      <td class="text-bold py-0 text-right">{{ attr.attr.data }}</td>
     </tr>
   </tbody>
 </div>

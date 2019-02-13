@@ -38,6 +38,7 @@
             s.spell.imageId
           }}"
           *ngIf="s.spell.imageId"
+          style="margin-bottom: -0.075rem"
         />
 
         <!-- Fallback Image -->
@@ -46,6 +47,7 @@
           width="32"
           src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/spell-default"
           *ngIf="!s.spell.imageId"
+          style="margin-bottom: -0.075rem"
         />
       </div>
 

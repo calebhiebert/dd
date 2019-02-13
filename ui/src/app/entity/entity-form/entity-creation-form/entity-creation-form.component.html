@@ -179,11 +179,11 @@
         <div class="form-group" *ngIf="campaignEditable">
           <label class="form-checkbox">
             <input type="checkbox" formControlName="spawnable" />
-            <i class="form-icon"></i> This entity is spawnable
+            <i class="form-icon"></i> This {{ preset.name }} is spawnable
           </label>
           <p class="form-input-hint">
-            Spawnable entities act as presets. They can be quickly spawned into
-            game sessions
+            Turns this {{ preset.name }} into a preset that can be quickly
+            spawned into game sessions.
           </p>
         </div>
 
