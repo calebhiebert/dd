@@ -41,6 +41,9 @@ namespace net_api.Models
         public double? Lat { get; set; }
         public double? Lng { get; set; }
 
+        [Column("Tags", TypeName = "varchar[]")]
+        public string[] Tags { get; set; }
+
         public Article()
         {
             Id = Guid.NewGuid();
@@ -64,8 +67,8 @@ namespace net_api.Models
             this.MapId = article.MapId;
             this.Name = article.Name;
             this.Published = article.Published;
-            this.Text = article.Text;
             this.UserId = article.UserId;
+            this.Tags = article.Tags;
         }
 
         public SearchedArticle(Article article, string imgId) : this(article)

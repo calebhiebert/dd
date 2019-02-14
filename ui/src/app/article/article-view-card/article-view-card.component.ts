@@ -13,4 +13,12 @@ export class ArticleViewCardComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  public get subtitleText() {
+    if (this.article.tags) {
+      return this.article.tags.join(', ');
+    } else {
+      return '';
+    }
+  }
 }

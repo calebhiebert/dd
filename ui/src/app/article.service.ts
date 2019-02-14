@@ -66,6 +66,7 @@ export interface IArticle {
   user?: string;
   published: boolean;
   createdAt?: Date;
+  tags: string[];
   mapId?: string;
   map?: IMap;
   lat?: number;

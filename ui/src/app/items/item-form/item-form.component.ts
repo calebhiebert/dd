@@ -154,7 +154,7 @@ export class ItemFormComponent implements OnInit {
       const item = await this.itemService.getItem(id);
       this.item = item;
 
-      this.formGroup.patchValue(item);
+      this.formGroup.patchValue({ ...item, tags: item.tags || [] });
 
       if (this.item.tags) {
         (this.formGroup.get('tags') as FormArray).controls = this.item.tags.map(

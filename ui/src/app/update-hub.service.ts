@@ -8,6 +8,7 @@ import { IEntity, EntityService } from './entity.service';
 import * as Sentry from '@sentry/browser';
 import { NoteService } from './note.service';
 import { ToastrService } from 'ngx-toastr';
+import { IArticle } from './article.service';
 
 export enum ConnectionState {
   NOT_CONNECTED,
@@ -29,6 +30,10 @@ export class UpdateHubService {
 
   // Events
   public entityUpdated = new EventEmitter<IEntity>();
+
+  public articleCreated = new EventEmitter<IArticle>();
+  public articleUpdated = new EventEmitter<IArticle>();
+  public articleDeleted = new EventEmitter<IArticle>();
 
   constructor(
     private login: LoginService,
@@ -92,6 +97,18 @@ export class UpdateHubService {
 
     this.connection.on('NoteDelete', (note) => {
       this.noteService.removeNoteFromCache(note.id);
+    });
+
+    this.connection.on('ArticleCreate', (article) => {
+      this.articleCreated.emit(article);
+    });
+
+    this.connection.on('ArticleUpdate', (article) => {
+      this.articleUpdated.emit(article);
+    });
+
+    this.connection.on('ArticleDelete', (article) => {
+      this.articleDeleted.emit(article);
     });
 
     await this.authenticate();

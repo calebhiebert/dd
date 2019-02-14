@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using net_api.Authorization;
 using net_api.Models;
@@ -19,11 +20,13 @@ namespace net_api.Controllers
     {
         private readonly Context _context;
         private readonly IAuthorizationService _auth;
+        private readonly IHubContext<UpdateHub> _hub;
 
-        public ArticlesController(Context context, IAuthorizationService auth)
+        public ArticlesController(Context context, IAuthorizationService auth, IHubContext<UpdateHub> hub)
         {
             _context = context;
             _auth = auth;
+            _hub = hub;
         }
 
         // GET: api/Articles
@@ -188,6 +191,12 @@ namespace net_api.Controllers
                 }
             }
 
+            if (article.Published)
+            {
+                await _hub.Clients.Group($"campaign-{article.CampaignId}")
+                    .SendAsync("ArticleUpdate", article);
+            }
+
             return NoContent();
         }
 
@@ -211,6 +220,12 @@ namespace net_api.Controllers
             _context.Articles.Add(article);
             await _context.SaveChangesAsync();
 
+            if (article.Published)
+            {
+                await _hub.Clients.Group($"campaign-{article.CampaignId}")
+                    .SendAsync("ArticleCreate", article);
+            }
+
             return CreatedAtAction("GetArticle", new { id = article.Id }, article);
         }
 
@@ -233,6 +248,12 @@ namespace net_api.Controllers
 
             _context.Articles.Remove(article);
             await _context.SaveChangesAsync();
+
+            if (article.Published)
+            {
+                await _hub.Clients.Group($"campaign-{article.CampaignId}")
+                    .SendAsync("ArticleDelete", article);
+            }
 
             return article;
         }

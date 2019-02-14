@@ -33,6 +33,7 @@ import 'leaflet-draw';
 import { EntityViewMiniComponent } from '../entity/entity-view-mini/entity-view-mini.component';
 import { ArticleSelectComponent } from '../article/article-select/article-select.component';
 import { ArticleService, IArticle } from '../article.service';
+import { ArticleViewMiniComponent } from '../article/article-view-mini/article-view-mini.component';
 
 const ownNoteIcon = L.icon({
   iconUrl: '/assets/note-icon.png',
@@ -82,10 +83,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private _articles: IArticle[];
   private _entityComponents: ComponentRef<EntityViewMiniComponent>[] = [];
   private _noteComponents: ComponentRef<NoteViewMiniComponent>[] = [];
+  private _articleComponents: ComponentRef<ArticleViewMiniComponent>[] = [];
   private _noteCreateSubscription: Subscription;
   private _noteDeleteSubscription: Subscription;
   private _noteUpdateSubscription: Subscription;
   private _entityUpdateSubscription: Subscription;
+  private _articleUpdateSubscription: Subscription;
+  private _articleDeleteSubscription: Subscription;
 
   private _queryLatLng: any[];
 
@@ -167,23 +171,26 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             marker['_entityComponent'].instance.entity = e;
           }
         } else {
-          if (this._entityLayerGroups[e.preset.name]) {
-            // Remove them from this map if neccecary
-            const marker = this._entityLayerGroups[e.preset.name]
-              .getLayers()
-              .find((l) => l['_entity'].id === e.id);
-
-            if (marker) {
-              this._entityLayerGroups[e.preset.name].removeLayer(marker);
-              this._entityComponents = this._entityComponents.filter(
-                (ec) => ec !== marker['_entityComponent']
-              );
-              marker['_entityComponent'].destroy();
-            }
-          }
+          this.removeEntityFromMap(e);
         }
       }
     );
+
+    this._articleUpdateSubscription = this.updateHub.articleUpdated.subscribe(
+      (article) => {
+        if (article.mapId === this._map.id) {
+          this.addArticleToMap(article);
+        } else {
+          this.removeArticleFromMap(article);
+        }
+      }
+    );
+
+    this._articleDeleteSubscription = this.updateHub.articleDeleted
+      .pipe(filter((a) => a.mapId === this._map.id))
+      .subscribe((article) => {
+        this.removeArticleFromMap(article);
+      });
 
     this.route.paramMap.subscribe((params) => {
       this.loadMap(params.get('m_id'));
@@ -211,6 +218,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       ec.destroy();
     }
 
+    for (const ac of this._articleComponents) {
+      ac.destroy();
+    }
+
     if (this._noteCreateSubscription) {
       this._noteCreateSubscription.unsubscribe();
     }
@@ -225,6 +236,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     if (this._entityUpdateSubscription) {
       this._entityUpdateSubscription.unsubscribe();
+    }
+
+    if (this._articleUpdateSubscription) {
+      this._articleUpdateSubscription.unsubscribe();
+    }
+
+    if (this._articleDeleteSubscription) {
+      this._articleDeleteSubscription.unsubscribe();
     }
   }
 
@@ -367,14 +386,61 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private addArticleToMap(article: IArticle) {
+    // Check to see if this article already exists on the map
+    const layers = this._articlesLayerGroup.getLayers();
+
+    for (const l of layers) {
+      if (l['_article'] && l['_article'].id === article.id) {
+        l['_article'] = article;
+        l.setLatLng([article.lat, article.lng]);
+        l['_articleComponent'].instance.article = article;
+        return;
+      }
+    }
+
     if (article.lat && article.lng) {
       const marker = L.marker([article.lat, article.lng]);
-
       marker['_article'] = article;
-
       this._articlesLayerGroup.addLayer(marker);
 
-      marker.bindPopup(article.name);
+      // Create component for popup
+      const component = this.resolver
+        .resolveComponentFactory(ArticleViewMiniComponent)
+        .create(this.injector);
+      component.instance.article = article;
+
+      this._articleComponents.push(component);
+      marker['_articleComponent'] = component;
+      this.appRef.attachView(component.hostView);
+
+      // Create popup
+      const popup = L.popup({
+        minWidth: 150,
+      });
+
+      popup.setContent((component.hostView as EmbeddedViewRef<any>)
+        .rootNodes[0] as HTMLElement);
+
+      marker.bindPopup(popup);
+    }
+  }
+
+  private removeArticleFromMap(article: IArticle) {
+    const layers = this._articlesLayerGroup.getLayers();
+
+    for (const l of layers) {
+      if (l['_article'] && l['_article'].id === article.id) {
+        this._articlesLayerGroup.removeLayer(l);
+
+        const component: ComponentRef<ArticleViewMiniComponent> =
+          l['_articleComponent'];
+
+        this._articleComponents = this._articleComponents.filter(
+          (ac) => ac !== component
+        );
+
+        component.destroy();
+      }
     }
   }
 
@@ -552,6 +618,23 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         .rootNodes[0] as HTMLElement);
 
       marker.bindPopup(popup);
+    }
+  }
+
+  private removeEntityFromMap(e: IEntity) {
+    if (this._entityLayerGroups[e.preset.name]) {
+      // Remove them from this map if neccecary
+      const marker = this._entityLayerGroups[e.preset.name]
+        .getLayers()
+        .find((l) => l['_entity'].id === e.id);
+
+      if (marker) {
+        this._entityLayerGroups[e.preset.name].removeLayer(marker);
+        this._entityComponents = this._entityComponents.filter(
+          (ec) => ec !== marker['_entityComponent']
+        );
+        marker['_entityComponent'].destroy();
+      }
     }
   }
 

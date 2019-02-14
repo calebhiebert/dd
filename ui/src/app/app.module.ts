@@ -93,7 +93,11 @@ import { ArticleViewCardComponent } from './article/article-view-card/article-vi
 /* tslint:enable:max-line-length */
 
 @NgModule({
-  entryComponents: [NoteViewMiniComponent, EntityViewMiniComponent],
+  entryComponents: [
+    NoteViewMiniComponent,
+    EntityViewMiniComponent,
+    ArticleViewMiniComponent,
+  ],
   declarations: [
     AppComponent,
     ItemViewListComponent,

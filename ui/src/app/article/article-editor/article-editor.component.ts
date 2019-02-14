@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
@@ -40,6 +40,7 @@ export class ArticleEditorComponent implements OnInit {
       ]),
       text: new FormControl(null),
       published: new FormControl(false),
+      tags: new FormArray([]),
     });
 
     if (this.editing) {
@@ -121,6 +122,7 @@ export class ArticleEditorComponent implements OnInit {
       published: v.published,
       campaignId: this.campaignSerivce.campaign.id,
       userId: this.login.id,
+      tags: v.tags || [],
     };
 
     if (this.editing) {
@@ -140,7 +142,19 @@ export class ArticleEditorComponent implements OnInit {
       throw err;
     }
 
+    if (this._article.tags === null) {
+      this._article.tags = [];
+    }
+
     this.formGroup.patchValue(this._article);
+
+    if (this._article.tags) {
+      (this.formGroup.get(
+        'tags'
+      ) as FormArray).controls = this._article.tags.map(
+        (t) => new FormControl(t)
+      );
+    }
 
     this.formGroup.enable();
     this.loading = false;
