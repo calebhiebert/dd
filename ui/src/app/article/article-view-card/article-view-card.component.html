@@ -8,7 +8,14 @@
     />
   </div>
   <div class="card-header">
-    <div class="card-title h5">{{ article.name }}</div>
+    <div class="columns">
+      <div class="column">
+        <div class="card-title h5">{{ article.name }}</div>
+      </div>
+      <div class="column col-auto" *ngIf="article.mapId !== null">
+        <i class="icon icon-location"></i>
+      </div>
+    </div>
     <div class="card-subtitle text-gray">{{ subtitleText }}</div>
   </div>
   <div class="card-body">

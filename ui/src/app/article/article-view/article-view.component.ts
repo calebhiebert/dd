@@ -68,6 +68,23 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
     ]);
   }
 
+  public viewOnMap() {
+    this.router.navigate(
+      [
+        'campaigns',
+        this.campaignService.campaign.id,
+        'maps',
+        this.article.mapId,
+      ],
+      {
+        queryParams: {
+          lat: this.article.lat,
+          lng: this.article.lng,
+        },
+      }
+    );
+  }
+
   public get editable() {
     return this.campaignService.canEdit;
   }

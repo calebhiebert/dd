@@ -94,7 +94,7 @@ export class ArticleEditorComponent implements OnInit {
                 this.campaignSerivce.campaign.id
               }/articles/${item.original.id}`;
 
-              return `<a href="${link}">${item.original.name}</a>`;
+              return `<a [routerLink]="${link}">${item.original.name}</a>`;
             },
 
             lookup: (article) => {

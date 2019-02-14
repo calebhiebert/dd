@@ -17,6 +17,15 @@
       </div>
 
       <div class="column col-auto">
+        <!-- View On Map -->
+        <div
+          class="c-hand d-inline mr-2"
+          *ngIf="article.mapId !== null"
+          (click)="viewOnMap()"
+        >
+          Location <i class="icon icon-location"></i>
+        </div>
+
         <button class="btn btn-sm" (click)="edit()" *ngIf="editable">
           Edit
         </button>

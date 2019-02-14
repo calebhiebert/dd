@@ -340,7 +340,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     // Scroll to the place that was queried
     if (this._queryLatLng) {
-      map.flyTo(this._queryLatLng, this._map.maxZoom);
+      map.flyTo(this._queryLatLng, this._map.maxZoom - 1);
     }
 
     // If the user viewing the map created it
