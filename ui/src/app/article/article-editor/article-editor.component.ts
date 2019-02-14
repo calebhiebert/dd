@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IArticle, ArticleService } from 'src/app/article.service';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
+import Tribute, { TributeItem } from 'tributejs';
 
 @Component({
   selector: 'dd-article-editor',
@@ -65,6 +66,50 @@ export class ArticleEditorComponent implements OnInit {
       },
       requestHeaders: {
         Authorization: `Bearer ${this.login.loadToken()}`,
+      },
+      events: {
+        'froalaEditor.initialized': (e, editor) => {
+          const t = new Tribute({
+            allowSpaces: true,
+
+            values: async (text, cb) => {
+              const articles = await this.articleService.getArticles(
+                this.campaignSerivce.campaign.id,
+                10,
+                0,
+                text
+              );
+
+              console.log(articles);
+
+              cb(articles);
+            },
+
+            menuItemTemplate: (article: TributeItem<IArticle>) => {
+              return article.original.name;
+            },
+
+            selectTemplate: (item) => {
+              const link = `/campaigns/${
+                this.campaignSerivce.campaign.id
+              }/articles/${item.original.id}`;
+
+              return `<a href="${link}">${item.original.name}</a>`;
+            },
+
+            lookup: (article) => {
+              return `${article.name} ${article.text} ${article.tags.join(
+                ' '
+              )}`;
+            },
+
+            fillAttr: 'id',
+          });
+
+          const el = document.querySelector('.fr-element.fr-view');
+
+          t.attach(el);
+        },
       },
       toolbarButtons: [
         'fullscreen',
