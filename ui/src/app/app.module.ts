@@ -86,6 +86,7 @@ import { ArticleEditorComponent } from './article/article-editor/article-editor.
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { ArticleViewComponent } from './article/article-view/article-view.component';
 import { ArticleSelectComponent } from './article/article-select/article-select.component';
+import { MapToolbarComponent } from './map/map-toolbar/map-toolbar.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -164,6 +165,7 @@ import { ArticleSelectComponent } from './article/article-select/article-select.
     ArticleEditorComponent,
     ArticleViewComponent,
     ArticleSelectComponent,
+    MapToolbarComponent,
   ],
   imports: [
     BrowserModule,
