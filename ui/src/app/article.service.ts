@@ -49,6 +49,12 @@ export class ArticleService {
       .get<IArticle[]>(`${environment.apiURL}/articles/map/${mapId}`)
       .toPromise();
   }
+
+  public deleteArticle(id: string): Promise<void> {
+    return this.http
+      .delete<void>(`${environment.apiURL}/articles/${id}`)
+      .toPromise();
+  }
 }
 
 export interface IArticle {

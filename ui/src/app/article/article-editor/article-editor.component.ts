@@ -5,6 +5,8 @@ import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IArticle, ArticleService } from 'src/app/article.service';
+import { Location } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'dd-article-editor',
@@ -24,7 +26,8 @@ export class ArticleEditorComponent implements OnInit {
     private articleService: ArticleService,
     private login: LoginService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -169,9 +172,27 @@ export class ArticleEditorComponent implements OnInit {
     this.formGroup.enable();
   }
 
-  public delete() {}
+  public async delete() {
+    if (
+      (await Swal.fire({ title: 'Are you sure?', showCancelButton: true }))
+        .value === true
+    ) {
+      try {
+        await this.articleService.deleteArticle(this._article.id);
+        this.router.navigate([
+          'campaigns',
+          this.campaignSerivce.campaign.id,
+          'articles',
+        ]);
+      } catch (err) {
+        throw err;
+      }
+    }
+  }
 
-  public cancel() {}
+  public cancel() {
+    this.location.back();
+  }
 
   public get editing() {
     return this.route.snapshot.data.editing;
