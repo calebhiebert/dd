@@ -33,6 +33,11 @@
     </div>
 
     <!-- Article Content -->
-    <div [froalaView]="article.text"></div>
+    <!-- <div [froalaView]="article.text"></div> -->
+    <div
+      class="fr-view"
+      [p3x-compile]="article.text"
+      [p3x-compile-ctx]="this"
+    ></div>
   </div>
 </div>

@@ -15,11 +15,26 @@
   </div>
 
   <!-- Loading Indicator -->
-  <div class="loading loading-lg" *ngIf="loading"></div>
+  <div class="loading loading-lg" *ngIf="loading && !articles"></div>
+
+  <!-- Search -->
+  <div class="has-icon-right" *ngIf="articles">
+    <input
+      type="text"
+      class="form-input"
+      placeholder="Search"
+      [formControl]="searchControl"
+    />
+    <i class="form-icon loading" *ngIf="loading"></i>
+    <i class="form-icon icon icon-search" *ngIf="!loading"></i>
+  </div>
 
   <!-- Article Cards -->
   <div class="columns article-cards">
-    <div class="col-4 col-xs-12 col-md-6 p-2" *ngFor="let a of articles">
+    <div
+      class="col-4 col-xs-12 col-md-6 p-2"
+      *ngFor="let a of articles; trackBy: trackArticle"
+    >
       <dd-article-view-card
         (click)="viewArticle(a)"
         [article]="a"
@@ -27,8 +42,11 @@
     </div>
   </div>
 
-  <!-- Empty State -->
-  <div class="empty" *ngIf="articles && articles.length === 0">
+  <!-- Empty State (No Articles) -->
+  <div
+    class="empty mt-2"
+    *ngIf="articles && articles.length === 0 && search === null"
+  >
     <div class="empty-icon">
       <i class="icon icon-search icon-4x"></i>
     </div>
@@ -41,5 +59,16 @@
         Create Article
       </button>
     </div>
+  </div>
+
+  <!-- Empty State (No Search Results) -->
+  <div
+    class="empty mt-2"
+    *ngIf="articles && articles.length === 0 && search !== null"
+  >
+    <div class="empty-icon">
+      <i class="icon icon-search icon-4x"></i>
+    </div>
+    <p class="empty-title h5">Your search contained no results</p>
   </div>
 </div>

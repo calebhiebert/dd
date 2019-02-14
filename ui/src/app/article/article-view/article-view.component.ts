@@ -28,6 +28,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       if (params.has('a_id')) {
+        this.article = undefined;
         this.load(params.get('a_id'));
       }
     });
@@ -83,6 +84,20 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
         },
       }
     );
+  }
+
+  /**
+   * Navigates to an article with the given id
+   * The function name is so short because some trickery is being
+   * used to render the content, and the function name is stored in the database
+   */
+  public na(id: string) {
+    this.router.navigate([
+      'campaigns',
+      this.campaignService.campaign.id,
+      'articles',
+      id,
+    ]);
   }
 
   public get editable() {

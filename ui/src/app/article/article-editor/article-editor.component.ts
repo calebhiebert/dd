@@ -80,8 +80,6 @@ export class ArticleEditorComponent implements OnInit {
                 text
               );
 
-              console.log(articles);
-
               cb(articles);
             },
 
@@ -90,11 +88,9 @@ export class ArticleEditorComponent implements OnInit {
             },
 
             selectTemplate: (item) => {
-              const link = `/campaigns/${
-                this.campaignSerivce.campaign.id
-              }/articles/${item.original.id}`;
-
-              return `<a [routerLink]="${link}">${item.original.name}</a>`;
+              return `<a class="c-hand" (click)="context.na('${
+                item.original.id
+              }')">${item.original.name}</a>`;
             },
 
             lookup: (article) => {
@@ -163,7 +159,7 @@ export class ArticleEditorComponent implements OnInit {
 
     const article: IArticle = {
       name: v.name,
-      text: v.text,
+      text: v.text.replace(new RegExp('routerlink', 'g'), 'routerLink'),
       published: v.published,
       campaignId: this.campaignSerivce.campaign.id,
       userId: this.login.id,
