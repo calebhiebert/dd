@@ -1,0 +1,17 @@
+<div class="card hoverable">
+  <div class="card-image" *ngIf="article.firstImageID">
+    <img
+      src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500/v1549919172/{{
+        article.firstImageID
+      }}"
+      class="img-responsive"
+    />
+  </div>
+  <div class="card-header">
+    <div class="card-title h5">{{ article.name }}</div>
+    <div class="card-subtitle text-gray">Some Subtitle</div>
+  </div>
+  <div class="card-body">
+    ...
+  </div>
+</div>

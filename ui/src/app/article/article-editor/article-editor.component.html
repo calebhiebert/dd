@@ -45,7 +45,7 @@
         class="btn"
         [ngClass]="{ loading: saving }"
         (click)="save()"
-        [disabled]="loading || saving"
+        [disabled]="loading || saving || formGroup.invalid"
       >
         Save
       </button>
@@ -88,5 +88,13 @@
   <div class="form-group">
     <label class="form-label" for="text">Content</label>
     <div id="text" [froalaEditor]="froalaOptions" formControlName="text"></div>
+  </div>
+
+  <!-- Published -->
+  <div class="form-group">
+    <label class="form-switch">
+      <input type="checkbox" formControlName="published" />
+      <i class="form-icon"></i> This article is published (players can view it)
+    </label>
   </div>
 </div>

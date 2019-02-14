@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IArticle, ArticleService } from 'src/app/article.service';
 
 @Component({
@@ -17,11 +17,14 @@ export class ArticleEditorComponent implements OnInit {
   public saving = false;
   public loading = false;
 
+  private _article: IArticle;
+
   constructor(
     private campaignSerivce: CampaignService,
     private articleService: ArticleService,
     private login: LoginService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -33,9 +36,16 @@ export class ArticleEditorComponent implements OnInit {
         Validators.maxLength(30),
       ]),
       text: new FormControl(null),
+      published: new FormControl(false),
     });
 
-    this.formGroup.valueChanges.subscribe(console.log);
+    if (this.editing) {
+      this.formGroup.disable();
+
+      this.route.paramMap.subscribe((params) => {
+        this.load(params.get('a_id'));
+      });
+    }
   }
 
   private makeFroalaOptions() {
@@ -111,9 +121,26 @@ export class ArticleEditorComponent implements OnInit {
     };
 
     if (this.editing) {
+      article.id = this._article.id;
+      article.userId = this._article.userId;
     }
 
     return article;
+  }
+
+  private async load(id: string) {
+    this.loading = true;
+
+    try {
+      this._article = await this.articleService.getArticle(id);
+    } catch (err) {
+      throw err;
+    }
+
+    this.formGroup.patchValue(this._article);
+
+    this.formGroup.enable();
+    this.loading = false;
   }
 
   public async save() {
@@ -128,6 +155,12 @@ export class ArticleEditorComponent implements OnInit {
       } else {
         await this.articleService.createArticle(article);
       }
+
+      this.router.navigate([
+        'campaigns',
+        this.campaignSerivce.campaign.id,
+        'articles',
+      ]);
     } catch (err) {
       throw err;
     }

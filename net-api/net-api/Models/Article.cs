@@ -47,4 +47,30 @@ namespace net_api.Models
             CreatedAt = DateTime.UtcNow;
         }
     }
+
+    public class SearchedArticle : Article
+    {
+        public string FirstImageID { get; set; }
+
+        public string ShortDescription { get; set; }
+
+        public SearchedArticle(Article article)
+        {
+            this.CampaignId = article.CampaignId;
+            this.CreatedAt = article.CreatedAt;
+            this.Id = article.Id;
+            this.Lat = article.Lat;
+            this.Lng = article.Lng;
+            this.MapId = article.MapId;
+            this.Name = article.Name;
+            this.Published = article.Published;
+            this.Text = article.Text;
+            this.UserId = article.UserId;
+        }
+
+        public SearchedArticle(Article article, string imgId) : this(article)
+        {
+            this.FirstImageID = imgId;
+        }
+    }
 }

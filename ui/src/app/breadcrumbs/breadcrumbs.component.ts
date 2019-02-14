@@ -70,6 +70,12 @@ export class BreadcrumbsComponent implements OnInit {
               navigate: ['campaigns', cr.parent.paramMap.get('id'), 'maps'],
             });
             break;
+          case 'Article View':
+            breadcrumbs.push({
+              display: 'Maps',
+              navigate: ['campaigns', cr.parent.paramMap.get('id'), 'articles'],
+            });
+            break;
         }
 
         breadcrumbs.push(crumb);

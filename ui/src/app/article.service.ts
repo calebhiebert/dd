@@ -20,11 +20,11 @@ export class ArticleService {
     limit: number = 10,
     offset: number = 0,
     search?: string
-  ): Promise<IArticle[]> {
+  ): Promise<ISearchedArticle[]> {
     const searchString = search ? `&search=${encodeURIComponent(search)}` : '';
 
     return this.http
-      .get<IArticle[]>(
+      .get<ISearchedArticle[]>(
         `${
           environment.apiURL
         }/articles?campaignId=${campaignId}&limit=${limit}&offset=${offset}${searchString}`
@@ -64,4 +64,8 @@ export interface IArticle {
   map?: IMap;
   lat?: number;
   lng?: number;
+}
+
+export interface ISearchedArticle extends IArticle {
+  firstImageID: string;
 }

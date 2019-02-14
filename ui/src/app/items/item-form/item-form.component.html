@@ -3,6 +3,9 @@
   <div class="loading loading-lg" *ngIf="loading"></div>
 
   <div class="columns col-oneline" *ngIf="!loading || !editing">
+    <div class="column">
+      <h3>{{ editing ? 'Edit' : 'Create' }} Item</h3>
+    </div>
     <div class="column col-ml-auto col-auto">
       <button class="btn mr-2" (click)="cancel()">Cancel</button>
       <button
@@ -14,7 +17,12 @@
       >
         Delete
       </button>
-      <button class="btn btn-primary" [disabled]="formGroup.invalid" (click)="save()" [ngClass]="{ loading: saving }">
+      <button
+        class="btn btn-primary"
+        [disabled]="formGroup.invalid"
+        (click)="save()"
+        [ngClass]="{ loading: saving }"
+      >
         Save
       </button>
     </div>
@@ -44,13 +52,34 @@
             id="item-name"
             placeholder="Sword of Agatha"
           />
-          <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.required">
+          <p
+            class="form-input-hint"
+            *ngIf="
+              name.invalid &&
+              (name.dirty || name.touched) &&
+              name.errors.required
+            "
+          >
             The item needs a name
           </p>
-          <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.minlength">
+          <p
+            class="form-input-hint"
+            *ngIf="
+              name.invalid &&
+              (name.dirty || name.touched) &&
+              name.errors.minlength
+            "
+          >
             The name is too short
           </p>
-          <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.maxlength">
+          <p
+            class="form-input-hint"
+            *ngIf="
+              name.invalid &&
+              (name.dirty || name.touched) &&
+              name.errors.maxlength
+            "
+          >
             The name can't be more than 30 characters long
           </p>
         </div>
@@ -59,7 +88,8 @@
         <div
           class="form-group"
           [ngClass]="{
-            'has-error': description.invalid && (description.touched || description.dirty),
+            'has-error':
+              description.invalid && (description.touched || description.dirty),
             'has-success': description.valid
           }"
         >
@@ -83,7 +113,11 @@
           </p>
           <p
             class="form-input-hint"
-            *ngIf="description.invalid && (description.touched || description.dirty) && description.errors.required"
+            *ngIf="
+              description.invalid &&
+              (description.touched || description.dirty) &&
+              description.errors.required
+            "
           >
             The item needs a description
           </p>
@@ -92,8 +126,15 @@
         <!-- Rarity -->
         <div class="form-group" [ngClass]="{ 'has-success': rarity.valid }">
           <label for="rarity" class="form-label">Rarity</label>
-          <select name="rarity" id="rarity" class="form-input" formControlName="rarity">
-            <option [value]="i" *ngFor="let ir of rarities; let i = index">{{ ir.name }}</option>
+          <select
+            name="rarity"
+            id="rarity"
+            class="form-input"
+            formControlName="rarity"
+          >
+            <option [value]="i" *ngFor="let ir of rarities; let i = index">{{
+              ir.name
+            }}</option>
           </select>
         </div>
 
@@ -115,10 +156,22 @@
             name="cost"
             id="cost"
           />
-          <p class="form-input-hint" *ngIf="cost.invalid && (cost.dirty || cost.touched) && cost.errors.required">
+          <p
+            class="form-input-hint"
+            *ngIf="
+              cost.invalid &&
+              (cost.dirty || cost.touched) &&
+              cost.errors.required
+            "
+          >
             A cost is required
           </p>
-          <p class="form-input-hint" *ngIf="cost.invalid && (cost.dirty || cost.touched) && cost.errors.number">
+          <p
+            class="form-input-hint"
+            *ngIf="
+              cost.invalid && (cost.dirty || cost.touched) && cost.errors.number
+            "
+          >
             The cost must be a number
           </p>
         </div>
@@ -143,11 +196,22 @@
           />
           <p
             class="form-input-hint"
-            *ngIf="weight.invalid && (weight.dirty || weight.touched) && weight.errors.required"
+            *ngIf="
+              weight.invalid &&
+              (weight.dirty || weight.touched) &&
+              weight.errors.required
+            "
           >
             A weight is required
           </p>
-          <p class="form-input-hint" *ngIf="weight.invalid && (weight.dirty || weight.touched) && weight.errors.number">
+          <p
+            class="form-input-hint"
+            *ngIf="
+              weight.invalid &&
+              (weight.dirty || weight.touched) &&
+              weight.errors.number
+            "
+          >
             The weight must be a number
           </p>
         </div>
@@ -155,8 +219,8 @@
         <!-- Player Visible -->
         <div class="form-group">
           <label class="form-switch">
-            <input type="checkbox" formControlName="playerVisible" /> <i class="form-icon"></i> Item is visible to
-            players
+            <input type="checkbox" formControlName="playerVisible" />
+            <i class="form-icon"></i> Item is visible to players
           </label>
         </div>
 

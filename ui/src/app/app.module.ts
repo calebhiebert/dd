@@ -87,6 +87,9 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { ArticleViewComponent } from './article/article-view/article-view.component';
 import { ArticleSelectComponent } from './article/article-select/article-select.component';
 import { MapToolbarComponent } from './map/map-toolbar/map-toolbar.component';
+import { ArticleManagerComponent } from './article/article-manager/article-manager.component';
+import { ArticleViewMiniComponent } from './article/article-view-mini/article-view-mini.component';
+import { ArticleViewCardComponent } from './article/article-view-card/article-view-card.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -166,6 +169,9 @@ import { MapToolbarComponent } from './map/map-toolbar/map-toolbar.component';
     ArticleViewComponent,
     ArticleSelectComponent,
     MapToolbarComponent,
+    ArticleManagerComponent,
+    ArticleViewMiniComponent,
+    ArticleViewCardComponent,
   ],
   imports: [
     BrowserModule,

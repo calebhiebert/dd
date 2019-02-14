@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -83,9 +84,9 @@ namespace net_api.Controllers
                     .Where(a => a.Name.ToLower().Contains(search) || a.Text.ToLower().Contains(search));
             }
 
-            var articles = await query.Select(a => new { a.CampaignId, a.UserId, a.Id, a.Name, a.Published, a.CreatedAt }).ToListAsync();
+            var articles = await query.ToListAsync();
 
-            return Ok(articles);
+            return Ok(articles.Select(a => new SearchedArticle(a, GetFirstImageId(a.Text))));
         }
 
         [HttpGet("map/{id}")]
@@ -234,6 +235,27 @@ namespace net_api.Controllers
             await _context.SaveChangesAsync();
 
             return article;
+        }
+
+        private string GetFirstImageId(string text)
+        {
+            var groups = Regex.Match(text, "<img.*?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase).Groups;
+
+            if (groups.Count == 1)
+            {
+                return null;
+            } 
+
+            var url = groups[1].Value;
+
+            var urlGroups = Regex.Match(url, "https://res.cloudinary.com/.+/image/upload/.+/(Public/.+/[0-9a-z]+)", RegexOptions.IgnoreCase).Groups;
+
+            if (urlGroups.Count == 1)
+            {
+                return null;
+            }
+
+            return urlGroups[1].Value;   
         }
 
         private bool ArticleExists(Guid id)

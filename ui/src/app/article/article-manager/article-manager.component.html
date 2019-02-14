@@ -1,0 +1,45 @@
+<div class="container grid-xl">
+  <!-- Title Controls -->
+  <div class="columns">
+    <!-- Title -->
+    <div class="column">
+      <h3>Articles</h3>
+    </div>
+
+    <!-- Controls -->
+    <div class="column col-auto">
+      <button class="btn btn-sm" (click)="createArticle()">
+        <i class="icon icon-plus"></i> New Article
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div class="loading loading-lg" *ngIf="loading"></div>
+
+  <!-- Article Cards -->
+  <div class="columns article-cards">
+    <div class="col-4 col-xs-12 col-md-6 p-2" *ngFor="let a of articles">
+      <dd-article-view-card
+        (click)="viewArticle(a)"
+        [article]="a"
+      ></dd-article-view-card>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty" *ngIf="articles && articles.length === 0">
+    <div class="empty-icon">
+      <i class="icon icon-search icon-4x"></i>
+    </div>
+    <p class="empty-title h5">There are no articles for this campaign</p>
+    <p class="empty-subtitle" *ngIf="editable">
+      Click the button to create one
+    </p>
+    <div class="empty-action" *ngIf="editable">
+      <button class="btn btn-primary" (click)="createArticle()">
+        Create Article
+      </button>
+    </div>
+  </div>
+</div>

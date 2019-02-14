@@ -34,6 +34,7 @@ import { MapManagerComponent } from './map/map-manager/map-manager.component';
 import { SpellFormComponent } from './spell/spell-form/spell-form.component';
 import { ArticleEditorComponent } from './article/article-editor/article-editor.component';
 import { ArticleViewComponent } from './article/article-view/article-view.component';
+import { ArticleManagerComponent } from './article/article-manager/article-manager.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -248,6 +249,13 @@ const routes: Routes = [
         },
       },
       {
+        path: 'articles',
+        component: ArticleManagerComponent,
+        data: {
+          breadcrumb: 'Articles',
+        },
+      },
+      {
         path: 'spells/:s_id',
         component: SpellViewComponent,
         data: {
@@ -308,7 +316,7 @@ const routes: Routes = [
         path: 'articles/:a_id',
         component: ArticleViewComponent,
         data: {
-          breadcrumb: 'View Article',
+          breadcrumb: 'Article View',
         },
       },
     ],

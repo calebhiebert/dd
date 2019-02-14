@@ -62,7 +62,7 @@ export interface IItem {
   cost: number;
   weight: number;
   imageId?: string;
-  userId: string;
+  userId?: string;
   rarity: number;
   playerVisible: boolean;
   tags?: string[];

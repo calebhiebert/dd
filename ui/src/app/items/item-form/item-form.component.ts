@@ -67,7 +67,7 @@ export class ItemFormComponent implements OnInit {
 
     const v = this.formGroup.value;
 
-    if (this.editing) {
+    if (this.editing === true) {
       const item: IItem = {
         id: this.item.id,
         campaignId: this.item.campaignId,
@@ -102,7 +102,6 @@ export class ItemFormComponent implements OnInit {
         rarity: v.rarity,
         playerVisible: v.playerVisible,
         weight: v.weight,
-        userId: this.item.userId,
         cost: v.cost,
         tags: v.tags,
       };
