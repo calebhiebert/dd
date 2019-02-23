@@ -26,7 +26,7 @@
           placeholder="Search"
           [formControl]="searchControl"
         />
-        <i class="form-icon icon icon-search" *ngIf="!loading"></i>
+        <i class="form-icon icon icon-search" *ngIf="!loading || !spells"></i>
         <div class="form-icon loading" *ngIf="loading && spells"></div>
       </div>
     </div>
