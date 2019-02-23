@@ -74,5 +74,5 @@ export interface IArticle {
 }
 
 export interface ISearchedArticle extends IArticle {
-  firstImageID: string;
+  imageURLs: string[];
 }
