@@ -173,6 +173,13 @@ namespace net_api.Controllers
                 article.Content = originalArticle.Content;
             }
 
+            if (article.MapId == null)
+            {
+                article.MapId = originalArticle.MapId;
+                article.Lat = originalArticle.Lat;
+                article.Lng = originalArticle.Lng;
+            }
+
             _context.Entry(article).State = EntityState.Modified;
 
             try
@@ -194,6 +201,12 @@ namespace net_api.Controllers
             if (article.Published)
             {
                 await _hub.Clients.Group($"campaign-{article.CampaignId}")
+                    .SendAsync("ArticleUpdate", article);
+            } else
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                await _hub.Clients.Group($"notifications-{userId}")
                     .SendAsync("ArticleUpdate", article);
             }
 

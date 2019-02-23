@@ -177,6 +177,9 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
     if (this.editing) {
       article.id = this._article.id;
       article.userId = this._article.userId;
+      article.map = this._article.map;
+      article.lat = this._article.lat;
+      article.lng = this._article.lng;
     }
 
     return article;
