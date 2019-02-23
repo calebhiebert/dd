@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { CampaignService, ICampaign } from 'src/app/campaign.service';
-import { IEntityPreset } from 'src/app/entity.service';
 
 @Component({
   selector: 'dd-campaign-list',
@@ -12,6 +11,9 @@ export class CampaignListComponent implements OnInit {
   public loading = false;
   public creating = false;
   public campaigns: ICampaign[] = null;
+
+  @Input()
+  public hideHeader = false;
 
   constructor(
     private campaignService: CampaignService,
