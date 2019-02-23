@@ -57,6 +57,7 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
       ]),
       published: new FormControl(false),
       tags: new FormArray([]),
+      icon: new FormControl(),
     });
 
     if (this.editing) {
@@ -187,6 +188,7 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
       campaignId: this.campaignSerivce.campaign.id,
       userId: this.login.id,
       tags: v.tags || [],
+      icon: v.icon,
     };
 
     if (this.editing) {
@@ -285,5 +287,9 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
 
   public get name() {
     return this.formGroup.get('name');
+  }
+
+  public get icon() {
+    return this.formGroup.get('icon');
   }
 }

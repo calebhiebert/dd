@@ -34,6 +34,7 @@ import { EntityViewMiniComponent } from '../entity/entity-view-mini/entity-view-
 import { ArticleSelectComponent } from '../article/article-select/article-select.component';
 import { ArticleService, IArticle } from '../article.service';
 import { ArticleViewMiniComponent } from '../article/article-view-mini/article-view-mini.component';
+import { IconService } from '../icon.service';
 
 const ownNoteIcon = L.icon({
   iconUrl: '/assets/note-icon.png',
@@ -108,7 +109,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     private entityService: EntityService,
     private updateHub: UpdateHubService,
     private toast: ToastrService,
-    private articleService: ArticleService
+    private articleService: ArticleService,
+    private iconService: IconService
   ) {}
 
   ngAfterViewInit() {
@@ -400,6 +402,18 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     if (article.lat && article.lng) {
       const marker = L.marker([article.lat, article.lng]);
+
+      if (article.icon) {
+        marker.setIcon(
+          L.icon({
+            iconUrl: this.iconService.getIconSrc(article.icon),
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -23],
+          })
+        );
+      }
+
       marker['_article'] = article;
       this._articlesLayerGroup.addLayer(marker);
 
@@ -452,7 +466,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           allowIntersection: false, // Restricts shapes to simple polygons
           drawError: {
             color: '#e1e100', // Color the shape will turn when intersects
-            message: '<strong>Oh snap!<strong> you can\'t draw that!', // Message that will show when intersect
+            message: "<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
           },
         },
         circlemarker: false,

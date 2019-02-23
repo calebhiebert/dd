@@ -90,6 +90,7 @@ import { ArticleManagerComponent } from './article/article-manager/article-manag
 import { ArticleViewMiniComponent } from './article/article-view-mini/article-view-mini.component';
 import { ArticleViewCardComponent } from './article/article-view-card/article-view-card.component';
 import { QuickDiceComponent } from './quick-dice/quick-dice.component';
+import { IconPickerComponent } from './icon-picker/icon-picker.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -177,6 +178,7 @@ import { QuickDiceComponent } from './quick-dice/quick-dice.component';
     ArticleViewMiniComponent,
     ArticleViewCardComponent,
     QuickDiceComponent,
+    IconPickerComponent,
   ],
   imports: [
     BrowserModule,

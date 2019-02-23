@@ -64,6 +64,8 @@ namespace net_api.Models
         [Column("Tags", TypeName = "varchar[]")]
         public string[] Tags { get; set; }
 
+        public string Icon { get; set; }
+
         public Article()
         {
             Id = Guid.NewGuid();

@@ -71,6 +71,7 @@ export interface IArticle {
   map?: IMap;
   lat?: number;
   lng?: number;
+  icon?: string;
 }
 
 export interface ISearchedArticle extends IArticle {
