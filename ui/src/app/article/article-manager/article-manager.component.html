@@ -7,7 +7,7 @@
     </div>
 
     <!-- Controls -->
-    <div class="column col-auto">
+    <div class="column col-auto" *ngIf="editable">
       <button class="btn btn-sm" (click)="createArticle()">
         <i class="icon icon-plus"></i> New Article
       </button>

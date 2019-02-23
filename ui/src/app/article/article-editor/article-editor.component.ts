@@ -160,13 +160,6 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
         },
       },
     });
-
-    this._quill.on('text-change', (change) => {
-      console.log(
-        'Model',
-        JSON.parse(JSON.stringify(this._quill.getContents()))
-      );
-    });
   }
 
   private constructArticle(): IArticle {
