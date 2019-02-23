@@ -12,6 +12,7 @@
   <div class="column col-sm-12" *ngIf="spawnMode">
     <dd-number-quick-select
       (selected)="spawn($event)"
+      (cancel)="spawnMode = false"
       [loading]="spawning"
     ></dd-number-quick-select>
   </div>

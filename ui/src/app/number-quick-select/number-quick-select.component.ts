@@ -23,6 +23,9 @@ export class NumberQuickSelectComponent implements OnInit {
   @Output()
   public selected = new EventEmitter<number>();
 
+  @Output()
+  public cancel = new EventEmitter<boolean>();
+
   public customInput = false;
 
   public inputControl: FormControl;
