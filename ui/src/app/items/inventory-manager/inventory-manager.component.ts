@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { IInventoryItem, EntityService } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { IItem } from 'src/app/item.service';
@@ -33,6 +33,9 @@ export class InventoryManagerComponent implements OnInit {
 
   @ViewChild('itemedit')
   public itemEditModal: ModalComponent<any>;
+
+  @ViewChild('quantityedit')
+  private _quantityEdit: ElementRef<HTMLInputElement>;
 
   constructor(
     private entityService: EntityService,
@@ -108,6 +111,10 @@ export class InventoryManagerComponent implements OnInit {
       ]),
     });
     this.editingItem = item;
+
+    setTimeout(() => {
+      this._quantityEdit.nativeElement.focus();
+    }, 1);
 
     this.itemEditModal.open().then(() => {
       this.editingItem = undefined;
