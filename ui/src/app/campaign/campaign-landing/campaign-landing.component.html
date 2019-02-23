@@ -1,6 +1,8 @@
 <dd-modal #invites size="large" *ngIf="editable">
   <div modal-header><h4>Manage Invites</h4></div>
-  <div modal-body *ngIf="invites.isOpen"><dd-invite-manager></dd-invite-manager></div>
+  <div modal-body *ngIf="invites.isOpen">
+    <dd-invite-manager></dd-invite-manager>
+  </div>
 </dd-modal>
 
 <div class="container grid-xl" *ngIf="campaign">
@@ -30,14 +32,20 @@
     </div>
     <div class="column col-auto col-ml-auto hide-md">
       <div class="dropdown dropdown-right">
-        <button class="btn btn-link dropdown-toggle">Menu <i class="icon icon-caret"></i></button>
+        <button class="btn btn-link dropdown-toggle">
+          Menu <i class="icon icon-caret"></i>
+        </button>
 
         <ul class="menu">
           <li class="menu-item" *ngFor="let ep of entityPresets">
-            <a [routerLink]="['..', 'entities', ep.id, 'create']">Create {{ ep.name }}</a>
+            <a [routerLink]="['..', 'entities', ep.id, 'create']"
+              >Create {{ ep.name }}</a
+            >
           </li>
           <li class="menu-item" *ngIf="editable">
-            <a [routerLink]="['/campaign', 'manage', campaign.id, 'settings']">Settings</a>
+            <a [routerLink]="['/campaign', 'manage', campaign.id, 'settings']"
+              >Settings</a
+            >
           </li>
         </ul>
       </div>
@@ -46,7 +54,9 @@
 
   <div class="columns">
     <!-- Description -->
-    <div class="column col-9 col-xl-8 col-md-12"><markdown [data]="campaign.description"></markdown></div>
+    <div class="column col-9 col-xl-8 col-md-12">
+      <markdown [data]="campaign.description"></markdown>
+    </div>
 
     <!-- Sidebar -->
     <div class="column col-3 col-md-12 col-xl-4 col-ml-auto">
@@ -56,22 +66,34 @@
           <div class="columns">
             <div class="column"><h5>Members</h5></div>
             <div class="column col-auto col-ml-auto" *ngIf="editable">
-              <button class="btn btn-sm" (click)="invites.open()"><i class="icon icon-plus"></i> Invite Members</button>
+              <button class="btn btn-sm" (click)="invites.open()">
+                <i class="icon icon-plus"></i>
+                <span class="hide-sm"> Invite Members</span>
+              </button>
             </div>
           </div>
         </div>
 
         <div class="card-body">
-          <div class="tile tile-centered mb-2" *ngFor="let u of campaign.members">
+          <div
+            class="tile tile-centered mb-2"
+            *ngFor="let u of campaign.members"
+          >
             <div class="tile-icon">
               <figure class="avatar"><img [src]="u.user.pictureURL" /></figure>
             </div>
             <div class="tile-content">
               <div class="tile-title">{{ u.user.username }}</div>
               <div class="d-flex">
-                <span class="chip hoverable-chip" (click)="selectEntity(e)" *ngFor="let e of userEntities(u.user.id)">
+                <span
+                  class="chip hoverable-chip"
+                  (click)="selectEntity(e)"
+                  *ngFor="let e of userEntities(u.user.id)"
+                >
                   <img
-                    src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}"
+                    src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+                      e.imageId
+                    }}"
                     class="avatar avatar-sm"
                   />
                   {{ e.name }}
@@ -87,7 +109,10 @@
           <div class="columns">
             <div class="column"><h5>Active Quests</h5></div>
             <div class="column col-auto col-ml-auto" *ngIf="editable">
-              <button class="btn btn-sm" (click)="manageQuests()">Manage</button>
+              <button class="btn btn-sm" (click)="manageQuests()">
+                <span class="hide-sm">Manage </span>
+                <i class="icon icon-menu"></i>
+              </button>
             </div>
           </div>
         </div>

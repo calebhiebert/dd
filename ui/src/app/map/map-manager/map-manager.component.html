@@ -8,7 +8,7 @@
     <!-- New Map button -->
     <div class="column col-auto" *ngIf="editable">
       <button class="btn btn-sm" (click)="newMap()">
-        <i class="icon icon-plus"></i> New Map
+        <i class="icon icon-plus"></i><span class="hide-sm"> New Map</span>
       </button>
     </div>
   </div>
@@ -60,8 +60,12 @@
 
       <!-- Controls -->
       <div *ngIf="editable">
-        <button class="btn btn-sm mr-2" (click)="delete(m)">Delete</button>
-        <button class="btn btn-sm">Edit</button>
+        <button class="btn btn-sm mr-2" (click)="delete(m)">
+          <i class="icon icon-delete"></i><span class="hide-sm"> Delete</span>
+        </button>
+        <button class="btn btn-sm" disabled>
+          <i class="icon icon-edit"></i><span class="hide-sm"> Edit</span>
+        </button>
       </div>
     </div>
   </div>

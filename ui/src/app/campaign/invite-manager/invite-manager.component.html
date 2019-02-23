@@ -22,7 +22,7 @@
     *ngIf="invites.length > 0"
     [ngClass]="{ loading: creatingInvite }"
   >
-    <i class="icon icon-plus"></i> Create Invite
+    <i class="icon icon-plus"></i><span class="hide-sm"> Create Invite</span>
   </button>
   <!-- Invites List -->
   <table class="table" *ngIf="invites.length > 0">
