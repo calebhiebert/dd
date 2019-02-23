@@ -86,7 +86,13 @@ export class ArticleViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this._quill.setContents(this.article.content.ops);
 
         this.setupArticleMentions(
-          document.querySelectorAll('[data-type="article"]')
+          this._quillContainer.nativeElement.querySelectorAll(
+            '[data-type="article"]'
+          )
+        );
+
+        this.setupImages(
+          this._quillContainer.nativeElement.querySelectorAll('img')
         );
       }
     } catch (err) {
@@ -108,6 +114,12 @@ export class ArticleViewComponent implements OnInit, OnDestroy, AfterViewInit {
           id,
         ]);
       });
+    });
+  }
+
+  private setupImages(nodes: NodeListOf<HTMLImageElement>) {
+    nodes.forEach((n) => {
+      n.classList.add('img-responsive');
     });
   }
 
