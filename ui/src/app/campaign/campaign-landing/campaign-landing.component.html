@@ -6,22 +6,6 @@
 </dd-modal>
 
 <div class="container grid-xl" *ngIf="campaign">
-  <!-- Active Session Card -->
-  <!-- <div class="card p-2">
-    <div class="columns">
-      <div class="column">
-        <span class="text-large text-bold"
-          >There is currently an active session!</span
-        >
-      </div>
-      <div class="column col-auto col-ml-auto">
-        <button class="btn btn-primary">
-          Join Session <i class="icon icon-arrow-right"></i>
-        </button>
-      </div>
-    </div>
-  </div> -->
-
   <!-- Header -->
   <div class="columns">
     <div class="column col-9 col-lg-8 col-md-12 hide-md">
@@ -104,6 +88,7 @@
         </div>
       </div>
 
+      <!-- Quests -->
       <div class="card mt-2">
         <div class="card-header">
           <div class="columns">
@@ -118,6 +103,12 @@
         </div>
 
         <div class="card-body"><dd-quest-quick-view></dd-quest-quick-view></div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="card mt-2 p-2">
+        <button class="btn mb-2" (click)="viewItems()">Items</button>
+        <button class="btn" (click)="viewSpells()">Spells</button>
       </div>
     </div>
   </div>

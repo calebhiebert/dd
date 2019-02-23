@@ -37,6 +37,14 @@ export class CampaignLandingComponent implements OnInit {
     this.router.navigate(['campaigns', this.campaign.id, 'quests']);
   }
 
+  public viewSpells() {
+    this.router.navigate(['campaigns', this.campaign.id, 'spells']);
+  }
+
+  public viewItems() {
+    this.router.navigate(['campaigns', this.campaign.id, 'items']);
+  }
+
   public get campaign() {
     return this.campaignService.campaign;
   }
