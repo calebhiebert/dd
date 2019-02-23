@@ -101,9 +101,7 @@ namespace net_api.Models
 
     public class SearchedArticle : Article
     {
-        public string FirstImageID { get; set; }
-
-        public string ShortDescription { get; set; }
+        public List<string> ImageURLs { get; set; }
 
         public SearchedArticle(Article article)
         {
@@ -117,12 +115,11 @@ namespace net_api.Models
             this.Published = article.Published;
             this.UserId = article.UserId;
             this.Tags = article.Tags;
-            this.ContentJson = article.ContentJson;
         }
 
         public SearchedArticle(Article article, string imgId) : this(article)
         {
-            var imgs = GetImageURLS();
+            ImageURLs = article.GetImageURLS();
         }
     }
 }

@@ -13,13 +13,15 @@ import { IArticle, ArticleService } from 'src/app/article.service';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 import Quill from 'quill';
-import { ImageDrop } from 'quill-image-drop-module';
 import BlotFormatter from 'quill-blot-formatter';
 import Mention from 'quill-mention';
+import ImageUploader from 'quill-image-uploader';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment.prod';
 
-Quill.register('modules/imageDrop', ImageDrop);
 Quill.register('modules/blotFormatter', BlotFormatter);
 Quill.register('modules/mention', Mention);
+Quill.register('modules/imageUploader', ImageUploader);
 
 @Component({
   selector: 'dd-article-editor',
@@ -43,7 +45,8 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
     private login: LoginService,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -69,7 +72,6 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
     this._quill = new Quill(this._editor.nativeElement, {
       theme: 'snow',
       modules: {
-        imageDrop: true,
         blotFormatter: {},
         toolbar: [
           ['bold', 'italic', 'underline', 'strike'], // toggled buttons
@@ -157,6 +159,19 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
 
           listItemClass: 'menu-item',
           mentionListClass: 'menu',
+        },
+        imageUploader: {
+          upload: async (file) => {
+            const form = new FormData();
+            form.append('file', file);
+            form.append('campaignId', this.campaignSerivce.campaign.id);
+
+            const result = await this.http
+              .post(`${environment.apiURL}/upload`, form)
+              .toPromise();
+
+            return result['secure_url'];
+          },
         },
       },
     });
