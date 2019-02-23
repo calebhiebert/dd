@@ -89,6 +89,7 @@ import { MapToolbarComponent } from './map/map-toolbar/map-toolbar.component';
 import { ArticleManagerComponent } from './article/article-manager/article-manager.component';
 import { ArticleViewMiniComponent } from './article/article-view-mini/article-view-mini.component';
 import { ArticleViewCardComponent } from './article/article-view-card/article-view-card.component';
+import { QuickDiceComponent } from './quick-dice/quick-dice.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -175,6 +176,7 @@ import { ArticleViewCardComponent } from './article/article-view-card/article-vi
     ArticleManagerComponent,
     ArticleViewMiniComponent,
     ArticleViewCardComponent,
+    QuickDiceComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,16 @@
+.rotate-scale-up {
+  animation: rotate-scale-up 650ms cubic-bezier(0.165, 0.84, 0.44, 1) infinite
+    both;
+}
+
+@keyframes rotate-scale-up {
+  0% {
+    transform: scale(1) rotateZ(0);
+  }
+  50% {
+    transform: scale(1.4) rotateZ(180deg);
+  }
+  100% {
+    transform: scale(1) rotateZ(360deg);
+  }
+}

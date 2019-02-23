@@ -1,0 +1,48 @@
+<div class="card p-1">
+  <!-- Die Selection -->
+  <div class="columns" *ngIf="!die">
+    <div
+      class="column col-4 col-md-2 col-sm-4 text-center hoverable"
+      *ngFor="let d of diceOptions"
+      (click)="selectDie(d)"
+    >
+      <img [src]="d.src" width="45" />
+      <!-- <div class="">d{{ d.n }}</div> -->
+    </div>
+  </div>
+
+  <!-- Die Count Selection -->
+  <div class="columns" *ngIf="die && !dieCount">
+    <div
+      *ngFor="let d of dieCountOptions"
+      class="column col-4 col-md-2 col-sm-4 mb-1"
+    >
+      <button class="btn btn-primary w-100" (click)="selectDieCount(d)">
+        {{ d }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Die Results Selection -->
+  <div class="columns" *ngIf="rollResults">
+    <div class="column text-center col-12">
+      <h4>{{ resultTotal }}</h4>
+    </div>
+    <div
+      *ngFor="let rr of rollResults"
+      class="column col-4 col-md-2 col-sm-4 col-m-auto mb-1 text-center"
+    >
+      <img
+        [ngClass]="{ 'rotate-scale-up': rr.rollValue === rr.dieValue }"
+        [src]="die.src"
+        width="24"
+      />
+      <div class="text-bold">
+        {{ rr.rollValue }}
+      </div>
+    </div>
+    <div class="column text-center">
+      <button class="btn btn-sm" (click)="reset()">Reset</button>
+    </div>
+  </div>
+</div>
