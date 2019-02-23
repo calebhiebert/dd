@@ -1,11 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 @import './variables.scss';
-@import 'spectre.css';
+@import 'spectre.css/src/spectre.scss';
 @import 'spectre.css/dist/spectre-icons.css';
 @import 'spectre.css/dist/spectre-exp.css';
 @import 'sweetalert2/dist/sweetalert2.min.css';
 @import './toast.scss';
 @import '~leaflet-draw/dist/leaflet.draw.css';
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.snow.css';
 
 .flex-row {
   flex-direction: row;
@@ -98,4 +100,35 @@ $hover-scale: 1.005;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.menu-item {
+  @extend .menu-item;
+
+  & > span {
+    border-radius: $border-radius;
+    color: inherit;
+    display: block;
+    margin: 0 (-$unit-2);
+    padding: $unit-1 $unit-2;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:focus,
+    &:hover,
+    &:active {
+      background: $secondary-color;
+      color: $primary-color;
+    }
+  }
+}
+
+.mention {
+  @extend .label, .label-secondary;
+  cursor: pointer;
+}
+
+.menu-item.selected > span {
+  background: $secondary-color;
+  color: $primary-color;
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,8 +17,27 @@ namespace net_api.Models
         [StringLength(30, MinimumLength = 3)]
         public string Name { get; set; }
 
-        [StringLength(6000)]
-        public string Text { get; set; }
+        [JsonIgnore]
+        [Column("Content", TypeName = "JSONB")]
+        public string ContentJson { get; set; }
+
+        [NotMapped]
+        public Object Content {
+            get
+            {
+                if (ContentJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject(ContentJson);
+            }
+
+            set
+            {
+                ContentJson = JsonConvert.SerializeObject(value);
+            }
+        }
 
         [Required]
         public Guid CampaignId { get; set; }
@@ -49,6 +69,34 @@ namespace net_api.Models
             Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
         }
+
+        public List<string> GetImageURLS()
+        {
+            var imageURLs = new List<string>();
+
+            if (ContentJson != null)
+            {
+                var jobject = JObject.Parse(ContentJson);
+
+                var ops = jobject["ops"];
+
+                if (ops != null && ops.Type == JTokenType.Array)
+                {
+                    foreach (var op in ops)
+                    {
+                        if (op["insert"] != null && op["insert"].Type == JTokenType.Object)
+                        {
+                            if (op["insert"]["image"] != null)
+                            {
+                                imageURLs.Add(op["insert"]["image"].ToString());
+                            }
+                        }
+                    }
+                }
+            }
+
+            return imageURLs;
+        }
     }
 
     public class SearchedArticle : Article
@@ -69,11 +117,12 @@ namespace net_api.Models
             this.Published = article.Published;
             this.UserId = article.UserId;
             this.Tags = article.Tags;
+            this.ContentJson = article.ContentJson;
         }
 
         public SearchedArticle(Article article, string imgId) : this(article)
         {
-            this.FirstImageID = imgId;
+            var imgs = GetImageURLS();
         }
     }
 }

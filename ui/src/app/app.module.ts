@@ -83,14 +83,12 @@ import { SpellSelectComponent } from './spell/spell-select/spell-select.componen
 import { NoteViewMiniComponent } from './note/note-view-mini/note-view-mini.component';
 import { EntityViewMiniComponent } from './entity/entity-view-mini/entity-view-mini.component';
 import { ArticleEditorComponent } from './article/article-editor/article-editor.component';
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { ArticleViewComponent } from './article/article-view/article-view.component';
 import { ArticleSelectComponent } from './article/article-select/article-select.component';
 import { MapToolbarComponent } from './map/map-toolbar/map-toolbar.component';
 import { ArticleManagerComponent } from './article/article-manager/article-manager.component';
 import { ArticleViewMiniComponent } from './article/article-view-mini/article-view-mini.component';
 import { ArticleViewCardComponent } from './article/article-view-card/article-view-card.component';
-import { CompileModule } from 'p3x-angular-compile';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -195,9 +193,6 @@ import { CompileModule } from 'p3x-angular-compile';
         useFactory: markedOptionsFactory,
       },
     }),
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot(),
-    CompileModule,
   ],
   providers: [
     {

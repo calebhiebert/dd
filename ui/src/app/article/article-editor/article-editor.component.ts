@@ -1,26 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { environment } from 'src/environments/environment';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IArticle, ArticleService } from 'src/app/article.service';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
-import Tribute, { TributeItem } from 'tributejs';
+import Quill from 'quill';
+import { ImageDrop } from 'quill-image-drop-module';
+import BlotFormatter from 'quill-blot-formatter';
+import Mention from 'quill-mention';
+
+Quill.register('modules/imageDrop', ImageDrop);
+Quill.register('modules/blotFormatter', BlotFormatter);
+Quill.register('modules/mention', Mention);
 
 @Component({
   selector: 'dd-article-editor',
   templateUrl: './article-editor.component.html',
   styleUrls: ['./article-editor.component.scss'],
 })
-export class ArticleEditorComponent implements OnInit {
-  public froalaOptions: any;
+export class ArticleEditorComponent implements OnInit, AfterViewInit {
   public formGroup: FormGroup;
   public saving = false;
   public loading = false;
 
   private _article: IArticle;
+
+  @ViewChild('editor')
+  private _editor: ElementRef<HTMLDivElement>;
+  private _quill: Quill;
 
   constructor(
     private campaignSerivce: CampaignService,
@@ -32,14 +47,11 @@ export class ArticleEditorComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.froalaOptions = this.makeFroalaOptions();
-
     this.formGroup = new FormGroup({
       name: new FormControl(null, [
         Validators.required,
         Validators.maxLength(30),
       ]),
-      text: new FormControl(null),
       published: new FormControl(false),
       tags: new FormArray([]),
     });
@@ -53,105 +65,108 @@ export class ArticleEditorComponent implements OnInit {
     }
   }
 
-  private makeFroalaOptions() {
-    return {
-      fileUpload: false,
-      videoUpload: false,
-      height: 400,
-      imageUploadMethod: 'POST',
-      imageUploadURL: `${environment.apiURL}/upload/froala`,
-      imageUploadParams: {
-        campaignId:
-          this.campaignSerivce.campaign && this.campaignSerivce.campaign.id,
-      },
-      requestHeaders: {
-        Authorization: `Bearer ${this.login.loadToken()}`,
-      },
-      events: {
-        'froalaEditor.initialized': (e, editor) => {
-          const t = new Tribute({
-            allowSpaces: true,
+  ngAfterViewInit() {
+    this._quill = new Quill(this._editor.nativeElement, {
+      theme: 'snow',
+      modules: {
+        imageDrop: true,
+        blotFormatter: {},
+        toolbar: [
+          ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+          ['blockquote', 'code-block', 'image'],
 
-            values: async (text, cb) => {
-              const articles = await this.articleService.getArticles(
-                this.campaignSerivce.campaign.id,
-                10,
-                0,
-                text
-              );
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+          [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
 
-              cb(articles);
-            },
+          [{ header: [1, 2, 3, 4, 5, 6, false] }],
 
-            menuItemTemplate: (article: TributeItem<IArticle>) => {
-              return article.original.name;
-            },
+          [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+          [{ font: [] }],
+          [{ align: [] }],
 
-            selectTemplate: (item) => {
-              return `<a class="c-hand" (click)="context.na('${
-                item.original.id
-              }')">${item.original.name}</a>`;
-            },
+          ['clean'], // remove formatting button
+        ],
+        mention: {
+          mentionDenotationChars: ['@'],
+          allowedChars: /^[A-Za-z0-9\s'_\-"]*$/,
+          source: async (search, renderList, mentionChar) => {
+            const articles = await this.articleService.getArticles(
+              this.campaignSerivce.campaign.id,
+              5,
+              0,
+              search
+            );
 
-            lookup: (article) => {
-              return `${article.name} ${article.text} ${article.tags.join(
-                ' '
-              )}`;
-            },
+            const mappedArticles = articles.map((a) => ({
+              id: a.id,
+              value: a.name,
+            }));
 
-            fillAttr: 'id',
-          });
+            if (search.trim().length > 0) {
+              mappedArticles.unshift({
+                id: 'create-empty-article',
+                value: search,
+              });
+            }
 
-          const el = document.querySelector('.fr-element.fr-view');
+            renderList(mappedArticles);
+          },
 
-          t.attach(el);
+          renderItem: (item, searchTerm) => {
+            return `<span>${
+              item.id === 'create-empty-article'
+                ? '<i class="icon icon-plus"></i> '
+                : ''
+            }${item.value}</span>`;
+          },
+
+          onSelect: async (item, insertItem) => {
+            item['type'] = 'article';
+
+            if (
+              item['id'] === 'create-empty-article' &&
+              (await Swal.fire({
+                title: 'Create new article?',
+                text: `A new article with the name ${
+                  item['value']
+                } will be created`,
+                showCancelButton: true,
+              })).value === true
+            ) {
+              const newArticle = await this.articleService.createArticle({
+                name: item['value'].trim(),
+                published: false,
+                campaignId: this.campaignSerivce.campaign.id,
+                userId: this.login.id,
+                tags: ['ToDo'],
+                content: {},
+              });
+
+              item['id'] = newArticle.id;
+              item['type'] = 'article';
+              item['name'] = newArticle.name;
+
+              insertItem(item);
+            } else {
+              insertItem(item);
+            }
+          },
+
+          showDenotationChar: false,
+
+          listItemClass: 'menu-item',
+          mentionListClass: 'menu',
         },
       },
-      toolbarButtons: [
-        'fullscreen',
-        'bold',
-        'italic',
-        'underline',
-        'strikeThrough',
-        'subscript',
-        'superscript',
-        '|',
-        'fontFamily',
-        'fontSize',
-        'color',
-        'inlineClass',
-        'inlineStyle',
-        'paragraphStyle',
-        'lineHeight',
-        '|',
-        'paragraphFormat',
-        'align',
-        'formatOL',
-        'formatUL',
-        'outdent',
-        'indent',
-        'quote',
-        '-',
-        'insertLink',
-        'insertImage',
-        'insertVideo',
-        'embedly',
-        'insertTable',
-        '|',
-        'emoticons',
-        'fontAwesome',
-        'specialCharacters',
-        'insertHR',
-        'selectAll',
-        'clearFormatting',
-        '|',
-        'print',
-        'help',
-        '|',
-        'undo',
-        'redo',
-      ],
-    };
+    });
+
+    this._quill.on('text-change', (change) => {
+      console.log(
+        'Model',
+        JSON.parse(JSON.stringify(this._quill.getContents()))
+      );
+    });
   }
 
   private constructArticle(): IArticle {
@@ -159,7 +174,7 @@ export class ArticleEditorComponent implements OnInit {
 
     const article: IArticle = {
       name: v.name,
-      text: v.text.replace(new RegExp('routerlink', 'g'), 'routerLink'),
+      content: this._quill.getContents(),
       published: v.published,
       campaignId: this.campaignSerivce.campaign.id,
       userId: this.login.id,
@@ -179,6 +194,10 @@ export class ArticleEditorComponent implements OnInit {
 
     try {
       this._article = await this.articleService.getArticle(id);
+
+      if (this._article.content && this._article.content.ops) {
+        this._quill.setContents(this._article.content.ops);
+      }
     } catch (err) {
       throw err;
     }

@@ -84,12 +84,12 @@ namespace net_api.Controllers
                 search = search.ToLower();
 
                 query = query
-                    .Where(a => a.Name.ToLower().Contains(search) || a.Text.ToLower().Contains(search));
+                    .Where(a => a.Name.ToLower().Contains(search));
             }
 
             var articles = await query.ToListAsync();
 
-            return Ok(articles.Select(a => new SearchedArticle(a, GetFirstImageId(a.Text))));
+            return Ok(articles.Select(a => new SearchedArticle(a, null)));
         }
 
         [HttpGet("map/{id}")]
@@ -168,9 +168,9 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
-            if (article.Text == null)
+            if (article.Content == null)
             {
-                article.Text = originalArticle.Text;
+                article.Content = originalArticle.Content;
             }
 
             _context.Entry(article).State = EntityState.Modified;

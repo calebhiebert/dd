@@ -1,21 +1,37 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { IArticle, ArticleService } from 'src/app/article.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
 import { Subscription } from 'rxjs';
 import { UpdateHubService } from 'src/app/update-hub.service';
 import { filter } from 'rxjs/operators';
+import Quill from 'quill';
+
+import BlotFormatter from 'quill-blot-formatter';
+
+Quill.register('modules/blotFormatter', BlotFormatter);
 
 @Component({
   selector: 'dd-article-view',
   templateUrl: './article-view.component.html',
   styleUrls: ['./article-view.component.css'],
 })
-export class ArticleViewComponent implements OnInit, OnDestroy {
+export class ArticleViewComponent implements OnInit, OnDestroy, AfterViewInit {
   public loading = false;
   public article: IArticle;
 
+  @ViewChild('contentcontainer')
+  private _quillContainer: ElementRef<HTMLDivElement>;
+
   private _updateSubscription: Subscription;
+  private _quill: Quill;
 
   constructor(
     private articleService: ArticleService,
@@ -46,16 +62,53 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngAfterViewInit() {
+    this._quill = new Quill(this._quillContainer.nativeElement, {
+      modules: {
+        toolbar: false,
+      },
+
+      readOnly: true,
+    });
+  }
+
   private async load(id: string) {
     this.loading = true;
 
+    if (this._quill) {
+      this._quill.setContents([]);
+    }
+
     try {
       this.article = await this.articleService.getArticle(id);
+
+      if (this.article.content && this.article.content.ops) {
+        this._quill.setContents(this.article.content.ops);
+
+        this.setupArticleMentions(
+          document.querySelectorAll('[data-type="article"]')
+        );
+      }
     } catch (err) {
       throw err;
     }
 
     this.loading = false;
+  }
+
+  private setupArticleMentions(nodes: NodeListOf<HTMLSpanElement>) {
+    nodes.forEach((node) => {
+      const id = node.dataset.id;
+
+      node.addEventListener('click', () => {
+        this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'articles',
+          id,
+        ]);
+      });
+    });
   }
 
   public edit() {
@@ -84,20 +137,6 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
         },
       }
     );
-  }
-
-  /**
-   * Navigates to an article with the given id
-   * The function name is so short because some trickery is being
-   * used to render the content, and the function name is stored in the database
-   */
-  public na(id: string) {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'articles',
-      id,
-    ]);
   }
 
   public get editable() {

@@ -60,7 +60,7 @@ export class ArticleService {
 export interface IArticle {
   id?: string;
   name: string;
-  text: string;
+  content: any;
   campaignId: string;
   userId: string;
   user?: string;
