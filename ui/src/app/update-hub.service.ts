@@ -58,7 +58,6 @@ export class UpdateHubService {
     this.connection.onclose((e) => {
       this._state = ConnectionState.CLOSED;
       this.start();
-      Sentry.captureEvent(e);
     });
 
     this.connection.on('AuthenticateComplete', () => this.authComplete());
