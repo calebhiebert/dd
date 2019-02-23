@@ -35,6 +35,7 @@ import { SpellFormComponent } from './spell/spell-form/spell-form.component';
 import { ArticleEditorComponent } from './article/article-editor/article-editor.component';
 import { ArticleViewComponent } from './article/article-view/article-view.component';
 import { ArticleManagerComponent } from './article/article-manager/article-manager.component';
+import { AccountSettingsComponent } from './account/account-settings/account-settings.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -43,25 +44,23 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    data: { showLoginLoading: false },
     canActivate: [LoginPageGuard],
   },
   {
     path: 'register',
     component: RegisterComponent,
-    data: { showLoginLoading: false },
   },
   {
     path: 'callback',
     component: LoginComponent,
-    data: {
-      showLoginLoading: false,
-    },
   },
   {
-    path: 'notifications',
-    component: NotificationsComponent,
+    path: 'account',
+    component: AccountSettingsComponent,
     canActivate: [LoggedInGuard, ActionGuard],
+    data: {
+      breadcrumb: 'Account',
+    },
   },
   {
     path: 'campaigns/list',

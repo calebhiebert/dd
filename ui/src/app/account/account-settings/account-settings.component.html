@@ -1,0 +1,51 @@
+<div class="container grid-xl">
+  <!-- Loading -->
+  <div class="loading loading-lg" *ngIf="loading"></div>
+
+  <!-- User Details -->
+  <div class="columns" *ngIf="user">
+    <!-- Picture -->
+    <div class="column col-auto">
+      <figure class="avatar avatar-xl">
+        <img [src]="user.pictureURL" />
+      </figure>
+    </div>
+
+    <!-- Username -->
+    <div class="column d-flex align-items-center">
+      <h3 *ngIf="!editUsername">
+        {{ user.username }}
+        <button
+          class="btn btn-sm btn-link"
+          (click)="editUsername = !editUsername"
+        >
+          <i class="icon icon-edit"></i>
+        </button>
+      </h3>
+
+      <div class="form-group" *ngIf="editUsername">
+        <input
+          class="form-input input-lg"
+          type="text"
+          name="username"
+          id="username"
+          [formControl]="username"
+        />
+        <button class="btn mt-2" (click)="editUsername = false">
+          <i class="icon icon-cross"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="column col-auto" *ngIf="dirty">
+      <button
+        class="btn btn-sm"
+        [disabled]="formGroup.invalid"
+        [ngClass]="{ loading: saving }"
+        (click)="save()"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>

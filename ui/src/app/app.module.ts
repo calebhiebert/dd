@@ -91,6 +91,7 @@ import { ArticleViewMiniComponent } from './article/article-view-mini/article-vi
 import { ArticleViewCardComponent } from './article/article-view-card/article-view-card.component';
 import { QuickDiceComponent } from './quick-dice/quick-dice.component';
 import { IconPickerComponent } from './icon-picker/icon-picker.component';
+import { AccountSettingsComponent } from './account/account-settings/account-settings.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -179,6 +180,7 @@ import { IconPickerComponent } from './icon-picker/icon-picker.component';
     ArticleViewCardComponent,
     QuickDiceComponent,
     IconPickerComponent,
+    AccountSettingsComponent,
   ],
   imports: [
     BrowserModule,

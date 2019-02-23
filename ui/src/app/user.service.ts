@@ -19,6 +19,12 @@ export class UserService {
       .post<IUser>(`${environment.apiURL}/users`, user)
       .toPromise();
   }
+
+  public updateUser(user: IUser): Promise<void> {
+    return this.http
+      .put<void>(`${environment.apiURL}/users/${user.id}`, user)
+      .toPromise();
+  }
 }
 
 export interface IUser {

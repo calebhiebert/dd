@@ -69,8 +69,6 @@ namespace net_api.Controllers
                 return BadRequest("User id does not match, cannot post");
             }
 
-            // TODO authenticate users
-
             if (id != user.Id)
             {
                 return BadRequest();
