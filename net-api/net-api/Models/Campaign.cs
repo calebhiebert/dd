@@ -61,13 +61,16 @@ namespace net_api.Models
         [Required]
         public bool PlayersCanEditSpells { get; set; }
 
-        public ICollection<EntityPreset> EntityPresets { get; set; }
+        public List<EntityPreset> EntityPresets { get; set; }
 
-        public ICollection<Entity> Entities { get; set; }
+        public List<Entity> Entities { get; set; }
 
-        public ICollection<Item> Items { get; set; }
+        public List<Item> Items { get; set; }
 
-        public ICollection<Quest> Quests { get; set; }
+        public List<Quest> Quests { get; set; }
+
+        [JsonIgnore]
+        public List<CampaignInvite> Invites { get; set; }
 
         public Campaign()
         {

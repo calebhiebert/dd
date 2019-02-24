@@ -8,7 +8,7 @@ import * as Sentry from '@sentry/browser';
 @Component({
   selector: 'dd-invite',
   templateUrl: './invite.component.html',
-  styleUrls: ['./invite.component.css']
+  styleUrls: ['./invite.component.css'],
 })
 export class InviteComponent implements OnInit {
   public loading = false;
@@ -30,8 +30,8 @@ export class InviteComponent implements OnInit {
     actions.unshift({
       type: ActionType.INVITE,
       data: {
-        inviteId: this.route.snapshot.paramMap.get('invite_id')
-      }
+        inviteId: this.route.snapshot.paramMap.get('invite_id'),
+      },
     });
     this.actions.save();
 

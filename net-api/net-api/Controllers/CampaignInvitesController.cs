@@ -17,23 +17,45 @@ namespace net_api.Controllers
     {
         private readonly Context _context;
         private readonly IHubContext<UpdateHub> _hub;
+        private readonly IAuthorizationService _auth;
 
-        public CampaignInvitesController(Context context, IHubContext<UpdateHub> hub)
+        public CampaignInvitesController(Context context, IHubContext<UpdateHub> hub, IAuthorizationService auth)
         {
             _context = context;
             _hub = hub;
+            _auth = auth;
         }
 
         // GET: api/CampaignInvites
         [HttpGet]
-        public IActionResult GetCampaignInvites([FromQuery(Name = "campaignId")] Guid? campaignId)
+        [Authorize]
+        public async Task<IActionResult> GetCampaignInvites([FromQuery(Name = "campaignId")] Guid? campaignId)
         {
             if (campaignId == null)
             {
                 return BadRequest("Missing campaign id");
             }
 
-            return Ok(_context.CampaignInvites.Where(c => c.CampaignId == campaignId).Include(e => e.User).ToList());
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == campaignId)
+                .Include(c => c.Invites)
+                    .ThenInclude(i => i.User)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            return Ok(campaign.Invites);
         }
 
         // GET: api/CampaignInvites/5
@@ -45,8 +67,10 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var campaignInvite = await _context.CampaignInvites.Include(c => c.Campaign)
-                .Where(c => c.Id == id).FirstOrDefaultAsync();
+            var campaignInvite = await _context.CampaignInvites
+                .Include(c => c.Campaign)
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
 
             if (campaignInvite == null)
             {
@@ -74,18 +98,26 @@ namespace net_api.Controllers
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // Search to see if the user is already in the campaign
-            var existingMember = await _context.CampaignUsers
-                .Where(cu => cu.CampaignId == campaignInvite.CampaignId)
-                .Where(cu => cu.UserId == userId)
+            var user = await _context.Users
+                .Where(u => u.Id == userId)
                 .FirstOrDefaultAsync();
 
-            if (existingMember != null)
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == campaignInvite.CampaignId)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
+
+            if (campaign.Members.Any(m => m.UserId == userId))
             {
                 return BadRequest("already in campaign");
             } 
 
-            var user = new CampaignUser
+            var campaignUser = new CampaignUser
             {
                 UserId = userId,
                 CampaignId = campaignInvite.CampaignId
@@ -94,27 +126,27 @@ namespace net_api.Controllers
             campaignInvite.Status = CampaignInviteStatus.Accepted;
             campaignInvite.AcceptedUserId = userId;
 
-            var campaignMembers = _context.CampaignUsers.Where(u => u.CampaignId == campaignInvite.CampaignId);
+            var campaignMembers = campaign.Members;
 
             foreach (var member in campaignMembers)
             {
                 var notification = new CampaignNotification
                 {
-                    CampaignId = campaignInvite.CampaignId,
+                    CampaignId = campaign.Id,
                     UserId = member.UserId,
-                    Message = $"A user has joined a campaign! This message will eventually have more details."
+                    Message = $"{user.Username} has joined {campaign.Name}!"
                 };
 
                 _context.Notifications.Add(notification);
             }
 
+            _context.Add(campaignUser);
+
+            await _context.SaveChangesAsync();
+
             await _hub.Clients
                 .Groups(campaignMembers.Select(m => $"notifications-{m.UserId}").ToList())
                 .SendAsync("Notify");
-
-            _context.Add(user);
-
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }
@@ -137,39 +169,47 @@ namespace net_api.Controllers
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // Search to see if the user is already in the campaign
-            var existingMember = await _context.CampaignUsers
-                .Where(cu => cu.CampaignId == campaignInvite.CampaignId)
-                .Where(cu => cu.UserId == userId)
+            var user = await _context.Users
+                .Where(u => u.Id == userId)
                 .FirstOrDefaultAsync();
 
-            if (existingMember != null)
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == campaignInvite.CampaignId)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
+
+            if (campaign.Members.Any(m => m.UserId == userId))
             {
                 return BadRequest("already in campaign");
             }
 
-            var campaignMembers = _context.CampaignUsers.Where(u => u.CampaignId == campaignInvite.CampaignId);
+            campaignInvite.Status = CampaignInviteStatus.Declined;
+            campaignInvite.AcceptedUserId = userId;
+
+            var campaignMembers = campaign.Members;
 
             foreach (var member in campaignMembers)
             {
                 var notification = new CampaignNotification
                 {
-                    CampaignId = campaignInvite.CampaignId,
+                    CampaignId = campaign.Id,
                     UserId = member.UserId,
-                    Message = $"A user has rejected an invite! This message will eventually have more details."
+                    Message = $"{user.Username} has declined to join {campaign.Name}!"
                 };
 
                 _context.Notifications.Add(notification);
             }
 
+            await _context.SaveChangesAsync();
+
             await _hub.Clients
                 .Groups(campaignMembers.Select(m => $"notifications-{m.UserId}").ToList())
                 .SendAsync("Notify");
-
-            campaignInvite.Status = CampaignInviteStatus.Declined;
-            campaignInvite.AcceptedUserId = userId;
-
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }
@@ -181,6 +221,7 @@ namespace net_api.Controllers
 
         // POST: api/CampaignInvites
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostCampaignInvite([FromBody] CampaignInvite campaignInvite)
         {
             if (!ModelState.IsValid)
@@ -188,46 +229,27 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Verify that the user has permission to edit the campaign
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            var campaign = _context.Campaigns.FirstOrDefault(c => c.Id == campaignInvite.CampaignId);
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == campaignInvite.CampaignId)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
 
             if (campaign == null)
             {
                 return NotFound();
             }
 
-            if (campaign.UserId != userId)
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
             {
-                return BadRequest("No permission");
+                return Forbid();
             }
 
             _context.CampaignInvites.Add(campaignInvite);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCampaignInvite", new { id = campaignInvite.Id }, campaignInvite);
-        }
-
-        // DELETE: api/CampaignInvites/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCampaignInvite([FromRoute] string id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var campaignInvite = await _context.CampaignInvites.FindAsync(id);
-            if (campaignInvite == null)
-            {
-                return NotFound();
-            }
-
-            _context.CampaignInvites.Remove(campaignInvite);
-            await _context.SaveChangesAsync();
-
-            return Ok(campaignInvite);
         }
 
         private bool CampaignInviteExists(string id)
