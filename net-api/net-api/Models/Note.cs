@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,9 +16,28 @@ namespace net_api.Models
         [StringLength(40)]
         public string Title { get; set; }
 
-        [Required]
-        [StringLength(3000)]
-        public string Text { get; set; }
+        [Column("Content", TypeName = "JSONB")]
+        [JsonIgnore]
+        public string ContentJson { get; set; }
+
+        [NotMapped]
+        public Object Content
+        {
+            get
+            {
+                if (ContentJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject(ContentJson);
+            }
+
+            set
+            {
+                ContentJson = JsonConvert.SerializeObject(value);
+            }
+        }
 
         [Required]
         public Guid CampaignId { get; set; }
@@ -30,22 +50,13 @@ namespace net_api.Models
         [JsonIgnore]
         public Quest Quest { get; set; }
 
-        public Guid? EntityId { get; set; }
-
-        [JsonIgnore]
-        public Entity Entity { get; set; }
-
-        public Guid? EntityPresetId { get; set; }
-
-        [JsonIgnore]
-        public EntityPreset EntityPreset { get; set; }
-
         [Required]
         public bool PublicEdit { get; set; }
 
         [Required]
         public bool PublicView { get; set; }
 
+        [Required]
         public string UserId { get; set; }
 
         public User User { get; set; }

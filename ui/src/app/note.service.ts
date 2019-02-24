@@ -165,11 +165,9 @@ export enum NoteType {
 export interface INote {
   id?: string;
   title: string;
-  text: string;
+  content: any;
   campaignId: string;
   questId?: string;
-  entityId?: string;
-  entityPresetId?: string;
   publicEdit: boolean;
   publicView: boolean;
   userId?: string;

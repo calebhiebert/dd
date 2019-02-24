@@ -53,7 +53,8 @@ export class NoteEditorComponent implements OnInit {
 
     const noteCreation: INote = {
       title: 'UNNAMED_NOTE',
-      text: 'TEXT',
+      userId: this.loginService.id,
+      content: null,
       campaignId: this.campaignService.campaign.id,
       publicEdit: false,
       publicView: false,
@@ -72,7 +73,6 @@ export class NoteEditorComponent implements OnInit {
 
     try {
       this.note = await this.noteService.createNote(noteCreation);
-      this.note.text = '';
       this.note.title = '';
     } catch (err) {
       throw err;
@@ -123,7 +123,7 @@ export class NoteEditorComponent implements OnInit {
   public addNote(opts: INoteOptions) {
     this.createNote(opts);
     this.modal.open().then(() => {
-      if (this.note.text === '' && this.note.title === '') {
+      if (this.note.content === null && this.note.title === '') {
         this.noteService.deleteNote(this.note.id);
       }
 
