@@ -13,8 +13,7 @@ export class NavSidebarComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private login: LoginService,
-    private router: Router,
-    private hub: UpdateHubService
+    private router: Router
   ) {}
 
   ngOnInit() {}
@@ -55,9 +54,5 @@ export class NavSidebarComponent implements OnInit {
 
   public get campaignEditable() {
     return this.campaignService.canEdit;
-  }
-
-  public get connectionStatus() {
-    return this.hub.state;
   }
 }

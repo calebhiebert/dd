@@ -15,7 +15,8 @@
   <div class="columns" *ngIf="die && !dieCount">
     <div
       *ngFor="let d of dieCountOptions"
-      class="column col-4 col-md-2 col-sm-4 mb-1"
+      class="column mb-1"
+      [ngClass]="{ 'col-12': d === 1, 'col-4 col-md-2 col-sm-4': d !== 1 }"
     >
       <button class="btn btn-primary w-100" (click)="selectDieCount(d)">
         {{ d }}
@@ -30,7 +31,7 @@
     </div>
     <div
       *ngFor="let rr of rollResults"
-      class="column col-4 col-md-2 col-sm-4 col-m-auto mb-1 text-center"
+      class="column col-4 col-md-2 col-sm-4 col-mx-auto mb-1 text-center"
     >
       <img
         [ngClass]="{ 'rotate-scale-up': rr.rollValue === rr.dieValue }"
@@ -41,8 +42,15 @@
         {{ rr.rollValue }}
       </div>
     </div>
-    <div class="column text-center">
-      <button class="btn btn-sm" (click)="reset()">Reset</button>
+    <div class="column col-12 text-center">
+      <button class="btn btn-sm" (click)="reset()">
+        <i class="icon icon-cross"></i>
+        <span class="hide-sm"> Reset</span>
+      </button>
+      <button class="btn btn-sm ml-2" (click)="roll()">
+        <i class="icon icon-refresh"></i>
+        <span class="hide-sm"> Roll Again</span>
+      </button>
     </div>
   </div>
 </div>
