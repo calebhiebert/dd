@@ -1,6 +1,6 @@
 <div class="card hoverable">
-  <div class="card-image" *ngIf="article.imageURLs.length > 0">
-    <img [src]="article.imageURLs[0]" width="500" class="img-responsive" />
+  <div class="card-image" *ngIf="imgSrc !== null">
+    <img [src]="imgSrc" width="500" class="img-responsive" />
   </div>
   <div class="card-header">
     <div class="columns">

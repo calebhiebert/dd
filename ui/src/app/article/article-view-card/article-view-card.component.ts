@@ -43,4 +43,14 @@ export class ArticleViewCardComponent implements OnInit {
       return '';
     }
   }
+
+  public get imgSrc() {
+    if (this.article.imageURLs.length > 0) {
+      return `https://res.cloudinary.com/dqhk8k6iv/image/fetch/c_fill,g_auto:faces,h_250,w_500/${
+        this.article.imageURLs[0]
+      }`;
+    } else {
+      return null;
+    }
+  }
 }
