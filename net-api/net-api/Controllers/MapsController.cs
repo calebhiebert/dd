@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -25,15 +24,18 @@ namespace net_api.Controllers
 
         private readonly Context _context;
         private readonly IHubContext<UpdateHub> _hub;
+        private readonly IAuthorizationService _auth;
 
-        public MapsController(Context context, IHubContext<UpdateHub> hub)
+        public MapsController(Context context, IHubContext<UpdateHub> hub, IAuthorizationService auth)
         {
             _context = context;
             _hub = hub;
+            _auth = auth;
         }
 
         // GET: api/Maps
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Map>>> GetMaps([FromQuery] Guid? campaignId)
         {
             if (campaignId == null)
@@ -41,20 +43,29 @@ namespace net_api.Controllers
                 return BadRequest("missing campaign id");
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            var campaign = await _context.Campaigns.AsNoTracking()
-                .Where(c => c.Id == campaignId).Include(c => c.Members).FirstOrDefaultAsync();
+            var campaign = await _context.Campaigns
+                .AsNoTracking()
+                .Where(c => c.Id == campaignId)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
 
             if (campaign == null)
             {
                 return NotFound();
             }
 
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
+            var campaignEditableAuthResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             var mapQuery = _context.Maps
                 .Where(m => m.CampaignId == campaignId);
 
-            if (userId != campaign.UserId)
+            if (!campaignEditableAuthResult.Succeeded)
             {
                 mapQuery = mapQuery.Where(m => m.Status == MapStatus.Processed && m.PlayerVisible == true);
             }
@@ -173,16 +184,27 @@ namespace net_api.Controllers
 
         // GET: api/Maps/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Map>> GetMap(Guid id)
+        public async Task<ActionResult> GetMap(Guid id)
         {
-            var map = await _context.Maps.FindAsync(id);
+            var map = await _context.Maps
+                .Where(m => m.Id == id)
+                .Include(m => m.Campaign)
+                    .ThenInclude(c => c.Members)
+                .FirstOrDefaultAsync();
 
             if (map == null)
             {
                 return NotFound();
             }
 
-            return map;
+            var authResult = await _auth.AuthorizeAsync(User, map.Campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            return Ok(map);
         }
 
         // POST: api/Maps
@@ -206,7 +228,22 @@ namespace net_api.Controllers
                 return BadRequest("missing name");
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == campaignId)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
 
             var id = Guid.NewGuid();
 
@@ -216,6 +253,8 @@ namespace net_api.Controllers
             putRequest.Key = id.ToString();
 
             var putResult = await S3.PutObjectAsync(putRequest);
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var map = new Map
             {
@@ -248,7 +287,11 @@ namespace net_api.Controllers
                 return BadRequest("submitted body id does not match route id");
             }
 
-            var originalMap = await _context.Maps.Where(m => m.Id == id).AsNoTracking().FirstOrDefaultAsync();
+            var originalMap = await _context.Maps
+                .Where(m => m.Id == id)
+                .Include(m => m.Campaign)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
 
             if (originalMap == null)
             {
@@ -256,6 +299,13 @@ namespace net_api.Controllers
             } else if (originalMap.Status == MapStatus.Processing)
             {
                 return BadRequest("cannot update map while procesing");
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, originalMap.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             map.Mapping = originalMap.Mapping;
@@ -280,10 +330,21 @@ namespace net_api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Map>> DeleteMap(Guid id)
         {
-            var map = await _context.Maps.FindAsync(id);
+            var map = await _context.Maps
+                .Where(m => m.Id == id)
+                .Include(m => m.Campaign)
+                .FirstOrDefaultAsync();
+
             if (map == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, map.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             try
