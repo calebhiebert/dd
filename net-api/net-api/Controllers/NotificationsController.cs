@@ -17,10 +17,12 @@ namespace net_api.Controllers
     public class NotificationsController : ControllerBase
     {
         private readonly Context _context;
+        private readonly IAuthorizationService _auth;
 
-        public NotificationsController(Context context)
+        public NotificationsController(Context context, IAuthorizationService auth)
         {
             _context = context;
+            _auth = auth;
         }
 
         // GET: api/Notifications
@@ -47,43 +49,6 @@ namespace net_api.Controllers
             return Ok(user.Notifications);
         }
 
-        // PUT: api/Notifications/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutNotification(Guid id, Notification notification)
-        {
-            if (id != notification.Id)
-            {
-                return BadRequest();
-            }
-
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (userId != notification.UserId)
-            {
-                return BadRequest("edit notification for user which you are not");
-            }
-
-            _context.Entry(notification).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!NotificationExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // DELETE: api/Notifications/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Notification>> DeleteNotification(Guid id)
@@ -94,7 +59,12 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            // TODO authenticate users
+            var authResult = await _auth.AuthorizeAsync(User, notification, "NotificationEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
 
             _context.Notifications.Remove(notification);
             await _context.SaveChangesAsync();
