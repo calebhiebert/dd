@@ -16,15 +16,17 @@ namespace net_api.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly Context _context;
+        private readonly IAuthorizationService _auth;
 
-        public ItemsController(Context context)
+        public ItemsController(Context context, IAuthorizationService auth)
         {
             _context = context;
+            _auth = auth;
         }
 
         // GET: api/Items
         [HttpGet]
-        public IActionResult GetItems(
+        public async Task<IActionResult> GetItems(
             [FromQuery] Guid campaignId, 
             [FromQuery] int limit,
             [FromQuery] int offset,
@@ -36,8 +38,6 @@ namespace net_api.Controllers
                 return BadRequest("Missing campaign id");
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             var campaign = _context.Campaigns
                 .Where(c => c.Id == campaignId)
                 .Include(c => c.Members)
@@ -48,10 +48,12 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            // Authorize request
-            if (userId != campaign.UserId && !campaign.Members.Any(m => m.UserId == userId))
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
+            var campaignEditableAuthResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
             {
-                return BadRequest("not authorized");
+                return Forbid();
             }
 
             if (limit <= 0)
@@ -72,7 +74,7 @@ namespace net_api.Controllers
             items = _context.Items.Where(i => i.CampaignId == campaignId).OrderBy(i => i.Name);
 
             // Do not show player items that are not player visible
-            if (userId != campaign.UserId)
+            if (!campaignEditableAuthResult.Succeeded)
             {
                 items = items.Where(i => i.PlayerVisible == true);
             }
@@ -118,13 +120,22 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            // TODO authenticate requests
-
-            var item = await _context.Items.FindAsync(id);
+            var item = await _context.Items
+                .Where(i => i.Id == id)
+                .Include(i => i.Campaign)
+                    .ThenInclude(c => c.Members)
+                .FirstOrDefaultAsync();
 
             if (item == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, item.Campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             return Ok(item);
@@ -144,7 +155,18 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
-            // TODO authenticate requests
+            var existingItem = await _context.Items
+                .Where(i => i.Id == id)
+                .AsNoTracking()
+                .Include(i => i.Campaign)
+                .FirstOrDefaultAsync();
+
+            var authResult = await _auth.AuthorizeAsync(User, existingItem.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
 
             _context.Entry(item).State = EntityState.Modified;
 
@@ -176,7 +198,22 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            // TODO authenticate requests
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == item.CampaignId)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             item.UserId = userId;
@@ -196,13 +233,22 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var item = await _context.Items.FindAsync(id);
+            var item = await _context.Items
+                .Where(i => i.Id == id)
+                .Include(i => i.Campaign)
+                .FirstOrDefaultAsync();
+
             if (item == null)
             {
                 return NotFound();
             }
 
-            // TODO authenticate requests
+            var authResult = await _auth.AuthorizeAsync(User, item.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
 
             _context.Items.Remove(item);
             await _context.SaveChangesAsync();
