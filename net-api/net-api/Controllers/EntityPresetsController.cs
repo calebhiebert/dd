@@ -17,10 +17,12 @@ namespace net_api.Controllers
     public class EntityPresetsController : ControllerBase
     {
         private readonly Context _context;
+        private readonly IAuthorizationService _auth;
 
-        public EntityPresetsController(Context context)
+        public EntityPresetsController(Context context, IAuthorizationService auth)
         {
             _context = context;
+            _auth = auth;
         }
 
         // GET: api/EntityPresets
@@ -32,13 +34,20 @@ namespace net_api.Controllers
                 return BadRequest("Missing campaign id");
             }
 
-            // TODO authenticate requests
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == campaignId)
+                .Include(c => c.Members)
+                .Include(c => c.EntityPresets)
+                .FirstOrDefaultAsync();
 
-            var presets = await _context.EntityPresets
-                .Where(e => e.CampaignId == campaignId)
-                .ToListAsync();
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
 
-            return Ok(presets);
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            return Ok(campaign.EntityPresets);
         }
 
         // GET: api/EntityPresets/5
@@ -50,13 +59,22 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            // TODO authenticate requests
-
-            var entityPreset = await _context.EntityPresets.FindAsync(id);
+            var entityPreset = await _context.EntityPresets
+                .Where(ep => ep.Id == id)
+                .Include(ep => ep.Campaign)
+                    .ThenInclude(c => c.Members)
+                .FirstOrDefaultAsync();
 
             if (entityPreset == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, entityPreset.Campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             return Ok(entityPreset);
@@ -76,7 +94,21 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
-            // TODO authenticate requests
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == entityPreset.CampaignId)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
 
             _context.Entry(entityPreset).State = EntityState.Modified;
 
@@ -108,7 +140,21 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            // TODO authenticate requests
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == entityPreset.CampaignId)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
 
             _context.EntityPresets.Add(entityPreset);
             await _context.SaveChangesAsync();
@@ -132,6 +178,17 @@ namespace net_api.Controllers
             {
                 return NotFound();
             }
+
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == entityPreset.CampaignId)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
 
             _context.EntityPresets.Remove(entityPreset);
             await _context.SaveChangesAsync();
