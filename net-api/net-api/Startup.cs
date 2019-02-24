@@ -46,11 +46,13 @@ namespace net_api
 
             services.AddSingleton<IAuthorizationHandler, CampaignEditableHandler>();
             services.AddSingleton<IAuthorizationHandler, CampaignViewableHandler>();
+            services.AddSingleton<IAuthorizationHandler, EntityEditableHandler>();
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("CampaignEditPolicy", policy => policy.Requirements.Add(new CampaignEditorRequirement()));
                 options.AddPolicy("CampaignViewPolicy", policy => policy.Requirements.Add(new CampaignViewerRequirement()));
+                options.AddPolicy("EntityEditPolicy", policy => policy.Requirements.Add(new EntityEditorRequirement()));
             });
 
             services.AddScoped<Context>();

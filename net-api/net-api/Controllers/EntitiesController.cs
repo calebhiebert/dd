@@ -18,11 +18,13 @@ namespace net_api.Controllers
     {
         private readonly Context _context;
         private readonly IHubContext<UpdateHub> _hub;
+        private readonly IAuthorizationService _auth;
 
-        public EntitiesController(Context context, IHubContext<UpdateHub> hub)
+        public EntitiesController(Context context, IHubContext<UpdateHub> hub, IAuthorizationService auth)
         {
             _context = context;
             _hub = hub;
+            _auth = auth;
         }
 
         // GET: api/Entities
@@ -34,26 +36,32 @@ namespace net_api.Controllers
                 return BadRequest("missing campaign id");
             }
 
-            var campaign = await _context.Campaigns.Include(c => c.Members).FirstOrDefaultAsync(c => c.Id == campaignId);
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == campaignId)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
 
             if (campaign == null)
             {
                 return NotFound();
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
 
-            if (userId != campaign.UserId || !campaign.Members.Any(m => m.UserId == userId))
+            if (!authResult.Succeeded)
             {
-                return BadRequest("no permissions");
+                return Forbid();
             }
 
-            if (spawnable && userId != campaign.UserId)
+            var viewSpawnableAuthResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (spawnable && !viewSpawnableAuthResult.Succeeded)
             {
-                return BadRequest("can't view spawnables if not admin");
+                return Forbid();
             }
 
-            var query = _context.Entities.Where(e => e.CampaignId == campaign.Id);
+            var query = _context.Entities
+                .Where(e => e.CampaignId == campaign.Id);
 
             if (spawnable == true)
             {
@@ -77,28 +85,23 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var entity = await _context.Entities.Where(e => e.Id == id).Include(e => e.Preset).FirstOrDefaultAsync();
+            var entity = await _context.Entities
+                .Where(e => e.Id == id)
+                .Include(e => e.Preset)
+                .Include(e => e.Campaign)
+                    .ThenInclude(c => c.Members)
+                .FirstOrDefaultAsync();
 
             if (entity == null)
             {
                 return NotFound();
             }
 
-            var campaign = await _context.Campaigns
-                .Include(c => c.Members)
-                .Where(c => c.Id == entity.CampaignId)
-                .FirstOrDefaultAsync();
-            
-            if (campaign == null)
-            {
-                return NotFound();
-            }
+            var authResult = await _auth.AuthorizeAsync(User, entity.Campaign, "CampaignViewPolicy");
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (campaign.UserId != userId && !campaign.Members.Any(m => m.UserId == userId))
+            if (!authResult.Succeeded)
             {
-                return BadRequest("No permissions");
+                return Forbid();
             }
 
             // Make sure a null health is not returned
@@ -134,11 +137,10 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var existingEntity = await _context.Entities
                 .Where(e => e.Id == entity.Id)
-                .Include(e => e.Campaign).ThenInclude(c => c.Members)
+                .Include(e => e.Campaign)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
@@ -147,18 +149,20 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            var campaign = existingEntity.Campaign;
+            var authResult = await _auth.AuthorizeAsync(User, existingEntity, "EntityEditPolicy");
+            var campaignEditableAuthResult = await _auth.AuthorizeAsync(User, existingEntity.Campaign, "CampaignEditPolicy");
 
-            // Check that the user is part of the campaign
-            if (userId != campaign.UserId && !campaign.Members.Any(m => m.UserId == userId))
+            if (!authResult.Succeeded)
             {
-                return BadRequest("no permissions");
+                return Forbid();
             }
 
-            if (userId != campaign.UserId)
+            if (!campaignEditableAuthResult.Succeeded)
             {
                 entity.Spawnable = false;
             }
+
+            entity.UserId = existingEntity.UserId;
 
             _context.Entry(entity).State = EntityState.Modified;
 
@@ -195,34 +199,39 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var campaign = await _context.Campaigns.Include(c => c.Members).FirstOrDefaultAsync(c => c.Id == entity.CampaignId);
-            var preset = await _context.EntityPresets.FirstOrDefaultAsync(p => p.Id == entity.EntityPresetId);
+            var campaign = await _context.Campaigns
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync(c => c.Id == entity.CampaignId);
+
+            var preset = await _context.EntityPresets
+                .FirstOrDefaultAsync(p => p.Id == entity.EntityPresetId);
 
             if (campaign == null || preset == null)
             {
                 return NotFound();
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
+            var campaignEditableAuthResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
 
-            // Check that the user is part of the campaign
-            if (userId != campaign.UserId && !campaign.Members.Any(m => m.UserId == userId))
+            if (!authResult.Succeeded)
             {
-                return BadRequest("no permissions");
+                return Forbid();
             }
 
             // Check that the user is allowed to create the specified entity type
-            if (!preset.PlayerCreatable && userId != campaign.UserId)
+            if (!preset.PlayerCreatable && !campaignEditableAuthResult.Succeeded)
             {
-                return BadRequest("entity type is not player creatable, and you are not admin");
+                return Forbid();
             }
 
-            if (userId != campaign.UserId)
+            if (!campaignEditableAuthResult.Succeeded)
             {
                 entity.Spawnable = false;
             }
 
             _context.Entities.Add(entity);
+
             await _context.SaveChangesAsync();
 
             await _hub.Clients.Group($"campaign-{entity.CampaignId}")
@@ -243,6 +252,8 @@ namespace net_api.Controllers
             var entity = await _context.Entities
                 .Where(e => e.Id == id)
                 .Include(e => e.InventoryItems)
+                .Include(e => e.EntitySpells)
+                .Include(e => e.Campaign)
                 .FirstOrDefaultAsync();
 
             if (entity == null)
@@ -250,24 +261,15 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            var campaign = await _context.Campaigns
-                .Include(c => c.Members)
-                .Where(c => c.Id == entity.CampaignId)
-                .FirstOrDefaultAsync();
+            var authResult = await _auth.AuthorizeAsync(User, entity, "EntityEditPolicy");
 
-            if (campaign == null)
+            if (!authResult.Succeeded)
             {
-                return NotFound();
-            }
-
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (campaign.UserId != userId && !campaign.Members.Any(m => m.UserId == userId))
-            {
-                return BadRequest("No permissions");
+                return Forbid();
             }
 
             _context.InventoryItems.RemoveRange(entity.InventoryItems);
+            _context.EntitySpells.RemoveRange(entity.EntitySpells);
             _context.Entities.Remove(entity);
             await _context.SaveChangesAsync();
 
@@ -298,22 +300,23 @@ namespace net_api.Controllers
                 return BadRequest("entity is not spawnable");
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (userId != preset.Campaign.UserId)
+            var authResult = await _auth.AuthorizeAsync(User, preset.Campaign, "CampaignEditPolicy");
+            
+            if (!authResult.Succeeded)
             {
-                return BadRequest("no permissions");
+                return Forbid();
             }
-
+ 
             for (var i = 0; i < count; i++)
             {
                 // TODO also copy over inventory items
+                // TODO also copy over spells
 
                 var entity = new Entity
                 {
                     Name = preset.Name,
                     Description = preset.Description,
-                    UserId = userId,
+                    UserId = preset.UserId,
                     CampaignId = preset.CampaignId,
                     Currency = preset.Currency,
                     ImageId = preset.ImageId,

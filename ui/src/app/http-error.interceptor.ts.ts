@@ -3,7 +3,7 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpErrorResponse
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
@@ -22,7 +22,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     let responseError;
 
     return next.handle(req).pipe(
-      tap(() => {}, error => (responseError = error)),
+      tap(() => {}, (error) => (responseError = error)),
       finalize(async () => {
         if (responseError !== undefined) {
           if (responseError instanceof HttpErrorResponse) {
@@ -33,7 +33,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                   text:
                     'Your login session has expired, you will be redirected to the login page',
                   type: 'warning',
-                  confirmButtonText: 'Okay'
+                  confirmButtonText: 'Okay',
                 });
 
                 await this.router.navigate(['login']);
@@ -46,12 +46,20 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     text:
                       'The resource you requested could not be found! Sorry about that.',
                     type: 'error',
-                    confirmButtonText: 'Okay'
+                    confirmButtonText: 'Okay',
                   });
                 }
                 break;
               case 400:
                 this.handleBadRequest(responseError);
+                break;
+              case 403:
+                await Swal.fire({
+                  title: 'No Permissions',
+                  text: "Looks like you don't have permission for that!",
+                  type: 'error',
+                  confirmButtonText: 'Shucks',
+                });
                 break;
               case 0:
                 await Swal.fire({
@@ -59,7 +67,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                   text:
                     'A connection to the server could not be established. Please make sure you are connected to the internet',
                   type: 'error',
-                  confirmButtonText: 'Okay'
+                  confirmButtonText: 'Okay',
                 });
                 break;
               default:
@@ -69,7 +77,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     'An unknown error occured. Maybe this will help: ' +
                     responseError.message,
                   type: 'error',
-                  confirmButtonText: 'Okay'
+                  confirmButtonText: 'Okay',
                 });
                 break;
             }
@@ -97,7 +105,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       type: swalType,
       confirmButtonText: '¯\\_(ツ)_/¯',
       title: errorTitle,
-      text: errorText
+      text: errorText,
     });
   }
 }

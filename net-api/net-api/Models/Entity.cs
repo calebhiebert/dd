@@ -107,6 +107,7 @@ namespace net_api.Models
         public double? Lng { get; set; }
 
         public ICollection<InventoryItem> InventoryItems { get; set; }
+        public ICollection<EntitySpell> EntitySpells { get; set; }
 
         public Entity()
         {
