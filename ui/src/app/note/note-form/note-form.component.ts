@@ -21,7 +21,19 @@ export class NoteFormComponent implements OnInit, AfterViewInit {
   public formGroup: FormGroup;
 
   @Input()
-  public note: INote;
+  public set note(note: INote) {
+    this._note = note;
+
+    if (this._quill && !this.editable && note.content && note.content.ops) {
+      this._quill.setContents(note.content.ops);
+    }
+  }
+
+  public get note() {
+    return this._note;
+  }
+
+  private _note: INote;
 
   @Output()
   public noteChange = new EventEmitter<INote>();

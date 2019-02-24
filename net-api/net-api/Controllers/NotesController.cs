@@ -19,11 +19,13 @@ namespace net_api.Controllers
     {
         private readonly Context _context;
         private readonly IHubContext<UpdateHub> _hub;
+        private readonly IAuthorizationService _auth;
 
-        public NotesController(Context context, IHubContext<UpdateHub> hub)
+        public NotesController(Context context, IHubContext<UpdateHub> hub, IAuthorizationService auth)
         {
             _context = context;
             _hub = hub;
+            _auth = auth;
         }
 
         // GET: api/Notes
@@ -50,9 +52,11 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            if (userId != campaign.UserId && !campaign.Members.Any(m => m.UserId == userId))
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
             {
-                return BadRequest("No permissions");
+                return Forbid();
             }
 
             var query = _context.Notes
@@ -71,13 +75,22 @@ namespace net_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Note>> GetNote(Guid id)
         {
-            var note = await _context.Notes.FindAsync(id);
-
-            // TODO authorize request
+            var note = await _context.Notes
+                .Where(n => n.Id == id)
+                .Include(n => n.Campaign)
+                    .ThenInclude(c => c.Members)
+                .FirstOrDefaultAsync();
 
             if (note == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, note, "NoteViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             return note;
@@ -92,7 +105,25 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
-            // TODO authorize request
+            var existingNote = await _context.Notes
+                .AsNoTracking()
+                .Where(n => n.Id == note.Id)
+                .Include(n => n.Campaign)
+                    .ThenInclude(c => c.Members)
+                .FirstOrDefaultAsync();
+
+            if (existingNote == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, existingNote, "NoteEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             note.UserId = userId;
             note.User = null;
@@ -129,6 +160,23 @@ namespace net_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Note>> PostNote(Note note)
         {
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == note.CampaignId)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             note.UserId = userId;
@@ -151,10 +199,23 @@ namespace net_api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Note>> DeleteNote(Guid id)
         {
-            var note = await _context.Notes.FindAsync(id);
+            var note = await _context.Notes
+                .AsNoTracking()
+                .Where(n => n.Id == id)
+                .Include(n => n.Campaign)
+                    .ThenInclude(c => c.Members)
+                .FirstOrDefaultAsync();
+
             if (note == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, note, "NoteEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             _context.Notes.Remove(note);
