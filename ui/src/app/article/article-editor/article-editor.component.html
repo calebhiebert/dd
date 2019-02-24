@@ -87,6 +87,7 @@
   <!-- Icon -->
   <div class="form-group">
     <label class="form-label">Icon</label>
-    <dd-icon-picker [formControl]="icon"></dd-icon-picker>
+    <!-- https://stackoverflow.com/questions/38958347/angular2-rc-5-custom-input-no-value-accessor-for-form-control-with-unspecified -->
+    <dd-icon-picker [formControl]="icon" ngDefaultControl></dd-icon-picker>
   </div>
 </div>

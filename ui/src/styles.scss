@@ -124,7 +124,7 @@ $hover-scale: 1.005;
 }
 
 .mention {
-  @extend .label, .label-secondary;
+  @extend a;
   cursor: pointer;
 }
 
