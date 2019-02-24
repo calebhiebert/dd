@@ -10,6 +10,9 @@ export class MapToolbarComponent implements OnInit {
   @Input()
   public title: string;
 
+  @Input()
+  public loading: boolean;
+
   constructor(private location: Location) {}
 
   ngOnInit() {}

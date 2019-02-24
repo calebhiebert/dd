@@ -250,12 +250,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private async loadMap(id: string) {
+    this.loading = true;
     await this.load(id);
     this.constructMap();
     this.createNotesLayer();
     this.createArticlesLayer();
     await this.loadNotes(id);
     await this.loadArticles();
+    this.loading = false;
 
     // Do entity setup
     // TODO move this into it's own function
@@ -281,15 +283,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private async load(id: string) {
-    this.loading = true;
-
     try {
       this._map = await this.mapService.getMap(id);
     } catch (err) {
       throw err;
     }
-
-    this.loading = false;
   }
 
   private async loadNotes(mapId: string) {
