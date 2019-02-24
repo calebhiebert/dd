@@ -1,9 +1,9 @@
-<form (ngSubmit)="submit()" [formGroup]="formGroup">
+<form [formGroup]="formGroup">
   <div class="form-group">
     <div #editor></div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group" *ngIf="editable">
     <label class="form-switch">
       <input type="checkbox" formControlName="publicView" />
       <i class="form-icon"></i> This note is publicly visible

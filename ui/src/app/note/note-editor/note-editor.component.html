@@ -5,11 +5,11 @@
   <div modal-body *ngIf="note">
     <div class="loading" *ngIf="loading"></div>
     <dd-note-form
-      *ngIf="note && editable"
+      *ngIf="note"
       [note]="note"
+      [editable]="editable"
       (noteChange)="onNoteChange($event)"
     ></dd-note-form>
-    <div class="note-display" *ngIf="!editable">{{ note.text }}</div>
   </div>
   <div modal-footer *ngIf="note">
     <!-- User Display -->

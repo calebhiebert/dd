@@ -26,6 +26,9 @@ export class NoteFormComponent implements OnInit, AfterViewInit {
   @Output()
   public noteChange = new EventEmitter<INote>();
 
+  @Input()
+  public editable = false;
+
   @ViewChild('editor')
   private _editor: ElementRef<HTMLDivElement>;
   private _quill: Quill;
@@ -50,12 +53,21 @@ export class NoteFormComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this._quill = new Quill(this._editor.nativeElement, {
-      theme: 'snow',
+      theme: this.editable ? 'snow' : undefined,
       modules: {
-        toolbar: [['bold', 'italic', 'underline', 'strike']],
+        toolbar: this.editable
+          ? [['bold', 'italic', 'underline', 'strike']]
+          : false,
       },
       placeholder: 'Note goes here!',
+      readOnly: !this.editable,
     });
+
+    if (!this.editable) {
+      this._editor.nativeElement
+        .querySelectorAll('.ql-editor')
+        .forEach((el) => el.classList.add('p-0'));
+    }
 
     this._quill.on('text-change', (delta, oldDelta, source) => {
       if (source === 'api') {
@@ -68,12 +80,6 @@ export class NoteFormComponent implements OnInit, AfterViewInit {
 
     if (this.note.content && this.note.content.ops) {
       this._quill.setContents(this.note.content.ops);
-    }
-  }
-
-  public submit() {
-    if (!this.formGroup.valid) {
-      return;
     }
   }
 }
