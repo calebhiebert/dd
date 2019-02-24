@@ -17,36 +17,39 @@ namespace net_api.Controllers
     public class InventoryItemsController : ControllerBase
     {
         private readonly Context _context;
+        private readonly IAuthorizationService _auth;
 
-        public InventoryItemsController(Context context)
+        public InventoryItemsController(Context context, IAuthorizationService auth)
         {
             _context = context;
+            _auth = auth;
         }
 
         // GET: api/InventoryItems
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<InventoryItem>>> GetInventoryItems([FromQuery]Guid entityId)
+        public async Task<ActionResult> GetInventoryItems([FromQuery]Guid entityId)
         {
-            // TODO authenticate requests
-            // TODO verify that the inventory does not have this item already
+            var entity = await _context.Entities
+                .Where(e => e.Id == entityId)
+                .Include(e => e.InventoryItems)
+                    .ThenInclude(ii => ii.Item)
+                .Include(e => e.Campaign)
+                    .ThenInclude(c => c.Members)
+                .FirstOrDefaultAsync();
 
-            return await _context.InventoryItems.Where(i => i.EntityId == entityId).Include(i => i.Item).ToListAsync();
-        }
-
-        // GET: api/InventoryItems/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<InventoryItem>> GetInventoryItem(Guid id)
-        {
-            // TODO authenticate requests
-
-            var inventoryItem = await _context.InventoryItems.FindAsync(id);
-
-            if (inventoryItem == null)
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            return inventoryItem;
+            var authResult = await _auth.AuthorizeAsync(User, entity.Campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            return Ok(entity.InventoryItems);
         }
 
         // PUT: api/InventoryItems
@@ -65,10 +68,11 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            // Check for correct permissions
-            if (userId != entity.UserId && userId != entity.Campaign.UserId)
+            var authResult = await _auth.AuthorizeAsync(User, entity, "EntityEditPolicy");
+
+            if (!authResult.Succeeded)
             {
-                return BadRequest("no permissions");
+                return Forbid();
             }
 
             // It's possible that the client could submit the item field
@@ -114,6 +118,8 @@ namespace net_api.Controllers
         {
             var inventoryItem = await _context.InventoryItems
                 .Where(i => i.EntityId == entId && i.ItemId == itmId)
+                .Include(ii => ii.Entity)
+                    .ThenInclude(e => e.Campaign)
                 .FirstOrDefaultAsync();
 
             if (inventoryItem == null)
@@ -121,7 +127,7 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            // TODO authenticate requests
+            var authResult = _auth.AuthorizeAsync(User, inventoryItem.Entity, "EntityEditPolicy");
 
             _context.InventoryItems.Remove(inventoryItem);
             await _context.SaveChangesAsync();
