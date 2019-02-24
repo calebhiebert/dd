@@ -711,4 +711,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   public get editable() {
     return this.campaignService.canEdit;
   }
+
+  public get mapObj() {
+    return this._map;
+  }
 }
