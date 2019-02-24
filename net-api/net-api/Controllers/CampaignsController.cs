@@ -18,11 +18,13 @@ namespace net_api.Controllers
     {
         private readonly Context _context;
         private readonly IHubContext<UpdateHub> _hub;
+        private readonly IAuthorizationService _auth;
 
-        public CampaignsController(Context context, IHubContext<UpdateHub> hub)
+        public CampaignsController(Context context, IHubContext<UpdateHub> hub, IAuthorizationService auth)
         {
             _context = context;
             _hub = hub;
+            _auth = auth;
         }
 
         // GET: api/Campaigns
@@ -31,7 +33,9 @@ namespace net_api.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            return _context.Campaigns.Include(c => c.Members).Include(c => c.User)
+            return _context.Campaigns
+                .Include(c => c.Members)
+                .Include(c => c.User)
                 .Where(c => c.UserId == userId || c.Members.Any(m => m.UserId == userId));
         }
 
@@ -44,22 +48,24 @@ namespace net_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             var campaign = await _context.Campaigns
+                .Where(c => c.Id == id)
                 .Include(c => c.EntityPresets)
                 .Include(c => c.Entities)
-                .Include("Members.User")
-                .FirstOrDefaultAsync(u => u.Id == id);
+                .Include(c => c.Members)
+                    .ThenInclude(m => m.User)
+                .FirstOrDefaultAsync();
 
             if (campaign == null)
             {
                 return NotFound();
             }
 
-            if (campaign.UserId != userId && !campaign.Members.Any(m => m.UserId == userId))
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
             {
-                return BadRequest("No permission");
+                return Forbid();
             }
 
             return Ok(campaign);
@@ -81,36 +87,25 @@ namespace net_api.Controllers
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var existingCampaign = await _context.Campaigns.AsNoTracking()
-                .Where(c => c.Id == id).Include(c => c.Members).FirstOrDefaultAsync();
+            var existingCampaign = await _context.Campaigns
+                .AsNoTracking()
+                .Where(c => c.Id == id)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
 
             if (existingCampaign == null)
             {
                 return NotFound();
             }
 
-            if (userId != campaign.UserId)
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
             {
-                return BadRequest("not the owner of the campaign");
+                return Forbid();
             }
 
             campaign.UserId = existingCampaign.UserId;
-
-            foreach (var member in existingCampaign.Members)
-            {
-                var notification = new CampaignNotification
-                {
-                    Message = $"{existingCampaign.Name} has been updated!",
-                    UserId = member.UserId,
-                    CampaignId = existingCampaign.Id,
-                };
-
-                _context.Notifications.Add(notification);
-            }
-
-            await _hub.Clients
-                .Groups(existingCampaign.Members.Select(m => $"notifications-{m.UserId}").ToList())
-                .SendAsync("Notify");
 
             _context.Entry(campaign).State = EntityState.Modified;
 
@@ -176,11 +171,11 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
 
-            if (campaign.UserId != userId)
+            if (!authResult.Succeeded)
             {
-                return BadRequest("do not own campaign");
+                return Forbid();
             }
 
             _context.Campaigns.Remove(campaign);
