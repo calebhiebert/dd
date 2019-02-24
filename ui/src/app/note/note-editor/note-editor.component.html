@@ -9,6 +9,7 @@
       [note]="note"
       [editable]="editable"
       (noteChange)="onNoteChange($event)"
+      #noteform
     ></dd-note-form>
   </div>
   <div modal-footer *ngIf="note">

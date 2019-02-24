@@ -147,9 +147,14 @@ namespace net_api.Controllers
             }
 
             // Notify other users of the change
-            if (note.PublicView)
+            if (note.PublicView || existingNote.PublicView)
             {
                 await _hub.Clients.Group($"campaign-{note.CampaignId}")
+                    .SendAsync("NoteUpdate", note);
+            } else
+            {
+                // Notify only the owner of the note change
+                await _hub.Clients.Group($"notifications-{userId}")
                     .SendAsync("NoteUpdate", note);
             }
 

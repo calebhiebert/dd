@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { NoteEditorComponent } from './note/note-editor/note-editor.component';
 import { IUser } from './user.service';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class NoteService {
   private _noteCreate = new EventEmitter<INote>();
   private _noteDelete = new EventEmitter<INote>();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private login: LoginService) {
     this.clearNoteCache();
   }
 
@@ -112,8 +113,12 @@ export class NoteService {
       const existingNote = this._noteCache.find((cn) => cn.id === n.id);
 
       if (existingNote !== undefined) {
-        Object.assign(existingNote, n);
-        this._noteUpdate.emit(existingNote);
+        if (n.userId !== this.login.id && n.publicView === false) {
+          this.removeNoteFromCache(n.id);
+        } else {
+          Object.assign(existingNote, n);
+          this._noteUpdate.emit(existingNote);
+        }
       } else {
         this._noteCache.push({ ...n });
         this._noteCreate.emit(n);

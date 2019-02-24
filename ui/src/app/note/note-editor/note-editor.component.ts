@@ -10,6 +10,7 @@ import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 import { filter } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { NoteFormComponent } from '../note-form/note-form.component';
 
 @Component({
   selector: 'dd-note-editor',
@@ -29,6 +30,9 @@ export class NoteEditorComponent implements OnInit {
   private _autosavePromise: Promise<void> = null;
   private _saveTimeout: number;
 
+  @ViewChild('noteform')
+  private _noteForm: NoteFormComponent;
+
   constructor(
     private noteService: NoteService,
     private campaignService: CampaignService,
@@ -43,6 +47,11 @@ export class NoteEditorComponent implements OnInit {
       .subscribe((note) => {
         if (!this.editable) {
           this.note = note;
+
+          // For some reason the note form will not trigger updates unless explicitly set
+          if (this._noteForm) {
+            this._noteForm.note = note;
+          }
         }
       });
   }
