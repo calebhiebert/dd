@@ -132,3 +132,10 @@ $hover-scale: 1.005;
   background: $secondary-color;
   color: $primary-color;
 }
+
+// Force quill to use the same fonts as the rest of the app
+.ql-container {
+  font-family: $base-font-family;
+  font-size: $font-size;
+  text-rendering: optimizeLegibility;
+}
