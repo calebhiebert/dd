@@ -21,7 +21,7 @@ export class AutocompleteComponent implements OnInit {
   public placeholder: string;
 
   @Input()
-  public doSearch: (searchTerm: string) => Promise<any[]>;
+  public doSearch: SearchFunction;
 
   @ViewChild('input')
   public input: ElementRef<HTMLInputElement>;
@@ -101,3 +101,5 @@ export class AutocompleteComponent implements OnInit {
     }
   }
 }
+
+export type SearchFunction = (searchTerm: string) => Promise<any[]>;

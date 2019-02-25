@@ -4,6 +4,9 @@ import {
   ArticleService,
   IArticleQuest,
 } from 'src/app/article.service';
+import { QuestService, IQuest } from 'src/app/quest.service';
+import { CampaignService } from 'src/app/campaign.service';
+import { SearchFunction } from 'src/app/autocomplete/autocomplete.component';
 
 @Component({
   selector: 'dd-article-quest-manager',
@@ -15,12 +18,21 @@ export class ArticleQuestManagerComponent implements OnInit {
   public article: IArticle;
 
   public articleQuests: IArticleQuest[];
+  public doQuestSearch: SearchFunction;
 
   public loading = false;
 
-  constructor(private articleService: ArticleService) {}
+  constructor(
+    private articleService: ArticleService,
+    private questService: QuestService,
+    private campaignService: CampaignService
+  ) {}
 
   ngOnInit() {
+    this.doQuestSearch = (search: string) => {
+      return this.searchQuests(search);
+    };
+
     this.load();
   }
 
@@ -38,11 +50,18 @@ export class ArticleQuestManagerComponent implements OnInit {
     this.loading = false;
   }
 
-  public async doQuestSearch(search: string): Promise<any[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([{ value: 'Super Quest' }]);
-      }, 500);
+  public async searchQuests(search: string): Promise<any[]> {
+    const quests = await this.questService.getQuests(
+      this.campaignService.campaign.id,
+      search
+    );
+
+    return quests.map((q) => {
+      return { ...q, value: q.name };
     });
+  }
+
+  public questSelected(quest: IQuest) {
+    console.log(quest);
   }
 }

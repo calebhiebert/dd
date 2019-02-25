@@ -5,6 +5,7 @@
   <dd-autocomplete
     placeholder="Add Quest"
     [doSearch]="doQuestSearch"
+    (onSelect)="questSelected($event)"
   ></dd-autocomplete>
 
   <!-- Empty State -->

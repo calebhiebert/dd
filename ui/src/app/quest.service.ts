@@ -10,15 +10,18 @@ import { IArticle } from './article.service';
 export class QuestService {
   constructor(private http: HttpClient) {}
 
-  public getQuests(
-    campaignId: string,
-    activeOnly: boolean = false
-  ): Promise<IQuest[]> {
+  public getQuests(campaignId: string, search?: string): Promise<IQuest[]> {
+    let searchQuery = '';
+
+    if (search !== null && search !== undefined) {
+      searchQuery = `&search=${encodeURIComponent(
+        search.trim().toLowerCase()
+      )}`;
+    }
+
     return this.http
       .get<IQuest[]>(
-        `${
-          environment.apiURL
-        }/quests?campaignId=${campaignId}&activeOnly=${activeOnly}`
+        `${environment.apiURL}/quests?campaignId=${campaignId}${searchQuery}`
       )
       .toPromise();
   }

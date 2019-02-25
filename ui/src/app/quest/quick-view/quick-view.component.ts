@@ -36,8 +36,7 @@ export class QuickViewComponent implements OnInit {
 
     try {
       this.quests = await this.questService.getQuests(
-        this.campaignService.campaign.id,
-        true
+        this.campaignService.campaign.id
       );
     } catch (err) {
       throw err;

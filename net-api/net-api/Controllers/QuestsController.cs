@@ -23,7 +23,8 @@ namespace net_api.Controllers
         // GET: api/Quests
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Quest>>> GetQuests(
-            [FromQuery] Guid campaignId
+            [FromQuery] Guid campaignId,
+            [FromQuery] string search
             )
         {
             if (campaignId == null)
@@ -50,6 +51,15 @@ namespace net_api.Controllers
             if (userId != campaign.UserId)
             {
                 query = query.Where(q => q.Visible == true);
+            }
+
+            if (search != null)
+            {
+                query = query
+                    .Where(q => 
+                        q.Name.ToLower()
+                        .Contains(search.Trim().ToLower()) || q.Description.ToLower().Contains(search.Trim().ToLower())
+                    );
             }
 
             query = query.OrderBy(q => q.Name);
