@@ -93,6 +93,7 @@ import { QuickDiceComponent } from './quick-dice/quick-dice.component';
 import { IconPickerComponent } from './icon-picker/icon-picker.component';
 import { AccountSettingsComponent } from './account/account-settings/account-settings.component';
 import { ArticleQuestManagerComponent } from './quest/article-quest-manager/article-quest-manager.component';
+import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -183,6 +184,7 @@ import { ArticleQuestManagerComponent } from './quest/article-quest-manager/arti
     IconPickerComponent,
     AccountSettingsComponent,
     ArticleQuestManagerComponent,
+    AutocompleteComponent,
   ],
   imports: [
     BrowserModule,

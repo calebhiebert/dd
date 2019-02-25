@@ -1,0 +1,14 @@
+.search-cursor {
+  cursor: text;
+}
+
+.menu-overlay {
+  position: fixed;
+  bottom: 0;
+  cursor: default;
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}

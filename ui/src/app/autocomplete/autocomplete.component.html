@@ -1,0 +1,33 @@
+<div class="form-autocomplete">
+  <!-- autocomplete input container -->
+  <div
+    class="form-autocomplete-input form-input search-cursor"
+    [ngClass]="{ 'is-focused': focused === true }"
+    (click)="focusInput()"
+  >
+    <div [ngClass]="{ 'has-icon-left': loading }">
+      <!-- autocomplete real input box -->
+      <input
+        class="form-input"
+        type="text"
+        [formControl]="control"
+        [placeholder]="placeholderText"
+        (focus)="focus(true)"
+        (focusout)="focus(false)"
+        #input
+      />
+      <i class="form-icon loading" *ngIf="loading"></i>
+    </div>
+  </div>
+
+  <div class="menu-overlay" *ngIf="menuShown" (click)="closeMenu()"></div>
+  <!-- autocomplete suggestion list -->
+  <ul class="menu" *ngIf="menuShown">
+    <!-- menu list items -->
+    <li class="menu-item" *ngFor="let item of items">
+      <span (click)="select(item)">
+        {{ item.value }}
+      </span>
+    </li>
+  </ul>
+</div>

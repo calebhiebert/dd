@@ -37,4 +37,12 @@ export class ArticleQuestManagerComponent implements OnInit {
 
     this.loading = false;
   }
+
+  public async doQuestSearch(search: string): Promise<any[]> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([{ value: 'Super Quest' }]);
+      }, 500);
+    });
+  }
 }

@@ -2,8 +2,13 @@
   <!-- Loading -->
   <div class="loading" *ngIf="loading"></div>
 
+  <dd-autocomplete
+    placeholder="Add Quest"
+    [doSearch]="doQuestSearch"
+  ></dd-autocomplete>
+
   <!-- Empty State -->
-  <div class="empty">
+  <div class="empty mt-2">
     <p class="empty-title h5">This article has no quests</p>
   </div>
 </div>
