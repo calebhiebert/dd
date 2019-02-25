@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { IMap } from './map.service';
+import { IQuest } from './quest.service';
 
 @Injectable({
   providedIn: 'root',
@@ -55,6 +56,32 @@ export class ArticleService {
       .delete<void>(`${environment.apiURL}/articles/${id}`)
       .toPromise();
   }
+
+  public getArticleQuests(articleId: string): Promise<IArticleQuest[]> {
+    return this.http
+      .get<IArticleQuest[]>(
+        `${environment.apiURL}/articlequests/?articleId=${articleId}`
+      )
+      .toPromise();
+  }
+
+  public updateArticleQuest(articleQuest: IArticleQuest): Promise<void> {
+    return this.http
+      .put<void>(`${environment.apiURL}/articlequests`, articleQuest)
+      .toPromise();
+  }
+
+  public deleteArticleQuest(
+    articleQuest: IArticleQuest
+  ): Promise<IArticleQuest> {
+    return this.http
+      .delete<IArticleQuest>(
+        `${environment.apiURL}/articlequests?articleId=${
+          articleQuest.articleId
+        }&questId=${articleQuest.questId}`
+      )
+      .toPromise();
+  }
 }
 
 export interface IArticle {
@@ -76,4 +103,11 @@ export interface IArticle {
 
 export interface ISearchedArticle extends IArticle {
   imageURLs: string[];
+}
+
+export interface IArticleQuest {
+  articleId: string;
+  questId: string;
+  article?: IArticle;
+  quest?: IQuest;
 }
