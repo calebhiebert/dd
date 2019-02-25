@@ -90,4 +90,10 @@
     <!-- https://stackoverflow.com/questions/38958347/angular2-rc-5-custom-input-no-value-accessor-for-form-control-with-unspecified -->
     <dd-icon-picker [formControl]="icon" ngDefaultControl></dd-icon-picker>
   </div>
+
+  <!-- Quests -->
+  <div class="form-group" *ngIf="editing && article">
+    <label class="form-label">Quests</label>
+    <dd-article-quest-manager [article]="article"></dd-article-quest-manager>
+  </div>
 </div>

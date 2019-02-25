@@ -44,6 +44,11 @@
           <span class="label label-rounded" *ngIf="!quest.available"
             >Unavailable</span
           >
+
+          <!-- Label if hidden -->
+          <span class="label label-rounded ml-1" *ngIf="!quest.visible"
+            >Hidden</span
+          >
         </div>
       </div>
     </div>

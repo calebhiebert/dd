@@ -291,4 +291,8 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
   public get icon() {
     return this.formGroup.get('icon');
   }
+
+  public get article() {
+    return this._article;
+  }
 }

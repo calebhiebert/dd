@@ -92,6 +92,7 @@ import { ArticleViewCardComponent } from './article/article-view-card/article-vi
 import { QuickDiceComponent } from './quick-dice/quick-dice.component';
 import { IconPickerComponent } from './icon-picker/icon-picker.component';
 import { AccountSettingsComponent } from './account/account-settings/account-settings.component';
+import { ArticleQuestManagerComponent } from './quest/article-quest-manager/article-quest-manager.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -181,6 +182,7 @@ import { AccountSettingsComponent } from './account/account-settings/account-set
     QuickDiceComponent,
     IconPickerComponent,
     AccountSettingsComponent,
+    ArticleQuestManagerComponent,
   ],
   imports: [
     BrowserModule,
