@@ -61,7 +61,15 @@ export class ArticleQuestManagerComponent implements OnInit {
     });
   }
 
+  public remove(aq: IArticleQuest) {
+    // Do some things
+  }
+
   public questSelected(quest: IQuest) {
-    console.log(quest);
+    this.articleQuests.push({
+      articleId: this.article.id,
+      questId: quest.id,
+      quest: quest,
+    });
   }
 }

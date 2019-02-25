@@ -10,7 +10,12 @@ import { IArticle } from './article.service';
 export class QuestService {
   constructor(private http: HttpClient) {}
 
-  public getQuests(campaignId: string, search?: string): Promise<IQuest[]> {
+  public getQuests(
+    campaignId: string,
+    search?: string,
+    limit: number = 10,
+    offset: number = 0
+  ): Promise<IQuest[]> {
     let searchQuery = '';
 
     if (search !== null && search !== undefined) {
@@ -21,7 +26,9 @@ export class QuestService {
 
     return this.http
       .get<IQuest[]>(
-        `${environment.apiURL}/quests?campaignId=${campaignId}${searchQuery}`
+        `${
+          environment.apiURL
+        }/quests?campaignId=${campaignId}${searchQuery}&limit=${limit}&offset=${offset}`
       )
       .toPromise();
   }

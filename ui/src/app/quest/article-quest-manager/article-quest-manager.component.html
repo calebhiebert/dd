@@ -9,7 +9,23 @@
   ></dd-autocomplete>
 
   <!-- Empty State -->
-  <div class="empty mt-2">
+  <div class="empty mt-2" *ngIf="articleQuests && articleQuests.length === 0">
     <p class="empty-title h5">This article has no quests</p>
+  </div>
+
+  <!-- Quest List -->
+  <div>
+    <div class="card p-1 pl-2 mt-1" *ngFor="let aq of articleQuests">
+      <div class="columns">
+        <div class="column">
+          {{ aq.quest.name }}
+        </div>
+        <div class="column col-auto">
+          <button class="btn btn-sm btn-link" (click)="remove(aq)">
+            <i class="icon icon-cross"></i>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

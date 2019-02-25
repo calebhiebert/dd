@@ -24,7 +24,9 @@ namespace net_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Quest>>> GetQuests(
             [FromQuery] Guid campaignId,
-            [FromQuery] string search
+            [FromQuery] string search,
+            [FromQuery] int? limit,
+            [FromQuery] int? offset
             )
         {
             if (campaignId == null)
@@ -62,7 +64,26 @@ namespace net_api.Controllers
                     );
             }
 
-            query = query.OrderBy(q => q.Name);
+            if (limit == null)
+            {
+                limit = 10;
+            } else if (limit > 50)
+            {
+                limit = 50;
+            } else if (limit <= 0)
+            {
+                limit = 10;
+            }
+
+            if (offset < 0 || offset == null)
+            {
+                offset = 0;
+            }
+
+            query = query
+                .OrderBy(q => q.Name)
+                .Skip((int)offset)
+                .Take((int)limit);
 
             var quests = await query.ToListAsync();
 

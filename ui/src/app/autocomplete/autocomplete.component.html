@@ -23,6 +23,9 @@
   <div class="menu-overlay" *ngIf="menuShown" (click)="closeMenu()"></div>
   <!-- autocomplete suggestion list -->
   <ul class="menu" *ngIf="menuShown">
+    <div class="empty p-2" *ngIf="items.length === 0">
+      <p class="empty-title h5">Your search returned no results</p>
+    </div>
     <!-- menu list items -->
     <li class="menu-item" *ngFor="let item of items">
       <span (click)="select(item)">
