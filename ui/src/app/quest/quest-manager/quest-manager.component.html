@@ -39,6 +39,11 @@
           <span [ngClass]="{ 'text-gray': !quest.visible }">
             {{ quest.name }}
           </span>
+
+          <!-- Label if unavailable -->
+          <span class="label label-rounded" *ngIf="!quest.available"
+            >Unavailable</span
+          >
         </div>
       </div>
     </div>

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IQuest, QuestService } from 'src/app/quest.service';
+import { IQuest, QuestService, QuestStatus } from 'src/app/quest.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { Location } from '@angular/common';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'dd-quest-form',
@@ -22,22 +23,35 @@ export class QuestFormComponent implements OnInit {
     private route: ActivatedRoute,
     private campaignService: CampaignService,
     private questService: QuestService,
-    private location: Location,
+    private location: Location
   ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
-      description: new FormControl(null, [Validators.required, Validators.maxLength(3000)]),
+      name: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30),
+      ]),
+      description: new FormControl(null, [
+        Validators.required,
+        Validators.maxLength(3000),
+      ]),
+      accepted: new FormControl(false),
+      available: new FormControl(false),
       visible: new FormControl(false),
-      active: new FormControl(false),
+      status: new FormControl('0'),
     });
-
-    this.active.disable();
 
     this.visible.valueChanges.subscribe(() => {
       this.dataToUI();
     });
+
+    this.available.valueChanges.pipe(distinctUntilChanged()).subscribe(() => {
+      this.dataToUI();
+    });
+
+    this.dataToUI();
 
     if (this.editing) {
       const questId = this.route.snapshot.paramMap.get('q_id');
@@ -46,13 +60,34 @@ export class QuestFormComponent implements OnInit {
   }
 
   private dataToUI() {
+    if (!this.quest && this.editing) {
+      return;
+    }
+
+    const isAvailable = this.available.value as boolean;
     const isVisible = this.visible.value as boolean;
 
     if (!isVisible) {
-      this.active.setValue(false);
-      this.active.disable();
+      this.available.setValue(false);
+      this.accepted.setValue(false);
+      this.status.setValue(QuestStatus.NONE);
+
+      this.accepted.disable();
+      this.available.disable();
+      this.status.disable();
     } else {
-      this.active.enable();
+      this.available.enable();
+
+      if (!isAvailable) {
+        this.accepted.setValue(false);
+        this.status.setValue(QuestStatus.NONE);
+
+        this.accepted.disable();
+        this.status.disable();
+      } else {
+        this.accepted.enable();
+        this.status.enable();
+      }
     }
   }
 
@@ -61,9 +96,9 @@ export class QuestFormComponent implements OnInit {
     this.formGroup.disable();
 
     try {
-      this.quest = await this.questService.getQuest(id);
-
-      this.formGroup.patchValue(this.quest);
+      const questResult = await this.questService.getQuest(id);
+      this.formGroup.patchValue(questResult);
+      this.quest = questResult;
 
       setTimeout(() => {
         this.dataToUI();
@@ -80,8 +115,10 @@ export class QuestFormComponent implements OnInit {
     const quest: IQuest = {
       name: this.name.value,
       description: this.description.value,
+      accepted: this.accepted.value,
+      available: this.available.value,
       visible: this.visible.value,
-      active: this.active.value,
+      status: this.status.value,
       campaignId: this.campaignService.campaign.id,
     };
 
@@ -104,14 +141,24 @@ export class QuestFormComponent implements OnInit {
     if (this.editing) {
       try {
         await this.questService.updateQuest(quest);
-        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'quests', this.quest.id]);
+        this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'quests',
+          this.quest.id,
+        ]);
       } catch (err) {
         throw err;
       }
     } else {
       try {
         const createdQuest = await this.questService.createQuest(quest);
-        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'quests', createdQuest.id]);
+        this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'quests',
+          createdQuest.id,
+        ]);
       } catch (err) {
         throw err;
       }
@@ -140,11 +187,19 @@ export class QuestFormComponent implements OnInit {
     return this.formGroup.get('description');
   }
 
+  public get accepted() {
+    return this.formGroup.get('accepted');
+  }
+
+  public get available() {
+    return this.formGroup.get('available');
+  }
+
   public get visible() {
     return this.formGroup.get('visible');
   }
 
-  public get active() {
-    return this.formGroup.get('active');
+  public get status() {
+    return this.formGroup.get('status');
   }
 }

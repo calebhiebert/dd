@@ -23,8 +23,7 @@ namespace net_api.Controllers
         // GET: api/Quests
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Quest>>> GetQuests(
-            [FromQuery] Guid campaignId,
-            [FromQuery] bool activeOnly = false
+            [FromQuery] Guid campaignId
             )
         {
             if (campaignId == null)
@@ -48,17 +47,12 @@ namespace net_api.Controllers
 
             var query = _context.Quests.Where(q => q.CampaignId == campaign.Id);
 
-            if (activeOnly)
-            {
-                query = query.Where(q => q.Active == true);
-            }
-
             if (userId != campaign.UserId)
             {
                 query = query.Where(q => q.Visible == true);
             }
 
-            query = query.OrderBy(q => q.Active);
+            query = query.OrderBy(q => q.Name);
 
             var quests = await query.ToListAsync();
 

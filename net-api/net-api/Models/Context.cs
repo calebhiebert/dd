@@ -21,16 +21,17 @@ namespace net_api.Models
         public DbSet<InventoryItem> InventoryItems { get; set; }
         public DbSet<Quest> Quests { get; set; }
         public DbSet<Map> Maps { get; set; }
-
         public DbSet<Note> Notes { get; set; }
+        public DbSet<Spell> Spells { get; set; }
+        public DbSet<Article> Articles { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<CampaignNotification> CampaignInviteNotifications { get; set; }
         public DbSet<MapNotification> MapNotifications { get; set; }
 
-        public DbSet<Article> Articles { get; set; }
-        public DbSet<Spell> Spells { get; set; }
         public DbSet<EntitySpell> EntitySpells { get; set; }
+
+        public DbSet<ArticleQuest> ArticleQuests { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -55,6 +56,7 @@ namespace net_api.Models
             modelBuilder.Entity<CampaignUser>().HasKey(tbl => new { tbl.CampaignId, tbl.UserId });
             modelBuilder.Entity<InventoryItem>().HasKey(tbl => new { tbl.EntityId, tbl.ItemId });
             modelBuilder.Entity<EntitySpell>().HasKey(tbl => new { tbl.EntityId, tbl.SpellId });
+            modelBuilder.Entity<ArticleQuest>().HasKey(tbl => new { tbl.ArticleId, tbl.QuestId });
 
             modelBuilder.Query<MapBytePosition>();
         }

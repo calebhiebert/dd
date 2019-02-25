@@ -66,6 +66,8 @@ namespace net_api.Models
 
         public string Icon { get; set; }
 
+        public List<ArticleQuest> ArticleQuests { get; set; }
+
         public Article()
         {
             Id = Guid.NewGuid();

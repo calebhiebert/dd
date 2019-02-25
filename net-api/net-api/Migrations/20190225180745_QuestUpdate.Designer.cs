@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using net_api.Models;
@@ -9,9 +10,10 @@ using net_api.Models;
 namespace netapi.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20190225180745_QuestUpdate")]
+    partial class QuestUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,19 +64,6 @@ namespace netapi.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Articles");
-                });
-
-            modelBuilder.Entity("net_api.Models.ArticleQuest", b =>
-                {
-                    b.Property<Guid>("ArticleId");
-
-                    b.Property<Guid>("QuestId");
-
-                    b.HasKey("ArticleId", "QuestId");
-
-                    b.HasIndex("QuestId");
-
-                    b.ToTable("ArticleQuests");
                 });
 
             modelBuilder.Entity("net_api.Models.Campaign", b =>
@@ -574,19 +563,6 @@ namespace netapi.Migrations
                     b.HasOne("net_api.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("net_api.Models.ArticleQuest", b =>
-                {
-                    b.HasOne("net_api.Models.Article", "Article")
-                        .WithMany("ArticleQuests")
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("net_api.Models.Quest", "Quest")
-                        .WithMany()
-                        .HasForeignKey("QuestId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
