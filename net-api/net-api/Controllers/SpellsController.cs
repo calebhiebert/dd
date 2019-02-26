@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,12 @@ namespace net_api.Controllers
     public class SpellsController : ControllerBase
     {
         private readonly Context _context;
+        private readonly IAuthorizationService _auth;
 
-        public SpellsController(Context context)
+        public SpellsController(Context context, IAuthorizationService auth)
         {
             _context = context;
+            _auth = auth;
         }
 
         // GET: api/Spells
@@ -45,13 +48,14 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
 
-            // Authorize request
-            if (userId != campaign.UserId && !campaign.Members.Any(m => m.UserId == userId))
+            if (!authResult.Succeeded)
             {
-                return BadRequest("not authorized");
+                return Forbid();
             }
+
+            var campaignEditableAuthResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
 
             if (limit == 0)
             {
@@ -68,7 +72,7 @@ namespace net_api.Controllers
                 .OrderBy(s => s.Name);
 
             // Only let the campaign owner see spells with playerVisible = false
-            if (userId != campaign.UserId)
+            if (!campaignEditableAuthResult.Succeeded)
             {
                 spells = spells
                     .Where(s => s.PlayerVisible == true);
@@ -106,11 +110,21 @@ namespace net_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Spell>> GetSpell(Guid id)
         {
-            var spell = await _context.Spells.FindAsync(id);
+            var spell = await _context.Spells
+                .Include(s => s.Campaign)
+                    .ThenInclude(c => c.Members)
+                .FirstOrDefaultAsync(s => s.Id == id);
 
             if (spell == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, spell.Campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             return spell;
@@ -120,6 +134,22 @@ namespace net_api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSpell(Guid id, Spell spell)
         {
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == spell.CampaignId)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             if (id != spell.Id)
             {
                 return BadRequest();
@@ -150,6 +180,22 @@ namespace net_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Spell>> PostSpell(Spell spell)
         {
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == spell.CampaignId)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             _context.Spells.Add(spell);
             await _context.SaveChangesAsync();
 
@@ -160,10 +206,20 @@ namespace net_api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Spell>> DeleteSpell(Guid id)
         {
-            var spell = await _context.Spells.FindAsync(id);
+            var spell = await _context.Spells
+                .Include(s => s.Campaign)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
             if (spell == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, spell.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             _context.Spells.Remove(spell);
