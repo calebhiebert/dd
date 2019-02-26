@@ -11,6 +11,11 @@ import Quill from 'quill';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CampaignService } from '../campaign.service';
 import { Router } from '@angular/router';
+import { ArticleService } from '../article.service';
+import { HttpClient } from '@angular/common/http';
+import Swal from 'sweetalert2';
+import { LoginService } from '../login.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'dd-quill',
@@ -52,7 +57,10 @@ export class QuillComponent
 
   constructor(
     private campaignService: CampaignService,
-    private router: Router
+    private articleService: ArticleService,
+    private login: LoginService,
+    private router: Router,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {}
@@ -66,7 +74,9 @@ export class QuillComponent
     if (this.readOnly) {
       this._container.nativeElement
         .querySelectorAll('.ql-editor')
-        .forEach((n) => n.classList.add('p-0'));
+        .forEach((n) => {
+          n.classList.add('p-0');
+        });
     }
 
     this._quill.on('text-change', (delta, oldDelta, source) => {
@@ -100,6 +110,9 @@ export class QuillComponent
         );
 
         this.setupImages(this._container.nativeElement.querySelectorAll('img'));
+        this.setupTables(
+          this._container.nativeElement.querySelectorAll('table')
+        );
       } else {
         this._quill.setContents([]);
       }
@@ -136,6 +149,83 @@ export class QuillComponent
 
           ['clean'], // remove formatting button
         ],
+        mention: {
+          mentionDenotationChars: ['@'],
+          allowedChars: /^[A-Za-z0-9\s'_\-"]*$/,
+          source: async (search, renderList, mentionChar) => {
+            const articles = await this.articleService.getArticles(
+              this.campaignService.campaign.id,
+              5,
+              0,
+              search
+            );
+
+            const mappedArticles = articles.map((a) => ({
+              id: a.id,
+              value: a.name,
+              published: a.published,
+            }));
+
+            if (search.trim().length > 0) {
+              mappedArticles.push({
+                id: 'create-empty-article',
+                value: search,
+                published: false,
+              });
+            }
+
+            renderList(mappedArticles);
+          },
+
+          renderItem: (item, searchTerm) => {
+            return `<div><span>${
+              item.id === 'create-empty-article'
+                ? '<i class="icon icon-plus"></i> '
+                : ''
+            }${item.value}</span>${
+              !item.published
+                ? '<span class="label ml-1 label-rounded">Hidden</span>'
+                : ''
+            }</div>`;
+          },
+
+          onSelect: async (item, insertItem) => {
+            item['type'] = 'article';
+
+            if (
+              item['id'] === 'create-empty-article' &&
+              (await Swal.fire({
+                title: 'Create new article?',
+                text: `A new article with the name ${
+                  item['value']
+                } will be created`,
+                showCancelButton: true,
+              })).value === true
+            ) {
+              const newArticle = await this.articleService.createArticle({
+                name: item['value'].trim(),
+                published: false,
+                campaignId: this.campaignService.campaign.id,
+                userId: this.login.id,
+                tags: ['ToDo'],
+                content: {},
+              });
+
+              item['id'] = newArticle.id;
+              item['type'] = 'article';
+              item['name'] = newArticle.name;
+
+              insertItem(item);
+            } else {
+              insertItem(item);
+            }
+          },
+
+          showDenotationChar: false,
+
+          listItemClass: 'menu-item',
+          mentionListClass: 'menu',
+        },
       },
       readOnly: this.readOnly,
     };
@@ -158,6 +248,20 @@ export class QuillComponent
             'blockquote',
           ],
         ];
+      } else {
+        base.modules.imageUploader = {
+          upload: async (file) => {
+            const form = new FormData();
+            form.append('file', file);
+            form.append('campaignId', this.campaignService.campaign.id);
+
+            const result = await this.http
+              .post(`${environment.apiURL}/upload`, form)
+              .toPromise();
+
+            return result['secure_url'];
+          },
+        };
       }
     }
     return base;
@@ -176,6 +280,10 @@ export class QuillComponent
         ]);
       });
     });
+  }
+
+  private setupTables(nodes: NodeListOf<HTMLTableElement>) {
+    nodes.forEach((n) => n.classList.add('table', 'table-striped'));
   }
 
   private setupImages(nodes: NodeListOf<HTMLImageElement>) {

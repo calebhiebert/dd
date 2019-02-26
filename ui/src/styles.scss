@@ -105,7 +105,8 @@ $hover-scale: 1.005;
 .menu-item {
   @extend .menu-item;
 
-  & > span {
+  & > span,
+  & > div {
     border-radius: $border-radius;
     color: inherit;
     display: block;
@@ -128,7 +129,8 @@ $hover-scale: 1.005;
   cursor: pointer;
 }
 
-.menu-item.selected > span {
+.menu-item.selected > span,
+.menu-item.selected > div {
   background: $secondary-color;
   color: $primary-color;
 }

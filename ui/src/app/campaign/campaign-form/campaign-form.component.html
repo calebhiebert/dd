@@ -50,13 +50,7 @@
         </p>
       </div>
 
-      <div
-        class="form-group"
-        [ngClass]="{
-          'has-error':
-            description.invalid && (description.dirty || description.touched)
-        }"
-      >
+      <div class="form-group">
         <label class="form-label">Description</label>
         <dd-quill
           simple="true"

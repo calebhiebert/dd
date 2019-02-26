@@ -112,7 +112,6 @@ export class EntityFormComponent implements OnInit {
 
       setTimeout(() => {
         this.formGroup.patchValue(preset);
-        console.log(this.attributeEditors);
       }, 1);
     } catch (err) {
       throw err;

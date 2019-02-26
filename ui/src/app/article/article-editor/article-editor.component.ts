@@ -22,18 +22,12 @@ import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
   templateUrl: './article-editor.component.html',
   styleUrls: ['./article-editor.component.scss'],
 })
-export class ArticleEditorComponent
-  implements OnInit, AfterViewInit, ComponentCanDeactivate {
+export class ArticleEditorComponent implements OnInit, ComponentCanDeactivate {
   public formGroup: FormGroup;
   public saving = false;
   public loading = false;
 
   private _article: IArticle;
-
-  @ViewChild('editor')
-  private _editor: ElementRef<HTMLDivElement>;
-  private _quill: Quill;
-  private _quillDirty = false;
 
   constructor(
     private campaignSerivce: CampaignService,
@@ -51,6 +45,7 @@ export class ArticleEditorComponent
         Validators.required,
         Validators.maxLength(30),
       ]),
+      content: new FormControl(null),
       published: new FormControl(false),
       tags: new FormArray([]),
       icon: new FormControl(),
@@ -65,122 +60,8 @@ export class ArticleEditorComponent
     }
   }
 
-  ngAfterViewInit() {
-    this._quill = new Quill(this._editor.nativeElement, {
-      theme: 'snow',
-      modules: {
-        blotFormatter: {},
-        toolbar: [
-          ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-          ['blockquote', 'code-block', 'image'],
-
-          [{ list: 'ordered' }, { list: 'bullet' }],
-          [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
-          [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-
-          [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-          [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-          [{ align: [] }],
-
-          ['clean'], // remove formatting button
-        ],
-        mention: {
-          mentionDenotationChars: ['@'],
-          allowedChars: /^[A-Za-z0-9\s'_\-"]*$/,
-          source: async (search, renderList, mentionChar) => {
-            const articles = await this.articleService.getArticles(
-              this.campaignSerivce.campaign.id,
-              5,
-              0,
-              search
-            );
-
-            const mappedArticles = articles.map((a) => ({
-              id: a.id,
-              value: a.name,
-            }));
-
-            if (search.trim().length > 0) {
-              mappedArticles.unshift({
-                id: 'create-empty-article',
-                value: search,
-              });
-            }
-
-            renderList(mappedArticles);
-          },
-
-          renderItem: (item, searchTerm) => {
-            return `<span>${
-              item.id === 'create-empty-article'
-                ? '<i class="icon icon-plus"></i> '
-                : ''
-            }${item.value}</span>`;
-          },
-
-          onSelect: async (item, insertItem) => {
-            item['type'] = 'article';
-
-            if (
-              item['id'] === 'create-empty-article' &&
-              (await Swal.fire({
-                title: 'Create new article?',
-                text: `A new article with the name ${
-                  item['value']
-                } will be created`,
-                showCancelButton: true,
-              })).value === true
-            ) {
-              const newArticle = await this.articleService.createArticle({
-                name: item['value'].trim(),
-                published: false,
-                campaignId: this.campaignSerivce.campaign.id,
-                userId: this.login.id,
-                tags: ['ToDo'],
-                content: {},
-              });
-
-              item['id'] = newArticle.id;
-              item['type'] = 'article';
-              item['name'] = newArticle.name;
-
-              insertItem(item);
-            } else {
-              insertItem(item);
-            }
-          },
-
-          showDenotationChar: false,
-
-          listItemClass: 'menu-item',
-          mentionListClass: 'menu',
-        },
-        imageUploader: {
-          upload: async (file) => {
-            const form = new FormData();
-            form.append('file', file);
-            form.append('campaignId', this.campaignSerivce.campaign.id);
-
-            const result = await this.http
-              .post(`${environment.apiURL}/upload`, form)
-              .toPromise();
-
-            return result['secure_url'];
-          },
-        },
-      },
-    });
-
-    this._quill.on('text-change', (delta, old, src) => {
-      if (src === 'user') {
-        this._quillDirty = true;
-      }
-    });
-  }
-
   canDeactivate() {
-    return !this.formGroup.dirty && !this._quillDirty;
+    return !this.formGroup.dirty;
   }
 
   private constructArticle(): IArticle {
@@ -188,7 +69,7 @@ export class ArticleEditorComponent
 
     const article: IArticle = {
       name: v.name,
-      content: this._quill.getContents(),
+      content: v.content,
       published: v.published,
       campaignId: this.campaignSerivce.campaign.id,
       userId: this.login.id,
@@ -212,10 +93,6 @@ export class ArticleEditorComponent
 
     try {
       this._article = await this.articleService.getArticle(id);
-
-      if (this._article.content && this._article.content.ops) {
-        this._quill.setContents(this._article.content.ops);
-      }
     } catch (err) {
       throw err;
     }
@@ -257,7 +134,6 @@ export class ArticleEditorComponent
     this.saving = false;
     this.formGroup.enable();
     this.formGroup.markAsPristine();
-    this._quillDirty = false;
     this.router.navigate([
       'campaigns',
       this.campaignSerivce.campaign.id,
