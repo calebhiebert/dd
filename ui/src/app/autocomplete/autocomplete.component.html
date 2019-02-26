@@ -27,8 +27,8 @@
       <p class="empty-title h5">Your search returned no results</p>
     </div>
     <!-- menu list items -->
-    <li class="menu-item" *ngFor="let item of items">
-      <span (click)="select(item)">
+    <li class="menu-item" *ngFor="let item of items; trackBy: trackItem">
+      <span (click)="select(item)" [innerHTML]="createItem(item)">
         {{ item.value }}
       </span>
     </li>

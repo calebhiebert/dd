@@ -70,8 +70,6 @@ namespace net_api.Controllers
         [HttpPut]
         public async Task<IActionResult> PutArticleQuest(ArticleQuest articleQuest)
         {
-            _context.Entry(articleQuest).State = EntityState.Modified;
-
             var article = await _context.Articles
                 .Where(a => a.Id == articleQuest.ArticleId)
                 .Include(a => a.Campaign)
@@ -102,11 +100,7 @@ namespace net_api.Controllers
             articleQuest.Article = null;
             articleQuest.Quest = null;
 
-            var existingItem = _context.ArticleQuests
-                .Where(aq => aq.QuestId == quest.Id && aq.ArticleId == article.Id)
-                .FirstOrDefaultAsync();
-
-            if (existingItem == null)
+            if (!ArticleQuestExists(articleQuest.ArticleId, articleQuest.QuestId))
             {
                 _context.ArticleQuests.Add(articleQuest);
             } else
@@ -116,7 +110,11 @@ namespace net_api.Controllers
 
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            await _context.Entry(articleQuest)
+                .Reference(aq => aq.Quest)
+                .LoadAsync();
+
+            return Ok(articleQuest);
         }
 
         // DELETE: api/ArticleQuests?questId=lskdjf&articleId=sldkjf
@@ -145,6 +143,11 @@ namespace net_api.Controllers
             await _context.SaveChangesAsync();
 
             return articleQuest;
+        }
+
+        private bool ArticleQuestExists(Guid articleId, Guid questId)
+        {
+            return _context.ArticleQuests.Any(aq => aq.QuestId == questId && aq.ArticleId == articleId);
         }
     }
 }

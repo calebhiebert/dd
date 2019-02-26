@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ElementRef,
-  ViewChild,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { IArticle, ArticleService } from 'src/app/article.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
@@ -38,7 +31,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy, AfterViewInit {
     private route: ActivatedRoute,
     private router: Router,
     private campaignService: CampaignService,
-    private updateHub: UpdateHubService
+    private updateHub: UpdateHubService,
   ) {}
 
   ngOnInit() {
@@ -70,6 +63,8 @@ export class ArticleViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
       readOnly: true,
     });
+
+    this._quillContainer.nativeElement.querySelectorAll('.ql-editor').forEach((n) => n.classList.add('p-0'));
   }
 
   private async load(id: string) {
@@ -85,15 +80,9 @@ export class ArticleViewComponent implements OnInit, OnDestroy, AfterViewInit {
       if (this.article.content && this.article.content.ops) {
         this._quill.setContents(this.article.content.ops);
 
-        this.setupArticleMentions(
-          this._quillContainer.nativeElement.querySelectorAll(
-            '[data-type="article"]'
-          )
-        );
+        this.setupArticleMentions(this._quillContainer.nativeElement.querySelectorAll('[data-type="article"]'));
 
-        this.setupImages(
-          this._quillContainer.nativeElement.querySelectorAll('img')
-        );
+        this.setupImages(this._quillContainer.nativeElement.querySelectorAll('img'));
       }
     } catch (err) {
       throw err;
@@ -107,12 +96,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy, AfterViewInit {
       const id = node.dataset.id;
 
       node.addEventListener('click', () => {
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'articles',
-          id,
-        ]);
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'articles', id]);
       });
     });
   }
@@ -124,31 +108,16 @@ export class ArticleViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public edit() {
-    this.router.navigate([
-      'campaign',
-      'manage',
-      this.campaignService.campaign.id,
-      'articles',
-      this.article.id,
-      'edit',
-    ]);
+    this.router.navigate(['campaign', 'manage', this.campaignService.campaign.id, 'articles', this.article.id, 'edit']);
   }
 
   public viewOnMap() {
-    this.router.navigate(
-      [
-        'campaigns',
-        this.campaignService.campaign.id,
-        'maps',
-        this.article.mapId,
-      ],
-      {
-        queryParams: {
-          lat: this.article.lat,
-          lng: this.article.lng,
-        },
-      }
-    );
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'maps', this.article.mapId], {
+      queryParams: {
+        lat: this.article.lat,
+        lng: this.article.lng,
+      },
+    });
   }
 
   public get editable() {

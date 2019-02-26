@@ -1,13 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ElementRef,
-  ViewChild,
-  AfterViewInit,
-  EventEmitter,
-  Output,
-} from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, EventEmitter, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
@@ -22,6 +13,9 @@ export class AutocompleteComponent implements OnInit {
 
   @Input()
   public doSearch: SearchFunction;
+
+  @Input()
+  public createItem: DropdownItemGenerationFunction;
 
   @ViewChild('input')
   public input: ElementRef<HTMLInputElement>;
@@ -39,12 +33,16 @@ export class AutocompleteComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    if (!this.createItem) {
+      this.createItem = (item: any) => item.value;
+    }
+
     this.control = new FormControl(null);
 
     this.control.valueChanges
       .pipe(
         debounceTime(250),
-        distinctUntilChanged()
+        distinctUntilChanged(),
       )
       .subscribe((text) => {
         if (text !== null && text !== undefined) {
@@ -69,6 +67,10 @@ export class AutocompleteComponent implements OnInit {
     }
 
     this.loading = false;
+  }
+
+  public trackItem(idx: number) {
+    return idx;
   }
 
   public focus(focus: boolean) {
@@ -103,3 +105,4 @@ export class AutocompleteComponent implements OnInit {
 }
 
 export type SearchFunction = (searchTerm: string) => Promise<any[]>;
+export type DropdownItemGenerationFunction = (item: any) => string;

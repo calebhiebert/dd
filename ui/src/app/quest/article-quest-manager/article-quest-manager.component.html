@@ -5,6 +5,7 @@
   <dd-autocomplete
     placeholder="Add Quest"
     [doSearch]="doQuestSearch"
+    [createItem]="createAutocompleteItem"
     (onSelect)="questSelected($event)"
   ></dd-autocomplete>
 
@@ -23,6 +24,9 @@
         <div class="column col-auto">
           <button class="btn btn-sm btn-link" (click)="remove(aq)">
             <i class="icon icon-cross"></i>
+          </button>
+          <button class="btn btn-sm btn-link ml-1" (click)="viewQuest(aq.questId)">
+            <i class="icon icon-arrow-right"></i>
           </button>
         </div>
       </div>

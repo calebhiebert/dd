@@ -11,74 +11,52 @@ export class ArticleService {
   constructor(private http: HttpClient) {}
 
   public getArticle(id: string): Promise<IArticle> {
-    return this.http
-      .get<IArticle>(`${environment.apiURL}/articles/${id}`)
-      .toPromise();
+    return this.http.get<IArticle>(`${environment.apiURL}/articles/${id}`).toPromise();
   }
 
   public getArticles(
     campaignId: string,
     limit: number = 10,
     offset: number = 0,
-    search?: string
+    search?: string,
   ): Promise<ISearchedArticle[]> {
     const searchString = search ? `&search=${encodeURIComponent(search)}` : '';
 
     return this.http
       .get<ISearchedArticle[]>(
-        `${
-          environment.apiURL
-        }/articles?campaignId=${campaignId}&limit=${limit}&offset=${offset}${searchString}`
+        `${environment.apiURL}/articles?campaignId=${campaignId}&limit=${limit}&offset=${offset}${searchString}`,
       )
       .toPromise();
   }
 
   public createArticle(article: IArticle): Promise<IArticle> {
-    return this.http
-      .post<IArticle>(`${environment.apiURL}/articles`, article)
-      .toPromise();
+    return this.http.post<IArticle>(`${environment.apiURL}/articles`, article).toPromise();
   }
 
   public updateArticle(article: IArticle): Promise<void> {
-    return this.http
-      .put<void>(`${environment.apiURL}/articles/${article.id}`, article)
-      .toPromise();
+    return this.http.put<void>(`${environment.apiURL}/articles/${article.id}`, article).toPromise();
   }
 
   public getMapArticles(mapId: string): Promise<IArticle[]> {
-    return this.http
-      .get<IArticle[]>(`${environment.apiURL}/articles/map/${mapId}`)
-      .toPromise();
+    return this.http.get<IArticle[]>(`${environment.apiURL}/articles/map/${mapId}`).toPromise();
   }
 
   public deleteArticle(id: string): Promise<void> {
-    return this.http
-      .delete<void>(`${environment.apiURL}/articles/${id}`)
-      .toPromise();
+    return this.http.delete<void>(`${environment.apiURL}/articles/${id}`).toPromise();
   }
 
   public getArticleQuests(articleId: string): Promise<IArticleQuest[]> {
-    return this.http
-      .get<IArticleQuest[]>(
-        `${environment.apiURL}/articlequests/?articleId=${articleId}`
-      )
-      .toPromise();
+    return this.http.get<IArticleQuest[]>(`${environment.apiURL}/articlequests/?articleId=${articleId}`).toPromise();
   }
 
-  public updateArticleQuest(articleQuest: IArticleQuest): Promise<void> {
-    return this.http
-      .put<void>(`${environment.apiURL}/articlequests`, articleQuest)
-      .toPromise();
+  public updateArticleQuest(articleQuest: IArticleQuest): Promise<IArticleQuest> {
+    return this.http.put<IArticleQuest>(`${environment.apiURL}/articlequests`, articleQuest).toPromise();
   }
 
-  public deleteArticleQuest(
-    articleQuest: IArticleQuest
-  ): Promise<IArticleQuest> {
+  public deleteArticleQuest(articleQuest: IArticleQuest): Promise<IArticleQuest> {
     return this.http
       .delete<IArticleQuest>(
-        `${environment.apiURL}/articlequests?articleId=${
-          articleQuest.articleId
-        }&questId=${articleQuest.questId}`
+        `${environment.apiURL}/articlequests?articleId=${articleQuest.articleId}&questId=${articleQuest.questId}`,
       )
       .toPromise();
   }
