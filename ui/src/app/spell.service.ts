@@ -80,7 +80,7 @@ export interface IEntitySpell {
 export interface ISpell {
   id?: string;
   name: string;
-  description: string;
+  content?: any;
   campaignId: string;
   playerVisible: boolean;
   imageId?: string;

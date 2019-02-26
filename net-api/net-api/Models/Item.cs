@@ -13,9 +13,27 @@ namespace net_api.Models
         [StringLength(30, MinimumLength = 3)]
         public string Name { get; set; }
 
-        [Required]
-        [Column("Description", TypeName = "TEXT")]
-        public string Description { get; set; }
+        [Column("Content", TypeName = "JSONB")]
+        public string ContentJson { get; set; }
+
+        [NotMapped]
+        public Object Content
+        {
+            get
+            {
+                if (ContentJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject(ContentJson);
+            }
+
+            set
+            {
+                ContentJson = JsonConvert.SerializeObject(value);
+            }
+        }
 
         public string ImageId { get; set; }
 

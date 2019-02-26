@@ -24,13 +24,16 @@ export class CampaignSettingsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private login: LoginService,
-    private location: Location,
+    private location: Location
   ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({});
     this.expandXPTable = !this.editing;
-    if (this.campaign.experienceTable === undefined || this.campaign.experienceTable === null) {
+    if (
+      this.campaign.experienceTable === undefined ||
+      this.campaign.experienceTable === null
+    ) {
       this.campaign.experienceTable = [];
     }
   }
@@ -56,7 +59,7 @@ export class CampaignSettingsComponent implements OnInit {
 
         const campaignUpdate: ICampaign = {
           name: v.name,
-          description: v.description,
+          content: v.content,
           imageId: v.imageId,
           experienceTable: v.experienceTable,
           userId: this.login.id,
@@ -76,7 +79,7 @@ export class CampaignSettingsComponent implements OnInit {
       try {
         const c = await this.campaignService.createCampaign({
           name: v.name,
-          description: v.description,
+          content: v.content,
           imageId: v.imageId,
           experienceTable: v.experienceTable,
           itemRarities: v.itemRarities,
@@ -108,7 +111,7 @@ export class CampaignSettingsComponent implements OnInit {
       return {
         id: '',
         name: '',
-        description: '',
+        content: null,
         imageId: '',
         userId: '',
         experienceTable: [],

@@ -176,7 +176,7 @@ export class UpdateHubService {
       const c = this.campaignService.campaign;
 
       c.name = campaign.name;
-      c.description = campaign.description;
+      c.content = campaign.content;
       c.imageId = campaign.imageId;
       c.experienceTable = campaign.experienceTable;
       c.itemTypes = campaign.itemTypes;

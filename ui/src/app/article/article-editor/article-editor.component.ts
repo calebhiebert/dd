@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
@@ -8,7 +14,7 @@ import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 import Quill from 'quill';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 
 @Component({
@@ -16,7 +22,8 @@ import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
   templateUrl: './article-editor.component.html',
   styleUrls: ['./article-editor.component.scss'],
 })
-export class ArticleEditorComponent implements OnInit, AfterViewInit, ComponentCanDeactivate {
+export class ArticleEditorComponent
+  implements OnInit, AfterViewInit, ComponentCanDeactivate {
   public formGroup: FormGroup;
   public saving = false;
   public loading = false;
@@ -35,12 +42,15 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit, ComponentC
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private http: HttpClient,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      name: new FormControl(null, [Validators.required, Validators.maxLength(30)]),
+      name: new FormControl(null, [
+        Validators.required,
+        Validators.maxLength(30),
+      ]),
       published: new FormControl(false),
       tags: new FormArray([]),
       icon: new FormControl(),
@@ -79,7 +89,12 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit, ComponentC
           mentionDenotationChars: ['@'],
           allowedChars: /^[A-Za-z0-9\s'_\-"]*$/,
           source: async (search, renderList, mentionChar) => {
-            const articles = await this.articleService.getArticles(this.campaignSerivce.campaign.id, 5, 0, search);
+            const articles = await this.articleService.getArticles(
+              this.campaignSerivce.campaign.id,
+              5,
+              0,
+              search
+            );
 
             const mappedArticles = articles.map((a) => ({
               id: a.id,
@@ -97,9 +112,11 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit, ComponentC
           },
 
           renderItem: (item, searchTerm) => {
-            return `<span>${item.id === 'create-empty-article' ? '<i class="icon icon-plus"></i> ' : ''}${
-              item.value
-            }</span>`;
+            return `<span>${
+              item.id === 'create-empty-article'
+                ? '<i class="icon icon-plus"></i> '
+                : ''
+            }${item.value}</span>`;
           },
 
           onSelect: async (item, insertItem) => {
@@ -109,7 +126,9 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit, ComponentC
               item['id'] === 'create-empty-article' &&
               (await Swal.fire({
                 title: 'Create new article?',
-                text: `A new article with the name ${item['value']} will be created`,
+                text: `A new article with the name ${
+                  item['value']
+                } will be created`,
                 showCancelButton: true,
               })).value === true
             ) {
@@ -143,7 +162,9 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit, ComponentC
             form.append('file', file);
             form.append('campaignId', this.campaignSerivce.campaign.id);
 
-            const result = await this.http.post(`${environment.apiURL}/upload`, form).toPromise();
+            const result = await this.http
+              .post(`${environment.apiURL}/upload`, form)
+              .toPromise();
 
             return result['secure_url'];
           },
@@ -206,7 +227,11 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit, ComponentC
     this.formGroup.patchValue(this._article);
 
     if (this._article.tags) {
-      (this.formGroup.get('tags') as FormArray).controls = this._article.tags.map((t) => new FormControl(t));
+      (this.formGroup.get(
+        'tags'
+      ) as FormArray).controls = this._article.tags.map(
+        (t) => new FormControl(t)
+      );
     }
 
     this.formGroup.enable();
@@ -233,14 +258,25 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit, ComponentC
     this.formGroup.enable();
     this.formGroup.markAsPristine();
     this._quillDirty = false;
-    this.router.navigate(['campaigns', this.campaignSerivce.campaign.id, 'articles']);
+    this.router.navigate([
+      'campaigns',
+      this.campaignSerivce.campaign.id,
+      'articles',
+    ]);
   }
 
   public async delete() {
-    if ((await Swal.fire({ title: 'Are you sure?', showCancelButton: true })).value === true) {
+    if (
+      (await Swal.fire({ title: 'Are you sure?', showCancelButton: true }))
+        .value === true
+    ) {
       try {
         await this.articleService.deleteArticle(this._article.id);
-        this.router.navigate(['campaigns', this.campaignSerivce.campaign.id, 'articles']);
+        this.router.navigate([
+          'campaigns',
+          this.campaignSerivce.campaign.id,
+          'articles',
+        ]);
       } catch (err) {
         throw err;
       }

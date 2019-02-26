@@ -84,8 +84,7 @@ namespace net_api.Controllers
                 search = search.ToLower().Trim();
 
                 items = items.Where(
-                    i => i.Name.ToLower().Contains(search) ||
-                    i.Description.ToLower().Contains(search));
+                    i => i.Name.ToLower().Contains(search));
             }
 
             var count = items.Count();
@@ -98,11 +97,6 @@ namespace net_api.Controllers
             }
 
             var itemArray = items.ToArray();
-
-            foreach (var item in itemArray)
-            {
-                item.Description = item.Description.Substring(0, Math.Min(item.Description.Length, 150));
-            }
 
             return Ok(new
             {

@@ -82,42 +82,13 @@
         </div>
 
         <!-- Description -->
-        <div
-          class="form-group"
-          [ngClass]="{
-            'has-error':
-              description.invalid && (description.touched || description.dirty),
-            'has-success': description.valid
-          }"
-        >
+        <div class="form-group">
           <label class="form-label" for="spell-description">Description</label>
-          <textarea
-            class="form-input"
-            formControlName="description"
-            id="spell-description"
-            rows="5"
-            placeholder="Sharp sword made of metal"
-          ></textarea>
-          <p class="form-input-hint mb-1">
-            Descriptions can use
-            <a
-              href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Markdown</a
-            >
-            styles
-          </p>
-          <p
-            class="form-input-hint"
-            *ngIf="
-              description.invalid &&
-              (description.touched || description.dirty) &&
-              description.errors.required
-            "
-          >
-            The spell needs a description
-          </p>
+          <dd-quill
+            simple="true"
+            formControlName="content"
+            placeholder="Description"
+          ></dd-quill>
         </div>
 
         <!-- Player Visible -->

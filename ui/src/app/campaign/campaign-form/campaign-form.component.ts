@@ -30,11 +30,8 @@ export class CampaignFormComponent implements OnInit {
     );
 
     this.formGroup.addControl(
-      'description',
-      new FormControl(this.campaign ? this.campaign.description : null, [
-        Validators.required,
-        Validators.minLength(3),
-      ])
+      'content',
+      new FormControl(this.campaign ? this.campaign.content : null)
     );
 
     if (this.includeImage) {

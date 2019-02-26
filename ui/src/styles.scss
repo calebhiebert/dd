@@ -139,3 +139,7 @@ $hover-scale: 1.005;
   font-size: $font-size;
   text-rendering: optimizeLegibility;
 }
+
+.ql-mention-list-container {
+  z-index: 500;
+}

@@ -56,7 +56,7 @@ export class ItemService {
 export interface IItem {
   id: string;
   name: string;
-  description: string;
+  content?: any;
   campaignId: string;
   cost: number;
   weight: number;

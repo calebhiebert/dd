@@ -200,7 +200,7 @@ export class CampaignService {
 export interface ICampaign {
   id: string;
   name: string;
-  description: string;
+  content?: any;
   imageId: string;
   userId: string;
   user?: IUser;

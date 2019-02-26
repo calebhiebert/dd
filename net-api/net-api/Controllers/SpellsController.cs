@@ -86,7 +86,6 @@ namespace net_api.Controllers
                 spells = spells
                     .Where(s =>
                     s.Name.ToLower().Contains(search) ||
-                    s.Description.ToLower().Contains(search) ||
                     string.Join(",", s.Tags).ToLower().Contains(search)
                     );
             }

@@ -42,8 +42,6 @@ export class IconPickerComponent implements OnInit {
 
     if (this.formControl) {
       this.formControl.setValue(icon.id);
-
-      console.log(this.formControl);
     }
 
     try {
