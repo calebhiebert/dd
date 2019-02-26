@@ -13,6 +13,7 @@ namespace net_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SpellsController : ControllerBase
     {
         private readonly Context _context;

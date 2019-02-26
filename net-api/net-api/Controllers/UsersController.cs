@@ -23,15 +23,6 @@ namespace net_api.Controllers
             _context = context;
         }
 
-        // GET: api/Users
-        [HttpGet]
-        public IEnumerable<User> GetUsers()
-        {
-            // TODO authenticate users
-
-            return _context.Users;
-        }
-
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser([FromRoute] string id)
@@ -40,8 +31,6 @@ namespace net_api.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            // TODO authenticate users
 
             var user = await _context.Users.FindAsync(id);
 
@@ -66,7 +55,7 @@ namespace net_api.Controllers
 
             if (id != userId)
             {
-                return BadRequest("User id does not match, cannot post");
+                return Forbid();
             }
 
             if (id != user.Id)
@@ -108,10 +97,8 @@ namespace net_api.Controllers
 
             if (user.Id != userId)
             {
-                return BadRequest("User id does not match, cannot post");
+                return Forbid();
             }
-
-            // TODO authenticate users
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
