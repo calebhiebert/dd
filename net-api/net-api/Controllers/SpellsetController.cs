@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,36 +13,49 @@ namespace net_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SpellsetController : ControllerBase
     {
         private readonly Context _context;
+        private readonly IAuthorizationService _auth;
 
-        public SpellsetController(Context context)
+        public SpellsetController(Context context, IAuthorizationService auth)
         {
             _context = context;
+            _auth = auth;
         }
 
         // GET: api/Spellset/lskdjfosiejfse
         [HttpGet("{entityId}")]
-        public async Task<ActionResult<IEnumerable<EntitySpell>>> GetEntitySpells([FromRoute] Guid? entityId)
+        public async Task<ActionResult> GetEntitySpells([FromRoute] Guid? entityId)
         {
             if (entityId == null)
             {
                 return BadRequest("missing entity id");
             }
 
-            return await _context.EntitySpells
-                .Where(es => es.EntityId == entityId)
-                .Include(es => es.Spell)
-                .ToListAsync();
+            var entity = await _context.Entities
+                .Where(e => e.Id == entityId)
+                .Include(e => e.Campaign)
+                    .ThenInclude(c => c.Members)
+                .Include(e => e.EntitySpells)
+                    .ThenInclude(es => es.Spell)
+                .FirstOrDefaultAsync();
+
+            var authResult = await _auth.AuthorizeAsync(User, entity.Campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            return Ok(entity.EntitySpells);
         }
 
         // PUT: api/Spellset
         [HttpPut]
         public async Task<IActionResult> PutEntitySpell(EntitySpell entitySpell)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             var entity = await _context.Entities
                 .Where(e => e.Id == entitySpell.EntityId)
                 .Include(e => e.Campaign)
@@ -52,10 +66,11 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            // Check for correct permissions
-            if (userId != entity.UserId && userId != entity.Campaign.UserId)
+            var authResult = await _auth.AuthorizeAsync(User, entity.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
             {
-                return BadRequest("no permissions");
+                return Forbid();
             }
 
             // It's possible that the client could submit the spell field
@@ -99,10 +114,20 @@ namespace net_api.Controllers
         {
             var entitySpell = await _context.EntitySpells
                 .Where(es => es.SpellId == spellId && es.EntityId == entityId)
+                .Include(es => es.Entity)
+                    .ThenInclude(e => e.Campaign)
                 .FirstOrDefaultAsync();
+
             if (entitySpell == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, entitySpell.Entity.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             _context.EntitySpells.Remove(entitySpell);
