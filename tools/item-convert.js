@@ -3,67 +3,115 @@ const { Client } = require('pg');
 const uuid = require('uuid/v4');
 const { convertHtmlToDelta } = require('node-quill-converter');
 const marked = require('marked');
-const nanoid = require('nanoid');
+const Chance = require('chance');
 
 // Load spells
 const magicitems = JSON.parse(fs.readFileSync('./magicitems.json'));
 
-const CAMPAIGN_ID = 'ff126e57-cdc9-40cd-b9fd-f1f2f522ff64';
-const USER_ID = 'google-oauth2|115793422235026993679';
+const CAMPAIGN_ID = '8856eb86-ea92-4d0a-ad18-4ba5125d4ee5';
+const USER_ID = 'google-oauth2|115097827328089785154';
 
 const db = new Client({
-  host: 'localhost',
-  database: 'dd',
-  user: 'dd',
-  password: 'dd',
+	host: 'localhost',
+	database: 'dd',
+	user: 'dd',
+	password: 'dd',
 });
 
+const chance = new Chance();
+
+function getRarity(rarityString) {
+	if (rarityString === null || rarityString === undefined) {
+		return 0;
+	}
+
+	rarityString = rarityString.toLowerCase();
+
+	if (rarityString.indexOf('artifact') !== -1) {
+		return 5;
+	} else if (rarityString.indexOf('legendary') !== -1) {
+		return 4;
+	} else if (rarityString.indexOf('very rare') !== -1) {
+		return 3;
+	} else if (rarityString.indexOf('rare') !== -1) {
+		return 2;
+	} else if (rarityString.indexOf('uncommon') !== -1) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 async function convert() {
-  await db.connect();
+	await db.connect();
 
-  let idx = 0;
+	let idx = 0;
+	let tblCol = 0;
 
-  for (const spell of magicitems) {
-    const html = marked(spell.desc);
-    const delta = convertHtmlToDelta(html);
+	const renderer = new marked.Renderer();
 
-    const { name, type, rarity } = spell;
+	renderer.table = (header, body) => {
+		return `<ul>${body}</ul>`;
+	};
 
-    function bulletPoint(a, b) {
-      return [
-        { insert: `${a} - ` },
-        { insert: `${b}`, attributes: { bold: true } },
-        { insert: '\n', attributes: { list: 'bullet' } },
-      ];
-    }
+	renderer.tablerow = (content) => {
+		return `<li>${content}</li>`;
+	};
 
-    delta.ops.push({ insert: '\n' });
-    delta.ops.push(...bulletPoint('Type', type));
-    delta.ops.push(...bulletPoint('Rarity', rarity));
+	renderer.tablecell = (content) => {
+		if (tblCol++ % 2 === 0) {
+			return content + ' - ';
+		} else {
+			return `<b>${content}</b>`;
+		}
+	};
 
-    const id = uuid();
-    const tags = [type];
+	for (const spell of magicitems) {
+		const html = marked(spell.desc, {
+			renderer: renderer,
+		});
+		const delta = convertHtmlToDelta(html);
 
-    const res = await db.query(
-      `INSERT INTO "Items" ("Id", "Name", "CampaignId", "UserId", "Tags", "PlayerVisible", "Content", "Rarity", "Cost", "Weight") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-      [
-        id,
-        name.substring(0, 30),
-        CAMPAIGN_ID,
-        USER_ID,
-        `{${tags.join(', ')}}`,
-        true,
-        delta,
-        0,
-        0,
-        0,
-      ]
-    );
+		const { name, type, rarity } = spell;
 
-    console.log(++idx, '/', magicitems.length);
-  }
+		function bulletPoint(a, b) {
+			return [
+				{ insert: `${a} - ` },
+				{ insert: `${b}`, attributes: { bold: true } },
+				{ insert: '\n', attributes: { list: 'bullet' } },
+			];
+		}
 
-  await db.end();
+		delta.ops.push({ insert: '\n' });
+		delta.ops.push(...bulletPoint('Type', type));
+		delta.ops.push(...bulletPoint('Rarity', rarity));
+
+		const id = uuid();
+		const tags = [type];
+		const rr = getRarity(rarity);
+
+		const res = await db.query(
+			`INSERT INTO "Items" ("Id", "Name", "CampaignId", "UserId", "Tags", "PlayerVisible", "Content", "Rarity", "Cost", "Weight") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+			[
+				id,
+				name.substring(0, 30),
+				CAMPAIGN_ID,
+				USER_ID,
+				`{${tags.join(', ')}}`,
+				true,
+				delta,
+				rr,
+				Math.round(
+					Math.pow(rr + 1, rr + 1) * 10 * chance.floating({ min: 0.5, max: 4 })
+				),
+				0,
+			]
+		);
+
+		console.log(++idx, '/', magicitems.length);
+	}
+
+	await db.end();
 }
 
 convert();
