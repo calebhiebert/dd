@@ -39,7 +39,7 @@ namespace net_api.Models
 
         public DateTime CreatedAt { get; set; }
 
-        public DateTime AcceptedAt { get; set; }
+        public DateTime? AcceptedAt { get; set; }
 
         public Guid? OriginId { get; set; }
 

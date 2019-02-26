@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
@@ -11,13 +12,16 @@ namespace net_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class QuestsController : ControllerBase
     {
         private readonly Context _context;
+        private readonly IAuthorizationService _auth;
 
-        public QuestsController(Context context)
+        public QuestsController(Context context, IAuthorizationService auth)
         {
             _context = context;
+            _auth = auth;
         }
 
         // GET: api/Quests
@@ -34,8 +38,6 @@ namespace net_api.Controllers
                 return BadRequest("missing campaign id");
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             var campaign = await _context.Campaigns
                 .Include(c => c.Members)
                 .FirstOrDefaultAsync(c => c.Id == campaignId);
@@ -43,14 +45,20 @@ namespace net_api.Controllers
             if (campaign == null)
             {
                 return NotFound();
-            } else if (!campaign.Members.Any(m => m.UserId == userId))
-            {
-                return BadRequest("not part of campaign");
             }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            var campaignEditableAuthResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
 
             var query = _context.Quests.Where(q => q.CampaignId == campaign.Id);
 
-            if (userId != campaign.UserId)
+            if (!campaignEditableAuthResult.Succeeded)
             {
                 query = query.Where(q => q.Visible == true);
             }
@@ -94,11 +102,22 @@ namespace net_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Quest>> GetQuest(Guid id)
         {
-            var quest = await _context.Quests.FindAsync(id);
+            var quest = await _context.Quests
+                .Where(q => q.Id == id)
+                .Include(q => q.Campaign)
+                    .ThenInclude(c => c.Members)
+                .FirstOrDefaultAsync();
 
             if (quest == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, quest.Campaign, quest.Visible ? "CampaignViewPolicy" : "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             return quest;
@@ -111,6 +130,32 @@ namespace net_api.Controllers
             if (id != quest.Id)
             {
                 return BadRequest();
+            }
+
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == quest.CampaignId)
+                .FirstOrDefaultAsync();
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            // Make sure the quest is not in an invalid state
+            if (!quest.Visible)
+            {
+                quest.Accepted = false;
+                quest.AcceptedAt = null;
+                quest.Available = false;
+                quest.Status = QuestStatus.None;
+            }
+
+            if (!quest.Available)
+            {
+                quest.Accepted = false;
+                quest.Status = QuestStatus.None;
             }
 
             _context.Entry(quest).State = EntityState.Modified;
@@ -138,7 +183,16 @@ namespace net_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Quest>> PostQuest(Quest quest)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == quest.CampaignId)
+                .FirstOrDefaultAsync();
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
 
             _context.Quests.Add(quest);
             await _context.SaveChangesAsync();
@@ -150,10 +204,21 @@ namespace net_api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Quest>> DeleteQuest(Guid id)
         {
-            var quest = await _context.Quests.FindAsync(id);
+            var quest = await _context.Quests
+                .Where(q => q.Id == id)
+                .Include(q => q.Campaign)
+                .FirstOrDefaultAsync();
+
             if (quest == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, quest.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             _context.Quests.Remove(quest);
