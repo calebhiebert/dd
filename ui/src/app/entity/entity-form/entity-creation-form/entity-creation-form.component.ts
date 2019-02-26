@@ -42,10 +42,7 @@ export class EntityCreationFormComponent implements OnInit {
         Validators.minLength(2),
         Validators.maxLength(20),
       ]),
-      description: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
+      content: new FormControl(null),
       spawnable: new FormControl(false),
       xp: new FormControl(0, [numberValidator, Validators.min(0)]),
       currency: new FormControl(null, [numberValidator, Validators.min(0)]),
@@ -125,7 +122,7 @@ export class EntityCreationFormComponent implements OnInit {
     const ent: IEntity = {
       id: this.entity ? this.entity.id : '',
       name: v.name,
-      description: v.description,
+      content: v.content,
       xp: v.xp,
       imageId: v.imageId,
       imageColor1: v.imageColor1,
@@ -271,8 +268,8 @@ export class EntityCreationFormComponent implements OnInit {
     return this.formGroup.get('name');
   }
 
-  public get description() {
-    return this.formGroup.get('description');
+  public get content() {
+    return this.formGroup.get('content');
   }
 
   public get xp() {

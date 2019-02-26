@@ -104,4 +104,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Empty state -->
+  <div class="empty p-2" *ngIf="inventory && inventory.length === 0">
+    <p class="empty-subtitle">No items here!</p>
+  </div>
 </div>

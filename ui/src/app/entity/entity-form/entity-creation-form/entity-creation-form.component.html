@@ -122,57 +122,16 @@
         </div>
 
         <!-- Description -->
-        <div
-          class="form-group"
-          [ngClass]="{
-            'has-error':
-              description.invalid && (description.touched || description.dirty),
-            'has-success':
-              description.valid && (description.touched || description.dirty)
-          }"
-        >
+        <div class="form-group">
           <label for="description" class="form-label"
             >Description
             <span class="text-large text-bold text-primary">*</span></label
           >
-          <textarea
-            name="description"
-            id="description"
-            formControlName="description"
-            rows="5"
-            class="form-input"
+          <dd-quill
+            simple="true"
+            formControlName="content"
             placeholder="Description"
-          ></textarea>
-          <p class="form-input-hint mb-1">
-            Descriptions can use
-            <a
-              href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Markdown</a
-            >
-            styles
-          </p>
-          <p
-            class="form-input-hint"
-            *ngIf="
-              description.invalid &&
-              (description.touched || description.dirty) &&
-              description.errors.minlength
-            "
-          >
-            The description can't be shorter than 3 characters
-          </p>
-          <p
-            class="form-input-hint"
-            *ngIf="
-              description.invalid &&
-              (description.touched || description.dirty) &&
-              description.errors.required
-            "
-          >
-            The description is required
-          </p>
+          ></dd-quill>
         </div>
 
         <!-- Spawnable -->

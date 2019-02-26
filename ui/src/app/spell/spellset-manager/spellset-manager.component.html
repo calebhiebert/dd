@@ -26,6 +26,7 @@
 
 <!-- Spells -->
 <div>
+  <!-- Spell List -->
   <div class="card px-1 pt-1 mb-1" *ngFor="let s of spells">
     <div class="columns col-gapless">
       <!-- Image Column -->
@@ -72,5 +73,10 @@
         </button>
       </div>
     </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty p-2" *ngIf="spells && spells.length === 0">
+    <p class="empty-subtitle">No spells here!</p>
   </div>
 </div>

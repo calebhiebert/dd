@@ -315,7 +315,7 @@ namespace net_api.Controllers
                 var entity = new Entity
                 {
                     Name = preset.Name,
-                    Description = preset.Description,
+                    Content = preset.Content,
                     UserId = preset.UserId,
                     CampaignId = preset.CampaignId,
                     Currency = preset.Currency,

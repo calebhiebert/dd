@@ -7,6 +7,7 @@ import {
   EntityAttributeClass,
   IHealth,
   IViewAttribute,
+  IAttribute,
 } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { AttributeType } from 'src/app/attributes';
@@ -192,6 +193,10 @@ export class EntityViewComponent implements OnInit, OnDestroy {
         },
       }
     );
+  }
+
+  public trackAttribute(idx: number, attribute: IAttribute) {
+    return attribute.name;
   }
 
   public get processedAttributes(): IViewAttribute[] {

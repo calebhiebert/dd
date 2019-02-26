@@ -147,7 +147,17 @@ export class QuillComponent
       base.theme = 'snow';
 
       if (this.simple) {
-        base.modules.toolbar = [['bold', 'italic', 'underline', 'strike']];
+        base.modules.toolbar = [
+          [
+            'bold',
+            'italic',
+            'underline',
+            'strike',
+            { list: 'ordered' },
+            { list: 'bullet' },
+            'blockquote',
+          ],
+        ];
       }
     }
     return base;

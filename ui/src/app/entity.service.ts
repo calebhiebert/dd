@@ -172,7 +172,7 @@ export interface IEntityAttribute {
 export interface IEntity {
   id?: string;
   name: string;
-  description: string;
+  content?: any;
   imageId?: string;
   imageColor1?: string;
   imageColor2?: string;
@@ -196,7 +196,7 @@ export interface IEntity {
 export interface IAttribute {
   name: string;
   type: AttributeType;
-  data: string;
+  data: any;
 }
 
 export interface IInventoryItem {

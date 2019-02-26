@@ -53,14 +53,12 @@
           </select>
 
           <!-- Big Text Input -->
-          <textarea
-            class="form-input"
-            name="bigtext"
-            rows="3"
-            [formControlName]="att.name"
-            [placeholder]="att.name"
+          <dd-quill
             *ngSwitchCase="3"
-          ></textarea>
+            [placeholder]="att.name"
+            [formControlName]="att.name"
+            simple="true"
+          ></dd-quill>
 
           <figure class="form-icon avatar" *ngIf="att.imageId">
             <img
