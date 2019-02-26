@@ -21,7 +21,7 @@ export class AutocompleteComponent implements OnInit {
   public input: ElementRef<HTMLInputElement>;
 
   @Output()
-  public onSelect = new EventEmitter<any>();
+  public selection = new EventEmitter<any>();
 
   public menuShown = false;
 
@@ -86,7 +86,7 @@ export class AutocompleteComponent implements OnInit {
   }
 
   public select(item: any) {
-    this.onSelect.emit(item);
+    this.selection.emit(item);
     this.menuShown = false;
     this.control.setValue(null);
   }

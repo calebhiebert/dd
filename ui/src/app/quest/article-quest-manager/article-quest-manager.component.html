@@ -6,7 +6,7 @@
     placeholder="Add Quest"
     [doSearch]="doQuestSearch"
     [createItem]="createAutocompleteItem"
-    (onSelect)="questSelected($event)"
+    (selection)="questSelected($event)"
   ></dd-autocomplete>
 
   <!-- Empty State -->
