@@ -1,8 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { IArticle, ArticleService, IArticleQuest } from 'src/app/article.service';
+import {
+  IArticle,
+  ArticleService,
+  IArticleQuest,
+} from 'src/app/article.service';
 import { QuestService, IQuest, QuestStatus } from 'src/app/quest.service';
 import { CampaignService } from 'src/app/campaign.service';
-import { SearchFunction, DropdownItemGenerationFunction } from 'src/app/autocomplete/autocomplete.component';
+import {
+  SearchFunction,
+  DropdownItemGenerationFunction,
+} from 'src/app/autocomplete/autocomplete.component';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
@@ -25,7 +32,7 @@ export class ArticleQuestManagerComponent implements OnInit {
     private articleService: ArticleService,
     private questService: QuestService,
     private campaignService: CampaignService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -40,7 +47,9 @@ export class ArticleQuestManagerComponent implements OnInit {
     this.loading = true;
 
     try {
-      this.articleQuests = await this.articleService.getArticleQuests(this.article.id);
+      this.articleQuests = await this.articleService.getArticleQuests(
+        this.article.id
+      );
     } catch (err) {
       throw err;
     }
@@ -49,7 +58,13 @@ export class ArticleQuestManagerComponent implements OnInit {
   }
 
   public async searchQuests(search: string): Promise<any[]> {
-    const quests = await this.questService.getQuests(this.campaignService.campaign.id, search);
+    const quests = await this.questService.getQuests(
+      this.campaignService.campaign.id,
+      search,
+      5,
+      0,
+      this.articleQuests.map((aq) => aq.questId)
+    );
 
     const mappedQuests: any[] = quests.map((q) => {
       return { ...q, value: q.name };
@@ -71,18 +86,29 @@ export class ArticleQuestManagerComponent implements OnInit {
   }
 
   public async remove(articleQuest: IArticleQuest) {
-    this.articleQuests = this.articleQuests.filter(
-      (aq) => aq.articleId !== articleQuest.articleId && aq.questId !== articleQuest.questId,
-    );
+    this.articleQuests = this.articleQuests.filter((aq) => aq !== articleQuest);
 
     await this.articleService.deleteArticleQuest(articleQuest);
+  }
+
+  public async edit(articleQuest: IArticleQuest) {
+    this.router.navigate([
+      'campaign',
+      'manage',
+      this.campaignService.campaign.id,
+      'quests',
+      articleQuest.questId,
+      'edit',
+    ]);
   }
 
   public async questSelected(quest: IQuest | any) {
     if (quest.id === 'create-new-quest') {
       const confirmation = await Swal.fire({
         title: 'Create new quest?',
-        text: `This will create a new blank quest and attach it to ${this.article.name}`,
+        text: `This will create a new blank quest and attach it to ${
+          this.article.name
+        }`,
         showCancelButton: true,
       });
 
@@ -104,7 +130,9 @@ export class ArticleQuestManagerComponent implements OnInit {
 
       await this.questSelected(newQuest);
     } else {
-      const existingArticleQuest = this.articleQuests.find((aq) => aq.questId === quest.id);
+      const existingArticleQuest = this.articleQuests.find(
+        (aq) => aq.questId === quest.id
+      );
 
       if (existingArticleQuest !== undefined) {
         return;
@@ -124,6 +152,11 @@ export class ArticleQuestManagerComponent implements OnInit {
   }
 
   public async viewQuest(questId: string) {
-    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'quests', questId]);
+    this.router.navigate([
+      'campaigns',
+      this.campaignService.campaign.id,
+      'quests',
+      questId,
+    ]);
   }
 }

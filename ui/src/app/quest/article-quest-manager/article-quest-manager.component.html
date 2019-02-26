@@ -25,7 +25,13 @@
           <button class="btn btn-sm btn-link" (click)="remove(aq)">
             <i class="icon icon-cross"></i>
           </button>
-          <button class="btn btn-sm btn-link ml-1" (click)="viewQuest(aq.questId)">
+          <button class="btn btn-sm btn-link" (click)="edit(aq)">
+            <i class="icon icon-edit"></i>
+          </button>
+          <button
+            class="btn btn-sm btn-link ml-1"
+            (click)="viewQuest(aq.questId)"
+          >
             <i class="icon icon-arrow-right"></i>
           </button>
         </div>

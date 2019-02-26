@@ -14,7 +14,10 @@ export class QuestService {
     campaignId: string,
     search?: string,
     limit: number = 10,
-    offset: number = 0
+    offset: number = 0,
+    except: string[] = null,
+    only: string[] = null,
+    status: QuestStatus[] = null
   ): Promise<IQuest[]> {
     let searchQuery = '';
 
@@ -24,11 +27,43 @@ export class QuestService {
       )}`;
     }
 
+    let exceptQuery = '';
+
+    if (except && except.length > 0) {
+      except.forEach((id) => {
+        exceptQuery += `&except=${encodeURIComponent(id)}`;
+      });
+    }
+
+    let onlyQuery = '';
+
+    if (only && only.length > 0) {
+      only.forEach((id) => {
+        onlyQuery += `&only=${encodeURIComponent(id)}`;
+      });
+    }
+
+    let statusQuery = '';
+
+    if (status && status.length > 0) {
+      status.forEach((st) => {
+        statusQuery += `&status=${st}`;
+      });
+    }
+
+    if (!limit) {
+      limit = 10;
+    }
+
+    if (!offset) {
+      offset = 0;
+    }
+
     return this.http
       .get<IQuest[]>(
         `${
           environment.apiURL
-        }/quests?campaignId=${campaignId}${searchQuery}&limit=${limit}&offset=${offset}`
+        }/quests?campaignId=${campaignId}${searchQuery}&limit=${limit}&offset=${offset}${exceptQuery}${onlyQuery}${statusQuery}`
       )
       .toPromise();
   }
@@ -48,6 +83,12 @@ export class QuestService {
   public updateQuest(quest: IQuest): Promise<void> {
     return this.http
       .put<void>(`${environment.apiURL}/quests/${quest.id}`, quest)
+      .toPromise();
+  }
+
+  public deleteQuest(quest: IQuest): Promise<IQuest> {
+    return this.http
+      .delete<IQuest>(`${environment.apiURL}/quests/${quest.id}`)
       .toPromise();
   }
 }

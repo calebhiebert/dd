@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { QuestService, IQuest } from 'src/app/quest.service';
+import { QuestService, IQuest, QuestStatus } from 'src/app/quest.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { Router } from '@angular/router';
 
@@ -36,7 +36,13 @@ export class QuickViewComponent implements OnInit {
 
     try {
       this.quests = await this.questService.getQuests(
-        this.campaignService.campaign.id
+        this.campaignService.campaign.id,
+        null,
+        null,
+        null,
+        null,
+        null,
+        [QuestStatus.IN_PROGRESS]
       );
     } catch (err) {
       throw err;

@@ -9,7 +9,13 @@
         <button class="btn mr-2" type="button" (click)="cancel()">
           Cancel
         </button>
-        <button class="btn btn-error mr-2" type="button" *ngIf="editing">
+        <button
+          class="btn btn-error mr-2"
+          [ngClass]="{ loading: deleting }"
+          type="button"
+          *ngIf="editing"
+          (click)="delete()"
+        >
           Delete
         </button>
         <button class="btn btn-primary" [disabled]="formGroup.invalid">

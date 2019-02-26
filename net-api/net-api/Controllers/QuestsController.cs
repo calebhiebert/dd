@@ -30,7 +30,10 @@ namespace net_api.Controllers
             [FromQuery] Guid campaignId,
             [FromQuery] string search,
             [FromQuery] int? limit,
-            [FromQuery] int? offset
+            [FromQuery] int? offset,
+            [FromQuery] Guid[] except,
+            [FromQuery] Guid[] only,
+            [FromQuery] QuestStatus[] status
             )
         {
             if (campaignId == null)
@@ -70,6 +73,21 @@ namespace net_api.Controllers
                         q.Name.ToLower()
                         .Contains(search.Trim().ToLower()) || q.Description.ToLower().Contains(search.Trim().ToLower())
                     );
+            }
+
+            if (except != null && except.Length > 0)
+            {
+                query = query.Where(q => !except.Contains(q.Id));
+            }
+
+            if (only != null && only.Length > 0)
+            {
+                query = query.Where(q => only.Contains(q.Id));
+            }
+
+            if (status != null && status.Length > 0)
+            {
+                query = query.Where(q => status.Contains(q.Status));
             }
 
             if (limit == null)
