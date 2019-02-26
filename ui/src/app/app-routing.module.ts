@@ -36,6 +36,7 @@ import { ArticleEditorComponent } from './article/article-editor/article-editor.
 import { ArticleViewComponent } from './article/article-view/article-view.component';
 import { ArticleManagerComponent } from './article/article-manager/article-manager.component';
 import { AccountSettingsComponent } from './account/account-settings/account-settings.component';
+import { UnsavedChangesGuard } from './unsaved-changes.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -131,6 +132,7 @@ const routes: Routes = [
       {
         path: 'quests/create',
         component: QuestFormComponent,
+        canDeactivate: [UnsavedChangesGuard],
         data: {
           editing: false,
         },
@@ -138,6 +140,7 @@ const routes: Routes = [
       {
         path: 'quests/:q_id/edit',
         component: QuestFormComponent,
+        canDeactivate: [UnsavedChangesGuard],
         data: {
           editing: true,
         },
@@ -175,6 +178,7 @@ const routes: Routes = [
       {
         path: 'articles/create',
         component: ArticleEditorComponent,
+        canDeactivate: [UnsavedChangesGuard],
         data: {
           editing: false,
           breadcrumb: 'Create Article',
@@ -183,6 +187,7 @@ const routes: Routes = [
       {
         path: 'articles/:a_id/edit',
         component: ArticleEditorComponent,
+        canDeactivate: [UnsavedChangesGuard],
         data: {
           editing: true,
           breadcrumb: 'Edit Article',

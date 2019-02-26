@@ -5,13 +5,14 @@ import { IQuest, QuestService, QuestStatus } from 'src/app/quest.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { Location } from '@angular/common';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 
 @Component({
   selector: 'dd-quest-form',
   templateUrl: './quest-form.component.html',
   styleUrls: ['./quest-form.component.css'],
 })
-export class QuestFormComponent implements OnInit {
+export class QuestFormComponent implements OnInit, ComponentCanDeactivate {
   public loading = false;
 
   public formGroup: FormGroup;
@@ -23,20 +24,13 @@ export class QuestFormComponent implements OnInit {
     private route: ActivatedRoute,
     private campaignService: CampaignService,
     private questService: QuestService,
-    private location: Location
+    private location: Location,
   ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      name: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(30),
-      ]),
-      description: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(3000),
-      ]),
+      name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+      description: new FormControl(null, [Validators.required, Validators.maxLength(3000)]),
       accepted: new FormControl(false),
       available: new FormControl(false),
       visible: new FormControl(false),
@@ -57,6 +51,10 @@ export class QuestFormComponent implements OnInit {
       const questId = this.route.snapshot.paramMap.get('q_id');
       this.loadQuest(questId);
     }
+  }
+
+  canDeactivate() {
+    return !this.formGroup.dirty;
   }
 
   private dataToUI() {
@@ -141,24 +139,16 @@ export class QuestFormComponent implements OnInit {
     if (this.editing) {
       try {
         await this.questService.updateQuest(quest);
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'quests',
-          this.quest.id,
-        ]);
+        this.formGroup.markAsPristine();
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'quests', this.quest.id]);
       } catch (err) {
         throw err;
       }
     } else {
       try {
         const createdQuest = await this.questService.createQuest(quest);
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'quests',
-          createdQuest.id,
-        ]);
+        this.formGroup.markAsPristine();
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'quests', createdQuest.id]);
       } catch (err) {
         throw err;
       }
