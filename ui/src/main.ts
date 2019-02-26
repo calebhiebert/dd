@@ -5,6 +5,16 @@ import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import * as Sentry from '@sentry/browser';
 
+import Quill from 'quill';
+
+import BlotFormatter from 'quill-blot-formatter';
+import Mention from 'quill-mention';
+import ImageUploader from 'quill-image-uploader';
+
+Quill.register('modules/blotFormatter', BlotFormatter);
+Quill.register('modules/mention', Mention);
+Quill.register('modules/imageUploader', ImageUploader);
+
 if (environment.production) {
   enableProdMode();
 

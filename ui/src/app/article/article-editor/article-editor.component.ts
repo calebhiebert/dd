@@ -7,16 +7,9 @@ import { IArticle, ArticleService } from 'src/app/article.service';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 import Quill from 'quill';
-import BlotFormatter from 'quill-blot-formatter';
-import Mention from 'quill-mention';
-import ImageUploader from 'quill-image-uploader';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.prod';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
-
-Quill.register('modules/blotFormatter', BlotFormatter);
-Quill.register('modules/mention', Mention);
-Quill.register('modules/imageUploader', ImageUploader);
 
 @Component({
   selector: 'dd-article-editor',

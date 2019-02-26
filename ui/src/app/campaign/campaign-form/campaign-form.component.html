@@ -12,40 +12,14 @@
         }"
       >
         <label for="name" class="form-label">Name</label>
-        <input
-          type="text"
-          name="name"
-          formControlName="name"
-          id="name"
-          class="form-input"
-          placeholder="Name"
-        />
-        <p
-          class="form-input-hint"
-          *ngIf="
-            name.invalid && (name.dirty || name.touched) && name.errors.required
-          "
-        >
+        <input type="text" name="name" formControlName="name" id="name" class="form-input" placeholder="Name" />
+        <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.required">
           A name is required
         </p>
-        <p
-          class="form-input-hint"
-          *ngIf="
-            name.invalid &&
-            (name.dirty || name.touched) &&
-            name.errors.minlength
-          "
-        >
+        <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.minlength">
           The name cannot be shorter than 3 characters
         </p>
-        <p
-          class="form-input-hint"
-          *ngIf="
-            name.invalid &&
-            (name.dirty || name.touched) &&
-            name.errors.maxlength
-          "
-        >
+        <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.maxlength">
           The name cannot be longer than 30 characters
         </p>
       </div>
@@ -53,8 +27,7 @@
       <div
         class="form-group"
         [ngClass]="{
-          'has-error':
-            description.invalid && (description.dirty || description.touched)
+          'has-error': description.invalid && (description.dirty || description.touched)
         }"
       >
         <label for="description" class="form-label">Description</label>
@@ -78,21 +51,13 @@
         </p>
         <p
           class="form-input-hint"
-          *ngIf="
-            description.invalid &&
-            (description.dirty || description.touched) &&
-            description.errors.required
-          "
+          *ngIf="description.invalid && (description.dirty || description.touched) && description.errors.required"
         >
           A description is required
         </p>
         <p
           class="form-input-hint"
-          *ngIf="
-            description.invalid &&
-            (description.dirty || description.touched) &&
-            description.errors.minlength
-          "
+          *ngIf="description.invalid && (description.dirty || description.touched) && description.errors.minlength"
         >
           The description cannot be shorter than 3 characters
         </p>

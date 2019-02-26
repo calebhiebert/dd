@@ -94,6 +94,7 @@ import { IconPickerComponent } from './icon-picker/icon-picker.component';
 import { AccountSettingsComponent } from './account/account-settings/account-settings.component';
 import { ArticleQuestManagerComponent } from './quest/article-quest-manager/article-quest-manager.component';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
+import { QuillComponent } from './quill/quill.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -185,6 +186,7 @@ import { AutocompleteComponent } from './autocomplete/autocomplete.component';
     AccountSettingsComponent,
     ArticleQuestManagerComponent,
     AutocompleteComponent,
+    QuillComponent,
   ],
   imports: [
     BrowserModule,

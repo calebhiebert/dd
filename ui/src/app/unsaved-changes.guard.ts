@@ -20,6 +20,8 @@ export class UnsavedChangesGuard implements CanDeactivate<ComponentCanDeactivate
         title: 'Are you sure?',
         text: 'You have unsaved changes, are you sure you want to leave?',
         showCancelButton: true,
+        cancelButtonText: 'No',
+        confirmButtonText: 'Yes',
       });
 
       if (confirmation.value === true) {
