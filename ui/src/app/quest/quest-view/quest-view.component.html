@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <markdown [data]="quest.description"></markdown>
+    <dd-quill readOnly="true" [value]="quest.content"></dd-quill>
 
     <!-- Notes -->
     <dd-note-list [notes]="notes"></dd-note-list>

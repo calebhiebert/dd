@@ -35,14 +35,11 @@ export class QuestFormComponent implements OnInit, ComponentCanDeactivate {
         Validators.minLength(3),
         Validators.maxLength(30),
       ]),
-      description: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(3000),
-      ]),
       accepted: new FormControl(false),
       available: new FormControl(false),
       visible: new FormControl(false),
       status: new FormControl('0'),
+      content: new FormControl(null),
     });
 
     this.visible.valueChanges.subscribe(() => {
@@ -120,10 +117,10 @@ export class QuestFormComponent implements OnInit, ComponentCanDeactivate {
   private constructQuest(): IQuest {
     const quest: IQuest = {
       name: this.name.value,
-      description: this.description.value,
       accepted: this.accepted.value,
       available: this.available.value,
       visible: this.visible.value,
+      content: this.formGroup.get('content').value,
       status: this.status.value,
       campaignId: this.campaignService.campaign.id,
     };
@@ -199,10 +196,6 @@ export class QuestFormComponent implements OnInit, ComponentCanDeactivate {
 
   public get name() {
     return this.formGroup.get('name');
-  }
-
-  public get description() {
-    return this.formGroup.get('description');
   }
 
   public get accepted() {

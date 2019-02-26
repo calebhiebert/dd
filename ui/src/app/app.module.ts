@@ -1,11 +1,15 @@
 /* tslint:disable:max-line-length */
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler, forwardRef } from '@angular/core';
 import { TruncateModule } from 'ng2-truncate';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import { NavComponent } from './nav/nav.component';
 import { CampaignComponent } from './campaign/campaign.component';
 import { PaginatorComponent } from './paginator/paginator.component';

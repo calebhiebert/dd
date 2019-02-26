@@ -71,8 +71,7 @@ namespace net_api.Controllers
                 query = query
                     .Where(q => 
                         q.Name.ToLower()
-                        .Contains(search.Trim().ToLower()) || q.Description.ToLower().Contains(search.Trim().ToLower())
-                    );
+                        .Contains(search.Trim().ToLower()));
             }
 
             if (except != null && except.Length > 0)

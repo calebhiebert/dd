@@ -96,7 +96,7 @@ export class QuestService {
 export interface IQuest {
   id?: string;
   name: string;
-  description: string;
+  content?: any;
   accepted: boolean;
   available: boolean;
   visible: boolean;

@@ -1,6 +1,10 @@
 <form [formGroup]="formGroup">
   <div class="form-group">
-    <div #editor></div>
+    <dd-quill
+      simple="true"
+      [readOnly]="!editable"
+      formControlName="content"
+    ></dd-quill>
   </div>
 
   <div class="form-group" *ngIf="editable">

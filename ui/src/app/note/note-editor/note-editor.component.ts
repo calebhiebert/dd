@@ -20,7 +20,7 @@ import { NoteFormComponent } from '../note-form/note-form.component';
 export class NoteEditorComponent implements OnInit {
   @ViewChild('modal')
   private modal: ModalComponent<any>;
-  public statusText: string = '';
+  public statusText = '';
   public loading = false;
 
   public note: INote;
@@ -111,6 +111,10 @@ export class NoteEditorComponent implements OnInit {
   }
 
   public onNoteChange(note: INote) {
+    if (!this.editable) {
+      return;
+    }
+
     this.statusText = 'Unsaved';
 
     if (Date.now() > this._lastAutosave + this._autosaveInterval) {

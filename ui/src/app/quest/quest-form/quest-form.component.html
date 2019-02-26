@@ -66,42 +66,9 @@
     </div>
 
     <!-- Description -->
-    <div
-      class="form-group"
-      [ngClass]="{
-        'has-error':
-          description.invalid && (description.touched || description.dirty),
-        'has-success': description.valid
-      }"
-    >
+    <div class="form-group">
       <label class="form-label" for="item-description">Description</label>
-      <textarea
-        class="form-input"
-        formControlName="description"
-        id="item-description"
-        rows="5"
-        placeholder="Description"
-      ></textarea>
-      <p class="form-input-hint mb-1">
-        Descriptions can use
-        <a
-          href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Markdown</a
-        >
-        styles
-      </p>
-      <p
-        class="form-input-hint"
-        *ngIf="
-          description.invalid &&
-          (description.touched || description.dirty) &&
-          description.errors.required
-        "
-      >
-        The quest needs a description
-      </p>
+      <dd-quill placeholder="Do Quest" formControlName="content"></dd-quill>
     </div>
 
     <!-- Accepted -->

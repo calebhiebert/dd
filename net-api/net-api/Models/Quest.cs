@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,9 +16,28 @@ namespace net_api.Models
         [StringLength(30, MinimumLength = 3)]
         public string Name { get; set; }
 
-        [Required]
-        [StringLength(6000)]
-        public string Description { get; set; }
+        [JsonIgnore]
+        [Column("Content", TypeName = "JSONB")]
+        public string ContentJson { get; set; }
+
+        [NotMapped]
+        public Object Content
+        {
+            get
+            {
+                if (ContentJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject(ContentJson);
+            }
+
+            set
+            {
+                ContentJson = JsonConvert.SerializeObject(value);
+            }
+        }
 
         [Required]
         public bool Accepted { get; set; }

@@ -120,7 +120,6 @@ export class ArticleQuestManagerComponent implements OnInit {
 
       const newQuest = await this.questService.createQuest({
         name: name,
-        description: 'To Do',
         accepted: false,
         available: false,
         visible: false,

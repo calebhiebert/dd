@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using net_api.Models;
@@ -9,9 +10,10 @@ using net_api.Models;
 namespace netapi.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20190226161537_QuestQuillContent")]
+    partial class QuestQuillContent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -464,6 +466,10 @@ namespace netapi.Migrations
                         .HasColumnType("JSONB");
 
                     b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(6000);
 
                     b.Property<string>("Name")
                         .IsRequired()
