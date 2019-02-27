@@ -97,7 +97,7 @@ export interface IArticle {
   createdAt?: Date;
   tags: string[];
   mapId?: string;
-  articleQuests: IArticleQuest[];
+  articleQuests?: IArticleQuest[];
   map?: IMap;
   lat?: number;
   lng?: number;

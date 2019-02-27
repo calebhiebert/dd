@@ -43,7 +43,7 @@ namespace net_api.Models
         public string UserId { get; set; }
         public virtual User User { get; set; }
 
-        public ICollection<CampaignUser> Members { get; set; }
+        public List<CampaignUser> Members { get; set; }
 
         [XPTable]
         [Column("ExperienceTable", TypeName = "bigint[]")]

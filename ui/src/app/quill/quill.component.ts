@@ -16,6 +16,7 @@ import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { LoginService } from '../login.service';
 import { environment } from 'src/environments/environment';
+import { SearchService, SearchObjectType } from '../search.service';
 
 @Component({
   selector: 'dd-quill',
@@ -60,7 +61,8 @@ export class QuillComponent
     private articleService: ArticleService,
     private login: LoginService,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private searchService: SearchService
   ) {}
 
   ngOnInit() {}
@@ -103,11 +105,7 @@ export class QuillComponent
       if (obj !== null && obj !== undefined) {
         this._quill.setContents(obj.ops);
 
-        this.setupArticleMentions(
-          this._container.nativeElement.querySelectorAll(
-            '[data-type="article"]'
-          )
-        );
+        this.setupMentions();
 
         this.setupImages(this._container.nativeElement.querySelectorAll('img'));
         this.setupTables(
@@ -153,78 +151,183 @@ export class QuillComponent
           mentionDenotationChars: ['@'],
           allowedChars: /^[A-Za-z0-9\s'_\-"]*$/,
           source: async (search, renderList, mentionChar) => {
-            const articles = await this.articleService.getArticles(
-              this.campaignService.campaign.id,
-              5,
-              0,
-              search
-            );
+            const newSearch = await this.searchService.search(search);
 
-            const mappedArticles = articles.map((a) => ({
-              id: a.id,
-              value: a.name,
-              published: a.published,
-            }));
+            const mappedResults: any[] = newSearch.map((sr) => {
+              switch (sr.type) {
+                case SearchObjectType.ARTICLE:
+                  return {
+                    id: sr.article.id,
+                    value: sr.article.name,
+                    obj: sr.article,
+                    type: sr.type,
+                  };
+                case SearchObjectType.ENTITY:
+                  return {
+                    id: sr.entity.id,
+                    value: sr.entity.name,
+                    obj: sr.entity,
+                    type: sr.type,
+                  };
+                case SearchObjectType.ITEM:
+                  return {
+                    id: sr.item.id,
+                    value: sr.item.name,
+                    obj: sr.item,
+                    type: sr.type,
+                  };
+                case SearchObjectType.MAP:
+                  return {
+                    id: sr.map.id,
+                    value: sr.map.name,
+                    obj: sr.map,
+                    type: sr.type,
+                  };
+                case SearchObjectType.QUEST:
+                  return {
+                    id: sr.quest.id,
+                    value: sr.quest.name,
+                    obj: sr.quest,
+                    type: sr.type,
+                  };
+                case SearchObjectType.SPELL:
+                  return {
+                    id: sr.spell.id,
+                    value: sr.spell.name,
+                    obj: sr.spell,
+                    type: sr.type,
+                  };
+                case SearchObjectType.USER:
+                  return {
+                    id: sr.user.id,
+                    value: sr.user.username,
+                    obj: sr.user,
+                    type: sr.type,
+                  };
+              }
+            });
 
-            if (search.trim().length > 0) {
-              mappedArticles.push({
+            if (search.trim().length > 0 && this.campaignService.canEdit) {
+              mappedResults.push({
                 id: 'create-empty-article',
                 value: search,
-                published: false,
+                type: 'create-article',
               });
             }
 
-            renderList(mappedArticles);
+            console.log(mappedResults);
+
+            renderList(mappedResults);
           },
 
           renderItem: (item, searchTerm) => {
-            return `<div><span>${
-              item.id === 'create-empty-article'
-                ? '<i class="icon icon-plus"></i> '
-                : ''
-            }${item.value}</span>${
-              !item.published
-                ? '<span class="label ml-1 label-rounded">Hidden</span>'
-                : ''
-            }</div>`;
+            let html = '<div>';
+
+            switch (item.type) {
+              case SearchObjectType.ARTICLE:
+                html += `<span><i class="icon icon-bookmark"></i> ${
+                  item.obj.name
+                }</span>`;
+                break;
+              case SearchObjectType.ENTITY:
+                html += `<span><i class="icon icon-emoji"></i> ${
+                  item.obj.name
+                }</span>`;
+                break;
+              case SearchObjectType.ITEM:
+                html += `<span><i class="icon icon-photo"></i> ${
+                  item.obj.name
+                }</span>`;
+                break;
+              case SearchObjectType.MAP:
+                html += `<span><i class="icon icon-location"></i> ${
+                  item.obj.name
+                }</span>`;
+                break;
+              case SearchObjectType.QUEST:
+                html += `<span><i class="icon icon-flag"></i> ${
+                  item.obj.name
+                }</span>`;
+                break;
+              case SearchObjectType.SPELL:
+                html += `<span><i class="icon icon-time"></i> ${
+                  item.obj.name
+                }</span>`;
+                break;
+              case SearchObjectType.USER:
+                html += `<span><i class="icon icon-people"></i> ${
+                  item.obj.username
+                }</span>`;
+                break;
+              case 'create-article':
+                html += `<span><i class="icon icon-plus"></i> ${
+                  item.value
+                }</span>`;
+                break;
+            }
+
+            html += '</div>';
+            return html;
           },
 
           onSelect: async (item, insertItem) => {
-            item['type'] = 'article';
+            switch (item.type) {
+              case SearchObjectType.ARTICLE:
+                item.value = item.value.name;
+                break;
+              case SearchObjectType.ENTITY:
+                item.value = item.value.name;
+                break;
+              case SearchObjectType.ITEM:
+                item.value = item.value.name;
+                break;
+              case SearchObjectType.MAP:
+                item.value = item.value.name;
+                break;
+              case SearchObjectType.QUEST:
+                item.value = item.value.name;
+                break;
+              case SearchObjectType.SPELL:
+                item.value = item.value.name;
+                break;
+              case SearchObjectType.USER:
+                item.value = item.value.username;
+                break;
+              case 'create-article':
+                if (
+                  (await Swal.fire({
+                    title: 'Create new article?',
+                    text: `A new article with the name ${
+                      item['value']
+                    } will be created`,
+                    showCancelButton: true,
+                  })).value === true
+                ) {
+                  const newArticle = await this.articleService.createArticle({
+                    name: item['value'].trim(),
+                    published: false,
+                    campaignId: this.campaignService.campaign.id,
+                    userId: this.login.id,
+                    tags: ['ToDo'],
+                    content: {},
+                  });
 
-            if (
-              item['id'] === 'create-empty-article' &&
-              (await Swal.fire({
-                title: 'Create new article?',
-                text: `A new article with the name ${
-                  item['value']
-                } will be created`,
-                showCancelButton: true,
-              })).value === true
-            ) {
-              const newArticle = await this.articleService.createArticle({
-                name: item['value'].trim(),
-                published: false,
-                campaignId: this.campaignService.campaign.id,
-                userId: this.login.id,
-                tags: ['ToDo'],
-                content: {},
-              });
+                  item['id'] = newArticle.id;
+                  item['type'] = SearchObjectType.ARTICLE;
 
-              item['id'] = newArticle.id;
-              item['type'] = 'article';
-              item['name'] = newArticle.name;
-
-              insertItem(item);
-            } else {
-              insertItem(item);
+                  insertItem(item);
+                }
+                return;
             }
+
+            insertItem(item);
           },
 
           showDenotationChar: false,
 
           listItemClass: 'menu-item',
           mentionListClass: 'menu',
+          dataAttributes: ['id', 'value', 'type'],
         },
       },
       readOnly: this.readOnly,
@@ -233,6 +336,7 @@ export class QuillComponent
     if (this.readOnly) {
       base.modules.toolbar = false;
       base.modules.theme = undefined;
+      base.modules.mention = false;
     } else {
       base.theme = 'snow';
 
@@ -267,19 +371,114 @@ export class QuillComponent
     return base;
   }
 
-  private setupArticleMentions(nodes: NodeListOf<HTMLSpanElement>) {
-    nodes.forEach((node) => {
-      const id = node.dataset.id;
+  private setupMentions() {
+    this._container.nativeElement
+      .querySelectorAll(`[data-type="${SearchObjectType.ARTICLE}"]`)
+      .forEach((node: HTMLSpanElement) => {
+        const id = node.dataset.id;
 
-      node.addEventListener('click', () => {
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'articles',
-          id,
-        ]);
+        node.addEventListener('click', () => {
+          this.router.navigate([
+            'campaigns',
+            this.campaignService.campaign.id,
+            'articles',
+            id,
+          ]);
+        });
       });
-    });
+
+    this._container.nativeElement
+      .querySelectorAll(`[data-type="${SearchObjectType.ENTITY}"]`)
+      .forEach((node: HTMLSpanElement) => {
+        const id = node.dataset.id;
+
+        node.addEventListener('click', () => {
+          this.router.navigate([
+            'campaigns',
+            this.campaignService.campaign.id,
+            'entities',
+            id,
+          ]);
+        });
+      });
+
+    this._container.nativeElement
+      .querySelectorAll(`[data-type="${SearchObjectType.ITEM}"]`)
+      .forEach((node: HTMLSpanElement) => {
+        const id = node.dataset.id;
+
+        node.addEventListener('click', () => {
+          this.router.navigate([
+            'campaigns',
+            this.campaignService.campaign.id,
+            'items',
+            id,
+          ]);
+        });
+      });
+
+    this._container.nativeElement
+      .querySelectorAll(`[data-type="${SearchObjectType.MAP}"]`)
+      .forEach((node: HTMLSpanElement) => {
+        const id = node.dataset.id;
+
+        node.addEventListener('click', () => {
+          this.router.navigate([
+            'campaigns',
+            this.campaignService.campaign.id,
+            'maps',
+            id,
+          ]);
+        });
+      });
+
+    this._container.nativeElement
+      .querySelectorAll(`[data-type="${SearchObjectType.QUEST}"]`)
+      .forEach((node: HTMLSpanElement) => {
+        const id = node.dataset.id;
+
+        node.addEventListener('click', () => {
+          this.router.navigate([
+            'campaigns',
+            this.campaignService.campaign.id,
+            'quests',
+            id,
+          ]);
+        });
+      });
+
+    this._container.nativeElement
+      .querySelectorAll(`[data-type="${SearchObjectType.SPELL}"]`)
+      .forEach((node: HTMLSpanElement) => {
+        const id = node.dataset.id;
+
+        node.addEventListener('click', () => {
+          this.router.navigate([
+            'campaigns',
+            this.campaignService.campaign.id,
+            'spells',
+            id,
+          ]);
+        });
+      });
+
+    this._container.nativeElement
+      .querySelectorAll(`[data-type="${SearchObjectType.USER}"]`)
+      .forEach((node: HTMLSpanElement) => {
+        const id = node.dataset.id;
+
+        node.addEventListener('mouseenter', () => {
+          console.log('Show User', id);
+        });
+
+        node.addEventListener('mouseleave', () => {
+          console.log('Hide User', id);
+        });
+
+        node.addEventListener('mousemove', (e) => {
+          console.log('Move User Window', e.clientX, e.clientY);
+        });
+      });
   }
 
   private setupTables(nodes: NodeListOf<HTMLTableElement>) {

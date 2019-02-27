@@ -89,4 +89,10 @@ namespace net_api.Models
     }
 
     public enum MapStatus { Processing, Processed }
+
+    public class MapMini
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+    }
 }
