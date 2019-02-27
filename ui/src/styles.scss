@@ -145,3 +145,7 @@ $hover-scale: 1.005;
 .ql-mention-list-container {
   z-index: 500;
 }
+
+[hidden] {
+  display: none !important;
+}

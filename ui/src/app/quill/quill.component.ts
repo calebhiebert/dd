@@ -6,6 +6,7 @@ import {
   AfterContentInit,
   Input,
   forwardRef,
+  ComponentRef,
 } from '@angular/core';
 import Quill from 'quill';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -14,9 +15,12 @@ import { Router } from '@angular/router';
 import { ArticleService } from '../article.service';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import Popper from 'popper.js';
 import { LoginService } from '../login.service';
 import { environment } from 'src/environments/environment';
 import { SearchService, SearchObjectType } from '../search.service';
+import { DynComponentService } from '../dyn-component.service';
+import { UserViewMiniComponent } from '../account/user-view-mini/user-view-mini.component';
 
 @Component({
   selector: 'dd-quill',
@@ -62,7 +66,8 @@ export class QuillComponent
     private login: LoginService,
     private router: Router,
     private http: HttpClient,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private componentService: DynComponentService
   ) {}
 
   ngOnInit() {}
@@ -214,8 +219,6 @@ export class QuillComponent
                 type: 'create-article',
               });
             }
-
-            console.log(mappedResults);
 
             renderList(mappedResults);
           },
@@ -466,17 +469,35 @@ export class QuillComponent
       .querySelectorAll(`[data-type="${SearchObjectType.USER}"]`)
       .forEach((node: HTMLSpanElement) => {
         const id = node.dataset.id;
+        let popper;
+        let popperEl: HTMLDivElement;
+        let component: ComponentRef<any>;
 
         node.addEventListener('mouseenter', () => {
-          console.log('Show User', id);
+          popperEl = document.createElement('div');
+          popperEl.classList.add('card');
+          popperEl.classList.add('p-2');
+          document.body.appendChild(popperEl);
+
+          component = this.componentService.getComponent(UserViewMiniComponent);
+          component.instance.userId = id;
+
+          popperEl.appendChild(this.componentService.getRootNode(component));
+
+          popper = new Popper(node, popperEl, {
+            placement: 'top-end',
+          });
+          (component.instance as UserViewMiniComponent).valueUpdate.subscribe(
+            () => {
+              popper.scheduleUpdate();
+            }
+          );
         });
 
         node.addEventListener('mouseleave', () => {
-          console.log('Hide User', id);
-        });
-
-        node.addEventListener('mousemove', (e) => {
-          console.log('Move User Window', e.clientX, e.clientY);
+          component.destroy();
+          popper.destroy();
+          document.body.removeChild(popperEl);
         });
       });
   }
