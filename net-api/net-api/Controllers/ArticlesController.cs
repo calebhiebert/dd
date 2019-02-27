@@ -54,7 +54,8 @@ namespace net_api.Controllers
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var query = _context.Articles.Where(a => a.CampaignId == campaign.Id);
+            var query = _context.Articles
+                .Where(a => a.CampaignId == campaign.Id);
 
             if (userId != campaign.UserId)
             {
@@ -84,7 +85,10 @@ namespace net_api.Controllers
                     .Where(a => a.Name.ToLower().Contains(search));
             }
 
-            var articles = await query.ToListAsync();
+            // TODO filter out article quests that should not be shown
+            var articles = await query
+                .Include(a => a.ArticleQuests)
+                .ToListAsync();
 
             return Ok(articles.Select(a => new SearchedArticle(a, null)));
         }

@@ -7,6 +7,9 @@
       <div class="column">
         <div class="card-title h5">{{ article.name }}</div>
       </div>
+      <div class="column col-auto" *ngIf="article.articleQuests.length > 0">
+        <i class="icon icon-flag"></i>
+      </div>
       <div class="column col-auto" *ngIf="article.mapId !== null">
         <i class="icon icon-location"></i>
       </div>

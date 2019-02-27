@@ -119,6 +119,7 @@ namespace net_api.Models
             this.Published = article.Published;
             this.UserId = article.UserId;
             this.Tags = article.Tags;
+            this.ArticleQuests = article.ArticleQuests;
         }
 
         public SearchedArticle(Article article, string imgId) : this(article)
