@@ -16,6 +16,10 @@ export class IconService {
     'falling-leaf',
     'brutal-helm',
     'graduate-cap',
+    'uncertainty',
+    'hazard-sign',
+    'drakkar',
+    'pig',
   ];
 
   constructor() {}

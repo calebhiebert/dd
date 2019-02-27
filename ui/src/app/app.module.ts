@@ -45,7 +45,6 @@ import { TagEditorComponent } from './tag-editor/tag-editor.component';
 import { ItemViewComponent } from './items/item-view/item-view.component';
 import { AboutComponent } from './about/about.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { EntityComponent } from './entity/entity.component';
 import { EntityAttributeEditorModalComponent } from './entity/entity-view/entity-attribute-editor-modal/entity-attribute-editor-modal.component';
@@ -75,7 +74,6 @@ import { SpellManagerComponent } from './spell/spell-manager/spell-manager.compo
 import { SpellFormComponent } from './spell/spell-form/spell-form.component';
 import { SpellViewComponent } from './spell/spell-view/spell-view.component';
 import { SpellViewListComponent } from './spell/spell-view-list/spell-view-list.component';
-import { markedOptionsFactory } from './marked-custom';
 import { SpellsetManagerComponent } from './spell/spellset-manager/spellset-manager.component';
 import { AttributeRowViewComponent } from './entity/entity-view/attribute-row-view/attribute-row-view.component';
 import { AttributeTableViewComponent } from './entity/entity-view/attribute-table-view/attribute-table-view.component';
@@ -203,12 +201,6 @@ import { QuillComponent } from './quill/quill.component';
     }),
     TruncateModule,
     HttpClientModule,
-    MarkdownModule.forRoot({
-      markedOptions: {
-        provide: MarkedOptions,
-        useFactory: markedOptionsFactory,
-      },
-    }),
   ],
   providers: [
     {

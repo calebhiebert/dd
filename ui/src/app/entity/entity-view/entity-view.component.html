@@ -208,7 +208,7 @@
         class="divider text-center"
         [attr.data-content]="'About ' + entity.name"
       ></div>
-      <markdown [data]="entity.description"></markdown>
+      <dd-quill readOnly="true" [value]="entity.content"></dd-quill>
       <img
         class="img-responsive s-rounded"
         src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{

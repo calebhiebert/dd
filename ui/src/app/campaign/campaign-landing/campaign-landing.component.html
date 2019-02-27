@@ -39,7 +39,7 @@
   <div class="columns">
     <!-- Description -->
     <div class="column col-9 col-xl-8 col-md-12">
-      <markdown [data]="campaign.description"></markdown>
+      <dd-quill readOnly="true" [value]="campaign.content"></dd-quill>
     </div>
 
     <!-- Sidebar -->
