@@ -97,6 +97,7 @@ import { AccountSettingsComponent } from './account/account-settings/account-set
 import { ArticleQuestManagerComponent } from './quest/article-quest-manager/article-quest-manager.component';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 import { QuillComponent } from './quill/quill.component';
+import { UserViewMiniComponent } from './account/user-view-mini/user-view-mini.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -104,6 +105,7 @@ import { QuillComponent } from './quill/quill.component';
     NoteViewMiniComponent,
     EntityViewMiniComponent,
     ArticleViewMiniComponent,
+    UserViewMiniComponent,
   ],
   declarations: [
     AppComponent,
@@ -189,6 +191,7 @@ import { QuillComponent } from './quill/quill.component';
     ArticleQuestManagerComponent,
     AutocompleteComponent,
     QuillComponent,
+    UserViewMiniComponent,
   ],
   imports: [
     BrowserModule,

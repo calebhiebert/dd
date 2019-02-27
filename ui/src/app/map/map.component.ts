@@ -3,10 +3,6 @@ import {
   ElementRef,
   ViewChild,
   AfterViewInit,
-  ComponentFactoryResolver,
-  Injector,
-  ApplicationRef,
-  EmbeddedViewRef,
   ComponentRef,
   OnDestroy,
 } from '@angular/core';
@@ -35,6 +31,7 @@ import { ArticleSelectComponent } from '../article/article-select/article-select
 import { ArticleService, IArticle } from '../article.service';
 import { ArticleViewMiniComponent } from '../article/article-view-mini/article-view-mini.component';
 import { IconService } from '../icon.service';
+import { DynComponentService } from '../dyn-component.service';
 
 const ownNoteIcon = L.icon({
   iconUrl: '/assets/note-icon.png',
@@ -103,10 +100,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     private campaignService: CampaignService,
     private noteService: NoteService,
     private login: LoginService,
-    private resolver: ComponentFactoryResolver,
-    private injector: Injector,
-    private appRef: ApplicationRef,
     private entityService: EntityService,
+    private componentService: DynComponentService,
     private updateHub: UpdateHubService,
     private toast: ToastrService,
     private articleService: ArticleService,
@@ -416,23 +411,20 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this._articlesLayerGroup.addLayer(marker);
 
       // Create component for popup
-      const component = this.resolver
-        .resolveComponentFactory(ArticleViewMiniComponent)
-        .create(this.injector);
+      const component = this.componentService.getComponent(
+        ArticleViewMiniComponent
+      );
       component.instance.article = article;
 
       this._articleComponents.push(component);
       marker['_articleComponent'] = component;
-      this.appRef.attachView(component.hostView);
 
       // Create popup
       const popup = L.popup({
         minWidth: 150,
       });
 
-      popup.setContent((component.hostView as EmbeddedViewRef<any>)
-        .rootNodes[0] as HTMLElement);
-
+      popup.setContent(this.componentService.getRootNode(component));
       marker.bindPopup(popup);
     }
   }
@@ -464,7 +456,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           allowIntersection: false, // Restricts shapes to simple polygons
           drawError: {
             color: '#e1e100', // Color the shape will turn when intersects
-            message: "<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
+            message: '<strong>Oh snap!<strong> you can\'t draw that!', // Message that will show when intersect
           },
         },
         circlemarker: false,
@@ -570,22 +562,19 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       marker['_noteId'] = note.id;
 
-      const component = this.resolver
-        .resolveComponentFactory(NoteViewMiniComponent)
-        .create(this.injector);
+      const component = this.componentService.getComponent(
+        NoteViewMiniComponent
+      );
       component.instance.note = note;
 
       this._noteComponents.push(component);
       marker['_noteComponent'] = component;
 
-      this.appRef.attachView(component.hostView);
-
       const popup = L.popup({
         minWidth: 150,
       });
 
-      popup.setContent((component.hostView as EmbeddedViewRef<any>)
-        .rootNodes[0] as HTMLElement);
+      popup.setContent(this.componentService.getRootNode(component));
 
       marker.bindPopup(popup);
 
@@ -607,14 +596,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       marker['_entity'] = entity;
 
-      const component = this.resolver
-        .resolveComponentFactory(EntityViewMiniComponent)
-        .create(this.injector);
+      const component = this.componentService.getComponent(
+        EntityViewMiniComponent
+      );
 
       component.instance.entity = entity;
       this._entityComponents.push(component);
       marker['_entityComponent'] = component;
-      this.appRef.attachView(component.hostView);
 
       if (!this._entityLayerGroups[entity.preset.name]) {
         this.createEntityLayer(entity.preset.name);
@@ -626,8 +614,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         minWidth: 250,
       });
 
-      popup.setContent((component.hostView as EmbeddedViewRef<any>)
-        .rootNodes[0] as HTMLElement);
+      popup.setContent(this.componentService.getRootNode(component));
 
       marker.bindPopup(popup);
     }
