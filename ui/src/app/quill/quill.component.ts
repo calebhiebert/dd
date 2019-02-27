@@ -226,11 +226,15 @@ export class QuillComponent
           renderItem: (item, searchTerm) => {
             let html = '<div>';
 
+            function labelHTML(text: string) {
+              return `<span class="label">${text}</span>`;
+            }
+
             switch (item.type) {
               case SearchObjectType.ARTICLE:
                 html += `<span><i class="icon icon-bookmark"></i> ${
                   item.obj.name
-                }</span>`;
+                } ${!item.obj.published ? labelHTML('Hidden') : ''}</span>`;
                 break;
               case SearchObjectType.ENTITY:
                 html += `<span><i class="icon icon-emoji"></i> ${
@@ -240,22 +244,24 @@ export class QuillComponent
               case SearchObjectType.ITEM:
                 html += `<span><i class="icon icon-photo"></i> ${
                   item.obj.name
-                }</span>`;
+                } ${!item.obj.playerVisible ? labelHTML('Hidden') : ''}</span>`;
                 break;
               case SearchObjectType.MAP:
                 html += `<span><i class="icon icon-location"></i> ${
                   item.obj.name
-                }</span>`;
+                } ${!item.obj.playerVisible ? labelHTML('Hidden') : ''}</span>`;
                 break;
               case SearchObjectType.QUEST:
                 html += `<span><i class="icon icon-flag"></i> ${
                   item.obj.name
+                } ${!item.obj.visible ? ' ' + labelHTML('Hidden') : ''}${
+                  !item.obj.visible ? ' ' + labelHTML('Unavailable') : ''
                 }</span>`;
                 break;
               case SearchObjectType.SPELL:
                 html += `<span><i class="icon icon-time"></i> ${
                   item.obj.name
-                }</span>`;
+                } ${!item.obj.playerVisible ? labelHTML('Hidden') : ''}</span>`;
                 break;
               case SearchObjectType.USER:
                 html += `<span><i class="icon icon-people"></i> ${
@@ -485,7 +491,7 @@ export class QuillComponent
           popperEl.appendChild(this.componentService.getRootNode(component));
 
           popper = new Popper(node, popperEl, {
-            placement: 'top-end',
+            placement: 'top',
           });
           (component.instance as UserViewMiniComponent).valueUpdate.subscribe(
             () => {
