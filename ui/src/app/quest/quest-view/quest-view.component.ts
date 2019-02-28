@@ -58,8 +58,7 @@ export class QuestViewComponent implements OnInit {
     }
 
     this.router.navigate([
-      'campaign',
-      'manage',
+      'campaigns',
       this.campaignService.campaign.id,
       'quests',
       this.quest.id,

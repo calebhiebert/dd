@@ -39,15 +39,22 @@ export class CampaignSettingsComponent implements OnInit {
   }
 
   public selectEntityPreset(preset: IEntityPreset) {
-    this.router.navigate(['../', 'entities', preset.id, 'edit'], {
-      relativeTo: this.route,
-    });
+    this.router.navigate([
+      'campaigns',
+      this.campaignService.campaign.id,
+      'entitytypes',
+      preset.id,
+      'edit',
+    ]);
   }
 
   public async createEntityPreset() {
-    this.router.navigate(['..', 'entities', 'create'], {
-      relativeTo: this.route,
-    });
+    this.router.navigate([
+      'campaigns',
+      this.campaignService.campaign.id,
+      'entitytypes',
+      'create',
+    ]);
   }
 
   public async save() {
@@ -87,7 +94,7 @@ export class CampaignSettingsComponent implements OnInit {
           id: '',
         });
 
-        this.router.navigate(['campaign', 'manage', c.id, 'settings']);
+        this.router.navigate(['campaigns', c.id, 'settings']);
       } catch (err) {
         throw err;
       }

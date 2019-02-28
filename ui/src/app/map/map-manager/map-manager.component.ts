@@ -48,8 +48,7 @@ export class MapManagerComponent implements OnInit {
 
   public newMap() {
     this.router.navigate([
-      'campaign',
-      'manage',
+      'campaigns',
       this.campaignService.campaign.id,
       'maps',
       'upload',

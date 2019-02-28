@@ -85,117 +85,6 @@ const routes: Routes = [
     },
   },
   {
-    path: 'campaign/manage/:id',
-    component: CampaignComponent,
-    canActivate: [LoggedInGuard, ActionGuard],
-    data: {
-      breadcrumb: 'Campaign',
-    },
-    children: [
-      {
-        path: 'settings',
-        component: CampaignSettingsComponent,
-        data: {
-          editing: true,
-          breadcrumb: 'Settings',
-        },
-      },
-      {
-        path: 'items/create',
-        component: ItemFormComponent,
-        data: {
-          editing: false,
-        },
-      },
-      {
-        path: 'items/:item_id/edit',
-        component: ItemFormComponent,
-        data: {
-          editing: true,
-        },
-      },
-      {
-        path: 'entities/create',
-        component: EntityFormComponent,
-        data: {
-          editing: false,
-        },
-      },
-      {
-        path: 'entities/:ent_id/edit',
-        component: EntityFormComponent,
-        data: {
-          editing: true,
-          breadcrumb: 'Edit Preset',
-        },
-      },
-      {
-        path: 'quests/create',
-        component: QuestFormComponent,
-        canDeactivate: [UnsavedChangesGuard],
-        data: {
-          editing: false,
-        },
-      },
-      {
-        path: 'quests/:q_id/edit',
-        component: QuestFormComponent,
-        canDeactivate: [UnsavedChangesGuard],
-        data: {
-          editing: true,
-        },
-      },
-      {
-        path: 'spawnables',
-        component: SpawnableManagerComponent,
-        data: {
-          breadcrumb: 'Spawnables',
-        },
-      },
-      {
-        path: 'maps/upload',
-        component: MapUploadComponent,
-        data: {
-          breadcrumb: 'Upload Map',
-        },
-      },
-      {
-        path: 'spells/create',
-        component: SpellFormComponent,
-        data: {
-          breadcrumb: 'Create Spell',
-          editing: false,
-        },
-      },
-      {
-        path: 'spells/:s_id/edit',
-        component: SpellFormComponent,
-        data: {
-          breadcrumb: 'Edit Spell',
-          editing: true,
-        },
-      },
-      {
-        path: 'articles/create',
-        component: ArticleEditorComponent,
-        canDeactivate: [UnsavedChangesGuard],
-        data: {
-          editing: false,
-          breadcrumb: 'Create Article',
-        },
-      },
-      {
-        path: 'articles/:a_id/edit',
-        component: ArticleEditorComponent,
-        canDeactivate: [UnsavedChangesGuard],
-        data: {
-          editing: true,
-          breadcrumb: 'Edit Article',
-        },
-      },
-    ],
-  },
-  {
     path: 'campaigns/:id',
     component: CampaignComponent,
     canActivate: [LoggedInGuard, ActionGuard],
@@ -246,6 +135,36 @@ const routes: Routes = [
         ],
       },
       {
+        path: 'entitytypes/create',
+        component: EntityFormComponent,
+        data: {
+          editing: false,
+        },
+      },
+      {
+        path: 'entitytypes/:ent_id/edit',
+        component: EntityFormComponent,
+        data: {
+          editing: true,
+          breadcrumb: 'Edit Preset',
+        },
+      },
+      {
+        path: 'spawnables',
+        component: SpawnableManagerComponent,
+        data: {
+          breadcrumb: 'Spawnables',
+        },
+      },
+      {
+        path: 'settings',
+        component: CampaignSettingsComponent,
+        data: {
+          editing: true,
+          breadcrumb: 'Settings',
+        },
+      },
+      {
         path: 'spells',
         component: SpellManagerComponent,
         data: {
@@ -253,10 +172,19 @@ const routes: Routes = [
         },
       },
       {
-        path: 'articles',
-        component: ArticleManagerComponent,
+        path: 'spells/create',
+        component: SpellFormComponent,
         data: {
-          breadcrumb: 'Articles',
+          breadcrumb: 'Create Spell',
+          editing: false,
+        },
+      },
+      {
+        path: 'spells/:s_id/edit',
+        component: SpellFormComponent,
+        data: {
+          breadcrumb: 'Edit Spell',
+          editing: true,
         },
       },
       {
@@ -282,6 +210,22 @@ const routes: Routes = [
         },
       },
       {
+        path: 'quests/create',
+        component: QuestFormComponent,
+        canDeactivate: [UnsavedChangesGuard],
+        data: {
+          editing: false,
+        },
+      },
+      {
+        path: 'quests/:q_id/edit',
+        component: QuestFormComponent,
+        canDeactivate: [UnsavedChangesGuard],
+        data: {
+          editing: true,
+        },
+      },
+      {
         path: 'quests/:q_id',
         component: QuestViewComponent,
         data: {
@@ -293,6 +237,20 @@ const routes: Routes = [
         component: ItemManagerComponent,
         data: {
           breadcrumb: 'Items',
+        },
+      },
+      {
+        path: 'items/create',
+        component: ItemFormComponent,
+        data: {
+          editing: false,
+        },
+      },
+      {
+        path: 'items/:item_id/edit',
+        component: ItemFormComponent,
+        data: {
+          editing: true,
         },
       },
       {
@@ -310,10 +268,42 @@ const routes: Routes = [
         },
       },
       {
+        path: 'maps/upload',
+        component: MapUploadComponent,
+        data: {
+          breadcrumb: 'Upload Map',
+        },
+      },
+      {
         path: 'maps/:m_id',
         component: MapComponent,
         data: {
           breadcrumb: 'Map View',
+        },
+      },
+      {
+        path: 'articles',
+        component: ArticleManagerComponent,
+        data: {
+          breadcrumb: 'Articles',
+        },
+      },
+      {
+        path: 'articles/create',
+        component: ArticleEditorComponent,
+        canDeactivate: [UnsavedChangesGuard],
+        data: {
+          editing: false,
+          breadcrumb: 'Create Article',
+        },
+      },
+      {
+        path: 'articles/:a_id/edit',
+        component: ArticleEditorComponent,
+        canDeactivate: [UnsavedChangesGuard],
+        data: {
+          editing: true,
+          breadcrumb: 'Edit Article',
         },
       },
       {

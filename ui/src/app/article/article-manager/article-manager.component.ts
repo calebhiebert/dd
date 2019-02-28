@@ -74,8 +74,7 @@ export class ArticleManagerComponent implements OnInit {
 
   public createArticle() {
     this.router.navigate([
-      'campaign',
-      'manage',
+      'campaigns',
       this.campaignService.campaign.id,
       'articles',
       'create',

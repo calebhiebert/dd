@@ -93,8 +93,7 @@ export class ArticleQuestManagerComponent implements OnInit {
 
   public async edit(articleQuest: IArticleQuest) {
     this.router.navigate([
-      'campaign',
-      'manage',
+      'campaigns',
       this.campaignService.campaign.id,
       'quests',
       articleQuest.questId,

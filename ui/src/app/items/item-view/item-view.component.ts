@@ -54,8 +54,7 @@ export class ItemViewComponent implements OnInit {
   public async edit() {
     try {
       await this.router.navigate([
-        'campaign',
-        'manage',
+        'campaigns',
         this.campaignService.campaign.id,
         'items',
         this.item.id,

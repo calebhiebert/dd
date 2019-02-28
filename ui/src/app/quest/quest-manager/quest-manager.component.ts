@@ -44,8 +44,7 @@ export class QuestManagerComponent implements OnInit {
 
   public addQuest() {
     this.router.navigate([
-      'campaign',
-      'manage',
+      'campaigns',
       this.campaignService.campaign.id,
       'quests',
       'create',

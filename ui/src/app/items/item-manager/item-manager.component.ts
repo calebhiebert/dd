@@ -123,8 +123,7 @@ export class ItemManagerComponent implements OnInit {
 
   public async addItem() {
     this.router.navigate([
-      'campaign',
-      'manage',
+      'campaigns',
       this.campaignService.campaign.id,
       'items',
       'create',

@@ -52,8 +52,7 @@ export class SpellViewComponent implements OnInit {
 
   public edit() {
     this.router.navigate([
-      'campaign',
-      'manage',
+      'campaigns',
       this.campaignService.campaign.id,
       'spells',
       this.spell.id,

@@ -67,8 +67,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
 
   public edit() {
     this.router.navigate([
-      'campaign',
-      'manage',
+      'campaigns',
       this.campaignService.campaign.id,
       'articles',
       this.article.id,

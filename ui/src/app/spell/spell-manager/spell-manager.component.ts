@@ -125,8 +125,7 @@ export class SpellManagerComponent implements OnInit {
 
   public addSpell() {
     this.router.navigate([
-      'campaign',
-      'manage',
+      'campaigns',
       this.campaignService.campaign.id,
       'spells',
       'create',

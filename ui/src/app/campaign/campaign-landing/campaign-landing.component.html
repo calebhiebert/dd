@@ -27,7 +27,7 @@
             >
           </li>
           <li class="menu-item" *ngIf="editable">
-            <a [routerLink]="['/campaign', 'manage', campaign.id, 'settings']"
+            <a [routerLink]="['campaigns', campaign.id, 'settings']"
               >Settings</a
             >
           </li>

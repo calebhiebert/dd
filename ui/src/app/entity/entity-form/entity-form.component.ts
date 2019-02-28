@@ -178,9 +178,11 @@ export class EntityFormComponent implements OnInit {
 
           await this.entityService.updateEntityPreset(updatedPreset);
 
-          await this.router.navigate(['../../..', 'settings'], {
-            relativeTo: this.route,
-          });
+          await this.router.navigate([
+            'campaigns',
+            this.campaignService.campaign.id,
+            'settings',
+          ]);
         } catch (err) {
           throw err;
         }
@@ -212,9 +214,11 @@ export class EntityFormComponent implements OnInit {
           ? this.campaignService.campaign.entityPresets.push(ep)
           : (this.campaignService.campaign.entityPresets = [ep]);
 
-        await this.router.navigate(['../..', 'settings'], {
-          relativeTo: this.route,
-        });
+        await this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'settings',
+        ]);
       }
 
       this.saving = false;
@@ -235,9 +239,11 @@ export class EntityFormComponent implements OnInit {
           this.campaignService.campaign.id,
           '1'
         );
-        this.router.navigate(['../../..', 'settings'], {
-          relativeTo: this.route,
-        });
+        await this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'settings',
+        ]);
       } catch (err) {
         throw err;
       }

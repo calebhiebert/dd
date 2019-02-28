@@ -33,7 +33,7 @@
         <a [routerLink]="['campaigns', campaign.id, 'quests']">Quests</a>
       </li>
       <li class="nav-item" *ngIf="campaignEditable">
-        <a [routerLink]="['campaign', 'manage', campaign.id, 'spawnables']"
+        <a [routerLink]="['campaigns', campaign.id, 'spawnables']"
           >Spawnables</a
         >
       </li>
@@ -57,9 +57,7 @@
       </li>
       <!-- <li class="nav-item"><a [routerLink]="['home']">Sessions</a></li> -->
       <li class="nav-item" *ngIf="campaignEditable">
-        <a [routerLink]="['campaign', 'manage', campaign.id, 'settings']"
-          >Settings</a
-        >
+        <a [routerLink]="['campaigns', campaign.id, 'settings']">Settings</a>
       </li>
     </ul>
   </li>
