@@ -14,6 +14,7 @@ import {
 } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl } from '@angular/forms';
+import { CampaignService } from 'src/app/campaign.service';
 
 interface IBarStats {
   max: number;
@@ -76,7 +77,7 @@ export class HealthDisplayComponent implements OnInit {
 
   private operationRegex = /^(\+([0-9]+))|(-([0-9]+))|(\/([0-9]+))|(\*([0-9]+))|(\+\+)|([0-9]+)$/;
 
-  constructor() {}
+  constructor(private campaignService: CampaignService) {}
 
   ngOnInit() {
     this.operationControl = new FormControl(null);
@@ -280,5 +281,9 @@ export class HealthDisplayComponent implements OnInit {
 
   public get sliderTooltip() {
     return `${this.sliderControl.value}/${this.health.max}`;
+  }
+
+  public get amountVisible() {
+    return !this.preset.amountHidden || this.campaignService.canEdit;
   }
 }

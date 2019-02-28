@@ -146,6 +146,9 @@ namespace net_api.Models
         [HexColorCodeValidator]
         public string StaticColor { get; set; }
 
+        [Required]
+        public bool AmountHidden { get; set; }
+
         public double[] Bars { get; set; }
     }
 

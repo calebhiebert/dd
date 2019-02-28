@@ -53,18 +53,30 @@
     [style.width]="bar.percentCSS"
     [style.backgroundColor]="bar.colorCSS"
   >
-    <h5 class="mb-1 text-bold" *ngIf="hpPercent > 50 && !mini">
+    <h5 class="mb-1 text-bold" *ngIf="hpPercent > 50 && !mini && amountVisible">
       {{ bar.current }} / {{ bar.max }}
     </h5>
     <h5
       class="mb-1 text-bold"
-      *ngIf="hpPercent <= 50 && !mini"
+      *ngIf="hpPercent <= 50 && !mini && amountVisible"
       style="opacity: 0;"
     >
       .
     </h5>
-    <div *ngIf="hpPercent > 50 && mini">{{ bar.current }} / {{ bar.max }}</div>
-    <div *ngIf="hpPercent <= 50 && mini" style="opacity: 0;">
+    <h5
+      class="mb-1 text-bold"
+      *ngIf="!mini && !amountVisible"
+      style="opacity: 0;"
+    >
+      .
+    </h5>
+    <div *ngIf="hpPercent > 50 && mini && amountVisible">
+      {{ bar.current }} / {{ bar.max }}
+    </div>
+    <div *ngIf="hpPercent <= 50 && mini && amountVisible" style="opacity: 0;">
+      .
+    </div>
+    <div *ngIf="!amountVisible && mini" style="opacity: 0;">
       .
     </div>
   </div>
@@ -72,13 +84,13 @@
   <!-- Extras container -->
   <div
     class="d-flex justify-content-center align-items-center p-1"
-    *ngIf="hpPercent <= 50 && !mini"
+    *ngIf="hpPercent <= 50 && !mini && amountVisible"
   >
     <h5 class="mb-1 text-bold">{{ bar.current }} / {{ bar.max }}</h5>
   </div>
   <div
     class="d-flex justify-content-center align-items-center pl-1"
-    *ngIf="hpPercent <= 50 && mini"
+    *ngIf="hpPercent <= 50 && mini && amountVisible"
   >
     <div>{{ bar.current }} / {{ bar.max }}</div>
   </div>

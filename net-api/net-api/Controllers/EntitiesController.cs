@@ -66,7 +66,8 @@ namespace net_api.Controllers
             if (spawnable == true)
             {
                 query = query.Where(e => e.Spawnable == true);
-            } else
+            }
+            else
             {
                 query = query.Where(e => e.Spawnable == false);
             }
@@ -185,8 +186,6 @@ namespace net_api.Controllers
             await _hub.Clients.Group($"campaign-{entity.CampaignId}")
                 .SendAsync("EntityUpdate", entity);
 
-            await HandleUpdateDifferences(existingEntity, entity);
-
             return NoContent();
         }
 
@@ -295,18 +294,19 @@ namespace net_api.Controllers
             if (preset == null)
             {
                 return NotFound();
-            } else if (!preset.Spawnable)
+            }
+            else if (!preset.Spawnable)
             {
                 return BadRequest("entity is not spawnable");
             }
 
             var authResult = await _auth.AuthorizeAsync(User, preset.Campaign, "CampaignEditPolicy");
-            
+
             if (!authResult.Succeeded)
             {
                 return Forbid();
             }
- 
+
             for (var i = 0; i < count; i++)
             {
                 // TODO also copy over inventory items
@@ -344,39 +344,6 @@ namespace net_api.Controllers
         private bool EntityExists(Guid id)
         {
             return _context.Entities.Any(e => e.Id == id);
-        }
-
-        /// <summary>
-        /// Sends messages about entity updates
-        /// </summary>
-        /// <param name="a">Original entity</param>
-        /// <param name="b">Updated entity</param>
-        private async Task HandleUpdateDifferences(Entity a, Entity b)
-        {
-            // Check for current hp differences
-            if (a.Health != null && b.Health != null && a.Health.Current != b.Health.Current && a.Health.Max == b.Health.Max)
-            {
-                var difference = b.Health.Current - a.Health.Current;
-                var message = string.Empty;
-
-                if (b.Health.Current == b.Health.Max)
-                {
-                    message = $"{b.Name} healed to full health";
-                } else if (difference > 0)
-                {
-                    message = $"{b.Name} healed {difference} hp";
-                } else if (difference < 0)
-                {
-                    message = $"{b.Name} took {difference * -1} damage";
-                }
-
-                await _hub.Clients.Group($"campaign-{a.CampaignId}")
-                        .SendAsync("EventNotify", new EventNotify
-                        {
-                            Sender = "System",
-                            Message = message
-                        });
-            }
         }
     }
 }

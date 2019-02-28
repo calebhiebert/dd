@@ -209,6 +209,7 @@ export interface IInventoryItem {
 
 export interface IHealthPreset {
   type: HealthType;
+  amountHidden: boolean;
   colorType?: HealthColorType;
   staticColor?: string;
   bars?: number[];
