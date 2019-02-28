@@ -85,6 +85,10 @@ export class ArticleManagerComponent implements OnInit {
     return article.name;
   }
 
+  public trackIdx(idx: number) {
+    return idx;
+  }
+
   public viewArticle(article: IArticle) {
     this.router.navigate([
       'campaigns',
@@ -92,6 +96,34 @@ export class ArticleManagerComponent implements OnInit {
       'articles',
       article.id,
     ]);
+  }
+
+  public get splitArticles() {
+    const splitCount = 3;
+
+    if (!this.articles) {
+      return [];
+    }
+
+    const splitArticles = [];
+
+    for (let i = 0; i < splitCount; i++) {
+      splitArticles[i] = [];
+    }
+
+    let arrCursor = 0;
+
+    this.articles.forEach((article) => {
+      splitArticles[arrCursor].push(article);
+
+      if (arrCursor === splitCount - 1) {
+        arrCursor = 0;
+      } else {
+        arrCursor++;
+      }
+    });
+
+    return splitArticles;
   }
 
   public get editable() {

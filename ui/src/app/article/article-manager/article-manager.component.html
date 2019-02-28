@@ -30,15 +30,17 @@
   </div>
 
   <!-- Article Cards -->
-  <div class="columns article-cards">
+  <div class="columns">
     <div
-      class="col-4 col-xs-12 col-md-6 p-2"
-      *ngFor="let a of articles; trackBy: trackArticle"
+      class="column col-sm-12"
+      *ngFor="let sa of splitArticles; trackBy: trackIdx"
     >
-      <dd-article-view-card
-        (click)="viewArticle(a)"
-        [article]="a"
-      ></dd-article-view-card>
+      <div class="py-2" *ngFor="let a of sa; trackBy: trackArticle">
+        <dd-article-view-card
+          (click)="viewArticle(a)"
+          [article]="a"
+        ></dd-article-view-card>
+      </div>
     </div>
   </div>
 
