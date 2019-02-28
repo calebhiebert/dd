@@ -78,7 +78,7 @@ namespace net_api.Models
         {
             var imageURLs = new List<string>();
 
-            if (ContentJson != null)
+            if (ContentJson != null && ContentJson != "null")
             {
                 var jobject = JObject.Parse(ContentJson);
 

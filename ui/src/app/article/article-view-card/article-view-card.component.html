@@ -5,7 +5,12 @@
   <div class="card-header">
     <div class="columns">
       <div class="column">
-        <div class="card-title h5">{{ article.name }}</div>
+        <div class="card-title h5">
+          {{ article.name }}
+          <span class="label label-secondary" *ngIf="!article.published"
+            >Hidden</span
+          >
+        </div>
       </div>
       <div class="column col-auto" *ngIf="article.articleQuests.length > 0">
         <i class="icon icon-flag"></i>
