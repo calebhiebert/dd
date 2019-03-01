@@ -9,14 +9,12 @@
 </dd-modal>
 
 <dd-modal #itemedit>
-  <div modal-header>Edit Item</div>
+  <h4 modal-header *ngIf="editingItem">{{ editingItem.item.name }}</h4>
   <div modal-body *ngIf="editingItem">
     <form (ngSubmit)="saveItem()" [formGroup]="editFormGroup">
+      <!-- Quantity -->
       <div class="form-group">
-        <label for="quantity"
-          >How many <strong>{{ editingItem.item.name }}</strong> do you
-          have?</label
-        >
+        <label for="quantity">Quantity</label>
         <input
           class="form-input"
           type="number"
@@ -25,6 +23,12 @@
           formControlName="quantity"
           #quantityedit
         />
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label for="notes">Notes</label>
+        <dd-quill formControlName="content" simple="true" id="notes"></dd-quill>
       </div>
     </form>
   </div>
@@ -37,6 +41,9 @@
       [disabled]="editFormGroup.invalid"
     >
       Save
+    </button>
+    <button class="btn" style="float: left;" (click)="useItem(editingItem)">
+      Use
     </button>
   </div>
 </dd-modal>
@@ -88,12 +95,11 @@
           (click)="editItem(i)"
         >
           {{ i.item.name }}
-          <span class="text-bold text-large">x{{ i.quantity }}</span>
+          <sup class="text-bold text-small" *ngIf="i.quantity !== 1"
+            >x{{ i.quantity }}</sup
+          >
         </div>
         <div class="column col-auto">
-          <button class="btn btn-sm" (click)="useItem(i)" *ngIf="editable">
-            <i class="icon icon-share"></i>
-          </button>
           <button
             class="btn btn-sm ml-1"
             [routerLink]="['/campaigns', campaign.id, 'items', i.item.id]"

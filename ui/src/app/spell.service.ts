@@ -75,6 +75,7 @@ export interface IEntitySpell {
   entityId: string;
   spellId: string;
   spell?: ISpell;
+  content?: any;
 }
 
 export interface ISpell {

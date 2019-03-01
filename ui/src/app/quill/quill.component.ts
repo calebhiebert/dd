@@ -88,7 +88,6 @@ export class QuillComponent
 
     this._quill.on('text-change', (delta, oldDelta, source) => {
       if ((source === 'user' || source === 'api') && this._onChange) {
-        console.log(delta, oldDelta, this._quill.getContents());
         this._onChange(this._quill.getContents());
       }
     });

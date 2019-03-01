@@ -109,12 +109,9 @@ export class InventoryManagerComponent implements OnInit {
         Validators.required,
         Validators.min(0),
       ]),
+      content: new FormControl(item.content),
     });
     this.editingItem = item;
-
-    setTimeout(() => {
-      this._quantityEdit.nativeElement.focus();
-    }, 1);
 
     this.itemEditModal.open().then(() => {
       this.editingItem = undefined;
@@ -132,6 +129,7 @@ export class InventoryManagerComponent implements OnInit {
     const item = this.editingItem;
 
     item.quantity = this.editFormGroup.value.quantity;
+    item.content = this.editFormGroup.value.content;
 
     try {
       if (item.quantity === 0) {
@@ -167,6 +165,10 @@ export class InventoryManagerComponent implements OnInit {
         );
         this.inventory = this.inventory.filter((itm) => itm !== inventoryItem);
         this.toastr.info(`Used 1x ${inventoryItem.item.name}`);
+
+        if (inventoryItem === this.editingItem) {
+          this.itemEditModal.close(null);
+        }
       } else {
         await this.entityService.updateInventoryItem({
           ...inventoryItem,
@@ -174,6 +176,7 @@ export class InventoryManagerComponent implements OnInit {
         });
         inventoryItem.quantity--;
         this.toastr.info(`Used 1x ${inventoryItem.item.name}`);
+        this.editFormGroup.patchValue(this.editingItem);
       }
     } catch (err) {
       throw err;

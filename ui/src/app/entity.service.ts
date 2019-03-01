@@ -205,6 +205,7 @@ export interface IInventoryItem {
   entityId: string;
   entity?: IEntity;
   quantity: number;
+  content?: any;
 }
 
 export interface IHealthPreset {
