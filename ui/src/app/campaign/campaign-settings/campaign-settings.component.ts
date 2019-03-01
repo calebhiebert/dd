@@ -16,6 +16,7 @@ export class CampaignSettingsComponent implements OnInit {
 
   public expandXPTable = false;
   public expandItemRarityTable = false;
+  public expandCurrencyMapEditor = false;
 
   public formGroup: FormGroup;
 
@@ -71,6 +72,7 @@ export class CampaignSettingsComponent implements OnInit {
           experienceTable: v.experienceTable,
           userId: this.login.id,
           itemRarities: v.itemRarities,
+          currencyMap: v.currencyMap,
           id: this.campaign.id,
         };
 
@@ -90,6 +92,7 @@ export class CampaignSettingsComponent implements OnInit {
           imageId: v.imageId,
           experienceTable: v.experienceTable,
           itemRarities: v.itemRarities,
+          currencyMap: v.currencyMap,
           userId: this.login.id,
           id: '',
         });

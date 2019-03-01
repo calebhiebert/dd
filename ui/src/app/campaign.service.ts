@@ -210,7 +210,7 @@ export interface ICampaign {
   entityPresets?: IEntityPreset[];
   itemTypes?: IItemType[];
   itemRarities?: IItemRarity[];
-  currencyTypes?: ICurrencyType[];
+  currencyMap?: ICurrencyLevel[];
   members?: ICampaignUser[];
   createdAt?: Date;
 }
@@ -245,9 +245,9 @@ export interface IItemType {
   color: string;
 }
 
-export interface ICurrencyType {
+export interface ICurrencyLevel {
   name: string;
-  imageId: string;
+  imageId?: string;
   value: number;
 }
 

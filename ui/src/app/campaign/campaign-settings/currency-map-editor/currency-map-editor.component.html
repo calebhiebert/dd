@@ -1,0 +1,34 @@
+<div>
+  <div *ngFor="let i of controls; let idx = index" [formGroup]="i">
+    <div class="columns">
+      <!-- Name -->
+      <div class="column">
+        <div class="form-group">
+          <label for="cm-name-{{ idx }}" class="form-label">Name</label>
+          <input
+            type="text"
+            name="name"
+            id="cm-name-{{ idx }}"
+            formControlName="name"
+            class="form-input"
+          />
+        </div>
+      </div>
+
+      <!-- Value -->
+      <div class="column">
+        <div class="form-group">
+          <label for="cm-value-{{ idx }}" class="form-label">Value</label>
+          <input
+            class="form-input"
+            type="number"
+            name="name"
+            id="cm-value-{{ idx }}"
+            formControlName="value"
+            step="0.01"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

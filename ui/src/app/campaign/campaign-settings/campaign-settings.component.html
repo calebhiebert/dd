@@ -85,6 +85,29 @@
 
   <div class="divider my-2"></div>
 
+  <div class="columns mt-2">
+    <div class="column"><h3 class="mb-0">Currency Map</h3></div>
+    <div class="column col-auto col-ml-auto">
+      <button
+        class="btn btn-sm"
+        (click)="expandCurrencyMapEditor = !expandCurrencyMapEditor"
+      >
+        <span *ngIf="expandCurrencyMapEditor"
+          >Collapse <i class="icon icon-arrow-up"></i
+        ></span>
+        <span *ngIf="!expandCurrencyMapEditor"
+          >Expand <i class="icon icon-arrow-down"></i
+        ></span>
+      </button>
+    </div>
+  </div>
+  <dd-currency-map-editor
+    *ngIf="expandCurrencyMapEditor"
+    [formGroup]="formGroup"
+  ></dd-currency-map-editor>
+
+  <div class="divider my-2"></div>
+
   <!-- Entity Types -->
   <div class="columns mt-2" *ngIf="editing">
     <div class="column"><h3>Entity Types</h3></div>

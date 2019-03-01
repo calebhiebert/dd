@@ -5,7 +5,6 @@ import { LoginService } from './login.service';
 import { ICampaign, CampaignService } from './campaign.service';
 import { NotificationService } from './notification.service';
 import { IEntity, EntityService } from './entity.service';
-import * as Sentry from '@sentry/browser';
 import { NoteService } from './note.service';
 import { ToastrService } from 'ngx-toastr';
 import { IArticle } from './article.service';
@@ -181,7 +180,7 @@ export class UpdateHubService {
       c.experienceTable = campaign.experienceTable;
       c.itemTypes = campaign.itemTypes;
       c.itemRarities = campaign.itemRarities;
-      c.currencyTypes = campaign.currencyTypes;
+      c.currencyMap = campaign.currencyMap;
     }
   }
 

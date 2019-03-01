@@ -72,6 +72,34 @@ namespace net_api.Models
             }
         }
 
+        [Column("CurrencyMap", TypeName = "JSONB")]
+        [JsonIgnore]
+        public string CurrencyMapJson { get; set; }
+
+        [NotMapped]
+        public List<CurrencyLevel> CurrencyMap
+        {
+            get
+            {
+                if (CurrencyMapJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<List<CurrencyLevel>>(CurrencyMapJson);
+            }
+
+            set
+            {
+                foreach (var cl in value)
+                {
+                    cl.Value = Math.Round(cl.Value, 2, MidpointRounding.AwayFromZero);
+                }
+
+                CurrencyMapJson = JsonConvert.SerializeObject(value);
+            }
+        }
+
         public DateTime CreatedAt { get; set; }
         
         [Required]
@@ -94,6 +122,7 @@ namespace net_api.Models
         public Campaign()
         {
             Members = new List<CampaignUser>();
+            CurrencyMap = new List<CurrencyLevel>() { new CurrencyLevel { Name = "Gold Pieces", Value = 1.00 } };
             Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
         }
