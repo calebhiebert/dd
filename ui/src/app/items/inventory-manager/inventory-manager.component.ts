@@ -99,10 +99,6 @@ export class InventoryManagerComponent implements OnInit {
   }
 
   public async editItem(item: IInventoryItem) {
-    if (!this.editable) {
-      return;
-    }
-
     this.editFormGroup = new FormGroup({
       quantity: new FormControl(item.quantity, [
         numberValidator,
@@ -111,6 +107,7 @@ export class InventoryManagerComponent implements OnInit {
       ]),
       content: new FormControl(item.content),
     });
+
     this.editingItem = item;
 
     this.itemEditModal.open().then(() => {
