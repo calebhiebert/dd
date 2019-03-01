@@ -396,7 +396,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (article.lat && article.lng) {
       const marker = L.marker([article.lat, article.lng]);
 
-      if (article.icon) {
+      if (article.icon !== null && article.icon !== undefined) {
         marker.setIcon(
           L.icon({
             iconUrl: this.iconService.getIconSrc(article.icon),
