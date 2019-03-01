@@ -22,12 +22,19 @@
 
         <ul class="menu">
           <li class="menu-item" *ngFor="let ep of entityPresets">
-            <a [routerLink]="['..', 'entities', ep.id, 'create']"
+            <a
+              [routerLink]="[
+                '/campaigns',
+                campaign.id,
+                'entities',
+                ep.id,
+                'create'
+              ]"
               >Create {{ ep.name }}</a
             >
           </li>
           <li class="menu-item" *ngIf="editable">
-            <a [routerLink]="['campaigns', campaign.id, 'settings']"
+            <a [routerLink]="['/campaigns', campaign.id, 'settings']"
               >Settings</a
             >
           </li>
