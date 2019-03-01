@@ -7,13 +7,15 @@ import { numberValidator } from '../../dynamic-attribute-form/dynamic-attribute-
 import { LoginService } from 'src/app/login.service';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
+import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 
 @Component({
   selector: 'dd-entity-creation-form',
   templateUrl: './entity-creation-form.component.html',
   styleUrls: ['./entity-creation-form.component.css'],
 })
-export class EntityCreationFormComponent implements OnInit {
+export class EntityCreationFormComponent
+  implements OnInit, ComponentCanDeactivate {
   public loading = false;
 
   public saving = false;
@@ -74,6 +76,10 @@ export class EntityCreationFormComponent implements OnInit {
         this.formGroup.patchValue({ spawnable: true });
       }
     }
+  }
+
+  canDeactivate() {
+    return !this.formGroup.dirty;
   }
 
   private setFormValidators() {

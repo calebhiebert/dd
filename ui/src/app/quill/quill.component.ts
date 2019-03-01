@@ -140,7 +140,7 @@ export class QuillComponent
         blotFormatter: {},
         toolbar: [
           ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-          ['blockquote', 'code-block', 'image'],
+          ['blockquote', 'code-block', 'image', 'link'],
 
           [{ list: 'ordered' }, { list: 'bullet' }],
           [{ script: 'sub' }, { script: 'super' }], // superscript/subscript

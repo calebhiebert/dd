@@ -19,7 +19,6 @@ import { InviteComponent } from './invite/invite.component';
 import { ActionGuard } from './action.guard';
 import { ItemViewComponent } from './items/item-view/item-view.component';
 import { AboutComponent } from './about/about.component';
-import { NotificationsComponent } from './notifications/notifications.component';
 import { EntityComponent } from './entity/entity.component';
 import { QuestFormComponent } from './quest/quest-form/quest-form.component';
 import { QuestViewComponent } from './quest/quest-view/quest-view.component';
@@ -119,6 +118,7 @@ const routes: Routes = [
           {
             path: ':ent_type_id/create',
             component: EntityCreationFormComponent,
+            canDeactivate: [UnsavedChangesGuard],
             data: {
               editing: false,
               breadcrumb: 'Create Entity',
@@ -127,6 +127,7 @@ const routes: Routes = [
           {
             path: ':ent_id/edit',
             component: EntityCreationFormComponent,
+            canDeactivate: [UnsavedChangesGuard],
             data: {
               editing: true,
               breadcrumb: 'Edit Entity',

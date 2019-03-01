@@ -18,13 +18,14 @@ import {
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { EntityAttributeRowEditorComponent } from '../entity-attribute-row-editor/entity-attribute-row-editor.component';
 import { AttributeType } from 'src/app/attributes';
+import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 
 @Component({
   selector: 'dd-entity-form',
   templateUrl: './entity-form.component.html',
   styleUrls: ['./entity-form.component.css'],
 })
-export class EntityFormComponent implements OnInit {
+export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
   public saving = false;
   public deleting = false;
   public loading = false;
@@ -89,6 +90,10 @@ export class EntityFormComponent implements OnInit {
     });
 
     this.presets.getPresets().then((p) => (this.presetList = p));
+  }
+
+  canDeactivate() {
+    return !this.formGroup.dirty;
   }
 
   private async loadEntityPreset(id: string) {
