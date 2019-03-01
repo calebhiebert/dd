@@ -14,7 +14,6 @@ export class SpawnableManagerComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private entityService: EntityService,
     private campaignService: CampaignService
   ) {}

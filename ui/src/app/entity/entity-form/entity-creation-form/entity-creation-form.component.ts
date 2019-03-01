@@ -205,6 +205,9 @@ export class EntityCreationFormComponent
     if (this.editing) {
       try {
         await this.entityService.updateEntity(this.constructEntity());
+
+        this.formGroup.markAsPristine();
+
         this.router.navigate(['../'], { relativeTo: this.route });
       } catch (err) {
         throw err;
@@ -214,6 +217,8 @@ export class EntityCreationFormComponent
         const ent = await this.entityService.createEntity(
           this.constructEntity()
         );
+
+        this.formGroup.markAsPristine();
 
         this.router.navigate([
           'campaigns',
