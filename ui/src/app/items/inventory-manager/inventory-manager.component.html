@@ -40,7 +40,12 @@
       Quantity: {{ editingItem.quantity }}
     </div>
 
-    <dd-quill readOnly="true" [value]="editingItem.content"></dd-quill>
+    <dd-quill
+      *ngIf="!editable"
+      readOnly="true"
+      [value]="editingItem.content"
+      placeholder="Notes"
+    ></dd-quill>
   </div>
   <div modal-footer *ngIf="editingItem && editable">
     <button class="btn" (click)="itemedit.close(null)">Cancel</button>
@@ -53,7 +58,7 @@
       Save
     </button>
     <button class="btn" style="float: left;" (click)="useItem(editingItem)">
-      Use
+      Use 1x {{ editingItem.item.name }}
     </button>
   </div>
 </dd-modal>

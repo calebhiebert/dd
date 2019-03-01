@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { IEntitySpell, SpellService, ISpell } from 'src/app/spell.service';
 import { CampaignService } from 'src/app/campaign.service';
-import { SpellSelectComponent } from '../spell-select/spell-select.component';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import Swal from 'sweetalert2';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'dd-spellset-manager',
@@ -19,12 +19,18 @@ export class SpellsetManagerComponent implements OnInit {
 
   public loading = false;
   public spells: IEntitySpell[];
+  public editingSpell: IEntitySpell;
+  public editFormGroup: FormGroup;
+  public saving = false;
 
   // The ID of the entitySpell currently being deleted (if any)
   public deletingId: string;
 
   @ViewChild('spellselect')
   private selectModal: ModalComponent<void>;
+
+  @ViewChild('spelledit')
+  private editModal: ModalComponent<any>;
 
   constructor(
     private spellService: SpellService,
@@ -68,6 +74,30 @@ export class SpellsetManagerComponent implements OnInit {
     }
   }
 
+  public async save() {
+    if (!this.editingSpell || !this.editFormGroup) {
+      return;
+    }
+
+    this.saving = true;
+
+    this.editingSpell.content = this.editFormGroup.value.content;
+
+    try {
+      await this.spellService.updateSpellsetItem(this.editingSpell);
+    } catch (err) {
+      throw err;
+    }
+
+    this.saving = false;
+
+    try {
+      this.editModal.close(null);
+    } catch (err) {
+      // Ignore
+    }
+  }
+
   public async addSpell(spell: ISpell) {
     try {
       const updatedItem = await this.spellService.updateSpellsetItem({
@@ -81,6 +111,19 @@ export class SpellsetManagerComponent implements OnInit {
     } catch (err) {
       throw err;
     }
+  }
+
+  public viewOrEditEntitySpell(es: IEntitySpell) {
+    this.editFormGroup = new FormGroup({
+      content: new FormControl(es.content),
+    });
+
+    this.editingSpell = es;
+
+    this.editModal.open().then(() => {
+      this.editingSpell = undefined;
+      this.editFormGroup = undefined;
+    });
   }
 
   public get campaign() {
