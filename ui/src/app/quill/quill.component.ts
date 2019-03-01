@@ -87,7 +87,8 @@ export class QuillComponent
     }
 
     this._quill.on('text-change', (delta, oldDelta, source) => {
-      if (source === 'user' && this._onChange) {
+      if ((source === 'user' || source === 'api') && this._onChange) {
+        console.log(delta, oldDelta, this._quill.getContents());
         this._onChange(this._quill.getContents());
       }
     });
@@ -108,7 +109,7 @@ export class QuillComponent
       this._writeQueue.push(obj);
     } else {
       if (obj !== null && obj !== undefined) {
-        this._quill.setContents(obj.ops);
+        this._quill.setContents(obj.ops, 'form');
 
         this.setupMentions();
 
@@ -117,7 +118,7 @@ export class QuillComponent
           this._container.nativeElement.querySelectorAll('table')
         );
       } else {
-        this._quill.setContents([]);
+        this._quill.setContents([], 'form');
       }
     }
   }
