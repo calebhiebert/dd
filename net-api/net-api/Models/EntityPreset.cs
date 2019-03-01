@@ -154,7 +154,7 @@ namespace net_api.Models
 
     public enum AttributeType
     {
-        String, Number, Enum, BigText
+        String, Number, Enum, BigText, SelectMulti
     }
 
     public enum AttributeClass

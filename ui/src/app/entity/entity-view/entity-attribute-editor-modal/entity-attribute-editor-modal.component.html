@@ -50,15 +50,18 @@
             }}</option>
           </select>
 
-          <!-- Big Text Input -->
-          <textarea
-            class="form-input"
-            name="bigtext"
-            rows="3"
+          <!-- Enum Multi input -->
+          <select
+            class="form-select"
+            name="attr"
             [formControl]="control"
-            [placeholder]="attribute.name"
-            *ngSwitchCase="3"
-          ></textarea>
+            multiple="true"
+            *ngSwitchCase="4"
+          >
+            <option *ngFor="let o of attribute.options" [value]="o">{{
+              o
+            }}</option>
+          </select>
 
           <figure class="form-icon avatar" *ngIf="attribute.imageId">
             <img

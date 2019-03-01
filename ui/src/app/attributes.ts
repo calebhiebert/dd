@@ -9,4 +9,5 @@ export enum AttributeType {
   NUMBER,
   ENUM,
   BIG_TEXT,
+  SELECT_MULTI,
 }

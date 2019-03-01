@@ -60,6 +60,17 @@
             simple="true"
           ></dd-quill>
 
+          <!-- Enum Multi input -->
+          <select
+            class="form-select"
+            name="attr"
+            [formControlName]="att.name"
+            multiple="true"
+            *ngSwitchCase="4"
+          >
+            <option *ngFor="let o of att.options" [value]="o">{{ o }}</option>
+          </select>
+
           <figure class="form-icon avatar" *ngIf="att.imageId">
             <img
               src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{

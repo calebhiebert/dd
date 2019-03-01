@@ -29,6 +29,7 @@
           <option value="1">Number</option>
           <option value="2">Selection</option>
           <option value="3">Free Text (Formatted)</option>
+          <option value="4">Selection (Multiple)</option>
         </select>
       </div>
 
@@ -94,7 +95,15 @@
       </div>
 
       <!-- Options -->
-      <div class="form-group" *ngIf="type.value === '2' || type.value === 2">
+      <div
+        class="form-group"
+        *ngIf="
+          type.value === '2' ||
+          type.value === 2 ||
+          type.value === '4' ||
+          type.value === 4
+        "
+      >
         <label for="options" class="form-label">Options</label>
         <dd-tag-editor
           [formGroup]="formGroup"

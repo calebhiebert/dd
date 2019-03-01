@@ -21,7 +21,7 @@ export const DND_5E: IEntityAttribute[] = [
   {
     name: 'Speed',
     description: 'Speed',
-    type: AttributeType.NUMBER,
+    type: AttributeType.STRING,
     class: EntityAttributeClass.MAJOR,
     required: true,
     min: 0,
@@ -29,7 +29,7 @@ export const DND_5E: IEntityAttribute[] = [
   {
     name: 'Class',
     description: 'Class',
-    type: AttributeType.ENUM,
+    type: AttributeType.SELECT_MULTI,
     class: EntityAttributeClass.NORMAL,
     required: true,
     options: [
