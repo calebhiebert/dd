@@ -122,7 +122,6 @@ namespace net_api.Models
         public Campaign()
         {
             Members = new List<CampaignUser>();
-            CurrencyMap = new List<CurrencyLevel>() { new CurrencyLevel { Name = "Gold Pieces", Value = 1.00 } };
             Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
         }

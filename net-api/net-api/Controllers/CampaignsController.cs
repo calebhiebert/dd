@@ -107,6 +107,17 @@ namespace net_api.Controllers
 
             campaign.UserId = existingCampaign.UserId;
 
+            if (campaign.CurrencyMap == null)
+            {
+                campaign.CurrencyMap = new List<CurrencyLevel> { new CurrencyLevel { Name = "gp", Value = 1.00 } };
+            } else if (campaign.CurrencyMap.Count == 0)
+            {
+                campaign.CurrencyMap.Add(new CurrencyLevel { Name = "gp", Value = 1.00 });
+            } else
+            {
+                campaign.CurrencyMap[0].Value = 1.00;
+            }
+
             _context.Entry(campaign).State = EntityState.Modified;
 
             try

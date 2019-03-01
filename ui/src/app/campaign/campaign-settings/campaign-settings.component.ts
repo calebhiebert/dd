@@ -31,6 +31,8 @@ export class CampaignSettingsComponent implements OnInit {
   ngOnInit() {
     this.formGroup = new FormGroup({});
     this.expandXPTable = !this.editing;
+    this.expandCurrencyMapEditor = !this.editing;
+    this.expandItemRarityTable = !this.editing;
     if (
       this.campaign.experienceTable === undefined ||
       this.campaign.experienceTable === null

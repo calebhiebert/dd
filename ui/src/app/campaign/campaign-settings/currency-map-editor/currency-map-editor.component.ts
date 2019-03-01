@@ -18,13 +18,12 @@ export class CurrencyMapEditorComponent implements OnInit {
   ngOnInit() {
     this.items = new FormArray(
       [
-        { name: 'gp', value: 1 },
-        { name: 'cp', value: 0.01 },
-        { name: 'sp', value: 0.1 },
-        { name: 'pp', value: 10 },
+        { name: 'gp', value: 1.0, useInConversions: true },
+        { name: 'cp', value: 0.01, useInConversions: true },
+        { name: 'sp', value: 0.1, useInConversions: true },
+        { name: 'pp', value: 10.0, useInConversions: false },
       ].map(this.getFormGroup)
     );
-    this.controls[0].get('value').disable();
 
     this.formGroup.addControl('currencyMap', this.items);
   }
@@ -39,6 +38,7 @@ export class CurrencyMapEditorComponent implements OnInit {
         Validators.required,
         Validators.min(0.01),
       ]),
+      useInConversions: new FormControl(cl.useInConversions),
     });
   }
 

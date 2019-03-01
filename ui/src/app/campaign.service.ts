@@ -247,8 +247,8 @@ export interface IItemType {
 
 export interface ICurrencyLevel {
   name: string;
-  imageId?: string;
   value: number;
+  useInConversions: boolean;
 }
 
 export interface IItemRarity {

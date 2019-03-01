@@ -13,6 +13,7 @@ import { CampaignService } from 'src/app/campaign.service';
 import { AttributeType } from 'src/app/attributes';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoginService } from 'src/app/login.service';
+import { CurrencyService } from 'src/app/currency.service';
 
 @Component({
   selector: 'dd-entity-view',
@@ -33,7 +34,8 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     private campaignService: CampaignService,
     private sanitizer: DomSanitizer,
     private login: LoginService,
-    private router: Router
+    private router: Router,
+    private currencyService: CurrencyService
   ) {}
 
   ngOnInit() {
@@ -73,6 +75,11 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     } catch (err) {
       throw err;
     }
+
+    this.currencyService.mapCurrencyValues(
+      this.campaignService.campaign.currencyMap,
+      this.entity.currency
+    );
 
     this.loading = false;
   }
@@ -123,7 +130,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     );
 
     if (attrValue !== null && attrValue !== undefined) {
-      this.entity.currency = parseInt(attrValue, 10);
+      this.entity.currency = parseFloat(attrValue);
       this.updateEntity();
     }
   }
@@ -297,20 +304,12 @@ export class EntityViewComponent implements OnInit, OnDestroy {
       return '0';
     }
 
-    let currency = '';
-    const currencyString = this.entity.currency.toString();
-
-    for (let i = 0; i < currencyString.length; i++) {
-      currency += currencyString[i];
-      if (
-        (currencyString.length - i - 1) % 3 === 0 &&
-        currencyString.length - i - 1 > 0
-      ) {
-        currency += ',';
-      }
-    }
-
-    return currency;
+    return this.currencyService.getCurrencyString(
+      this.currencyService.mapCurrencyValues(
+        this.campaignService.campaign.currencyMap,
+        this.entity.currency
+      )
+    );
   }
 
   public get preset() {
