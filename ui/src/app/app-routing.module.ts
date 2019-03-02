@@ -160,6 +160,7 @@ const routes: Routes = [
       {
         path: 'settings',
         component: CampaignSettingsComponent,
+        canDeactivate: [UnsavedChangesGuard],
         data: {
           editing: true,
           breadcrumb: 'Settings',

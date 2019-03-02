@@ -100,8 +100,9 @@
     </div>
   </div>
   <dd-currency-map-editor
-    *ngIf="expandCurrencyMapEditor"
+    [hidden]="!expandCurrencyMapEditor"
     [formGroup]="formGroup"
+    [campaign]="campaign"
   ></dd-currency-map-editor>
 
   <div class="divider my-2"></div>

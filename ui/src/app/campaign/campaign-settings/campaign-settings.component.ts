@@ -5,13 +5,16 @@ import { IEntityPreset } from 'src/app/entity.service';
 import { FormGroup } from '@angular/forms';
 import { Location } from '@angular/common';
 import { LoginService } from 'src/app/login.service';
+import { ToastrService } from 'ngx-toastr';
+import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 
 @Component({
   selector: 'dd-campaign-settings',
   templateUrl: './campaign-settings.component.html',
   styleUrls: ['./campaign-settings.component.css'],
 })
-export class CampaignSettingsComponent implements OnInit {
+export class CampaignSettingsComponent
+  implements OnInit, ComponentCanDeactivate {
   public saving = false;
 
   public expandXPTable = false;
@@ -25,7 +28,8 @@ export class CampaignSettingsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private login: LoginService,
-    private location: Location
+    private location: Location,
+    private toast: ToastrService
   ) {}
 
   ngOnInit() {
@@ -39,6 +43,10 @@ export class CampaignSettingsComponent implements OnInit {
     ) {
       this.campaign.experienceTable = [];
     }
+  }
+
+  canDeactivate() {
+    return !this.formGroup.dirty;
   }
 
   public selectEntityPreset(preset: IEntityPreset) {
@@ -84,6 +92,8 @@ export class CampaignSettingsComponent implements OnInit {
       } catch (err) {
         throw err;
       }
+
+      this.toast.info('Campaign settings updated');
     } else {
       const v = this.formGroup.value;
 

@@ -39,6 +39,16 @@
           </label>
         </div>
       </div>
+
+      <div class="column col-auto">
+        <label class="form-label">Remove</label>
+        <button class="btn btn-sm btn-error" (click)="removeCurrencyLevel(idx)">
+          <i class="icon icon-cross"></i>
+        </button>
+      </div>
     </div>
   </div>
+  <button class="btn btn-sm mt-2" (click)="addCurrencyLevel()">
+    <i class="icon icon-plus"></i><span class="hide-sm"> Add Level</span>
+  </button>
 </div>
