@@ -151,6 +151,10 @@ $hover-scale: 1.005;
   z-index: 500;
 }
 
+.faded {
+  opacity: 0.5;
+}
+
 [hidden] {
   display: none !important;
 }

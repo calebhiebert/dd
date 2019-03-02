@@ -129,7 +129,7 @@ export class InventoryManagerComponent implements OnInit {
     item.content = this.editFormGroup.value.content;
 
     try {
-      if (item.quantity === 0) {
+      if (item.quantity < 0) {
         await this.entityService.deleteInventoryItem(
           this.entityId,
           item.itemId
@@ -148,33 +148,20 @@ export class InventoryManagerComponent implements OnInit {
   }
 
   public async useItem(inventoryItem: IInventoryItem) {
-    if (!this.editable) {
+    if (!this.editable || inventoryItem.quantity === 0) {
       return;
     }
 
     this.working = true;
 
     try {
-      if (inventoryItem.quantity === 1) {
-        await this.entityService.deleteInventoryItem(
-          this.entityId,
-          inventoryItem.itemId
-        );
-        this.inventory = this.inventory.filter((itm) => itm !== inventoryItem);
-        this.toastr.info(`Used 1x ${inventoryItem.item.name}`);
-
-        if (inventoryItem === this.editingItem) {
-          this.itemEditModal.close(null);
-        }
-      } else {
-        await this.entityService.updateInventoryItem({
-          ...inventoryItem,
-          quantity: inventoryItem.quantity - 1,
-        });
-        inventoryItem.quantity--;
-        this.toastr.info(`Used 1x ${inventoryItem.item.name}`);
-        this.editFormGroup.patchValue(this.editingItem);
-      }
+      await this.entityService.updateInventoryItem({
+        ...inventoryItem,
+        quantity: inventoryItem.quantity - 1,
+      });
+      inventoryItem.quantity--;
+      this.toastr.info(`Used 1x ${inventoryItem.item.name}`);
+      this.editFormGroup.patchValue(this.editingItem);
     } catch (err) {
       throw err;
     }

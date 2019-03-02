@@ -26,6 +26,7 @@
           formControlName="quantity"
           #quantityedit
         />
+        <p class="form-input-hint">Set to any negative number to delete</p>
       </div>
 
       <!-- Notes -->
@@ -57,8 +58,13 @@
     >
       Save
     </button>
-    <button class="btn" style="float: left;" (click)="useItem(editingItem)">
-      Use 1x {{ editingItem.item.name }}
+    <button
+      class="btn"
+      style="float: left;"
+      [disabled]="editingItem.quantity === 0"
+      (click)="useItem(editingItem)"
+    >
+      Use
     </button>
   </div>
 </dd-modal>
@@ -82,7 +88,11 @@
   <div>
     <div class="card px-1 pt-1 mb-1" *ngFor="let i of inventory">
       <div class="columns col-gapless">
-        <div class="column col-auto mr-2 c-hand" (click)="editItem(i)">
+        <div
+          class="column col-auto mr-2 c-hand"
+          [ngClass]="{ faded: i.quantity === 0 }"
+          (click)="editItem(i)"
+        >
           <img
             class="s-rounded"
             width="32"
@@ -100,7 +110,11 @@
             style="margin-bottom: -0.075rem"
           />
         </div>
-        <div class="column c-hand" (click)="editItem(i)">
+        <div
+          class="column c-hand"
+          [ngClass]="{ faded: i.quantity === 0 }"
+          (click)="editItem(i)"
+        >
           {{ i.item.name }}
           <sup class="text-bold text-small" *ngIf="i.quantity !== 1"
             >x{{ i.quantity }}</sup
