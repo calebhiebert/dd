@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { LoginService } from '../login.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'dd-login',
@@ -35,7 +36,13 @@ export class LoginComponent implements OnInit {
         if (err && err.error === 'invalid_token') {
           this.router.navigate(['login']);
         } else {
-          throw err;
+          Swal.fire({
+            title: 'Oh dear.',
+            text:
+              'Something went wrong while logging you in, please try again.',
+          }).then(() => {
+            this.router.navigate(['login']);
+          });
         }
       }
       this.processing = false;

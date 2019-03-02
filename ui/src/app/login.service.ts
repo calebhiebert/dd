@@ -41,6 +41,20 @@ export class LoginService {
     return this.auth;
   }
 
+  private getUserInfo(token: string): Promise<Auth0UserProfile> {
+    const auth = this.getAuth();
+
+    return new Promise((resolve, reject) => {
+      auth.client.userInfo(token, (err, res) => {
+        if (err !== null) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  }
+
   public resetLoginStatus() {
     this.loginPromise = undefined;
     this.loginInProgress = false;
@@ -101,6 +115,11 @@ export class LoginService {
           this.loginCompleted = true;
           resolve(true);
           this.onLogin.emit();
+
+          // Refresh the login token every 15 minutes as long as the user is on the page
+          setTimeout(() => {
+            this.checkSession();
+          }, 1000 * 60 * 15);
         } catch (err) {
           localStorage.removeItem('auth-token');
           resolve(false);
@@ -113,20 +132,6 @@ export class LoginService {
     return this.loginPromise;
   }
 
-  private getUserInfo(token: string): Promise<Auth0UserProfile> {
-    const auth = this.getAuth();
-
-    return new Promise((resolve, reject) => {
-      auth.client.userInfo(token, (err, res) => {
-        if (err !== null) {
-          reject(err);
-        } else {
-          resolve(res);
-        }
-      });
-    });
-  }
-
   public saveToken(token: string) {
     localStorage.setItem('auth-token', token);
   }
@@ -134,6 +139,23 @@ export class LoginService {
   public loadToken(): string | null {
     const token = localStorage.getItem('auth-token');
     return token;
+  }
+
+  public checkSession() {
+    const auth = this.getAuth();
+
+    auth.checkSession({}, (err, res) => {
+      if (err) {
+        Sentry.captureException(err);
+      } else {
+        this.saveToken(res.accessToken);
+      }
+    });
+
+    // Refresh the token every 15 minutes as long as the user is on the page
+    setTimeout(() => {
+      this.checkSession();
+    }, 1000 * 60 * 15);
   }
 
   public authorize(connection: string) {

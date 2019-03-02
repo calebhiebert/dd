@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
+  private silenceErrors = false;
+
   constructor(private router: Router) {}
 
   intercept(
@@ -25,6 +27,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       tap(() => {}, (error) => (responseError = error)),
       finalize(async () => {
         if (responseError !== undefined) {
+          if (this.silenceErrors) {
+            return;
+          }
+
           if (responseError instanceof HttpErrorResponse) {
             switch (responseError.status) {
               case 401:
@@ -35,6 +41,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                   type: 'warning',
                   confirmButtonText: 'Okay',
                 });
+
+                this.silenceErrors = true;
 
                 await this.router.navigate(['login']);
                 break;
@@ -84,6 +92,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           } else {
             console.log('UNKNOWN ERR', responseError);
           }
+        } else {
+          this.silenceErrors = false;
         }
       })
     );
