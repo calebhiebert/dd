@@ -304,7 +304,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
       return '0';
     }
 
-    return this.currencyService.getCurrencyString(
+    return this.currencyService.getCurrencyHTMLString(
       this.currencyService.mapCurrencyValues(
         this.campaignService.campaign.currencyMap,
         this.entity.currency

@@ -52,6 +52,12 @@ export class CurrencyService {
   public getCurrencyString(mappedValues: IMappedCurrency[]): string {
     return mappedValues.map((mv) => `${mv.amount}${mv.name}`).join(' ');
   }
+
+  public getCurrencyHTMLString(mappedValues: IMappedCurrency[]): string {
+    return mappedValues
+      .map((mv) => `${mv.amount}<span class="currency-text">${mv.name}</span>`)
+      .join(' ');
+  }
 }
 
 export interface IMappedCurrency {

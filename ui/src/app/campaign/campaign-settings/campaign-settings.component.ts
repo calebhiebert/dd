@@ -87,8 +87,8 @@ export class CampaignSettingsComponent
         };
 
         await this.campaignService.updateCampaign(campaignUpdate);
-
         this.campaignService.campaign = { ...this.campaign, ...campaignUpdate };
+        this.formGroup.markAsPristine();
       } catch (err) {
         throw err;
       }
