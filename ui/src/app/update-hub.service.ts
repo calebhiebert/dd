@@ -8,6 +8,7 @@ import { IEntity, EntityService } from './entity.service';
 import { NoteService } from './note.service';
 import { ToastrService } from 'ngx-toastr';
 import { IArticle } from './article.service';
+import { ICursorUpdate } from './quill/quill.component';
 
 export enum ConnectionState {
   NOT_CONNECTED,
@@ -33,6 +34,9 @@ export class UpdateHubService {
   public articleCreated = new EventEmitter<IArticle>();
   public articleUpdated = new EventEmitter<IArticle>();
   public articleDeleted = new EventEmitter<IArticle>();
+  public cursorUpdate = new EventEmitter<ICursorUpdate>();
+  public noteDeltaUpdate = new EventEmitter<{ id: string; delta: any }>();
+  public stateUpdate = new EventEmitter<ConnectionState>();
 
   constructor(
     private login: LoginService,
@@ -43,6 +47,7 @@ export class UpdateHubService {
     private toastr: ToastrService
   ) {
     this._state = ConnectionState.NOT_CONNECTED;
+    this.stateUpdate.emit(this._state);
 
     campaignService.events.subscribe((campaign) => {
       if (campaign === null && campaignService.previousCampaignId) {
@@ -56,6 +61,7 @@ export class UpdateHubService {
   private async setup() {
     this.connection.onclose((e) => {
       this._state = ConnectionState.CLOSED;
+      this.stateUpdate.emit(this._state);
       this.start();
     });
 
@@ -109,11 +115,21 @@ export class UpdateHubService {
       this.articleDeleted.emit(article);
     });
 
+    this.connection.on('NoteCursorUpdate', (ncu) => {
+      this.cursorUpdate.emit(ncu);
+    });
+
+    this.connection.on('NoteDeltaUpdate', (ndu) => {
+      this.noteDeltaUpdate.emit(ndu);
+    });
+
     await this.authenticate();
   }
 
   private async authenticate() {
     this._state = ConnectionState.AUTHENTICATING;
+    this.stateUpdate.emit(this._state);
+
     try {
       await this.connection.invoke('Authenticate');
     } catch (err) {
@@ -147,11 +163,17 @@ export class UpdateHubService {
 
     try {
       this._state = ConnectionState.CONNECTING;
+      this.stateUpdate.emit(this._state);
+
       await this.connection.start();
       this._state = ConnectionState.CONNECTED;
+      this.stateUpdate.emit(this._state);
+
       await this.setup();
     } catch (err) {
       this._state = ConnectionState.CLOSED;
+      this.stateUpdate.emit(this._state);
+
       setTimeout(() => {
         this.start();
       }, 5000);
@@ -160,6 +182,7 @@ export class UpdateHubService {
 
   private authComplete() {
     this._state = ConnectionState.CONNECTED;
+    this.stateUpdate.emit(this._state);
 
     if (this.campaignService.campaign) {
       this.subscribeCampaign(this.campaignService.campaign.id);
@@ -274,6 +297,53 @@ export class UpdateHubService {
     } catch (err) {
       throw err;
     }
+  }
+
+  public async subscribeNote(noteId: string) {
+    if (this.state !== ConnectionState.CONNECTED) {
+      console.warn('Not in connected state');
+      return;
+    }
+
+    try {
+      await this.connection.invoke('SubscribeNote', noteId);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  public async unsubscribeNote(noteId: string) {
+    if (this.state !== ConnectionState.CONNECTED) {
+      console.warn('Not in connected state');
+      return;
+    }
+
+    try {
+      await this.connection.invoke('UnsubscribeNote', noteId);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  public async sendNoteCursorUpdate(
+    noteId: string,
+    range: { index: number; length: number }
+  ) {
+    if (this.state !== ConnectionState.CONNECTED) {
+      console.warn('Not in connected state');
+      return;
+    }
+
+    await this.connection.invoke('NoteCursorUpdate', noteId, { range });
+  }
+
+  public async sendNoteDeltaUpdate(noteId: string, delta: any) {
+    if (this.state !== ConnectionState.CONNECTED) {
+      console.warn('Not in connected state');
+      return;
+    }
+
+    await this.connection.invoke('NoteDeltaUpdate', noteId, delta);
   }
 
   public get state() {

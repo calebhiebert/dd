@@ -131,8 +131,14 @@ namespace net_api.Controllers
             }
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            note.UserId = userId;
+            note.UserId = existingNote.UserId;
             note.User = null;
+
+            if (userId != existingNote.UserId)
+            {
+                note.PublicEdit = existingNote.PublicEdit;
+                note.PublicView = existingNote.PublicView;
+            }
 
             _context.Entry(note).State = EntityState.Modified;
 

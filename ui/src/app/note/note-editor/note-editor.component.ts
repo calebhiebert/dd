@@ -147,6 +147,7 @@ export class NoteEditorComponent implements OnInit {
   }
 
   public async editNote(note: INote) {
+    this.statusText = '';
     this.modal.open().then(() => {
       this.note = undefined;
     });
@@ -183,6 +184,10 @@ export class NoteEditorComponent implements OnInit {
 
   public get editable() {
     return this.note.userId === this.loginService.id || this.note.publicEdit;
+  }
+
+  public get advancedEditable() {
+    return this.note.userId === this.loginService.id;
   }
 
   public get user() {

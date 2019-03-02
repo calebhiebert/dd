@@ -4,13 +4,19 @@
     *ngFor="let n of notes"
     (click)="noteSelected(n)"
   >
-    <div class="columns">
+    <div class="columns col-gapless">
       <div class="column">{{ n.title }}</div>
       <div class="column col-auto text-gray text-italic text-right hide-sm">
         {{ getUserText(n.userId) }}
       </div>
       <div class="column text-gray text-italic show-sm col-12">
         {{ getUserText(n.userId) }}
+      </div>
+      <div
+        class="column col-auto d-flex align-items-center ml-1"
+        *ngIf="n.publicEdit"
+      >
+        <i class="icon icon-edit"></i>
       </div>
     </div>
   </div>

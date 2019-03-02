@@ -7,6 +7,8 @@ import {
   Input,
   forwardRef,
   ComponentRef,
+  EventEmitter,
+  Output,
 } from '@angular/core';
 import Quill from 'quill';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -21,6 +23,7 @@ import { environment } from 'src/environments/environment';
 import { SearchService, SearchObjectType } from '../search.service';
 import { DynComponentService } from '../dyn-component.service';
 import { UserViewMiniComponent } from '../account/user-view-mini/user-view-mini.component';
+import { Chance } from 'chance';
 
 @Component({
   selector: 'dd-quill',
@@ -50,6 +53,18 @@ export class QuillComponent
     this.writeValue(value);
   }
 
+  @Input()
+  public cursorUpdates: EventEmitter<ICursorUpdate>;
+
+  @Input()
+  public deltaUpdates: EventEmitter<any>;
+
+  @Output()
+  public textChange = new EventEmitter<any>();
+
+  @Output()
+  public selectionChange = new EventEmitter<any>();
+
   @ViewChild('container')
   private _container: ElementRef<HTMLDivElement>;
 
@@ -57,6 +72,9 @@ export class QuillComponent
 
   private _onChange: any;
   private _onTouched: any;
+  private _cursors: any;
+  private _cursorCollection: { [key: string]: any } = {};
+  private _selectionUpdateInterval;
 
   private _writeQueue: any[] = [];
 
@@ -84,23 +102,59 @@ export class QuillComponent
         .forEach((n) => {
           n.classList.add('p-0');
         });
+    } else {
+      this._cursors = this._quill.getModule('cursors');
     }
 
     this._quill.on('text-change', (delta, oldDelta, source) => {
       if ((source === 'user' || source === 'api') && this._onChange) {
         this._onChange(this._quill.getContents());
+        this.textChange.emit(delta);
       }
     });
 
     this._quill.on('selection-change', (range, oldRange, source) => {
-      if (source === 'user' && this._onTouched) {
+      if ((source === 'user' || source === 'api') && this._onTouched) {
         this._onTouched();
+        this.selectionChange.emit(range);
       }
     });
 
     while (this._writeQueue.length > 0) {
       this.writeValue(this._writeQueue.pop());
     }
+
+    if (this.cursorUpdates) {
+      this.cursorUpdates.subscribe((cu) => {
+        if (!this._cursorCollection[cu.id] && cu.range) {
+          const chance = new Chance(cu.id);
+
+          this._cursorCollection[cu.id] = this._cursors.createCursor(
+            cu.id,
+            cu.displayName,
+            chance.color({ format: 'hex' })
+          );
+        }
+
+        if (cu.range) {
+          this._cursors.moveCursor(cu.id, cu.range);
+        } else if (this._cursorCollection[cu.id]) {
+          this._cursors.removeCursor(cu.id);
+        }
+      });
+    }
+
+    if (this.deltaUpdates) {
+      this.deltaUpdates.subscribe((du) => {
+        if (this._quill) {
+          this._quill.updateContents(du.ops, 'colab');
+        }
+      });
+    }
+
+    this._selectionUpdateInterval = setInterval(() => {
+      this.selectionChange.emit(this._quill.getSelection());
+    }, 1500);
   }
 
   writeValue(obj: any): void {
@@ -348,6 +402,7 @@ export class QuillComponent
       base.modules.mention = false;
     } else {
       base.theme = 'snow';
+      base.modules.cursors = true;
 
       if (this.simple) {
         base.modules.toolbar = [
@@ -517,4 +572,11 @@ export class QuillComponent
       n.classList.add('img-responsive');
     });
   }
+}
+
+export interface ICursorUpdate {
+  id: string;
+  noteId?: string;
+  displayName: string;
+  range: { index: number; length: number };
 }

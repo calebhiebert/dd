@@ -35,6 +35,7 @@ export class LoginService {
         responseType: 'token',
         redirectUri: `${location.protocol}//${location.host}/callback`,
         audience: 'https://dd.panchem.io',
+        scope: 'openid',
       });
     }
 
@@ -116,10 +117,8 @@ export class LoginService {
           resolve(true);
           this.onLogin.emit();
 
-          // Refresh the login token every 15 minutes as long as the user is on the page
-          setTimeout(() => {
-            this.checkSession();
-          }, 1000 * 60 * 15);
+          // Get a new token right away, this is done because authentication could have succeeded with an old token
+          this.checkSession();
         } catch (err) {
           localStorage.removeItem('auth-token');
           resolve(false);
@@ -144,13 +143,32 @@ export class LoginService {
   public checkSession() {
     const auth = this.getAuth();
 
-    auth.checkSession({}, (err, res) => {
-      if (err) {
-        Sentry.captureException(err);
-      } else {
-        this.saveToken(res.accessToken);
+    auth.checkSession(
+      {
+        domain: environment.auth0Domain,
+        clientID: environment.auth0ClientId,
+        responseType: 'token',
+        redirectUri: `${location.protocol}//${location.host}/callback`,
+        audience: 'https://dd.panchem.io',
+        scope: 'openid',
+      },
+      (err, res) => {
+        if (err) {
+          Sentry.captureException(err);
+        } else {
+          console.log('Refreshed Access Token');
+
+          this.getUserInfo(res.accessToken)
+            .then((userInfo) => {
+              this.saveToken(res.accessToken);
+              this.authData = userInfo;
+            })
+            .catch((err) => {
+              console.log('Error when updating access token', err);
+            });
+        }
       }
-    });
+    );
 
     // Refresh the token every 15 minutes as long as the user is on the page
     setTimeout(() => {

@@ -4,13 +4,24 @@
       simple="true"
       [readOnly]="!editable"
       formControlName="content"
+      (textChange)="textChange($event)"
+      (selectionChange)="selectionChange($event)"
+      [cursorUpdates]="cursorUpdates"
+      [deltaUpdates]="deltaUpdates"
     ></dd-quill>
   </div>
 
-  <div class="form-group" *ngIf="editable">
+  <div class="form-group" *ngIf="advancedEditable">
     <label class="form-switch">
       <input type="checkbox" formControlName="publicView" />
       <i class="form-icon"></i> This note is publicly visible
+    </label>
+  </div>
+
+  <div class="form-group" *ngIf="advancedEditable">
+    <label class="form-switch">
+      <input type="checkbox" formControlName="publicEdit" />
+      <i class="form-icon"></i> This note is publicly editable
     </label>
   </div>
 </form>
