@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using net_api.Models;
@@ -9,9 +10,10 @@ using net_api.Models;
 namespace netapi.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20190302160604_NoMoreMapShapes")]
+    partial class NoMoreMapShapes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -400,10 +402,6 @@ namespace netapi.Migrations
                     b.Property<double?>("Lng");
 
                     b.Property<Guid?>("MapId");
-
-                    b.Property<string>("MapShapeJson")
-                        .HasColumnName("MapShape")
-                        .HasColumnType("JSONB");
 
                     b.Property<bool>("PublicEdit");
 

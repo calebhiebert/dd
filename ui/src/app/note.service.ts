@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { NoteEditorComponent } from './note/note-editor/note-editor.component';
 import { IUser } from './user.service';
 import { LoginService } from './login.service';
+import { IMapShape } from './map.service';
 
 @Injectable({
   providedIn: 'root',
@@ -160,6 +161,7 @@ export interface INoteOptions {
   mapId?: string;
   lat?: number;
   lng?: number;
+  mapShape?: IMapShape;
 }
 
 export enum NoteType {
@@ -182,6 +184,7 @@ export interface INote {
   mapId?: string;
   lat?: number;
   lng?: number;
+  mapShape?: IMapShape;
 }
 
 export interface INoteQuery {

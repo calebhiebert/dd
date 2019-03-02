@@ -77,6 +77,7 @@ export class NoteEditorComponent implements OnInit {
         noteCreation.mapId = opts.mapId;
         noteCreation.lat = opts.lat;
         noteCreation.lng = opts.lng;
+        noteCreation.mapShape = opts.mapShape;
         break;
     }
 
@@ -133,8 +134,9 @@ export class NoteEditorComponent implements OnInit {
     }
   }
 
-  public addNote(opts: INoteOptions) {
-    this.createNote(opts);
+  public async addNote(opts: INoteOptions) {
+    await this.createNote(opts);
+
     this.modal.open().then(() => {
       if (this.note.content === null && this.note.title === '') {
         this.noteService.deleteNote(this.note.id);

@@ -59,29 +59,6 @@ namespace net_api.Models
             }
         }
 
-        [Column("Shapes", TypeName = "jsonb")]
-        [JsonIgnore]
-        public string ShapesJson { get; set; }
-
-        [NotMapped]
-        public MapShape[] Shapes
-        {
-            get
-            {
-                if (ShapesJson == null)
-                {
-                    return null;
-                }
-
-                return JsonConvert.DeserializeObject<MapShape[]>(ShapesJson);
-            }
-
-            set
-            {
-                ShapesJson = JsonConvert.SerializeObject(value);
-            }
-        }
-
         public bool ShouldSerializeMapping()
         {
             return false;

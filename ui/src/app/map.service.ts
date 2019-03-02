@@ -40,7 +40,6 @@ export interface IMap {
   maxZoom: number;
   campaignId: string;
   status: MapStatus;
-  shapes?: IMapShape[];
   playerVisible: boolean;
   userId: string;
   mapping?: { [key: string]: number[] };

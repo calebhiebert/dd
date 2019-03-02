@@ -74,6 +74,29 @@ namespace net_api.Models
         public double? Lat { get; set; }
         public double? Lng { get; set; }
 
+        [JsonIgnore]
+        [Column("MapShape", TypeName = "JSONB")]
+        public string MapShapeJson { get; set; }
+
+        [NotMapped]
+        public MapShape MapShape
+        {
+            get
+            {
+                if (MapShapeJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<MapShape>(MapShapeJson);
+            }
+
+            set
+            {
+                MapShapeJson = JsonConvert.SerializeObject(value);
+            }
+        }
+
         public Note()
         {
             Id = Guid.NewGuid();

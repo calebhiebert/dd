@@ -77,6 +77,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private _entityLayerGroups: { [key: string]: any } = {};
   private _mapLayerControl: any;
   private _shapeLayers: any;
+  private _drawControls: any;
   private _notes: INote[];
   private _articles: IArticle[];
   private _entityComponents: ComponentRef<EntityViewMiniComponent>[] = [];
@@ -133,15 +134,35 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             this._notesLayerGroup.removeLayer(layer);
           }
         }
+
+        for (const layer of this._shapeLayers.getLayers()) {
+          if (layer['_noteId'] === n.id) {
+            const popupComponent: ComponentRef<NoteViewMiniComponent> =
+              layer['_noteComponent'];
+
+            this._noteComponents = this._noteComponents.filter(
+              (nc) => nc !== popupComponent
+            );
+
+            popupComponent.destroy();
+            this._shapeLayers.removeLayer(layer);
+          }
+        }
       });
 
     // The note service emits an event every time a note is updated
     this._noteUpdateSubscription = this.noteService.noteUpdate
       .pipe(filter((n) => n.mapId === this._map.id))
       .subscribe((n) => {
-        const noteLayer = this._notesLayerGroup
+        let noteLayer = this._notesLayerGroup
           .getLayers()
           .find((l) => l['_noteId'] === n.id);
+
+        if (noteLayer === undefined) {
+          noteLayer = this._shapeLayers
+            .getLayers()
+            .find((l) => l['_noteId'] === n.id);
+        }
 
         if (noteLayer === undefined) {
           this.addNoteToMap(n);
@@ -338,16 +359,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       map.flyTo(this._queryLatLng, this._map.maxZoom - 1);
     }
 
-    // If the user viewing the map created it
-    if (this._map.userId === this.login.id) {
-      this.addDrawControls();
-    }
-
     this.redrawShapes();
   }
 
   private redrawShapes() {
-    const shapes = this._map.shapes;
+    const shapes = null;
 
     if (shapes === null) {
       return;
@@ -448,49 +464,76 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private addDrawControls() {
-    const options = {
-      position: 'topleft',
-      draw: {
-        polygon: {
-          allowIntersection: false, // Restricts shapes to simple polygons
-          drawError: {
-            color: '#e1e100', // Color the shape will turn when intersects
-            message: '<strong>Oh snap!<strong> you can\'t draw that!', // Message that will show when intersect
-          },
-        },
-        circlemarker: false,
-      },
-      edit: {
-        featureGroup: this._shapeLayers, // REQUIRED!!
-        remove: true,
-      },
-    };
-
-    map.addControl(new L.Control.Draw(options));
-
-    map.on('draw:edited', (e) => {
-      this.updateMapShapes(this.getDrawnShapes());
-    });
-
-    map.on('draw:created', (e) => {
-      this._shapeLayers.addLayer(e.layer);
-      this.updateMapShapes(this.getDrawnShapes());
-    });
-
-    map.on('draw:deleted', (e) => {
-      this.updateMapShapes(this.getDrawnShapes());
-    });
-  }
-
-  private async updateMapShapes(shapes: IMapShape[]) {
-    this._map.shapes = shapes;
-
-    try {
-      await this.mapService.updateMap(this._map);
-    } catch (err) {
-      throw err;
+  private getDrawnShape(): Promise<IMapShape | null> {
+    if (this._drawControls !== undefined) {
+      throw new Error('Cannot have multiple draw controls!');
     }
+
+    return new Promise((resolve, reject) => {
+      const options = {
+        position: 'topleft',
+        draw: {
+          polygon: {
+            allowIntersection: false, // Restricts shapes to simple polygons
+            drawError: {
+              color: '#e1e100', // Color the shape will turn when intersects
+              message: "<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
+            },
+          },
+          circlemarker: false,
+          marker: false,
+        },
+        edit: {
+          featureGroup: this._shapeLayers, // REQUIRED!!
+          remove: false,
+        },
+      };
+
+      this._drawControls = new L.Control.Draw(options);
+
+      map.addControl(this._drawControls);
+
+      // map.on('draw:edited', (e) => {
+      //   map.removeControl(this._drawControls);
+      //   this._drawControls = undefined;
+      // });
+
+      map.on('draw:created', (e) => {
+        this._shapeLayers.addLayer(e.layer);
+        if (this._drawControls) {
+          map.removeControl(this._drawControls);
+          this._drawControls = undefined;
+        }
+
+        const l = e.layer;
+
+        if (l instanceof L.Circle) {
+          resolve({
+            type: MapShapeType.CIRCLE,
+            lat: l.getLatLng().lat,
+            lng: l.getLatLng().lng,
+            radius: l.getRadius(),
+          });
+        } else if (l instanceof L.Rectangle) {
+          const latLngs = l.getLatLngs()[0];
+
+          resolve({
+            type: MapShapeType.RECTANGLE,
+            points: latLngs.map((latLng) => [latLng.lat, latLng.lng]),
+          });
+        } else if (l instanceof L.Polygon) {
+          resolve({
+            type: MapShapeType.POLYGON,
+            points: l.getLatLngs()[0].map((latLng) => [latLng.lat, latLng.lng]),
+          });
+        } else if (l instanceof L.Polyline) {
+          resolve({
+            type: MapShapeType.POLYLINE,
+            points: l.getLatLngs().map((latLng) => [latLng.lat, latLng.lng]),
+          });
+        }
+      });
+    });
   }
 
   private createNotesLayer() {
@@ -512,48 +555,46 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this._mapLayerControl.addOverlay(layer, name);
   }
 
-  private getDrawnShapes() {
-    const shapes: IMapShape[] = [];
-
-    this._shapeLayers.eachLayer((l) => {
-      if (l instanceof L.Circle) {
-        shapes.push({
-          type: MapShapeType.CIRCLE,
-          lat: l.getLatLng().lat,
-          lng: l.getLatLng().lng,
-          radius: l.getRadius(),
-        });
-      } else if (l instanceof L.Marker) {
-        shapes.push({
-          type: MapShapeType.MARKER,
-          lat: l.getLatLng().lat,
-          lng: l.getLatLng().lng,
-        });
-      } else if (l instanceof L.Rectangle) {
-        const latLngs = l.getLatLngs()[0];
-
-        shapes.push({
-          type: MapShapeType.RECTANGLE,
-          points: latLngs.map((latLng) => [latLng.lat, latLng.lng]),
-        });
-      } else if (l instanceof L.Polygon) {
-        shapes.push({
-          type: MapShapeType.POLYGON,
-          points: l.getLatLngs()[0].map((latLng) => [latLng.lat, latLng.lng]),
-        });
-      } else if (l instanceof L.Polyline) {
-        shapes.push({
-          type: MapShapeType.POLYLINE,
-          points: l.getLatLngs().map((latLng) => [latLng.lat, latLng.lng]),
-        });
-      }
-    });
-
-    return shapes;
-  }
-
   private addNoteToMap(note: INote) {
-    if (note.lat && note.lng) {
+    if (note.mapShape) {
+      let layerToAdd;
+      const s = note.mapShape;
+
+      switch (s.type) {
+        case MapShapeType.CIRCLE:
+          layerToAdd = L.circle([s.lat, s.lng], { radius: s.radius });
+          break;
+        case MapShapeType.POLYGON:
+          layerToAdd = L.polygon(s.points);
+          break;
+        case MapShapeType.POLYLINE:
+          layerToAdd = L.polyline(s.points);
+          break;
+        case MapShapeType.RECTANGLE:
+          layerToAdd = L.rectangle(s.points);
+          break;
+      }
+
+      layerToAdd['_noteId'] = note.id;
+
+      const component = this.componentService.getComponent(
+        NoteViewMiniComponent
+      );
+      component.instance.note = note;
+
+      this._noteComponents.push(component);
+      layerToAdd['_noteComponent'] = component;
+
+      const popup = L.popup({
+        minWidth: 150,
+      });
+
+      popup.setContent(this.componentService.getRootNode(component));
+
+      layerToAdd.bindPopup(popup);
+
+      this._shapeLayers.addLayer(layerToAdd);
+    } else if (note.lat && note.lng) {
       const isNoteMine = note.userId === this.login.id;
 
       const marker = L.marker([note.lat, note.lng], {
@@ -680,6 +721,19 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           });
 
           this.toast.info(`Linked article ${article.name}`);
+        }
+        break;
+      case MapEditorOperationType.PLACE_SHAPELY_NOTE:
+        const shape = await this.getDrawnShape();
+
+        if (shape !== null) {
+          this.noteService.addNote({
+            type: NoteType.MAP,
+            mapId: this._map.id,
+            lat: event.latlng.lat,
+            lng: event.latlng.lng,
+            mapShape: shape,
+          });
         }
         break;
     }

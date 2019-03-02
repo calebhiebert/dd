@@ -38,6 +38,13 @@ export class MapEditorMenuComponent implements OnInit {
     this.modal.close(null);
   }
 
+  public placeShapelyNote() {
+    this._opResolver({
+      type: MapEditorOperationType.PLACE_SHAPELY_NOTE,
+    });
+    this.modal.close(null);
+  }
+
   public updateEntityPosition() {
     this._opResolver({
       type: MapEditorOperationType.UPDATE_ENTITY_POSITION,
@@ -70,4 +77,5 @@ export enum MapEditorOperationType {
   PLACE_NOTE,
   UPDATE_ENTITY_POSITION,
   LINK_ARTICLE,
+  PLACE_SHAPELY_NOTE,
 }

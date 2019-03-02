@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   auth0Domain: 'panch-dd.auth0.com',
-  auth0ClientId: 'wtWPWeaJjR4hbWYi4hJuduRDDFVn97Fn',
+  auth0ClientId: '9vKGU44oDoiGxliIyFL7hjWQQSdmvWEz',
   apiURL: 'http://localhost:5000/api',
   hubURL: 'http://localhost:5000/hub',
   tileURL: 'http://localhost:5000/api',

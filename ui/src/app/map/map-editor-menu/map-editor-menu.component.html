@@ -4,6 +4,9 @@
   </div>
   <div modal-body>
     <div class="card p-2 hoverable mb-2" (click)="placeNote()">Make Note</div>
+    <div class="card p-2 hoverable mb-2" (click)="placeShapelyNote()">
+      Make Shapely Note
+    </div>
     <div
       class="card p-2 hoverable mb-2"
       (click)="updateEntityPosition()"
@@ -11,6 +14,12 @@
     >
       Put me Here
     </div>
-    <div class="card p-2 hoverable mb-2" (click)="linkArticle()" *ngIf="campaignEditable">Link Article</div>
+    <div
+      class="card p-2 hoverable mb-2"
+      (click)="linkArticle()"
+      *ngIf="campaignEditable"
+    >
+      Link Article
+    </div>
   </div>
 </dd-modal>
