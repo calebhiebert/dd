@@ -284,6 +284,10 @@ quill-image-uploader@1.0.2
 MIT
 MIT
 
+quill-cursors@2.0.3
+MIT
+MIT
+
 tslib@1.9.3
 Apache-2.0
 Apache License
