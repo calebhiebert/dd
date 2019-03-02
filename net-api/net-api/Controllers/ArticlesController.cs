@@ -111,7 +111,7 @@ namespace net_api.Controllers
                 articleQuery = articleQuery.Where(a => a.Published == true);
             }
 
-            var articles = await articleQuery.ToListAsync();
+            var articles = await articleQuery.Select(a => new SearchedArticle(a)).ToListAsync();
 
             return Ok(articles);
         }
@@ -172,13 +172,6 @@ namespace net_api.Controllers
             if (article.Content == null)
             {
                 article.Content = originalArticle.Content;
-            }
-
-            if (article.MapId == null)
-            {
-                article.MapId = originalArticle.MapId;
-                article.Lat = originalArticle.Lat;
-                article.Lng = originalArticle.Lng;
             }
 
             _context.Entry(article).State = EntityState.Modified;
