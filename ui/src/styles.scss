@@ -151,6 +151,11 @@ $hover-scale: 1.005;
   z-index: 500;
 }
 
+.ql-editor > p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .faded {
   opacity: 0.5;
 }
