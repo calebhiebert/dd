@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.3.31.14" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.31.20" />
     <PackageReference Include="CloudinaryDotNet" Version="1.6.0" />
     <PackageReference Include="dotenv.net" Version="1.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.App" />

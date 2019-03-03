@@ -35,7 +35,7 @@ export class LoginService {
         responseType: 'token',
         redirectUri: `${location.protocol}//${location.host}/callback`,
         audience: 'https://dd.panchem.io',
-        scope: 'openid',
+        scope: 'openid profile email',
       });
     }
 
@@ -150,7 +150,7 @@ export class LoginService {
         responseType: 'token',
         redirectUri: `${location.protocol}//${location.host}/callback`,
         audience: 'https://dd.panchem.io',
-        scope: 'openid',
+        scope: 'openid profile email',
       },
       (err, res) => {
         if (err) {
