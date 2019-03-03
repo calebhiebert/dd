@@ -8,8 +8,8 @@ const Chance = require('chance');
 // Load spells
 const magicitems = JSON.parse(fs.readFileSync('./magicitems.json'));
 
-const CAMPAIGN_ID = '8856eb86-ea92-4d0a-ad18-4ba5125d4ee5';
-const USER_ID = 'google-oauth2|115097827328089785154';
+const CAMPAIGN_ID = '6745f9ca-77c5-4abb-aa1c-b1e04e83dd8f';
+const USER_ID = 'google-oauth2|115793422235026993679';
 
 const db = new Client({
 	host: 'localhost',

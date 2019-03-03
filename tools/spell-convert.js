@@ -8,7 +8,7 @@ const nanoid = require('nanoid');
 // Load spells
 const spells = JSON.parse(fs.readFileSync('./spells.json'));
 
-const CAMPAIGN_ID = 'ff126e57-cdc9-40cd-b9fd-f1f2f522ff64';
+const CAMPAIGN_ID = '6745f9ca-77c5-4abb-aa1c-b1e04e83dd8f';
 const USER_ID = 'google-oauth2|115793422235026993679';
 
 const db = new Client({
