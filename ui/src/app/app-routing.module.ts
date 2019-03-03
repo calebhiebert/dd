@@ -4,7 +4,6 @@ import { CampaignComponent } from './campaign/campaign.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { LoggedInGuard } from './logged-in.guard';
-import { LoginPageGuard } from './login-page.guard';
 import { EntityFormComponent } from './entity/entity-form/entity-form.component';
 import { EntityViewComponent } from './entity/entity-view/entity-view.component';
 import { EntityCreationFormComponent } from './entity/entity-form/entity-creation-form/entity-creation-form.component';

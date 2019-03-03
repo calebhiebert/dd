@@ -1,0 +1,49 @@
+diff --git a/node_modules/quill-blot-formatter/dist/actions/ResizeAction.js b/node_modules/quill-blot-formatter/dist/actions/ResizeAction.js
+index 511acbb..ea57e00 100644
+--- a/node_modules/quill-blot-formatter/dist/actions/ResizeAction.js
++++ b/node_modules/quill-blot-formatter/dist/actions/ResizeAction.js
+@@ -48,12 +48,19 @@ var ResizeAction = function (_Action) {
+ 
+       var rect = target.getBoundingClientRect();
+ 
+-      _this.dragStartX = event.clientX;
++      if (event.touches) {
++        _this.dragStartX = event.touches[0].clientX;
++      } else {
++        _this.dragStartX = event.clientX;
++      }
++
+       _this.preDragWidth = rect.width;
+       _this.targetRatio = rect.height / rect.width;
+ 
+       document.addEventListener('mousemove', _this.onDrag);
++      document.addEventListener('touchmove', _this.onDrag);
+       document.addEventListener('mouseup', _this.onMouseUp);
++      document.addEventListener('touchend', _this.onMouseUp);
+     };
+ 
+     _this.onDrag = function (event) {
+@@ -66,7 +73,14 @@ var ResizeAction = function (_Action) {
+         return;
+       }
+ 
+-      var deltaX = event.clientX - _this.dragStartX;
++      var deltaX;
++
++      if (event.touches) {
++        deltaX = event.touches[0].clientX - _this.dragStartX;
++      } else {
++        deltaX = event.clientX - _this.dragStartX; 
++      }
++
+       var newWidth = 0;
+ 
+       if (_this.dragHandle === _this.topLeftHandle || _this.dragHandle === _this.bottomLeftHandle) {
+@@ -132,6 +146,7 @@ var ResizeAction = function (_Action) {
+       }
+ 
+       box.addEventListener('mousedown', this.onMouseDown);
++      box.addEventListener('touchstart', this.onMouseDown);
+ 
+       return box;
+     }
