@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CampaignService, ICampaign } from 'src/app/campaign.service';
 import { IEntityPreset } from 'src/app/entity.service';
@@ -7,6 +7,7 @@ import { Location } from '@angular/common';
 import { LoginService } from 'src/app/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
+import { ExporterComponent } from './exporter/exporter.component';
 
 @Component({
   selector: 'dd-campaign-settings',
@@ -22,6 +23,9 @@ export class CampaignSettingsComponent
   public expandCurrencyMapEditor = false;
 
   public formGroup: FormGroup;
+
+  @ViewChild('exporter')
+  private exporter: ExporterComponent;
 
   constructor(
     private campaignService: CampaignService,
@@ -124,6 +128,10 @@ export class CampaignSettingsComponent
 
   public async delete() {
     // TODO add delete logic
+  }
+
+  public export() {
+    this.exporter.doExport();
   }
 
   public get campaign(): ICampaign {

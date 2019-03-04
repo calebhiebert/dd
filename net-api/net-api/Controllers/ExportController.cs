@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using net_api.Models;
 using Newtonsoft.Json;
 
@@ -29,17 +30,26 @@ namespace net_api.Controllers
         [HttpGet]
         public async Task<IActionResult> ExportCampaign([FromQuery] Guid? campaignId)
         {
-            var items = _context.Items
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == campaignId)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var items = await _context.Items
                 .Where(i => i.CampaignId == campaignId)
                 .Select(i => new { i.Id, i.Name, i.Content, i.Cost, i.ImageId, i.Tags, i.Weight, i.PlayerVisible })
-                .ToList();
+                .ToListAsync();
 
-            var spells = _context.Spells
+            var spells = await _context.Spells
                 .Where(s => s.CampaignId == campaignId)
                 .Select(s => new { s.Id, s.Name, s.Content, s.PlayerVisible, s.Tags, s.ImageId })
-                .ToList();
+                .ToListAsync();
 
-            var entityPresets = _context.EntityPresets
+            var entityPresets = await _context.EntityPresets
                 .Where(ep => ep.CampaignId == campaignId)
                 .Select(ep => new
                 {
@@ -56,9 +66,9 @@ namespace net_api.Controllers
                     ep.IsXPEnabled,
                     ep.PlayerCreatable
                 })
-                .ToList();
+                .ToListAsync();
 
-            var articles = _context.Articles
+            var articles = await _context.Articles
                 .Where(a => a.CampaignId == campaignId)
                 .Select(a => new
                 {
@@ -67,9 +77,9 @@ namespace net_api.Controllers
                     a.Name,
                     a.Published,
                     a.Tags
-                });
+                }).ToListAsync();
 
-            var quests = _context.Quests
+            var quests = await _context.Quests
                 .Where(q => q.CampaignId == campaignId)
                 .Select(q => new
                 {
@@ -81,7 +91,7 @@ namespace net_api.Controllers
                     q.OriginId,
                     q.Status,
                     q.Visible
-                });
+                }).ToListAsync();
 
             // Zip creation code
             var zipMemStream = new MemoryStream();
@@ -143,7 +153,7 @@ namespace net_api.Controllers
 
             zipMemStream.Seek(0, SeekOrigin.Begin);
 
-            Response.Headers.Append("content-disposition", "attachment; filename=\"Export.zip\"");
+            Response.Headers.Append("content-disposition", $"attachment; filename=\"{campaign.Name}.zip\"");
 
             return File(zipMemStream, "application/zip");
         }

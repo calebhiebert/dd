@@ -1,0 +1,40 @@
+<dd-modal #modal>
+  <h4 modal-header>Export</h4>
+  <div modal-body>
+    <div class="form-group" [formGroup]="formGroup">
+      <!-- Items -->
+      <label class="form-checkbox">
+        <input type="checkbox" formControlName="exportItems" />
+        <i class="form-icon"></i> Export Items
+      </label>
+
+      <!-- Spells -->
+      <label class="form-checkbox">
+        <input type="checkbox" formControlName="exportSpells" />
+        <i class="form-icon"></i> Export Spells
+      </label>
+
+      <!-- Quests -->
+      <label class="form-checkbox">
+        <input type="checkbox" formControlName="exportQuests" />
+        <i class="form-icon"></i> Export Quests
+      </label>
+
+      <!-- Articles -->
+      <label class="form-checkbox">
+        <input type="checkbox" formControlName="exportArticles" />
+        <i class="form-icon"></i> Export Articles
+      </label>
+
+      <!-- Entity Presets -->
+      <label class="form-checkbox">
+        <input type="checkbox" formControlName="exportEntityPresets" />
+        <i class="form-icon"></i> Export Entity Types
+      </label>
+    </div>
+
+    <a [href]="exportLink" class="btn btn-primary mt-2">
+      <i class="icon icon-download"></i> Export
+    </a>
+  </div>
+</dd-modal>

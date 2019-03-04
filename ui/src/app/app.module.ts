@@ -99,6 +99,7 @@ import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 import { QuillComponent } from './quill/quill.component';
 import { UserViewMiniComponent } from './account/user-view-mini/user-view-mini.component';
 import { CurrencyMapEditorComponent } from './campaign/campaign-settings/currency-map-editor/currency-map-editor.component';
+import { ExporterComponent } from './campaign/campaign-settings/exporter/exporter.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -194,6 +195,7 @@ import { CurrencyMapEditorComponent } from './campaign/campaign-settings/currenc
     QuillComponent,
     UserViewMiniComponent,
     CurrencyMapEditorComponent,
+    ExporterComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,4 @@
+<dd-exporter #exporter></dd-exporter>
 <div class="container grid-xl" *ngIf="campaign || !editing">
   <!-- Header -->
   <div class="columns">
@@ -112,7 +113,8 @@
     <div class="column"><h3>Entity Types</h3></div>
     <div class="column col-auto">
       <button class="btn btn-sm" (click)="createEntityPreset()">
-        <i class="icon icon-plus"></i> New Entity Preset
+        <i class="icon icon-plus"></i
+        ><span class="hide-sm"> New Entity Type</span>
       </button>
     </div>
   </div>
@@ -154,11 +156,23 @@
 
   <!-- Danger Options -->
   <div class="card p-2" *ngIf="editing">
-    <div class="card-title"><h3 class="mb-2">Danger!</h3></div>
+    <div class="card-body">
+      <h3 class="mb-2">Other Stuff</h3>
+
+      <button class="btn btn-primary" (click)="export()">
+        <i class="icon icon-download"></i> Export Data
+      </button>
+
+      <button class="btn btn-primary ml-2" disabled>
+        <i class="icon icon-upload"></i> Import Data
+      </button>
+    </div>
 
     <div class="card-body">
+      <h3 class="mb-2">Danger!</h3>
+
       <button class="btn btn-error" (click)="delete()" disabled>
-        Delete Campaign
+        <i class="icon icon-cross"></i> Delete Campaign
       </button>
     </div>
   </div>
