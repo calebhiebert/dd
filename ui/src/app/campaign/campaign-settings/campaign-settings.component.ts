@@ -8,6 +8,7 @@ import { LoginService } from 'src/app/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { ExporterComponent } from './exporter/exporter.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'dd-campaign-settings',
@@ -17,6 +18,7 @@ import { ExporterComponent } from './exporter/exporter.component';
 export class CampaignSettingsComponent
   implements OnInit, ComponentCanDeactivate {
   public saving = false;
+  public deleting = false;
 
   public expandXPTable = false;
   public expandItemRarityTable = false;
@@ -127,7 +129,29 @@ export class CampaignSettingsComponent
   }
 
   public async delete() {
-    // TODO add delete logic
+    const confirmation = await Swal.fire({
+      title: 'Are you sure?',
+      text:
+        'This will completely delete this campaign and everything that goes along with it. This cannot be undone!',
+      showCancelButton: true,
+      cancelButtonText: 'Back to safety',
+      confirmButtonText: '☢️ Nuke It',
+    });
+
+    if (!confirmation.value) {
+      return;
+    }
+
+    this.deleting = true;
+
+    try {
+      await this.campaignService.deleteCampaign(this.campaign);
+    } catch (err) {
+      throw err;
+    }
+
+    this.deleting = false;
+    this.router.navigate(['home']);
   }
 
   public export() {

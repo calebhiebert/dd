@@ -171,7 +171,11 @@
     <div class="card-body">
       <h3 class="mb-2">Danger!</h3>
 
-      <button class="btn btn-error" (click)="delete()" disabled>
+      <button
+        class="btn btn-error"
+        [ngClass]="{ loading: deleting }"
+        (click)="delete()"
+      >
         <i class="icon icon-cross"></i> Delete Campaign
       </button>
     </div>

@@ -77,6 +77,12 @@ export class CampaignService {
       .toPromise();
   }
 
+  public async deleteCampaign(campaign: ICampaign): Promise<ICampaign> {
+    return this.http
+      .delete<ICampaign>(`${environment.apiURL}/campaigns/${campaign.id}`)
+      .toPromise();
+  }
+
   public async getInvites(): Promise<ICampaignInvite[]> {
     return this.http
       .get<ICampaignInvite[]>(
