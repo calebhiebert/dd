@@ -39,6 +39,12 @@ namespace net_api.Controllers
             int questsImported = 0;
             int entityPresetsImported = 0;
 
+            var itemList = new List<Item>();
+            var spellList = new List<Spell>();
+            var articleList = new List<Article>();
+            var questList = new List<Quest>();
+            var entityPresetList = new List<EntityPreset>();
+
             using (var fileStream = file.OpenReadStream())
             {
                 var zip = new ZipArchive(fileStream, ZipArchiveMode.Read);
@@ -57,7 +63,7 @@ namespace net_api.Controllers
                                 item.Id = newId;
                                 item.CampaignId = (Guid)campaignId;
                                 item.UserId = userId;
-                                _context.Items.Add(item);
+                                itemList.Add(item);
                                 itemsImported++;
                             }
                             break;
@@ -72,7 +78,7 @@ namespace net_api.Controllers
                                 spell.Id = newId;
                                 spell.CampaignId = (Guid)campaignId;
                                 spell.UserId = userId;
-                                _context.Spells.Add(spell);
+                                spellList.Add(spell);
                                 spellsImported++;
                             }
                             break;
@@ -87,7 +93,7 @@ namespace net_api.Controllers
                                 article.Id = newId;
                                 article.CampaignId = (Guid)campaignId;
                                 article.UserId = userId;
-                                _context.Articles.Add(article);
+                                articleList.Add(article);
                                 articlesImported++;
                             }
                             break;
@@ -101,7 +107,7 @@ namespace net_api.Controllers
                                 idDict.Add(quest.Id, newId);
                                 quest.Id = newId;
                                 quest.CampaignId = (Guid)campaignId;
-                                _context.Quests.Add(quest);
+                                questList.Add(quest);
                                 questsImported++;
                             }
                             break;
@@ -116,7 +122,7 @@ namespace net_api.Controllers
                                 ep.Id = newId;
                                 ep.CampaignId = (Guid)campaignId;
                                 ep.UserId = userId;
-                                _context.EntityPresets.Add(ep);
+                                entityPresetList.Add(ep);
                                 entityPresetsImported++;
                             }
                             break;
@@ -124,6 +130,33 @@ namespace net_api.Controllers
                 }
             }
 
+            // Update all id values in all content to new id values
+            foreach (var obj in articleList)
+            {
+                obj.ContentJson = PatchIdValues(obj.ContentJson, idDict);
+            }
+
+            foreach (var obj in itemList)
+            {
+                obj.ContentJson = PatchIdValues(obj.ContentJson, idDict);
+            }
+
+            foreach (var obj in spellList)
+            {
+                obj.ContentJson = PatchIdValues(obj.ContentJson, idDict);
+            }
+
+            foreach (var obj in questList)
+            {
+                obj.ContentJson = PatchIdValues(obj.ContentJson, idDict);
+            }
+
+            // Add all entries to the context
+            _context.AddRange(itemList);
+            _context.AddRange(spellList);
+            _context.AddRange(articleList);
+            _context.AddRange(questList);
+            _context.AddRange(entityPresetList);
             await _context.SaveChangesAsync();
 
             return Ok(new { Items = itemsImported, Quests = questsImported, Articles = articlesImported, Spells = spellsImported, EntityPresets = entityPresetsImported });
@@ -139,6 +172,21 @@ namespace net_api.Controllers
 
                 return serializer.Deserialize<T>(jr);
             }
+        }
+
+        private string PatchIdValues(string old, Dictionary<Guid, Guid> idDict)
+        {
+            string replaced = old;
+
+            foreach(var entry in idDict)
+            {
+                var oldId = entry.Key.ToString();
+                var newId = entry.Value.ToString();
+
+                replaced = replaced.Replace(oldId, newId);
+            }
+
+            return replaced;
         }
     }
 }

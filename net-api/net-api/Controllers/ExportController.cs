@@ -135,7 +135,8 @@ namespace net_api.Controllers
                                 a.Icon,
                                 a.Name,
                                 a.Published,
-                                a.Tags
+                                a.Tags,
+                                a.Id
                             }).ToListAsync();
 
                         var jtw = new JsonTextWriter(new StreamWriter(strm));
