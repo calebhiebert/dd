@@ -141,6 +141,7 @@ $hover-scale: 1.005;
   font-family: $base-font-family;
   font-size: $font-size;
   text-rendering: optimizeLegibility;
+  overflow: visible !important;
 }
 
 .ql-mention-list-container {

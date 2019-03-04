@@ -164,7 +164,9 @@ export class QuillComponent
       if (obj !== null && obj !== undefined) {
         this._quill.setContents(obj.ops, 'form');
 
-        this.setupMentions();
+        if (this.readOnly) {
+          this.setupMentions();
+        }
 
         this.setupImages(this._container.nativeElement.querySelectorAll('img'));
         this.setupTables(
@@ -436,10 +438,19 @@ export class QuillComponent
   }
 
   private setupMentions() {
+    const getIconEl = (icon: string) => {
+      const el = document.createElement('i');
+      el.classList.add('icon');
+      el.classList.add(icon);
+      return el;
+    };
+
     this._container.nativeElement
       .querySelectorAll(`[data-type="${SearchObjectType.ARTICLE}"]`)
       .forEach((node: HTMLSpanElement) => {
         const id = node.dataset.id;
+
+        node.prepend(getIconEl('icon-bookmark'));
 
         node.addEventListener('click', () => {
           this.router.navigate([
@@ -456,6 +467,8 @@ export class QuillComponent
       .forEach((node: HTMLSpanElement) => {
         const id = node.dataset.id;
 
+        node.prepend(getIconEl('icon-emoji'));
+
         node.addEventListener('click', () => {
           this.router.navigate([
             'campaigns',
@@ -470,6 +483,8 @@ export class QuillComponent
       .querySelectorAll(`[data-type="${SearchObjectType.ITEM}"]`)
       .forEach((node: HTMLSpanElement) => {
         const id = node.dataset.id;
+
+        node.prepend(getIconEl('icon-photo'));
 
         node.addEventListener('click', () => {
           this.router.navigate([
@@ -486,6 +501,8 @@ export class QuillComponent
       .forEach((node: HTMLSpanElement) => {
         const id = node.dataset.id;
 
+        node.prepend(getIconEl('icon-location'));
+
         node.addEventListener('click', () => {
           this.router.navigate([
             'campaigns',
@@ -501,6 +518,8 @@ export class QuillComponent
       .forEach((node: HTMLSpanElement) => {
         const id = node.dataset.id;
 
+        node.prepend(getIconEl('icon-flag'));
+
         node.addEventListener('click', () => {
           this.router.navigate([
             'campaigns',
@@ -515,6 +534,8 @@ export class QuillComponent
       .querySelectorAll(`[data-type="${SearchObjectType.SPELL}"]`)
       .forEach((node: HTMLSpanElement) => {
         const id = node.dataset.id;
+
+        node.prepend(getIconEl('icon-time'));
 
         node.addEventListener('click', () => {
           this.router.navigate([
@@ -533,6 +554,8 @@ export class QuillComponent
         let popper;
         let popperEl: HTMLDivElement;
         let component: ComponentRef<any>;
+
+        node.prepend(getIconEl('icon-people'));
 
         node.addEventListener('mouseenter', () => {
           popperEl = document.createElement('div');

@@ -9,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { ExporterComponent } from './exporter/exporter.component';
 import Swal from 'sweetalert2';
+import { HttpClient, HttpEventType } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'dd-campaign-settings',
@@ -19,6 +21,7 @@ export class CampaignSettingsComponent
   implements OnInit, ComponentCanDeactivate {
   public saving = false;
   public deleting = false;
+  public importing = false;
 
   public expandXPTable = false;
   public expandItemRarityTable = false;
@@ -35,7 +38,8 @@ export class CampaignSettingsComponent
     private route: ActivatedRoute,
     private login: LoginService,
     private location: Location,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -156,6 +160,56 @@ export class CampaignSettingsComponent
 
   public export() {
     this.exporter.doExport();
+  }
+
+  public async import(evt) {
+    const file: File = evt.target.files[0];
+
+    const validType =
+      [
+        'application/zip',
+        'application/x-zip-compressed',
+        'multipart/x-zip',
+      ].indexOf(file.type) !== -1;
+
+    if (!validType) {
+      Swal.fire({
+        type: 'error',
+        title: 'Invalid File Type!',
+        text: 'File should be a zip file created from an export',
+      });
+      return;
+    }
+
+    this.importing = true;
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('campaignId', this.campaignService.campaign.id);
+
+      this.http.post(`${environment.apiURL}/import`, formData).subscribe(
+        (res) => {
+          const { articles, entityPresets, items, quests, spells } = res as any;
+          this.importing = false;
+          Swal.fire({
+            title: 'All Done!',
+            // tslint:disable-next-line:max-line-length
+            html: `All done importing the things. Here's how it went:<br/>Articles: ${articles}<br/>Entity Types: ${entityPresets}<br/>Items: ${items}<br/>Quests: ${quests}<br/>Spells: ${spells}`,
+          }).then(() => location.reload());
+        },
+        (err) => {
+          Swal.fire({
+            type: 'error',
+            title: 'Hmm...',
+            text: 'Something went wrong during import. Please try again',
+          });
+          throw err;
+        }
+      );
+    } catch (err) {
+      throw err;
+    }
   }
 
   public get campaign(): ICampaign {
