@@ -268,7 +268,7 @@ export class QuillComponent
               }
             });
 
-            if (search.trim().length > 0 && this.campaignService.canEdit) {
+            if (search.trim().length >= 3 && this.campaignService.canEdit) {
               mappedResults.push({
                 id: 'create-empty-article',
                 value: search,

@@ -70,7 +70,7 @@ export class ArticleQuestManagerComponent implements OnInit {
       return { ...q, value: q.name };
     });
 
-    if (search.trim().length > 0) {
+    if (search.trim().length >= 3) {
       mappedQuests.unshift({ id: 'create-new-quest', value: search });
     }
 
