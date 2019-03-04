@@ -28,7 +28,14 @@ namespace net_api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ExportCampaign([FromQuery] Guid? campaignId)
+        public async Task<IActionResult> ExportCampaign(
+            [FromQuery] Guid? campaignId,
+            [FromQuery] bool items,
+            [FromQuery] bool spells,
+            [FromQuery] bool quests,
+            [FromQuery] bool articles,
+            [FromQuery] bool entitypresets
+            )
         {
             var campaign = await _context.Campaigns
                 .Where(c => c.Id == campaignId)
@@ -39,60 +46,6 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            var items = await _context.Items
-                .Where(i => i.CampaignId == campaignId)
-                .Select(i => new { i.Id, i.Name, i.Content, i.Cost, i.ImageId, i.Tags, i.Weight, i.PlayerVisible })
-                .ToListAsync();
-
-            var spells = await _context.Spells
-                .Where(s => s.CampaignId == campaignId)
-                .Select(s => new { s.Id, s.Name, s.Content, s.PlayerVisible, s.Tags, s.ImageId })
-                .ToListAsync();
-
-            var entityPresets = await _context.EntityPresets
-                .Where(ep => ep.CampaignId == campaignId)
-                .Select(ep => new
-                {
-                    ep.Id,
-                    ep.Name,
-                    ep.ImageId,
-                    ep.Attributes,
-                    ep.Description,
-                    ep.Health,
-                    ep.IsCurrencyEnabled,
-                    ep.IsHealthEnabled,
-                    ep.IsInventoryEnabled,
-                    ep.IsSpellsetsEnabled,
-                    ep.IsXPEnabled,
-                    ep.PlayerCreatable
-                })
-                .ToListAsync();
-
-            var articles = await _context.Articles
-                .Where(a => a.CampaignId == campaignId)
-                .Select(a => new
-                {
-                    a.Content,
-                    a.Icon,
-                    a.Name,
-                    a.Published,
-                    a.Tags
-                }).ToListAsync();
-
-            var quests = await _context.Quests
-                .Where(q => q.CampaignId == campaignId)
-                .Select(q => new
-                {
-                    q.Accepted,
-                    q.Available,
-                    q.Content,
-                    q.Id,
-                    q.Name,
-                    q.OriginId,
-                    q.Status,
-                    q.Visible
-                }).ToListAsync();
-
             // Zip creation code
             var zipMemStream = new MemoryStream();
 
@@ -101,53 +54,121 @@ namespace net_api.Controllers
                 var serializer = new JsonSerializer();
 
                 // Write items
-                var entry = zipArchive.CreateEntry("items.json");
-
-                using (var strm = entry.Open())
+                if (items)
                 {
-                    var jtw = new JsonTextWriter(new StreamWriter(strm));
-                    serializer.Serialize(jtw, items);
-                    jtw.Flush();
+                    var entry = zipArchive.CreateEntry("items.json");
+                    using (var strm = entry.Open())
+                    {
+                        var itemList = await _context.Items
+                            .Where(i => i.CampaignId == campaignId)
+                            .Select(i => new { i.Id, i.Name, i.Content, i.Cost, i.ImageId, i.Tags, i.Weight, i.PlayerVisible })
+                            .ToListAsync();
+
+                        var jtw = new JsonTextWriter(new StreamWriter(strm));
+                        serializer.Serialize(jtw, itemList);
+                        await jtw.FlushAsync();
+                    }
                 }
 
                 // Write spells
-                entry = zipArchive.CreateEntry("spells.json");
-
-                using (var strm = entry.Open())
+                if (spells)
                 {
-                    var jtw = new JsonTextWriter(new StreamWriter(strm));
-                    serializer.Serialize(jtw, spells);
-                    jtw.Flush();
+                    var entry = zipArchive.CreateEntry("spells.json");
+
+                    using (var strm = entry.Open())
+                    {
+                        var spellList = await _context.Spells
+                            .Where(s => s.CampaignId == campaignId)
+                            .Select(s => new { s.Id, s.Name, s.Content, s.PlayerVisible, s.Tags, s.ImageId })
+                            .ToListAsync();
+
+                        var jtw = new JsonTextWriter(new StreamWriter(strm));
+                        serializer.Serialize(jtw, spellList);
+                        await jtw.FlushAsync();
+                    }
                 }
 
                 // Write entity presets
-                entry = zipArchive.CreateEntry("entity-presets.json");
-
-                using (var strm = entry.Open())
+                if (entitypresets)
                 {
-                    var jtw = new JsonTextWriter(new StreamWriter(strm));
-                    serializer.Serialize(jtw, entityPresets);
-                    jtw.Flush();
+                    var entry = zipArchive.CreateEntry("entity-presets.json");
+
+                    using (var strm = entry.Open())
+                    {
+                        var entityPresetList = await _context.EntityPresets
+                            .Where(ep => ep.CampaignId == campaignId)
+                            .Select(ep => new
+                            {
+                                ep.Id,
+                                ep.Name,
+                                ep.ImageId,
+                                ep.Attributes,
+                                ep.Description,
+                                ep.Health,
+                                ep.IsCurrencyEnabled,
+                                ep.IsHealthEnabled,
+                                ep.IsInventoryEnabled,
+                                ep.IsSpellsetsEnabled,
+                                ep.IsXPEnabled,
+                                ep.PlayerCreatable
+                            })
+                            .ToListAsync();
+
+                        var jtw = new JsonTextWriter(new StreamWriter(strm));
+                        serializer.Serialize(jtw, entityPresetList);
+                        await jtw.FlushAsync();
+                    }
                 }
 
                 // Write articles
-                entry = zipArchive.CreateEntry("articles.json");
-
-                using (var strm = entry.Open())
+                if (articles)
                 {
-                    var jtw = new JsonTextWriter(new StreamWriter(strm));
-                    serializer.Serialize(jtw, articles);
-                    jtw.Flush();
+                    var entry = zipArchive.CreateEntry("articles.json");
+
+                    using (var strm = entry.Open())
+                    {
+                        var articleList = await _context.Articles
+                            .Where(a => a.CampaignId == campaignId)
+                            .Select(a => new
+                            {
+                                a.Content,
+                                a.Icon,
+                                a.Name,
+                                a.Published,
+                                a.Tags
+                            }).ToListAsync();
+
+                        var jtw = new JsonTextWriter(new StreamWriter(strm));
+                        serializer.Serialize(jtw, articleList);
+                        await jtw.FlushAsync();
+                    }
                 }
 
                 // Write quests
-                entry = zipArchive.CreateEntry("quests.json");
-
-                using (var strm = entry.Open())
+                if (quests)
                 {
-                    var jtw = new JsonTextWriter(new StreamWriter(strm));
-                    serializer.Serialize(jtw, quests);
-                    jtw.Flush();
+                    var entry = zipArchive.CreateEntry("quests.json");
+
+                    using (var strm = entry.Open())
+                    {
+                        var questList = await _context.Quests
+                            .Where(q => q.CampaignId == campaignId)
+                            .Select(q => new
+                            {
+                                q.Accepted,
+                                q.Available,
+                                q.Content,
+                                q.Id,
+                                q.Name,
+                                q.OriginId,
+                                q.Status,
+                                q.Visible
+                            }).ToListAsync();
+
+                        var jtw = new JsonTextWriter(new StreamWriter(strm));
+                        serializer.Serialize(jtw, questList);
+                        await jtw.FlushAsync();
+                    }
                 }
             }
 

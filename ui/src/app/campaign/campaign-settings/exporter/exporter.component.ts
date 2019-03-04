@@ -55,7 +55,7 @@ export class ExporterComponent implements OnInit {
     }
 
     if (v.exportEntityPresets) {
-      link += 'entitypresets=true';
+      link += '&entitypresets=true';
     }
 
     return link;
