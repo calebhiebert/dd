@@ -13,6 +13,7 @@ import {
   IFloatFieldOptions,
   IEnumFieldOptions,
 } from '../form-types';
+import { _callOnClient } from '@sentry/minimal';
 
 @Component({
   selector: 'dd-field-base',
@@ -21,14 +22,32 @@ import {
 })
 export class FieldBaseComponent implements OnInit {
   @Input()
-  public attribute: IEntityAttribute;
-
-  @Input()
-  public config: IDynamicFieldConfig;
-
-  @Input()
   public control: FormControl;
 
+  @Input()
+  public set attribute(value) {
+    this._attribute = value;
+    this._fieldConfigCache = undefined;
+    this.control.setValidators(this.getValidators(this.fieldConfig));
+  }
+
+  public get attribute() {
+    return this._attribute;
+  }
+
+  @Input()
+  public set config(value) {
+    this._config = value;
+    this._fieldConfigCache = undefined;
+    this.control.setValidators(this.getValidators(this.fieldConfig));
+  }
+
+  public get config() {
+    return this._config;
+  }
+
+  private _attribute: IEntityAttribute;
+  private _config: IDynamicFieldConfig;
   private _fieldConfigCache: IDynamicFieldConfig;
 
   constructor() {}
