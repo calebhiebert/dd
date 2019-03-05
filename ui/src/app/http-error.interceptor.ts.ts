@@ -64,7 +64,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               case 403:
                 await Swal.fire({
                   title: 'No Permissions',
-                  text: "Looks like you don't have permission for that!",
+                  text: 'Looks like you don\'t have permission for that!',
                   type: 'error',
                   confirmButtonText: 'Shucks',
                 });

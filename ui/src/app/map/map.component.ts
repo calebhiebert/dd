@@ -477,7 +477,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             allowIntersection: false, // Restricts shapes to simple polygons
             drawError: {
               color: '#e1e100', // Color the shape will turn when intersects
-              message: "<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
+              message: '<strong>Oh snap!<strong> you can\'t draw that!', // Message that will show when intersect
             },
           },
           circlemarker: false,
@@ -627,6 +627,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (entity.lat && entity.lng) {
       const marker = L.marker([entity.lat, entity.lng], {
         icon: L.icon({
+          // tslint:disable-next-line:max-line-length
           iconUrl: `https://res.cloudinary.com/dqhk8k6iv/image/upload/bo_2px_solid_rgb:303742,c_lfill,g_faces:auto,h_${ENTITY_ICON_SIZE},r_${ENTITY_ICON_SIZE /
             2},w_${ENTITY_ICON_SIZE}/${entity.imageId}`,
           iconSize: [ENTITY_ICON_SIZE, ENTITY_ICON_SIZE],

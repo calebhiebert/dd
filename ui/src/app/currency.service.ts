@@ -26,9 +26,9 @@ export class CurrencyService {
         return b.value - a.value;
       });
 
-    let results: IMappedCurrency[] = [];
+    const results: IMappedCurrency[] = [];
 
-    for (let cl of sortedCurrencyMap) {
+    for (const cl of sortedCurrencyMap) {
       const remainder = amount % cl.value;
 
       const amt = Math.round(amount - remainder) / cl.value;

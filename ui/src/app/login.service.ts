@@ -163,8 +163,8 @@ export class LoginService {
               this.saveToken(res.accessToken);
               this.authData = userInfo;
             })
-            .catch((err) => {
-              console.log('Error when updating access token', err);
+            .catch((uinfoErr) => {
+              console.log('Error when updating access token', uinfoErr);
             });
         }
       }

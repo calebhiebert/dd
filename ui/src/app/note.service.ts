@@ -35,7 +35,7 @@ export class NoteService {
 
   public clearNoteCache() {
     if (this._noteCache) {
-      for (var note of this._noteCache) {
+      for (const note of this._noteCache) {
         this._noteDelete.emit(note);
       }
     }
@@ -85,9 +85,9 @@ export class NoteService {
     return this.http
       .post<INote>(`${environment.apiURL}/notes`, note)
       .toPromise()
-      .then((note) => {
-        this.addOrUpdateCacheNotes([note]);
-        return note;
+      .then((createdNote) => {
+        this.addOrUpdateCacheNotes([createdNote]);
+        return createdNote;
       });
   }
 

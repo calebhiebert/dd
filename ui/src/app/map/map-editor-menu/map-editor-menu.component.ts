@@ -2,6 +2,18 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { CampaignService } from 'src/app/campaign.service';
 
+export interface IMapEditorOperation {
+  type: MapEditorOperationType;
+}
+
+export enum MapEditorOperationType {
+  NONE,
+  PLACE_NOTE,
+  UPDATE_ENTITY_POSITION,
+  LINK_ARTICLE,
+  PLACE_SHAPELY_NOTE,
+}
+
 @Component({
   selector: 'dd-map-editor-menu',
   templateUrl: './map-editor-menu.component.html',
@@ -66,16 +78,4 @@ export class MapEditorMenuComponent implements OnInit {
   public get campaignEditable() {
     return this.campaignService.canEdit;
   }
-}
-
-export interface IMapEditorOperation {
-  type: MapEditorOperationType;
-}
-
-export enum MapEditorOperationType {
-  NONE,
-  PLACE_NOTE,
-  UPDATE_ENTITY_POSITION,
-  LINK_ARTICLE,
-  PLACE_SHAPELY_NOTE,
 }

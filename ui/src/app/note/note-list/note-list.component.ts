@@ -28,7 +28,6 @@ export class NoteListComponent implements OnInit {
   /**
    * Returns the username of the user with the specified id.
    * If the user cannot be found, returns an empty string
-   * @param userId
    */
   public getUserText(userId: string): string {
     const user = this.campaignService.getUser(userId);
