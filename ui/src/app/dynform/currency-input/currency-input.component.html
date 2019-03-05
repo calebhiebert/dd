@@ -1,0 +1,33 @@
+<div>
+  <!-- Single Control -->
+  <label class="form-label">
+    Currency
+  </label>
+  <div class="input-group" *ngIf="formControl">
+    <input
+      type="text"
+      class="form-input"
+      [formControl]="formControl"
+      [placeholder]="levels[0].name"
+    />
+    <div class="input-group-addon">{{ levels[0].name }}</div>
+  </div>
+
+  <!-- Multi Controls -->
+  <div class="columns" *ngIf="formArray">
+    <div
+      class="col-4 col-sm-12 p-1"
+      *ngFor="let control of controls; let idx = index"
+    >
+      <div class="input-group">
+        <input
+          type="number"
+          class="form-input"
+          [formControl]="control"
+          [placeholder]="levels[idx].name"
+        />
+        <div class="input-group-addon">{{ levels[idx].name }}</div>
+      </div>
+    </div>
+  </div>
+</div>

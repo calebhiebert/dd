@@ -4,6 +4,8 @@ import { FormControl, Validators, ValidatorFn } from '@angular/forms';
 import { AttributeType } from 'src/app/attributes';
 import { numberValidator } from '../../dynamic-attribute-form/dynamic-attribute-form.component';
 import { IEntityAttribute } from 'src/app/entity.service';
+import { ICurrencyFieldOptions } from 'src/app/dynform/form-types';
+import { CampaignService } from 'src/app/campaign.service';
 
 @Component({
   selector: 'dd-entity-attribute-editor-modal',
@@ -21,7 +23,7 @@ export class EntityAttributeEditorModalComponent implements OnInit {
 
   public control: FormControl;
 
-  constructor() {}
+  constructor(private campaignService: CampaignService) {}
 
   ngOnInit() {}
 

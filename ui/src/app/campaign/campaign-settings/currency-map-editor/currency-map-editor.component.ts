@@ -35,6 +35,10 @@ export class CurrencyMapEditorComponent implements OnInit {
     }
 
     this.formGroup.addControl('currencyMap', this.items);
+    this.formGroup.addControl('trackCoins', new FormControl(false));
+
+    this.items.controls[0].get('value').disable();
+    this.items.controls[0].get('useInConversions').disable();
   }
 
   private getFormGroup(cl: ICurrencyLevel) {
@@ -63,5 +67,9 @@ export class CurrencyMapEditorComponent implements OnInit {
 
   public get controls() {
     return this.items.controls;
+  }
+
+  public get trackCoins() {
+    return this.formGroup.get('trackCoins');
   }
 }

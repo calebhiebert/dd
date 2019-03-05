@@ -1,3 +1,5 @@
+import { ICurrencyLevel } from '../campaign.service';
+
 export interface IDynamicFieldConfig {
   name: string;
   description?: string;
@@ -39,6 +41,11 @@ export interface ITextFormattedFieldOptions extends IFieldOptions {
   simple?: boolean;
 }
 
+export interface ICurrencyFieldOptions extends IFieldOptions {
+  levels: ICurrencyLevel[];
+  trackCoins?: boolean;
+}
+
 export type DynamicFieldOptions =
   | IFieldOptions
   | IStringFieldOptions
@@ -46,7 +53,8 @@ export type DynamicFieldOptions =
   | IFloatFieldOptions
   | IEnumFieldOptions
   | IEnumMultiFieldOptions
-  | ITextFormattedFieldOptions;
+  | ITextFormattedFieldOptions
+  | ICurrencyFieldOptions;
 
 export enum DynamicFieldType {
   STRING,
@@ -55,4 +63,5 @@ export enum DynamicFieldType {
   ENUM,
   ENUM_MULTI,
   TEXT_FORMATTED,
+  CURRENCY,
 }

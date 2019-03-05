@@ -42,13 +42,28 @@
 
       <div class="column col-auto">
         <label class="form-label">Remove</label>
-        <button class="btn btn-sm btn-error" (click)="removeCurrencyLevel(idx)">
+        <button
+          class="btn btn-sm btn-error"
+          (click)="removeCurrencyLevel(idx)"
+          [disabled]="idx === 0"
+        >
           <i class="icon icon-cross"></i>
         </button>
       </div>
     </div>
   </div>
-  <button class="btn btn-sm mt-2" (click)="addCurrencyLevel()">
-    <i class="icon icon-plus"></i><span class="hide-sm"> Add Level</span>
-  </button>
+
+  <div class="columns">
+    <div class="column col-auto">
+      <button class="btn btn-sm mt-2" (click)="addCurrencyLevel()">
+        <i class="icon icon-plus"></i><span class="hide-sm"> Add Level</span>
+      </button>
+    </div>
+    <div class="column col-auto">
+      <label class="form-checkbox mt-2">
+        <input type="checkbox" [formControl]="trackCoins" />
+        <i class="form-icon"></i> Track individual coins
+      </label>
+    </div>
+  </div>
 </div>

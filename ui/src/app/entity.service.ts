@@ -227,6 +227,11 @@ export interface IViewAttribute {
   pattr: IEntityAttribute;
 }
 
+export interface ICurrency {
+  values: { [key: string]: number };
+  value: number;
+}
+
 export enum EntityAttributeClass {
   MAJOR,
   NORMAL,

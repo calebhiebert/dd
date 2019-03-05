@@ -105,6 +105,7 @@ import { FieldBaseComponent } from './dynform/field-base/field-base.component';
 import { DynamicFieldComponent } from './dynform/dynamic-field/dynamic-field.component';
 import { DynamicInputComponent } from './dynform/dynamic-input/dynamic-input.component';
 import { DynamicValidationErrorsComponent } from './dynform/dynamic-validation-errors/dynamic-validation-errors.component';
+import { CurrencyInputComponent } from './dynform/currency-input/currency-input.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -206,6 +207,7 @@ import { DynamicValidationErrorsComponent } from './dynform/dynamic-validation-e
     DynamicFieldComponent,
     DynamicInputComponent,
     DynamicValidationErrorsComponent,
+    CurrencyInputComponent,
   ],
   imports: [
     BrowserModule,

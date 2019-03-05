@@ -100,6 +100,8 @@ namespace net_api.Models
             }
         }
 
+        public bool TrackCoins { get; set; }
+
         public DateTime CreatedAt { get; set; }
         
         [Required]
