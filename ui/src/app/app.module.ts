@@ -100,6 +100,9 @@ import { QuillComponent } from './quill/quill.component';
 import { UserViewMiniComponent } from './account/user-view-mini/user-view-mini.component';
 import { CurrencyMapEditorComponent } from './campaign/campaign-settings/currency-map-editor/currency-map-editor.component';
 import { ExporterComponent } from './campaign/campaign-settings/exporter/exporter.component';
+import { DynamicFieldHorizontalComponent } from './dynform/dynamic-field-horizontal/dynamic-field-horizontal.component';
+import { FieldBaseComponent } from './dynform/field-base/field-base.component';
+import { DynamicFieldComponent } from './dynform/dynamic-field/dynamic-field.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -196,6 +199,9 @@ import { ExporterComponent } from './campaign/campaign-settings/exporter/exporte
     UserViewMiniComponent,
     CurrencyMapEditorComponent,
     ExporterComponent,
+    DynamicFieldHorizontalComponent,
+    FieldBaseComponent,
+    DynamicFieldComponent,
   ],
   imports: [
     BrowserModule,
