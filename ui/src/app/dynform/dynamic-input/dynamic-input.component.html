@@ -1,0 +1,73 @@
+<div [ngClass]="{ 'has-icon-left': config.imageId }" [ngSwitch]="config.type">
+  <!-- String Input -->
+  <input
+    type="text"
+    name="attr"
+    class="form-input"
+    [placeholder]="config.name"
+    [formControl]="control"
+    *ngSwitchCase="0"
+  />
+
+  <!-- Int Input -->
+  <input
+    type="number"
+    name="attr"
+    class="form-input"
+    [placeholder]="config.name"
+    [formControl]="control"
+    *ngSwitchCase="1"
+  />
+
+  <!-- Float Input -->
+  <input
+    type="number"
+    name="attr"
+    class="form-input"
+    [placeholder]="config.name"
+    [formControl]="control"
+    [step]="config.options.step"
+    *ngSwitchCase="2"
+  />
+
+  <!-- Enum input -->
+  <select
+    class="form-input"
+    name="attr"
+    [formControl]="control"
+    *ngSwitchCase="3"
+  >
+    <option *ngFor="let o of config.options.choices" [value]="o">{{
+      o
+    }}</option>
+  </select>
+
+  <!-- Enum Multi input -->
+  <select
+    class="form-input"
+    name="attr"
+    [formControl]="control"
+    multiple="true"
+    *ngSwitchCase="4"
+  >
+    <option *ngFor="let o of config.options.choices" [value]="o">{{
+      o
+    }}</option>
+  </select>
+
+  <!-- Text Formatted Input -->
+  <dd-quill
+    [placeholder]="config.name"
+    [formControl]="control"
+    simple="true"
+    *ngSwitchCase="5"
+  ></dd-quill>
+
+  <figure class="form-icon avatar" *ngIf="config.imageId">
+    <img
+      src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+        config.imageId
+      }}"
+    />
+  </figure>
+</div>

@@ -1,0 +1,38 @@
+<p
+  class="form-input-hint mb-1"
+  *ngIf="
+    control.invalid && (control.dirty || control.touched) && errors.required
+  "
+>
+  {{ config.name }} is required
+</p>
+<p
+  class="form-input-hint mb-1"
+  *ngIf="control.invalid && (control.dirty || control.touched) && errors.min"
+>
+  {{ config.name }} can't be lower than {{ config.options.min }}
+</p>
+<p
+  class="form-input-hint mb-1"
+  *ngIf="control.invalid && (control.dirty || control.touched) && errors.max"
+>
+  {{ config.name }} can't be higher than {{ config.options.max }}
+</p>
+<p
+  class="form-input-hint mb-1"
+  *ngIf="
+    control.invalid && (control.dirty || control.touched) && errors.minlength
+  "
+>
+  {{ config.name }} cannot have less than
+  {{ config.options.minLength }} characters
+</p>
+<p
+  class="form-input-hint mb-1"
+  *ngIf="
+    control.invalid && (control.dirty || control.touched) && errors.maxlength
+  "
+>
+  {{ config.name }} cannot have more than
+  {{ config.options.maxLength }} characters
+</p>

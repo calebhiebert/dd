@@ -103,6 +103,8 @@ import { ExporterComponent } from './campaign/campaign-settings/exporter/exporte
 import { DynamicFieldHorizontalComponent } from './dynform/dynamic-field-horizontal/dynamic-field-horizontal.component';
 import { FieldBaseComponent } from './dynform/field-base/field-base.component';
 import { DynamicFieldComponent } from './dynform/dynamic-field/dynamic-field.component';
+import { DynamicInputComponent } from './dynform/dynamic-input/dynamic-input.component';
+import { DynamicValidationErrorsComponent } from './dynform/dynamic-validation-errors/dynamic-validation-errors.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -202,6 +204,8 @@ import { DynamicFieldComponent } from './dynform/dynamic-field/dynamic-field.com
     DynamicFieldHorizontalComponent,
     FieldBaseComponent,
     DynamicFieldComponent,
+    DynamicInputComponent,
+    DynamicValidationErrorsComponent,
   ],
   imports: [
     BrowserModule,

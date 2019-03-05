@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FieldBaseComponent } from '../field-base/field-base.component';
 
 @Component({
@@ -7,6 +7,9 @@ import { FieldBaseComponent } from '../field-base/field-base.component';
   styleUrls: ['./dynamic-field.component.css'],
 })
 export class DynamicFieldComponent extends FieldBaseComponent {
+  @Input()
+  public showLabel: boolean;
+
   constructor() {
     super();
   }

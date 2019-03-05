@@ -14,8 +14,4 @@ export class DynamicFieldHorizontalComponent extends FieldBaseComponent {
   ngOnInit() {
     super.ngOnInit();
   }
-
-  public get errors() {
-    return this.control.errors as any;
-  }
 }

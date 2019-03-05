@@ -4,7 +4,7 @@
       class="col-12 mb-2"
       [attribute]="att"
       [control]="control(att.name)"
-      *ngFor="let att of attributes"
+      *ngFor="let att of attributes; trackBy: trackAttribute"
     ></dd-dynamic-field-horizontal>
   </div>
 </div>

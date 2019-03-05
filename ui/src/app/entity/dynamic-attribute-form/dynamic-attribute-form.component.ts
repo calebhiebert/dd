@@ -8,7 +8,7 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { AttributeType, Attribute } from 'src/app/attributes';
-import { IEntityAttribute } from 'src/app/entity.service';
+import { IEntityAttribute, IAttribute } from 'src/app/entity.service';
 
 // TODO move this to some sort of validator file
 export const numberValidator: ValidatorFn = (
@@ -106,6 +106,10 @@ export class DynamicAttributeFormComponent implements OnInit {
 
   public control(name: string): AbstractControl {
     return this.formGroup.get(name);
+  }
+
+  public trackAttribute(idx: number, attr: IEntityAttribute) {
+    return attr.name;
   }
 
   @Input()
