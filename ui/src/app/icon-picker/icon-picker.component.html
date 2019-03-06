@@ -12,6 +12,10 @@
   </div>
 </dd-modal>
 
-<div class="picker-box" (click)="openPicker()">
+<div
+  class="picker-box"
+  [ngClass]="{ disabled: isDisabled }"
+  (click)="openPicker()"
+>
   <img *ngIf="selectedIconSrc" [src]="selectedIconSrc" />
 </div>

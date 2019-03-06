@@ -118,6 +118,8 @@ namespace net_api.Models
 
         public List<Quest> Quests { get; set; }
 
+        public List<ConceptType> ConceptTypes { get; set; }
+
         [JsonIgnore]
         public List<CampaignInvite> Invites { get; set; }
 

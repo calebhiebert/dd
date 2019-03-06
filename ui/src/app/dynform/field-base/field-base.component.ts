@@ -157,7 +157,7 @@ export class FieldBaseComponent implements OnInit {
   }
 
   public get fieldConfig(): IDynamicFieldConfig {
-    if (!this.config && !this._fieldConfigCache) {
+    if (!this.config && !this._fieldConfigCache && this.attribute) {
       this._fieldConfigCache = {
         name: this.attribute.name,
         description: this.attribute.description,

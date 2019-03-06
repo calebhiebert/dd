@@ -6,8 +6,10 @@
   }"
 >
   <label class="form-label" *ngIf="showLabel"
-    >{{ attribute.name }}
-    <span *ngIf="attribute.required" class="text-primary text-large text-bold"
+    >{{ fieldConfig.name }}
+    <span
+      *ngIf="fieldConfig.options.required"
+      class="text-primary text-large text-bold"
       >*</span
     ></label
   >
@@ -16,7 +18,9 @@
     [control]="control"
     [config]="fieldConfig"
   ></dd-dynamic-input>
-  <p class="form-input-hint mb-0">{{ attribute.description }}</p>
+  <p class="form-input-hint mb-0" *ngIf="fieldConfig.description">
+    {{ fieldConfig.description }}
+  </p>
   <dd-dynamic-validation-errors
     [config]="fieldConfig"
     [control]="control"

@@ -4,7 +4,7 @@ export interface IDynamicFieldConfig {
   name: string;
   description?: string;
   imageId?: string;
-  defaultValue: any;
+  defaultValue?: any;
   type: DynamicFieldType;
   options?: DynamicFieldOptions;
 }

@@ -35,6 +35,7 @@ import { ArticleViewComponent } from './article/article-view/article-view.compon
 import { ArticleManagerComponent } from './article/article-manager/article-manager.component';
 import { AccountSettingsComponent } from './account/account-settings/account-settings.component';
 import { UnsavedChangesGuard } from './unsaved-changes.guard';
+import { ConceptTypeEditorComponent } from './concept/concept-type-editor/concept-type-editor.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -132,6 +133,20 @@ const routes: Routes = [
             },
           },
         ],
+      },
+      {
+        path: 'concepttypes/create',
+        component: ConceptTypeEditorComponent,
+        data: {
+          editing: false,
+        },
+      },
+      {
+        path: 'concepttypes/:ct_id/edit',
+        component: ConceptTypeEditorComponent,
+        data: {
+          editing: true,
+        },
       },
       {
         path: 'entitytypes/create',

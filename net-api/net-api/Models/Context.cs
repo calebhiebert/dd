@@ -24,6 +24,7 @@ namespace net_api.Models
         public DbSet<Note> Notes { get; set; }
         public DbSet<Spell> Spells { get; set; }
         public DbSet<Article> Articles { get; set; }
+        public DbSet<ConceptType> ConceptTypes { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<CampaignNotification> CampaignInviteNotifications { get; set; }

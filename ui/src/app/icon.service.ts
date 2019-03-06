@@ -20,6 +20,9 @@ export class IconService {
     'hazard-sign',
     'drakkar',
     'pig',
+    'sharp-shuriken',
+    'swap-bag',
+    'radar-sweep',
   ];
 
   constructor() {}
