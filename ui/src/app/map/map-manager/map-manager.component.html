@@ -68,5 +68,14 @@
         </button>
       </div>
     </div>
+
+    <!-- Pagination -->
+    <dd-paginator
+      [totalItems]="totalMaps"
+      itemsPerPage="10"
+      [autoHide]="false"
+      [page]="page"
+      (pageChange)="page = $event"
+    ></dd-paginator>
   </div>
 </div>

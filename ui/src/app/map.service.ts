@@ -8,9 +8,24 @@ import { environment } from 'src/environments/environment';
 export class MapService {
   constructor(private http: HttpClient) {}
 
-  public getMaps(campaignId: string): Promise<IMap[]> {
+  public getMaps(
+    campaignId: string,
+    limit = 10,
+    offset = 0,
+    search?: string
+  ): Promise<IMapSearchResult> {
+    let searchQuery = '';
+
+    if (search) {
+      searchQuery = `&search=${encodeURIComponent(search)}`;
+    }
+
     return this.http
-      .get<IMap[]>(`${environment.apiURL}/maps?campaignId=${campaignId}`)
+      .get<IMapSearchResult>(
+        `${
+          environment.apiURL
+        }/maps?campaignId=${campaignId}&limit=${limit}&offset=${offset}${searchQuery}`
+      )
       .toPromise();
   }
 
@@ -31,6 +46,11 @@ export class MapService {
       .put<void>(`${environment.apiURL}/maps/${map.id}`, map)
       .toPromise();
   }
+}
+
+export interface IMapSearchResult {
+  total: number;
+  maps: IMap[];
 }
 
 export interface IMap {

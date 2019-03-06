@@ -36,7 +36,12 @@ namespace net_api.Controllers
         // GET: api/Maps
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Map>>> GetMaps([FromQuery] Guid? campaignId)
+        public async Task<ActionResult<IEnumerable<Map>>> GetMaps(
+            [FromQuery] Guid? campaignId,
+            [FromQuery] int? limit,
+            [FromQuery] int? offset,
+            [FromQuery] string search
+            )
         {
             if (campaignId == null)
             {
@@ -70,6 +75,28 @@ namespace net_api.Controllers
                 mapQuery = mapQuery.Where(m => m.Status == MapStatus.Processed && m.PlayerVisible == true);
             }
 
+            if (search != null && search.Trim().Length > 0)
+            {
+                mapQuery = mapQuery.Where(m => m.Name.ToLower().Contains(search.ToLower()));
+            }
+
+            if (limit == null || limit <= 0)
+            {
+                limit = 10;
+            } else if (limit > 50)
+            {
+                limit = 50;
+            }
+
+            if (offset == null || offset < 0)
+            {
+                offset = 0;
+            }
+
+            mapQuery = mapQuery.Skip((int)offset).Take((int)limit);
+
+            var totalCount = await mapQuery.CountAsync();
+
             var maps = await mapQuery
                 .Select(m => new Map{
                     Id = m.Id,
@@ -83,7 +110,7 @@ namespace net_api.Controllers
                 })
                 .ToListAsync();
 
-            return maps;
+            return Ok(new { Maps = maps, Total = totalCount });
         }
 
         [HttpPost("finished")]

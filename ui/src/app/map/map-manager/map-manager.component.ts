@@ -12,6 +12,8 @@ import Swal from 'sweetalert2';
 export class MapManagerComponent implements OnInit {
   public loading = false;
   public maps: IMap[];
+  public totalMaps: number;
+  public page = 1;
 
   constructor(
     private mapService: MapService,
@@ -27,9 +29,14 @@ export class MapManagerComponent implements OnInit {
     this.loading = true;
 
     try {
-      this.maps = await this.mapService.getMaps(
-        this.campaignService.campaign.id
+      const result = await this.mapService.getMaps(
+        this.campaignService.campaign.id,
+        10,
+        10 * (this.page - 1)
       );
+
+      this.maps = result.maps;
+      this.totalMaps = result.total;
     } catch (err) {
       throw err;
     }
@@ -67,6 +74,12 @@ export class MapManagerComponent implements OnInit {
         throw err;
       }
     }
+  }
+
+  public setPage(page: number) {
+    this.page = page;
+
+    this.load();
   }
 
   public get editable() {
