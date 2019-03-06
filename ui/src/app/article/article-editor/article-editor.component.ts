@@ -80,7 +80,7 @@ export class ArticleEditorComponent implements OnInit, ComponentCanDeactivate {
     if (this.editing) {
       article.id = this._article.id;
       article.userId = this._article.userId;
-      article.map = this._article.map;
+      article.mapId = this._article.mapId;
       article.lat = this._article.lat;
       article.lng = this._article.lng;
     }
