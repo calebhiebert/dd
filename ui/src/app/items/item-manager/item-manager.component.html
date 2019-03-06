@@ -31,6 +31,12 @@
       </div>
     </div>
   </div>
+
+  <!-- Tags -->
+  <div>
+    <span class="label label-rounded m-1" *ngFor="let t of tags">{{ t }}</span>
+  </div>
+
   <div class="loading loading-lg" *ngIf="loading && !items"></div>
 
   <div *ngIf="items">

@@ -18,6 +18,7 @@ export class ItemManagerComponent implements OnInit {
   public items: IItem[];
   public totalItemCount: number;
   public queryLimit = 10;
+  public tags: string[];
 
   private _queryOffset: number;
   private _page = 1;
@@ -100,6 +101,16 @@ export class ItemManagerComponent implements OnInit {
     }
 
     this.loading = false;
+  }
+
+  private async loadTags() {
+    try {
+      this.tags = await this.itemService.getTags(
+        this.campaignService.campaign.id
+      );
+    } catch (err) {
+      throw err;
+    }
   }
 
   private async writeURLParams() {

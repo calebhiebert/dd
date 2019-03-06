@@ -135,6 +135,33 @@ namespace net_api.Controllers
             return Ok(item);
         }
 
+        [HttpGet("tags")]
+        public async Task<IActionResult> GetTagList([FromQuery] Guid campaignId)
+        {
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == campaignId)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            var tags = await _context.Query<Tags>()
+                .FromSql("SELECT DISTINCT UNNEST(\"Tags\") AS \"Tag\" FROM \"Items\"")
+                .Select(t => t.Tag)
+                .ToArrayAsync();
+
+            return Ok(tags);
+        }
+
         // PUT: api/Items/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutItem([FromRoute] Guid id, [FromBody] Item item)

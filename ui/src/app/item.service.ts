@@ -51,6 +51,14 @@ export class ItemService {
       .get<IItem>(`${environment.apiURL}/items/${id}`)
       .toPromise();
   }
+
+  public async getTags(campaignId: string): Promise<string[]> {
+    return this.http
+      .get<string[]>(
+        `${environment.apiURL}/items/tags?campaignId=${campaignId}`
+      )
+      .toPromise();
+  }
 }
 
 export interface IItem {

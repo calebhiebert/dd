@@ -59,6 +59,7 @@ namespace net_api.Models
             modelBuilder.Entity<ArticleQuest>().HasKey(tbl => new { tbl.ArticleId, tbl.QuestId });
 
             modelBuilder.Query<MapBytePosition>();
+            modelBuilder.Query<Tags>();
         }
     }
 }
