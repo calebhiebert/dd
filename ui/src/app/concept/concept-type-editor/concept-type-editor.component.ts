@@ -111,7 +111,7 @@ export class ConceptTypeEditorComponent
   }
 
   public addField() {
-    this.fields.push(new FormGroup({}));
+    this.fields.push(FieldDefinitionFormComponent.createFormGroup(null));
   }
 
   public removeField(idx: number) {
@@ -133,6 +133,8 @@ export class ConceptTypeEditorComponent
       } else {
         await this.conceptService.createConceptType(conceptType);
       }
+
+      this.formGroup.markAsPristine();
     } catch (err) {
       throw err;
     }
@@ -158,7 +160,20 @@ export class ConceptTypeEditorComponent
     this.location.back();
   }
 
-  public async delete() {}
+  public async delete() {
+    this.deleting = true;
+
+    try {
+      await this.conceptService.deleteConceptType(this.conceptType.id);
+    } catch (err) {
+      throw err;
+    }
+    
+    this.formGroup.markAsPristine();
+    this.cancel();
+
+    this.deleting = false;
+  }
 
   public get editing() {
     return this.route.snapshot.data.editing;

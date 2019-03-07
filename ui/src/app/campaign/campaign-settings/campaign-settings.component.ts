@@ -56,6 +56,8 @@ export class CampaignSettingsComponent
     ) {
       this.campaign.experienceTable = [];
     }
+
+    this.campaignService.refreshCurrentCampaign();
   }
 
   public canDeactivate() {

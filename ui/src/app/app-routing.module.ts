@@ -137,6 +137,7 @@ const routes: Routes = [
       {
         path: 'concepttypes/create',
         component: ConceptTypeEditorComponent,
+        canDeactivate: [UnsavedChangesGuard],
         data: {
           editing: false,
         },
@@ -144,6 +145,7 @@ const routes: Routes = [
       {
         path: 'concepttypes/:ct_id/edit',
         component: ConceptTypeEditorComponent,
+        canDeactivate: [UnsavedChangesGuard],
         data: {
           editing: true,
         },

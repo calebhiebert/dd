@@ -109,6 +109,7 @@ import { CurrencyInputComponent } from './dynform/currency-input/currency-input.
 import { FieldDefinitionFormComponent } from './dynform/field-definition-form/field-definition-form.component';
 import { ConceptEditorComponent } from './concept/concept-editor/concept-editor.component';
 import { ConceptTypeEditorComponent } from './concept/concept-type-editor/concept-type-editor.component';
+import { ConceptManagerComponent } from './concept/concept-manager/concept-manager.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -214,6 +215,7 @@ import { ConceptTypeEditorComponent } from './concept/concept-type-editor/concep
     FieldDefinitionFormComponent,
     ConceptEditorComponent,
     ConceptTypeEditorComponent,
+    ConceptManagerComponent,
   ],
   imports: [
     BrowserModule,

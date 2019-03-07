@@ -4,8 +4,6 @@ import {
   FormControl,
   FormArray,
   Validators,
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
 import {
@@ -13,9 +11,9 @@ import {
   IDynamicFieldConfig,
   DynamicFieldOptions,
   IStringFieldOptions,
-  IFieldOptions,
   IEnumFieldOptions,
 } from '../form-types';
+import {Chance} from 'chance';
 
 @Component({
   selector: 'dd-field-definition-form',
@@ -27,9 +25,20 @@ export class FieldDefinitionFormComponent implements OnInit {
   public formGroup: FormGroup;
   public options: FormGroup;
 
-  constructor(private campaignService: CampaignService) {}
+  public uniqueFieldId: string;
+
+  constructor(private campaignService: CampaignService) {
+    this.uniqueFieldId = new Chance().guid();
+  }
 
   public static createFormGroup(config: IDynamicFieldConfig): FormGroup {
+    if (config === null || config === undefined) {
+      config = {
+        name: null,
+        type: null
+      };
+    }
+
     return new FormGroup({
       name: new FormControl(config.name, [
         Validators.required,

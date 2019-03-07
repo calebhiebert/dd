@@ -45,6 +45,21 @@ export class CampaignService {
     this.loadingCampaign = false;
   }
 
+  public async refreshCurrentCampaign() {
+    if (!this.campaign) {
+      return;
+    }
+
+    try {
+      const campaign = await this.getCampaign(this.campaign.id);
+      Object.assign(this.campaign, campaign);
+      document.title = this.campaign.name;
+      this.events.emit(campaign);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   /**
    * Returns a list of campaigns the user can access
    */
