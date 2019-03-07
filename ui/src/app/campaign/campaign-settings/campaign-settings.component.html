@@ -120,11 +120,11 @@
   </div>
   <div class="empty" *ngIf="editing && campaign.entityPresets.length === 0">
     <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
-    <p class="empty-title h5">There are no entity presets :(</p>
+    <p class="empty-title h5">There are no entity types :(</p>
     <p class="empty-subtitle">Click the button to create one</p>
     <div class="empty-action">
       <button class="btn btn-primary" (click)="createEntityPreset()">
-        Create Preset
+        Create Type
       </button>
     </div>
   </div>
@@ -147,6 +147,46 @@
         <div class="column">
           <h4 class="mb-1">{{ ep.name }}</h4>
           <span class="text-gray">{{ ep.description | truncate: 120 }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider my-2" *ngIf="editing"></div>
+
+  <!-- Concept Types -->
+  <div class="columns mt-2" *ngIf="editing">
+    <div class="column"><h3>Concept Types</h3></div>
+    <div class="column col-auto">
+      <button class="btn btn-sm" (click)="createConceptType()">
+        <i class="icon icon-plus"></i
+        ><span class="hide-sm"> New Concept Type</span>
+      </button>
+    </div>
+  </div>
+  <div class="empty" *ngIf="editing && campaign.conceptTypes.length === 0">
+    <div class="empty-icon"><i class="icon icon-search icon-4x"></i></div>
+    <p class="empty-title h5">There are no concept types :(</p>
+    <p class="empty-subtitle">Click the button to create one</p>
+    <div class="empty-action">
+      <button class="btn btn-primary" (click)="createConceptType()">
+        Create Concept Type
+      </button>
+    </div>
+  </div>
+  <div *ngIf="editing">
+    <div
+      class="card p-2 mb-2 hoverable"
+      *ngFor="let ct of campaign.conceptTypes"
+      (click)="selectConceptType(ct)"
+    >
+      <div class="columns">
+        <div class="column col-auto" *ngIf="ct.icon">
+          <img class="img-responsive" src="{{ getIcon(ct.icon) }}" />
+        </div>
+        <div class="column">
+          <h4 class="mb-1">{{ ct.name }}</h4>
+          <span class="text-gray">{{ ct.description | truncate: 120 }}</span>
         </div>
       </div>
     </div>
@@ -191,3 +231,5 @@
     </div>
   </div>
 </div>
+
+<div class="loading" *ngIf="loading"></div>

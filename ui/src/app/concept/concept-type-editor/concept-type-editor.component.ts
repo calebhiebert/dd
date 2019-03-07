@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import {
   IDynamicFieldConfig,
   DynamicFieldType,
@@ -50,12 +50,13 @@ export class ConceptTypeEditorComponent
     private campaignService: CampaignService,
     private conceptService: ConceptService,
     private login: LoginService,
-    private location: Location
+    private location: Location,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      name: new FormControl(null),
+      name: new FormControl(null, [Validators.required]),
       description: new FormControl(null),
       icon: new FormControl(null),
       fields: new FormArray([]),
@@ -67,6 +68,8 @@ export class ConceptTypeEditorComponent
         this.load(id);
       });
     }
+
+    this.formGroup.valueChanges.subscribe(() => console.log(this.formGroup));
   }
 
   private constructConceptType(): IConceptType {
@@ -102,6 +105,10 @@ export class ConceptTypeEditorComponent
     this.loading = false;
   }
 
+  private addField() {
+    this.fields.push(new FormControl(null));
+  }
+
   public canDeactivate() {
     return !this.formGroup.dirty;
   }
@@ -115,9 +122,7 @@ export class ConceptTypeEditorComponent
       if (this.editing) {
         await this.conceptService.updateConceptType(conceptType);
       } else {
-        await this.conceptService
-          .createConceptType(conceptType)
-          .then(console.log);
+        await this.conceptService.createConceptType(conceptType);
       }
     } catch (err) {
       throw err;
@@ -125,6 +130,15 @@ export class ConceptTypeEditorComponent
 
     this.formGroup.markAsPristine();
     this.saving = false;
+
+    await this.router.navigate(
+      ['campaigns', this.campaignService.campaign.id, 'settings'],
+      {
+        queryParams: {
+          refresh: true,
+        },
+      }
+    );
   }
 
   public cancel() {
@@ -147,5 +161,9 @@ export class ConceptTypeEditorComponent
 
   public get icon() {
     return this.formGroup.get('icon');
+  }
+
+  public get fields() {
+    return this.formGroup.get('fields') as FormArray;
   }
 }

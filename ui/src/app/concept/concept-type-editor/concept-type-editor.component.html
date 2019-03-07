@@ -49,5 +49,23 @@
       <label>Icon</label>
       <dd-icon-picker [formControl]="icon"></dd-icon-picker>
     </div>
+
+    <!-- Field Config -->
+    <div class="columns">
+      <div class="column">
+        <h4>Fields</h4>
+      </div>
+      <div class="column col-auto">
+        <button class="btn btn-sm" (click)="addField()">
+          <i class="icon icon-plus"></i> Add Field
+        </button>
+      </div>
+    </div>
+    <div>
+      <dd-field-definition-form
+        *ngFor="let field of fields.controls"
+        [formControl]="field"
+      ></dd-field-definition-form>
+    </div>
   </div>
 </div>

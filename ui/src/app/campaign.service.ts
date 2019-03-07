@@ -5,6 +5,7 @@ import { IEntityPreset, IEntity } from './entity.service';
 import { environment } from 'src/environments/environment';
 import { IUser } from './user.service';
 import { LoginService } from './login.service';
+import { IConceptType } from './concept.service';
 
 @Injectable({
   providedIn: 'root',
@@ -218,6 +219,7 @@ export interface ICampaign {
   itemRarities?: IItemRarity[];
   currencyMap?: ICurrencyLevel[];
   members?: ICampaignUser[];
+  conceptTypes?: IConceptType[];
   createdAt?: Date;
 }
 

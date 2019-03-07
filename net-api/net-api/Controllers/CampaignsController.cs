@@ -52,6 +52,7 @@ namespace net_api.Controllers
                 .Where(c => c.Id == id)
                 .Include(c => c.EntityPresets)
                 .Include(c => c.Entities)
+                .Include(c => c.ConceptTypes)
                 .Include(c => c.Members)
                     .ThenInclude(m => m.User)
                 .FirstOrDefaultAsync();

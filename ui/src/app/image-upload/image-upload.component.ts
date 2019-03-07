@@ -5,8 +5,9 @@ import {
   AfterViewInit,
   ElementRef,
   Input,
+  forwardRef,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { LoginService } from '../login.service';
 import { CampaignService } from '../campaign.service';
@@ -15,8 +16,16 @@ import { CampaignService } from '../campaign.service';
   selector: 'dd-image-upload',
   templateUrl: './image-upload.component.html',
   styleUrls: ['./image-upload.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ImageUploadComponent),
+      multi: true,
+    },
+  ],
 })
-export class ImageUploadComponent implements OnInit, AfterViewInit {
+export class ImageUploadComponent
+  implements OnInit, AfterViewInit, ControlValueAccessor {
   @ViewChild('fupload')
   public fupload: ElementRef<HTMLElement>;
 
@@ -28,8 +37,7 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
   public isUploading = false;
   public uploadProgress: number = null;
 
-  @Input()
-  public formGroup: FormGroup;
+  public imageId: string;
 
   @Input()
   public eleId = '';
@@ -37,21 +45,15 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
   @Input()
   public campaignId: string;
 
+  private _onChange: any;
+  private _onTouched: any;
+
   constructor(
     private loginService: LoginService,
     private campaignService: CampaignService
   ) {}
 
-  ngOnInit() {
-    if (!this.formGroup.contains('imageId')) {
-      this.formGroup.addControl('imageId', new FormControl(null));
-    }
-
-    if (!this.formGroup.contains('imageColor1')) {
-      this.formGroup.addControl('imageColor1', new FormControl(null));
-      this.formGroup.addControl('imageColor2', new FormControl(null));
-    }
-  }
+  ngOnInit() {}
 
   ngAfterViewInit(): void {
     ['dragenter', 'dragover'].forEach((evt) =>
@@ -79,8 +81,22 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
     });
   }
 
+  writeValue(obj: any): void {
+    this.imageId = obj;
+  }
+
+  public registerOnChange(fn: any): void {
+    this._onChange = fn;
+  }
+
+  public registerOnTouched(fn: any): void {
+    this._onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {}
+
   public clearImage() {
-    this.formGroup.get('imageId').reset();
+    this.writeValue(null);
   }
 
   public clearError() {
@@ -96,13 +112,9 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
   }
 
   public get imageURL() {
-    if (
-      this.formGroup.get('imageId').value !== null &&
-      this.formGroup.get('imageId').value !== undefined &&
-      this.formGroup.get('imageId').value !== ''
-    ) {
+    if (this.imageId) {
       return `https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${
-        this.formGroup.get('imageId').value
+        this.imageId
       }`;
     } else {
       return null;
@@ -138,11 +150,10 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
 
       this.isUploading = false;
       this.file = null;
-      this.formGroup.get('imageId').setValue(image.public_id);
+      this.writeValue(image.public_id);
 
-      if (image.colors) {
-        this.imageColor1.setValue(image.colors[0][0]);
-        this.imageColor2.setValue(image.colors[1][0]);
+      if (this._onChange) {
+        this._onChange(image.public_id);
       }
     };
 
@@ -156,17 +167,5 @@ export class ImageUploadComponent implements OnInit, AfterViewInit {
 
   public get controlId() {
     return `file-upload-${this.eleId}`;
-  }
-
-  public get control() {
-    return this.formGroup.get('imageId');
-  }
-
-  public get imageColor1() {
-    return this.formGroup.get('imageColor1');
-  }
-
-  public get imageColor2() {
-    return this.formGroup.get('imageColor2');
   }
 }

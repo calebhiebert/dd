@@ -11,6 +11,8 @@ import { ExporterComponent } from './exporter/exporter.component';
 import Swal from 'sweetalert2';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { IConceptType } from 'src/app/concept.service';
+import { IconService } from 'src/app/icon.service';
 
 @Component({
   selector: 'dd-campaign-settings',
@@ -39,7 +41,8 @@ export class CampaignSettingsComponent
     private login: LoginService,
     private location: Location,
     private toast: ToastrService,
-    private http: HttpClient
+    private http: HttpClient,
+    private iconService: IconService
   ) {}
 
   ngOnInit() {
@@ -55,7 +58,7 @@ export class CampaignSettingsComponent
     }
   }
 
-  canDeactivate() {
+  public canDeactivate() {
     return !this.formGroup.dirty;
   }
 
@@ -69,11 +72,30 @@ export class CampaignSettingsComponent
     ]);
   }
 
+  public selectConceptType(conceptType: IConceptType) {
+    this.router.navigate([
+      'campaigns',
+      this.campaignService.campaign.id,
+      'concepttypes',
+      conceptType.id,
+      'edit',
+    ]);
+  }
+
   public async createEntityPreset() {
     this.router.navigate([
       'campaigns',
       this.campaignService.campaign.id,
       'entitytypes',
+      'create',
+    ]);
+  }
+
+  public createConceptType() {
+    this.router.navigate([
+      'campaigns',
+      this.campaignService.campaign.id,
+      'concepttypes',
       'create',
     ]);
   }
@@ -212,6 +234,10 @@ export class CampaignSettingsComponent
     }
   }
 
+  public getIcon(icon: string) {
+    return this.iconService.getIconSrc(icon);
+  }
+
   public get campaign(): ICampaign {
     if (this.editing) {
       return this.campaignService.campaign;
@@ -229,5 +255,9 @@ export class CampaignSettingsComponent
 
   public get editing() {
     return this.route.snapshot.data.editing;
+  }
+
+  public get loading() {
+    return this.campaignService.loadingCampaign;
   }
 }

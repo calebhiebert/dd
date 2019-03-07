@@ -1,10 +1,9 @@
-<div class="form-group" [ngClass]="{ 'has-error': control.invalid }">
+<div class="form-group">
   <div
     class="p-2"
     id="drop-area"
     [ngClass]="{
-      'drag-over': isDragOver,
-      'file-has-error': control.invalid
+      'drag-over': isDragOver
     }"
     #fupload
   >
@@ -44,9 +43,6 @@
       [src]="imageURL"
     />
   </div>
-  <p class="form-input-hint" *ngIf="control.invalid && control.errors.required">
-    An image is required
-  </p>
 </div>
 
 <div class="toast toast-error" *ngIf="fileError !== null">

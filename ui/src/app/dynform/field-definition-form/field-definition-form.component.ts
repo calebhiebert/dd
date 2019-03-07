@@ -1,16 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
+import { Component, OnInit, forwardRef } from '@angular/core';
+import {
+  FormGroup,
+  FormControl,
+  FormArray,
+  Validators,
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
 import { DynamicFieldType } from '../form-types';
+import { IconPickerComponent } from 'src/app/icon-picker/icon-picker.component';
 
 @Component({
   selector: 'dd-field-definition-form',
   templateUrl: './field-definition-form.component.html',
   styleUrls: ['./field-definition-form.component.css'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => FieldDefinitionFormComponent),
+      multi: true,
+    },
+  ],
 })
-export class FieldDefinitionFormComponent implements OnInit {
+export class FieldDefinitionFormComponent
+  implements OnInit, ControlValueAccessor {
   public formGroup: FormGroup;
   public options: FormGroup;
+
+  private _onChange: any;
+  private _onTouched: any;
 
   constructor(private campaignService: CampaignService) {}
 
@@ -29,6 +48,12 @@ export class FieldDefinitionFormComponent implements OnInit {
       type = parseInt(type, 10);
       this.options = this.createOptionsFormGroup(type);
       this.formGroup.setControl('options', this.options);
+    });
+
+    this.formGroup.valueChanges.subscribe((val) => {
+      if (this._onChange) {
+        this._onChange(val);
+      }
     });
   }
 
@@ -52,6 +77,28 @@ export class FieldDefinitionFormComponent implements OnInit {
         return new FormGroup({
           choices: new FormArray([]),
         });
+    }
+  }
+
+  writeValue(obj: any): void {
+    if (obj !== null && obj !== undefined) {
+      this.formGroup.patchValue(obj);
+    }
+  }
+
+  public registerOnChange(fn: any): void {
+    this._onChange = fn;
+  }
+
+  public registerOnTouched(fn: any): void {
+    this._onTouched = fn;
+  }
+
+  public setDisabledState?(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.formGroup.disable();
+    } else {
+      this.formGroup.enable();
     }
   }
 

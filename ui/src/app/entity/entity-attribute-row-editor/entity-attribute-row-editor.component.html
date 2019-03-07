@@ -20,7 +20,7 @@
   <div class="columns" *ngIf="!collapsed">
     <div class="column col-3 col-md-12">
       <label class="form-label">Icon</label>
-      <dd-image-upload [formGroup]="formGroup" [eleId]="id"></dd-image-upload>
+      <dd-image-upload formControlName="imageId" [eleId]="id"></dd-image-upload>
 
       <div class="form-group">
         <label for="type" class="form-label">Type</label>
