@@ -1,4 +1,4 @@
-import { Component, OnInit, forwardRef } from '@angular/core';
+import { Component, OnInit, forwardRef, Input } from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -8,98 +8,94 @@ import {
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
-import { DynamicFieldType } from '../form-types';
-import { IconPickerComponent } from 'src/app/icon-picker/icon-picker.component';
+import {
+  DynamicFieldType,
+  IDynamicFieldConfig,
+  DynamicFieldOptions,
+  IStringFieldOptions,
+  IFieldOptions,
+  IEnumFieldOptions,
+} from '../form-types';
 
 @Component({
   selector: 'dd-field-definition-form',
   templateUrl: './field-definition-form.component.html',
   styleUrls: ['./field-definition-form.component.css'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => FieldDefinitionFormComponent),
-      multi: true,
-    },
-  ],
 })
-export class FieldDefinitionFormComponent
-  implements OnInit, ControlValueAccessor {
+export class FieldDefinitionFormComponent implements OnInit {
+  @Input()
   public formGroup: FormGroup;
   public options: FormGroup;
 
-  private _onChange: any;
-  private _onTouched: any;
-
   constructor(private campaignService: CampaignService) {}
 
-  ngOnInit() {
-    this.formGroup = new FormGroup({
-      name: new FormControl(null, [
+  public static createFormGroup(config: IDynamicFieldConfig): FormGroup {
+    return new FormGroup({
+      name: new FormControl(config.name, [
         Validators.required,
         Validators.maxLength(30),
       ]),
-      description: new FormControl(null),
-      type: new FormControl(null),
-      imageId: new FormControl(null),
-    });
-
-    this.formGroup.get('type').valueChanges.subscribe((type) => {
-      type = parseInt(type, 10);
-      this.options = this.createOptionsFormGroup(type);
-      this.formGroup.setControl('options', this.options);
-    });
-
-    this.formGroup.valueChanges.subscribe((val) => {
-      if (this._onChange) {
-        this._onChange(val);
-      }
+      description: new FormControl(config.description),
+      type: new FormControl(config.type, [Validators.required]),
+      imageId: new FormControl(config.imageId),
+      options: this.createOptionsFormGroup(config.type, config.options),
     });
   }
 
-  private createOptionsFormGroup(type: DynamicFieldType) {
+  private static createOptionsFormGroup(
+    type: DynamicFieldType,
+    options: DynamicFieldOptions
+  ) {
+    if (options === undefined || options === null) {
+      options = {};
+    }
+
+    let opt;
     switch (type) {
       case DynamicFieldType.STRING:
+        opt = options as IStringFieldOptions;
         return new FormGroup({
-          maxLength: new FormControl(null),
-          minLength: new FormControl(null),
+          maxLength: new FormControl(opt.maxLength),
+          minLength: new FormControl(opt.minLength),
+          required: new FormControl(opt.required),
         });
 
       case DynamicFieldType.INT:
       case DynamicFieldType.FLOAT:
+        opt = options as IStringFieldOptions;
+
         return new FormGroup({
-          min: new FormControl(null),
-          max: new FormControl(null),
+          min: new FormControl(opt.min),
+          max: new FormControl(opt.max),
+          required: new FormControl(opt.required),
         });
 
       case DynamicFieldType.ENUM:
       case DynamicFieldType.ENUM_MULTI:
+        opt = options as IEnumFieldOptions;
         return new FormGroup({
-          choices: new FormArray([]),
+          choices: new FormArray(
+            opt.choices ? opt.choices.map((c) => new FormControl(c)) : []
+          ),
+          required: new FormControl(opt.required),
+        });
+      default:
+        return new FormGroup({
+          required: new FormControl(options.required),
         });
     }
   }
 
-  writeValue(obj: any): void {
-    if (obj !== null && obj !== undefined) {
-      this.formGroup.patchValue(obj);
-    }
-  }
+  ngOnInit() {
+    this.formGroup.get('type').valueChanges.subscribe((type) => {
+      type = parseInt(type, 10);
 
-  public registerOnChange(fn: any): void {
-    this._onChange = fn;
-  }
-
-  public registerOnTouched(fn: any): void {
-    this._onTouched = fn;
-  }
-
-  public setDisabledState?(isDisabled: boolean): void {
-    if (isDisabled) {
-      this.formGroup.disable();
-    } else {
-      this.formGroup.enable();
-    }
+      this.options = FieldDefinitionFormComponent.createOptionsFormGroup(
+        type,
+        this.formGroup.value.options
+      );
+      this.formGroup.setControl('options', this.options);
+    });
   }
 
   public get campaign() {

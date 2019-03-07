@@ -11,6 +11,7 @@ import { IConceptType, ConceptService } from 'src/app/concept.service';
 import { Location } from '@angular/common';
 import { LoginComponent } from 'src/app/login/login.component';
 import { LoginService } from 'src/app/login.service';
+import { FieldDefinitionFormComponent } from 'src/app/dynform/field-definition-form/field-definition-form.component';
 
 @Component({
   selector: 'dd-concept-type-editor',
@@ -68,8 +69,6 @@ export class ConceptTypeEditorComponent
         this.load(id);
       });
     }
-
-    this.formGroup.valueChanges.subscribe(() => console.log(this.formGroup));
   }
 
   private constructConceptType(): IConceptType {
@@ -79,7 +78,7 @@ export class ConceptTypeEditorComponent
       userId: this.login.id,
       icon: this.icon.value,
       campaignId: this.campaignService.campaign.id,
-      fields: [],
+      fields: this.fields.value,
     };
 
     if (this.editing) {
@@ -96,7 +95,13 @@ export class ConceptTypeEditorComponent
 
     try {
       this.conceptType = await this.conceptService.getConceptType(id);
-      this.formGroup.patchValue(this.conceptType);
+      this.conceptType.fields.forEach((f) =>
+        this.fields.push(FieldDefinitionFormComponent.createFormGroup(f))
+      );
+
+      setTimeout(() => {
+        this.formGroup.patchValue(this.conceptType);
+      }, 1);
     } catch (err) {
       throw err;
     }
@@ -105,8 +110,12 @@ export class ConceptTypeEditorComponent
     this.loading = false;
   }
 
-  private addField() {
-    this.fields.push(new FormControl(null));
+  public addField() {
+    this.fields.push(new FormGroup({}));
+  }
+
+  public removeField(idx: number) {
+    this.fields.removeAt(idx);
   }
 
   public canDeactivate() {
@@ -139,6 +148,10 @@ export class ConceptTypeEditorComponent
         },
       }
     );
+  }
+
+  public trackField(idx: number) {
+    return idx;
   }
 
   public cancel() {

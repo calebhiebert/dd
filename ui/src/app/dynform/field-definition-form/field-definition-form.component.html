@@ -75,7 +75,10 @@
     <!-- Specific Validation -->
     <div [ngSwitch]="true" [formGroup]="options" *ngIf="options">
       <!-- String -->
-      <div class="columns" *ngSwitchCase="type.value === '0'">
+      <div
+        class="columns"
+        *ngSwitchCase="type.value === '0' || type.value === 0"
+      >
         <!-- MinLength -->
         <div class="column">
           <input
@@ -100,7 +103,12 @@
       <!-- Int/Float -->
       <div
         class="columns"
-        *ngSwitchCase="type.value === '1' || type.value === '2'"
+        *ngSwitchCase="
+          type.value === '1' ||
+          type.value === '2' ||
+          type.value === 1 ||
+          type.value === 2
+        "
       >
         <!-- MinLength -->
         <div class="column">
@@ -125,7 +133,12 @@
 
       <div
         class="columns"
-        *ngSwitchCase="type.value === '3' || type.value === '4'"
+        *ngSwitchCase="
+          type.value === '3' ||
+          type.value === '4' ||
+          type.value === 3 ||
+          type.value === 4
+        "
       >
         <div class="column">
           <dd-tag-editor
@@ -137,9 +150,9 @@
     </div>
 
     <!-- Required -->
-    <div class="form-group">
+    <div class="form-group" [formGroup]="options" *ngIf="options">
       <label class="form-checkbox">
-        <input type="checkbox" />
+        <input type="checkbox" formControlName="required" />
         <i class="form-icon"></i> Required
       </label>
     </div>
