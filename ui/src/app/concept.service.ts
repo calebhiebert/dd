@@ -3,7 +3,6 @@ import { IDynamicFieldConfig } from './dynform/form-types';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ICampaign } from './campaign.service';
-import { IUser } from './user.service';
 
 @Injectable({
   providedIn: 'root',

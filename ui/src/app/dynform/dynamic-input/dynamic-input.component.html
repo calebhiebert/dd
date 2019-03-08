@@ -26,7 +26,7 @@
     class="form-input"
     [placeholder]="config.name"
     [formControl]="control"
-    [step]="config.options.step"
+    [step]="config.options.step || 0.01"
     *ngSwitchCase="2"
   />
 
@@ -62,6 +62,12 @@
     simple="true"
     *ngSwitchCase="5"
   ></dd-quill>
+
+  <dd-currency-input
+    [config]="config.options"
+    [formControl]="control"
+    *ngSwitchCase="6"
+  ></dd-currency-input>
 
   <figure class="form-icon avatar" *ngIf="config.imageId">
     <img

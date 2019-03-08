@@ -120,6 +120,28 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
+            var existingConcept = await _context.Concepts
+                .Where(c => c.Id == id)
+                .AsNoTracking()
+                .Include(c => c.ConceptType)
+                    .ThenInclude(c => c.Campaign)
+                        .ThenInclude(c => c.Members)
+                .FirstOrDefaultAsync();
+
+            if (existingConcept == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, existingConcept.ConceptType.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            concept.UserId = existingConcept.UserId;
+
             _context.Entry(concept).State = EntityState.Modified;
 
             try
@@ -145,6 +167,26 @@ namespace net_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Concept>> PostConcept(Concept concept)
         {
+            var existingConcept = await _context.Concepts
+                .Where(c => c.Id == concept.ConceptTypeId)
+                .AsNoTracking()
+                .Include(c => c.ConceptType)
+                    .ThenInclude(c => c.Campaign)
+                        .ThenInclude(c => c.Members)
+                .FirstOrDefaultAsync();
+
+            if (existingConcept == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, existingConcept.ConceptType.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             concept.UserId = userId;
@@ -159,10 +201,22 @@ namespace net_api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Concept>> DeleteConcept(Guid id)
         {
-            var concept = await _context.Concepts.FindAsync(id);
+            var concept = await _context.Concepts
+                .Where(c => c.Id == id)
+                    .Include(c => c.ConceptType)
+                        .ThenInclude(c => c.Campaign)
+                .FirstOrDefaultAsync();
+
             if (concept == null)
             {
                 return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, concept.ConceptType.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
             }
 
             _context.Concepts.Remove(concept);

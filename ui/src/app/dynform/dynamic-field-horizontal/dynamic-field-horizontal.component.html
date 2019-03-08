@@ -7,10 +7,8 @@
 >
   <div class="col-2 col-lg-3 col-sm-12">
     <label class="form-label"
-      >{{ config.name }}
-      <span
-        *ngIf="config.options.required"
-        class="text-primary text-large text-bold"
+      >{{ fieldConfig.name }}
+      <span *ngIf="options.required" class="text-primary text-large text-bold"
         >*</span
       ></label
     >
@@ -22,8 +20,8 @@
         [config]="fieldConfig"
         [control]="control"
       ></dd-dynamic-input>
-      <p class="form-input-hint mb-0" *ngIf="config.description">
-        {{ config.description }}
+      <p class="form-input-hint mb-0" *ngIf="fieldConfig.description">
+        {{ fieldConfig.description }}
       </p>
       <dd-dynamic-validation-errors
         [config]="fieldConfig"

@@ -11,6 +11,8 @@ import {
   IDynamicFieldConfig,
   DynamicFieldType,
 } from 'src/app/dynform/form-types';
+import { Location } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'dd-concept-editor',
@@ -21,9 +23,11 @@ export class ConceptEditorComponent implements OnInit {
   public notFound: boolean;
   public loading = false;
   public saving = false;
+  public deleting = true;
 
   public formGroup: FormGroup;
   public conceptType: IConceptType;
+  public concept: IConcept;
 
   public nameFieldConfig: IDynamicFieldConfig = {
     name: 'Name',
@@ -44,7 +48,8 @@ export class ConceptEditorComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private conceptService: ConceptService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -68,9 +73,13 @@ export class ConceptEditorComponent implements OnInit {
       if (this.conceptType === null || this.conceptType === undefined) {
         this.notFound = true;
       } else {
-        this.fields.controls = this.conceptType.fields.map(
-          () => new FormControl(null)
-        );
+        this.conceptType.fields.forEach(() => {
+          this.fields.push(new FormControl(null));
+        });
+
+        if (this.editing) {
+          this.load(id);
+        }
       }
     });
   }
@@ -86,17 +95,84 @@ export class ConceptEditorComponent implements OnInit {
       name: this.name.value,
       content: this.description.value,
       userId: 'dmmy',
-      fields: this.fields.value,
+      fields: this.fields.value
+        .map((fv, idx) => {
+          return {
+            name: this.conceptType.fields[idx].name,
+            value: fv,
+          };
+        })
+        .filter(
+          (fv) => fv.value !== null && fv.value !== undefined && fv.value !== ''
+        ),
       tags: this.tags.value,
+      imageId: this.imageId.value,
       conceptTypeId: this.conceptType.id,
     };
+
+    if (this.editing) {
+      concept.id = this.concept.id;
+    }
 
     return concept;
   }
 
-  public cancel() {}
+  private async load(id: string) {
+    this.loading = true;
+    this.formGroup.disable();
 
-  public delete() {}
+    try {
+      this.concept = await this.conceptService.getConcept(id);
+    } catch (err) {
+      throw err;
+    }
+
+    this.formGroup.patchValue({
+      ...this.concept,
+      fields: this.conceptType.fields.map((f) => {
+        const val = this.concept.fields.find((fld) => fld.name === f.name);
+
+        if (val) {
+          return val.value;
+        } else {
+          return null;
+        }
+      }),
+    });
+
+    this.formGroup.markAsPristine();
+
+    this.formGroup.enable();
+    this.loading = false;
+  }
+
+  public cancel() {
+    this.location.back();
+  }
+
+  public async delete() {
+    const confirmation = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to undo this',
+      showCancelButton: true,
+    });
+
+    if (!confirmation.value) {
+      return;
+    }
+
+    this.formGroup.markAsPristine();
+    this.formGroup.disable();
+    this.deleting = true;
+
+    try {
+      await this.conceptService.deleteConcept(this.concept.id);
+    } catch (err) {
+      throw err;
+    }
+
+    this.cancel();
+  }
 
   public async save() {
     if (!this.formGroup.valid) {

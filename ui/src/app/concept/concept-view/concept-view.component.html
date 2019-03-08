@@ -1,1 +1,39 @@
-<div class="container grid-xl"></div>
+<div class="container grid-xl">
+  <div class="loading loading-lg" *ngIf="loading"></div>
+
+  <dd-error-four-o-four *ngIf="notFound"></dd-error-four-o-four>
+
+  <!-- Title Controls -->
+  <div class="columns" *ngIf="concept">
+    <div class="column col-auto">
+      <img
+        class="s-rounded"
+        width="64"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+          concept.imageId
+        }}"
+        *ngIf="concept.imageId"
+        alt="Item Picture"
+      />
+
+      <!-- Fallback Image -->
+      <img
+        class="s-rounded"
+        width="64"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/winged-sword"
+        *ngIf="!concept.imageId"
+        alt="Item Fallback Picture"
+      />
+    </div>
+    <div class="column">
+      <h2 class="mb-0">{{ concept.name }}</h2>
+    </div>
+    <div class="column col-auto">
+      <button class="btn btn-sm" (click)="edit()" *ngIf="editable">
+        <i class="icon icon-edit"></i> <span class="hide-sm"> Edit</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Data View -->
+</div>

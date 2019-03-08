@@ -1,6 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, forwardRef } from '@angular/core';
 import { ICurrencyFieldOptions } from '../form-types';
-import { ControlValueAccessor, FormArray, FormControl } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormArray,
+  FormControl,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import { ICurrencyLevel } from 'src/app/campaign.service';
 import { ICurrency } from 'src/app/entity.service';
 
@@ -8,6 +13,13 @@ import { ICurrency } from 'src/app/entity.service';
   selector: 'dd-currency-input',
   templateUrl: './currency-input.component.html',
   styleUrls: ['./currency-input.component.css'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CurrencyInputComponent),
+      multi: true,
+    },
+  ],
 })
 export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
   @Input()
@@ -65,6 +77,10 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(obj: ICurrency): void {
+    if (obj === null || obj === undefined) {
+      return;
+    }
+
     if (this.config.trackCoins) {
       this.formArray.setValue(
         this.mapCurrencyValuesToConfig(obj.values, this.config.levels)
@@ -84,16 +100,26 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
 
   setDisabledState?(isDisabled: boolean): void {
     if (this.formArray) {
-      this.formArray.disable();
+      if (isDisabled) {
+        this.formArray.disable();
+      } else {
+        this.formArray.enable();
+      }
     }
 
     if (this.formControl) {
-      this.formControl.disable();
+      if (isDisabled) {
+        this.formControl.disable();
+      } else {
+        this.formControl.enable();
+      }
     }
   }
 
-  public get levels() {
-    return this.config.levels;
+  public get levels(): ICurrencyLevel[] {
+    return (
+      this.config.levels || [{ name: 'gp', value: 1, useInConversions: true }]
+    );
   }
 
   public get controls() {
