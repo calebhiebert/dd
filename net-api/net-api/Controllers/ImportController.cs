@@ -38,12 +38,16 @@ namespace net_api.Controllers
             int articlesImported = 0;
             int questsImported = 0;
             int entityPresetsImported = 0;
+            int conceptTypesImported = 0;
+            int conceptsImported = 0;
 
             var itemList = new List<Item>();
             var spellList = new List<Spell>();
             var articleList = new List<Article>();
             var questList = new List<Quest>();
             var entityPresetList = new List<EntityPreset>();
+            var conceptTypeList = new List<ConceptType>();
+            var conceptList = new List<Concept>();
 
             using (var fileStream = file.OpenReadStream())
             {
@@ -54,8 +58,8 @@ namespace net_api.Controllers
                     switch(entry.Name)
                     {
                         case "items.json":
-                            var items = DeserializeZipStream<Item[]>(entry.Open());
-                            foreach (var item in items)
+                            itemList = DeserializeZipStream<List<Item>>(entry.Open());
+                            foreach (var item in itemList)
                             {
                                 var newId = Guid.NewGuid();
 
@@ -63,14 +67,13 @@ namespace net_api.Controllers
                                 item.Id = newId;
                                 item.CampaignId = (Guid)campaignId;
                                 item.UserId = userId;
-                                itemList.Add(item);
                                 itemsImported++;
                             }
                             break;
 
                         case "spells.json":
-                            var spells = DeserializeZipStream<Spell[]>(entry.Open());
-                            foreach (var spell in spells)
+                            spellList = DeserializeZipStream<List<Spell>>(entry.Open());
+                            foreach (var spell in spellList)
                             {
                                 var newId = Guid.NewGuid();
 
@@ -78,14 +81,13 @@ namespace net_api.Controllers
                                 spell.Id = newId;
                                 spell.CampaignId = (Guid)campaignId;
                                 spell.UserId = userId;
-                                spellList.Add(spell);
                                 spellsImported++;
                             }
                             break;
 
                         case "articles.json":
-                            var articles = DeserializeZipStream<Article[]>(entry.Open());
-                            foreach (var article in articles)
+                            articleList = DeserializeZipStream<List<Article>>(entry.Open());
+                            foreach (var article in articleList)
                             {
                                 var newId = Guid.NewGuid();
 
@@ -93,28 +95,50 @@ namespace net_api.Controllers
                                 article.Id = newId;
                                 article.CampaignId = (Guid)campaignId;
                                 article.UserId = userId;
-                                articleList.Add(article);
                                 articlesImported++;
                             }
                             break;
 
                         case "quests.json":
-                            var quests = DeserializeZipStream<Quest[]>(entry.Open());
-                            foreach (var quest in quests)
+                            questList = DeserializeZipStream<List<Quest>>(entry.Open());
+                            foreach (var quest in questList)
                             {
                                 var newId = Guid.NewGuid();
 
                                 idDict.Add(quest.Id, newId);
                                 quest.Id = newId;
                                 quest.CampaignId = (Guid)campaignId;
-                                questList.Add(quest);
                                 questsImported++;
                             }
                             break;
+                        case "concept-types.json":
+                            conceptTypeList = DeserializeZipStream<List<ConceptType>>(entry.Open());
 
+                            foreach (var conceptType in conceptTypeList)
+                            {
+                                var newId = Guid.NewGuid();
+                                idDict.Add(conceptType.Id, newId);
+                                conceptType.Id = newId;
+                                conceptType.CampaignId = (Guid)campaignId;
+                                conceptType.UserId = userId;
+                                conceptTypesImported++;
+                            }
+                            break;
+                        case "concepts.json":
+                            conceptList = DeserializeZipStream<List<Concept>>(entry.Open());
+
+                            foreach (var concept in conceptList)
+                            {
+                                var newId = Guid.NewGuid();
+                                idDict.Add(concept.Id, newId);
+                                concept.Id = newId;
+                                concept.UserId = userId;
+                                conceptsImported++;
+                            }
+                            break;
                         case "entity-presets.json":
-                            var entityPresets = DeserializeZipStream<EntityPreset[]>(entry.Open());
-                            foreach (var ep in entityPresets)
+                            entityPresetList = DeserializeZipStream<List<EntityPreset>>(entry.Open());
+                            foreach (var ep in entityPresetList)
                             {
                                 var newId = Guid.NewGuid();
 
@@ -122,12 +146,17 @@ namespace net_api.Controllers
                                 ep.Id = newId;
                                 ep.CampaignId = (Guid)campaignId;
                                 ep.UserId = userId;
-                                entityPresetList.Add(ep);
                                 entityPresetsImported++;
                             }
                             break;
                     }
                 }
+            }
+
+            // Reassign values
+            foreach (var concept in conceptList)
+            {
+                concept.ConceptTypeId = idDict[concept.ConceptTypeId];
             }
 
             // Update all id values in all content to new id values
@@ -151,15 +180,32 @@ namespace net_api.Controllers
                 obj.ContentJson = PatchIdValues(obj.ContentJson, idDict);
             }
 
+            foreach (var obj in conceptList)
+            {
+                obj.ContentJson = PatchIdValues(obj.ContentJson, idDict);
+                obj.FieldsJson = PatchIdValues(obj.FieldsJson, idDict);
+            }
+
             // Add all entries to the context
             _context.AddRange(itemList);
             _context.AddRange(spellList);
             _context.AddRange(articleList);
             _context.AddRange(questList);
             _context.AddRange(entityPresetList);
+            _context.AddRange(conceptTypeList);
+            _context.AddRange(conceptList);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Items = itemsImported, Quests = questsImported, Articles = articlesImported, Spells = spellsImported, EntityPresets = entityPresetsImported });
+            return Ok(new
+            {
+                Items = itemsImported,
+                Quests = questsImported,
+                Articles = articlesImported,
+                Spells = spellsImported,
+                EntityPresets = entityPresetsImported,
+                Concepts = conceptsImported,
+                ConceptTypes = conceptTypesImported
+            });
         }
 
         private T DeserializeZipStream<T>(Stream inStream)

@@ -25,6 +25,10 @@ export class ExporterComponent implements OnInit {
       exportArticles: new FormControl(true),
       exportEntityPresets: new FormControl(true),
     });
+
+    for (const ct of this.conceptTypes) {
+      this.formGroup.addControl(`ct-${ct.id}`, new FormControl(true));
+    }
   }
 
   public doExport() {
@@ -58,6 +62,16 @@ export class ExporterComponent implements OnInit {
       link += '&entitypresets=true';
     }
 
+    for (const ct of this.conceptTypes) {
+      if (this.formGroup.get(`ct-${ct.id}`).value === true) {
+        link += `&conceptType=${ct.id}`;
+      }
+    }
+
     return link;
+  }
+
+  public get conceptTypes() {
+    return this.campaignService.campaign.conceptTypes;
   }
 }

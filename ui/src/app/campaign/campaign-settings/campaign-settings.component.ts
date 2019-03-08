@@ -220,7 +220,7 @@ export class CampaignSettingsComponent
             title: 'All Done!',
             // tslint:disable-next-line:max-line-length
             html: `All done importing the things. Here's how it went:<br/>Articles: ${articles}<br/>Entity Types: ${entityPresets}<br/>Items: ${items}<br/>Quests: ${quests}<br/>Spells: ${spells}`,
-          }).then(() => location.reload());
+          }).then(() => this.campaignService.refreshCurrentCampaign());
         },
         (err) => {
           Swal.fire({

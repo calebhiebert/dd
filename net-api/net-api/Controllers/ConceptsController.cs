@@ -167,20 +167,19 @@ namespace net_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Concept>> PostConcept(Concept concept)
         {
-            var existingConcept = await _context.Concepts
+            var existingConceptType = await _context.ConceptTypes
                 .Where(c => c.Id == concept.ConceptTypeId)
                 .AsNoTracking()
-                .Include(c => c.ConceptType)
-                    .ThenInclude(c => c.Campaign)
-                        .ThenInclude(c => c.Members)
+                .Include(c => c.Campaign)
+                    .ThenInclude(c => c.Members)
                 .FirstOrDefaultAsync();
 
-            if (existingConcept == null)
+            if (existingConceptType == null)
             {
                 return NotFound();
             }
 
-            var authResult = await _auth.AuthorizeAsync(User, existingConcept.ConceptType.Campaign, "CampaignEditPolicy");
+            var authResult = await _auth.AuthorizeAsync(User, existingConceptType.Campaign, "CampaignEditPolicy");
 
             if (!authResult.Succeeded)
             {

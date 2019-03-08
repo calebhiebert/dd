@@ -34,7 +34,8 @@ namespace net_api.Controllers
             [FromQuery] bool spells,
             [FromQuery] bool quests,
             [FromQuery] bool articles,
-            [FromQuery] bool entitypresets
+            [FromQuery] bool entitypresets,
+            [FromQuery] Guid[] conceptType
             )
         {
             var campaign = await _context.Campaigns
@@ -168,6 +169,58 @@ namespace net_api.Controllers
 
                         var jtw = new JsonTextWriter(new StreamWriter(strm));
                         serializer.Serialize(jtw, questList);
+                        await jtw.FlushAsync();
+                    }
+                }
+
+                // Write concept types
+                if (conceptType != null && conceptType.Length > 0)
+                {
+                    var entry = zipArchive.CreateEntry("concept-types.json");
+
+                    using (var strm = entry.Open())
+                    {
+                        var conceptTypes = await _context.ConceptTypes
+                            .Where(ct => ct.CampaignId == campaignId)
+                            .Where(ct => conceptType.Contains(ct.Id))
+                            .Select(q => new
+                            {
+                                q.Id,
+                                q.Name,
+                                q.PluralForm,
+                                q.Description,
+                                q.Icon,
+                                q.Fields,
+                            }).ToListAsync();
+
+                        var jtw = new JsonTextWriter(new StreamWriter(strm));
+                        serializer.Serialize(jtw, conceptTypes);
+                        await jtw.FlushAsync();
+                    }
+                }
+
+                // Write concepts
+                if (conceptType != null && conceptType.Length > 0)
+                {
+                    var entry = zipArchive.CreateEntry("concepts.json");
+
+                    using (var strm = entry.Open())
+                    {
+                        var concepts = await _context.Concepts
+                            .Where(ct => conceptType.Contains(ct.ConceptTypeId))
+                            .Select(q => new
+                            {
+                                q.Id,
+                                q.Name,
+                                q.Content,
+                                q.ImageId,
+                                q.Fields,
+                                q.Tags,
+                                q.ConceptTypeId
+                            }).ToListAsync();
+
+                        var jtw = new JsonTextWriter(new StreamWriter(strm));
+                        serializer.Serialize(jtw, concepts);
                         await jtw.FlushAsync();
                     }
                 }

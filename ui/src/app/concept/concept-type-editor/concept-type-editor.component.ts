@@ -179,7 +179,7 @@ export class ConceptTypeEditorComponent
     } catch (err) {
       throw err;
     }
-    
+
     this.formGroup.markAsPristine();
     this.cancel();
 

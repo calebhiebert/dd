@@ -31,6 +31,12 @@
         <input type="checkbox" formControlName="exportEntityPresets" />
         <i class="form-icon"></i> Export Entity Types
       </label>
+
+      <!-- Concepts -->
+      <label class="form-checkbox" *ngFor="let ct of conceptTypes">
+        <input type="checkbox" [formControlName]="'ct-' + ct.id" />
+        <i class="form-icon"></i> Export {{ ct.pluralForm }}
+      </label>
     </div>
 
     <a [href]="exportLink" target="_blank" class="btn btn-primary mt-2">
