@@ -1,3 +1,40 @@
-<p>
-  concept-manager works!
-</p>
+<div class="container grid-xl">
+  <dd-error-four-o-four *ngIf="notFound"></dd-error-four-o-four>
+  <div class="loading loading-lg" *ngIf="loading"></div>
+
+  <!-- Concept List -->
+  <div *ngIf="concepts && conceptType">
+    <div
+      class="card p-1 hoverable"
+      *ngFor="let c of concepts"
+      (click)="selectConcept(c)"
+    >
+      <dd-concept-list-item [concept]="c"></dd-concept-list-item>
+    </div>
+  </div>
+
+  <!-- Empty State (No concepts) -->
+  <div class="empty" *ngIf="conceptType && concepts && totalConcepts === 0">
+    <div class="empty-icon">
+      <i class="icon icon-search icon-4x"></i>
+    </div>
+    <p class="empty-title h5">There are no {{ conceptType.pluralForm }}</p>
+    <p class="empty-subtitle" *ngIf="editing">Click the button to create one</p>
+    <div class="empty-action" *ngIf="editing">
+      <button class="btn btn-primary" (click)="create()">
+        Create {{ conceptType.name }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Empty State (Nothing from search) -->
+  <div
+    class="empty"
+    *ngIf="conceptType && concepts && concepts.length === 0 && search"
+  >
+    <div class="empty-icon">
+      <i class="icon icon-search icon-4x"></i>
+    </div>
+    <p class="empty-title h5">Your search returned nothing</p>
+  </div>
+</div>

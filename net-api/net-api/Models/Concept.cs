@@ -45,6 +45,8 @@ namespace net_api.Models
         [JsonIgnore]
         public User User { get; set; }
 
+        public string ImageId { get; set; }
+
         [Column("Fields", TypeName = "JSONB")]
         [JsonIgnore]
         public string FieldsJson { get; set; }

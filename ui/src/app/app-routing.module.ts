@@ -36,6 +36,8 @@ import { ArticleManagerComponent } from './article/article-manager/article-manag
 import { AccountSettingsComponent } from './account/account-settings/account-settings.component';
 import { UnsavedChangesGuard } from './unsaved-changes.guard';
 import { ConceptTypeEditorComponent } from './concept/concept-type-editor/concept-type-editor.component';
+import { ConceptManagerComponent } from './concept/concept-manager/concept-manager.component';
+import { ConceptEditorComponent } from './concept/concept-editor/concept-editor.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -146,6 +148,24 @@ const routes: Routes = [
         path: 'concepttypes/:ct_id/edit',
         component: ConceptTypeEditorComponent,
         canDeactivate: [UnsavedChangesGuard],
+        data: {
+          editing: true,
+        },
+      },
+      {
+        path: 'concepts/:ct_id/manage',
+        component: ConceptManagerComponent,
+      },
+      {
+        path: 'concepts/:ct_id/create',
+        component: ConceptEditorComponent,
+        data: {
+          editing: false,
+        },
+      },
+      {
+        path: 'concepts/:ct_id/:c_id/edit',
+        component: ConceptEditorComponent,
         data: {
           editing: true,
         },

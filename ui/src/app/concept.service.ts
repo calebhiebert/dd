@@ -44,10 +44,35 @@ export class ConceptService {
       .toPromise();
   }
 
-  public getConcepts(typeId: string): Promise<IConceptsQueryResult> {
+  public getConcepts(
+    typeId: string,
+    limit?: number,
+    offset?: number,
+    search?: string
+  ): Promise<IConceptsQueryResult> {
+    if (limit === undefined || limit === null || limit <= 0) {
+      limit = 10;
+    } else if (limit > 50) {
+      limit = 50;
+    }
+
+    if (offset === undefined || offset === null || offset < 0) {
+      offset = 0;
+    }
+
+    let searchQuery = '';
+
+    if (search !== null && search !== undefined && search.trim().length > 0) {
+      searchQuery = `&search=${encodeURIComponent(search)}`;
+    }
+
     return this.http
-    .get<IConceptsQueryResult>(`${environment.apiURL}/concepts?type=${typeId}`)
-    .toPromise();
+      .get<IConceptsQueryResult>(
+        `${
+          environment.apiURL
+        }/concepts?type=${typeId}&limit=${limit}&offset=${offset}${searchQuery}`
+      )
+      .toPromise();
   }
 
   public createConcept(Concept: IConcept): Promise<IConcept> {
@@ -58,10 +83,7 @@ export class ConceptService {
 
   public updateConcept(Concept: IConcept): Promise<void> {
     return this.http
-      .put<void>(
-        `${environment.apiURL}/concepts/${Concept.id}`,
-        Concept
-      )
+      .put<void>(`${environment.apiURL}/concepts/${Concept.id}`, Concept)
       .toPromise();
   }
 
@@ -91,6 +113,7 @@ export interface IConcept {
   userId: string;
   fields: IField[];
   tags: string[];
+  imageId?: string;
   conceptTypeId: string;
   conceptType?: IConceptType;
 }

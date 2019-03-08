@@ -42,7 +42,7 @@ export class FieldBaseComponent implements OnInit {
     this.control.setValidators(this.getValidators(this.fieldConfig));
   }
 
-  public get config() {
+  public get config(): IDynamicFieldConfig {
     return this._config;
   }
 
@@ -173,5 +173,9 @@ export class FieldBaseComponent implements OnInit {
     } else {
       return this._fieldConfigCache;
     }
+  }
+
+  public get options() {
+    return this.fieldConfig.options || {};
   }
 }

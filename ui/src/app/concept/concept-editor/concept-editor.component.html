@@ -1,3 +1,81 @@
-<p>
-  concept-editor works!
-</p>
+<div class="container grid-xl">
+  <!-- 404 -->
+  <dd-error-four-o-four *ngIf="notFound"></dd-error-four-o-four>
+
+  <!-- Loading -->
+  <div class="loading loading-lg" *ngIf="loading"></div>
+
+  <!-- Title Controls -->
+  <div class="columns" *ngIf="conceptType">
+    <div class="column">
+      <h3>{{ editing ? 'Edit' : 'Create' }} {{ conceptType.name }}</h3>
+    </div>
+    <div class="column col-auto">
+      <!-- Cancel -->
+      <button class="btn mr-2" (click)="cancel()">
+        <i class="icon icon-arrow-left"></i> Cancel
+      </button>
+
+      <!-- Delete -->
+      <button class="btn btn-error mr-2" (click)="delete()" *ngIf="editing">
+        <i class="icon icon-cross"></i> Delete
+      </button>
+
+      <!-- Save -->
+      <button
+        class="btn btn-primary"
+        (click)="save()"
+        [disabled]="formGroup.invalid || formGroup.pristine"
+        [ngClass]="{ loading: saving }"
+      >
+        <i class="icon icon-check"></i> Save
+      </button>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div [formGroup]="formGroup" *ngIf="conceptType">
+    <!-- Form controls that will always be here -->
+    <div class="columns">
+      <div class="column col-auto">
+        <dd-image-upload formControlName="imageId"></dd-image-upload>
+      </div>
+
+      <div class="column">
+        <!-- Name -->
+        <dd-dynamic-field
+          [control]="name"
+          [config]="nameFieldConfig"
+          showLabel="true"
+        ></dd-dynamic-field>
+
+        <!-- Description -->
+        <dd-dynamic-field
+          [control]="description"
+          [config]="descriptionFieldConfig"
+          showLabel="true"
+        ></dd-dynamic-field>
+
+        <!-- Tags -->
+        <div class="form-group">
+          <label class="form-label">Tags</label>
+          <dd-tag-editor [formGroup]="formGroup"></dd-tag-editor>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dynamic Form controls -->
+    <div class="form-horizontal">
+      <dd-dynamic-field-horizontal
+        class="col-12 mb-2"
+        [config]="field"
+        [control]="fields.controls[idx]"
+        *ngFor="
+          let field of conceptType.fields;
+          let idx = index;
+          trackBy: trackField
+        "
+      ></dd-dynamic-field-horizontal>
+    </div>
+  </div>
+</div>

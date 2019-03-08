@@ -20,6 +20,8 @@
     <Compile Remove="Migrations\20190112190404_Notifications.Designer.cs" />
     <Compile Remove="Migrations\20190306202505_Concepts.cs" />
     <Compile Remove="Migrations\20190306202505_Concepts.Designer.cs" />
+    <Compile Remove="Migrations\20190308142100_ConceptImageId.cs" />
+    <Compile Remove="Migrations\20190308142100_ConceptImageId.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

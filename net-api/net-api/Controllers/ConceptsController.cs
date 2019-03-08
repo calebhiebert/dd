@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -144,6 +145,10 @@ namespace net_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Concept>> PostConcept(Concept concept)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            concept.UserId = userId;
+
             _context.Concepts.Add(concept);
             await _context.SaveChangesAsync();
 

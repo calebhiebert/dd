@@ -110,6 +110,8 @@ import { FieldDefinitionFormComponent } from './dynform/field-definition-form/fi
 import { ConceptEditorComponent } from './concept/concept-editor/concept-editor.component';
 import { ConceptTypeEditorComponent } from './concept/concept-type-editor/concept-type-editor.component';
 import { ConceptManagerComponent } from './concept/concept-manager/concept-manager.component';
+import { ErrorFourOFourComponent } from './error-four-o-four/error-four-o-four.component';
+import { ConceptListItemComponent } from './concept/concept-list-item/concept-list-item.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -216,6 +218,8 @@ import { ConceptManagerComponent } from './concept/concept-manager/concept-manag
     ConceptEditorComponent,
     ConceptTypeEditorComponent,
     ConceptManagerComponent,
+    ErrorFourOFourComponent,
+    ConceptListItemComponent,
   ],
   imports: [
     BrowserModule,

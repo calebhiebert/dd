@@ -42,9 +42,6 @@ export class ImageUploadComponent
   @Input()
   public eleId = '';
 
-  @Input()
-  public campaignId: string;
-
   private _onChange: any;
   private _onTouched: any;
 

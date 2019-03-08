@@ -7,9 +7,7 @@
 >
   <label class="form-label" *ngIf="showLabel"
     >{{ fieldConfig.name }}
-    <span
-      *ngIf="fieldConfig.options.required"
-      class="text-primary text-large text-bold"
+    <span *ngIf="options.required" class="text-primary text-large text-bold"
       >*</span
     ></label
   >
