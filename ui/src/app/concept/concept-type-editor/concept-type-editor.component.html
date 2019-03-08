@@ -5,12 +5,7 @@
       <h3>{{ editing ? 'Edit' : 'Create' }} Concept</h3>
     </div>
     <div class="column col-auto">
-      <button
-        class="btn btn-error mr-2"
-        (click)="delete()"
-        *ngIf="editing"
-        [ngClass]="{ loading: deleting }"
-      >
+      <button class="btn btn-error mr-2" (click)="delete()" *ngIf="editing" [ngClass]="{ loading: deleting }">
         Delete
       </button>
 
@@ -18,12 +13,8 @@
         Cancel
       </button>
 
-      <button
-        class="btn btn-primary"
-        (click)="save()"
-        [ngClass]="{ loading: saving }"
-        [disabled]="formGroup.invalid || formGroup.pristine"
-      >
+      <button class="btn btn-primary" (click)="save()" [ngClass]="{ loading: saving }"
+        [disabled]="formGroup.invalid || formGroup.pristine">
         Save
       </button>
     </div>
@@ -31,18 +22,13 @@
 
   <div class="mt-2">
     <!-- Form -->
-    <dd-dynamic-field
-      [control]="name"
-      [config]="nameFieldConfig"
-      showLabel="true"
-    ></dd-dynamic-field>
+    <dd-dynamic-field [control]="name" [config]="nameFieldConfig" showLabel="true"></dd-dynamic-field>
+
+    <!-- Form -->
+    <dd-dynamic-field [control]="pluarlForm" [config]="pluralFormFieldConfig" showLabel="true"></dd-dynamic-field>
 
     <!-- Description -->
-    <dd-dynamic-field
-      [control]="description"
-      [config]="descriptionFieldConfig"
-      showLabel="true"
-    ></dd-dynamic-field>
+    <dd-dynamic-field [control]="description" [config]="descriptionFieldConfig" showLabel="true"></dd-dynamic-field>
 
     <!-- Icon -->
     <div class="form-group">
@@ -61,13 +47,11 @@
         </button>
       </div>
     </div>
-    <div
-      *ngFor="
+    <div *ngFor="
         let field of fields.controls;
         let idx = index;
         trackBy: trackField
-      "
-    >
+      ">
       <div class="columns mb-1">
         <div class="column">
           <h4 class="mb-0">{{ field.value.name }}</h4>

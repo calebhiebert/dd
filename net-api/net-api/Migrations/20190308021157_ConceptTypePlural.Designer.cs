@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using net_api.Models;
@@ -9,9 +10,10 @@ using net_api.Models;
 namespace netapi.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20190308021157_ConceptTypePlural")]
+    partial class ConceptTypePlural
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,6 +217,10 @@ namespace netapi.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30);
+
+                    b.Property<string>("PluralForm")
+                        .IsRequired()
+                        .HasMaxLength(32);
 
                     b.Property<string>("UserId")
                         .IsRequired();

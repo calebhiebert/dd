@@ -16,6 +16,10 @@ namespace net_api.Models
         [StringLength(30)]
         public string Name { get; set; }
 
+        [Required]
+        [StringLength(32)]
+        public string PluralForm { get; set; }
+
         [StringLength(100)]
         public string Description { get; set; }
 

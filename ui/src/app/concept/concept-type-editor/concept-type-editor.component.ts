@@ -9,7 +9,6 @@ import {
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { IConceptType, ConceptService } from 'src/app/concept.service';
 import { Location } from '@angular/common';
-import { LoginComponent } from 'src/app/login/login.component';
 import { LoginService } from 'src/app/login.service';
 import { FieldDefinitionFormComponent } from 'src/app/dynform/field-definition-form/field-definition-form.component';
 
@@ -37,6 +36,16 @@ export class ConceptTypeEditorComponent
     },
   };
 
+  public pluralFormFieldConfig: IDynamicFieldConfig = {
+    name: 'Plural Form',
+    description: 'This will be used in various places, the plural form',
+    type: DynamicFieldType.STRING,
+    options: {
+      maxLength: 32,
+      required: true,
+    },
+  };
+
   public descriptionFieldConfig: IDynamicFieldConfig = {
     name: 'Description',
     type: DynamicFieldType.STRING,
@@ -58,6 +67,7 @@ export class ConceptTypeEditorComponent
   ngOnInit() {
     this.formGroup = new FormGroup({
       name: new FormControl(null, [Validators.required]),
+      pluralForm: new FormControl(null, [Validators.required]),
       description: new FormControl(null),
       icon: new FormControl(null),
       fields: new FormArray([]),
@@ -74,6 +84,7 @@ export class ConceptTypeEditorComponent
   private constructConceptType(): IConceptType {
     const conceptType: IConceptType = {
       name: this.name.value,
+      pluralForm: this.pluarlForm.value,
       description: this.description.value,
       userId: this.login.id,
       icon: this.icon.value,
@@ -185,6 +196,10 @@ export class ConceptTypeEditorComponent
 
   public get description() {
     return this.formGroup.get('description');
+  }
+
+  public get pluarlForm() {
+    return this.formGroup.get('pluralForm');
   }
 
   public get icon() {

@@ -75,6 +75,7 @@ export class ConceptService {
 export interface IConceptType {
   id?: string;
   name: string;
+  pluralForm: string;
   description?: string;
   userId: string;
   icon?: string;
