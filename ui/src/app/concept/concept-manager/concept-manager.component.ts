@@ -73,7 +73,16 @@ export class ConceptManagerComponent implements OnInit {
     ]);
   }
 
-  public selectConcept(concept: IConcept) {}
+  public selectConcept(concept: IConcept) {
+    this.router.navigate([
+      'campaigns',
+      this.campaignService.campaign.id,
+      'concepts',
+      this.conceptType.id,
+      concept.id,
+      'view',
+    ]);
+  }
 
   public get editing() {
     return this.campaignService.canEdit;

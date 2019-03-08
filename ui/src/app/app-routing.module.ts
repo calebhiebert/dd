@@ -38,6 +38,7 @@ import { UnsavedChangesGuard } from './unsaved-changes.guard';
 import { ConceptTypeEditorComponent } from './concept/concept-type-editor/concept-type-editor.component';
 import { ConceptManagerComponent } from './concept/concept-manager/concept-manager.component';
 import { ConceptEditorComponent } from './concept/concept-editor/concept-editor.component';
+import { ConceptViewComponent } from './concept/concept-view/concept-view.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -169,6 +170,10 @@ const routes: Routes = [
         data: {
           editing: true,
         },
+      },
+      {
+        path: 'concepts/:ct_id/:c_id/view',
+        component: ConceptViewComponent,
       },
       {
         path: 'entitytypes/create',

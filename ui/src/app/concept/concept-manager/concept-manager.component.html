@@ -2,6 +2,19 @@
   <dd-error-four-o-four *ngIf="notFound"></dd-error-four-o-four>
   <div class="loading loading-lg" *ngIf="loading"></div>
 
+  <!-- Header Controls -->
+  <div class="columns" *ngIf="conceptType">
+    <div class="column">
+      <h3>{{ conceptType.pluralForm }}</h3>
+    </div>
+    <div class="column col-auto">
+      <button class="btn btn-sm" *ngIf="editing" (click)="create()">
+        <i class="icon icon-plus"></i
+        ><span class="hide-sm"> New {{ conceptType.name }}</span>
+      </button>
+    </div>
+  </div>
+
   <!-- Concept List -->
   <div *ngIf="concepts && conceptType">
     <div
