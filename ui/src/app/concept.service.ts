@@ -3,6 +3,7 @@ import { IDynamicFieldConfig } from './dynform/form-types';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ICampaign } from './campaign.service';
+import { IUser } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +37,39 @@ export class ConceptService {
       .delete<IConceptType>(`${environment.apiURL}/concepttypes/${id}`)
       .toPromise();
   }
+
+  public getConcept(id: string): Promise<IConcept> {
+    return this.http
+      .get<IConcept>(`${environment.apiURL}/concepts/${id}`)
+      .toPromise();
+  }
+
+  public getConcepts(typeId: string): Promise<IConceptsQueryResult> {
+    return this.http
+    .get<IConceptsQueryResult>(`${environment.apiURL}/concepts?type=${typeId}`)
+    .toPromise();
+  }
+
+  public createConcept(Concept: IConcept): Promise<IConcept> {
+    return this.http
+      .post<IConcept>(`${environment.apiURL}/concepts`, Concept)
+      .toPromise();
+  }
+
+  public updateConcept(Concept: IConcept): Promise<void> {
+    return this.http
+      .put<void>(
+        `${environment.apiURL}/concepts/${Concept.id}`,
+        Concept
+      )
+      .toPromise();
+  }
+
+  public deleteConcept(id: string): Promise<IConcept> {
+    return this.http
+      .delete<IConcept>(`${environment.apiURL}/concepts/${id}`)
+      .toPromise();
+  }
 }
 
 export interface IConceptType {
@@ -49,4 +83,25 @@ export interface IConceptType {
   campaign?: ICampaign;
 }
 
+export interface IConcept {
+  id?: string;
+  name: string;
+  content?: any;
+  userId: string;
+  fields: IField[];
+  tags: string[];
+  conceptTypeId: string;
+  conceptType?: IConceptType;
+}
+
 export interface IConceptField extends IDynamicFieldConfig {}
+
+export interface IField {
+  name: string;
+  value: any;
+}
+
+export interface IConceptsQueryResult {
+  total: number;
+  concepts: IConcept[];
+}

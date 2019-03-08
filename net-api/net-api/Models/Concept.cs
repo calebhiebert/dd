@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace net_api.Models
 {
-    public class ConceptType
+    public class Concept
     {
         public Guid Id { get; set; }
 
@@ -16,8 +16,28 @@ namespace net_api.Models
         [StringLength(30)]
         public string Name { get; set; }
 
-        [StringLength(100)]
-        public string Description { get; set; }
+        [JsonIgnore]
+        [Column("Content", TypeName = "JSONB")]
+        public string ContentJson { get; set; }
+
+        [NotMapped]
+        public Object Content
+        {
+            get
+            {
+                if (ContentJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject(ContentJson);
+            }
+
+            set
+            {
+                ContentJson = JsonConvert.SerializeObject(value);
+            }
+        }
 
         [Required]
         public string UserId { get; set; }
@@ -25,43 +45,51 @@ namespace net_api.Models
         [JsonIgnore]
         public User User { get; set; }
 
-        public string Icon { get; set; }
-
         [Column("Fields", TypeName = "JSONB")]
         [JsonIgnore]
-        public string FieldJson { get; set; }
+        public string FieldsJson { get; set; }
 
         [NotMapped]
         [Required]
-        public List<ConceptField> Fields
+        public List<Field> Fields
         {
             get
             {
-                if (FieldJson == null)
+                if (FieldsJson == null)
                 {
                     return null;
                 }
 
-                return JsonConvert.DeserializeObject<List<ConceptField>>(FieldJson);
+                return JsonConvert.DeserializeObject<List<Field>>(FieldsJson);
             }
 
             set
             {
-                FieldJson = JsonConvert.SerializeObject(value);
+                FieldsJson = JsonConvert.SerializeObject(value);
             }
         }
 
+        [Column("Tags", TypeName = "varchar[]")]
+        public string[] Tags { get; set; }
+
         [Required]
-        public Guid CampaignId { get; set; }
+        public Guid ConceptTypeId { get; set; }
 
-        [JsonIgnore]
-        public Campaign Campaign { get; set; }
+        public ConceptType ConceptType { get; set; }
 
-        public ConceptType()
+        public Concept()
         {
             Id = Guid.NewGuid();
         }
     }
 
-    public class ConceptField : FieldConfig { }
+    public class Field
+    {
+        [Required]
+        [StringLength(30)]
+        public string Name { get; set; }
+
+        [Required]
+        public Object Value { get; set; }
+    }
 }
