@@ -7,7 +7,11 @@
   <li class="page-item" *ngFor="let p of pageArr">
     <button
       class="btn"
-      [ngClass]="{ 'btn-primary': page === p, 'btn-link': page !== p }"
+      [ngClass]="{
+        'btn-primary': page === p,
+        'btn-link': page !== p,
+        loading: page === p && loading
+      }"
       (click)="setPage(p)"
       *ngIf="p > 0"
     >

@@ -3,7 +3,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 @Component({
   selector: 'dd-paginator',
   templateUrl: './paginator.component.html',
-  styleUrls: ['./paginator.component.css']
+  styleUrls: ['./paginator.component.css'],
 })
 export class PaginatorComponent implements OnInit {
   @Input()
@@ -17,6 +17,9 @@ export class PaginatorComponent implements OnInit {
 
   @Input()
   public autoHide = true;
+
+  @Input()
+  public loading = false;
 
   @Output()
   public pageChange = new EventEmitter<number>();

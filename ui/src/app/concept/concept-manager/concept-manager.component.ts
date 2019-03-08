@@ -20,6 +20,7 @@ export class ConceptManagerComponent implements OnInit {
   public concepts: IConcept[];
   public totalConcepts: number;
   public search: string;
+  public page = 1;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,7 +53,11 @@ export class ConceptManagerComponent implements OnInit {
     this.loading = true;
 
     try {
-      const result = await this.conceptService.getConcepts(id, 10, 0);
+      const result = await this.conceptService.getConcepts(
+        id,
+        10,
+        (this.page - 1) * 10
+      );
       this.concepts = result.concepts;
       this.totalConcepts = result.total;
     } catch (err) {
@@ -82,6 +87,11 @@ export class ConceptManagerComponent implements OnInit {
       concept.id,
       'view',
     ]);
+  }
+
+  public changePage(page: number) {
+    this.page = page;
+    this.load(this.conceptType.id);
   }
 
   public get editing() {

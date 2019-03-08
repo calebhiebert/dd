@@ -1,6 +1,6 @@
 <div class="container grid-xl">
   <dd-error-four-o-four *ngIf="notFound"></dd-error-four-o-four>
-  <div class="loading loading-lg" *ngIf="loading"></div>
+  <div class="loading loading-lg" *ngIf="loading && !concepts"></div>
 
   <!-- Header Controls -->
   <div class="columns" *ngIf="conceptType">
@@ -24,6 +24,16 @@
     >
       <dd-concept-list-item [concept]="c"></dd-concept-list-item>
     </div>
+
+    <!-- Paginator -->
+    <dd-paginator
+      [itemsPerPage]="10"
+      [page]="page"
+      [autoHide]="false"
+      [totalItems]="totalConcepts"
+      [loading]="loading"
+      (pageChange)="changePage($event)"
+    ></dd-paginator>
   </div>
 
   <!-- Empty State (No concepts) -->
