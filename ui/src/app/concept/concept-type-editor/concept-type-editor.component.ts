@@ -62,7 +62,7 @@ export class ConceptTypeEditorComponent
     private login: LoginService,
     private location: Location,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.formGroup = new FormGroup({
@@ -74,7 +74,7 @@ export class ConceptTypeEditorComponent
       entityConfig: new FormGroup({
         enabled: new FormControl(false),
         enableQuantity: new FormControl(false),
-        fields: new FormArray([])
+        // fields: new FormArray([])
       }),
     });
 
@@ -118,14 +118,12 @@ export class ConceptTypeEditorComponent
         this.fields.push(FieldDefinitionFormComponent.createFormGroup(f))
       );
 
-      setTimeout(() => {
-        this.formGroup.patchValue(this.conceptType);
-      }, 1);
+      this.formGroup.patchValue(this.conceptType, { emitEvent: false });
     } catch (err) {
       throw err;
     }
 
-    this.formGroup.enable();
+    this.formGroup.enable({ emitEvent: false });
     this.loading = false;
   }
 
@@ -187,7 +185,7 @@ export class ConceptTypeEditorComponent
     } catch (err) {
       throw err;
     }
-    
+
     this.formGroup.markAsPristine();
     this.cancel();
 
