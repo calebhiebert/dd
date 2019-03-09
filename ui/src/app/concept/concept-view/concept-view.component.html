@@ -51,8 +51,7 @@
       [ngClass]="{
         'col-8': concept.imageId !== null,
         'col-12': concept.imageId === null
-      }"
-    >
+      }">
       <dd-quill [value]="concept.content" readOnly="true"></dd-quill>
 
       <!-- Tags -->
@@ -64,6 +63,19 @@
           {{ t }}
         </div>
       </div>
+
+      <table class="table">
+        <thead>
+          <th>Field</th>
+          <th>Value</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let field of concept.fields">
+            <td>{{ field.name }}</td>
+            <td >{{ field.value }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Lower full size image -->

@@ -3,6 +3,7 @@ import {
   IConcept,
   ConceptService,
   IConceptType,
+  IField
 } from 'src/app/concept.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
@@ -71,6 +72,10 @@ export class ConceptViewComponent implements OnInit {
       this.concept.id,
       'edit',
     ]);
+  }
+
+  public getFieldConfig(field: IField) {
+    return this.concept.fields.find(f => f.name === field.name);
   }
 
   public get editable() {
