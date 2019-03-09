@@ -9,7 +9,7 @@ import { IEntity } from './entity.service';
   providedIn: 'root',
 })
 export class ConceptService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public getConceptType(id: string): Promise<IConceptType> {
     return this.http
@@ -69,7 +69,7 @@ export class ConceptService {
     return this.http
       .get<IConceptsQueryResult>(
         `${
-          environment.apiURL
+        environment.apiURL
         }/concepts?type=${typeId}&limit=${limit}&offset=${offset}${searchQuery}`
       )
       .toPromise();
@@ -90,6 +90,36 @@ export class ConceptService {
   public deleteConcept(id: string): Promise<IConcept> {
     return this.http
       .delete<IConcept>(`${environment.apiURL}/concepts/${id}`)
+      .toPromise();
+  }
+
+  public async getConceptEntities(entityId: string): Promise<IConceptEntity[]> {
+    return this.http
+      .get<IConceptEntity[]>(
+        `${environment.apiURL}/conceptentities?entityId=${entityId}`
+      )
+      .toPromise();
+  }
+
+  public async updateConceptEntity(
+    conceptEntity: IConceptEntity
+  ): Promise<IConceptEntity> {
+    return this.http
+      .put<IConceptEntity>(
+        `${environment.apiURL}/conceptentities`,
+        conceptEntity
+      )
+      .toPromise();
+  }
+
+  public async deleteConceptEntity(
+    entId: string,
+    conceptId: string
+  ): Promise<void> {
+    return this.http
+      .delete<void>(
+        `${environment.apiURL}/conceptentities/${entId}/concept/${conceptId}`
+      )
       .toPromise();
   }
 }
@@ -119,8 +149,8 @@ export interface IConcept {
   conceptType?: IConceptType;
 }
 
-export interface IConceptField extends IDynamicFieldConfig {}
-export interface IConceptEntityFieldConfig extends IDynamicFieldConfig {}
+export interface IConceptField extends IDynamicFieldConfig { }
+export interface IConceptEntityFieldConfig extends IDynamicFieldConfig { }
 
 export interface IField {
   name: string;

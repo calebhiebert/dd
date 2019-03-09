@@ -127,6 +127,7 @@ namespace net_api.Models
 
         public ICollection<InventoryItem> InventoryItems { get; set; }
         public ICollection<EntitySpell> EntitySpells { get; set; }
+        public ICollection<ConceptEntity> EntityConcepts { get; set; }
 
         public Entity()
         {
