@@ -33,6 +33,7 @@
       [totalItems]="totalConcepts"
       [loading]="loading"
       (pageChange)="changePage($event)"
+      *ngIf="concepts && concepts.length > 0"
     ></dd-paginator>
   </div>
 

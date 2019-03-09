@@ -36,4 +36,48 @@
   </div>
 
   <!-- Data View -->
+  <div class="columns mt-2" *ngIf="concept">
+    <div class="column col-4 hide-md" *ngIf="concept.imageId">
+      <img
+        class="img-responsive s-rounded"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
+          concept.imageId
+        }}"
+        [alt]="'picture of' + concept.name"
+      />
+    </div>
+    <div
+      class="column col-md-12"
+      [ngClass]="{
+        'col-8': concept.imageId !== null,
+        'col-12': concept.imageId === null
+      }"
+    >
+      <dd-quill [value]="concept.content" readOnly="true"></dd-quill>
+
+      <!-- Tags -->
+      <div class="mt-2" *ngIf="concept.tags">
+        <div
+          class="label label-rounded mr-1 mb-1"
+          *ngFor="let t of concept.tags"
+        >
+          {{ t }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Lower full size image -->
+    <div
+      class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2"
+      *ngIf="concept.imageId"
+    >
+      <img
+        class="img-responsive s-rounded"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
+          concept.imageId
+        }}"
+        [alt]="'picture of' + concept.name"
+      />
+    </div>
+  </div>
 </div>
