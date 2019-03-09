@@ -24,8 +24,10 @@ namespace net_api.Models
         public DbSet<Note> Notes { get; set; }
         public DbSet<Spell> Spells { get; set; }
         public DbSet<Article> Articles { get; set; }
+
         public DbSet<ConceptType> ConceptTypes { get; set; }
         public DbSet<Concept> Concepts { get; set; }
+        public DbSet<ConceptEntity> ConceptEntities { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<CampaignNotification> CampaignInviteNotifications { get; set; }
@@ -59,6 +61,7 @@ namespace net_api.Models
             modelBuilder.Entity<InventoryItem>().HasKey(tbl => new { tbl.EntityId, tbl.ItemId });
             modelBuilder.Entity<EntitySpell>().HasKey(tbl => new { tbl.EntityId, tbl.SpellId });
             modelBuilder.Entity<ArticleQuest>().HasKey(tbl => new { tbl.ArticleId, tbl.QuestId });
+            modelBuilder.Entity<ConceptEntity>().HasKey(tbl => new { tbl.ConceptId, tbl.EntityId });
 
             modelBuilder.Query<MapBytePosition>();
             modelBuilder.Query<Tags>();

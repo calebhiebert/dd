@@ -1,8 +1,8 @@
 <div class="container grid-xl">
   <!-- Header Area -->
   <div class="columns">
-    <div class="column">
-      <h3>{{ editing ? 'Edit' : 'Create' }} Concept</h3>
+    <div class="column mb-0">
+      <h3>{{ editing ? 'Edit' : 'Create' }} Concept Type</h3>
     </div>
     <div class="column col-auto">
       <button class="btn btn-error mr-2" (click)="delete()" *ngIf="editing" [ngClass]="{ loading: deleting }">
@@ -36,10 +36,35 @@
       <dd-icon-picker [formControl]="icon"></dd-icon-picker>
     </div>
 
+    <!-- Entity Config -->
+    <div [formGroup]="entityConfig" class="big-space">
+      <h3 class="my-2">Entity Settings</h3>
+
+      <!-- Enabled -->
+      <div class="form-group">
+        <label class="form-checkbox mb-0">
+          <input type="checkbox" formControlName="enabled" />
+          <i class="form-icon"></i> Entities can have this concept
+        </label>
+        <div class="form-input-hint mt-0">
+          This would be like characters having items for example
+        </div>
+      </div>
+
+      <!-- Enable Quantity -->
+      <div class="form-group" *ngIf="entityConfig.value.enabled">
+        <label class="form-checkbox mb-0">
+          <input type="checkbox" formControlName="enableQuantity" />
+          <i class="form-icon"></i> Enable quantities
+        </label>
+        <div class="form-input-hint mt-0">This would be like characters having a specific number of a certain item</div>
+      </div>
+    </div>
+
     <!-- Field Config -->
-    <div class="columns">
+    <div class="columns big-space">
       <div class="column">
-        <h4>Fields</h4>
+        <h3>Fields</h3>
       </div>
       <div class="column col-auto">
         <button class="btn btn-sm" (click)="addField()">
@@ -54,7 +79,7 @@
       ">
       <div class="columns mb-1">
         <div class="column">
-          <h4 class="mb-0">{{ field.value.name }}</h4>
+          <h6 class="mb-0">{{ field.value.name }}</h6>
         </div>
         <div class="column col-auto">
           <button class="btn btn-sm btn-error" (click)="removeField(idx)">

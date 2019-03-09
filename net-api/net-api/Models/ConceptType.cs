@@ -55,6 +55,30 @@ namespace net_api.Models
             }
         }
 
+        [Column("EntityConfig", TypeName = "JSONB")]
+        [JsonIgnore]
+        public string EntityConfigJson { get; set; }
+
+        [NotMapped]
+        [Required]
+        public ConceptEntityConfig EntityConfig
+        {
+            get
+            {
+                if (EntityConfigJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<ConceptEntityConfig>(EntityConfigJson);
+            }
+
+            set
+            {
+                EntityConfigJson = JsonConvert.SerializeObject(value);
+            }
+        }
+
         [Required]
         public Guid CampaignId { get; set; }
 

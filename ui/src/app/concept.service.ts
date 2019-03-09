@@ -3,6 +3,7 @@ import { IDynamicFieldConfig } from './dynform/form-types';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ICampaign } from './campaign.service';
+import { IEntity } from './entity.service';
 
 @Injectable({
   providedIn: 'root',
@@ -101,6 +102,7 @@ export interface IConceptType {
   userId: string;
   icon?: string;
   fields: IConceptField[];
+  entityConfig: IConceptEntityConfig;
   campaignId: string;
   campaign?: ICampaign;
 }
@@ -118,6 +120,7 @@ export interface IConcept {
 }
 
 export interface IConceptField extends IDynamicFieldConfig {}
+export interface IConceptEntityFieldConfig extends IDynamicFieldConfig {}
 
 export interface IField {
   name: string;
@@ -127,4 +130,20 @@ export interface IField {
 export interface IConceptsQueryResult {
   total: number;
   concepts: IConcept[];
+}
+
+export interface IConceptEntityConfig {
+  enabled: boolean;
+  enableQuantity: boolean;
+  fields: IConceptEntityFieldConfig[];
+}
+
+export interface IConceptEntity {
+  conceptId: string;
+  concept?: IConcept;
+  entityId: string;
+  entity?: IEntity;
+  fields: IField[];
+  quantity?: number;
+  content?: any;
 }

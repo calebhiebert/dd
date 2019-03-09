@@ -71,6 +71,11 @@ export class ConceptTypeEditorComponent
       description: new FormControl(null),
       icon: new FormControl(null),
       fields: new FormArray([]),
+      entityConfig: new FormGroup({
+        enabled: new FormControl(false),
+        enableQuantity: new FormControl(false),
+        fields: new FormArray([])
+      }),
     });
 
     if (this.editing) {
@@ -79,6 +84,8 @@ export class ConceptTypeEditorComponent
         this.load(id);
       });
     }
+
+    this.name.valueChanges.subscribe()
   }
 
   private constructConceptType(): IConceptType {
@@ -90,6 +97,7 @@ export class ConceptTypeEditorComponent
       icon: this.icon.value,
       campaignId: this.campaignService.campaign.id,
       fields: this.fields.value,
+      entityConfig: this.entityConfig.value,
     };
 
     if (this.editing) {
@@ -179,7 +187,7 @@ export class ConceptTypeEditorComponent
     } catch (err) {
       throw err;
     }
-
+    
     this.formGroup.markAsPristine();
     this.cancel();
 
@@ -204,6 +212,10 @@ export class ConceptTypeEditorComponent
 
   public get icon() {
     return this.formGroup.get('icon');
+  }
+
+  public get entityConfig() {
+    return this.formGroup.get('entityConfig');
   }
 
   public get fields() {

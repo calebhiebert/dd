@@ -2,119 +2,80 @@
 <div class="container grid-xl" *ngIf="campaign || !editing">
   <!-- Header -->
   <div class="columns">
-    <div class="column"><h2>Settings</h2></div>
+    <div class="column">
+      <h2>{{ editing ? 'Settings' : 'Create Campaign' }}</h2>
+    </div>
     <div class="column col-auto col-ml-auto">
       <button class="btn mr-2" (click)="cancel()">Cancel</button>
 
-      <button
-        class="btn btn-primary"
-        [disabled]="formGroup.invalid || formGroup.pristine"
-        (click)="save()"
-        [ngClass]="{ loading: saving }"
-      >
+      <button class="btn btn-primary" [disabled]="formGroup.invalid || formGroup.pristine" (click)="save()"
+        [ngClass]="{ loading: saving }">
         Save
       </button>
     </div>
   </div>
 
-  <h3>General Settings</h3>
-  <dd-campaign-form
-    [campaign]="campaign"
-    [formGroup]="formGroup"
-    [includeImage]="editing"
-  ></dd-campaign-form>
-
-  <div class="divider my-2"></div>
+  <h3 class="mb-0">General Settings</h3>
+  <dd-campaign-form [campaign]="campaign" [formGroup]="formGroup" [includeImage]="editing"></dd-campaign-form>
 
   <!-- Experience Table -->
-  <div class="columns mt-2">
-    <div class="column"><h3 class="mb-0">Experience Table</h3></div>
+  <div class="columns big-space">
+    <div class="column">
+      <h3 class="mb-0">Experience Table</h3>
+    </div>
     <div class="column col-auto col-ml-auto">
-      <button
-        class="btn btn-sm"
-        *ngIf="!expandXPTable"
-        (click)="expandXPTable = !expandXPTable"
-      >
+      <button class="btn btn-sm" *ngIf="!expandXPTable" (click)="expandXPTable = !expandXPTable">
         Expand <i class="icon icon-arrow-down"></i>
       </button>
-      <button
-        class="btn btn-sm"
-        *ngIf="expandXPTable"
-        (click)="expandXPTable = !expandXPTable"
-      >
+      <button class="btn btn-sm" *ngIf="expandXPTable" (click)="expandXPTable = !expandXPTable">
         Collapse <i class="icon icon-arrow-up"></i>
       </button>
     </div>
   </div>
-  <span class="text-gray" *ngIf="expandXPTable"
-    >This is the experience table. This will determine entities' levels based on
+  <span class="text-gray" *ngIf="expandXPTable">This is the experience table. This will determine entities' levels based
+    on
     the amount of XP they have. For example, if level 2 was set to 30 XP, an
-    entity would be level 2 when they reach 30 or above XP.</span
-  >
-  <dd-experience-table-editor
-    [campaign]="campaign"
-    [formGroup]="formGroup"
-    [hidden]="!expandXPTable"
-  ></dd-experience-table-editor>
-
-  <div class="divider my-2"></div>
+    entity would be level 2 when they reach 30 or above XP.</span>
+  <dd-experience-table-editor [campaign]="campaign" [formGroup]="formGroup" [hidden]="!expandXPTable">
+  </dd-experience-table-editor>
 
   <!-- Item Rarity Table -->
-  <div class="columns mt-2">
-    <div class="column"><h3 class="mb-0">Item Rarity Table</h3></div>
+  <div class="columns big-space">
+    <div class="column">
+      <h3 class="mb-0">Item Rarity Table</h3>
+    </div>
     <div class="column col-auto col-ml-auto">
-      <button
-        class="btn btn-sm"
-        (click)="expandItemRarityTable = !expandItemRarityTable"
-      >
-        <span *ngIf="expandItemRarityTable"
-          >Collapse <i class="icon icon-arrow-up"></i
-        ></span>
-        <span *ngIf="!expandItemRarityTable"
-          >Expand <i class="icon icon-arrow-down"></i
-        ></span>
+      <button class="btn btn-sm" (click)="expandItemRarityTable = !expandItemRarityTable">
+        <span *ngIf="expandItemRarityTable">Collapse <i class="icon icon-arrow-up"></i></span>
+        <span *ngIf="!expandItemRarityTable">Expand <i class="icon icon-arrow-down"></i></span>
       </button>
     </div>
   </div>
-  <dd-item-rarity-table-editor
-    [hidden]="!expandItemRarityTable"
-    [campaign]="campaign"
-    [formGroup]="formGroup"
-  ></dd-item-rarity-table-editor>
+  <dd-item-rarity-table-editor [hidden]="!expandItemRarityTable" [campaign]="campaign" [formGroup]="formGroup">
+  </dd-item-rarity-table-editor>
 
-  <div class="divider my-2"></div>
-
-  <div class="columns mt-2">
-    <div class="column"><h3 class="mb-0">Currency Map</h3></div>
+  <div class="columns big-space">
+    <div class="column">
+      <h3 class="mb-0">Currency Map</h3>
+    </div>
     <div class="column col-auto col-ml-auto">
-      <button
-        class="btn btn-sm"
-        (click)="expandCurrencyMapEditor = !expandCurrencyMapEditor"
-      >
-        <span *ngIf="expandCurrencyMapEditor"
-          >Collapse <i class="icon icon-arrow-up"></i
-        ></span>
-        <span *ngIf="!expandCurrencyMapEditor"
-          >Expand <i class="icon icon-arrow-down"></i
-        ></span>
+      <button class="btn btn-sm" (click)="expandCurrencyMapEditor = !expandCurrencyMapEditor">
+        <span *ngIf="expandCurrencyMapEditor">Collapse <i class="icon icon-arrow-up"></i></span>
+        <span *ngIf="!expandCurrencyMapEditor">Expand <i class="icon icon-arrow-down"></i></span>
       </button>
     </div>
   </div>
-  <dd-currency-map-editor
-    [hidden]="!expandCurrencyMapEditor"
-    [formGroup]="formGroup"
-    [campaign]="campaign"
-  ></dd-currency-map-editor>
-
-  <div class="divider my-2"></div>
+  <dd-currency-map-editor [hidden]="!expandCurrencyMapEditor" [formGroup]="formGroup" [campaign]="campaign">
+  </dd-currency-map-editor>
 
   <!-- Entity Types -->
-  <div class="columns mt-2" *ngIf="editing">
-    <div class="column"><h3>Entity Types</h3></div>
+  <div class="columns big-space" *ngIf="editing">
+    <div class="column">
+      <h3>Entity Types</h3>
+    </div>
     <div class="column col-auto">
       <button class="btn btn-sm" (click)="createEntityPreset()">
-        <i class="icon icon-plus"></i
-        ><span class="hide-sm"> New Entity Type</span>
+        <i class="icon icon-plus"></i><span class="hide-sm"> New Entity Type</span>
       </button>
     </div>
   </div>
@@ -129,19 +90,13 @@
     </div>
   </div>
   <div *ngIf="editing">
-    <div
-      class="card p-2 mb-2 hoverable"
-      *ngFor="let ep of campaign.entityPresets"
-      (click)="selectEntityPreset(ep)"
-    >
+    <div class="card p-2 mb-2 hoverable" *ngFor="let ep of campaign.entityPresets" (click)="selectEntityPreset(ep)">
       <div class="columns">
         <div class="column col-auto" *ngIf="ep.imageId">
           <figure class="avatar avatar-lg">
-            <img
-              src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+            <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
                 ep.imageId
-              }}"
-            />
+              }}" />
           </figure>
         </div>
         <div class="column">
@@ -152,15 +107,14 @@
     </div>
   </div>
 
-  <div class="divider my-2" *ngIf="editing"></div>
-
   <!-- Concept Types -->
-  <div class="columns mt-2" *ngIf="editing">
-    <div class="column"><h3>Concept Types</h3></div>
+  <div class="columns big-space" *ngIf="editing">
+    <div class="column">
+      <h3>Concept Types</h3>
+    </div>
     <div class="column col-auto">
       <button class="btn btn-sm" (click)="createConceptType()">
-        <i class="icon icon-plus"></i
-        ><span class="hide-sm"> New Concept Type</span>
+        <i class="icon icon-plus"></i><span class="hide-sm"> New Concept Type</span>
       </button>
     </div>
   </div>
@@ -175,11 +129,7 @@
     </div>
   </div>
   <div *ngIf="editing">
-    <div
-      class="card p-2 mb-2 hoverable"
-      *ngFor="let ct of campaign.conceptTypes"
-      (click)="selectConceptType(ct)"
-    >
+    <div class="card p-2 mb-2 hoverable" *ngFor="let ct of campaign.conceptTypes" (click)="selectConceptType(ct)">
       <div class="columns">
         <div class="column col-auto" *ngIf="ct.icon">
           <img class="img-responsive" src="{{ getIcon(ct.icon) }}" />
@@ -192,40 +142,25 @@
     </div>
   </div>
 
-  <div class="divider my-2" *ngIf="editing"></div>
-
   <!-- Danger Options -->
+  <h3 class="mb-2 big-space" *ngIf="editing">Other Stuff</h3>
   <div class="card p-2" *ngIf="editing">
     <div class="card-body">
-      <h3 class="mb-2">Other Stuff</h3>
 
       <button class="btn btn-primary" (click)="export()">
         <i class="icon icon-download"></i> Export Data
       </button>
 
-      <label
-        class="btn btn-primary ml-2"
-        [ngClass]="{ loading: importing }"
-        for="import-button"
-      >
+      <label class="btn btn-primary ml-2" [ngClass]="{ loading: importing }" for="import-button">
         <i class="icon icon-upload"></i> Import Data
-        <input
-          type="file"
-          id="import-button"
-          style="display: none"
-          (change)="import($event)"
-        />
+        <input type="file" id="import-button" style="display: none" (change)="import($event)" />
       </label>
     </div>
 
     <div class="card-body">
-      <h3 class="mb-2">Danger!</h3>
+      <h4 class="mb-2">Danger!</h4>
 
-      <button
-        class="btn btn-error"
-        [ngClass]="{ loading: deleting }"
-        (click)="delete()"
-      >
+      <button class="btn btn-error" [ngClass]="{ loading: deleting }" (click)="delete()">
         <i class="icon icon-cross"></i> Delete Campaign
       </button>
     </div>
