@@ -7,6 +7,7 @@ import {
 } from 'src/app/concept.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
+import { DynamicFieldType } from 'src/app/dynform/form-types';
 
 @Component({
   selector: 'dd-concept-view',
@@ -25,7 +26,7 @@ export class ConceptViewComponent implements OnInit {
     private router: Router,
     private campaignService: CampaignService,
     private conceptService: ConceptService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -75,7 +76,42 @@ export class ConceptViewComponent implements OnInit {
   }
 
   public getFieldConfig(field: IField) {
-    return this.concept.fields.find(f => f.name === field.name);
+    return this.conceptType.fields.find(f => f.name === field.name);
+  }
+
+  public get tableFields() {
+    const tableFields: IField[] = [];
+
+    for (const field of this.concept.fields) {
+      const config = this.getFieldConfig(field);
+
+      if (
+        [DynamicFieldType.BOOLEAN,
+        DynamicFieldType.ENUM,
+        DynamicFieldType.ENUM_MULTI,
+        DynamicFieldType.FLOAT,
+        DynamicFieldType.INT,
+        DynamicFieldType.STRING]
+          .indexOf(config.type) !== -1) {
+        tableFields.push(field);
+      }
+    }
+
+    return tableFields;
+  }
+
+  public get formattedTextFields() {
+    const formattedTextFields: IField[] = [];
+
+    for (const field of this.concept.fields) {
+      const config = this.getFieldConfig(field);
+
+      if (config.type === DynamicFieldType.TEXT_FORMATTED) {
+        formattedTextFields.push(field);
+      }
+    }
+
+    return formattedTextFields;
   }
 
   public get editable() {

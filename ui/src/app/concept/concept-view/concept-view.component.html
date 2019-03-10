@@ -6,24 +6,13 @@
   <!-- Title Controls -->
   <div class="columns" *ngIf="concept">
     <div class="column col-auto">
-      <img
-        class="s-rounded"
-        width="64"
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+      <img class="s-rounded" width="64" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
           concept.imageId
-        }}"
-        *ngIf="concept.imageId"
-        alt="Item Picture"
-      />
+        }}" *ngIf="concept.imageId" alt="Item Picture" />
 
       <!-- Fallback Image -->
-      <img
-        class="s-rounded"
-        width="64"
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/winged-sword"
-        *ngIf="!concept.imageId"
-        alt="Item Fallback Picture"
-      />
+      <img class="s-rounded" width="64" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/winged-sword"
+        *ngIf="!concept.imageId" alt="Item Fallback Picture" />
     </div>
     <div class="column">
       <h2 class="mb-0">{{ concept.name }}</h2>
@@ -38,39 +27,39 @@
   <!-- Data View -->
   <div class="columns mt-2" *ngIf="concept">
     <div class="column col-4 hide-md" *ngIf="concept.imageId">
-      <img
-        class="img-responsive s-rounded"
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
+      <img class="img-responsive s-rounded" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
           concept.imageId
-        }}"
-        [alt]="'picture of' + concept.name"
-      />
+        }}" [alt]="'picture of' + concept.name" />
     </div>
-    <div
-      class="column col-md-12"
-      [ngClass]="{
+    <div class="column col-md-12" [ngClass]="{
         'col-8': concept.imageId !== null,
         'col-12': concept.imageId === null
       }">
+
+      <!-- Description -->
       <dd-quill [value]="concept.content" readOnly="true"></dd-quill>
 
+      <!-- Formatted Text Fields -->
+      <div class="mt-2" *ngFor="let ftf of formattedTextFields">
+        <h5 class="mb-1">{{ ftf.name }}</h5>
+        <dd-quill [value]="ftf.value" readOnly="true"></dd-quill>
+      </div>
+
       <!-- Tags -->
-      <div class="mt-2" *ngIf="concept.tags">
-        <div
-          class="label label-rounded mr-1 mb-1"
-          *ngFor="let t of concept.tags"
-        >
+      <div class="big-space" *ngIf="concept.tags">
+        <div class="label label-rounded mr-1 mb-1" *ngFor="let t of concept.tags">
           {{ t }}
         </div>
       </div>
 
+      <!-- Field Table -->
       <table class="table">
         <thead>
           <th>Field</th>
           <th>Value</th>
         </thead>
         <tbody>
-          <tr *ngFor="let field of concept.fields">
+          <tr *ngFor="let field of tableFields">
             <td>{{ field.name }}</td>
             <td>{{ field.value }}</td>
           </tr>
@@ -79,17 +68,10 @@
     </div>
 
     <!-- Lower full size image -->
-    <div
-      class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2"
-      *ngIf="concept.imageId"
-    >
-      <img
-        class="img-responsive s-rounded"
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
+    <div class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2" *ngIf="concept.imageId">
+      <img class="img-responsive s-rounded" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
           concept.imageId
-        }}"
-        [alt]="'picture of' + concept.name"
-      />
+        }}" [alt]="'picture of' + concept.name" />
     </div>
   </div>
 </div>
