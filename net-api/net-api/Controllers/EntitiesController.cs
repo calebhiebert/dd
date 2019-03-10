@@ -250,8 +250,6 @@ namespace net_api.Controllers
 
             var entity = await _context.Entities
                 .Where(e => e.Id == id)
-                .Include(e => e.InventoryItems)
-                .Include(e => e.EntitySpells)
                 .Include(e => e.Campaign)
                 .FirstOrDefaultAsync();
 
@@ -267,8 +265,6 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
-            _context.InventoryItems.RemoveRange(entity.InventoryItems);
-            _context.EntitySpells.RemoveRange(entity.EntitySpells);
             _context.Entities.Remove(entity);
             await _context.SaveChangesAsync();
 
@@ -309,9 +305,6 @@ namespace net_api.Controllers
 
             for (var i = 0; i < count; i++)
             {
-                // TODO also copy over inventory items
-                // TODO also copy over spells
-
                 var entity = new Entity
                 {
                     Name = preset.Name,

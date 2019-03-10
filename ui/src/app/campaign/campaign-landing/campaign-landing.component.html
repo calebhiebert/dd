@@ -1,5 +1,7 @@
 <dd-modal #invites size="large" *ngIf="editable">
-  <div modal-header><h4>Manage Invites</h4></div>
+  <div modal-header>
+    <h4>Manage Invites</h4>
+  </div>
   <div modal-body *ngIf="invites.isOpen">
     <dd-invite-manager></dd-invite-manager>
   </div>
@@ -22,21 +24,16 @@
 
         <ul class="menu">
           <li class="menu-item" *ngFor="let ep of entityPresets">
-            <a
-              [routerLink]="[
+            <a [routerLink]="[
                 '/campaigns',
                 campaign.id,
                 'entities',
                 ep.id,
                 'create'
-              ]"
-              >Create {{ ep.name }}</a
-            >
+              ]">Create {{ ep.name }}</a>
           </li>
           <li class="menu-item" *ngIf="editable">
-            <a [routerLink]="['/campaigns', campaign.id, 'settings']"
-              >Settings</a
-            >
+            <a [routerLink]="['/campaigns', campaign.id, 'settings']">Settings</a>
           </li>
         </ul>
       </div>
@@ -55,7 +52,9 @@
       <div class="card">
         <div class="card-header">
           <div class="columns">
-            <div class="column"><h5>Members</h5></div>
+            <div class="column">
+              <h5>Members</h5>
+            </div>
             <div class="column col-auto col-ml-auto" *ngIf="editable">
               <button class="btn btn-sm" (click)="invites.open()">
                 <i class="icon icon-plus"></i>
@@ -66,27 +65,17 @@
         </div>
 
         <div class="card-body">
-          <div
-            class="tile tile-centered mb-2"
-            *ngFor="let u of campaign.members"
-          >
+          <div class="tile tile-centered mb-2" *ngFor="let u of campaign.members">
             <div class="tile-icon">
               <figure class="avatar"><img [src]="u.user.pictureURL" /></figure>
             </div>
             <div class="tile-content">
               <div class="tile-title">{{ u.user.username }}</div>
               <div class="d-flex">
-                <span
-                  class="chip hoverable-chip"
-                  (click)="selectEntity(e)"
-                  *ngFor="let e of userEntities(u.user.id)"
-                >
-                  <img
-                    src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+                <span class="chip hoverable-chip" (click)="selectEntity(e)" *ngFor="let e of userEntities(u.user.id)">
+                  <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
                       e.imageId
-                    }}"
-                    class="avatar avatar-sm"
-                  />
+                    }}" class="avatar avatar-sm" />
                   {{ e.name }}
                 </span>
               </div>
@@ -99,7 +88,9 @@
       <div class="card mt-2">
         <div class="card-header">
           <div class="columns">
-            <div class="column"><h5>Active Quests</h5></div>
+            <div class="column">
+              <h5>Active Quests</h5>
+            </div>
             <div class="column col-auto col-ml-auto" *ngIf="editable">
               <button class="btn btn-sm" (click)="manageQuests()">
                 <span class="hide-sm">Manage </span>
@@ -109,13 +100,14 @@
           </div>
         </div>
 
-        <div class="card-body"><dd-quest-quick-view></dd-quest-quick-view></div>
+        <div class="card-body">
+          <dd-quest-quick-view></dd-quest-quick-view>
+        </div>
       </div>
 
       <!-- Quick Links -->
       <div class="card mt-2 p-2">
-        <button class="btn mb-2" (click)="viewItems()">Items</button>
-        <button class="btn" (click)="viewSpells()">Spells</button>
+
       </div>
 
       <div class="mt-2">

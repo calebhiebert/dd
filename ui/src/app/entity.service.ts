@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { IUser } from './user.service';
 import { ICampaign } from './campaign.service';
 import { environment } from 'src/environments/environment';
-import { IItem } from './item.service';
 
 @Injectable({
   providedIn: 'root',
@@ -86,36 +85,6 @@ export class EntityService {
       .toPromise();
   }
 
-  public async getInventory(entityId: string): Promise<IInventoryItem[]> {
-    return this.http
-      .get<IInventoryItem[]>(
-        `${environment.apiURL}/inventoryitems?entityId=${entityId}`
-      )
-      .toPromise();
-  }
-
-  public async updateInventoryItem(
-    inventoryItem: IInventoryItem
-  ): Promise<IInventoryItem> {
-    return this.http
-      .put<IInventoryItem>(
-        `${environment.apiURL}/inventoryitems`,
-        inventoryItem
-      )
-      .toPromise();
-  }
-
-  public async deleteInventoryItem(
-    entId: string,
-    itemId: string
-  ): Promise<void> {
-    return this.http
-      .delete<void>(
-        `${environment.apiURL}/inventoryitems/${entId}/item/${itemId}`
-      )
-      .toPromise();
-  }
-
   public async spawnSpawnable(
     spawnableId: string,
     count: number
@@ -145,8 +114,6 @@ export interface IEntityPreset {
   user?: IUser;
   imageId: string;
   playerCreatable: boolean;
-  isInventoryEnabled: boolean;
-  isSpellsetsEnabled: boolean;
   isCurrencyEnabled: boolean;
   isXPEnabled: boolean;
   isHealthEnabled: boolean;
@@ -191,22 +158,12 @@ export interface IEntity {
   mapId?: string;
   lat?: number;
   lng?: number;
-  inventoryItems?: IInventoryItem[];
 }
 
 export interface IAttribute {
   name: string;
   type: AttributeType;
   data: any;
-}
-
-export interface IInventoryItem {
-  itemId: string;
-  item?: IItem;
-  entityId: string;
-  entity?: IEntity;
-  quantity: number;
-  content?: any;
 }
 
 export interface IHealthPreset {

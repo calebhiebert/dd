@@ -30,8 +30,6 @@ namespace net_api.Controllers
         [HttpGet]
         public async Task<IActionResult> ExportCampaign(
             [FromQuery] Guid? campaignId,
-            [FromQuery] bool items,
-            [FromQuery] bool spells,
             [FromQuery] bool quests,
             [FromQuery] bool articles,
             [FromQuery] bool entitypresets,
@@ -54,41 +52,6 @@ namespace net_api.Controllers
             {
                 var serializer = new JsonSerializer();
 
-                // Write items
-                if (items)
-                {
-                    var entry = zipArchive.CreateEntry("items.json");
-                    using (var strm = entry.Open())
-                    {
-                        var itemList = await _context.Items
-                            .Where(i => i.CampaignId == campaignId)
-                            .Select(i => new { i.Id, i.Name, i.Content, i.Cost, i.ImageId, i.Tags, i.Weight, i.PlayerVisible })
-                            .ToListAsync();
-
-                        var jtw = new JsonTextWriter(new StreamWriter(strm));
-                        serializer.Serialize(jtw, itemList);
-                        await jtw.FlushAsync();
-                    }
-                }
-
-                // Write spells
-                if (spells)
-                {
-                    var entry = zipArchive.CreateEntry("spells.json");
-
-                    using (var strm = entry.Open())
-                    {
-                        var spellList = await _context.Spells
-                            .Where(s => s.CampaignId == campaignId)
-                            .Select(s => new { s.Id, s.Name, s.Content, s.PlayerVisible, s.Tags, s.ImageId })
-                            .ToListAsync();
-
-                        var jtw = new JsonTextWriter(new StreamWriter(strm));
-                        serializer.Serialize(jtw, spellList);
-                        await jtw.FlushAsync();
-                    }
-                }
-
                 // Write entity presets
                 if (entitypresets)
                 {
@@ -108,8 +71,6 @@ namespace net_api.Controllers
                                 ep.Health,
                                 ep.IsCurrencyEnabled,
                                 ep.IsHealthEnabled,
-                                ep.IsInventoryEnabled,
-                                ep.IsSpellsetsEnabled,
                                 ep.IsXPEnabled,
                                 ep.PlayerCreatable
                             })

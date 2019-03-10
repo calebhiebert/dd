@@ -39,21 +39,6 @@
   <dd-experience-table-editor [campaign]="campaign" [formGroup]="formGroup" [hidden]="!expandXPTable">
   </dd-experience-table-editor>
 
-  <!-- Item Rarity Table -->
-  <div class="columns big-space">
-    <div class="column">
-      <h3 class="mb-0">Item Rarity Table</h3>
-    </div>
-    <div class="column col-auto col-ml-auto">
-      <button class="btn btn-sm" (click)="expandItemRarityTable = !expandItemRarityTable">
-        <span *ngIf="expandItemRarityTable">Collapse <i class="icon icon-arrow-up"></i></span>
-        <span *ngIf="!expandItemRarityTable">Expand <i class="icon icon-arrow-down"></i></span>
-      </button>
-    </div>
-  </div>
-  <dd-item-rarity-table-editor [hidden]="!expandItemRarityTable" [campaign]="campaign" [formGroup]="formGroup">
-  </dd-item-rarity-table-editor>
-
   <div class="columns big-space">
     <div class="column">
       <h3 class="mb-0">Currency Map</h3>

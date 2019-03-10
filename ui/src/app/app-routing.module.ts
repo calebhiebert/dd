@@ -9,27 +9,21 @@ import { EntityViewComponent } from './entity/entity-view/entity-view.component'
 import { EntityCreationFormComponent } from './entity/entity-form/entity-creation-form/entity-creation-form.component';
 import { EntityTypeSelectorComponent } from './entity/entity-form/entity-type-selector/entity-type-selector.component';
 import { CampaignListComponent } from './campaign/campaign-list/campaign-list.component';
-import { ItemManagerComponent } from './items/item-manager/item-manager.component';
 import { CampaignSettingsComponent } from './campaign/campaign-settings/campaign-settings.component';
 import { QuestManagerComponent } from './quest/quest-manager/quest-manager.component';
 import { CampaignLandingComponent } from './campaign/campaign-landing/campaign-landing.component';
 import { RegisterComponent } from './login/register/register.component';
 import { InviteComponent } from './invite/invite.component';
 import { ActionGuard } from './action.guard';
-import { ItemViewComponent } from './items/item-view/item-view.component';
 import { AboutComponent } from './about/about.component';
 import { EntityComponent } from './entity/entity.component';
 import { QuestFormComponent } from './quest/quest-form/quest-form.component';
 import { QuestViewComponent } from './quest/quest-view/quest-view.component';
 import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-manager.component';
 import { OverviewComponent } from './session/overview/overview.component';
-import { ItemFormComponent } from './items/item-form/item-form.component';
-import { SpellManagerComponent } from './spell/spell-manager/spell-manager.component';
-import { SpellViewComponent } from './spell/spell-view/spell-view.component';
 import { MapComponent } from './map/map.component';
 import { MapUploadComponent } from './map/map-upload/map-upload.component';
 import { MapManagerComponent } from './map/map-manager/map-manager.component';
-import { SpellFormComponent } from './spell/spell-form/spell-form.component';
 import { ArticleEditorComponent } from './article/article-editor/article-editor.component';
 import { ArticleViewComponent } from './article/article-view/article-view.component';
 import { ArticleManagerComponent } from './article/article-manager/article-manager.component';
@@ -207,36 +201,6 @@ const routes: Routes = [
         },
       },
       {
-        path: 'spells',
-        component: SpellManagerComponent,
-        data: {
-          breadcrumb: 'Spells',
-        },
-      },
-      {
-        path: 'spells/create',
-        component: SpellFormComponent,
-        data: {
-          breadcrumb: 'Create Spell',
-          editing: false,
-        },
-      },
-      {
-        path: 'spells/:s_id/edit',
-        component: SpellFormComponent,
-        data: {
-          breadcrumb: 'Edit Spell',
-          editing: true,
-        },
-      },
-      {
-        path: 'spells/:s_id',
-        component: SpellViewComponent,
-        data: {
-          breadcrumb: 'Spell View',
-        },
-      },
-      {
         path: 'overview',
         component: OverviewComponent,
         data: {
@@ -272,34 +236,6 @@ const routes: Routes = [
         component: QuestViewComponent,
         data: {
           breadcrumb: 'Quest View',
-        },
-      },
-      {
-        path: 'items',
-        component: ItemManagerComponent,
-        data: {
-          breadcrumb: 'Items',
-        },
-      },
-      {
-        path: 'items/create',
-        component: ItemFormComponent,
-        data: {
-          editing: false,
-        },
-      },
-      {
-        path: 'items/:item_id/edit',
-        component: ItemFormComponent,
-        data: {
-          editing: true,
-        },
-      },
-      {
-        path: 'items/:item_id',
-        component: ItemViewComponent,
-        data: {
-          breadcrumb: 'Item View',
         },
       },
       {
@@ -363,4 +299,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

@@ -17,9 +17,9 @@ export class CampaignLandingComponent implements OnInit {
     private campaignService: CampaignService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   public userEntities(id: string) {
     return this.campaign.entities.filter(
@@ -35,14 +35,6 @@ export class CampaignLandingComponent implements OnInit {
 
   public manageQuests() {
     this.router.navigate(['campaigns', this.campaign.id, 'quests']);
-  }
-
-  public viewSpells() {
-    this.router.navigate(['campaigns', this.campaign.id, 'spells']);
-  }
-
-  public viewItems() {
-    this.router.navigate(['campaigns', this.campaign.id, 'items']);
   }
 
   public get campaign() {

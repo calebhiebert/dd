@@ -102,15 +102,6 @@
 
   <div class="divider" *ngIf="preset.isCurrencyEnabled"></div>
 
-  <!-- Inventory Management -->
-  <dd-inventory-manager class="mt-2" [entityId]="entity.id" [editable]="editable"
-    *ngIf="entity && preset.isInventoryEnabled"></dd-inventory-manager>
-
-  <!-- Spellset Management -->
-  <div class="divider" *ngIf="entity && preset.isSpellsetsEnabled"></div>
-  <dd-spellset-manager [editable]="editable" [entityId]="entity.id" *ngIf="entity && preset.isSpellsetsEnabled">
-  </dd-spellset-manager>
-
   <!-- Concept Managers -->
   <div *ngFor="let ct of conceptTypeList">
     <div class="divider"></div>

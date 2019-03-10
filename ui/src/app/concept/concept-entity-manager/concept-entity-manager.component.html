@@ -95,7 +95,8 @@
         </div>
 
         <!-- Name -->
-        <div class="column c-hand" [ngClass]="{ faded: quantityEnabled && ce.quantity === 0 }" (click)="select(ce)">
+        <div class="column pt-1 c-hand" [ngClass]="{ faded: quantityEnabled && ce.quantity === 0 }"
+          (click)="select(ce)">
           {{ ce.concept.name }}
 
           <!-- Quantity -->

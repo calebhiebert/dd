@@ -75,7 +75,7 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
-            // It's possible that the client could submit the item field
+            // It's possible that the client could submit the concept field
             // this is not ideal (because entity framework will track it), so we just clear it
             conceptEntity.Concept = null;
 
@@ -104,7 +104,7 @@ namespace net_api.Controllers
                 }
             }
 
-            // Because the item field was cleared above, but we want to send it in the response
+            // Because the concept field was cleared above, but we want to send it in the response
             // we need to re populate it
             await _context.Entry(conceptEntity)
                 .Reference(i => i.Concept)

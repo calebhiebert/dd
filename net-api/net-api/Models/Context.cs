@@ -17,12 +17,9 @@ namespace net_api.Models
         public DbSet<Entity> Entities { get; set; }
         public DbSet<CampaignUser> CampaignUsers { get; set; }
         public DbSet<CampaignInvite> CampaignInvites { get; set; }
-        public DbSet<Item> Items { get; set; }
-        public DbSet<InventoryItem> InventoryItems { get; set; }
         public DbSet<Quest> Quests { get; set; }
         public DbSet<Map> Maps { get; set; }
         public DbSet<Note> Notes { get; set; }
-        public DbSet<Spell> Spells { get; set; }
         public DbSet<Article> Articles { get; set; }
 
         public DbSet<ConceptType> ConceptTypes { get; set; }
@@ -32,8 +29,6 @@ namespace net_api.Models
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<CampaignNotification> CampaignInviteNotifications { get; set; }
         public DbSet<MapNotification> MapNotifications { get; set; }
-
-        public DbSet<EntitySpell> EntitySpells { get; set; }
 
         public DbSet<ArticleQuest> ArticleQuests { get; set; }
 
@@ -58,8 +53,6 @@ namespace net_api.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CampaignUser>().HasKey(tbl => new { tbl.CampaignId, tbl.UserId });
-            modelBuilder.Entity<InventoryItem>().HasKey(tbl => new { tbl.EntityId, tbl.ItemId });
-            modelBuilder.Entity<EntitySpell>().HasKey(tbl => new { tbl.EntityId, tbl.SpellId });
             modelBuilder.Entity<ArticleQuest>().HasKey(tbl => new { tbl.ArticleId, tbl.QuestId });
             modelBuilder.Entity<ConceptEntity>().HasKey(tbl => new { tbl.ConceptId, tbl.EntityId });
 

@@ -68,14 +68,6 @@ namespace net_api.Controllers
                 .Where(e => e.Name.ToLower().Contains(search))
                 .Where(e => e.Spawnable == false && e.SpawnedFromId == null);
 
-            var spellQuery = _context.Spells
-                .Where(s => s.CampaignId == campaign.Id)
-                .Where(s => s.Name.ToLower().Contains(search));
-
-            var itemQuery = _context.Items
-                .Where(i => i.CampaignId == campaign.Id)
-                .Where(i => i.Name.ToLower().Contains(search));
-
             var mapQuery = _context.Maps
                 .Where(m => m.CampaignId == campaign.Id)
                 .Where(m => m.Name.ToLower().Contains(search));
@@ -89,12 +81,6 @@ namespace net_api.Controllers
                 questQuery = questQuery
                     .Where(q => q.Visible == true);
 
-                spellQuery = spellQuery
-                    .Where(s => s.PlayerVisible == true);
-
-                itemQuery = itemQuery
-                    .Where(i => i.PlayerVisible == true);
-
                 mapQuery = mapQuery
                     .Where(m => m.PlayerVisible == true);
             }
@@ -104,19 +90,15 @@ namespace net_api.Controllers
             var articleTask = articleQuery.Take(2).ToListAsync();
             var questTask = questQuery.Take(2).ToListAsync();
             var entityTask = entityQuery.Take(2).ToListAsync();
-            var spellTask = spellQuery.Take(2).ToListAsync();
-            var itemTask = itemQuery.Take(2).ToListAsync();
             var mapTask = finalMapQuery.Take(2).ToListAsync();
 
-            await Task.WhenAll(articleTask, questTask, entityTask, spellTask, itemTask, mapTask);
+            await Task.WhenAll(articleTask, questTask, entityTask, mapTask);
 
             var searchResults = new List<SearchResult>();
 
             articleTask.Result.ForEach(a => searchResults.Add(new ArticleSearchResult(a)));
             questTask.Result.ForEach(q => searchResults.Add(new QuestSearchResult(q)));
             entityTask.Result.ForEach(e => searchResults.Add(new EntitySearchResult(e)));
-            spellTask.Result.ForEach(s => searchResults.Add(new SpellSearchResult(s)));
-            itemTask.Result.ForEach(i => searchResults.Add(new ItemSearchResult(i)));
             mapTask.Result.ForEach(m => searchResults.Add(new MapSearchResult(m)));
             campaign.Members
                 .Where(m => m.User.Username.ToLower().Contains(search))

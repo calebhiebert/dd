@@ -19,7 +19,7 @@ export class BreadcrumbsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private campaignService: CampaignService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.breadcrumbs$ = this.router.events
@@ -50,18 +50,6 @@ export class BreadcrumbsComponent implements OnInit {
             breadcrumbs.push({
               display: 'Quests',
               navigate: ['campaigns', cr.parent.paramMap.get('id'), 'quests'],
-            });
-            break;
-          case 'Item View':
-            breadcrumbs.push({
-              display: 'Items',
-              navigate: ['campaigns', cr.parent.paramMap.get('id'), 'items'],
-            });
-            break;
-          case 'Spell View':
-            breadcrumbs.push({
-              display: 'Spells',
-              navigate: ['campaigns', cr.parent.paramMap.get('id'), 'spells'],
             });
             break;
           case 'Map View':

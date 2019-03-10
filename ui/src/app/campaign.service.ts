@@ -1,6 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IItem } from './item.service';
 import { IEntityPreset, IEntity } from './entity.service';
 import { environment } from 'src/environments/environment';
 import { IUser } from './user.service';
@@ -17,7 +16,7 @@ export class CampaignService {
   public previousCampaignId: string;
   public events = new EventEmitter<ICampaign>();
 
-  constructor(private http: HttpClient, private login: LoginService) {}
+  constructor(private http: HttpClient, private login: LoginService) { }
 
   public async setSelection(campaignId?: string) {
     if (campaignId === null) {
@@ -228,10 +227,8 @@ export interface ICampaign {
   user?: IUser;
   experienceTable: number[];
   entities?: IEntity[];
-  items?: IItem[];
   entityPresets?: IEntityPreset[];
   itemTypes?: IItemType[];
-  itemRarities?: IItemRarity[];
   currencyMap?: ICurrencyLevel[];
   members?: ICampaignUser[];
   conceptTypes?: IConceptType[];
@@ -272,9 +269,4 @@ export interface ICurrencyLevel {
   name: string;
   value: number;
   useInConversions: boolean;
-}
-
-export interface IItemRarity {
-  name: string;
-  color: string;
 }

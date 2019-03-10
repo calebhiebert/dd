@@ -21,28 +21,6 @@ namespace net_api.Models
         }
     }
 
-    public class SpellSearchResult : SearchResult
-    {
-        public Spell Spell { get; set; }
-
-        public SpellSearchResult(Spell spell)
-        {
-            Spell = spell;
-            Type = ObjectType.Spell;
-        }
-    }
-
-    public class ItemSearchResult : SearchResult
-    {
-        public Item Item { get; set; }
-
-        public ItemSearchResult(Item item)
-        {
-            Item = item;
-            Type = ObjectType.Item;
-        }
-    }
-
     public class ArticleSearchResult : SearchResult
     {
         public Article Article { get; set; }
@@ -89,6 +67,6 @@ namespace net_api.Models
 
     public enum ObjectType
     {
-        Entity, Spell, Item, Article, Map, Quest, User
+        Entity, Article, Map, Quest, User
     }
 }

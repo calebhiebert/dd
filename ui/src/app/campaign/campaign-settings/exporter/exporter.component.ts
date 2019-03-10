@@ -28,8 +28,6 @@ export class ExporterComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      exportItems: new FormControl(true),
-      exportSpells: new FormControl(true),
       exportQuests: new FormControl(true),
       exportArticles: new FormControl(true),
       exportEntityPresets: new FormControl(true),
@@ -50,14 +48,6 @@ export class ExporterComponent implements OnInit {
       }`;
 
     const v = this.formGroup.value;
-
-    if (v.exportItems) {
-      link += '&items=true';
-    }
-
-    if (v.exportSpells) {
-      link += '&spells=true';
-    }
 
     if (v.exportQuests) {
       link += '&quests=true';

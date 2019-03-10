@@ -49,29 +49,6 @@ namespace net_api.Models
         [Column("ExperienceTable", TypeName = "bigint[]")]
         public long[] ExperienceTable { get; set; }
 
-        [Column("ItemRarityTable", TypeName = "jsonb")]
-        [JsonIgnore]
-        public string ItemRarityTableJson { get; set; }
-
-        [NotMapped]
-        public List<ItemRarity> ItemRarities
-        {
-            get
-            {
-                if (ItemRarityTableJson == null)
-                {
-                    return null;
-                }
-
-                return JsonConvert.DeserializeObject<List<ItemRarity>>(ItemRarityTableJson);
-            }
-
-            set
-            {
-                ItemRarityTableJson = JsonConvert.SerializeObject(value);
-            }
-        }
-
         [Column("CurrencyMap", TypeName = "JSONB")]
         [JsonIgnore]
         public string CurrencyMapJson { get; set; }
@@ -103,18 +80,10 @@ namespace net_api.Models
         public bool TrackCoins { get; set; }
 
         public DateTime CreatedAt { get; set; }
-        
-        [Required]
-        public bool PlayersCanEditItems { get; set; }
-
-        [Required]
-        public bool PlayersCanEditSpells { get; set; }
 
         public List<EntityPreset> EntityPresets { get; set; }
 
         public List<Entity> Entities { get; set; }
-
-        public List<Item> Items { get; set; }
 
         public List<Quest> Quests { get; set; }
 

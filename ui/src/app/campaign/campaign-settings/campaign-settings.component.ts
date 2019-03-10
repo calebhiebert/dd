@@ -26,7 +26,6 @@ export class CampaignSettingsComponent
   public importing = false;
 
   public expandXPTable = false;
-  public expandItemRarityTable = false;
   public expandCurrencyMapEditor = false;
 
   public formGroup: FormGroup;
@@ -49,7 +48,7 @@ export class CampaignSettingsComponent
     this.formGroup = new FormGroup({});
     this.expandXPTable = !this.editing;
     this.expandCurrencyMapEditor = !this.editing;
-    this.expandItemRarityTable = !this.editing;
+
     if (
       this.campaign.experienceTable === undefined ||
       this.campaign.experienceTable === null
@@ -214,12 +213,12 @@ export class CampaignSettingsComponent
 
       this.http.post(`${environment.apiURL}/import`, formData).subscribe(
         (res) => {
-          const { articles, entityPresets, items, quests, spells } = res as any;
+          const { articles, entityPresets, quests, concepts, conceptTypes } = res as any;
           this.importing = false;
           Swal.fire({
             title: 'All Done!',
             // tslint:disable-next-line:max-line-length
-            html: `All done importing the things. Here's how it went:<br/>Articles: ${articles}<br/>Entity Types: ${entityPresets}<br/>Items: ${items}<br/>Quests: ${quests}<br/>Spells: ${spells}`,
+            html: `All done importing the things. Here's how it went:<br/>Articles: ${articles}<br/>Entity Types: ${entityPresets}<br/>Concepts: ${concepts}<br/>Quests: ${quests}<br/>ConceptTypes: ${conceptTypes}`,
           }).then(() => this.campaignService.refreshCurrentCampaign());
         },
         (err) => {

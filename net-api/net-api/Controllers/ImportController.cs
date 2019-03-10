@@ -33,16 +33,12 @@ namespace net_api.Controllers
             // Old imported ids need to be remapped to new ids
             var idDict = new Dictionary<Guid, Guid>();
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            int itemsImported = 0;
-            int spellsImported = 0;
             int articlesImported = 0;
             int questsImported = 0;
             int entityPresetsImported = 0;
             int conceptTypesImported = 0;
             int conceptsImported = 0;
 
-            var itemList = new List<Item>();
-            var spellList = new List<Spell>();
             var articleList = new List<Article>();
             var questList = new List<Quest>();
             var entityPresetList = new List<EntityPreset>();
@@ -57,34 +53,6 @@ namespace net_api.Controllers
                 {
                     switch(entry.Name)
                     {
-                        case "items.json":
-                            itemList = DeserializeZipStream<List<Item>>(entry.Open());
-                            foreach (var item in itemList)
-                            {
-                                var newId = Guid.NewGuid();
-
-                                idDict.Add(item.Id, newId);
-                                item.Id = newId;
-                                item.CampaignId = (Guid)campaignId;
-                                item.UserId = userId;
-                                itemsImported++;
-                            }
-                            break;
-
-                        case "spells.json":
-                            spellList = DeserializeZipStream<List<Spell>>(entry.Open());
-                            foreach (var spell in spellList)
-                            {
-                                var newId = Guid.NewGuid();
-
-                                idDict.Add(spell.Id, newId);
-                                spell.Id = newId;
-                                spell.CampaignId = (Guid)campaignId;
-                                spell.UserId = userId;
-                                spellsImported++;
-                            }
-                            break;
-
                         case "articles.json":
                             articleList = DeserializeZipStream<List<Article>>(entry.Open());
                             foreach (var article in articleList)
@@ -180,16 +148,6 @@ namespace net_api.Controllers
                 obj.ContentJson = PatchIdValues(obj.ContentJson, idDict);
             }
 
-            foreach (var obj in itemList)
-            {
-                obj.ContentJson = PatchIdValues(obj.ContentJson, idDict);
-            }
-
-            foreach (var obj in spellList)
-            {
-                obj.ContentJson = PatchIdValues(obj.ContentJson, idDict);
-            }
-
             foreach (var obj in questList)
             {
                 obj.ContentJson = PatchIdValues(obj.ContentJson, idDict);
@@ -202,8 +160,6 @@ namespace net_api.Controllers
             }
 
             // Add all entries to the context
-            _context.AddRange(itemList);
-            _context.AddRange(spellList);
             _context.AddRange(articleList);
             _context.AddRange(questList);
             _context.AddRange(entityPresetList);
@@ -213,10 +169,8 @@ namespace net_api.Controllers
 
             return Ok(new
             {
-                Items = itemsImported,
                 Quests = questsImported,
                 Articles = articlesImported,
-                Spells = spellsImported,
                 EntityPresets = entityPresetsImported,
                 Concepts = conceptsImported,
                 ConceptTypes = conceptTypesImported

@@ -86,9 +86,9 @@ export class QuillComponent
     private http: HttpClient,
     private searchService: SearchService,
     private componentService: DynComponentService
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngAfterContentInit() {
     this._quill = new Quill(
@@ -196,7 +196,7 @@ export class QuillComponent
     this._onTouched = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {}
+  setDisabledState?(isDisabled: boolean): void { }
 
   private getQuillSettings() {
     const base: any = {
@@ -240,13 +240,6 @@ export class QuillComponent
                     obj: sr.entity,
                     type: sr.type,
                   };
-                case SearchObjectType.ITEM:
-                  return {
-                    id: sr.item.id,
-                    value: sr.item.name,
-                    obj: sr.item,
-                    type: sr.type,
-                  };
                 case SearchObjectType.MAP:
                   return {
                     id: sr.map.id,
@@ -259,13 +252,6 @@ export class QuillComponent
                     id: sr.quest.id,
                     value: sr.quest.name,
                     obj: sr.quest,
-                    type: sr.type,
-                  };
-                case SearchObjectType.SPELL:
-                  return {
-                    id: sr.spell.id,
-                    value: sr.spell.name,
-                    obj: sr.spell,
                     type: sr.type,
                   };
                 case SearchObjectType.USER:
@@ -300,44 +286,34 @@ export class QuillComponent
               case SearchObjectType.ARTICLE:
                 html += `<span><i class="icon icon-bookmark"></i> ${
                   item.obj.name
-                } ${!item.obj.published ? labelHTML('Hidden') : ''}</span>`;
+                  } ${!item.obj.published ? labelHTML('Hidden') : ''}</span>`;
                 break;
               case SearchObjectType.ENTITY:
                 html += `<span><i class="icon icon-emoji"></i> ${
                   item.obj.name
-                }</span>`;
-                break;
-              case SearchObjectType.ITEM:
-                html += `<span><i class="icon icon-photo"></i> ${
-                  item.obj.name
-                } ${!item.obj.playerVisible ? labelHTML('Hidden') : ''}</span>`;
+                  }</span>`;
                 break;
               case SearchObjectType.MAP:
                 html += `<span><i class="icon icon-location"></i> ${
                   item.obj.name
-                } ${!item.obj.playerVisible ? labelHTML('Hidden') : ''}</span>`;
+                  } ${!item.obj.playerVisible ? labelHTML('Hidden') : ''}</span>`;
                 break;
               case SearchObjectType.QUEST:
                 html += `<span><i class="icon icon-flag"></i> ${
                   item.obj.name
-                } ${!item.obj.visible ? ' ' + labelHTML('Hidden') : ''}${
+                  } ${!item.obj.visible ? ' ' + labelHTML('Hidden') : ''}${
                   !item.obj.visible ? ' ' + labelHTML('Unavailable') : ''
-                }</span>`;
-                break;
-              case SearchObjectType.SPELL:
-                html += `<span><i class="icon icon-time"></i> ${
-                  item.obj.name
-                } ${!item.obj.playerVisible ? labelHTML('Hidden') : ''}</span>`;
+                  }</span>`;
                 break;
               case SearchObjectType.USER:
                 html += `<span><i class="icon icon-people"></i> ${
                   item.obj.username
-                }</span>`;
+                  }</span>`;
                 break;
               case 'create-article':
                 html += `<span><i class="icon icon-plus"></i> ${
                   item.value
-                }</span>`;
+                  }</span>`;
                 break;
             }
 
@@ -353,16 +329,10 @@ export class QuillComponent
               case SearchObjectType.ENTITY:
                 item.value = item.value.name;
                 break;
-              case SearchObjectType.ITEM:
-                item.value = item.value.name;
-                break;
               case SearchObjectType.MAP:
                 item.value = item.value.name;
                 break;
               case SearchObjectType.QUEST:
-                item.value = item.value.name;
-                break;
-              case SearchObjectType.SPELL:
                 item.value = item.value.name;
                 break;
               case SearchObjectType.USER:
@@ -374,7 +344,7 @@ export class QuillComponent
                     title: 'Create new article?',
                     text: `A new article with the name ${
                       item['value']
-                    } will be created`,
+                      } will be created`,
                     showCancelButton: true,
                   })).value === true
                 ) {
@@ -490,23 +460,6 @@ export class QuillComponent
       });
 
     this._container.nativeElement
-      .querySelectorAll(`[data-type="${SearchObjectType.ITEM}"]`)
-      .forEach((node: HTMLSpanElement) => {
-        const id = node.dataset.id;
-
-        node.prepend(getIconEl('icon-photo'));
-
-        node.addEventListener('click', () => {
-          this.router.navigate([
-            'campaigns',
-            this.campaignService.campaign.id,
-            'items',
-            id,
-          ]);
-        });
-      });
-
-    this._container.nativeElement
       .querySelectorAll(`[data-type="${SearchObjectType.MAP}"]`)
       .forEach((node: HTMLSpanElement) => {
         const id = node.dataset.id;
@@ -535,23 +488,6 @@ export class QuillComponent
             'campaigns',
             this.campaignService.campaign.id,
             'quests',
-            id,
-          ]);
-        });
-      });
-
-    this._container.nativeElement
-      .querySelectorAll(`[data-type="${SearchObjectType.SPELL}"]`)
-      .forEach((node: HTMLSpanElement) => {
-        const id = node.dataset.id;
-
-        node.prepend(getIconEl('icon-time'));
-
-        node.addEventListener('click', () => {
-          this.router.navigate([
-            'campaigns',
-            this.campaignService.campaign.id,
-            'spells',
             id,
           ]);
         });
