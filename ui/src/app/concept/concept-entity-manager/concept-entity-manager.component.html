@@ -17,6 +17,39 @@
     </div>
   </div>
 </dd-modal>
+
+<dd-modal #viewandedit>
+  <h4 modal-header class="mb-0" *ngIf="selectedConceptEntity">{{ selectedConceptEntity.concept.name }}</h4>
+
+  <!-- View For Edit Mode -->
+  <div modal-body *ngIf="editable && selectedConceptEntity" [formGroup]="editGroup">
+    <!-- Quantity Control -->
+    <dd-dynamic-field [control]="quantityControl" [config]="quantityFieldConfig" *ngIf="quantityEnabled">
+    </dd-dynamic-field>
+
+    <div class="my-2"></div>
+
+    <!-- Notes Control -->
+    <dd-dynamic-field [control]="contentControl" [config]="notesFieldConfig">
+    </dd-dynamic-field>
+
+  </div>
+
+  <!-- View For View Mode -->
+  <div modal-body *ngIf="!editable && selectedConceptEntity">
+    <!-- Quantity -->
+    <h6 *ngIf="quantityEnabled">Quantity: <strong>{{ selectedConceptEntity.quantity || 1 }}</strong></h6>
+
+    <!-- Notes -->
+    <dd-quill [value]="selectedConceptEntity.content" readOnly="true"></dd-quill>
+  </div>
+
+  <div modal-footer *ngIf="editable">
+    <button class="btn mr-2" (click)="viewandedit.close(null)">Cancel</button>
+    <button class="btn btn-primary" (click)="save()">Save</button>
+  </div>
+</dd-modal>
+
 <div>
   <!-- Title Controls -->
   <div class="columns">
@@ -48,7 +81,7 @@
       <div class="columns col-gapless">
 
         <!-- Image -->
-        <div class="column col-auto mr-2 c-hand" [ngClass]="{ faded: ce.quantity === 0 }" (click)="viewOrEdit(ce)">
+        <div class="column col-auto mr-2 c-hand" [ngClass]="{ faded: ce.quantity === 0 }" (click)="select(ce)">
 
           <!-- Actual Image -->
           <img class="s-rounded" width="32" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
@@ -61,7 +94,7 @@
         </div>
 
         <!-- Name -->
-        <div class="column c-hand" [ngClass]="{ faded: quantityEnabled && ce.quantity === 0 }" (click)="viewOrEdit(ce)">
+        <div class="column c-hand" [ngClass]="{ faded: quantityEnabled && ce.quantity === 0 }" (click)="select(ce)">
           {{ ce.concept.name }}
 
           <!-- Quantity -->

@@ -2,9 +2,10 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { IConceptType, IConceptsQueryResult, ConceptService, IConceptEntity, IConcept } from 'src/app/concept.service';
 import { IEntity } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CampaignService } from 'src/app/campaign.service';
+import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
 
 @Component({
   selector: 'dd-concept-entity-manager',
@@ -29,15 +30,25 @@ export class ConceptEntityManagerComponent implements OnInit {
   @ViewChild('picker')
   public pickerModal: ModalComponent<IConcept>;
 
+  @ViewChild('viewandedit')
+  public viewAndEditModal: ModalComponent<any>;
+
   public conceptEntities: IConceptEntity[];
   public searchResults: IConcept[];
+  public selectedConceptEntity: IConceptEntity = null;
 
   public searchControl: FormControl;
+  public editGroup: FormGroup;
 
   constructor(private conceptService: ConceptService, private campaignService: CampaignService) { }
 
   ngOnInit() {
     this.searchControl = new FormControl(null);
+
+    this.editGroup = new FormGroup({
+      quantity: new FormControl(null),
+      content: new FormControl(null),
+    });
 
     this.searchControl.valueChanges.pipe(distinctUntilChanged(), debounceTime(250)).subscribe(search => {
       if (search !== null && search !== undefined) {
@@ -102,7 +113,41 @@ export class ConceptEntityManagerComponent implements OnInit {
     }
   }
 
-  public async viewOrEdit() { }
+  public async select(conceptEntity: IConceptEntity) {
+    this.selectedConceptEntity = conceptEntity;
+
+    this.editGroup.patchValue({
+      quantity: conceptEntity.quantity || 1,
+      content: conceptEntity.content,
+    });
+
+    this.viewAndEditModal.open().then(() => {
+      this.selectedConceptEntity = null;
+    });
+  }
+
+  public async save() {
+    this.working = true;
+
+    try {
+      const toSave = { ...this.selectedConceptEntity, quantity: this.quantityControl.value, content: this.contentControl.value };
+
+      // Patch value
+      for (const ce of this.conceptEntities) {
+        if (ce.conceptId === toSave.conceptId && ce.entityId === toSave.entityId) {
+          Object.assign(ce, toSave);
+        }
+      }
+
+      this.viewAndEditModal.close(null);
+
+      await this.conceptService.updateConceptEntity(toSave);
+    } catch (err) {
+      throw err;
+    }
+
+    this.working = false;
+  }
 
   public get quantityEnabled() {
     return this.conceptType.entityConfig.enabled && this.conceptType.entityConfig.enableQuantity;
@@ -110,5 +155,39 @@ export class ConceptEntityManagerComponent implements OnInit {
 
   public get campaign() {
     return this.campaignService.campaign;
+  }
+
+  public get quantityControl() {
+    return this.editGroup.get('quantity');
+  }
+
+  public get contentControl() {
+    return this.editGroup.get('content');
+  }
+
+  public get quantityFieldConfig(): IDynamicFieldConfig {
+    if (!this.selectedConceptEntity || !this.entity) {
+      return {
+        name: 'Quantity',
+        type: DynamicFieldType.INT,
+      };
+    }
+
+    return {
+      name: 'Quantity',
+      description: `How many ${this.selectedConceptEntity.concept.name} does ${this.entity.name} have?`,
+      type: DynamicFieldType.INT,
+      options: {
+        min: 0,
+      }
+    };
+  }
+
+  public get notesFieldConfig(): IDynamicFieldConfig {
+    return {
+      name: 'Notes',
+      description: `All players will be able to see these notes`,
+      type: DynamicFieldType.TEXT_FORMATTED,
+    };
   }
 }
