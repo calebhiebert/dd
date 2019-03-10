@@ -107,7 +107,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     private toast: ToastrService,
     private articleService: ArticleService,
     private iconService: IconService
-  ) {}
+  ) { }
 
   ngAfterViewInit() {
     // The note service emits an event every time a note is created
@@ -629,7 +629,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         icon: L.icon({
           // tslint:disable-next-line:max-line-length
           iconUrl: `https://res.cloudinary.com/dqhk8k6iv/image/upload/bo_2px_solid_rgb:303742,c_lfill,g_faces:auto,h_${ENTITY_ICON_SIZE},r_${ENTITY_ICON_SIZE /
-            2},w_${ENTITY_ICON_SIZE}/${entity.imageId}`,
+            2},w_${ENTITY_ICON_SIZE},f_png/${entity.imageId}.png`,
           iconSize: [ENTITY_ICON_SIZE, ENTITY_ICON_SIZE],
           iconAnchor: [ENTITY_ICON_SIZE / 2, ENTITY_ICON_SIZE / 2],
           popupAnchor: [0, -(ENTITY_ICON_SIZE / 2)],
