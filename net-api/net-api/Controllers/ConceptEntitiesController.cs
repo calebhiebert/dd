@@ -27,7 +27,7 @@ namespace net_api.Controllers
 
         // GET: api/ConceptEntities
         [HttpGet]
-        public async Task<IActionResult> GetConceptEntities([FromQuery]Guid entityId)
+        public async Task<IActionResult> GetConceptEntities([FromQuery]Guid entityId, [FromQuery]Guid conceptTypeId)
         {
             var entity = await _context.Entities
                 .Where(e => e.Id == entityId)
@@ -49,7 +49,7 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
-            return Ok(entity.EntityConcepts);
+            return Ok(entity.EntityConcepts.Where(ec => ec.Concept.ConceptTypeId == conceptTypeId));
         }
 
         // PUT: api/ConceptEntities/5

@@ -45,6 +45,7 @@
   </div>
 
   <div modal-footer *ngIf="editable">
+    <button class="btn btn-error mr-2" (click)="delete()">Delete</button>
     <button class="btn mr-2" (click)="viewandedit.close(null)">Cancel</button>
     <button class="btn btn-primary" (click)="save()">Save</button>
   </div>

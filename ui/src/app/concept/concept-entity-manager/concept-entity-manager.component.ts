@@ -33,12 +33,13 @@ export class ConceptEntityManagerComponent implements OnInit {
   @ViewChild('viewandedit')
   public viewAndEditModal: ModalComponent<any>;
 
-  public conceptEntities: IConceptEntity[];
   public searchResults: IConcept[];
   public selectedConceptEntity: IConceptEntity = null;
 
   public searchControl: FormControl;
   public editGroup: FormGroup;
+
+  private _conceptEntities: IConceptEntity[];
 
   constructor(private conceptService: ConceptService, private campaignService: CampaignService) { }
 
@@ -65,7 +66,7 @@ export class ConceptEntityManagerComponent implements OnInit {
     this.loading = true;
 
     try {
-      this.conceptEntities = await this.conceptService.getConceptEntities(this.entity.id);
+      this.conceptEntities = await this.conceptService.getConceptEntities(this.entity.id, this.conceptType.id);
     } catch (err) {
       throw err;
     }
@@ -163,6 +164,14 @@ export class ConceptEntityManagerComponent implements OnInit {
 
   public get contentControl() {
     return this.editGroup.get('content');
+  }
+
+  public get conceptEntities() {
+    return this._conceptEntities;
+  }
+
+  public set conceptEntities(value: IConceptEntity[]) {
+    this._conceptEntities = value;
   }
 
   public get quantityFieldConfig(): IDynamicFieldConfig {

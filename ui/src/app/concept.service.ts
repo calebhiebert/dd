@@ -93,10 +93,10 @@ export class ConceptService {
       .toPromise();
   }
 
-  public async getConceptEntities(entityId: string): Promise<IConceptEntity[]> {
+  public async getConceptEntities(entityId: string, conceptTypeId: string): Promise<IConceptEntity[]> {
     return this.http
       .get<IConceptEntity[]>(
-        `${environment.apiURL}/conceptentities?entityId=${entityId}`
+        `${environment.apiURL}/conceptentities?entityId=${entityId}&conceptTypeId=${conceptTypeId}`
       )
       .toPromise();
   }

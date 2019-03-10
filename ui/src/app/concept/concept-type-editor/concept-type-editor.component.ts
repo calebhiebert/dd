@@ -74,7 +74,7 @@ export class ConceptTypeEditorComponent
       entityConfig: new FormGroup({
         enabled: new FormControl(false),
         enableQuantity: new FormControl(false),
-        // fields: new FormArray([])
+        fields: new FormArray([])
       }),
     });
 
@@ -96,7 +96,7 @@ export class ConceptTypeEditorComponent
       userId: this.login.id,
       icon: this.icon.value,
       campaignId: this.campaignService.campaign.id,
-      fields: this.fields.value,
+      fields: this.fields.value || [],
       entityConfig: this.entityConfig.value,
     };
 

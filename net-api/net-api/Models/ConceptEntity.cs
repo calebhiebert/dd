@@ -45,7 +45,7 @@ namespace net_api.Models
             }
         }
 
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
 
         [JsonIgnore]
         [Column("Content", TypeName = "JSONB")]

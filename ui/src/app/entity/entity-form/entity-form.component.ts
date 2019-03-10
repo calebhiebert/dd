@@ -305,7 +305,7 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
   }
 
   public get conceptTypeList() {
-    return this.campaignService.campaign.conceptTypes;
+    return this.campaignService.campaign.conceptTypes.filter(ct => ct.entityConfig.enabled === true);
   }
 
   public get editing() {
