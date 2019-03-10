@@ -47,6 +47,6 @@ namespace net_api.Models
 
     public enum FieldType
     {
-        String, Int, Float, Enum, EnumMulti, TextFormatted, Currency
+        String, Int, Float, Enum, EnumMulti, TextFormatted, Currency, Boolean
     }
 }

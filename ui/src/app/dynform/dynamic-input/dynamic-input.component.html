@@ -1,79 +1,47 @@
 <div [ngClass]="{ 'has-icon-left': config.imageId }" [ngSwitch]="config.type">
   <!-- String Input -->
-  <input
-    type="text"
-    name="attr"
-    class="form-input"
-    [placeholder]="config.name"
-    [formControl]="control"
-    *ngSwitchCase="0"
-  />
+  <input type="text" name="attr" class="form-input" [placeholder]="config.name" [formControl]="control"
+    *ngSwitchCase="0" />
 
   <!-- Int Input -->
-  <input
-    type="number"
-    name="attr"
-    class="form-input"
-    [placeholder]="config.name"
-    [formControl]="control"
-    *ngSwitchCase="1"
-  />
+  <input type="number" name="attr" class="form-input" [placeholder]="config.name" [formControl]="control"
+    *ngSwitchCase="1" />
 
   <!-- Float Input -->
-  <input
-    type="number"
-    name="attr"
-    class="form-input"
-    [placeholder]="config.name"
-    [formControl]="control"
-    [step]="config.options.step || 0.01"
-    *ngSwitchCase="2"
-  />
+  <input type="number" name="attr" class="form-input" [placeholder]="config.name" [formControl]="control"
+    [step]="config.options.step || 0.01" *ngSwitchCase="2" />
 
   <!-- Enum input -->
-  <select
-    class="form-select"
-    name="attr"
-    [formControl]="control"
-    *ngSwitchCase="3"
-  >
+  <select class="form-select" name="attr" [formControl]="control" *ngSwitchCase="3">
     <option *ngFor="let o of config.options.choices" [value]="o">{{
       o
     }}</option>
   </select>
 
   <!-- Enum Multi input -->
-  <select
-    class="form-select"
-    name="attr"
-    [formControl]="control"
-    multiple="true"
-    *ngSwitchCase="4"
-  >
+  <select class="form-select" name="attr" [formControl]="control" multiple="true" *ngSwitchCase="4">
     <option *ngFor="let o of config.options.choices" [value]="o">{{
       o
     }}</option>
   </select>
 
   <!-- Text Formatted Input -->
-  <dd-quill
-    [placeholder]="config.name"
-    [formControl]="control"
-    simple="true"
-    *ngSwitchCase="5"
-  ></dd-quill>
+  <dd-quill [placeholder]="config.name" [formControl]="control" simple="true" *ngSwitchCase="5"></dd-quill>
 
-  <dd-currency-input
-    [config]="config.options"
-    [formControl]="control"
-    *ngSwitchCase="6"
-  ></dd-currency-input>
+  <!-- Currency Input -->
+  <dd-currency-input [config]="config.options" [formControl]="control" *ngSwitchCase="6"></dd-currency-input>
+
+  <!-- Boolean Input -->
+  <div class="form-group" *ngSwitchCase="7">
+    <label class="form-checkbox">
+      <input type="checkbox" [formControl]="control">
+      <i class="form-icon"></i> {{ config.name }}
+    </label>
+  </div>
 
   <figure class="form-icon avatar" *ngIf="config.imageId">
-    <img
-      src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+    <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
         config.imageId
-      }}"
-    />
+      }}" />
   </figure>
 </div>

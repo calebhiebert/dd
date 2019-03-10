@@ -1,56 +1,29 @@
 <div class="columns" [formGroup]="formGroup">
   <!-- Image Upload -->
   <div class="column col-3">
-    <dd-image-upload
-      formControlName="imageId"
-      [eleId]="uniqueFieldId"
-    ></dd-image-upload>
+    <dd-image-upload formControlName="imageId" [eleId]="uniqueFieldId"></dd-image-upload>
   </div>
 
   <div class="column col-9">
     <!-- Name -->
-    <div
-      class="form-group"
-      [ngClass]="{ 'has-error': name.invalid && (name.dirty || name.touched) }"
-    >
-      <input
-        type="text"
-        name="name"
-        class="form-input input-sm"
-        placeholder="Name"
-        formControlName="name"
-      />
-      <p
-        class="form-input-hint mb-0"
-        *ngIf="
+    <div class="form-group" [ngClass]="{ 'has-error': name.invalid && (name.dirty || name.touched) }">
+      <input type="text" name="name" class="form-input input-sm" placeholder="Name" formControlName="name" />
+      <p class="form-input-hint mb-0" *ngIf="
           name.invalid && (name.dirty || name.touched) && name.errors.required
-        "
-      >
+        ">
         A name is required
       </p>
     </div>
 
     <!-- Description -->
     <div class="form-group">
-      <input
-        type="text"
-        name="description"
-        formControlName="description"
-        placeholder="Short Description"
-        class="form-input input-sm"
-      />
+      <input type="text" name="description" formControlName="description" placeholder="Short Description"
+        class="form-input input-sm" />
     </div>
 
     <!-- Type -->
-    <div
-      class="form-group"
-      [ngClass]="{ 'has-error': type.invalid && (type.dirty || type.touched) }"
-    >
-      <select
-        name="type"
-        class="form-input input-sm mt-1"
-        formControlName="type"
-      >
+    <div class="form-group" [ngClass]="{ 'has-error': type.invalid && (type.dirty || type.touched) }">
+      <select name="type" class="form-input input-sm mt-1" formControlName="type">
         <option [value]="null" disabled>Type</option>
         <option value="0">Word</option>
         <option value="1">Whole Number</option>
@@ -59,13 +32,11 @@
         <option value="4">Selection (Multiple)</option>
         <option value="5">Text (Formatted)</option>
         <option value="6">Currency</option>
+        <option value="7">Yes or No</option>
       </select>
-      <p
-        class="form-input-hint mb-0"
-        *ngIf="
+      <p class="form-input-hint mb-0" *ngIf="
           type.invalid && (type.dirty || type.touched) && type.errors.required
-        "
-      >
+        ">
         A type is required
       </p>
     </div>
@@ -75,76 +46,44 @@
     <!-- Specific Validation -->
     <div [ngSwitch]="true" [formGroup]="options" *ngIf="options">
       <!-- String -->
-      <div
-        class="columns"
-        *ngSwitchCase="type.value === '0' || type.value === 0"
-      >
+      <div class="columns" *ngSwitchCase="type.value === '0' || type.value === 0">
         <!-- MinLength -->
         <div class="column">
-          <input
-            type="number"
-            class="form-input input-sm"
-            placeholder="Minimum Length"
-            formControlName="minLength"
-          />
+          <input type="number" class="form-input input-sm" placeholder="Minimum Length" formControlName="minLength" />
         </div>
 
         <!-- MaxLength -->
         <div class="column">
-          <input
-            type="number"
-            class="form-input input-sm"
-            placeholder="Maximum Length"
-            formControlName="maxLength"
-          />
+          <input type="number" class="form-input input-sm" placeholder="Maximum Length" formControlName="maxLength" />
         </div>
       </div>
 
       <!-- Int/Float -->
-      <div
-        class="columns"
-        *ngSwitchCase="
+      <div class="columns" *ngSwitchCase="
           type.value === '1' ||
           type.value === '2' ||
           type.value === 1 ||
           type.value === 2
-        "
-      >
+        ">
         <!-- MinLength -->
         <div class="column">
-          <input
-            type="number"
-            class="form-input input-sm"
-            placeholder="Minimum"
-            formControlName="min"
-          />
+          <input type="number" class="form-input input-sm" placeholder="Minimum" formControlName="min" />
         </div>
 
         <!-- MaxLength -->
         <div class="column">
-          <input
-            type="number"
-            class="form-input input-sm"
-            placeholder="Maximum"
-            formControlName="max"
-          />
+          <input type="number" class="form-input input-sm" placeholder="Maximum" formControlName="max" />
         </div>
       </div>
 
-      <div
-        class="columns"
-        *ngSwitchCase="
+      <div class="columns" *ngSwitchCase="
           type.value === '3' ||
           type.value === '4' ||
           type.value === 3 ||
           type.value === 4
-        "
-      >
+        ">
         <div class="column">
-          <dd-tag-editor
-            [formGroup]="options"
-            controlName="choices"
-          ></dd-tag-editor>
+          <dd-tag-editor [formGroup]="options" controlName="choices"></dd-tag-editor>
         </div>
       </div>
     </div>

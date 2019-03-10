@@ -64,4 +64,5 @@ export enum DynamicFieldType {
   ENUM_MULTI,
   TEXT_FORMATTED,
   CURRENCY,
+  BOOLEAN
 }
