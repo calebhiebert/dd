@@ -121,6 +121,15 @@ namespace net_api.Controllers
                                 conceptType.Id = newId;
                                 conceptType.CampaignId = (Guid)campaignId;
                                 conceptType.UserId = userId;
+                                
+                                if (conceptType.EntityConfig == null)
+                                {
+                                    conceptType.EntityConfig = new ConceptEntityConfig
+                                    {
+                                        Enabled = false,
+                                    };
+                                }
+
                                 conceptTypesImported++;
                             }
                             break;
@@ -146,6 +155,12 @@ namespace net_api.Controllers
                                 ep.Id = newId;
                                 ep.CampaignId = (Guid)campaignId;
                                 ep.UserId = userId;
+                               
+                                if (ep.ConceptTypesEnabled == null)
+                                {
+                                    ep.ConceptTypesEnabled = new Guid[0];
+                                }
+
                                 entityPresetsImported++;
                             }
                             break;

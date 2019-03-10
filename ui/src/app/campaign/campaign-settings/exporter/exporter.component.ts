@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormGroup, FormControl } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { CampaignService } from 'src/app/campaign.service';
+import { IConceptType } from 'src/app/concept.service';
 
 @Component({
   selector: 'dd-exporter',
@@ -15,7 +16,15 @@ export class ExporterComponent implements OnInit {
   @ViewChild('modal')
   private modal: ModalComponent<any>;
 
-  constructor(private campaignService: CampaignService) {}
+  @Input()
+  public set conceptTypes(value: IConceptType[]) {
+    this._conceptTypes = value;
+    this.ngOnInit();
+  }
+
+  private _conceptTypes: IConceptType[];
+
+  constructor(private campaignService: CampaignService) { }
 
   ngOnInit() {
     this.formGroup = new FormGroup({
@@ -38,7 +47,7 @@ export class ExporterComponent implements OnInit {
   public get exportLink() {
     let link = `${environment.apiURL}/export?campaignId=${
       this.campaignService.campaign.id
-    }`;
+      }`;
 
     const v = this.formGroup.value;
 
@@ -72,6 +81,6 @@ export class ExporterComponent implements OnInit {
   }
 
   public get conceptTypes() {
-    return this.campaignService.campaign.conceptTypes;
+    return this._conceptTypes;
   }
 }

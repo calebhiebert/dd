@@ -1,4 +1,4 @@
-<dd-exporter #exporter *ngIf="editing"></dd-exporter>
+<dd-exporter #exporter *ngIf="editing" [conceptTypes]="campaign.conceptTypes"></dd-exporter>
 <div class="container grid-xl" *ngIf="campaign || !editing">
   <!-- Header -->
   <div class="columns">

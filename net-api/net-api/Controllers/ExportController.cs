@@ -191,6 +191,7 @@ namespace net_api.Controllers
                                 q.Description,
                                 q.Icon,
                                 q.Fields,
+                                q.EntityConfig
                             }).ToListAsync();
 
                         var jtw = new JsonTextWriter(new StreamWriter(strm));

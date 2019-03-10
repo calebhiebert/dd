@@ -114,6 +114,7 @@ export class ConceptTypeEditorComponent
 
     try {
       this.conceptType = await this.conceptService.getConceptType(id);
+
       this.conceptType.fields.forEach((f) =>
         this.fields.push(FieldDefinitionFormComponent.createFormGroup(f))
       );

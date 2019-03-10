@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { ExporterComponent } from './exporter/exporter.component';
 import Swal from 'sweetalert2';
-import { HttpClient, HttpEventType } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { IConceptType } from 'src/app/concept.service';
 import { IconService } from 'src/app/icon.service';
@@ -43,7 +43,7 @@ export class CampaignSettingsComponent
     private toast: ToastrService,
     private http: HttpClient,
     private iconService: IconService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.formGroup = new FormGroup({});
