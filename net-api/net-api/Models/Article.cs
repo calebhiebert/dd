@@ -125,7 +125,14 @@ namespace net_api.Models
 
         public SearchedArticle(Article article, string imgId) : this(article)
         {
-            ImageURLs = article.GetImageURLS();
+            try
+            {
+                ImageURLs = article.GetImageURLS();
+            } catch (JsonReaderException)
+            {
+                // There was some invalid json in the content, technically this is okay
+                // Eventually there will be some input validation on the content field
+            }
         }
     }
 }

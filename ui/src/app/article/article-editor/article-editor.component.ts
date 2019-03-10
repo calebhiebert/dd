@@ -37,7 +37,7 @@ export class ArticleEditorComponent implements OnInit, ComponentCanDeactivate {
     private router: Router,
     private location: Location,
     private http: HttpClient
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.formGroup = new FormGroup({
@@ -48,7 +48,7 @@ export class ArticleEditorComponent implements OnInit, ComponentCanDeactivate {
       content: new FormControl(null),
       published: new FormControl(false),
       tags: new FormArray([]),
-      icon: new FormControl(),
+      icon: new FormControl(null),
     });
 
     if (this.editing) {
