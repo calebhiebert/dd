@@ -6,6 +6,8 @@ import {
   IConceptType,
 } from 'src/app/concept.service';
 import { CampaignService } from 'src/app/campaign.service';
+import { FormControl } from '@angular/forms';
+import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'dd-concept-manager',
@@ -19,19 +21,38 @@ export class ConceptManagerComponent implements OnInit {
   public conceptType: IConceptType;
   public concepts: IConcept[];
   public totalConcepts: number;
-  public search: string;
+  public search: string = null;
   public page = 1;
+
+  public searchControl: FormControl;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private conceptService: ConceptService,
     private campaignService: CampaignService
-  ) {}
+  ) { }
 
   ngOnInit() {
+    this.searchControl = new FormControl(null);
+
+    this.searchControl.valueChanges.pipe(distinctUntilChanged(), debounceTime(250)).subscribe(search => {
+      if (search === null || search === undefined || search.trim().length === 0) {
+        this.search = null;
+      } else {
+        this.search = search.toLowerCase();
+      }
+
+      if (this.conceptType) {
+        this.load(this.conceptType.id);
+      }
+    });
+
     this.route.paramMap.subscribe((params) => {
       const id = params.get('ct_id');
+      this.conceptType = this.getConceptType(id);
+      this.concepts = null;
+
       this.load(id);
     });
   }
@@ -43,7 +64,6 @@ export class ConceptManagerComponent implements OnInit {
   }
 
   private async load(id: string) {
-    this.conceptType = this.getConceptType(id);
     if (!this.conceptType) {
       this.notFound = true;
       return;
@@ -56,7 +76,8 @@ export class ConceptManagerComponent implements OnInit {
       const result = await this.conceptService.getConcepts(
         id,
         10,
-        (this.page - 1) * 10
+        (this.page - 1) * 10,
+        this.search
       );
       this.concepts = result.concepts;
       this.totalConcepts = result.total;

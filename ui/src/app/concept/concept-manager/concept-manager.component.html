@@ -4,37 +4,38 @@
 
   <!-- Header Controls -->
   <div class="columns" *ngIf="conceptType">
-    <div class="column">
-      <h3>{{ conceptType.pluralForm }}</h3>
+
+    <!-- Title -->
+    <div class="column col-auto">
+      <h3 class="mb-0">{{ conceptType.pluralForm }}</h3>
     </div>
+
+    <!-- Add Button -->
     <div class="column col-auto">
       <button class="btn btn-sm" *ngIf="editing" (click)="create()">
-        <i class="icon icon-plus"></i
-        ><span class="hide-sm"> New {{ conceptType.name }}</span>
+        <i class="icon icon-plus"></i><span class="hide-sm"> New {{ conceptType.name }}</span>
       </button>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="column col-sm-12 my-1">
+      <div class="has-icon-right">
+        <input type="text" class="form-input" placeholder="Search..." [formControl]="searchControl">
+        <i class="icon icon-search form-icon" *ngIf="!loading || !concepts"></i>
+        <div class="loading form-icon" *ngIf="loading && concepts"></div>
+      </div>
     </div>
   </div>
 
   <!-- Concept List -->
   <div *ngIf="concepts && conceptType">
-    <div
-      class="card p-1 hoverable mb-1"
-      *ngFor="let c of concepts"
-      (click)="selectConcept(c)"
-    >
+    <div class="card p-1 hoverable mb-1" *ngFor="let c of concepts" (click)="selectConcept(c)">
       <dd-concept-list-item [concept]="c"></dd-concept-list-item>
     </div>
 
     <!-- Paginator -->
-    <dd-paginator
-      [itemsPerPage]="10"
-      [page]="page"
-      [autoHide]="false"
-      [totalItems]="totalConcepts"
-      [loading]="loading"
-      (pageChange)="changePage($event)"
-      *ngIf="concepts && concepts.length > 0"
-    ></dd-paginator>
+    <dd-paginator [itemsPerPage]="10" [page]="page" [autoHide]="false" [totalItems]="totalConcepts" [loading]="loading"
+      (pageChange)="changePage($event)" *ngIf="concepts && concepts.length > 0"></dd-paginator>
   </div>
 
   <!-- Empty State (No concepts) -->
@@ -52,10 +53,7 @@
   </div>
 
   <!-- Empty State (Nothing from search) -->
-  <div
-    class="empty"
-    *ngIf="conceptType && concepts && concepts.length === 0 && search"
-  >
+  <div class="empty" *ngIf="conceptType && concepts && concepts.length === 0 && search">
     <div class="empty-icon">
       <i class="icon icon-search icon-4x"></i>
     </div>
