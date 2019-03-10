@@ -19,9 +19,13 @@ export class RegisterComponent implements OnInit {
     public userService: UserService,
     private router: Router,
     private action: ActionQueueService
-  ) {}
+  ) { }
 
   ngOnInit() {
+    if (!this.login.authData) {
+      this.router.navigate(['login']);
+    }
+
     this.usernameControl = new FormControl(null, [
       Validators.required,
       Validators.minLength(3),
@@ -48,7 +52,6 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['home']);
       } catch (err) {
         throw err;
-        this.router.navigate(['home']);
       }
 
       this.loading = false;

@@ -25,7 +25,7 @@ export class LoginService {
     private userService: UserService,
     private router: Router,
     private actions: ActionQueueService
-  ) {}
+  ) { }
 
   private getAuth(): WebAuth {
     if (this.auth === undefined) {
@@ -228,6 +228,10 @@ export class LoginService {
   }
 
   public get id() {
-    return this.authData.sub;
+    if (this.authData) {
+      return this.authData.sub;
+    }
+
+    return null;
   }
 }

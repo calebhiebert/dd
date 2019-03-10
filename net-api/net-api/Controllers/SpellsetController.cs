@@ -66,7 +66,7 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            var authResult = await _auth.AuthorizeAsync(User, entity.Campaign, "CampaignEditPolicy");
+            var authResult = await _auth.AuthorizeAsync(User, entity, "EntityEditPolicy");
 
             if (!authResult.Succeeded)
             {
