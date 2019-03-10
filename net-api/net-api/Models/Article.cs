@@ -132,6 +132,7 @@ namespace net_api.Models
             {
                 // There was some invalid json in the content, technically this is okay
                 // Eventually there will be some input validation on the content field
+                ImageURLs = new List<string>();
             }
         }
     }

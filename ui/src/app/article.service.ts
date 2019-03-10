@@ -8,7 +8,7 @@ import { IQuest } from './quest.service';
   providedIn: 'root',
 })
 export class ArticleService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public getArticle(id: string): Promise<IArticle> {
     return this.http
@@ -27,7 +27,7 @@ export class ArticleService {
     return this.http
       .get<ISearchedArticle[]>(
         `${
-          environment.apiURL
+        environment.apiURL
         }/articles?campaignId=${campaignId}&limit=${limit}&offset=${offset}${searchString}`
       )
       .toPromise();
@@ -79,7 +79,7 @@ export class ArticleService {
     return this.http
       .delete<IArticleQuest>(
         `${environment.apiURL}/articlequests?articleId=${
-          articleQuest.articleId
+        articleQuest.articleId
         }&questId=${articleQuest.questId}`
       )
       .toPromise();
@@ -105,7 +105,7 @@ export interface IArticle {
 }
 
 export interface ISearchedArticle extends IArticle {
-  imageURLs: string[];
+  imageURLs?: string[];
 }
 
 export interface IArticleQuest {

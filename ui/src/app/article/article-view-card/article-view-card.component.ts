@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { IArticle, ISearchedArticle } from 'src/app/article.service';
+import { ISearchedArticle } from 'src/app/article.service';
 import { Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
 
@@ -15,9 +15,9 @@ export class ArticleViewCardComponent implements OnInit {
   constructor(
     private router: Router,
     private campaignService: CampaignService
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   public viewOnMap() {
     this.router.navigate(
@@ -45,10 +45,10 @@ export class ArticleViewCardComponent implements OnInit {
   }
 
   public get imgSrc() {
-    if (this.article.imageURLs.length > 0) {
+    if (this.article.imageURLs && this.article.imageURLs.length > 0) {
       return `https://res.cloudinary.com/dqhk8k6iv/image/fetch/c_fill,g_auto:faces,h_250,w_500/${
         this.article.imageURLs[0]
-      }`;
+        }`;
     } else {
       return null;
     }
