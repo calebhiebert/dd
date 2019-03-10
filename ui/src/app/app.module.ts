@@ -113,6 +113,7 @@ import { ConceptManagerComponent } from './concept/concept-manager/concept-manag
 import { ErrorFourOFourComponent } from './error-four-o-four/error-four-o-four.component';
 import { ConceptListItemComponent } from './concept/concept-list-item/concept-list-item.component';
 import { ConceptViewComponent } from './concept/concept-view/concept-view.component';
+import { ConceptEntityManagerComponent } from './concept/concept-entity-manager/concept-entity-manager.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -222,6 +223,7 @@ import { ConceptViewComponent } from './concept/concept-view/concept-view.compon
     ErrorFourOFourComponent,
     ConceptListItemComponent,
     ConceptViewComponent,
+    ConceptEntityManagerComponent,
   ],
   imports: [
     BrowserModule,

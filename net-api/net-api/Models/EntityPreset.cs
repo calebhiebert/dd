@@ -68,6 +68,10 @@ namespace net_api.Models
         public bool IsXPEnabled { get; set; }
 
         [Required]
+        [Column("ConceptTypesEnabled", TypeName = "UUID[]")]
+        public Guid[] ConceptTypesEnabled { get; set; }
+
+        [Required]
         public bool IsHealthEnabled { get; set; }
 
         [Column("Health", TypeName = "jsonb")]

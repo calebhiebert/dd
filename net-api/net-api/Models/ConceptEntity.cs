@@ -18,6 +18,7 @@ namespace net_api.Models
         [Required]
         public Guid EntityId { get; set; }
 
+        [JsonIgnore]
         public Entity Entity { get; set; }
 
         [Column("Fields", TypeName = "JSONB")]

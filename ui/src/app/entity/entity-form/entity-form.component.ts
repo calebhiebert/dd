@@ -52,7 +52,7 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
     private login: LoginService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.formGroup = new FormGroup({
@@ -79,6 +79,7 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
       isCurrencyEnabled: new FormControl(false),
       isXPEnabled: new FormControl(false),
       isHealthEnabled: new FormControl(false),
+      conceptTypesEnabled: new FormControl(null),
       imageId: new FormControl(null, Validators.required),
       attributes: new FormArray([]),
     });
@@ -146,7 +147,7 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
     }, 1);
   }
 
-  public submit() {}
+  public submit() { }
 
   public removeAttribute(i: number) {
     (this.formGroup.get('attributes') as FormArray).removeAt(i);
@@ -180,6 +181,7 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
             isSpellsetsEnabled: v.isSpellsetsEnabled,
             isXPEnabled: v.isXPEnabled,
             isHealthEnabled: v.isHealthEnabled,
+            conceptTypesEnabled: v.conceptTypesEnabled,
             attributes: v.attributes,
           };
 
@@ -214,6 +216,7 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
           isSpellsetsEnabled: v.isSpellsetsEnabled,
           isXPEnabled: v.isXPEnabled,
           isHealthEnabled: v.isHealthEnabled,
+          conceptTypesEnabled: v.conceptTypesEnabled,
           playerCreatable: v.playerCreatable,
           attributes: v.attributes,
         });
@@ -299,6 +302,10 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
 
   public get hpColorType() {
     return this.formGroup.get('health.colorType');
+  }
+
+  public get conceptTypeList() {
+    return this.campaignService.campaign.conceptTypes;
   }
 
   public get editing() {

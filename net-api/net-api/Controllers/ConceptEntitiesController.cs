@@ -53,8 +53,8 @@ namespace net_api.Controllers
         }
 
         // PUT: api/ConceptEntities/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutConceptEntity(Guid id, ConceptEntity conceptEntity)
+        [HttpPut]
+        public async Task<IActionResult> PutConceptEntity(ConceptEntity conceptEntity)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 

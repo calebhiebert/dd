@@ -1,42 +1,26 @@
 <dd-confirmation-modal #confirmmodal></dd-confirmation-modal>
 <dd-modal #presets>
-  <div modal-header><h4>Attribute Presets</h4></div>
+  <div modal-header>
+    <h4>Attribute Presets</h4>
+  </div>
   <div modal-body>
-    <div
-      class="card p-1 mb-1 hoverable"
-      (click)="usePreset(p)"
-      *ngFor="let p of presetList"
-    >
+    <div class="card p-1 mb-1 hoverable" (click)="usePreset(p)" *ngFor="let p of presetList">
       {{ p.name }} <span class="text-gray">{{ p.description }}</span>
     </div>
   </div>
 </dd-modal>
 
-<div
-  class="container grid-xl"
-  [formGroup]="formGroup"
-  *ngIf="entityPreset || !editing"
->
+<div class="container grid-xl" [formGroup]="formGroup" *ngIf="entityPreset || !editing">
   <div class="columns">
     <div class="column">
       <h3 *ngIf="!editing">Create Entity Preset</h3>
       <h3 *ngIf="editing">Edit Entity Preset</h3>
     </div>
     <div class="column col-auto col-ml-auto">
-      <button
-        class="btn btn-error mr-2"
-        (click)="delete()"
-        *ngIf="editing"
-        [ngClass]="{ loading: deleting }"
-      >
+      <button class="btn btn-error mr-2" (click)="delete()" *ngIf="editing" [ngClass]="{ loading: deleting }">
         Delete
       </button>
-      <button
-        class="btn"
-        (click)="save()"
-        [ngClass]="{ loading: saving }"
-        [disabled]="formGroup.invalid"
-      >
+      <button class="btn" (click)="save()" [ngClass]="{ loading: saving }" [disabled]="formGroup.invalid">
         Save
       </button>
     </div>
@@ -51,86 +35,48 @@
 
     <div class="column col-9 col-md-12">
       <!-- Name -->
-      <div
-        class="form-group"
-        [ngClass]="{
+      <div class="form-group" [ngClass]="{
           'has-error': name.invalid && (name.dirty || name.touched)
-        }"
-      >
+        }">
         <label for="name" class="form-label">Name</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          formControlName="name"
-          class="form-input"
-          placeholder="Name"
-        />
-        <p
-          class="form-input-hint"
-          *ngIf="name.invalid && name.dirty && name.errors.required"
-        >
+        <input type="text" name="name" id="name" formControlName="name" class="form-input" placeholder="Name" />
+        <p class="form-input-hint" *ngIf="name.invalid && name.dirty && name.errors.required">
           A name is required
         </p>
-        <p
-          class="form-input-hint"
-          *ngIf="name.invalid && name.dirty && name.errors.minlength"
-        >
+        <p class="form-input-hint" *ngIf="name.invalid && name.dirty && name.errors.minlength">
           Name should not have less than 3 characters
         </p>
-        <p
-          class="form-input-hint"
-          *ngIf="name.invalid && name.dirty && name.errors.maxlength"
-        >
+        <p class="form-input-hint" *ngIf="name.invalid && name.dirty && name.errors.maxlength">
           Name should not have more than 30 characters
         </p>
       </div>
 
       <!-- Description -->
-      <div
-        class="form-group"
-        [ngClass]="{
+      <div class="form-group" [ngClass]="{
           'has-error':
             description.invalid && (description.dirty || description.touched)
-        }"
-      >
+        }">
         <label for="description" class="form-label">Description</label>
-        <textarea
-          class="form-input"
-          name="description"
-          id="description"
-          rows="4"
-          formControlName="description"
-          placeholder="Description"
-        ></textarea>
-        <p
-          class="form-input-hint"
-          *ngIf="
+        <textarea class="form-input" name="description" id="description" rows="4" formControlName="description"
+          placeholder="Description"></textarea>
+        <p class="form-input-hint" *ngIf="
             description.invalid &&
             description.dirty &&
             description.errors.required
-          "
-        >
+          ">
           A description is required
         </p>
-        <p
-          class="form-input-hint"
-          *ngIf="
+        <p class="form-input-hint" *ngIf="
             description.invalid &&
             description.dirty &&
             description.errors.minlength
-          "
-        >
+          ">
           The description should not have less than 3 characters
         </p>
       </div>
+    </div>
 
-      <!-- <h5 class="mt-2">Starting Inventory</h5>
-      <dd-inventory-selector
-        [formGroup]="formGroup"
-        [entityPreset]="entityPreset"
-      ></dd-inventory-selector> -->
-
+    <div class="column col-12">
       <h5 class="mt-2">Misc</h5>
       <!-- Misc Options -->
       <div class="columns">
@@ -182,24 +128,25 @@
               <i class="form-icon"></i> This entity can have health
             </label>
           </div>
+
+          <!-- Concept Types Enabled -->
+          <div class="form-group">
+            <label for="conceptTypesEnabled" class="form-label">Concept Types</label>
+            <select name="conceptTypesEnabled" id="conceptTypesEnabled" class="form-select"
+              formControlName="conceptTypesEnabled" multiple>
+              <option *ngFor="let ct of conceptTypeList" [value]="ct.id">{{ ct.name }}</option>
+            </select>
+            <div class="form-input-hint">The entity will have these concept types enabled</div>
+          </div>
         </div>
       </div>
 
       <!-- Health -->
-      <div
-        formGroupName="health"
-        class="columns mb-2"
-        *ngIf="isHealthEnabled.value === true"
-      >
+      <div formGroupName="health" class="columns mb-2" *ngIf="isHealthEnabled.value === true">
         <div class="column">
           <div class="form-group">
             <label for="health-type" class="form-label">Health Type</label>
-            <select
-              name="health-type"
-              id="health-type"
-              class="form-input"
-              formControlName="type"
-            >
+            <select name="health-type" id="health-type" class="form-input" formControlName="type">
               <option value="0">Normal</option>
               <option value="1" disabled>Multi Bar (Coming Soon)</option>
             </select>
@@ -209,32 +156,18 @@
         <div class="column">
           <div class="form-group">
             <label for="bar-type" class="form-label">HP Bar Type</label>
-            <select
-              formControlName="colorType"
-              name="bar-type"
-              id="bar-type"
-              class="form-input"
-            >
+            <select formControlName="colorType" name="bar-type" id="bar-type" class="form-input">
               <option value="0">Dynamic</option>
               <option value="1">Static</option>
             </select>
           </div>
         </div>
 
-        <div
-          class="column"
-          *ngIf="hpColorType.value === '1' || hpColorType.value === 1"
-        >
+        <div class="column" *ngIf="hpColorType.value === '1' || hpColorType.value === 1">
           <!-- Bar Color -->
           <div class="form-group">
             <label for="bar-color" class="form-label">Bar Color</label>
-            <input
-              formControlName="staticColor"
-              type="color"
-              name="bar-color"
-              id="bar-color"
-              class="form-input"
-            />
+            <input formControlName="staticColor" type="color" name="bar-color" id="bar-color" class="form-input" />
           </div>
         </div>
 
@@ -254,7 +187,9 @@
   <!-- Attributes -->
   <div>
     <div class="columns">
-      <div class="column"><h5 class="mt-2">Attributes</h5></div>
+      <div class="column">
+        <h5 class="mt-2">Attributes</h5>
+      </div>
       <div class="column col-auto">
         <button class="btn btn-sm mr-2" (click)="presets.open()">
           Use Preset
@@ -267,12 +202,8 @@
 
     <!-- Attribute Array -->
     <div>
-      <dd-entity-attribute-row-editor
-        *ngFor="let attr of attributeControls; let i = index"
-        (remove)="removeAttribute(i)"
-        [formGroup]="attr"
-        #atteditor
-      ></dd-entity-attribute-row-editor>
+      <dd-entity-attribute-row-editor *ngFor="let attr of attributeControls; let i = index"
+        (remove)="removeAttribute(i)" [formGroup]="attr" #atteditor></dd-entity-attribute-row-editor>
     </div>
   </div>
 

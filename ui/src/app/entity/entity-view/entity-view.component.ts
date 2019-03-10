@@ -36,7 +36,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     private login: LoginService,
     private router: Router,
     private currencyService: CurrencyService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -169,7 +169,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
         name: 'XP',
         description: `Experience points that this ${
           this.entity.preset.name
-        } has`,
+          } has`,
         type: AttributeType.NUMBER,
         required: true,
         min: 0,
@@ -320,6 +320,14 @@ export class EntityViewComponent implements OnInit, OnDestroy {
         (preset) => preset.id === this.entity.entityPresetId
       );
     }
+  }
+
+  public get conceptTypeList() {
+    if (!this.preset) {
+      return [];
+    }
+
+    return this.campaignService.campaign.conceptTypes.filter(ct => this.preset.conceptTypesEnabled.indexOf(ct.id) !== -1);
   }
 
   public get entity() {

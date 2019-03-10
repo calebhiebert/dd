@@ -12,7 +12,7 @@ import { IItem } from './item.service';
 export class EntityService {
   private _currentViewEntity: IEntity = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public async updateEntityPreset(entityPreset: IEntityPreset): Promise<void> {
     return this.http
@@ -44,7 +44,7 @@ export class EntityService {
   public async deleteEntityPreset(
     campaignId: string,
     entityPresetId: string
-  ): Promise<void> {}
+  ): Promise<void> { }
 
   public async getEntity(id: string): Promise<IEntity> {
     return this.http
@@ -59,7 +59,7 @@ export class EntityService {
     return this.http
       .get<IEntity[]>(
         `${
-          environment.apiURL
+        environment.apiURL
         }/entities?campaignId=${campaignId}&spawnable=${spawnable}`
       )
       .toPromise();
@@ -150,6 +150,7 @@ export interface IEntityPreset {
   isCurrencyEnabled: boolean;
   isXPEnabled: boolean;
   isHealthEnabled: boolean;
+  conceptTypesEnabled: string[];
   attributes?: IEntityAttribute[];
   health: IHealthPreset;
   campaignId: string;

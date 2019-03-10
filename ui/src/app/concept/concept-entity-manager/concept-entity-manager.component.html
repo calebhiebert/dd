@@ -1,0 +1,83 @@
+<dd-modal #picker>
+  <h4 modal-header class="mb-0">Pick {{ conceptType.name }}</h4>
+  <div modal-body>
+    <!-- Search Bar -->
+    <div class="has-icon-right">
+      <input type="text" [formControl]="searchControl" class="form-input"
+        placeholder="Search {{ conceptType.pluralForm }}">
+      <i class="icon icon-search form-icon" *ngIf="!searchLoading"></i>
+      <div class="loading form-icon" *ngIf="searchLoading"></div>
+    </div>
+
+    <!-- Search Results -->
+    <div>
+      <div class="card p-1 my-1 hoverable" *ngFor="let sr of searchResults" (click)="picker.close(sr)">
+        {{ sr.name }}
+      </div>
+    </div>
+  </div>
+</dd-modal>
+<div>
+  <!-- Title Controls -->
+  <div class="columns">
+    <!-- Title -->
+    <div class="column">
+      <h5>{{ conceptType.pluralForm }}</h5>
+    </div>
+
+    <!-- Controls -->
+    <div class="column col-auto" *ngIf="editable">
+      <button class="btn btn-sm" (click)="add()">
+        <i class="icon icon-plus"></i><span class="hide-sm"> Add {{ conceptType.name }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="loading"></div>
+
+  <!-- Empty state -->
+  <div class="empty p-2" *ngIf="conceptEntities && conceptEntities.length === 0">
+    <p class="empty-subtitle">No {{ conceptType.pluralForm }} here!</p>
+  </div>
+
+  <!-- Concepts -->
+  <div>
+
+    <div class="card px-1 pt-1 mb-1" *ngFor="let ce of conceptEntities">
+      <div class="columns col-gapless">
+
+        <!-- Image -->
+        <div class="column col-auto mr-2 c-hand" [ngClass]="{ faded: ce.quantity === 0 }" (click)="viewOrEdit(ce)">
+
+          <!-- Actual Image -->
+          <img class="s-rounded" width="32" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+                  ce.concept.imageId
+                }}" *ngIf="ce.concept.imageId" style="margin-bottom: -0.075rem" />
+
+          <!-- Placeholder Image -->
+          <img class="s-rounded" width="32" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/winged-sword"
+            *ngIf="!ce.concept.imageId" style="margin-bottom: -0.075rem" />
+        </div>
+
+        <!-- Name -->
+        <div class="column c-hand" [ngClass]="{ faded: quantityEnabled && ce.quantity === 0 }" (click)="viewOrEdit(ce)">
+          {{ ce.concept.name }}
+
+          <!-- Quantity -->
+          <sup class="text-bold text-small"
+            *ngIf="quantityEnabled && ce.quantity !== 1 && ce.quantity !== null">x{{ ce.quantity }}</sup>
+        </div>
+
+        <!-- Controls -->
+        <div class="column col-auto">
+          <button class="btn btn-sm ml-1"
+            [routerLink]="['/campaigns', campaign.id, 'concepts', conceptType.id, ce.concept.id, 'view']">
+            <i class="icon icon-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
