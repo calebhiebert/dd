@@ -133,6 +133,7 @@ export class ConceptTypeEditorComponent
 
   public removeField(idx: number) {
     this.fields.removeAt(idx);
+    this.formGroup.markAsDirty();
   }
 
   public canDeactivate() {

@@ -13,7 +13,7 @@ import {
   IStringFieldOptions,
   IEnumFieldOptions,
 } from '../form-types';
-import {Chance} from 'chance';
+import { Chance } from 'chance';
 
 @Component({
   selector: 'dd-field-definition-form',
@@ -105,6 +105,12 @@ export class FieldDefinitionFormComponent implements OnInit {
       );
       this.formGroup.setControl('options', this.options);
     });
+
+    this.options = FieldDefinitionFormComponent.createOptionsFormGroup(
+      this.type.value,
+      this.formGroup.value.options
+    );
+    this.formGroup.setControl('options', this.options);
   }
 
   public get campaign() {

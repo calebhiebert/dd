@@ -8,7 +8,7 @@ const nanoid = require('nanoid');
 // Load spells
 const spells = JSON.parse(fs.readFileSync('./spells.json'));
 
-const CAMPAIGN_ID = '8b953847-9243-4384-a976-005444a570ea';
+const CONCEPT_TYPE_ID = '9fb01c87-0b93-4611-bf46-5fc6494e1db2';
 const USER_ID = 'google-oauth2|115793422235026993679';
 
 const db = new Client({
@@ -18,17 +18,25 @@ const db = new Client({
   password: 'dd',
 });
 
+function getDelta(md) {
+  return convertHtmlToDelta(marked(md));
+}
+
+function getComponents(cmp) {
+  return cmp.split(',').map(c => c.trim().toUpperCase());
+}
+
 async function convert() {
   await db.connect();
 
   let idx = 0;
 
   for (const spell of spells) {
-    const html = marked(spell.desc);
-    const delta = convertHtmlToDelta(html);
-
     const {
       name,
+      desc,
+      higher_level,
+      page,
       range,
       components,
       material,
@@ -39,34 +47,111 @@ async function convert() {
       level,
       level_int,
       school,
+      archetype,
+      circles,
+      domains,
+      oaths,
+      patrons
     } = spell;
-
-    function bulletPoint(a, b) {
-      return [
-        { insert: `${a} - ` },
-        { insert: `${b}`, attributes: { bold: true } },
-        { insert: '\n', attributes: { list: 'bullet' } },
-      ];
-    }
-
-    delta.ops.push({ insert: '\n' });
-    delta.ops.push(...bulletPoint('Range', range));
-    delta.ops.push(...bulletPoint('Components', components));
-    delta.ops.push(...bulletPoint('Material', material));
-    delta.ops.push(...bulletPoint('Ritual', ritual));
-    delta.ops.push(...bulletPoint('Duration', duration));
-    delta.ops.push(...bulletPoint('Concentration', concentration));
-    delta.ops.push(...bulletPoint('Casting Time', casting_time));
-    delta.ops.push(...bulletPoint('Level', level));
 
     const id = uuid();
     const tags = [`Level: ${level_int}`, `School: ${school}`];
+    const fields = [];
 
-    spell.class.split(', ').forEach((c) => tags.push(`Class: ${c}`));
+    if (higher_level) {
+      fields.push({
+        Name: 'Higher Level',
+        value: getDelta(higher_level),
+      })
+    }
+
+    if (range) {
+      fields.push({
+        Name: 'Range',
+        value: range,
+      })
+    }
+
+    if (components) {
+      fields.push({
+        Name: 'Components',
+        value: getComponents(components),
+      })
+    }
+
+    if (material) {
+      fields.push({
+        Name: 'Material',
+        value: material,
+      })
+    }
+
+    if (ritual) {
+      fields.push({
+        Name: 'Ritual',
+        value: ritual,
+      })
+    }
+
+    if (duration) {
+      fields.push({
+        Name: 'Duration',
+        value: duration,
+      })
+    }
+
+    if (concentration) {
+      fields.push({
+        Name: 'Concentration',
+        value: concentration === 'yes' ? true : false,
+      })
+    }
+
+    if (archetype) {
+      fields.push({
+        Name: 'Archetype',
+        value: archetype,
+      })
+    }
+
+    if (circles) {
+      fields.push({
+        Name: 'Circles',
+        value: circles,
+      })
+    }
+
+    if (domains) {
+      fields.push({
+        Name: 'Domains',
+        value: domains,
+      })
+    }
+
+    if (oaths) {
+      fields.push({
+        Name: 'Oaths',
+        value: oaths,
+      })
+    }
+
+    if (patrons) {
+      fields.push({
+        Name: 'Patrons',
+        value: patrons,
+      })
+    }
+
+    if (casting_time) {
+      fields.push({
+        Name: 'Casting Time',
+        value: casting_time,
+      })
+    }
 
     const res = await db.query(
-      `INSERT INTO "Spells" ("Id", "Name", "CampaignId", "UserId", "Tags", "PlayerVisible", "Content") VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [id, name, CAMPAIGN_ID, USER_ID, `{${tags.join(', ')}}`, true, delta]
+      `INSERT INTO "Concepts" ("Id", "Name", "Content", "UserId", "Fields", "Tags", "ConceptTypeId") VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [id, name, getDelta(desc), USER_ID, JSON.stringify(fields), `{${tags.join(', ')}}`, CONCEPT_TYPE_ID]
     );
 
     console.log(++idx, '/', spells.length);
