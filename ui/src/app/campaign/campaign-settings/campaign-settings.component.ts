@@ -114,7 +114,6 @@ export class CampaignSettingsComponent
           imageId: v.imageId,
           experienceTable: v.experienceTable,
           userId: this.login.id,
-          itemRarities: v.itemRarities,
           currencyMap: v.currencyMap,
           id: this.campaign.id,
         };
@@ -136,7 +135,6 @@ export class CampaignSettingsComponent
           content: v.content,
           imageId: v.imageId,
           experienceTable: v.experienceTable,
-          itemRarities: v.itemRarities,
           currencyMap: v.currencyMap,
           userId: this.login.id,
           id: '',

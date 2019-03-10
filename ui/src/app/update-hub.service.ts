@@ -202,7 +202,6 @@ export class UpdateHubService {
       c.imageId = campaign.imageId;
       c.experienceTable = campaign.experienceTable;
       c.itemTypes = campaign.itemTypes;
-      c.itemRarities = campaign.itemRarities;
       c.currencyMap = campaign.currencyMap;
     }
   }
