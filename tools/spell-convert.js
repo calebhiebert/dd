@@ -3,7 +3,6 @@ const { Client } = require('pg');
 const uuid = require('uuid/v4');
 const { convertHtmlToDelta } = require('node-quill-converter');
 const marked = require('marked');
-const nanoid = require('nanoid');
 
 // Load spells
 const spells = JSON.parse(fs.readFileSync('./spells.json'));
@@ -24,6 +23,10 @@ function getDelta(md) {
 
 function getComponents(cmp) {
   return cmp.split(',').map(c => c.trim().toUpperCase());
+}
+
+function getClass(clss) {
+  return clss.split(',').map(c => c.trim());
 }
 
 async function convert() {
@@ -146,6 +149,13 @@ async function convert() {
       fields.push({
         Name: 'Casting Time',
         value: casting_time,
+      })
+    }
+
+    if (spell.class) {
+      fields.push({
+        Name: 'Class',
+        value: getClass(spell.class)
       })
     }
 
