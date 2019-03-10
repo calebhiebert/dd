@@ -4,7 +4,7 @@
     <!-- Search Bar -->
     <div class="has-icon-right">
       <input type="text" [formControl]="searchControl" class="form-input"
-        placeholder="Search {{ conceptType.pluralForm }}">
+        placeholder="Search {{ conceptType.pluralForm }}" #searchbar>
       <i class="icon icon-search form-icon" *ngIf="!searchLoading"></i>
       <div class="loading form-icon" *ngIf="searchLoading"></div>
     </div>
@@ -45,7 +45,7 @@
   </div>
 
   <div modal-footer *ngIf="editable">
-    <button class="btn btn-error mr-2" (click)="delete()">Delete</button>
+    <button class="btn btn-error mr-2" (click)="remove(selectedConceptEntity)">Remove</button>
     <button class="btn mr-2" (click)="viewandedit.close(null)">Cancel</button>
     <button class="btn btn-primary" (click)="save()">Save</button>
   </div>

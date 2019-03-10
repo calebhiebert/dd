@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { IConceptType, IConceptsQueryResult, ConceptService, IConceptEntity, IConcept } from 'src/app/concept.service';
 import { IEntity } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
@@ -32,6 +32,9 @@ export class ConceptEntityManagerComponent implements OnInit {
 
   @ViewChild('viewandedit')
   public viewAndEditModal: ModalComponent<any>;
+
+  @ViewChild('searchbar')
+  public searchInput: ElementRef<HTMLInputElement>;
 
   public searchResults: IConcept[];
   public selectedConceptEntity: IConceptEntity = null;
@@ -88,7 +91,11 @@ export class ConceptEntityManagerComponent implements OnInit {
   }
 
   public async add() {
+    this.searchControl.patchValue(null);
     this.searchConcepts('');
+    setTimeout(() => {
+      this.searchInput.nativeElement.focus();
+    }, 1);
     const picked = await this.pickerModal.open();
 
     if (picked !== null) {
@@ -143,6 +150,24 @@ export class ConceptEntityManagerComponent implements OnInit {
       this.viewAndEditModal.close(null);
 
       await this.conceptService.updateConceptEntity(toSave);
+    } catch (err) {
+      throw err;
+    }
+
+    this.working = false;
+  }
+
+  public async remove(conceptEntity: IConceptEntity) {
+    this.working = true;
+
+    try {
+      this.conceptEntities = this.conceptEntities.filter(ce => {
+        return ce.conceptId !== conceptEntity.conceptId && ce.entityId !== conceptEntity.entityId;
+      });
+
+      this.viewAndEditModal.close(null);
+
+      await this.conceptService.deleteConceptEntity(conceptEntity.entityId, conceptEntity.conceptId);
     } catch (err) {
       throw err;
     }

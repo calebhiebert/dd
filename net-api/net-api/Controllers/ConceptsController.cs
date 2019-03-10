@@ -78,7 +78,7 @@ namespace net_api.Controllers
 
             var totalCount = await conceptQuery.CountAsync();
 
-            conceptQuery = conceptQuery.Skip(offset).Take(limit);
+            conceptQuery = conceptQuery.OrderBy(cq => cq.Name).Skip(offset).Take(limit);
 
             var concepts = await conceptQuery.ToListAsync();
 
