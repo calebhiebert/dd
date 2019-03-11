@@ -1,3 +1,1 @@
-<div *ngIf="errType" [ngSwitch]="errType">
-  <dd-error-four-o-four *ngSwitchCase="1"></dd-error-four-o-four>
-</div>
+<dd-error-page [header]="title" [text]="text" *ngIf="errType"></dd-error-page>

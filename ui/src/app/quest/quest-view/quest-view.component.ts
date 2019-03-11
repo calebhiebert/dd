@@ -11,6 +11,7 @@ import { NoteService, NoteType } from 'src/app/note.service';
 })
 export class QuestViewComponent implements OnInit {
   public loading = false;
+  public loadError: any;
   public quest: IQuest;
 
   constructor(
@@ -39,7 +40,7 @@ export class QuestViewComponent implements OnInit {
         questId: this.quest.id,
       });
     } catch (err) {
-      throw err;
+      this.loadError = err;
     }
 
     this.loading = false;
@@ -57,13 +58,7 @@ export class QuestViewComponent implements OnInit {
       return;
     }
 
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'quests',
-      this.quest.id,
-      'edit',
-    ]);
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'quests', this.quest.id, 'edit']);
   }
 
   public get editable() {

@@ -1,0 +1,20 @@
+.error-container {
+  background-image: url('https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto/v1552332874/error-background.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  height: 50vh;
+}
+
+.error-code-text {
+  font-size: 15vw;
+  color: #181819;
+}
+
+.error-subtitle-text {
+  margin-top: 1rem;
+  font-size: 3.5vw;
+  font-weight: bold;
+  color: #181819;
+  text-align: center;
+}

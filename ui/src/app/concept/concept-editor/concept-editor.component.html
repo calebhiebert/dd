@@ -1,6 +1,6 @@
 <div class="container grid-xl">
   <!-- 404 -->
-  <dd-error-four-o-four *ngIf="notFound"></dd-error-four-o-four>
+  <dd-http-errors [error]="error"></dd-http-errors>
 
   <!-- Loading -->
   <div class="loading loading-lg" *ngIf="loading"></div>

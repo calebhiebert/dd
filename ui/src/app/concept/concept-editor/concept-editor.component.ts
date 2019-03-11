@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./concept-editor.component.css'],
 })
 export class ConceptEditorComponent implements OnInit {
-  public notFound: boolean;
+  public error: any;
   public loading = false;
   public saving = false;
   public deleting = true;
@@ -61,7 +61,7 @@ export class ConceptEditorComponent implements OnInit {
       this.conceptType = this.getConceptType(typeId);
 
       if (this.conceptType === null || this.conceptType === undefined) {
-        this.notFound = true;
+        this.error = { status: 404 };
       } else {
         this.conceptType.fields.forEach(() => {
           this.fields.push(new FormControl(null));

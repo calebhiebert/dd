@@ -49,7 +49,6 @@ import { OverviewComponent } from './session/overview/overview.component';
 import { OverviewEntityComponent } from './session/overview-entity/overview-entity.component';
 import { OverviewToolbarComponent } from './session/overview-toolbar/overview-toolbar.component';
 import { FooterComponent } from './footer/footer.component';
-import { HttpErrorInterceptor } from './http-error.interceptor.ts';
 import { SentryErrorHandler } from './sentry.errorhandler';
 import { NoteFormComponent } from './note/note-form/note-form.component';
 import { NoteEditorComponent } from './note/note-editor/note-editor.component';
@@ -97,7 +96,8 @@ import { ConceptViewComponent } from './concept/concept-view/concept-view.compon
 import { ConceptEntityManagerComponent } from './concept/concept-entity-manager/concept-entity-manager.component';
 import { CurrencyViewComponent } from './dynform/currency-view/currency-view.component';
 import { HttpErrorsComponent } from './http-errors/http-errors.component';
-import { ErrorFourOFourComponent } from './http-errors/error-four-o-four/error-four-o-four.component';
+import { HttpErrorInterceptor } from './http-error.interceptor';
+import { ErrorPageComponent } from './http-errors/error-page/error-page.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -185,12 +185,12 @@ import { ErrorFourOFourComponent } from './http-errors/error-four-o-four/error-f
     ConceptEditorComponent,
     ConceptTypeEditorComponent,
     ConceptManagerComponent,
-    ErrorFourOFourComponent,
     ConceptListItemComponent,
     ConceptViewComponent,
     ConceptEntityManagerComponent,
     CurrencyViewComponent,
     HttpErrorsComponent,
+    ErrorPageComponent,
   ],
   imports: [
     BrowserModule,

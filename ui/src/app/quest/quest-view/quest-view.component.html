@@ -2,6 +2,8 @@
   <!-- Loading -->
   <div class="loading loading-lg" *ngIf="loading"></div>
 
+  <dd-http-errors [error]="loadError" *ngIf="loadError"></dd-http-errors>
+
   <!-- Display -->
   <div *ngIf="quest">
     <div class="columns">
@@ -9,9 +11,7 @@
         <h3>{{ quest.name }}</h3>
       </div>
       <div class="column col-auto col-ml-auto">
-        <button class="btn btn-sm mr-2" (click)="addNote()">
-          <i class="icon icon-link"></i> <span class="hide-sm"> Add Note</span>
-        </button>
+        <button class="btn btn-sm mr-2" (click)="addNote()"><i class="icon icon-link"></i> <span class="hide-sm"> Add Note</span></button>
         <button class="btn btn-sm" *ngIf="editable" (click)="edit()">
           <i class="icon icon-edit"></i>
           <span class="hide-sm"> Edit</span>

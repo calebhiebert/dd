@@ -54,6 +54,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
       this.article = await this.articleService.getArticle(id);
     } catch (err) {
       this.loadError = err;
+      console.log(err);
     }
 
     this.loading = false;
