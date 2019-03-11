@@ -33,6 +33,10 @@ export class CurrencyViewComponent implements OnInit {
   }
 
   public get text() {
+    if (!this.currency) {
+      return `<span class="currency-text">${this.blankValue}</span>`;
+    }
+
     let mapped: IMappedCurrency[];
 
     if (this.trackCoins === true) {
