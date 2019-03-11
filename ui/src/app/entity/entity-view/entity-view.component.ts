@@ -259,6 +259,10 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     return this.campaignService.calculateLevel(this.entity.xp);
   }
 
+  public get xpToNextLevel() {
+    return this.campaignService.getXPToNextLevel(this.entity.xp);
+  }
+
   public get editable() {
     return this.campaignService.canEdit || this.entity.userId === this.login.id;
   }

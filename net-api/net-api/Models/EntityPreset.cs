@@ -147,7 +147,7 @@ namespace net_api.Models
         [Required]
         public bool AmountHidden { get; set; }
 
-        public double[] Bars { get; set; }
+        public Dictionary<int, string> TextDamageLevels { get; set; }
     }
 
     public enum AttributeType
@@ -162,7 +162,7 @@ namespace net_api.Models
 
     public enum HealthType
     {
-        Normal, MultiBar
+        Normal, TextBased
     }
 
     public enum HealthColorType

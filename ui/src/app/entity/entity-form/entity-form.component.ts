@@ -298,6 +298,10 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
     return this.formGroup.get('health.colorType');
   }
 
+  public get hpType() {
+    return this.formGroup.get('health.type');
+  }
+
   public get conceptTypeList() {
     return this.campaignService.campaign.conceptTypes.filter(ct => ct.entityConfig.enabled === true);
   }

@@ -167,6 +167,20 @@ export class CampaignService {
     return level;
   }
 
+  public getXPToNextLevel(currentXp: number): number {
+    const xpTable = this.campaign.experienceTable || [];
+
+    for (let i = 0; i < xpTable.length; i++) {
+      const xpRequired = xpTable[i];
+
+      if (currentXp < xpRequired) {
+        return xpRequired - currentXp;
+      }
+    }
+
+    return -1;
+  }
+
   /**
    * Returns the entity preset from the current campaign object (if it exists)
    */

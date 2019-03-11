@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
 export class EntityService {
   private _currentViewEntity: IEntity = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public async updateEntityPreset(entityPreset: IEntityPreset): Promise<void> {
     return this.http.put<void>(`${environment.apiURL}/entitypresets/${entityPreset.id}`, entityPreset).toPromise();
@@ -31,7 +31,7 @@ export class EntityService {
     return this.http.get<IEntityPreset>(`${environment.apiURL}/entitypresets/${id}`).toPromise();
   }
 
-  public async deleteEntityPreset(campaignId: string, entityPresetId: string): Promise<void> {}
+  public async deleteEntityPreset(campaignId: string, entityPresetId: string): Promise<void> { }
 
   public async getEntity(id: string): Promise<IEntity> {
     return this.http.get<IEntity>(`${environment.apiURL}/entities/${id}`).toPromise();
@@ -136,7 +136,7 @@ export interface IHealthPreset {
   amountHidden: boolean;
   colorType?: HealthColorType;
   staticColor?: string;
-  bars?: number[];
+  textDamageLevels?: { [key: number]: string };
 }
 
 export interface IHealth {
@@ -164,7 +164,7 @@ export enum EntityAttributeClass {
 
 export enum HealthType {
   NORMAL,
-  MULTI_BAR,
+  TEXT_BASED,
 }
 
 export enum HealthColorType {

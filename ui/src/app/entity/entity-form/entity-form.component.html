@@ -132,11 +132,12 @@
             <label for="health-type" class="form-label">Health Type</label>
             <select name="health-type" id="health-type" class="form-input" formControlName="type">
               <option value="0">Normal</option>
-              <option value="1" disabled>Multi Bar (Coming Soon)</option>
+              <option value="1">Text Based</option>
             </select>
           </div>
         </div>
 
+        <!-- For Normal Health -->
         <div class="column">
           <div class="form-group">
             <label for="bar-type" class="form-label">HP Bar Type</label>
@@ -147,14 +148,15 @@
           </div>
         </div>
 
+        <!-- Static Bar Color -->
         <div class="column" *ngIf="hpColorType.value === '1' || hpColorType.value === 1">
-          <!-- Bar Color -->
           <div class="form-group">
             <label for="bar-color" class="form-label">Bar Color</label>
             <input formControlName="staticColor" type="color" name="bar-color" id="bar-color" class="form-input" />
           </div>
         </div>
 
+        <!-- HP Visibility -->
         <div class="column">
           <div class="form-group">
             <label class="form-label">Visibility</label>
