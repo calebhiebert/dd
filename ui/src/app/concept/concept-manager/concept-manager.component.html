@@ -33,19 +33,12 @@
     </div>
 
     <!-- Paginator -->
-    <dd-paginator
-      [itemsPerPage]="10"
-      [page]="page"
-      [autoHide]="false"
-      [totalItems]="totalConcepts"
-      [loading]="loading"
-      (pageChange)="changePage($event)"
-      *ngIf="concepts && concepts.length > 0"
-    ></dd-paginator>
+    <dd-paginator [itemsPerPage]="10" [page]="page" [autoHide]="false" [totalItems]="totalConcepts" [loading]="loading"
+      (pageChange)="changePage($event)" *ngIf="concepts && concepts.length > 0"></dd-paginator>
   </div>
 
   <!-- Empty State (No concepts) -->
-  <div class="empty" *ngIf="conceptType && concepts && totalConcepts === 0">
+  <div class="empty" *ngIf="conceptType && concepts && totalConcepts === 0 && !search">
     <div class="empty-icon">
       <i class="icon icon-search icon-4x"></i>
     </div>

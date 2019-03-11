@@ -27,7 +27,7 @@ export class ConceptManagerComponent implements OnInit {
     private router: Router,
     private conceptService: ConceptService,
     private campaignService: CampaignService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.searchControl = new FormControl(null);
@@ -45,6 +45,7 @@ export class ConceptManagerComponent implements OnInit {
         }
 
         if (this.conceptType) {
+          this.page = 1;
           this.load(this.conceptType.id);
         }
       });
