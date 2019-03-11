@@ -81,6 +81,8 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
 
   ngAfterContentInit() {
     if (this.readOnly) {
+      this._container.nativeElement.classList.add('ql-editor');
+      this._container.nativeElement.classList.add('p-0');
     } else {
       this._quill = new Quill(this._container.nativeElement, this.getQuillSettings());
 
@@ -148,6 +150,10 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
     }
 
     if (this.readOnly) {
+      if (obj === null || obj === undefined) {
+        return;
+      }
+
       this.renderQuillHTML(obj).then((html) => {
         this._container.nativeElement.innerHTML = html;
 
