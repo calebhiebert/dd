@@ -132,7 +132,6 @@ export class ConceptEditorComponent implements OnInit {
     this.formGroup.setControl('tags', new FormArray(this.concept.tags.map((t) => new FormControl(t))));
     this.formGroup.enable();
     this.loading = false;
-
     this.formGroup.markAsPristine();
   }
 

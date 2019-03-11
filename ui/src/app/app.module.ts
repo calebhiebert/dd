@@ -5,11 +5,7 @@ import { TruncateModule } from 'ng2-truncate';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
-import {
-  ReactiveFormsModule,
-  FormsModule,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NavComponent } from './nav/nav.component';
 import { CampaignComponent } from './campaign/campaign.component';
 import { PaginatorComponent } from './paginator/paginator.component';
@@ -96,20 +92,16 @@ import { FieldDefinitionFormComponent } from './dynform/field-definition-form/fi
 import { ConceptEditorComponent } from './concept/concept-editor/concept-editor.component';
 import { ConceptTypeEditorComponent } from './concept/concept-type-editor/concept-type-editor.component';
 import { ConceptManagerComponent } from './concept/concept-manager/concept-manager.component';
-import { ErrorFourOFourComponent } from './error-four-o-four/error-four-o-four.component';
 import { ConceptListItemComponent } from './concept/concept-list-item/concept-list-item.component';
 import { ConceptViewComponent } from './concept/concept-view/concept-view.component';
 import { ConceptEntityManagerComponent } from './concept/concept-entity-manager/concept-entity-manager.component';
 import { CurrencyViewComponent } from './dynform/currency-view/currency-view.component';
+import { HttpErrorsComponent } from './http-errors/http-errors.component';
+import { ErrorFourOFourComponent } from './http-errors/error-four-o-four/error-four-o-four.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
-  entryComponents: [
-    NoteViewMiniComponent,
-    EntityViewMiniComponent,
-    ArticleViewMiniComponent,
-    UserViewMiniComponent,
-  ],
+  entryComponents: [NoteViewMiniComponent, EntityViewMiniComponent, ArticleViewMiniComponent, UserViewMiniComponent],
   declarations: [
     AppComponent,
     ImageUploadComponent,
@@ -198,6 +190,7 @@ import { CurrencyViewComponent } from './dynform/currency-view/currency-view.com
     ConceptViewComponent,
     ConceptEntityManagerComponent,
     CurrencyViewComponent,
+    HttpErrorsComponent,
   ],
   imports: [
     BrowserModule,
@@ -229,4 +222,4 @@ import { CurrencyViewComponent } from './dynform/currency-view/currency-view.com
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

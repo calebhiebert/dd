@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ElementRef,
-  ViewChild,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IArticle, ArticleService } from 'src/app/article.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
@@ -20,6 +13,7 @@ import { filter } from 'rxjs/operators';
 })
 export class ArticleViewComponent implements OnInit, OnDestroy {
   public loading = false;
+  public loadError: any;
   public article: IArticle;
 
   private _updateSubscription: Subscription;
@@ -59,37 +53,23 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
     try {
       this.article = await this.articleService.getArticle(id);
     } catch (err) {
-      throw err;
+      this.loadError = err;
     }
 
     this.loading = false;
   }
 
   public edit() {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'articles',
-      this.article.id,
-      'edit',
-    ]);
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'articles', this.article.id, 'edit']);
   }
 
   public viewOnMap() {
-    this.router.navigate(
-      [
-        'campaigns',
-        this.campaignService.campaign.id,
-        'maps',
-        this.article.mapId,
-      ],
-      {
-        queryParams: {
-          lat: this.article.lat,
-          lng: this.article.lng,
-        },
-      }
-    );
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'maps', this.article.mapId], {
+      queryParams: {
+        lat: this.article.lat,
+        lng: this.article.lng,
+      },
+    });
   }
 
   public get editable() {

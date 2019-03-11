@@ -1,7 +1,7 @@
 <div class="container grid-xl">
   <div class="loading loading-lg" *ngIf="loading"></div>
 
-  <dd-error-four-o-four *ngIf="notFound"></dd-error-four-o-four>
+  <dd-http-errors [error]="loadError"></dd-http-errors>
 
   <!-- Title Controls -->
   <div class="columns" *ngIf="concept">

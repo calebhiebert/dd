@@ -11,7 +11,7 @@ import { DynamicFieldType } from 'src/app/dynform/form-types';
 })
 export class ConceptViewComponent implements OnInit {
   public loading = false;
-  public notFound = false;
+  public loadError: any;
 
   public conceptType: IConceptType;
   public concept: IConcept;
@@ -30,7 +30,7 @@ export class ConceptViewComponent implements OnInit {
 
       this.conceptType = this.getConceptType(typeId);
       if (this.conceptType === undefined || this.conceptType === null) {
-        this.notFound = true;
+        this.loadError = { status: 404 };
       } else {
         this.load(id);
       }
@@ -47,11 +47,7 @@ export class ConceptViewComponent implements OnInit {
     try {
       this.concept = await this.conceptService.getConcept(id);
     } catch (err) {
-      if (err.status && err.status === 404) {
-        this.notFound = true;
-      } else {
-        throw err;
-      }
+      this.loadError = err;
     }
 
     this.loading = false;

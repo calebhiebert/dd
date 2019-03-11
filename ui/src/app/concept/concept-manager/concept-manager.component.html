@@ -1,10 +1,9 @@
 <div class="container grid-xl">
-  <dd-error-four-o-four *ngIf="notFound"></dd-error-four-o-four>
+  <dd-http-errors [error]="loadError"></dd-http-errors>
   <div class="loading loading-lg" *ngIf="loading && !concepts"></div>
 
   <!-- Header Controls -->
   <div class="columns" *ngIf="conceptType">
-
     <!-- Title -->
     <div class="column col-auto">
       <h3 class="mb-0">{{ conceptType.pluralForm }}</h3>
@@ -20,7 +19,7 @@
     <!-- Search Bar -->
     <div class="column col-sm-12 my-1">
       <div class="has-icon-right">
-        <input type="text" class="form-input" placeholder="Search..." [formControl]="searchControl">
+        <input type="text" class="form-input" placeholder="Search..." [formControl]="searchControl" />
         <i class="icon icon-search form-icon" *ngIf="!loading || !concepts"></i>
         <div class="loading form-icon" *ngIf="loading && concepts"></div>
       </div>
@@ -34,8 +33,15 @@
     </div>
 
     <!-- Paginator -->
-    <dd-paginator [itemsPerPage]="10" [page]="page" [autoHide]="false" [totalItems]="totalConcepts" [loading]="loading"
-      (pageChange)="changePage($event)" *ngIf="concepts && concepts.length > 0"></dd-paginator>
+    <dd-paginator
+      [itemsPerPage]="10"
+      [page]="page"
+      [autoHide]="false"
+      [totalItems]="totalConcepts"
+      [loading]="loading"
+      (pageChange)="changePage($event)"
+      *ngIf="concepts && concepts.length > 0"
+    ></dd-paginator>
   </div>
 
   <!-- Empty State (No concepts) -->
@@ -46,9 +52,7 @@
     <p class="empty-title h5">There are no {{ conceptType.pluralForm }}</p>
     <p class="empty-subtitle" *ngIf="editing">Click the button to create one</p>
     <div class="empty-action" *ngIf="editing">
-      <button class="btn btn-primary" (click)="create()">
-        Create {{ conceptType.name }}
-      </button>
+      <button class="btn btn-primary" (click)="create()">Create {{ conceptType.name }}</button>
     </div>
   </div>
 
