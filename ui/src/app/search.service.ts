@@ -11,17 +11,12 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class SearchService {
-  constructor(
-    private campaignService: CampaignService,
-    private http: HttpClient
-  ) { }
+  constructor(private campaignService: CampaignService, private http: HttpClient) {}
 
   public search(search: string): Promise<ISearchResult[]> {
     return this.http
       .get<ISearchResult[]>(
-        `${environment.apiURL}/search?campaignId=${
-        this.campaignService.campaign.id
-        }&search=${encodeURIComponent(search)}`
+        `${environment.apiURL}/search?campaignId=${this.campaignService.campaign.id}&search=${encodeURIComponent(search)}`
       )
       .toPromise();
   }
@@ -43,6 +38,8 @@ export interface IMapMini {
 
 export enum SearchObjectType {
   ENTITY,
+  LEGACY_SPELL,
+  LEGACY_ITEM,
   ARTICLE,
   MAP,
   QUEST,

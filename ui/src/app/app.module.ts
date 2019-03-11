@@ -100,6 +100,7 @@ import { ErrorFourOFourComponent } from './error-four-o-four/error-four-o-four.c
 import { ConceptListItemComponent } from './concept/concept-list-item/concept-list-item.component';
 import { ConceptViewComponent } from './concept/concept-view/concept-view.component';
 import { ConceptEntityManagerComponent } from './concept/concept-entity-manager/concept-entity-manager.component';
+import { CurrencyViewComponent } from './dynform/currency-view/currency-view.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -196,6 +197,7 @@ import { ConceptEntityManagerComponent } from './concept/concept-entity-manager/
     ConceptListItemComponent,
     ConceptViewComponent,
     ConceptEntityManagerComponent,
+    CurrencyViewComponent,
   ],
   imports: [
     BrowserModule,

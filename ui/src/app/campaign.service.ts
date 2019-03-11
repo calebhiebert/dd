@@ -232,6 +232,7 @@ export interface ICampaign {
   currencyMap?: ICurrencyLevel[];
   members?: ICampaignUser[];
   conceptTypes?: IConceptType[];
+  trackCoins?: boolean;
   createdAt?: Date;
 }
 

@@ -1,16 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  ConceptService,
-  IConceptType,
-  IConcept,
-} from 'src/app/concept.service';
+import { ConceptService, IConceptType, IConcept, IConceptField } from 'src/app/concept.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
-import {
-  IDynamicFieldConfig,
-  DynamicFieldType,
-} from 'src/app/dynform/form-types';
+import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 
@@ -54,10 +47,7 @@ export class ConceptEditorComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      name: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(30),
-      ]),
+      name: new FormControl(null, [Validators.required, Validators.maxLength(30)]),
       imageId: new FormControl(null),
       content: new FormControl(null),
       fields: new FormArray([]),
@@ -85,9 +75,7 @@ export class ConceptEditorComponent implements OnInit {
   }
 
   private getConceptType(id: string): IConceptType {
-    return this.campaignService.campaign.conceptTypes.find(
-      (ct) => ct.id === id
-    );
+    return this.campaignService.campaign.conceptTypes.find((ct) => ct.id === id);
   }
 
   private constructConcept(): IConcept {
@@ -102,9 +90,7 @@ export class ConceptEditorComponent implements OnInit {
             value: fv,
           };
         })
-        .filter(
-          (fv) => fv.value !== null && fv.value !== undefined && fv.value !== ''
-        ),
+        .filter((fv) => fv.value !== null && fv.value !== undefined && fv.value !== ''),
       tags: this.tags.value,
       imageId: this.imageId.value,
       conceptTypeId: this.conceptType.id,
@@ -127,28 +113,27 @@ export class ConceptEditorComponent implements OnInit {
       throw err;
     }
 
-    this.formGroup.patchValue({
-      ...this.concept,
-      fields: this.conceptType.fields.map((f) => {
-        const val = this.concept.fields.find((fld) => fld.name === f.name);
+    this.formGroup.patchValue(
+      {
+        ...this.concept,
+        fields: this.conceptType.fields.map((f) => {
+          const val = this.concept.fields.find((fld) => fld.name === f.name);
 
-        if (val) {
-          return val.value;
-        } else {
-          return null;
-        }
-      }),
-    });
-
-    this.formGroup.setControl(
-      'tags',
-      new FormArray(this.concept.tags.map((t) => new FormControl(t)))
+          if (val) {
+            return val.value;
+          } else {
+            return null;
+          }
+        }),
+      },
+      { emitEvent: false }
     );
 
-    this.formGroup.markAsPristine();
-
+    this.formGroup.setControl('tags', new FormArray(this.concept.tags.map((t) => new FormControl(t))));
     this.formGroup.enable();
     this.loading = false;
+
+    this.formGroup.markAsPristine();
   }
 
   public cancel() {
@@ -196,13 +181,7 @@ export class ConceptEditorComponent implements OnInit {
 
       this.formGroup.markAsPristine();
 
-      this.router.navigate([
-        'campaigns',
-        this.campaignService.campaign.id,
-        'concepts',
-        this.conceptType.id,
-        'manage',
-      ]);
+      this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepts', this.conceptType.id, 'manage']);
     } catch (err) {
       throw err;
     }
@@ -213,7 +192,16 @@ export class ConceptEditorComponent implements OnInit {
     return idx;
   }
 
-  public getFieldControl(name: string) {}
+  public getFieldConfig(field: IConceptField) {
+    if (field.type === DynamicFieldType.CURRENCY) {
+      field.options = {
+        levels: this.campaignService.campaign.currencyMap,
+        trackCoins: this.campaignService.campaign.trackCoins,
+      };
+    }
+
+    return field;
+  }
 
   public get editing() {
     return this.route.snapshot.data.editing;

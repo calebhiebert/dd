@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  IConcept,
-  ConceptService,
-  IConceptType,
-  IField
-} from 'src/app/concept.service';
+import { IConcept, ConceptService, IConceptType, IField, IConceptField } from 'src/app/concept.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
 import { DynamicFieldType } from 'src/app/dynform/form-types';
@@ -26,7 +21,7 @@ export class ConceptViewComponent implements OnInit {
     private router: Router,
     private campaignService: CampaignService,
     private conceptService: ConceptService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -43,9 +38,7 @@ export class ConceptViewComponent implements OnInit {
   }
 
   private getConceptType(id: string): IConceptType {
-    return this.campaignService.campaign.conceptTypes.find(
-      (ct) => ct.id === id
-    );
+    return this.campaignService.campaign.conceptTypes.find((ct) => ct.id === id);
   }
 
   private async load(id: string) {
@@ -65,35 +58,35 @@ export class ConceptViewComponent implements OnInit {
   }
 
   public edit() {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'concepts',
-      this.conceptType.id,
-      this.concept.id,
-      'edit',
-    ]);
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepts', this.conceptType.id, this.concept.id, 'edit']);
   }
 
   public getFieldConfig(field: IField) {
-    return this.conceptType.fields.find(f => f.name === field.name);
+    return this.conceptType.fields.find((f) => f.name === field.name);
+  }
+
+  public trackField(idx: number) {
+    return idx;
   }
 
   public get tableFields() {
-    const tableFields: IField[] = [];
+    const tableFields: { field: IField; config: IConceptField }[] = [];
 
     for (const field of this.concept.fields) {
       const config = this.getFieldConfig(field);
 
       if (
-        [DynamicFieldType.BOOLEAN,
-        DynamicFieldType.ENUM,
-        DynamicFieldType.ENUM_MULTI,
-        DynamicFieldType.FLOAT,
-        DynamicFieldType.INT,
-        DynamicFieldType.STRING]
-          .indexOf(config.type) !== -1) {
-        tableFields.push(field);
+        [
+          DynamicFieldType.BOOLEAN,
+          DynamicFieldType.ENUM,
+          DynamicFieldType.ENUM_MULTI,
+          DynamicFieldType.FLOAT,
+          DynamicFieldType.INT,
+          DynamicFieldType.STRING,
+          DynamicFieldType.CURRENCY,
+        ].indexOf(config.type) !== -1
+      ) {
+        tableFields.push({ field: field, config: config });
       }
     }
 
@@ -116,5 +109,17 @@ export class ConceptViewComponent implements OnInit {
 
   public get editable() {
     return this.campaignService.canEdit;
+  }
+
+  public get currencyLevels() {
+    return this.campaignService.campaign.currencyMap;
+  }
+
+  public get campaign() {
+    return this.campaignService.campaign;
+  }
+
+  public get currencyMap() {
+    return this.campaignService.campaign.currencyMap || [{ value: 1, name: 'gp', useInConversions: true }];
   }
 }

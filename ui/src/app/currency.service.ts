@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ICurrencyLevel } from './campaign.service';
+import { ICurrency } from './entity.service';
 
 @Injectable({
   providedIn: 'root',
@@ -49,14 +50,39 @@ export class CurrencyService {
     return results;
   }
 
+  public mapCoinValues(currencyMap?: ICurrencyLevel[], values?: { [key: string]: number }) {
+    if (currencyMap === null || currencyMap === undefined) {
+      currencyMap = [{ value: 1, name: 'gp', useInConversions: true }];
+    }
+
+    const sortedCurrencyMap = currencyMap
+      .map((cl) => ({ ...cl, value: cl.value * 100 }))
+      .sort((a, b) => {
+        return b.value - a.value;
+      });
+
+    const results: IMappedCurrency[] = [];
+
+    for (const lvl of sortedCurrencyMap) {
+      const value = values[lvl.name];
+
+      if (value) {
+        results.push({
+          name: lvl.name,
+          amount: value,
+        });
+      }
+    }
+
+    return results;
+  }
+
   public getCurrencyString(mappedValues: IMappedCurrency[]): string {
     return mappedValues.map((mv) => `${mv.amount}${mv.name}`).join(' ');
   }
 
   public getCurrencyHTMLString(mappedValues: IMappedCurrency[]): string {
-    return mappedValues
-      .map((mv) => `${mv.amount}<span class="currency-text">${mv.name}</span>`)
-      .join(' ');
+    return mappedValues.map((mv) => `${mv.amount}<span class="currency-text">${mv.name}</span>`).join(' ');
   }
 }
 

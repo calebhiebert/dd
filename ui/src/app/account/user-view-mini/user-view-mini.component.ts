@@ -11,6 +11,8 @@ export class UserViewMiniComponent implements OnInit {
   public userId: string;
 
   public loading = false;
+
+  @Input()
   public user: IUser;
 
   // Called when something would cause the size of the element to change
@@ -21,7 +23,11 @@ export class UserViewMiniComponent implements OnInit {
   constructor(private userSerivce: UserService) {}
 
   ngOnInit() {
-    this.load();
+    if (!this.user) {
+      this.load();
+    } else {
+      console.log(this.user);
+    }
   }
 
   private async load() {

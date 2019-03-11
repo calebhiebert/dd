@@ -1,11 +1,6 @@
 import { Component, OnInit, Input, forwardRef } from '@angular/core';
 import { ICurrencyFieldOptions } from '../form-types';
-import {
-  ControlValueAccessor,
-  FormArray,
-  FormControl,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { ControlValueAccessor, FormArray, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ICurrencyLevel } from 'src/app/campaign.service';
 import { ICurrency } from 'src/app/entity.service';
 
@@ -39,7 +34,7 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
 
       this.formArray.valueChanges.subscribe((val) => {
         if (this._onChange) {
-          this._onChange({ values: val, value: 0 });
+          this._onChange({ values: this.convertCurrencyArrayToObject(val, this.config.levels), value: 0 });
         }
       });
     } else {
@@ -47,7 +42,7 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
 
       this.formControl.valueChanges.subscribe((val) => {
         if (this._onChange) {
-          this._onChange({ values: [], value: val });
+          this._onChange({ values: {}, value: val });
         }
       });
     }
@@ -61,10 +56,21 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
     );
   }
 
-  private mapCurrencyValuesToConfig(
-    values: { [key: string]: number },
-    levels: ICurrencyLevel[]
-  ) {
+  private convertCurrencyArrayToObject(values: number[], levels: ICurrencyLevel[]) {
+    const obj: { [key: string]: number } = {};
+
+    values.forEach((val, idx) => {
+      const lvl = levels[idx];
+
+      if (lvl && lvl.name) {
+        obj[lvl.name] = val;
+      }
+    });
+
+    return obj;
+  }
+
+  private mapCurrencyValuesToConfig(values: { [key: string]: number }, levels: ICurrencyLevel[]) {
     return levels.map((lvl) => {
       const val = values[lvl.name];
 
@@ -76,29 +82,39 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
     });
   }
 
-  writeValue(obj: ICurrency): void {
+  public reset() {
+    if (this._onChange) {
+      this._onChange(null);
+    }
+
+    if (this.config.trackCoins) {
+      this.formArray.patchValue(this.controls.map(() => null), { emitEvent: false });
+    } else {
+      this.formControl.patchValue(null, { emitEvent: false });
+    }
+  }
+
+  public writeValue(obj: ICurrency): void {
     if (obj === null || obj === undefined) {
       return;
     }
 
     if (this.config.trackCoins) {
-      this.formArray.setValue(
-        this.mapCurrencyValuesToConfig(obj.values, this.config.levels)
-      );
+      this.formArray.setValue(this.mapCurrencyValuesToConfig(obj.values, this.config.levels));
     } else {
       this.formControl.setValue(obj.value);
     }
   }
 
-  registerOnChange(fn: any): void {
+  public registerOnChange(fn: any): void {
     this._onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: any): void {
     this._onTouched = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {
+  public setDisabledState?(isDisabled: boolean): void {
     if (this.formArray) {
       if (isDisabled) {
         this.formArray.disable();
@@ -116,10 +132,12 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
     }
   }
 
+  public trackLevel(idx: number) {
+    return idx;
+  }
+
   public get levels(): ICurrencyLevel[] {
-    return (
-      this.config.levels || [{ name: 'gp', value: 1, useInConversions: true }]
-    );
+    return (this.config.levels || [{ name: 'gp', value: 1, useInConversions: true }]).sort((a, b) => b.value - a.value);
   }
 
   public get controls() {

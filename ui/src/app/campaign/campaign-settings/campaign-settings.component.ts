@@ -19,8 +19,7 @@ import { IconService } from 'src/app/icon.service';
   templateUrl: './campaign-settings.component.html',
   styleUrls: ['./campaign-settings.component.css'],
 })
-export class CampaignSettingsComponent
-  implements OnInit, ComponentCanDeactivate {
+export class CampaignSettingsComponent implements OnInit, ComponentCanDeactivate {
   public saving = false;
   public deleting = false;
   public importing = false;
@@ -42,21 +41,16 @@ export class CampaignSettingsComponent
     private toast: ToastrService,
     private http: HttpClient,
     private iconService: IconService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({});
     this.expandXPTable = !this.editing;
     this.expandCurrencyMapEditor = !this.editing;
 
-    if (
-      this.campaign.experienceTable === undefined ||
-      this.campaign.experienceTable === null
-    ) {
+    if (this.campaign.experienceTable === undefined || this.campaign.experienceTable === null) {
       this.campaign.experienceTable = [];
     }
-
-    this.campaignService.refreshCurrentCampaign();
   }
 
   public canDeactivate() {
@@ -64,41 +58,19 @@ export class CampaignSettingsComponent
   }
 
   public selectEntityPreset(preset: IEntityPreset) {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'entitytypes',
-      preset.id,
-      'edit',
-    ]);
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'entitytypes', preset.id, 'edit']);
   }
 
   public selectConceptType(conceptType: IConceptType) {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'concepttypes',
-      conceptType.id,
-      'edit',
-    ]);
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepttypes', conceptType.id, 'edit']);
   }
 
   public async createEntityPreset() {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'entitytypes',
-      'create',
-    ]);
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'entitytypes', 'create']);
   }
 
   public createConceptType() {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'concepttypes',
-      'create',
-    ]);
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepttypes', 'create']);
   }
 
   public async save() {
@@ -115,6 +87,7 @@ export class CampaignSettingsComponent
           experienceTable: v.experienceTable,
           userId: this.login.id,
           currencyMap: v.currencyMap,
+          trackCoins: v.trackCoins,
           id: this.campaign.id,
         };
 
@@ -136,6 +109,7 @@ export class CampaignSettingsComponent
           imageId: v.imageId,
           experienceTable: v.experienceTable,
           currencyMap: v.currencyMap,
+          trackCoins: v.trackCoins,
           userId: this.login.id,
           id: '',
         });
@@ -156,8 +130,7 @@ export class CampaignSettingsComponent
   public async delete() {
     const confirmation = await Swal.fire({
       title: 'Are you sure?',
-      text:
-        'This will completely delete this campaign and everything that goes along with it. This cannot be undone!',
+      text: 'This will completely delete this campaign and everything that goes along with it. This cannot be undone!',
       showCancelButton: true,
       cancelButtonText: 'Back to safety',
       confirmButtonText: '☢️ Nuke It',
@@ -186,12 +159,7 @@ export class CampaignSettingsComponent
   public async import(evt) {
     const file: File = evt.target.files[0];
 
-    const validType =
-      [
-        'application/zip',
-        'application/x-zip-compressed',
-        'multipart/x-zip',
-      ].indexOf(file.type) !== -1;
+    const validType = ['application/zip', 'application/x-zip-compressed', 'multipart/x-zip'].indexOf(file.type) !== -1;
 
     if (!validType) {
       Swal.fire({

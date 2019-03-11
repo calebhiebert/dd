@@ -1,15 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ElementRef,
-  ViewChild,
-  AfterContentInit,
-  Input,
-  forwardRef,
-  ComponentRef,
-  EventEmitter,
-  Output,
-} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterContentInit, Input, forwardRef, EventEmitter, Output } from '@angular/core';
 import Quill from 'quill';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CampaignService } from '../campaign.service';
@@ -17,13 +6,14 @@ import { Router } from '@angular/router';
 import { ArticleService } from '../article.service';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import Popper from 'popper.js';
+import Tooltip from 'tooltip.js';
+
 import { LoginService } from '../login.service';
 import { environment } from 'src/environments/environment';
 import { SearchService, SearchObjectType } from '../search.service';
 import { DynComponentService } from '../dyn-component.service';
-import { UserViewMiniComponent } from '../account/user-view-mini/user-view-mini.component';
 import { Chance } from 'chance';
+import { UserViewMiniComponent } from '../account/user-view-mini/user-view-mini.component';
 
 @Component({
   selector: 'dd-quill',
@@ -37,8 +27,7 @@ import { Chance } from 'chance';
     },
   ],
 })
-export class QuillComponent
-  implements OnInit, AfterContentInit, ControlValueAccessor {
+export class QuillComponent implements OnInit, AfterContentInit, ControlValueAccessor {
   @Input()
   public readOnly: boolean;
 
@@ -86,102 +75,92 @@ export class QuillComponent
     private http: HttpClient,
     private searchService: SearchService,
     private componentService: DynComponentService
-  ) { }
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   ngAfterContentInit() {
-    this._quill = new Quill(
-      this._container.nativeElement,
-      this.getQuillSettings()
-    );
-
     if (this.readOnly) {
-      this._container.nativeElement
-        .querySelectorAll('.ql-editor')
-        .forEach((n) => {
-          n.classList.add('p-0');
-        });
     } else {
+      this._quill = new Quill(this._container.nativeElement, this.getQuillSettings());
+
       this._cursors = this._quill.getModule('cursors');
-    }
 
-    this._quill.on('text-change', (delta, oldDelta, source) => {
-      if ((source === 'user' || source === 'api') && this._onChange) {
-        const contents = this._quill.getContents();
+      this._quill.on('text-change', (delta, oldDelta, source) => {
+        if ((source === 'user' || source === 'api') && this._onChange) {
+          const contents = this._quill.getContents();
 
-        if (
-          contents.ops &&
-          contents.ops.length > 0 &&
-          contents.ops[0].insert !== '\n'
-        ) {
-          this._onChange(contents);
-          this.textChange.emit(delta);
-        } else {
-          this._onChange(null);
-        }
-      }
-    });
-
-    this._quill.on('selection-change', (range, oldRange, source) => {
-      if ((source === 'user' || source === 'api') && this._onTouched) {
-        this._onTouched();
-        this.selectionChange.emit(range);
-      }
-    });
-
-    while (this._writeQueue.length > 0) {
-      this.writeValue(this._writeQueue.pop());
-    }
-
-    if (this.cursorUpdates) {
-      this.cursorUpdates.subscribe((cu) => {
-        if (!this._cursorCollection[cu.id] && cu.range) {
-          const chance = new Chance(cu.id);
-
-          this._cursorCollection[cu.id] = this._cursors.createCursor(
-            cu.id,
-            cu.displayName,
-            chance.color({ format: 'hex' })
-          );
-        }
-
-        if (cu.range) {
-          this._cursors.moveCursor(cu.id, cu.range);
-        } else if (this._cursorCollection[cu.id]) {
-          this._cursors.removeCursor(cu.id);
+          if (contents.ops && contents.ops.length > 0 && contents.ops[0].insert !== '\n') {
+            this._onChange(contents);
+            this.textChange.emit(delta);
+          } else {
+            this._onChange(null);
+          }
         }
       });
-    }
 
-    if (this.deltaUpdates) {
-      this.deltaUpdates.subscribe((du) => {
-        if (this._quill) {
-          this._quill.updateContents(du.ops, 'colab');
+      this._quill.on('selection-change', (range, oldRange, source) => {
+        if ((source === 'user' || source === 'api') && this._onTouched) {
+          this._onTouched();
+          this.selectionChange.emit(range);
         }
       });
-    }
 
-    this._selectionUpdateInterval = setInterval(() => {
-      this.selectionChange.emit(this._quill.getSelection());
-    }, 1500);
+      while (this._writeQueue.length > 0) {
+        this.writeValue(this._writeQueue.pop());
+      }
+
+      if (this.cursorUpdates) {
+        this.cursorUpdates.subscribe((cu) => {
+          if (!this._cursorCollection[cu.id] && cu.range) {
+            const chance = new Chance(cu.id);
+
+            this._cursorCollection[cu.id] = this._cursors.createCursor(cu.id, cu.displayName, chance.color({ format: 'hex' }));
+          }
+
+          if (cu.range) {
+            this._cursors.moveCursor(cu.id, cu.range);
+          } else if (this._cursorCollection[cu.id]) {
+            this._cursors.removeCursor(cu.id);
+          }
+        });
+      }
+
+      if (this.deltaUpdates) {
+        this.deltaUpdates.subscribe((du) => {
+          if (this._quill) {
+            this._quill.updateContents(du.ops, 'colab');
+          }
+        });
+      }
+
+      this._selectionUpdateInterval = setInterval(() => {
+        this.selectionChange.emit(this._quill.getSelection());
+      }, 1500);
+    }
   }
 
   writeValue(obj: any): void {
-    if (!this._quill) {
+    // Editor is in edit mode and editor not initialized yet
+    if (!this._quill && !this.readOnly) {
       this._writeQueue.push(obj);
+      return;
+    }
+
+    if (this.readOnly) {
+      this.renderQuillHTML(obj).then((html) => {
+        this._container.nativeElement.innerHTML = html;
+
+        setTimeout(() => {
+          this.setupMentions();
+        }, 1);
+      });
     } else {
       if (obj !== null && obj !== undefined) {
         this._quill.setContents(obj.ops, 'form');
 
-        if (this.readOnly) {
-          this.setupMentions();
-        }
-
         this.setupImages(this._container.nativeElement.querySelectorAll('img'));
-        this.setupTables(
-          this._container.nativeElement.querySelectorAll('table')
-        );
+        this.setupTables(this._container.nativeElement.querySelectorAll('table'));
       } else {
         this._quill.setContents([], 'form');
       }
@@ -196,7 +175,7 @@ export class QuillComponent
     this._onTouched = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void { }
+  setDisabledState?(isDisabled: boolean): void {}
 
   private getQuillSettings() {
     const base: any = {
@@ -284,36 +263,28 @@ export class QuillComponent
 
             switch (item.type) {
               case SearchObjectType.ARTICLE:
-                html += `<span><i class="icon icon-bookmark"></i> ${
-                  item.obj.name
-                  } ${!item.obj.published ? labelHTML('Hidden') : ''}</span>`;
+                html += `<span><i class="icon icon-bookmark"></i> ${item.obj.name} ${
+                  !item.obj.published ? labelHTML('Hidden') : ''
+                }</span>`;
                 break;
               case SearchObjectType.ENTITY:
-                html += `<span><i class="icon icon-emoji"></i> ${
-                  item.obj.name
-                  }</span>`;
+                html += `<span><i class="icon icon-emoji"></i> ${item.obj.name}</span>`;
                 break;
               case SearchObjectType.MAP:
-                html += `<span><i class="icon icon-location"></i> ${
-                  item.obj.name
-                  } ${!item.obj.playerVisible ? labelHTML('Hidden') : ''}</span>`;
+                html += `<span><i class="icon icon-location"></i> ${item.obj.name} ${
+                  !item.obj.playerVisible ? labelHTML('Hidden') : ''
+                }</span>`;
                 break;
               case SearchObjectType.QUEST:
-                html += `<span><i class="icon icon-flag"></i> ${
-                  item.obj.name
-                  } ${!item.obj.visible ? ' ' + labelHTML('Hidden') : ''}${
+                html += `<span><i class="icon icon-flag"></i> ${item.obj.name} ${!item.obj.visible ? ' ' + labelHTML('Hidden') : ''}${
                   !item.obj.visible ? ' ' + labelHTML('Unavailable') : ''
-                  }</span>`;
+                }</span>`;
                 break;
               case SearchObjectType.USER:
-                html += `<span><i class="icon icon-people"></i> ${
-                  item.obj.username
-                  }</span>`;
+                html += `<span><i class="icon icon-people"></i> ${item.obj.username}</span>`;
                 break;
               case 'create-article':
-                html += `<span><i class="icon icon-plus"></i> ${
-                  item.value
-                  }</span>`;
+                html += `<span><i class="icon icon-plus"></i> ${item.value}</span>`;
                 break;
             }
 
@@ -342,9 +313,7 @@ export class QuillComponent
                 if (
                   (await Swal.fire({
                     title: 'Create new article?',
-                    text: `A new article with the name ${
-                      item['value']
-                      } will be created`,
+                    text: `A new article with the name ${item['value']} will be created`,
                     showCancelButton: true,
                   })).value === true
                 ) {
@@ -387,17 +356,7 @@ export class QuillComponent
       base.modules.cursors = true;
 
       if (this.simple) {
-        base.modules.toolbar = [
-          [
-            'bold',
-            'italic',
-            'underline',
-            'strike',
-            { list: 'ordered' },
-            { list: 'bullet' },
-            'blockquote',
-          ],
-        ];
+        base.modules.toolbar = [['bold', 'italic', 'underline', 'strike', { list: 'ordered' }, { list: 'bullet' }, 'blockquote']];
       } else {
         base.modules.imageUploader = {
           upload: async (file) => {
@@ -405,9 +364,7 @@ export class QuillComponent
             form.append('file', file);
             form.append('campaignId', this.campaignService.campaign.id);
 
-            const result = await this.http
-              .post(`${environment.apiURL}/upload`, form)
-              .toPromise();
+            const result = await this.http.post(`${environment.apiURL}/upload`, form).toPromise();
 
             return result['secure_url'];
           },
@@ -415,6 +372,17 @@ export class QuillComponent
       }
     }
     return base;
+  }
+
+  private renderQuillHTML(delta: any): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const node = document.createElement('div');
+      const quill = new Quill(node, this.getQuillSettings());
+      quill.setContents(delta.ops);
+      setTimeout(() => {
+        resolve((node.firstChild as HTMLElement).innerHTML);
+      }, 1);
+    });
   }
 
   private setupMentions() {
@@ -425,111 +393,69 @@ export class QuillComponent
       return el;
     };
 
-    this._container.nativeElement
-      .querySelectorAll(`[data-type="${SearchObjectType.ARTICLE}"]`)
-      .forEach((node: HTMLSpanElement) => {
-        const id = node.dataset.id;
+    this._container.nativeElement.querySelectorAll(`[data-type="${SearchObjectType.ARTICLE}"]`).forEach((node: HTMLSpanElement) => {
+      const id = node.dataset.id;
 
-        node.prepend(getIconEl('icon-bookmark'));
-
-        node.addEventListener('click', () => {
-          this.router.navigate([
-            'campaigns',
-            this.campaignService.campaign.id,
-            'articles',
-            id,
-          ]);
-        });
+      node.addEventListener('click', () => {
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'articles', id]);
       });
+    });
 
-    this._container.nativeElement
-      .querySelectorAll(`[data-type="${SearchObjectType.ENTITY}"]`)
-      .forEach((node: HTMLSpanElement) => {
-        const id = node.dataset.id;
+    this._container.nativeElement.querySelectorAll(`[data-type="${SearchObjectType.ENTITY}"]`).forEach((node: HTMLSpanElement) => {
+      const id = node.dataset.id;
 
-        node.prepend(getIconEl('icon-emoji'));
-
-        node.addEventListener('click', () => {
-          this.router.navigate([
-            'campaigns',
-            this.campaignService.campaign.id,
-            'entities',
-            id,
-          ]);
-        });
+      node.addEventListener('click', () => {
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'entities', id]);
       });
+    });
 
-    this._container.nativeElement
-      .querySelectorAll(`[data-type="${SearchObjectType.MAP}"]`)
-      .forEach((node: HTMLSpanElement) => {
-        const id = node.dataset.id;
+    this._container.nativeElement.querySelectorAll(`[data-type="${SearchObjectType.MAP}"]`).forEach((node: HTMLSpanElement) => {
+      const id = node.dataset.id;
 
-        node.prepend(getIconEl('icon-location'));
-
-        node.addEventListener('click', () => {
-          this.router.navigate([
-            'campaigns',
-            this.campaignService.campaign.id,
-            'maps',
-            id,
-          ]);
-        });
+      node.addEventListener('click', () => {
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'maps', id]);
       });
+    });
 
-    this._container.nativeElement
-      .querySelectorAll(`[data-type="${SearchObjectType.QUEST}"]`)
-      .forEach((node: HTMLSpanElement) => {
-        const id = node.dataset.id;
+    this._container.nativeElement.querySelectorAll(`[data-type="${SearchObjectType.QUEST}"]`).forEach((node: HTMLSpanElement) => {
+      const id = node.dataset.id;
 
-        node.prepend(getIconEl('icon-flag'));
-
-        node.addEventListener('click', () => {
-          this.router.navigate([
-            'campaigns',
-            this.campaignService.campaign.id,
-            'quests',
-            id,
-          ]);
-        });
+      node.addEventListener('click', () => {
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'quests', id]);
       });
+    });
 
-    this._container.nativeElement
-      .querySelectorAll(`[data-type="${SearchObjectType.USER}"]`)
-      .forEach((node: HTMLSpanElement) => {
-        const id = node.dataset.id;
-        let popper;
-        let popperEl: HTMLDivElement;
-        let component: ComponentRef<any>;
+    this._container.nativeElement.querySelectorAll(`[data-type="${SearchObjectType.USER}"]`).forEach((node: HTMLSpanElement) => {
+      const id = node.dataset.id;
 
-        node.prepend(getIconEl('icon-people'));
+      const user = this.campaignService.campaign.members.find((m) => m.userId === id);
 
-        node.addEventListener('mouseenter', () => {
-          popperEl = document.createElement('div');
-          popperEl.classList.add('card');
-          popperEl.classList.add('p-2');
-          document.body.appendChild(popperEl);
-
-          component = this.componentService.getComponent(UserViewMiniComponent);
-          component.instance.userId = id;
-
-          popperEl.appendChild(this.componentService.getRootNode(component));
-
-          popper = new Popper(node, popperEl, {
-            placement: 'top',
-          });
-          (component.instance as UserViewMiniComponent).valueUpdate.subscribe(
-            () => {
-              popper.scheduleUpdate();
-            }
-          );
+      if (user) {
+        const tooltip = new Tooltip(node, {
+          trigger: 'click hover',
+          html: true,
+          title: 'Top',
+          placement: 'top-end',
+          template: `<div class="tooltip-on-top card" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>`,
+          popperOptions: {
+            placement: 'top-end',
+            modifiers: {
+              flip: {
+                behavior: ['bottom', 'top', 'left', 'right'],
+              },
+              preventOverflow: {
+                boundariesElement: document.getElementById('app-content'),
+              },
+            },
+          },
         });
 
-        node.addEventListener('mouseleave', () => {
-          component.destroy();
-          popper.destroy();
-          document.body.removeChild(popperEl);
-        });
-      });
+        const component = this.componentService.getComponent(UserViewMiniComponent);
+        component.instance.user = user.user;
+
+        tooltip.updateTitleContent(this.componentService.getRootNode(component));
+      }
+    });
   }
 
   private setupTables(nodes: NodeListOf<HTMLTableElement>) {

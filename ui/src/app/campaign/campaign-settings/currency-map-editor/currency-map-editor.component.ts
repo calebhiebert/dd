@@ -20,9 +20,7 @@ export class CurrencyMapEditorComponent implements OnInit {
 
   ngOnInit() {
     if (this.campaign.currencyMap) {
-      this.items = new FormArray(
-        this.campaign.currencyMap.map(this.getFormGroup)
-      );
+      this.items = new FormArray(this.campaign.currencyMap.map(this.getFormGroup));
     } else {
       this.items = new FormArray(
         [
@@ -35,7 +33,7 @@ export class CurrencyMapEditorComponent implements OnInit {
     }
 
     this.formGroup.addControl('currencyMap', this.items);
-    this.formGroup.addControl('trackCoins', new FormControl(false));
+    this.formGroup.addControl('trackCoins', new FormControl(this.campaign.trackCoins));
 
     this.items.controls[0].get('value').disable();
     this.items.controls[0].get('useInConversions').disable();
@@ -43,14 +41,8 @@ export class CurrencyMapEditorComponent implements OnInit {
 
   private getFormGroup(cl: ICurrencyLevel) {
     return new FormGroup({
-      name: new FormControl(cl.name, [
-        Validators.required,
-        Validators.maxLength(20),
-      ]),
-      value: new FormControl(cl.value, [
-        Validators.required,
-        Validators.min(0.01),
-      ]),
+      name: new FormControl(cl.name, [Validators.required, Validators.maxLength(20)]),
+      value: new FormControl(cl.value, [Validators.required, Validators.min(0.01)]),
       useInConversions: new FormControl(cl.useInConversions),
     });
   }
@@ -60,9 +52,7 @@ export class CurrencyMapEditorComponent implements OnInit {
   }
 
   public addCurrencyLevel() {
-    this.items.push(
-      this.getFormGroup({ name: null, value: null, useInConversions: true })
-    );
+    this.items.push(this.getFormGroup({ name: null, value: null, useInConversions: true }));
   }
 
   public get controls() {

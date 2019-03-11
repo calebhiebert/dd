@@ -67,6 +67,6 @@ namespace net_api.Models
 
     public enum ObjectType
     {
-        Entity, Article, Map, Quest, User
+        Entity, LegacyItems, LegacySpells, Article, Map, Quest, User
     }
 }
