@@ -6,13 +6,22 @@
   <!-- Title Controls -->
   <div class="columns" *ngIf="concept">
     <div class="column col-auto">
-      <img class="s-rounded" width="64" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-          concept.imageId
-        }}" *ngIf="concept.imageId" alt="Item Picture" />
+      <img
+        class="s-rounded"
+        width="64"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ concept.imageId }}"
+        *ngIf="concept.imageId"
+        alt="Item Picture"
+      />
 
       <!-- Fallback Image -->
-      <img class="s-rounded" width="64" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/winged-sword"
-        *ngIf="!concept.imageId" alt="Item Fallback Picture" />
+      <img
+        class="s-rounded"
+        width="64"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/winged-sword"
+        *ngIf="!concept.imageId"
+        alt="Item Fallback Picture"
+      />
     </div>
     <div class="column">
       <h2 class="mb-0">{{ concept.name }}</h2>
@@ -27,17 +36,22 @@
   <!-- Data View -->
   <div class="columns mt-2" *ngIf="concept">
     <div class="column col-4 hide-md" *ngIf="concept.imageId">
-      <img class="img-responsive s-rounded" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
-          concept.imageId
-        }}" [alt]="'picture of' + concept.name" />
+      <img
+        class="img-responsive s-rounded"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{ concept.imageId }}"
+        [alt]="'picture of' + concept.name"
+      />
     </div>
-    <div class="column col-md-12" [ngClass]="{
+    <div
+      class="column col-md-12"
+      [ngClass]="{
         'col-8': concept.imageId !== null,
         'col-12': concept.imageId === null
-      }">
-
+      }"
+    >
       <!-- Description -->
-      <dd-quill [value]="concept.content" readOnly="true"></dd-quill>
+      <dd-quill [value]="concept.content" readOnly="true" *ngIf="concept.content"></dd-quill>
+      <p *ngIf="!concept.content" class="text-italic text-center">There is nothing here...</p>
 
       <!-- Formatted Text Fields -->
       <div class="mt-2" *ngFor="let ftf of formattedTextFields">
@@ -53,7 +67,7 @@
       </div>
 
       <!-- Field Table -->
-      <table class="table">
+      <table class="table" *ngIf="tableFields.length > 0">
         <thead>
           <th>Field</th>
           <th>Value</th>
@@ -69,9 +83,11 @@
 
     <!-- Lower full size image -->
     <div class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2" *ngIf="concept.imageId">
-      <img class="img-responsive s-rounded" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
-          concept.imageId
-        }}" [alt]="'picture of' + concept.name" />
+      <img
+        class="img-responsive s-rounded"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{ concept.imageId }}"
+        [alt]="'picture of' + concept.name"
+      />
     </div>
   </div>
 </div>

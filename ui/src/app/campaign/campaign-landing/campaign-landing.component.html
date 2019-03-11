@@ -18,19 +18,11 @@
     </div>
     <div class="column col-auto col-ml-auto hide-md">
       <div class="dropdown dropdown-right">
-        <button class="btn btn-link dropdown-toggle">
-          Menu <i class="icon icon-caret"></i>
-        </button>
+        <button class="btn btn-link dropdown-toggle">Menu <i class="icon icon-caret"></i></button>
 
         <ul class="menu">
           <li class="menu-item" *ngFor="let ep of entityPresets">
-            <a [routerLink]="[
-                '/campaigns',
-                campaign.id,
-                'entities',
-                ep.id,
-                'create'
-              ]">Create {{ ep.name }}</a>
+            <a [routerLink]="['/campaigns', campaign.id, 'entities', ep.id, 'create']">Create {{ ep.name }}</a>
           </li>
           <li class="menu-item" *ngIf="editable">
             <a [routerLink]="['/campaigns', campaign.id, 'settings']">Settings</a>
@@ -73,9 +65,7 @@
               <div class="tile-title">{{ u.user.username }}</div>
               <div class="d-flex">
                 <span class="chip hoverable-chip" (click)="selectEntity(e)" *ngFor="let e of userEntities(u.user.id)">
-                  <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-                      e.imageId
-                    }}" class="avatar avatar-sm" />
+                  <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}" class="avatar avatar-sm" />
                   {{ e.name }}
                 </span>
               </div>
@@ -107,7 +97,14 @@
 
       <!-- Quick Links -->
       <div class="card mt-2 p-2">
-
+        <button
+          class="btn"
+          *ngFor="let ct of campaign.conceptTypes; let idx = index"
+          [routerLink]="['/campaigns', campaign.id, 'concepts', ct.id, 'manage']"
+          [ngClass]="{ 'mb-2': idx !== campaign.conceptTypes.length - 1 }"
+        >
+          {{ ct.pluralForm }}
+        </button>
       </div>
 
       <div class="mt-2">
