@@ -163,4 +163,14 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
       return this.formArray.controls;
     }
   }
+
+  public get singleInputName() {
+    const baseLevel = this.levels.find((lvl) => lvl.value === 1);
+
+    if (baseLevel) {
+      return baseLevel.name;
+    } else {
+      return 'gp';
+    }
+  }
 }
