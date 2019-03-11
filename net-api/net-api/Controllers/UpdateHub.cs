@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using net_api.Models;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -102,6 +103,33 @@ namespace net_api.Controllers
 
             await Clients.GroupExcept($"note-{noteId.ToString()}", Context.ConnectionId)
                 .SendAsync("NoteDeltaUpdate", new { Id = noteId, Delta = delta });
+        }
+
+        public async Task SubscribeEntities(Guid[] entityIds)
+        {
+            var entities = await _context.Entities
+                .Where(e => entityIds.Contains(e.Id))
+                    .Include(e => e.Campaign)
+                        .ThenInclude(c => c.Members)
+                .ToListAsync();
+
+            foreach (var entity in entities)
+            {
+                var authResult = await _auth.AuthorizeAsync(Context.User, entity.Campaign, "CampaignViewPolicy");
+
+                if (authResult.Succeeded)
+                {
+                    await Groups.AddToGroupAsync(Context.ConnectionId, $"entity-{entity.Id.ToString()}");
+                }
+            }
+        }
+
+        public async Task UnsubscribeEntities(Guid[] entityIds)
+        {
+            foreach (var entityId in entityIds)
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"entity-{entityId.ToString()}");
+            }
         }
     }
 }

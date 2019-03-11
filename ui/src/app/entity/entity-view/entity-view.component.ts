@@ -8,6 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { LoginService } from 'src/app/login.service';
 import { CurrencyService } from 'src/app/currency.service';
 import { DynamicFieldType } from 'src/app/dynform/form-types';
+import { UpdateHubService } from 'src/app/update-hub.service';
 
 @Component({
   selector: 'dd-entity-view',
@@ -29,8 +30,8 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private login: LoginService,
     private router: Router,
-    private currencyService: CurrencyService
-  ) {}
+    private update: UpdateHubService,
+  ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -40,6 +41,10 @@ export class EntityViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.entityService.currentViewEntity = null;
+
+    if (this.entity) {
+      this.update.unsubscribeEntities([this.entity.id]);
+    }
   }
 
   private getEntityAttribute(name: string): IEntityAttribute {
@@ -66,6 +71,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     try {
       const ent = await this.entityService.getEntity(id);
       this.entityService.currentViewEntity = ent;
+      this.update.subscribeEntities([ent.id]);
     } catch (err) {
       throw err;
     }

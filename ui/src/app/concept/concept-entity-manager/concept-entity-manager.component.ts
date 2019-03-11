@@ -107,7 +107,12 @@ export class ConceptEntityManagerComponent implements OnInit {
         fields: []
       };
 
-      this.conceptEntities.push(conceptEntity);
+      const existingConceptEntity = this.conceptEntities
+        .find(ce => ce.conceptId === conceptEntity.conceptId && ce.entityId === conceptEntity.entityId);
+
+      if (existingConceptEntity === undefined) {
+        this.conceptEntities.push(conceptEntity);
+      }
 
       this.working = true;
 
@@ -162,7 +167,9 @@ export class ConceptEntityManagerComponent implements OnInit {
 
     try {
       this.conceptEntities = this.conceptEntities.filter(ce => {
-        return ce.conceptId !== conceptEntity.conceptId && ce.entityId !== conceptEntity.entityId;
+        const match = ce.conceptId === conceptEntity.conceptId && ce.entityId === conceptEntity.entityId;
+
+        return !match;
       });
 
       this.viewAndEditModal.close(null);

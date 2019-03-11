@@ -123,6 +123,14 @@ export class UpdateHubService {
       this.noteDeltaUpdate.emit(ndu);
     });
 
+    this.connection.on('ConceptEntityUpdate', (ce) => {
+      console.log('UD', ce);
+    });
+
+    this.connection.on('ConceptEntityDelete', (ce) => {
+      console.log('DEL', ce);
+    });
+
     await this.authenticate();
   }
 
@@ -293,6 +301,32 @@ export class UpdateHubService {
         campaignId
       );
       this._isCampaignSubscribed = false;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  public async subscribeEntities(entityIds: string[]) {
+    if (this.state !== ConnectionState.CONNECTED) {
+      console.warn('Not in connected state');
+      return;
+    }
+
+    try {
+      const res = await this.connection.invoke('SubscribeEntities', entityIds);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  public async unsubscribeEntities(entityIds: string[]) {
+    if (this.state !== ConnectionState.CONNECTED) {
+      console.warn('Not in connected state');
+      return;
+    }
+
+    try {
+      const res = await this.connection.invoke('UnsubscribeEntities', entityIds);
     } catch (err) {
       throw err;
     }

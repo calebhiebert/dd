@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
 
@@ -18,11 +19,13 @@ namespace net_api.Controllers
     {
         private readonly Context _context;
         private readonly IAuthorizationService _auth;
+        private readonly IHubContext<UpdateHub> _hub;
 
-        public ConceptEntitiesController(Context context, IAuthorizationService auth)
+        public ConceptEntitiesController(Context context, IAuthorizationService auth, IHubContext<UpdateHub> hub)
         {
             _context = context;
             _auth = auth;
+            _hub = hub;
         }
 
         // GET: api/ConceptEntities
@@ -110,6 +113,10 @@ namespace net_api.Controllers
                 .Reference(i => i.Concept)
                 .LoadAsync();
 
+            await _hub.Clients
+                .Group($"entity-{conceptEntity.EntityId}")
+                .SendAsync("ConceptEntityUpdate", conceptEntity);
+
             return Ok(conceptEntity);
         }
 
@@ -132,6 +139,10 @@ namespace net_api.Controllers
 
             _context.ConceptEntities.Remove(conceptEntity);
             await _context.SaveChangesAsync();
+
+            await _hub.Clients
+                .Group($"entity-{conceptEntity.EntityId}")
+                .SendAsync("ConceptEntityDelete", conceptEntity);
 
             return conceptEntity;
         }
