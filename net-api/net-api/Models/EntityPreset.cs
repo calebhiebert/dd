@@ -146,8 +146,6 @@ namespace net_api.Models
 
         [Required]
         public bool AmountHidden { get; set; }
-
-        public Dictionary<int, string> TextDamageLevels { get; set; }
     }
 
     public enum AttributeType

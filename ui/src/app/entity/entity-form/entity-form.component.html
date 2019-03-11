@@ -138,7 +138,7 @@
         </div>
 
         <!-- For Normal Health -->
-        <div class="column">
+        <div class="column" [hidden]="hpType.value !== '0' && hpType.value !== 0">
           <div class="form-group">
             <label for="bar-type" class="form-label">HP Bar Type</label>
             <select formControlName="colorType" name="bar-type" id="bar-type" class="form-input">
@@ -149,7 +149,8 @@
         </div>
 
         <!-- Static Bar Color -->
-        <div class="column" *ngIf="hpColorType.value === '1' || hpColorType.value === 1">
+        <div class="column" *ngIf="hpColorType.value === '1' || hpColorType.value === 1"
+          [hidden]="hpType.value !== '0' && hpType.value !== 0">
           <div class="form-group">
             <label for="bar-color" class="form-label">Bar Color</label>
             <input formControlName="staticColor" type="color" name="bar-color" id="bar-color" class="form-input" />
@@ -157,7 +158,7 @@
         </div>
 
         <!-- HP Visibility -->
-        <div class="column">
+        <div class="column" [hidden]="hpType.value !== '0' && hpType.value !== 0">
           <div class="form-group">
             <label class="form-label">Visibility</label>
             <label class="form-checkbox">

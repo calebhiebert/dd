@@ -136,13 +136,12 @@ export interface IHealthPreset {
   amountHidden: boolean;
   colorType?: HealthColorType;
   staticColor?: string;
-  textDamageLevels?: { [key: number]: string };
 }
 
 export interface IHealth {
   max: number;
   current: number;
-  bars?: number[];
+  textDamageLevels?: { [key: number]: string };
 }
 
 export interface IViewAttribute {

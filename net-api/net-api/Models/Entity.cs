@@ -169,7 +169,7 @@ namespace net_api.Models
         [Required]
         public double Current { get; set; }
 
-        public double[] Bars { get; set; }
+        public Dictionary<int, string> TextDamageLevels { get; set; }
     }
 }
 
