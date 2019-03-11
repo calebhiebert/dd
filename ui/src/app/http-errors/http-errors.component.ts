@@ -23,6 +23,10 @@ export class HttpErrorsComponent implements OnInit {
   }
 
   private parseError(err: any) {
+    if (err === undefined || err === null) {
+      return;
+    }
+
     if (err.status && err.status === 404) {
       this.errType = ErrorType.HTTP_404;
     } else {
