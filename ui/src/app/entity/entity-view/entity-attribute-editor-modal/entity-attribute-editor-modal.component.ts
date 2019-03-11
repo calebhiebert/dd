@@ -5,6 +5,7 @@ import { AttributeType } from 'src/app/attributes';
 import { numberValidator } from '../../dynamic-attribute-form/dynamic-attribute-form.component';
 import { IEntityAttribute } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
+import { IDynamicFieldConfig } from 'src/app/dynform/form-types';
 
 @Component({
   selector: 'dd-entity-attribute-editor-modal',
@@ -13,12 +14,10 @@ import { CampaignService } from 'src/app/campaign.service';
 })
 export class EntityAttributeEditorModalComponent implements OnInit {
   @ViewChild('modal')
-  public modal: ModalComponent<string | null>;
-
-  @ViewChild('input')
-  public input: ElementRef<HTMLInputElement>;
+  public modal: ModalComponent<any>;
 
   public attribute: IEntityAttribute;
+  public config: IDynamicFieldConfig;
 
   public control: FormControl;
 
@@ -26,19 +25,17 @@ export class EntityAttributeEditorModalComponent implements OnInit {
 
   ngOnInit() {}
 
-  public async editAttribute(
-    attribute: IEntityAttribute,
-    currentValue?: string
-  ): Promise<string | null> {
+  public async editAttribute(attribute?: IEntityAttribute, config?: IDynamicFieldConfig, currentValue?: any): Promise<any> {
     this.attribute = attribute;
-    this.setupControl(currentValue);
-    setTimeout(() => {
-      if (this.input) {
-        this.input.nativeElement.focus();
-      }
-    }, 1);
+    this.config = config;
 
-    return this.modal.open();
+    this.control = new FormControl(currentValue);
+
+    return this.modal.open().then((res) => {
+      this.config = undefined;
+      this.attribute = undefined;
+      return res;
+    });
   }
 
   public ok() {
@@ -51,35 +48,5 @@ export class EntityAttributeEditorModalComponent implements OnInit {
 
   public cancel() {
     this.modal.close(null);
-  }
-
-  public setupControl(currentValue?: string) {
-    const validators: ValidatorFn[] = [];
-
-    if (this.attribute.type === AttributeType.STRING) {
-      if (this.attribute.min !== undefined && this.attribute.min !== null) {
-        validators.push(Validators.minLength(this.attribute.min));
-      }
-
-      if (this.attribute.max !== undefined && this.attribute.max !== null) {
-        validators.push(Validators.maxLength(this.attribute.max));
-      }
-    } else if (this.attribute.type === AttributeType.NUMBER) {
-      if (this.attribute.min !== undefined && this.attribute.min !== null) {
-        validators.push(Validators.min(this.attribute.min));
-      }
-
-      if (this.attribute.max !== undefined && this.attribute.max !== null) {
-        validators.push(Validators.max(this.attribute.max));
-      }
-
-      validators.push(numberValidator);
-    }
-
-    if (this.attribute.required) {
-      validators.push(Validators.required);
-    }
-
-    this.control = new FormControl(currentValue, validators);
   }
 }

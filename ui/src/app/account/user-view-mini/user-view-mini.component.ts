@@ -25,8 +25,6 @@ export class UserViewMiniComponent implements OnInit {
   ngOnInit() {
     if (!this.user) {
       this.load();
-    } else {
-      console.log(this.user);
     }
   }
 

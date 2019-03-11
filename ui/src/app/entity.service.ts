@@ -11,21 +11,14 @@ import { environment } from 'src/environments/environment';
 export class EntityService {
   private _currentViewEntity: IEntity = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   public async updateEntityPreset(entityPreset: IEntityPreset): Promise<void> {
-    return this.http
-      .put<void>(
-        `${environment.apiURL}/entitypresets/${entityPreset.id}`,
-        entityPreset
-      )
-      .toPromise();
+    return this.http.put<void>(`${environment.apiURL}/entitypresets/${entityPreset.id}`, entityPreset).toPromise();
   }
 
   // Creates a blank entity preset and returns the ID
-  public async createEntityPreset(
-    preset: IEntityPreset
-  ): Promise<IEntityPreset> {
+  public async createEntityPreset(preset: IEntityPreset): Promise<IEntityPreset> {
     return this.http
       .post<IEntityPreset>(`${environment.apiURL}/entitypresets`, {
         ...preset,
@@ -35,33 +28,17 @@ export class EntityService {
   }
 
   public async getEntityPreset(id: string): Promise<IEntityPreset> {
-    return this.http
-      .get<IEntityPreset>(`${environment.apiURL}/entitypresets/${id}`)
-      .toPromise();
+    return this.http.get<IEntityPreset>(`${environment.apiURL}/entitypresets/${id}`).toPromise();
   }
 
-  public async deleteEntityPreset(
-    campaignId: string,
-    entityPresetId: string
-  ): Promise<void> { }
+  public async deleteEntityPreset(campaignId: string, entityPresetId: string): Promise<void> {}
 
   public async getEntity(id: string): Promise<IEntity> {
-    return this.http
-      .get<IEntity>(`${environment.apiURL}/entities/${id}`)
-      .toPromise();
+    return this.http.get<IEntity>(`${environment.apiURL}/entities/${id}`).toPromise();
   }
 
-  public async getEntities(
-    campaignId: string,
-    spawnable: boolean = false
-  ): Promise<IEntity[]> {
-    return this.http
-      .get<IEntity[]>(
-        `${
-        environment.apiURL
-        }/entities?campaignId=${campaignId}&spawnable=${spawnable}`
-      )
-      .toPromise();
+  public async getEntities(campaignId: string, spawnable: boolean = false): Promise<IEntity[]> {
+    return this.http.get<IEntity[]>(`${environment.apiURL}/entities?campaignId=${campaignId}&spawnable=${spawnable}`).toPromise();
   }
 
   public async createEntity(entity: IEntity): Promise<IEntity> {
@@ -74,27 +51,15 @@ export class EntityService {
   }
 
   public async updateEntity(entity: IEntity): Promise<void> {
-    return this.http
-      .put<void>(`${environment.apiURL}/entities/${entity.id}`, entity)
-      .toPromise();
+    return this.http.put<void>(`${environment.apiURL}/entities/${entity.id}`, entity).toPromise();
   }
 
   public async deleteEntity(id: string): Promise<void> {
-    return this.http
-      .delete<void>(`${environment.apiURL}/entities/${id}`)
-      .toPromise();
+    return this.http.delete<void>(`${environment.apiURL}/entities/${id}`).toPromise();
   }
 
-  public async spawnSpawnable(
-    spawnableId: string,
-    count: number
-  ): Promise<void> {
-    return this.http
-      .post<void>(
-        `${environment.apiURL}/entities/spawn/${spawnableId}?count=${count}`,
-        null
-      )
-      .toPromise();
+  public async spawnSpawnable(spawnableId: string, count: number): Promise<void> {
+    return this.http.post<void>(`${environment.apiURL}/entities/spawn/${spawnableId}?count=${count}`, null).toPromise();
   }
 
   public get currentViewEntity() {
@@ -152,7 +117,7 @@ export interface IEntity {
   spawnable: boolean;
   health?: IHealth;
   xp?: number;
-  currency?: number;
+  currency?: { value?: number; values?: { [key: string]: number } };
   entityPresetId: string;
   preset?: IEntityPreset;
   mapId?: string;

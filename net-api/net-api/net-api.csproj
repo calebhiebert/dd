@@ -22,6 +22,8 @@
     <Compile Remove="Migrations\20190306202505_Concepts.Designer.cs" />
     <Compile Remove="Migrations\20190308142100_ConceptImageId.cs" />
     <Compile Remove="Migrations\20190308142100_ConceptImageId.Designer.cs" />
+    <Compile Remove="Migrations\20190311170911_EntityCurrency.cs" />
+    <Compile Remove="Migrations\20190311170911_EntityCurrency.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,14 +8,14 @@ import { LoginService } from 'src/app/login.service';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
+import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
 
 @Component({
   selector: 'dd-entity-creation-form',
   templateUrl: './entity-creation-form.component.html',
   styleUrls: ['./entity-creation-form.component.css'],
 })
-export class EntityCreationFormComponent
-  implements OnInit, ComponentCanDeactivate {
+export class EntityCreationFormComponent implements OnInit, ComponentCanDeactivate {
   public loading = false;
 
   public saving = false;
@@ -39,11 +39,7 @@ export class EntityCreationFormComponent
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      name: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(20),
-      ]),
+      name: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]),
       content: new FormControl(null),
       spawnable: new FormControl(false),
       xp: new FormControl(0, [numberValidator, Validators.min(0)]),
@@ -79,46 +75,18 @@ export class EntityCreationFormComponent
   }
 
   canDeactivate() {
-    return !this.formGroup.dirty;
+    return this.formGroup.pristine;
   }
 
   private setFormValidators() {
     if (this.preset.isXPEnabled) {
-      this.formGroup
-        .get('xp')
-        .setValidators([
-          numberValidator,
-          Validators.min(0),
-          Validators.required,
-        ]);
-    }
-
-    if (this.preset.isCurrencyEnabled) {
-      this.formGroup
-        .get('currency')
-        .setValidators([
-          numberValidator,
-          Validators.min(0),
-          Validators.required,
-        ]);
+      this.formGroup.get('xp').setValidators([numberValidator, Validators.min(0), Validators.required]);
     }
 
     if (this.preset.isHealthEnabled) {
-      this.formGroup
-        .get('health.max')
-        .setValidators([
-          numberValidator,
-          Validators.min(1),
-          Validators.required,
-        ]);
+      this.formGroup.get('health.max').setValidators([numberValidator, Validators.min(1), Validators.required]);
 
-      this.formGroup
-        .get('health.current')
-        .setValidators([
-          numberValidator,
-          Validators.min(0),
-          Validators.required,
-        ]);
+      this.formGroup.get('health.current').setValidators([numberValidator, Validators.min(0), Validators.required]);
     }
   }
 
@@ -149,9 +117,7 @@ export class EntityCreationFormComponent
       ent.health = null;
     }
 
-    for (const [k, attrData] of Object.entries(
-      this.attributesFormGroup.value
-    )) {
+    for (const [k, attrData] of Object.entries(this.attributesFormGroup.value)) {
       const preset = this.preset.attributes.find((p) => p.name === k);
 
       ent.attributes.push({
@@ -198,34 +164,29 @@ export class EntityCreationFormComponent
   }
 
   public async save() {
+    const entity = this.constructEntity();
+
     this.saving = true;
     this.formGroup.disable();
     this.attributesFormGroup.disable();
 
     if (this.editing) {
       try {
-        await this.entityService.updateEntity(this.constructEntity());
+        await this.entityService.updateEntity(entity);
 
         this.formGroup.markAsPristine();
 
-        this.router.navigate(['../'], { relativeTo: this.route });
+        this.cancel();
       } catch (err) {
         throw err;
       }
     } else {
       try {
-        const ent = await this.entityService.createEntity(
-          this.constructEntity()
-        );
+        const ent = await this.entityService.createEntity(entity);
 
         this.formGroup.markAsPristine();
 
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'entities',
-          ent.id,
-        ]);
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'entities', ent.id]);
       } catch (err) {
         throw err;
       }
@@ -248,11 +209,7 @@ export class EntityCreationFormComponent
     if (value === true) {
       try {
         await this.entityService.deleteEntity(this.entity.id);
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'overview',
-        ]);
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'overview']);
       } catch (err) {
         throw err;
       }
@@ -267,9 +224,7 @@ export class EntityCreationFormComponent
     if (this.editing) {
       return this.entity.preset;
     } else {
-      const epreset = this.campaignService.campaign.entityPresets.find(
-        (ep) => ep.id === this._entTypeId
-      );
+      const epreset = this.campaignService.campaign.entityPresets.find((ep) => ep.id === this._entTypeId);
 
       return epreset;
     }
@@ -309,5 +264,16 @@ export class EntityCreationFormComponent
 
   public get editing() {
     return this.route.snapshot.data.editing;
+  }
+
+  public get currencyConfig(): IDynamicFieldConfig {
+    return {
+      name: 'Money',
+      type: DynamicFieldType.CURRENCY,
+      options: {
+        levels: this.campaignService.campaign.currencyMap,
+        trackCoins: this.campaignService.campaign.trackCoins,
+      },
+    };
   }
 }

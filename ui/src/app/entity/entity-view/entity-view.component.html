@@ -91,28 +91,14 @@
     <!-- Currency Desktop -->
     <div class="column col-3 col-md-5 hide-sm" *ngIf="preset.isCurrencyEnabled">
       <div class="card h-100 p-1 currency-box text-center" (click)="editCurrency()" [ngClass]="{ 'c-hand': editable }">
-        <div class="columns col-gapless">
-          <div class="column">
-            <h5 class="mb-0 text-bold" [innerHTML]="formattedCurrency"></h5>
-          </div>
-          <div class="column col-auto">
-            <img src="/assets/metal-disc.png" style="margin-bottom: -0.45rem" width="30" />
-          </div>
-        </div>
+        <h5 class="mb-0"><dd-currency-view [currency]="entity.currency"></dd-currency-view></h5>
       </div>
     </div>
 
     <!-- Currency Mobile -->
     <div class="column col-12 show-sm mt-2" *ngIf="preset.isCurrencyEnabled">
       <div class="card p-1 currency-box text-center" (click)="editCurrency()" [ngClass]="{ 'c-hand': editable }">
-        <div class="columns col-gapless">
-          <div class="column">
-            <h4 class="mb-0 text-bold" [innerHTML]="formattedCurrency"></h4>
-          </div>
-          <div class="column col-auto">
-            <img src="/assets/metal-disc.png" class="coin-icon" width="25" />
-          </div>
-        </div>
+        <h5 class="mb-0"><dd-currency-view [currency]="entity.currency"></dd-currency-view></h5>
       </div>
     </div>
   </div>

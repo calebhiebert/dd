@@ -5,15 +5,15 @@
   </div>
 
   <!-- Multi Controls -->
-  <div class="columns" *ngIf="formArray">
-    <div class="column col-auto">
-      <button class="btn btn-link mt-1" (click)="reset()">Reset</button>
-    </div>
-    <div class="col-2 col-md-3 col-sm-12 p-1" *ngFor="let control of controls; let idx = index; trackBy: trackLevel">
+  <div class="columns col-gapless" *ngIf="formArray">
+    <div class="col-3 col-sm-12 p-1" *ngFor="let control of controls; let idx = index; trackBy: trackLevel">
       <div class="input-group">
         <input type="number" class="form-input" [formControl]="control" [placeholder]="levels[idx].name" />
         <div class="input-group-addon">{{ levels[idx].name }}</div>
       </div>
+    </div>
+    <div class="column col-auto">
+      <button class="btn btn-link mt-1" (click)="reset()">Clear Coin Values</button>
     </div>
   </div>
 </div>

@@ -48,7 +48,28 @@ namespace net_api.Models
         [JsonIgnore]
         public Campaign Campaign { get; set; }
 
-        public double? Currency { get; set; }
+        [JsonIgnore]
+        [Column("CurrencyAmount", TypeName = "JSONB")]
+        public string CurrencyJson { get; set; }
+
+        [NotMapped]
+        public CurrencyStore Currency
+        {
+            get
+            {
+                if (CurrencyJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<CurrencyStore>(CurrencyJson);
+            }
+
+            set
+            {
+                CurrencyJson = JsonConvert.SerializeObject(value);
+            }
+        }
 
         public string ImageId { get; set; }
 

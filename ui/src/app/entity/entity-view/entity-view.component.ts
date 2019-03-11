@@ -1,19 +1,13 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityAttributeEditorModalComponent } from './entity-attribute-editor-modal/entity-attribute-editor-modal.component';
-import {
-  EntityService,
-  IEntityAttribute,
-  EntityAttributeClass,
-  IHealth,
-  IViewAttribute,
-  IAttribute,
-} from 'src/app/entity.service';
+import { EntityService, IEntityAttribute, EntityAttributeClass, IHealth, IViewAttribute, IAttribute } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { AttributeType } from 'src/app/attributes';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoginService } from 'src/app/login.service';
 import { CurrencyService } from 'src/app/currency.service';
+import { DynamicFieldType } from 'src/app/dynform/form-types';
 
 @Component({
   selector: 'dd-entity-view',
@@ -36,7 +30,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     private login: LoginService,
     private router: Router,
     private currencyService: CurrencyService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -76,11 +70,6 @@ export class EntityViewComponent implements OnInit, OnDestroy {
       throw err;
     }
 
-    this.currencyService.mapCurrencyValues(
-      this.campaignService.campaign.currencyMap,
-      this.entity.currency
-    );
-
     this.loading = false;
   }
 
@@ -89,10 +78,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const attrValue = await this.attributeModal.editAttribute(
-      { ...attr.pattr },
-      attr.attr.data
-    );
+    const attrValue = await this.attributeModal.editAttribute({ ...attr.pattr }, null, attr.attr.data);
 
     if (attrValue !== null && attrValue !== undefined) {
       for (const attribute of this.entity.attributes) {
@@ -117,20 +103,21 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     }
 
     const attrValue = await this.attributeModal.editAttribute(
+      null,
       {
-        name: 'Gold Pieces',
-        description: `How many money you have`,
-        type: AttributeType.NUMBER,
-        required: true,
-        imageId: 'coin',
-        min: 0,
-        class: EntityAttributeClass.NORMAL,
+        name: 'Money',
+        type: DynamicFieldType.CURRENCY,
+        options: {
+          required: true,
+          levels: this.campaignService.campaign.currencyMap,
+          trackCoins: this.campaignService.campaign.trackCoins,
+        },
       },
-      this.entity.currency.toString()
+      this.entity.currency
     );
 
     if (attrValue !== null && attrValue !== undefined) {
-      this.entity.currency = parseFloat(attrValue);
+      this.entity.currency = attrValue;
       this.updateEntity();
     }
   }
@@ -150,6 +137,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
         max: 30,
         class: EntityAttributeClass.NORMAL,
       },
+      null,
       this.entity.name
     );
 
@@ -167,15 +155,14 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     const attrValue = await this.attributeModal.editAttribute(
       {
         name: 'XP',
-        description: `Experience points that this ${
-          this.entity.preset.name
-          } has`,
+        description: `Experience points that this ${this.entity.preset.name} has`,
         type: AttributeType.NUMBER,
         required: true,
         min: 0,
         max: 2147483647,
         class: EntityAttributeClass.NORMAL,
       },
+      null,
       this.entity.xp.toString()
     );
 
@@ -186,20 +173,12 @@ export class EntityViewComponent implements OnInit, OnDestroy {
   }
 
   public openLocationOnMap() {
-    this.router.navigate(
-      [
-        'campaigns',
-        this.campaignService.campaign.id,
-        'maps',
-        this.entity.mapId,
-      ],
-      {
-        queryParams: {
-          lat: this.entity.lat,
-          lng: this.entity.lng,
-        },
-      }
-    );
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'maps', this.entity.mapId], {
+      queryParams: {
+        lat: this.entity.lat,
+        lng: this.entity.lng,
+      },
+    });
   }
 
   public trackAttribute(idx: number, attribute: IAttribute) {
@@ -223,12 +202,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
           pattr: this.getEntityAttribute(a.name),
         };
       })
-      .filter(
-        (a) =>
-          a.pattr &&
-          a.pattr.class === 0 &&
-          a.pattr.type !== AttributeType.BIG_TEXT
-      );
+      .filter((a) => a.pattr && a.pattr.class === 0 && a.pattr.type !== AttributeType.BIG_TEXT);
   }
 
   public get normalAttributes(): IViewAttribute[] {
@@ -239,12 +213,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
           pattr: this.getEntityAttribute(a.name),
         };
       })
-      .filter(
-        (a) =>
-          a.pattr &&
-          a.pattr.class === 1 &&
-          a.pattr.type !== AttributeType.BIG_TEXT
-      );
+      .filter((a) => a.pattr && a.pattr.class === 1 && a.pattr.type !== AttributeType.BIG_TEXT);
   }
 
   public get bigTextAttributes(): IViewAttribute[] {
@@ -255,13 +224,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
           pattr: this.getEntityAttribute(a.name),
         };
       })
-      .filter(
-        (a) =>
-          a.pattr &&
-          a.pattr.class !== 3 &&
-          a.pattr.type === AttributeType.BIG_TEXT &&
-          a.attr.data
-      );
+      .filter((a) => a.pattr && a.pattr.class !== 3 && a.pattr.type === AttributeType.BIG_TEXT && a.attr.data);
   }
 
   public get minorAttributes(): IViewAttribute[] {
@@ -272,12 +235,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
           pattr: this.getEntityAttribute(a.name),
         };
       })
-      .filter(
-        (a) =>
-          a.pattr &&
-          a.pattr.class === 2 &&
-          a.pattr.type !== AttributeType.BIG_TEXT
-      );
+      .filter((a) => a.pattr && a.pattr.class === 2 && a.pattr.type !== AttributeType.BIG_TEXT);
   }
 
   public get unimportantAttributes(): IViewAttribute[] {
@@ -299,27 +257,16 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     return this.campaignService.canEdit || this.entity.userId === this.login.id;
   }
 
-  public get formattedCurrency() {
-    if (!this.entity) {
-      return '0';
-    }
-
-    return this.currencyService.getCurrencyHTMLString(
-      this.currencyService.mapCurrencyValues(
-        this.campaignService.campaign.currencyMap,
-        this.entity.currency
-      )
-    );
-  }
-
   public get preset() {
     if (!this.entity) {
       return null;
     } else {
-      return this.campaignService.campaign.entityPresets.find(
-        (preset) => preset.id === this.entity.entityPresetId
-      );
+      return this.campaignService.campaign.entityPresets.find((preset) => preset.id === this.entity.entityPresetId);
     }
+  }
+
+  public get campaign() {
+    return this.campaign;
   }
 
   public get conceptTypeList() {
@@ -327,7 +274,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
       return [];
     }
 
-    return this.campaignService.campaign.conceptTypes.filter(ct => this.preset.conceptTypesEnabled.indexOf(ct.id) !== -1);
+    return this.campaignService.campaign.conceptTypes.filter((ct) => this.preset.conceptTypesEnabled.indexOf(ct.id) !== -1);
   }
 
   public get entity() {

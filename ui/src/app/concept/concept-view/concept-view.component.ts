@@ -106,16 +106,4 @@ export class ConceptViewComponent implements OnInit {
   public get editable() {
     return this.campaignService.canEdit;
   }
-
-  public get currencyLevels() {
-    return this.campaignService.campaign.currencyMap;
-  }
-
-  public get campaign() {
-    return this.campaignService.campaign;
-  }
-
-  public get currencyMap() {
-    return this.campaignService.campaign.currencyMap || [{ value: 1, name: 'gp', useInConversions: true }];
-  }
 }

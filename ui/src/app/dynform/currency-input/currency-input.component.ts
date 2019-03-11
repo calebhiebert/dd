@@ -3,6 +3,7 @@ import { ICurrencyFieldOptions } from '../form-types';
 import { ControlValueAccessor, FormArray, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ICurrencyLevel } from 'src/app/campaign.service';
 import { ICurrency } from 'src/app/entity.service';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'dd-currency-input',
@@ -26,24 +27,40 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
   private _onChange: any;
   private _onTouched: any;
 
+  private _firstChange = true;
+
   constructor() {}
 
   ngOnInit() {
     if (this.config.trackCoins) {
       this.formArray = this.createFormArray(this.config.levels);
 
-      this.formArray.valueChanges.subscribe((val) => {
-        if (this._onChange) {
-          this._onChange({ values: this.convertCurrencyArrayToObject(val, this.config.levels), value: 0 });
-        }
-      });
+      this.formArray.valueChanges
+        .pipe(
+          distinctUntilChanged((a, b) => {
+            if (a === null || a === undefined) {
+              return a === b;
+            }
+
+            return !a.some((v, idx) => b[idx] !== v);
+          })
+        )
+        .subscribe((val) => {
+          if (this._onChange && !this._firstChange) {
+            this._onChange({ values: this.convertCurrencyArrayToObject(val, this.config.levels), value: 0 });
+          }
+
+          this._firstChange = false;
+        });
     } else {
       this.formControl = new FormControl(null);
 
-      this.formControl.valueChanges.subscribe((val) => {
-        if (this._onChange) {
+      this.formControl.valueChanges.pipe(distinctUntilChanged()).subscribe((val) => {
+        if (this._onChange && !this._firstChange) {
           this._onChange({ values: {}, value: val });
         }
+
+        this._firstChange = false;
       });
     }
   }
@@ -103,6 +120,7 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
       this.formArray.setValue(this.mapCurrencyValuesToConfig(obj.values, this.config.levels));
     } else {
       this.formControl.setValue(obj.value);
+      this.formControl.markAsPristine();
     }
   }
 

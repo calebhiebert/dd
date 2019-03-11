@@ -41,27 +41,12 @@
           }"
           *ngIf="preset.isXPEnabled"
         >
-          <label for="xp" class="form-label"
-            >XP <span class="text-large text-bold text-primary">*</span></label
-          >
-          <input
-            type="number"
-            name="xp"
-            id="xp"
-            class="form-input"
-            placeholder="XP"
-            formControlName="xp"
-          />
-          <p
-            class="form-input-hint"
-            *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.required"
-          >
+          <label for="xp" class="form-label">XP <span class="text-large text-bold text-primary">*</span></label>
+          <input type="number" name="xp" id="xp" class="form-input" placeholder="XP" formControlName="xp" />
+          <p class="form-input-hint" *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.required">
             An XP value is required
           </p>
-          <p
-            class="form-input-hint"
-            *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.min"
-          >
+          <p class="form-input-hint" *ngIf="xp.invalid && (xp.touched || xp.dirty) && xp.errors.min">
             Can't have negative XP :/
           </p>
         </div>
@@ -77,61 +62,23 @@
             'has-success': name.valid && (name.touched || name.dirty)
           }"
         >
-          <label for="name" class="form-lable"
-            >Name
-            <span class="text-large text-bold text-primary">*</span></label
-          >
-          <input
-            type="text"
-            name="name"
-            id="name"
-            formControlName="name"
-            class="form-input"
-            placeholder="Name"
-          />
-          <p
-            class="form-input-hint"
-            *ngIf="
-              name.invalid &&
-              (name.touched || name.dirty) &&
-              name.errors.required
-            "
-          >
+          <label for="name" class="form-lable">Name <span class="text-large text-bold text-primary">*</span></label>
+          <input type="text" name="name" id="name" formControlName="name" class="form-input" placeholder="Name" />
+          <p class="form-input-hint" *ngIf="name.invalid && (name.touched || name.dirty) && name.errors.required">
             A name is required
           </p>
-          <p
-            class="form-input-hint"
-            *ngIf="
-              name.invalid &&
-              (name.touched || name.dirty) &&
-              name.errors.minlength
-            "
-          >
+          <p class="form-input-hint" *ngIf="name.invalid && (name.touched || name.dirty) && name.errors.minlength">
             The name can't be shorter than 2 characters
           </p>
-          <p
-            class="form-input-hint"
-            *ngIf="
-              name.invalid &&
-              (name.touched || name.dirty) &&
-              name.errors.maxlength
-            "
-          >
+          <p class="form-input-hint" *ngIf="name.invalid && (name.touched || name.dirty) && name.errors.maxlength">
             The name can't be longer than 20 characters
           </p>
         </div>
 
         <!-- Description -->
         <div class="form-group">
-          <label for="description" class="form-label"
-            >Description
-            <span class="text-large text-bold text-primary">*</span></label
-          >
-          <dd-quill
-            simple="true"
-            formControlName="content"
-            placeholder="Description"
-          ></dd-quill>
+          <label for="description" class="form-label">Description <span class="text-large text-bold text-primary">*</span></label>
+          <dd-quill simple="true" formControlName="content" placeholder="Description"></dd-quill>
         </div>
 
         <!-- Spawnable -->
@@ -140,109 +87,37 @@
             <input type="checkbox" formControlName="spawnable" />
             <i class="form-icon"></i> This {{ preset.name }} is spawnable
           </label>
-          <p class="form-input-hint">
-            Turns this {{ preset.name }} into a preset that can be quickly
-            spawned into game sessions.
-          </p>
+          <p class="form-input-hint">Turns this {{ preset.name }} into a preset that can be quickly spawned into game sessions.</p>
         </div>
 
         <!-- Currency -->
-        <div
-          class="form-group"
-          [ngClass]="{
-            'has-error':
-              currency.invalid && (currency.dirty || currency.touched),
-            'has-success': currency.valid
-          }"
-          *ngIf="preset.isCurrencyEnabled"
-        >
-          <label for="currency" class="form-label">Gold Pieces</label>
-          <div class="input-group">
-            <input
-              type="number"
-              name="currency"
-              placeholder="Gold Pieces"
-              formControlName="currency"
-              id="currency"
-              class="form-input"
-            />
-            <span class="input-group-addon"> gp </span>
-          </div>
-          <p
-            class="form-input-hint"
-            *ngIf="
-              currency.invalid &&
-              (currency.dirty || currency.touched) &&
-              currency.errors.required
-            "
-          >
-            A value for gold pieces is required
-          </p>
-          <p
-            class="form-input-hint"
-            *ngIf="
-              currency.invalid &&
-              (currency.dirty || currency.touched) &&
-              currency.errors.min
-            "
-          >
-            You must be bad with money, you can't have negative money!
-          </p>
-        </div>
+        <dd-dynamic-field [config]="currencyConfig" [control]="currency"></dd-dynamic-field>
 
         <!-- Health -->
         <div
           class="form-group"
           [ngClass]="{
             'has-error': health.invalid && (health.dirty || health.touched),
-            'has-success': health.valid
+            'has-success': health.valid && (health.dirty || health.touched)
           }"
           formGroupName="health"
           *ngIf="preset.isHealthEnabled"
         >
           <label class="form-label">Health</label>
           <div class="input-group">
-            <input
-              type="number"
-              name="current-hp"
-              formControlName="current"
-              id="current-hp"
-              placeholder="Current HP"
-              class="form-input"
-            />
+            <input type="number" name="current-hp" formControlName="current" id="current-hp" placeholder="Current HP" class="form-input" />
             <span class="input-group-addon">/</span>
-            <input
-              type="number"
-              name="current-hp"
-              formControlName="max"
-              placeholder="Max HP"
-              id="current-hp"
-              class="form-input"
-            />
+            <input type="number" name="current-hp" formControlName="max" placeholder="Max HP" id="current-hp" class="form-input" />
           </div>
           <p
             class="form-input-hint mb-0"
-            *ngIf="
-              hpCurrent.invalid &&
-              (hpMax.dirty ||
-                hpMax.touched ||
-                hpCurrent.dirty ||
-                hpCurrent.touched) &&
-              hpCurrent.errors.required
-            "
+            *ngIf="hpCurrent.invalid && (hpMax.dirty || hpMax.touched || hpCurrent.dirty || hpCurrent.touched) && hpCurrent.errors.required"
           >
             A value is required for current health
           </p>
           <p
             class="form-input-hint mb-0"
-            *ngIf="
-              hpMax.invalid &&
-              (hpMax.dirty ||
-                hpMax.touched ||
-                hpCurrent.dirty ||
-                hpCurrent.touched) &&
-              hpMax.errors.required
-            "
+            *ngIf="hpMax.invalid && (hpMax.dirty || hpMax.touched || hpCurrent.dirty || hpCurrent.touched) && hpMax.errors.required"
           >
             A value is required for max health
           </p>
@@ -251,9 +126,6 @@
     </div>
 
     <h3 class="mt-2">Custom Attributes</h3>
-    <dd-dynamic-attribute-form
-      [formGroup]="attributesFormGroup"
-      [attributes]="preset.attributes"
-    ></dd-dynamic-attribute-form>
+    <dd-dynamic-attribute-form [formGroup]="attributesFormGroup" [attributes]="preset.attributes"></dd-dynamic-attribute-form>
   </div>
 </div>

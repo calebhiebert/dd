@@ -115,12 +115,6 @@ namespace net_api.Controllers
                 };
             }
 
-            // Make sure a null currency is not returned
-            if (entity.Currency == null)
-            {
-                entity.Currency = 0;
-            }
-
             return Ok(entity);
         }
 

@@ -16,4 +16,10 @@ namespace net_api.Models
 
         public bool UseInConversions { get; set; }
     }
+
+    public class CurrencyStore
+    {
+        public double? Value { get; set; }
+        public Dictionary<string, int?> Values { get; set; }
+    }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ICurrencyLevel } from 'src/app/campaign.service';
+import { ICurrencyLevel, CampaignService } from 'src/app/campaign.service';
 import { CurrencyService, IMappedCurrency } from 'src/app/currency.service';
 
 @Component({
@@ -9,18 +9,12 @@ import { CurrencyService, IMappedCurrency } from 'src/app/currency.service';
 })
 export class CurrencyViewComponent implements OnInit {
   @Input()
-  public levels: ICurrencyLevel[];
-
-  @Input()
   public currency: { value: number; values: { [key: string]: number } };
-
-  @Input()
-  public trackCoins: boolean;
 
   @Input()
   public blankValue = 'nothing';
 
-  constructor(private currencyService: CurrencyService) {}
+  constructor(private currencyService: CurrencyService, private campaignService: CampaignService) {}
 
   ngOnInit() {
     if (!this.levels) {
@@ -52,5 +46,13 @@ export class CurrencyViewComponent implements OnInit {
     } else {
       return this.currencyService.getCurrencyHTMLString(mapped);
     }
+  }
+
+  public get levels() {
+    return this.campaignService.campaign.currencyMap || [{ value: 1, name: 'gp', useInConversions: true }];
+  }
+
+  public get trackCoins() {
+    return this.campaignService.campaign.trackCoins;
   }
 }

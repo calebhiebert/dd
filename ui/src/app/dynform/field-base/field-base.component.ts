@@ -1,9 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Attribute } from '@angular/compiler';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { IEntityAttribute } from 'src/app/entity.service';
 import { AttributeType } from 'src/app/attributes';
-import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-attribute-form.component';
 import {
   IDynamicFieldConfig,
   DynamicFieldType,
@@ -26,9 +24,11 @@ export class FieldBaseComponent implements OnInit {
 
   @Input()
   public set attribute(value) {
-    this._attribute = value;
-    this._fieldConfigCache = undefined;
-    this.control.setValidators(this.getValidators(this.fieldConfig));
+    if (value !== undefined && value !== null) {
+      this._attribute = value;
+      this._fieldConfigCache = undefined;
+      this.control.setValidators(this.getValidators(this.fieldConfig));
+    }
   }
 
   public get attribute() {
@@ -37,9 +37,11 @@ export class FieldBaseComponent implements OnInit {
 
   @Input()
   public set config(value) {
-    this._config = value;
-    this._fieldConfigCache = undefined;
-    this.control.setValidators(this.getValidators(this.fieldConfig));
+    if (value !== undefined && value !== null) {
+      this._config = value;
+      this._fieldConfigCache = undefined;
+      this.control.setValidators(this.getValidators(this.fieldConfig));
+    }
   }
 
   public get config(): IDynamicFieldConfig {
@@ -67,21 +69,14 @@ export class FieldBaseComponent implements OnInit {
         validators.push(Validators.minLength(opt.minLength));
       }
 
-      if (
-        opt.maxLength &&
-        opt.maxLength !== null &&
-        opt.maxLength !== undefined
-      ) {
+      if (opt.maxLength && opt.maxLength !== null && opt.maxLength !== undefined) {
         validators.push(Validators.maxLength(opt.maxLength));
       }
 
       if (opt.pattern) {
         validators.push(Validators.pattern(opt.pattern));
       }
-    } else if (
-      config.type === DynamicFieldType.INT ||
-      config.type === DynamicFieldType.FLOAT
-    ) {
+    } else if (config.type === DynamicFieldType.INT || config.type === DynamicFieldType.FLOAT) {
       const opt = options as INumberFieldOptions;
 
       if (opt.min !== null && opt.min !== undefined) {
@@ -100,9 +95,7 @@ export class FieldBaseComponent implements OnInit {
     return validators;
   }
 
-  private mapAttributeTypeToFieldConfigType(
-    attributeType: AttributeType
-  ): DynamicFieldType {
+  private mapAttributeTypeToFieldConfigType(attributeType: AttributeType): DynamicFieldType {
     switch (attributeType) {
       case AttributeType.BIG_TEXT:
         return DynamicFieldType.TEXT_FORMATTED;
@@ -117,9 +110,7 @@ export class FieldBaseComponent implements OnInit {
     }
   }
 
-  private mapAttributeOptionsToFieldConfigOptions(
-    attribute: IEntityAttribute
-  ): DynamicFieldOptions {
+  private mapAttributeOptionsToFieldConfigOptions(attribute: IEntityAttribute): DynamicFieldOptions {
     const options = this.getDefaultSettings();
     const type = this.mapAttributeTypeToFieldConfigType(attribute.type);
 
@@ -127,18 +118,12 @@ export class FieldBaseComponent implements OnInit {
       const opt = options as IStringFieldOptions;
       opt.minLength = attribute.min;
       opt.maxLength = attribute.max;
-    } else if (
-      type === DynamicFieldType.INT ||
-      type === DynamicFieldType.FLOAT
-    ) {
+    } else if (type === DynamicFieldType.INT || type === DynamicFieldType.FLOAT) {
       const opt = options as IFloatFieldOptions;
       opt.step = 0.01;
       opt.max = attribute.max;
       opt.min = attribute.min;
-    } else if (
-      type === DynamicFieldType.ENUM ||
-      type === DynamicFieldType.ENUM_MULTI
-    ) {
+    } else if (type === DynamicFieldType.ENUM || type === DynamicFieldType.ENUM_MULTI) {
       const opt = options as IEnumFieldOptions;
       opt.choices = attribute.options;
     }

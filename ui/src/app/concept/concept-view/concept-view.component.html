@@ -78,7 +78,7 @@
             <td [ngSwitch]="fld.config.type">
               <!-- Currency Display -->
               <span *ngSwitchCase="6">
-                <dd-currency-view [levels]="currencyMap" [currency]="fld.field.value" [trackCoins]="campaign.trackCoins"></dd-currency-view>
+                <dd-currency-view [currency]="fld.field.value"></dd-currency-view>
               </span>
               <span *ngSwitchDefault>
                 {{ fld.field.value }}
