@@ -9,6 +9,7 @@ import { NoteService } from './note.service';
 import { ToastrService } from 'ngx-toastr';
 import { IArticle } from './article.service';
 import { ICursorUpdate } from './quill/quill.component';
+import { IConceptEntity } from './concept.service';
 
 export enum ConnectionState {
   NOT_CONNECTED,
@@ -37,6 +38,8 @@ export class UpdateHubService {
   public cursorUpdate = new EventEmitter<ICursorUpdate>();
   public noteDeltaUpdate = new EventEmitter<{ id: string; delta: any }>();
   public stateUpdate = new EventEmitter<ConnectionState>();
+  public conceptEntityUpdate = new EventEmitter<IConceptEntity>();
+  public conceptEntityDelete = new EventEmitter<IConceptEntity>();
 
   constructor(
     private login: LoginService,
@@ -124,11 +127,11 @@ export class UpdateHubService {
     });
 
     this.connection.on('ConceptEntityUpdate', (ce) => {
-      console.log('UD', ce);
+      this.conceptEntityUpdate.emit(ce);
     });
 
     this.connection.on('ConceptEntityDelete', (ce) => {
-      console.log('DEL', ce);
+      this.conceptEntityDelete.emit(ce);
     });
 
     await this.authenticate();

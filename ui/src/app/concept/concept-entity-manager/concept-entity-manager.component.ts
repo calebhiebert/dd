@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { IConceptType, IConceptsQueryResult, ConceptService, IConceptEntity, IConcept } from 'src/app/concept.service';
 import { IEntity } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
@@ -6,13 +6,15 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CampaignService } from 'src/app/campaign.service';
 import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
+import { Subscription } from 'rxjs';
+import { UpdateHubService } from 'src/app/update-hub.service';
 
 @Component({
   selector: 'dd-concept-entity-manager',
   templateUrl: './concept-entity-manager.component.html',
   styleUrls: ['./concept-entity-manager.component.css']
 })
-export class ConceptEntityManagerComponent implements OnInit {
+export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
   public loading = false;
   public searchLoading = false;
@@ -44,7 +46,10 @@ export class ConceptEntityManagerComponent implements OnInit {
 
   private _conceptEntities: IConceptEntity[];
 
-  constructor(private conceptService: ConceptService, private campaignService: CampaignService) { }
+  private _updateSubscription: Subscription;
+  private _deleteSubscription: Subscription;
+
+  constructor(private conceptService: ConceptService, private campaignService: CampaignService, private updateHub: UpdateHubService) { }
 
   ngOnInit() {
     this.searchControl = new FormControl(null);
@@ -62,7 +67,46 @@ export class ConceptEntityManagerComponent implements OnInit {
       }
     });
 
+    this._updateSubscription = this.updateHub.conceptEntityUpdate.subscribe((ce: IConceptEntity) => {
+      if (!this.conceptEntities || !this.entity || !this.conceptType) {
+        return;
+      }
+
+      if (ce.concept.conceptTypeId === this.conceptType.id && ce.entityId === this.entity.id) {
+        const index = this.conceptEntities.findIndex((ece) => ece.conceptId === ce.conceptId && ece.entityId === ce.entityId);
+
+        if (index !== -1) {
+          this.conceptEntities[index] = ce;
+        } else {
+          this.conceptEntities.push(ce);
+        }
+      }
+    });
+
+    this._deleteSubscription = this.updateHub.conceptEntityDelete.subscribe((ce: IConceptEntity) => {
+      if (!this.conceptEntities || !this.entity || !this.conceptType) {
+        return;
+      }
+
+      if (ce.entityId === this.entity.id) {
+        this.conceptEntities = this.conceptEntities.filter((ece) => {
+          const match = ece.conceptId === ce.conceptId && ece.entityId === ce.entityId;
+          return !match;
+        });
+      }
+    });
+
     this.load();
+  }
+
+  ngOnDestroy() {
+    if (this._updateSubscription) {
+      this._updateSubscription.unsubscribe();
+    }
+
+    if (this._deleteSubscription) {
+      this._deleteSubscription.unsubscribe();
+    }
   }
 
   private async load() {
