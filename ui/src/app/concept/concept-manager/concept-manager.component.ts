@@ -27,7 +27,7 @@ export class ConceptManagerComponent implements OnInit {
     private router: Router,
     private conceptService: ConceptService,
     private campaignService: CampaignService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.searchControl = new FormControl(null);
@@ -55,12 +55,61 @@ export class ConceptManagerComponent implements OnInit {
       this.conceptType = this.getConceptType(id);
       this.concepts = null;
 
+      const settings = this.readQueryFromURL();
+      this.page = settings.offset / settings.limit + 1;
+      this.search = settings.search;
+
       this.load(id);
     });
   }
 
   private getConceptType(id: string): IConceptType {
     return this.campaignService.campaign.conceptTypes.find((ct) => ct.id === id);
+  }
+
+  private writeQueryToURL() {
+    const queryParams = {
+      limit: 10,
+      offset: (this.page - 1) * 10,
+    };
+
+    if (this.search) {
+      queryParams['search'] = this.search;
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+      replaceUrl: true,
+    });
+  }
+
+  private readQueryFromURL() {
+    const queryParams = {
+      limit: 10,
+      offset: 0,
+      search: undefined,
+    };
+
+    const params = this.route.snapshot.queryParamMap;
+
+    try {
+      if (params.has('limit')) {
+        queryParams.limit = parseInt(params.get('limit'), 10);
+      }
+
+      if (params.has('offset')) {
+        queryParams.offset = parseInt(params.get('offset'), 10);
+      }
+
+      if (params.has('search')) {
+        queryParams.search = params.get('search');
+      }
+    } catch (err) {
+      // Probalby from invalid stuff
+    }
+
+    return queryParams;
   }
 
   private async load(id: string) {
@@ -76,6 +125,7 @@ export class ConceptManagerComponent implements OnInit {
       const result = await this.conceptService.getConcepts(id, 10, (this.page - 1) * 10, this.search);
       this.concepts = result.concepts;
       this.totalConcepts = result.total;
+      this.writeQueryToURL();
     } catch (err) {
       this.loadError = err;
     }

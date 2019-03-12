@@ -1,6 +1,5 @@
 <div class="container grid-xl">
   <dd-http-errors [error]="loadError"></dd-http-errors>
-  <div class="loading loading-lg" *ngIf="loading && !concepts"></div>
 
   <!-- Header Controls -->
   <div class="columns" *ngIf="conceptType">
@@ -26,6 +25,9 @@
     </div>
   </div>
 
+  <!-- Loading -->
+  <div class="loading loading-lg" *ngIf="loading && !concepts"></div>
+
   <!-- Concept List -->
   <div *ngIf="concepts && conceptType">
     <div class="card p-1 hoverable mb-1" *ngFor="let c of concepts" (click)="selectConcept(c)">
@@ -33,8 +35,15 @@
     </div>
 
     <!-- Paginator -->
-    <dd-paginator [itemsPerPage]="10" [page]="page" [autoHide]="false" [totalItems]="totalConcepts" [loading]="loading"
-      (pageChange)="changePage($event)" *ngIf="concepts && concepts.length > 0"></dd-paginator>
+    <dd-paginator
+      [itemsPerPage]="10"
+      [page]="page"
+      [autoHide]="false"
+      [totalItems]="totalConcepts"
+      [loading]="loading"
+      (pageChange)="changePage($event)"
+      *ngIf="concepts && concepts.length > 0"
+    ></dd-paginator>
   </div>
 
   <!-- Empty State (No concepts) -->
