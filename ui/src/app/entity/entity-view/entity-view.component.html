@@ -21,7 +21,21 @@
               {{ entity.name }}
               <a class="text-light" *ngIf="editable" [routerLink]="['edit']"><i class="icon icon-edit"></i></a>
             </h3>
-            <span class="text-italic no-select">{{ entity.preset.name }}</span>
+
+            <!-- Avatar Display -->
+            <div class="columns col-gapless">
+              <!-- Image -->
+              <div class="column col-auto mr-1 d-flex align-items-center" *ngIf="user">
+                <figure class="avatar avatar-xs">
+                  <img [src]="user.pictureURL" alt="avatar" />
+                </figure>
+              </div>
+
+              <!-- Username -->
+              <div class="column col-auto mr-1" *ngIf="user">{{ user.username }}</div>
+
+              <div class="column text-italic no-select">({{ entity.preset.name }})</div>
+            </div>
           </div>
         </div>
         <div class="column col-auto d-flex justify-end align-items-end col-ml-auto" style="line-height: 1.2">

@@ -30,8 +30,8 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private login: LoginService,
     private router: Router,
-    private update: UpdateHubService,
-  ) { }
+    private update: UpdateHubService
+  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -275,8 +275,22 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     }
   }
 
+  public get user() {
+    if (this.entity) {
+      const member = this.campaign.members.find((m) => m.userId === this.entity.userId);
+
+      if (member) {
+        return member.user;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
   public get campaign() {
-    return this.campaign;
+    return this.campaignService.campaign;
   }
 
   public get conceptTypeList() {
