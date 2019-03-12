@@ -64,5 +64,12 @@
       <i class="icon icon-search icon-4x"></i>
     </div>
     <p class="empty-title h5">Your search returned nothing</p>
+
+    <p class="empty-subtitle" *ngIf="canCreateFromSearch">
+      Click the button below to create a new {{ conceptType.name }} called {{ search }}
+    </p>
+    <div class="empty-action" *ngIf="canCreateFromSearch">
+      <button class="btn btn-primary" (click)="createFromSearch()">Create {{ search }}</button>
+    </div>
   </div>
 </div>

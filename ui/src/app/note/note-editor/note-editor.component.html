@@ -17,23 +17,16 @@
     <!-- User Display -->
     <div class="columns col-gapless mt-2">
       <!-- Image -->
-      <div
-        class="column col-auto pr-1 d-flex align-items-center"
-        *ngIf="!editable && user"
-      >
+      <div class="column col-auto pr-1 d-flex align-items-center" *ngIf="!editable && user">
         <figure class="avatar avatar-sm">
           <img [src]="user.pictureURL" alt="User Image" />
         </figure>
       </div>
       <div class="column d-flex align-items-center" *ngIf="!editable && user">
-        <span>{{ user.username }}</span>
+        <dd-user-view-nano [user]="user"></dd-user-view-nano>
       </div>
       <div class="column col-auto col-ml-auto">
-        <button
-          class="btn btn-error mr-2"
-          (click)="delete()"
-          *ngIf="note && editable"
-        >
+        <button class="btn btn-error mr-2" (click)="delete()" *ngIf="note && editable">
           Delete
         </button>
         <button class="btn" (click)="modal.close(null)">Close</button>

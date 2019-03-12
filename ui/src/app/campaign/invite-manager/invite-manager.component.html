@@ -6,22 +6,13 @@
     <p class="empty-title h5">There are no invites</p>
     <p class="empty-subtitle">Click the button below to create one</p>
     <div class="empty-action">
-      <button
-        class="btn btn-primary"
-        [ngClass]="{ loading: creatingInvite }"
-        (click)="createInvite()"
-      >
+      <button class="btn btn-primary" [ngClass]="{ loading: creatingInvite }" (click)="createInvite()">
         Create invite
       </button>
     </div>
   </div>
 
-  <button
-    class="btn btn-sm"
-    (click)="createInvite()"
-    *ngIf="invites.length > 0"
-    [ngClass]="{ loading: creatingInvite }"
-  >
+  <button class="btn btn-sm" (click)="createInvite()" *ngIf="invites.length > 0" [ngClass]="{ loading: creatingInvite }">
     <i class="icon icon-plus"></i><span class="hide-sm"> Create Invite</span>
   </button>
   <!-- Invites List -->
@@ -47,21 +38,12 @@
           <span *ngSwitchCase="3">Declined</span>
         </td>
         <td>
-          <div *ngIf="i.user">
-            <figure class="avatar avatar-xs">
-              <img [src]="i.user.pictureURL" alt="Avatar" />
-            </figure>
-            {{ i.user.username }}
-          </div>
+          <dd-user-view-nano [user]="i.user" *ngIf="i.user"></dd-user-view-nano>
           <span *ngIf="!i.user">N/A</span>
         </td>
         <td>{{ i.createdAt | date }}</td>
         <td>
-          <button
-            class="btn btn-link btn-sm"
-            *ngIf="i.status === 0"
-            (click)="revokeInvite(i)"
-          >
+          <button class="btn btn-link btn-sm" *ngIf="i.status === 0" (click)="revokeInvite(i)">
             <i class="icon icon-cross"></i>Revoke
           </button>
         </td>

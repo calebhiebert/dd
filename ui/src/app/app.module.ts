@@ -98,6 +98,7 @@ import { CurrencyViewComponent } from './dynform/currency-view/currency-view.com
 import { HttpErrorsComponent } from './http-errors/http-errors.component';
 import { HttpErrorInterceptor } from './http-error.interceptor';
 import { ErrorPageComponent } from './http-errors/error-page/error-page.component';
+import { UserViewNanoComponent } from './account/user-view-nano/user-view-nano.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -191,6 +192,7 @@ import { ErrorPageComponent } from './http-errors/error-page/error-page.componen
     CurrencyViewComponent,
     HttpErrorsComponent,
     ErrorPageComponent,
+    UserViewNanoComponent,
   ],
   imports: [
     BrowserModule,

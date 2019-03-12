@@ -106,4 +106,16 @@ export class ConceptViewComponent implements OnInit {
   public get editable() {
     return this.campaignService.canEdit;
   }
+
+  public get user() {
+    if (this.concept) {
+      const member = this.campaignService.campaign.members.find((m) => m.userId === this.concept.userId);
+
+      if (member) {
+        return member.user;
+      }
+    }
+
+    return null;
+  }
 }

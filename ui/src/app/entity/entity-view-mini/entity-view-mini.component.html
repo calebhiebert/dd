@@ -27,22 +27,14 @@
 
   <!-- HP -->
   <div class="mb-2" *ngIf="entity.preset.isHealthEnabled">
-    <dd-health-display
-      [editable]="false"
-      [health]="entity.health"
-      [preset]="entity.preset.health"
-      [mini]="true"
-    ></dd-health-display>
+    <dd-health-display [editable]="false" [health]="entity.health" [preset]="entity.preset.health" [mini]="true"></dd-health-display>
   </div>
 
   <!-- Footer -->
   <div class="columns">
     <!-- User -->
-    <div *ngIf="user" class="mt-auto">
-      <figure class="avatar avatar-xs">
-        <img [src]="user.pictureURL" />
-      </figure>
-      {{ user.username }}
+    <div class="column col-auto mt-auto">
+      <dd-user-view-nano [user]="user" *ngIf="user"></dd-user-view-nano>
     </div>
 
     <div class="column col-auto col-ml-auto">
@@ -56,9 +48,7 @@
       </button>
 
       <!-- See More -->
-      <button class="btn btn-sm" (click)="viewMore()">
-        More <i class="icon icon-arrow-right"></i>
-      </button>
+      <button class="btn btn-sm" (click)="viewMore()">More <i class="icon icon-arrow-right"></i></button>
     </div>
   </div>
 </div>

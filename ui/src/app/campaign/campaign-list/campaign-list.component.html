@@ -28,36 +28,21 @@
     <div class="card hoverable p-2 mb-2" (click)="selectCampaign(c)">
       <div class="columns">
         <div class="column col-auto" *ngIf="c.imageId">
-          <img
-            class="img-responsive s-rounded"
-            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-              c.imageId
-            }}"
-          />
+          <img class="img-responsive s-rounded" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ c.imageId }}" />
         </div>
         <div class="column">
           <div class="columns">
             <div class="column">
               <h4 class="mb-1">{{ c.name }}</h4>
+              <dd-user-view-nano [user]="c.user"></dd-user-view-nano>
             </div>
-            <div class="column col-md-12 text-right hide-md">
-              <span class="text-gray text-italic">
-                {{ c.members.length }} Member{{
-                  c.members.length === 1 ? '' : 's'
-                }}
-                • {{ c.user.username }}</span
-              >
+            <div class="column col-md-12 hide-md col-auto">
+              <span class="text-gray text-italic">{{ c.members.length }} Member{{ c.members.length === 1 ? '' : 's' }}</span>
             </div>
             <div class="column col-md-12 show-md">
-              <span class="text-gray text-italic">
-                {{ c.members.length }} Member{{
-                  c.members.length === 1 ? '' : 's'
-                }}
-                • {{ c.user.username }}</span
-              >
+              <span class="text-gray text-italic"> {{ c.members.length }} Member{{ c.members.length === 1 ? '' : 's' }} </span>
             </div>
           </div>
-          <span class="text-gray">{{ c.description | truncate: 150 }}</span>
         </div>
       </div>
     </div>

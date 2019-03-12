@@ -13,11 +13,7 @@ export class NoteListComponent implements OnInit {
   @Input()
   public notes: INote[];
 
-  constructor(
-    private noteService: NoteService,
-    private campaignService: CampaignService,
-    private loginService: LoginService
-  ) {}
+  constructor(private noteService: NoteService, private campaignService: CampaignService, private loginService: LoginService) {}
 
   ngOnInit() {}
 
@@ -25,21 +21,11 @@ export class NoteListComponent implements OnInit {
     this.noteService.editNote(note);
   }
 
-  /**
-   * Returns the username of the user with the specified id.
-   * If the user cannot be found, returns an empty string
-   */
-  public getUserText(userId: string): string {
-    const user = this.campaignService.getUser(userId);
-
-    if (!user || !user.user) {
-      return '';
-    }
-
-    return user.user.username;
-  }
-
   public isEditable(note: INote): boolean {
     return note.userId === this.loginService.id || note.publicEdit;
+  }
+
+  public user(id: string) {
+    return this.campaignService.getUser(id).user;
   }
 }

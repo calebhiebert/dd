@@ -22,17 +22,11 @@
               <a class="text-light" *ngIf="editable" [routerLink]="['edit']"><i class="icon icon-edit"></i></a>
             </h3>
 
-            <!-- Avatar Display -->
             <div class="columns col-gapless">
-              <!-- Image -->
-              <div class="column col-auto mr-1 d-flex align-items-center" *ngIf="user">
-                <figure class="avatar avatar-xs">
-                  <img [src]="user.pictureURL" alt="avatar" />
-                </figure>
-              </div>
-
               <!-- Username -->
-              <div class="column col-auto mr-1" *ngIf="user">{{ user.username }}</div>
+              <div class="column col-auto mr-1" *ngIf="user">
+                <dd-user-view-nano [user]="user"></dd-user-view-nano>
+              </div>
 
               <div class="column text-italic no-select">({{ entity.preset.name }})</div>
             </div>

@@ -41,7 +41,7 @@ export class ConceptManagerComponent implements OnInit {
         if (search === null || search === undefined || search.trim().length === 0) {
           this.search = null;
         } else {
-          this.search = search.toLowerCase();
+          this.search = search.trim();
         }
 
         if (this.conceptType) {
@@ -137,6 +137,14 @@ export class ConceptManagerComponent implements OnInit {
     this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepts', this.conceptType.id, 'create']);
   }
 
+  public createFromSearch() {
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepts', this.conceptType.id, 'create'], {
+      queryParams: {
+        name: this.search,
+      },
+    });
+  }
+
   public selectConcept(concept: IConcept) {
     this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepts', this.conceptType.id, concept.id, 'view']);
   }
@@ -148,5 +156,9 @@ export class ConceptManagerComponent implements OnInit {
 
   public get editing() {
     return this.campaignService.canEdit;
+  }
+
+  public get canCreateFromSearch() {
+    return this.editing && this.search;
   }
 }

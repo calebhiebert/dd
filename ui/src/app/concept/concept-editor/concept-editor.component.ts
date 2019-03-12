@@ -54,6 +54,11 @@ export class ConceptEditorComponent implements OnInit {
       tags: new FormArray([]),
     });
 
+    if (!this.editing && this.route.snapshot.queryParamMap.has('name')) {
+      this.name.setValue(this.route.snapshot.queryParamMap.get('name'));
+      this.name.markAsDirty();
+    }
+
     this.route.paramMap.subscribe((params) => {
       const typeId = params.get('ct_id');
       const id = params.get('c_id');
@@ -180,7 +185,7 @@ export class ConceptEditorComponent implements OnInit {
 
       this.formGroup.markAsPristine();
 
-      this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepts', this.conceptType.id, 'manage']);
+      this.cancel();
     } catch (err) {
       throw err;
     }
