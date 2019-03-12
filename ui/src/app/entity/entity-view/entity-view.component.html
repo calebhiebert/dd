@@ -52,26 +52,43 @@
 
 <div class="container grid-xl" *ngIf="entity">
   <!-- Major attributes -->
-  <dd-attribute-row-view *ngIf="majorAttributes.length > 0" [attributes]="majorAttributes" [editable]="editable"
-    (edit)="editAttribute($event)"></dd-attribute-row-view>
+  <dd-attribute-row-view
+    *ngIf="majorAttributes.length > 0"
+    [attributes]="majorAttributes"
+    [editable]="editable"
+    (edit)="editAttribute($event)"
+  ></dd-attribute-row-view>
 
   <div class="divider" *ngIf="majorAttributes.length > 0"></div>
 
   <!-- Normal Attributes -->
-  <dd-attribute-row-view *ngIf="normalAttributes.length > 0" [attributes]="normalAttributes" [editable]="editable"
-    (edit)="editAttribute($event)" mode="normal"></dd-attribute-row-view>
+  <dd-attribute-row-view
+    *ngIf="normalAttributes.length > 0"
+    [attributes]="normalAttributes"
+    [editable]="editable"
+    (edit)="editAttribute($event)"
+    mode="normal"
+  ></dd-attribute-row-view>
   <div class="divider" *ngIf="normalAttributes.length > 0"></div>
 
   <!-- Health/Currency -->
   <div class="columns">
     <!-- Health -->
-    <div class="column" [ngClass]="{
+    <div
+      class="column"
+      [ngClass]="{
         'col-9 col-md-7 col-sm-12': preset.isCurrencyEnabled,
         'col-12 mt-2': !preset.isCurrencyEnabled
-      }" *ngIf="preset.isHealthEnabled">
-      <div class="card h-100">
-        <dd-health-display [editable]="editable" [preset]="entity.preset.health" [health]="entity.health"
-          (healthChange)="onHPEdit($event)"></dd-health-display>
+      }"
+      *ngIf="preset.isHealthEnabled"
+    >
+      <div class="h-100">
+        <dd-health-display
+          [editable]="editable"
+          [preset]="entity.preset.health"
+          [health]="entity.health"
+          (healthChange)="onHPEdit($event)"
+        ></dd-health-display>
       </div>
     </div>
 
@@ -109,8 +126,10 @@
     <div class="column col-8 col-md-6 col-sm-12 hide-sm">
       <div class="divider text-center" [attr.data-content]="'About ' + entity.name"></div>
       <dd-quill readOnly="true" [value]="entity.content"></dd-quill>
-      <img class="img-responsive s-rounded mt-2"
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{ entity.imageId }}" />
+      <img
+        class="img-responsive s-rounded mt-2"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{ entity.imageId }}"
+      />
 
       <!-- Big description fields -->
       <div class="divider" *ngIf="bigTextAttributes.length > 0"></div>
@@ -123,16 +142,22 @@
 
     <!-- Minor Attributes -->
     <div class="column col-4 col-md-6 col-sm-12 col-ml-auto" *ngIf="minorAttributes.length > 0">
-      <dd-attribute-table-view *ngIf="minorAttributes.length > 0" [attributes]="minorAttributes" [editable]="editable"
-        (edit)="editAttribute($event)"></dd-attribute-table-view>
+      <dd-attribute-table-view
+        *ngIf="minorAttributes.length > 0"
+        [attributes]="minorAttributes"
+        [editable]="editable"
+        (edit)="editAttribute($event)"
+      ></dd-attribute-table-view>
     </div>
 
     <!-- Image and description lower -->
     <div class="column col-12 show-sm mt-2">
       <div class="divider text-center" [attr.data-content]="'About ' + entity.name"></div>
       <dd-quill readOnly="true" [value]="entity.content"></dd-quill>
-      <img class="img-responsive s-rounded"
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{ entity.imageId }}" />
+      <img
+        class="img-responsive s-rounded"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{ entity.imageId }}"
+      />
 
       <!-- Big description fields -->
       <div class="divider" *ngIf="bigTextAttributes.length > 0"></div>

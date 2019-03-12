@@ -122,6 +122,46 @@
             A value is required for max health
           </p>
         </div>
+
+        <!-- Health Text Levels -->
+        <div class="form-group" formGroupName="health" *ngIf="preset.isHealthEnabled && preset.health.type === 1">
+          <div class="columns">
+            <div class="column">
+              <label class="form-label">Health Text</label>
+            </div>
+            <div class="column col-auto">
+              <button class="button btn btn-sm" (click)="addHealthText()">
+                <div class="i icon icon-plus"></div>
+              </button>
+            </div>
+          </div>
+          <!-- Single Input -->
+          <div *ngFor="let lvl of hpTextLevels.controls; let idx = index" [formGroup]="lvl">
+            <div class="columns">
+              <!-- Percentage -->
+              <div class="column col-2 form-group">
+                <div class="input-group">
+                  <input type="number" min="0" max="100" class="form-input" placeholder="80" formControlName="percent" />
+                  <div class="input-group-addon">
+                    %
+                  </div>
+                </div>
+              </div>
+
+              <!-- Text -->
+              <div class="column">
+                <input type="text" class="form-input" placeholder="Looking a little bit sad" formControlName="text" />
+              </div>
+
+              <!-- Remove Button -->
+              <div class="column col-auto">
+                <button class="btn btn-error" (click)="removeHealthText(idx)">
+                  <i class="icon icon-cross"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

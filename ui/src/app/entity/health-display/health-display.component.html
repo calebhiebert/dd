@@ -4,15 +4,7 @@
     <form class="mb-2" (ngSubmit)="submitEdit()">
       <div class="form-group">
         <label class="form-label" for="operation">HP</label>
-        <input
-          type="tel"
-          name="operation"
-          id="operation"
-          placeholder="HP"
-          [formControl]="operationControl"
-          class="form-input"
-          #hpinput
-        />
+        <input type="tel" name="operation" id="operation" placeholder="HP" [formControl]="operationControl" class="form-input" #hpinput />
       </div>
     </form>
 
@@ -21,6 +13,7 @@
       [editable]="false"
       [health]="hpAfterOperation"
       [disableAnimation]="true"
+      [forceShowBar]="true"
       [preset]="preset"
     ></dd-health-display>
 
@@ -41,57 +34,43 @@
   </div>
 </dd-modal>
 
-<div
-  class="bar h-100"
-  (click)="editHP()"
-  [ngClass]="{ 'c-hand': editable }"
-  *ngFor="let bar of bars; trackBy: trackBarElement"
->
-  <div
-    class="bar-item d-flex align-items-center justify-content-center"
-    [ngClass]="{ 'bar-animated': !disableAnimation, 'p-1': !mini }"
-    [style.width]="bar.percentCSS"
-    [style.backgroundColor]="bar.colorCSS"
-  >
-    <h5 class="mb-1 text-bold" *ngIf="hpPercent > 50 && !mini && amountVisible">
-      {{ bar.current }} / {{ bar.max }}
-    </h5>
-    <h5
-      class="mb-1 text-bold"
-      *ngIf="hpPercent <= 50 && !mini && amountVisible"
-      style="opacity: 0;"
+<div *ngIf="!textOnly">
+  <!-- Bar Display -->
+  <div class="bar h-100" (click)="editHP()" [ngClass]="{ 'c-hand': editable }" *ngFor="let bar of bars; trackBy: trackBarElement">
+    <div
+      class="bar-item d-flex align-items-center justify-content-center"
+      [ngClass]="{ 'bar-animated': !disableAnimation, 'p-1': !mini }"
+      [style.width]="bar.percentCSS"
+      [style.backgroundColor]="bar.colorCSS"
     >
-      .
-    </h5>
-    <h5
-      class="mb-1 text-bold"
-      *ngIf="!mini && !amountVisible"
-      style="opacity: 0;"
-    >
-      .
-    </h5>
-    <div *ngIf="hpPercent > 50 && mini && amountVisible">
-      {{ bar.current }} / {{ bar.max }}
+      <h5 class="mb-1 text-bold" *ngIf="hpPercent > 50 && !mini && amountVisible">{{ bar.current }} / {{ bar.max }}</h5>
+      <h5 class="mb-1 text-bold" *ngIf="hpPercent <= 50 && !mini && amountVisible" style="opacity: 0;">
+        .
+      </h5>
+      <h5 class="mb-1 text-bold" *ngIf="!mini && !amountVisible" style="opacity: 0;">
+        .
+      </h5>
+      <div *ngIf="hpPercent > 50 && mini && amountVisible">{{ bar.current }} / {{ bar.max }}</div>
+      <div *ngIf="hpPercent <= 50 && mini && amountVisible" style="opacity: 0;">
+        .
+      </div>
+      <div *ngIf="!amountVisible && mini" style="opacity: 0;">
+        .
+      </div>
     </div>
-    <div *ngIf="hpPercent <= 50 && mini && amountVisible" style="opacity: 0;">
-      .
+
+    <!-- Extras container -->
+    <div class="d-flex justify-content-center align-items-center p-1" *ngIf="hpPercent <= 50 && !mini && amountVisible">
+      <h5 class="mb-1 text-bold">{{ bar.current }} / {{ bar.max }}</h5>
     </div>
-    <div *ngIf="!amountVisible && mini" style="opacity: 0;">
-      .
+    <div class="d-flex justify-content-center align-items-center pl-1" *ngIf="hpPercent <= 50 && mini && amountVisible">
+      <div>{{ bar.current }} / {{ bar.max }}</div>
     </div>
   </div>
 
-  <!-- Extras container -->
-  <div
-    class="d-flex justify-content-center align-items-center p-1"
-    *ngIf="hpPercent <= 50 && !mini && amountVisible"
-  >
-    <h5 class="mb-1 text-bold">{{ bar.current }} / {{ bar.max }}</h5>
-  </div>
-  <div
-    class="d-flex justify-content-center align-items-center pl-1"
-    *ngIf="hpPercent <= 50 && mini && amountVisible"
-  >
-    <div>{{ bar.current }} / {{ bar.max }}</div>
-  </div>
+  <!-- Text Display -->
+  <div class="form-input-hint text-center">{{ hpText }}</div>
+</div>
+<div *ngIf="textOnly" class="text-center" style="margin-top: -0.45rem;">
+  <h5 class="mb-2">{{ hpText }}</h5>
 </div>

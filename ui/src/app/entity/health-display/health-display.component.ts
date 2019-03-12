@@ -1,17 +1,5 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewChild,
-  Output,
-  EventEmitter,
-  ElementRef,
-} from '@angular/core';
-import {
-  IHealth,
-  IHealthPreset,
-  HealthColorType,
-} from 'src/app/entity.service';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
+import { IHealth, IHealthPreset, HealthColorType, HealthType } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
@@ -61,6 +49,9 @@ export class HealthDisplayComponent implements OnInit {
 
   @Input()
   public mini = false;
+
+  @Input()
+  public forceShowBar = false;
 
   @Output()
   public healthChange = new EventEmitter<IHealth>();
@@ -150,23 +141,10 @@ export class HealthDisplayComponent implements OnInit {
       amount: 10,
     };
 
-    const [
-      full,
-      add,
-      addValue,
-      sub,
-      subValue,
-      div,
-      divValue,
-      mul,
-      mulValue,
-      fill,
-      set,
-    ] = matches;
+    const [full, add, addValue, sub, subValue, div, divValue, mul, mulValue, fill, set] = matches;
 
     if (add) {
-      (operation.type = HPOperation.ADD),
-        (operation.amount = parseInt(addValue, 10));
+      (operation.type = HPOperation.ADD), (operation.amount = parseInt(addValue, 10));
     } else if (sub) {
       operation.type = HPOperation.SUBTRACT;
       operation.amount = parseInt(subValue, 10);
@@ -285,5 +263,34 @@ export class HealthDisplayComponent implements OnInit {
 
   public get amountVisible() {
     return !this.preset.amountHidden || this.campaignService.canEdit;
+  }
+
+  public get textOnly() {
+    return this.preset.type === HealthType.TEXT_BASED && !this.editable && !this.forceShowBar;
+  }
+
+  public get hpText() {
+    if (this.health && this.preset && this.preset.type === HealthType.TEXT_BASED) {
+      const hpTextLevels = Object.keys(this.health.textDamageLevels)
+        .map((tdl) => {
+          return {
+            percent: parseInt(tdl, 10),
+            text: this.health.textDamageLevels[tdl],
+          };
+        })
+        .sort((a, b) => {
+          return a.percent - b.percent;
+        });
+
+      for (const lvl of hpTextLevels) {
+        if (this.hpPercent <= lvl.percent) {
+          return lvl.text;
+        }
+      }
+
+      return '';
+    } else {
+      return '';
+    }
   }
 }

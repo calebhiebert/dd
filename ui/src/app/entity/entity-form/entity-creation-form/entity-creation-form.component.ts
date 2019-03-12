@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { EntityService, IEntity, HealthType } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { numberValidator } from '../../dynamic-attribute-form/dynamic-attribute-form.component';
@@ -47,6 +47,7 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
       health: new FormGroup({
         max: new FormControl(null, [numberValidator, Validators.min(1)]),
         current: new FormControl(null, [numberValidator, Validators.min(0)]),
+        textDamageLevels: new FormArray([]),
       }),
       imageId: new FormControl('uncertainty'),
       imageColor1: new FormControl('#fff'),
@@ -93,6 +94,16 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
   private constructEntity(): IEntity {
     const v = this.formGroup.value;
 
+    let hpTextLevels = null;
+
+    if (this.preset.isHealthEnabled && this.preset.health.type === HealthType.TEXT_BASED) {
+      hpTextLevels = {};
+
+      this.hpTextLevels.controls.forEach((ctrl) => {
+        hpTextLevels[ctrl.value.percent] = ctrl.value.text;
+      });
+    }
+
     const ent: IEntity = {
       id: this.entity ? this.entity.id : '',
       name: v.name,
@@ -106,6 +117,7 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
       health: {
         max: v.health.max,
         current: v.health.current,
+        textDamageLevels: hpTextLevels,
       },
       userId: this.editing ? this.entity.userId : this.login.id,
       campaignId: this.campaignService.campaign.id,
@@ -139,9 +151,25 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
       const ent = await this.entityService.getEntity(id);
       this.entity = ent;
       this.setFormValidators();
+      if (this.entity.health && this.entity.health.textDamageLevels) {
+        Object.keys(this.entity.health.textDamageLevels).forEach(() => {
+          this.addHealthText();
+        });
+      }
 
       setTimeout(() => {
-        const patchValue = { ...ent };
+        const patchValue: any = { ...ent };
+
+        if (patchValue.health && patchValue.health.textDamageLevels) {
+          const healthLevels = Object.keys(patchValue.health.textDamageLevels).map((percent) => {
+            return {
+              percent: percent,
+              text: patchValue.health.textDamageLevels[percent],
+            };
+          });
+
+          patchValue.health.textDamageLevels = healthLevels;
+        }
 
         if (ent.health === null) {
           ent.health = { max: 1, current: 0 };
@@ -216,6 +244,19 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
     }
   }
 
+  public addHealthText() {
+    this.hpTextLevels.push(
+      new FormGroup({
+        percent: new FormControl(null, [Validators.required, Validators.min(0), Validators.max(100)]),
+        text: new FormControl(null, [Validators.required, Validators.maxLength(150)]),
+      })
+    );
+  }
+
+  public removeHealthText(idx: number) {
+    this.hpTextLevels.removeAt(idx);
+  }
+
   public cancel() {
     this.location.back();
   }
@@ -256,6 +297,10 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
 
   public get hpCurrent() {
     return this.formGroup.get('health.current');
+  }
+
+  public get hpTextLevels() {
+    return this.formGroup.get('health.textDamageLevels') as FormArray;
   }
 
   public get campaignEditable() {
