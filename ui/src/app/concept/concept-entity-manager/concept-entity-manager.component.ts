@@ -12,10 +12,9 @@ import { UpdateHubService } from 'src/app/update-hub.service';
 @Component({
   selector: 'dd-concept-entity-manager',
   templateUrl: './concept-entity-manager.component.html',
-  styleUrls: ['./concept-entity-manager.component.css']
+  styleUrls: ['./concept-entity-manager.component.css'],
 })
 export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
-
   public loading = false;
   public searchLoading = false;
   public working = false;
@@ -49,7 +48,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   private _updateSubscription: Subscription;
   private _deleteSubscription: Subscription;
 
-  constructor(private conceptService: ConceptService, private campaignService: CampaignService, private updateHub: UpdateHubService) { }
+  constructor(private conceptService: ConceptService, private campaignService: CampaignService, private updateHub: UpdateHubService) {}
 
   ngOnInit() {
     this.searchControl = new FormControl(null);
@@ -59,13 +58,18 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
       content: new FormControl(null),
     });
 
-    this.searchControl.valueChanges.pipe(distinctUntilChanged(), debounceTime(250)).subscribe(search => {
-      if (search !== null && search !== undefined) {
-        this.searchConcepts(search.trim().toLowerCase());
-      } else {
-        this.searchConcepts('');
-      }
-    });
+    this.searchControl.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(250)
+      )
+      .subscribe((search) => {
+        if (search !== null && search !== undefined) {
+          this.searchConcepts(search.trim().toLowerCase());
+        } else {
+          this.searchConcepts('');
+        }
+      });
 
     this._updateSubscription = this.updateHub.conceptEntityUpdate.subscribe((ce: IConceptEntity) => {
       if (!this.conceptEntities || !this.entity || !this.conceptType) {
@@ -148,11 +152,12 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
         concept: picked,
         entityId: this.entity.id,
         quantity: this.quantityEnabled ? 1 : null,
-        fields: []
+        fields: [],
       };
 
-      const existingConceptEntity = this.conceptEntities
-        .find(ce => ce.conceptId === conceptEntity.conceptId && ce.entityId === conceptEntity.entityId);
+      const existingConceptEntity = this.conceptEntities.find(
+        (ce) => ce.conceptId === conceptEntity.conceptId && ce.entityId === conceptEntity.entityId
+      );
 
       if (existingConceptEntity === undefined) {
         this.conceptEntities.push(conceptEntity);
@@ -210,7 +215,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     this.working = true;
 
     try {
-      this.conceptEntities = this.conceptEntities.filter(ce => {
+      this.conceptEntities = this.conceptEntities.filter((ce) => {
         const match = ce.conceptId === conceptEntity.conceptId && ce.entityId === conceptEntity.entityId;
 
         return !match;
@@ -224,6 +229,14 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     }
 
     this.working = false;
+  }
+
+  public trackConcept(idx: number, concept: IConcept) {
+    return concept.id;
+  }
+
+  public trackConceptEntity(idx: number, conceptEntity: IConceptEntity) {
+    return conceptEntity.conceptId + conceptEntity.entityId;
   }
 
   public get quantityEnabled() {
@@ -264,7 +277,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
       type: DynamicFieldType.INT,
       options: {
         min: 0,
-      }
+      },
     };
   }
 

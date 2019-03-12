@@ -3,16 +3,15 @@
   <div modal-body>
     <!-- Search Bar -->
     <div class="has-icon-right">
-      <input type="text" [formControl]="searchControl" class="form-input"
-        placeholder="Search {{ conceptType.pluralForm }}" #searchbar>
+      <input type="text" [formControl]="searchControl" class="form-input" placeholder="Search {{ conceptType.pluralForm }}" #searchbar />
       <i class="icon icon-search form-icon" *ngIf="!searchLoading"></i>
       <div class="loading form-icon" *ngIf="searchLoading"></div>
     </div>
 
     <!-- Search Results -->
     <div>
-      <div class="card p-1 my-1 hoverable" *ngFor="let sr of searchResults" (click)="picker.close(sr)">
-        {{ sr.name }}
+      <div class="card p-1 my-1 hoverable" *ngFor="let sr of searchResults; trackBy: trackConcept" (click)="picker.close(sr)">
+        <dd-concept-list-item [concept]="sr" [imageSize]="25"></dd-concept-list-item>
       </div>
     </div>
   </div>
@@ -24,21 +23,20 @@
   <!-- View For Edit Mode -->
   <div modal-body *ngIf="editable && selectedConceptEntity" [formGroup]="editGroup">
     <!-- Quantity Control -->
-    <dd-dynamic-field [control]="quantityControl" [config]="quantityFieldConfig" *ngIf="quantityEnabled">
-    </dd-dynamic-field>
+    <dd-dynamic-field [control]="quantityControl" [config]="quantityFieldConfig" *ngIf="quantityEnabled"> </dd-dynamic-field>
 
     <div class="my-2"></div>
 
     <!-- Notes Control -->
-    <dd-dynamic-field [control]="contentControl" [config]="notesFieldConfig">
-    </dd-dynamic-field>
-
+    <dd-dynamic-field [control]="contentControl" [config]="notesFieldConfig"> </dd-dynamic-field>
   </div>
 
   <!-- View For View Mode -->
   <div modal-body *ngIf="!editable && selectedConceptEntity">
     <!-- Quantity -->
-    <h6 *ngIf="quantityEnabled">Quantity: <strong>{{ selectedConceptEntity.quantity || 1 }}</strong></h6>
+    <h6 *ngIf="quantityEnabled">
+      Quantity: <strong>{{ selectedConceptEntity.quantity || 1 }}</strong>
+    </h6>
 
     <!-- Notes -->
     <dd-quill [value]="selectedConceptEntity.content" readOnly="true"></dd-quill>
@@ -77,31 +75,35 @@
 
   <!-- Concepts -->
   <div>
-
     <div class="card px-1 pt-1 mb-1" *ngFor="let ce of conceptEntities">
       <div class="columns col-gapless">
-
         <!-- Image -->
         <div class="column col-auto mr-2 c-hand" [ngClass]="{ faded: ce.quantity === 0 }" (click)="select(ce)">
-
           <!-- Actual Image -->
-          <img class="s-rounded" width="32" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-                  ce.concept.imageId
-                }}" *ngIf="ce.concept.imageId" style="margin-bottom: -0.075rem" />
+          <img
+            class="s-rounded"
+            width="30"
+            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ ce.concept.imageId }}"
+            *ngIf="ce.concept.imageId"
+            style="margin-bottom: -0.075rem"
+          />
 
           <!-- Placeholder Image -->
-          <img class="s-rounded" width="32" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/winged-sword"
-            *ngIf="!ce.concept.imageId" style="margin-bottom: -0.075rem" />
+          <img
+            class="s-rounded"
+            width="30"
+            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/winged-sword"
+            *ngIf="!ce.concept.imageId"
+            style="margin-bottom: -0.075rem"
+          />
         </div>
 
         <!-- Name -->
-        <div class="column pt-1 c-hand" [ngClass]="{ faded: quantityEnabled && ce.quantity === 0 }"
-          (click)="select(ce)">
+        <div class="column c-hand" [ngClass]="{ faded: quantityEnabled && ce.quantity === 0 }" (click)="select(ce)">
           {{ ce.concept.name }}
 
           <!-- Quantity -->
-          <sup class="text-bold text-small"
-            *ngIf="quantityEnabled && ce.quantity !== 1 && ce.quantity !== null">x{{ ce.quantity }}</sup>
+          <sup class="text-bold text-small" *ngIf="quantityEnabled && ce.quantity !== 1 && ce.quantity !== null">x{{ ce.quantity }}</sup>
         </div>
 
         <!-- Controls -->
@@ -109,13 +111,11 @@
           <button class="btn btn-sm mr-1" (click)="select(ce)" *ngIf="editable">
             <i class="icon icon-edit"></i>
           </button>
-          <button class="btn btn-sm ml-1"
-            [routerLink]="['/campaigns', campaign.id, 'concepts', conceptType.id, ce.concept.id, 'view']">
+          <button class="btn btn-sm ml-1" [routerLink]="['/campaigns', campaign.id, 'concepts', conceptType.id, ce.concept.id, 'view']">
             <i class="icon icon-arrow-right"></i>
           </button>
         </div>
       </div>
     </div>
   </div>
-
 </div>
