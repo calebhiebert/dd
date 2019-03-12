@@ -50,6 +50,7 @@ namespace net_api
             services.AddSingleton<IAuthorizationHandler, NoteViewableHandler>();
             services.AddSingleton<IAuthorizationHandler, NoteEditableHandler>();
             services.AddSingleton<IAuthorizationHandler, NotificationAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, ConceptEditableHandler>();
 
             services.AddAuthorization(options =>
             {
@@ -59,6 +60,7 @@ namespace net_api
                 options.AddPolicy("NoteEditPolicy", policy => policy.Requirements.Add(new NoteEditorRequirement()));
                 options.AddPolicy("NoteViewPolicy", policy => policy.Requirements.Add(new NoteViewerRequirement()));
                 options.AddPolicy("NotificationEditPolicy", policy => policy.Requirements.Add(new NotificationEditorRequirement()));
+                options.AddPolicy("ConceptEditPolicy", policy => policy.Requirements.Add(new ConceptEditorRequirement()));
             });
 
             services.AddScoped<Context>();

@@ -104,7 +104,7 @@ export class ConceptViewComponent implements OnInit {
   }
 
   public get editable() {
-    return this.campaignService.canEdit;
+    return this.campaignService.canEdit || (this.conceptType && this.conceptType.playerEditable);
   }
 
   public get user() {

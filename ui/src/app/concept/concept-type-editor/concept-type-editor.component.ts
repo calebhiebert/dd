@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import {
-  IDynamicFieldConfig,
-  DynamicFieldType,
-} from 'src/app/dynform/form-types';
+import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { IConceptType, ConceptService } from 'src/app/concept.service';
 import { Location } from '@angular/common';
@@ -17,8 +14,7 @@ import { FieldDefinitionFormComponent } from 'src/app/dynform/field-definition-f
   templateUrl: './concept-type-editor.component.html',
   styleUrls: ['./concept-type-editor.component.css'],
 })
-export class ConceptTypeEditorComponent
-  implements OnInit, ComponentCanDeactivate {
+export class ConceptTypeEditorComponent implements OnInit, ComponentCanDeactivate {
   public saving = false;
   public deleting = false;
   public loading = false;
@@ -62,7 +58,7 @@ export class ConceptTypeEditorComponent
     private login: LoginService,
     private location: Location,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
@@ -71,10 +67,11 @@ export class ConceptTypeEditorComponent
       description: new FormControl(null),
       icon: new FormControl(null),
       fields: new FormArray([]),
+      playerEditable: new FormControl(false),
       entityConfig: new FormGroup({
         enabled: new FormControl(false),
         enableQuantity: new FormControl(false),
-        fields: new FormArray([])
+        fields: new FormArray([]),
       }),
     });
 
@@ -85,7 +82,7 @@ export class ConceptTypeEditorComponent
       });
     }
 
-    this.name.valueChanges.subscribe()
+    this.name.valueChanges.subscribe();
   }
 
   private constructConceptType(): IConceptType {
@@ -95,6 +92,7 @@ export class ConceptTypeEditorComponent
       description: this.description.value,
       userId: this.login.id,
       icon: this.icon.value,
+      playerEditable: this.playerEditable.value,
       campaignId: this.campaignService.campaign.id,
       fields: this.fields.value || [],
       entityConfig: this.entityConfig.value,
@@ -115,9 +113,7 @@ export class ConceptTypeEditorComponent
     try {
       this.conceptType = await this.conceptService.getConceptType(id);
 
-      this.conceptType.fields.forEach((f) =>
-        this.fields.push(FieldDefinitionFormComponent.createFormGroup(f))
-      );
+      this.conceptType.fields.forEach((f) => this.fields.push(FieldDefinitionFormComponent.createFormGroup(f)));
 
       this.formGroup.patchValue(this.conceptType, { emitEvent: false });
     } catch (err) {
@@ -161,14 +157,11 @@ export class ConceptTypeEditorComponent
     this.formGroup.markAsPristine();
     this.saving = false;
 
-    await this.router.navigate(
-      ['campaigns', this.campaignService.campaign.id, 'settings'],
-      {
-        queryParams: {
-          refresh: true,
-        },
-      }
-    );
+    await this.router.navigate(['campaigns', this.campaignService.campaign.id, 'settings'], {
+      queryParams: {
+        refresh: true,
+      },
+    });
   }
 
   public trackField(idx: number) {
@@ -212,6 +205,10 @@ export class ConceptTypeEditorComponent
 
   public get icon() {
     return this.formGroup.get('icon');
+  }
+
+  public get playerEditable() {
+    return this.formGroup.get('playerEditable');
   }
 
   public get entityConfig() {

@@ -31,6 +31,9 @@ namespace net_api.Models
 
         public string Icon { get; set; }
 
+        [Required]
+        public bool PlayerEditable { get; set; }
+
         [Column("Fields", TypeName = "JSONB")]
         [JsonIgnore]
         public string FieldJson { get; set; }

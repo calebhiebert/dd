@@ -30,7 +30,7 @@
 
   <!-- Concept List -->
   <div *ngIf="concepts && conceptType">
-    <div class="card p-1 hoverable mb-1" *ngFor="let c of concepts" (click)="selectConcept(c)">
+    <div class="card p-1 hoverable mb-1" *ngFor="let c of concepts; trackBy: trackConcept" (click)="selectConcept(c)">
       <dd-concept-list-item [concept]="c"></dd-concept-list-item>
     </div>
 

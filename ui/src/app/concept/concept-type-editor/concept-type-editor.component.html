@@ -13,8 +13,7 @@
         Cancel
       </button>
 
-      <button class="btn btn-primary" (click)="save()" [ngClass]="{ loading: saving }"
-        [disabled]="formGroup.invalid || formGroup.pristine">
+      <button class="btn btn-primary" (click)="save()" [ngClass]="{ loading: saving }" [disabled]="formGroup.invalid || formGroup.pristine">
         Save
       </button>
     </div>
@@ -34,6 +33,14 @@
     <div class="form-group mt-2">
       <label>Icon</label>
       <dd-icon-picker [formControl]="icon"></dd-icon-picker>
+    </div>
+
+    <!-- Player Editable -->
+    <div class="form-group">
+      <label class="form-checkbox mb-0">
+        <input type="checkbox" formControlName="enabled" [formControl]="playerEditable" />
+        <i class="form-icon"></i> Players can manage this concept
+      </label>
     </div>
 
     <!-- Entity Config -->
@@ -67,16 +74,10 @@
         <h3>Fields</h3>
       </div>
       <div class="column col-auto">
-        <button class="btn btn-sm" (click)="addField()">
-          <i class="icon icon-plus"></i> Add Field
-        </button>
+        <button class="btn btn-sm" (click)="addField()"><i class="icon icon-plus"></i> Add Field</button>
       </div>
     </div>
-    <div *ngFor="
-        let field of fields.controls;
-        let idx = index;
-        trackBy: trackField
-      " class="mt-2">
+    <div *ngFor="let field of fields.controls; let idx = index; trackBy: trackField" class="mt-2">
       <div class="columns mb-1">
         <div class="column">
           <h6 class="mb-0">{{ field.value.name }}</h6>

@@ -56,6 +56,7 @@ export class ConceptManagerComponent implements OnInit {
       this.concepts = null;
 
       const settings = this.readQueryFromURL();
+      this.searchControl.setValue(settings.search);
       this.page = settings.offset / settings.limit + 1;
       this.search = settings.search;
 
@@ -149,13 +150,17 @@ export class ConceptManagerComponent implements OnInit {
     this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepts', this.conceptType.id, concept.id, 'view']);
   }
 
+  public trackConcept(idx: number, concept: IConcept) {
+    return concept.id;
+  }
+
   public changePage(page: number) {
     this.page = page;
     this.load(this.conceptType.id);
   }
 
   public get editing() {
-    return this.campaignService.canEdit;
+    return this.campaignService.canEdit || (this.conceptType && this.conceptType.playerEditable);
   }
 
   public get canCreateFromSearch() {

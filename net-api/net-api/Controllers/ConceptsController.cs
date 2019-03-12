@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -133,13 +133,14 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            var authResult = await _auth.AuthorizeAsync(User, existingConcept.ConceptType.Campaign, "CampaignEditPolicy");
+            var authResult = await _auth.AuthorizeAsync(User, existingConcept.ConceptType, "ConceptEditPolicy");
 
             if (!authResult.Succeeded)
             {
                 return Forbid();
             }
 
+            concept.ConceptType = null;
             concept.UserId = existingConcept.UserId;
 
             _context.Entry(concept).State = EntityState.Modified;
@@ -179,7 +180,7 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            var authResult = await _auth.AuthorizeAsync(User, existingConceptType.Campaign, "CampaignEditPolicy");
+            var authResult = await _auth.AuthorizeAsync(User, existingConceptType, "ConceptEditPolicy");
 
             if (!authResult.Succeeded)
             {
@@ -204,6 +205,7 @@ namespace net_api.Controllers
                 .Where(c => c.Id == id)
                     .Include(c => c.ConceptType)
                         .ThenInclude(c => c.Campaign)
+                            .ThenInclude(c => c.Members)
                 .FirstOrDefaultAsync();
 
             if (concept == null)
@@ -211,7 +213,7 @@ namespace net_api.Controllers
                 return NotFound();
             }
 
-            var authResult = await _auth.AuthorizeAsync(User, concept.ConceptType.Campaign, "CampaignEditPolicy");
+            var authResult = await _auth.AuthorizeAsync(User, concept.ConceptType, "ConceptEditPolicy");
 
             if (!authResult.Succeeded)
             {
