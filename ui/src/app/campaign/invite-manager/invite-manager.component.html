@@ -12,9 +12,17 @@
     </div>
   </div>
 
-  <button class="btn btn-sm" (click)="createInvite()" *ngIf="invites.length > 0" [ngClass]="{ loading: creatingInvite }">
-    <i class="icon icon-plus"></i><span class="hide-sm"> Create Invite</span>
-  </button>
+  <div class="columns">
+    <div class="column">
+      <h4 class="mb-0">Invites</h4>
+    </div>
+
+    <div class="column col-auto">
+      <button class="btn btn-sm" (click)="createInvite()" *ngIf="invites.length > 0" [ngClass]="{ loading: creatingInvite }">
+        <i class="icon icon-plus"></i><span class="hide-sm"> Create Invite</span>
+      </button>
+    </div>
+  </div>
   <!-- Invites List -->
   <table class="table" *ngIf="invites.length > 0">
     <thead>
@@ -23,7 +31,6 @@
         <th>Name</th>
         <th>Status</th>
         <th>User</th>
-        <th>Created On</th>
         <th></th>
       </tr>
     </thead>
@@ -41,7 +48,6 @@
           <dd-user-view-nano [user]="i.user" *ngIf="i.user"></dd-user-view-nano>
           <span *ngIf="!i.user">N/A</span>
         </td>
-        <td>{{ i.createdAt | date }}</td>
         <td>
           <button class="btn btn-link btn-sm" *ngIf="i.status === 0" (click)="revokeInvite(i)">
             <i class="icon icon-cross"></i>Revoke

@@ -16,7 +16,7 @@ export class CampaignService {
   public previousCampaignId: string;
   public events = new EventEmitter<ICampaign>();
 
-  constructor(private http: HttpClient, private login: LoginService) { }
+  constructor(private http: HttpClient, private login: LoginService) {}
 
   public async setSelection(campaignId?: string) {
     if (campaignId === null) {
@@ -63,15 +63,11 @@ export class CampaignService {
    * Returns a list of campaigns the user can access
    */
   public async getCampaigns(): Promise<ICampaign[]> {
-    return this.http
-      .get<ICampaign[]>(`${environment.apiURL}/campaigns`)
-      .toPromise();
+    return this.http.get<ICampaign[]>(`${environment.apiURL}/campaigns`).toPromise();
   }
 
   public async getCampaign(id: string): Promise<ICampaign> {
-    return this.http
-      .get<ICampaign>(`${environment.apiURL}/campaigns/${id}`)
-      .toPromise();
+    return this.http.get<ICampaign>(`${environment.apiURL}/campaigns/${id}`).toPromise();
   }
 
   public async createCampaign(campaign: ICampaign): Promise<ICampaign> {
@@ -84,32 +80,19 @@ export class CampaignService {
   }
 
   public async updateCampaign(campaign: ICampaign): Promise<ICampaign> {
-    return this.http
-      .put<ICampaign>(
-        `${environment.apiURL}/campaigns/${campaign.id}`,
-        campaign
-      )
-      .toPromise();
+    return this.http.put<ICampaign>(`${environment.apiURL}/campaigns/${campaign.id}`, campaign).toPromise();
   }
 
   public async deleteCampaign(campaign: ICampaign): Promise<ICampaign> {
-    return this.http
-      .delete<ICampaign>(`${environment.apiURL}/campaigns/${campaign.id}`)
-      .toPromise();
+    return this.http.delete<ICampaign>(`${environment.apiURL}/campaigns/${campaign.id}`).toPromise();
   }
 
   public async getInvites(): Promise<ICampaignInvite[]> {
-    return this.http
-      .get<ICampaignInvite[]>(
-        `${environment.apiURL}/campaigninvites?campaignId=${this.campaign.id}`
-      )
-      .toPromise();
+    return this.http.get<ICampaignInvite[]>(`${environment.apiURL}/campaigninvites?campaignId=${this.campaign.id}`).toPromise();
   }
 
   public async getInvite(id: string): Promise<ICampaignInvite> {
-    return this.http
-      .get<ICampaignInvite>(`${environment.apiURL}/campaigninvites/${id}`)
-      .toPromise();
+    return this.http.get<ICampaignInvite>(`${environment.apiURL}/campaigninvites/${id}`).toPromise();
   }
 
   public async createInvite(name: string): Promise<ICampaignInvite> {
@@ -122,27 +105,23 @@ export class CampaignService {
   }
 
   public async updateInvite(invite: ICampaignInvite): Promise<void> {
-    return this.http
-      .put<void>(`${environment.apiURL}/campaigninvites/${invite.id}`, invite)
-      .toPromise();
+    return this.http.put<void>(`${environment.apiURL}/campaigninvites/${invite.id}`, invite).toPromise();
   }
 
   public async deleteInvite(token: string): Promise<void> {
-    return this.http
-      .delete<void>(`${environment.apiURL}/campaigninvites/${token}`)
-      .toPromise();
+    return this.http.delete<void>(`${environment.apiURL}/campaigninvites/${token}`).toPromise();
   }
 
   public async acceptInvite(token: string): Promise<void> {
-    return this.http
-      .post<void>(`${environment.apiURL}/campaigninvites/${token}/accept`, {})
-      .toPromise();
+    return this.http.post<void>(`${environment.apiURL}/campaigninvites/${token}/accept`, {}).toPromise();
   }
 
   public async denyInvite(token: string): Promise<void> {
-    return this.http
-      .post<void>(`${environment.apiURL}/campaigninvites/${token}/decline`, {})
-      .toPromise();
+    return this.http.post<void>(`${environment.apiURL}/campaigninvites/${token}/decline`, {}).toPromise();
+  }
+
+  public async removeMember(campaignUser: ICampaignUser) {
+    return this.http.delete<void>(`${environment.apiURL}/campaigns/${campaignUser.campaignId}/member/${campaignUser.userId}`).toPromise();
   }
 
   public calculateLevel(xp: number): number {

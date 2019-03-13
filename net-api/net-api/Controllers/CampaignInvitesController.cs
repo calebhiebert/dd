@@ -252,6 +252,59 @@ namespace net_api.Controllers
             return CreatedAtAction("GetCampaignInvite", new { id = campaignInvite.Id }, campaignInvite);
         }
 
+        // PUT: api/CampaignInvites/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCampaignInvite([FromRoute] string id, [FromBody] CampaignInvite campaignInvite)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != campaignInvite.Id)
+            {
+                return BadRequest();
+            }
+
+            var existingInvite = await _context.CampaignInvites
+                .Where(invite => invite.Id == id)
+                    .Include(i => i.Campaign)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (existingInvite == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, existingInvite.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            _context.Entry(campaignInvite).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CampaignInviteExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         private bool CampaignInviteExists(string id)
         {
             return _context.CampaignInvites.Any(e => e.Id == id);

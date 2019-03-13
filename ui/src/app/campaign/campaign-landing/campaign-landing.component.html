@@ -1,12 +1,3 @@
-<dd-modal #invites size="large" *ngIf="editable">
-  <div modal-header>
-    <h4>Manage Invites</h4>
-  </div>
-  <div modal-body *ngIf="invites.isOpen">
-    <dd-invite-manager></dd-invite-manager>
-  </div>
-</dd-modal>
-
 <div class="container grid-xl" *ngIf="campaign">
   <!-- Header -->
   <div class="columns">
@@ -48,9 +39,9 @@
               <h5>Members</h5>
             </div>
             <div class="column col-auto col-ml-auto" *ngIf="editable">
-              <button class="btn btn-sm" (click)="invites.open()">
-                <i class="icon icon-plus"></i>
-                <span class="hide-sm"> Invite Members</span>
+              <button class="btn btn-sm" (click)="manageMembers()">
+                <span class="hide-sm">Manage </span>
+                <i class="icon icon-menu"></i>
               </button>
             </div>
           </div>
@@ -65,8 +56,7 @@
               <div class="tile-title">{{ u.user.username }}</div>
               <div class="d-flex">
                 <span class="chip hoverable-chip" (click)="selectEntity(e)" *ngFor="let e of userEntities(u.user.id)">
-                  <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}"
-                    class="avatar avatar-sm" />
+                  <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}" class="avatar avatar-sm" />
                   {{ e.name }}
                 </span>
               </div>
@@ -98,9 +88,12 @@
 
       <!-- Quick Links -->
       <div class="card mt-2 p-2" *ngIf="campaign.conceptTypes && campaign.conceptTypes.length > 0">
-        <button class="btn" *ngFor="let ct of campaign.conceptTypes; let idx = index"
+        <button
+          class="btn"
+          *ngFor="let ct of campaign.conceptTypes; let idx = index"
           [routerLink]="['/campaigns', campaign.id, 'concepts', ct.id, 'manage']"
-          [ngClass]="{ 'mb-2': idx !== campaign.conceptTypes.length - 1 }">
+          [ngClass]="{ 'mb-2': idx !== campaign.conceptTypes.length - 1 }"
+        >
           {{ ct.pluralForm }}
         </button>
       </div>

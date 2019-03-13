@@ -34,6 +34,7 @@ import { ConceptManagerComponent } from './concept/concept-manager/concept-manag
 import { ConceptEditorComponent } from './concept/concept-editor/concept-editor.component';
 import { ConceptViewComponent } from './concept/concept-view/concept-view.component';
 import { ConceptHistoryComponent } from './concept/concept-history/concept-history.component';
+import { MemberManagerComponent } from './campaign/member-manager/member-manager.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -296,6 +297,13 @@ const routes: Routes = [
           breadcrumb: 'Article View',
         },
       },
+      {
+        path: 'members',
+        component: MemberManagerComponent,
+        data: {
+          breadcrumb: 'Members',
+        },
+      },
     ],
   },
 ];
@@ -304,4 +312,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

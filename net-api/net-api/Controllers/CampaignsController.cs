@@ -222,6 +222,47 @@ namespace net_api.Controllers
             return Ok(campaign);
         }
 
+        [HttpDelete("{id}/member/{memberId}")]
+        public async Task<IActionResult> RemoveMember(Guid id, string memberId)
+        {
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == id)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            var user = campaign.Members
+                .Where(m => m.CampaignId == id && m.UserId == memberId)
+                .FirstOrDefault();
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (user.UserId == campaign.UserId)
+            {
+                return BadRequest("cannot remove owner");
+            }
+
+            _context.CampaignUsers.Remove(user);
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         private bool CampaignExists(Guid id)
         {
             return _context.Campaigns.Any(e => e.Id == id);

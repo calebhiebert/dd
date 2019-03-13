@@ -126,7 +126,8 @@ $hover-scale: 1.005;
   }
 }
 
-.mention {
+.mention,
+.fake-link {
   @extend a;
   cursor: pointer;
 }
