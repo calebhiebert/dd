@@ -62,6 +62,11 @@ export class NotificationService {
     }
   }
 
+  public async clearAll() {
+    this._notifications = [];
+    return this.http.delete<void>(`${environment.apiURL}/notifications/clearall`).toPromise();
+  }
+
   public getNotifications(): Promise<Notification[]> {
     return this.http.get<Notification[]>(`${environment.apiURL}/notifications`).toPromise();
   }

@@ -3,6 +3,8 @@
 
   <!-- Notifications -->
   <div *ngIf="notifications">
+    <button class="btn btn-sm mb-2" (click)="clearAll()"><i class="icon icon-delete"></i><span class="hide-sm"> Clear All</span></button>
+
     <!-- Empty -->
     <div class="empty" *ngIf="notifications.length === 0">
       <div class="empty-icon"><i class="icon icon-flag icon-4x"></i></div>
@@ -15,11 +17,7 @@
       <div class="columns col-gapless">
         <!-- Clear Button -->
         <div class="column col-auto">
-          <button
-            class="btn btn-sm btn-link"
-            aria-label="Close"
-            (click)="clearNotification(n)"
-          >
+          <button class="btn btn-sm btn-link" aria-label="Close" (click)="clearNotification(n)">
             <i class="icon icon-cross"></i>
           </button>
         </div>
@@ -30,9 +28,7 @@
         </div>
 
         <!-- Controls Column -->
-        <div
-          class="column col-sm-12 col-md-auto col-lg-auto col-xl-auto col-auto col-ml-auto"
-        >
+        <div class="column col-sm-12 col-md-auto col-lg-auto col-xl-auto col-auto col-ml-auto">
           <!-- Campaign Related Notification Things -->
           <div *ngIf="n.campaign !== null && n.campaign !== undefined">
             <button class="btn btn-sm btn-primary" (click)="viewCampaign(n)">
@@ -42,9 +38,7 @@
 
           <!-- Map related notifications -->
           <div *ngIf="n.mapId !== null && n.mapId !== undefined">
-            <button class="btn btn-sm btn-primary" (click)="viewMap(n)">
-              View Map <i class="icon icon-arrow-right"></i>
-            </button>
+            <button class="btn btn-sm btn-primary" (click)="viewMap(n)">View Map <i class="icon icon-arrow-right"></i></button>
           </div>
         </div>
       </div>

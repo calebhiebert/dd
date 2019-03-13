@@ -49,6 +49,26 @@ namespace net_api.Controllers
             return Ok(user.Notifications);
         }
 
+        [HttpDelete("clearall")]
+        public async Task<IActionResult> ClearAllNotifications()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.Notifications)
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _context.RemoveRange(user.Notifications);
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
         // DELETE: api/Notifications/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Notification>> DeleteNotification(Guid id)

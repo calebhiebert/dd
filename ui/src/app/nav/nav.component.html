@@ -1,10 +1,7 @@
 <!-- Notifications Modal -->
 <dd-modal #notifmodal>
-  <h4 modal-header>Notifications</h4>
-  <dd-notifications
-    modal-body
-    (done)="notifmodal.close(null)"
-  ></dd-notifications>
+  <h4 modal-header class="mb-0">Notifications</h4>
+  <dd-notifications modal-body (done)="notifmodal.close(null)"></dd-notifications>
 </dd-modal>
 
 <div class="bg-light">
@@ -16,11 +13,7 @@
         </a>
       </section>
       <section class="navbar-section p-1" *ngIf="loggedIn">
-        <button
-          class="btn badge"
-          [attr.data-badge]="notificationText"
-          (click)="notifmodal.open()"
-        >
+        <button class="btn badge" [attr.data-badge]="notificationText" (click)="notifmodal.open()">
           <i class="icon icon-flag"></i>
         </button>
       </section>

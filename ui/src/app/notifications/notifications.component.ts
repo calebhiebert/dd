@@ -1,10 +1,5 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import {
-  NotificationService,
-  Notification,
-  ICampaignNotification,
-  IMapNotification,
-} from '../notification.service';
+import { NotificationService, Notification, ICampaignNotification, IMapNotification } from '../notification.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,10 +11,7 @@ export class NotificationsComponent implements OnInit {
   @Output()
   public done = new EventEmitter<boolean>();
 
-  constructor(
-    private notificationService: NotificationService,
-    private router: Router
-  ) {}
+  constructor(private notificationService: NotificationService, private router: Router) {}
 
   ngOnInit() {}
 
@@ -37,6 +29,10 @@ export class NotificationsComponent implements OnInit {
     this.notificationService.removeNotification(m);
     this.router.navigate(['campaigns', m.campaignId, 'maps', m.mapId]);
     this.done.emit(true);
+  }
+
+  public clearAll() {
+    this.notificationService.clearAll();
   }
 
   public get notifications() {
