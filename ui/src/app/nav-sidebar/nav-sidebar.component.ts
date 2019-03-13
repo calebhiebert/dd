@@ -42,7 +42,7 @@ export class NavSidebarComponent implements OnInit {
 
   public get navEntities() {
     return this.campaignService.campaign.entities.filter((e) => {
-      return !e.spawnable && e.spawnedFromId === null;
+      return !e.spawnable && e.spawnedFromId === null && e.userId === this.login.id;
     });
   }
 

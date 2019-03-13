@@ -36,6 +36,16 @@ export class NavComponent implements OnInit {
     return this.login.loggedIn;
   }
 
+  public get navEntities() {
+    if (this.loggedIn && this.campaign) {
+      return this.campaign.entities.filter((e) => {
+        return !e.spawnable && e.spawnedFromId === null && e.userId === this.login.id;
+      });
+    } else {
+      return null;
+    }
+  }
+
   public get loginInProgress() {
     return this.login.loginInProgress;
   }

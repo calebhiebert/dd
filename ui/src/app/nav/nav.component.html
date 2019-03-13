@@ -7,16 +7,31 @@
 <div class="bg-light">
   <div class="p-2">
     <header class="navbar">
+      <!-- Off Canvas Toggle -->
       <section>
         <a class="off-canvas-toggle btn btn-link btn-action" (click)="toggle()">
           <i class="icon icon-menu"></i>
         </a>
       </section>
+
+      <!-- Notification Area -->
       <section class="navbar-section p-1" *ngIf="loggedIn">
+        <div class="mr-2">
+          <figure
+            class="avatar mx-1 entity-hover"
+            [routerLink]="['/campaigns', campaign.id, 'entities', e.id]"
+            *ngFor="let e of navEntities"
+          >
+            <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}" alt="Avatar" />
+          </figure>
+        </div>
+
         <button class="btn badge" [attr.data-badge]="notificationText" (click)="notifmodal.open()">
           <i class="icon icon-flag"></i>
         </button>
       </section>
+
+      <!-- Login Button -->
       <section *ngIf="!loggedIn">
         <a [routerLink]="['login']" class="btn btn-link">Login</a>
       </section>
