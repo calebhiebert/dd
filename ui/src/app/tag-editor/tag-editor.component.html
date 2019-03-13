@@ -1,37 +1,15 @@
-<div
-  class="form-group"
-  [ngClass]="{ 'has-error': inputControl.invalid && inputControl.dirty }"
->
+<div class="form-group">
   <div class="form-autocomplete">
     <div class="form-autocomplete-input form-input">
       <!-- Chips -->
       <div class="chip" *ngFor="let t of formArray.value">
         {{ t }}
-        <a
-          (click)="removeTag(t)"
-          class="btn btn-clear"
-          aria-label="Close"
-          role="button"
-        ></a>
+        <a (click)="removeTag(t)" class="btn btn-clear" aria-label="Close" role="button"></a>
       </div>
 
       <!-- Input -->
-      <input
-        class="form-input"
-        type="text"
-        name="tag"
-        id="tag"
-        [formControl]="inputControl"
-        (keyup)="onInputEvent($event)"
-      />
+      <input class="form-input" type="text" name="tag" id="tag" (input)="onInputChanged($event)" (keyup)="onInputEvent($event)" #input />
     </div>
   </div>
   <p class="form-input-hint mb-0">Type some text and hit enter to add a tag</p>
-
-  <p
-    class="form-input-hint"
-    *ngIf="inputControl.invalid && inputControl.errors.maxlength"
-  >
-    Tags can't be longer than 20 characters
-  </p>
 </div>

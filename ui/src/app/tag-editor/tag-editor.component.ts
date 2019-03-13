@@ -1,38 +1,27 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
 
 @Component({
   selector: 'dd-tag-editor',
   templateUrl: './tag-editor.component.html',
-  styleUrls: ['./tag-editor.component.css']
+  styleUrls: ['./tag-editor.component.css'],
 })
 export class TagEditorComponent implements OnInit {
-  public inputControl: FormControl;
-
   @Input()
   public formGroup: FormGroup;
 
   @Input()
   public controlName = 'tags';
 
-  private previousInput: string;
-  private justHadValue = false;
+  @ViewChild('input')
+  private input: ElementRef<HTMLInputElement>;
+
+  private _currentValue = '';
+  private _previousValue = '';
 
   constructor() {}
 
   ngOnInit() {
-    this.inputControl = new FormControl(null, [Validators.maxLength(20)]);
-
-    this.inputControl.valueChanges.subscribe(v => {
-      if (this.previousInput !== '' && v === '') {
-        this.justHadValue = true;
-      } else {
-        this.justHadValue = false;
-      }
-
-      this.previousInput = v;
-    });
-
     if (!this.formGroup.contains(this.controlName)) {
       this.formGroup.addControl(this.controlName, new FormArray([]));
     }
@@ -49,27 +38,33 @@ export class TagEditorComponent implements OnInit {
   public onInputEvent(e) {
     switch (e.key) {
       case 'Enter':
-        if (
-          this.inputControl.valid &&
-          this.inputControl.value.trim().length > 0 &&
-          this.formArray.value.indexOf(this.inputControl.value.trim()) === -1
-        ) {
-          this.formArray.push(
-            new FormControl(this.inputControl.value.trim(), [
-              Validators.required
-            ])
-          );
-          this.inputControl.setValue('');
+        if (this._currentValue.trim().length > 0 && this.formArray.value.indexOf(this._currentValue.trim()) === -1) {
+          this.formArray.push(new FormControl(this._currentValue.trim()));
+
+          this.input.nativeElement.value = '';
+          this._previousValue = this._currentValue.trim();
+          this._currentValue = '';
         }
         break;
       case 'Backspace':
-        if (this.inputControl.value === '' && !this.justHadValue) {
-          const control = this.formArray.controls.pop();
-          this.inputControl.setValue(control.value);
+        if (this._currentValue === '' && this._previousValue === '' && this.formArray.length > 0) {
+          console.log(this._previousValue);
+          const control = this.formArray.controls[this.formArray.controls.length - 1];
+          this.formArray.removeAt(this.formArray.length - 1);
+
+          this.input.nativeElement.value = control.value;
+          this._previousValue = this._currentValue.trim();
+          this._currentValue = control.value;
+        } else {
+          this._previousValue = '';
         }
-        this.justHadValue = false;
         break;
     }
+  }
+
+  public onInputChanged(e) {
+    this._previousValue = this._currentValue;
+    this._currentValue = e.target.value;
   }
 
   public get formArray() {
