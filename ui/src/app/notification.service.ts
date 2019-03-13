@@ -4,6 +4,7 @@ import { ICampaign } from './campaign.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { IMap } from './map.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
@@ -12,13 +13,39 @@ export class NotificationService {
   private _loading = false;
   private _notifications: Notification[];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private toast: ToastrService) {}
+
+  private getNewNotifications(oldList: Notification[], newList: Notification[]) {
+    let newNotifications: Notification[] = [];
+
+    if (oldList) {
+      for (const n of newList) {
+        const old = oldList.find((on) => on.id === n.id);
+
+        if (old === undefined) {
+          newNotifications.push(n);
+        }
+      }
+    } else {
+      newNotifications = newList;
+    }
+
+    return newNotifications;
+  }
+
+  private makeNotificationToasts(notifications: Notification[]) {
+    for (const n of notifications) {
+      this.toast.info(n.message);
+    }
+  }
 
   public async loadNotifications() {
     this._loading = true;
     try {
       const notifications = await this.getNotifications();
+      const newNotifications = this.getNewNotifications(this._notifications, notifications);
       this._notifications = notifications;
+      this.makeNotificationToasts(newNotifications);
     } catch (err) {
       throw err;
     }
@@ -36,15 +63,11 @@ export class NotificationService {
   }
 
   public getNotifications(): Promise<Notification[]> {
-    return this.http
-      .get<Notification[]>(`${environment.apiURL}/notifications`)
-      .toPromise();
+    return this.http.get<Notification[]>(`${environment.apiURL}/notifications`).toPromise();
   }
 
   public deleteNotification(id: string): Promise<void> {
-    return this.http
-      .delete<void>(`${environment.apiURL}/notifications/${id}`)
-      .toPromise();
+    return this.http.delete<void>(`${environment.apiURL}/notifications/${id}`).toPromise();
   }
 
   public get notifications() {
@@ -56,10 +79,7 @@ export class NotificationService {
   }
 }
 
-export type Notification =
-  | INotification
-  | ICampaignNotification
-  | IMapNotification;
+export type Notification = INotification | ICampaignNotification | IMapNotification;
 
 export interface INotification {
   id: string;
