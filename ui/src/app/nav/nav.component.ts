@@ -8,7 +8,7 @@ import { NotificationService } from '../notification.service';
 @Component({
   selector: 'dd-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css'],
+  styleUrls: ['./nav.component.scss'],
 })
 export class NavComponent implements OnInit {
   constructor(
