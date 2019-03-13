@@ -1,0 +1,20 @@
+@import '../../variables.scss';
+
+.entity-hover {
+  transition: all 0.2s;
+}
+
+.entity-hover > img {
+  border: 1px solid $primary-color-light;
+}
+
+.entity-hover:hover,
+.entity-hover:active {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.entity-hover:hover > img,
+.entity-hover:active > img {
+  border: 2px solid $primary-color;
+}
