@@ -10,29 +10,47 @@ import { ActionType, ActionSource } from './history';
   providedIn: 'root',
 })
 export class ConceptService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   public getConceptType(id: string): Promise<IConceptType> {
-    return this.http.get<IConceptType>(`${environment.apiURL}/concepttypes/${id}`).toPromise();
+    return this.http
+      .get<IConceptType>(`${environment.apiURL}/concepttypes/${id}`)
+      .toPromise();
   }
 
   public createConceptType(conceptType: IConceptType): Promise<IConceptType> {
-    return this.http.post<IConceptType>(`${environment.apiURL}/concepttypes`, conceptType).toPromise();
+    return this.http
+      .post<IConceptType>(`${environment.apiURL}/concepttypes`, conceptType)
+      .toPromise();
   }
 
   public updateConceptType(conceptType: IConceptType): Promise<void> {
-    return this.http.put<void>(`${environment.apiURL}/concepttypes/${conceptType.id}`, conceptType).toPromise();
+    return this.http
+      .put<void>(
+        `${environment.apiURL}/concepttypes/${conceptType.id}`,
+        conceptType
+      )
+      .toPromise();
   }
 
   public deleteConceptType(id: string): Promise<IConceptType> {
-    return this.http.delete<IConceptType>(`${environment.apiURL}/concepttypes/${id}`).toPromise();
+    return this.http
+      .delete<IConceptType>(`${environment.apiURL}/concepttypes/${id}`)
+      .toPromise();
   }
 
   public getConcept(id: string): Promise<IConcept> {
-    return this.http.get<IConcept>(`${environment.apiURL}/concepts/${id}`).toPromise();
+    return this.http
+      .get<IConcept>(`${environment.apiURL}/concepts/${id}`)
+      .toPromise();
   }
 
-  public getConcepts(typeId: string, limit?: number, offset?: number, search?: string): Promise<IConceptsQueryResult> {
+  public getConcepts(
+    typeId: string,
+    limit?: number,
+    offset?: number,
+    search?: string
+  ): Promise<IConceptsQueryResult> {
     if (limit === undefined || limit === null || limit <= 0) {
       limit = 10;
     } else if (limit > 50) {
@@ -50,38 +68,80 @@ export class ConceptService {
     }
 
     return this.http
-      .get<IConceptsQueryResult>(`${environment.apiURL}/concepts?type=${typeId}&limit=${limit}&offset=${offset}${searchQuery}`)
+      .get<IConceptsQueryResult>(
+        `${
+          environment.apiURL
+        }/concepts?type=${typeId}&limit=${limit}&offset=${offset}${searchQuery}`
+      )
       .toPromise();
   }
 
   public getConceptHistory(id: string): Promise<IConceptHistory[]> {
-    return this.http.get<IConceptHistory[]>(`${environment.apiURL}/concepts/${id}/history`).toPromise();
-  }
-
-  public createConcept(Concept: IConcept): Promise<IConcept> {
-    return this.http.post<IConcept>(`${environment.apiURL}/concepts`, Concept).toPromise();
-  }
-
-  public updateConcept(Concept: IConcept): Promise<void> {
-    return this.http.put<void>(`${environment.apiURL}/concepts/${Concept.id}`, Concept).toPromise();
-  }
-
-  public deleteConcept(id: string): Promise<IConcept> {
-    return this.http.delete<IConcept>(`${environment.apiURL}/concepts/${id}`).toPromise();
-  }
-
-  public async getConceptEntities(entityId: string, conceptTypeId: string): Promise<IConceptEntity[]> {
     return this.http
-      .get<IConceptEntity[]>(`${environment.apiURL}/conceptentities?entityId=${entityId}&conceptTypeId=${conceptTypeId}`)
+      .get<IConceptHistory[]>(`${environment.apiURL}/concepts/${id}/history`)
       .toPromise();
   }
 
-  public async updateConceptEntity(conceptEntity: IConceptEntity): Promise<IConceptEntity> {
-    return this.http.put<IConceptEntity>(`${environment.apiURL}/conceptentities`, conceptEntity).toPromise();
+  public restoreConcept(id: string, historyId: string): Promise<IConcept> {
+    return this.http
+      .post<IConcept>(
+        `${environment.apiURL}/concepts/${id}/restore/${historyId}`,
+        null
+      )
+      .toPromise();
   }
 
-  public async deleteConceptEntity(entId: string, conceptId: string): Promise<void> {
-    return this.http.delete<void>(`${environment.apiURL}/conceptentities/${entId}/concept/${conceptId}`).toPromise();
+  public createConcept(Concept: IConcept): Promise<IConcept> {
+    return this.http
+      .post<IConcept>(`${environment.apiURL}/concepts`, Concept)
+      .toPromise();
+  }
+
+  public updateConcept(Concept: IConcept): Promise<void> {
+    return this.http
+      .put<void>(`${environment.apiURL}/concepts/${Concept.id}`, Concept)
+      .toPromise();
+  }
+
+  public deleteConcept(id: string): Promise<IConcept> {
+    return this.http
+      .delete<IConcept>(`${environment.apiURL}/concepts/${id}`)
+      .toPromise();
+  }
+
+  public async getConceptEntities(
+    entityId: string,
+    conceptTypeId: string
+  ): Promise<IConceptEntity[]> {
+    return this.http
+      .get<IConceptEntity[]>(
+        `${
+          environment.apiURL
+        }/conceptentities?entityId=${entityId}&conceptTypeId=${conceptTypeId}`
+      )
+      .toPromise();
+  }
+
+  public async updateConceptEntity(
+    conceptEntity: IConceptEntity
+  ): Promise<IConceptEntity> {
+    return this.http
+      .put<IConceptEntity>(
+        `${environment.apiURL}/conceptentities`,
+        conceptEntity
+      )
+      .toPromise();
+  }
+
+  public async deleteConceptEntity(
+    entId: string,
+    conceptId: string
+  ): Promise<void> {
+    return this.http
+      .delete<void>(
+        `${environment.apiURL}/conceptentities/${entId}/concept/${conceptId}`
+      )
+      .toPromise();
   }
 }
 
@@ -114,7 +174,7 @@ export interface IConcept {
 export interface IConceptHistory {
   id: string;
   userId: string;
-  dateTime: Date;
+  dateTime: string;
   actionType: ActionType;
   actionSource: ActionSource;
   conceptId: string;
@@ -126,8 +186,8 @@ export interface IConceptHistory {
   conceptTypeId: string;
 }
 
-export interface IConceptField extends IDynamicFieldConfig { }
-export interface IConceptEntityFieldConfig extends IDynamicFieldConfig { }
+export interface IConceptField extends IDynamicFieldConfig {}
+export interface IConceptEntityFieldConfig extends IDynamicFieldConfig {}
 
 export interface IField {
   name: string;

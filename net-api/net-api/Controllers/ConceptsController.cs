@@ -135,7 +135,65 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
-            return Ok(concept.History);
+            return Ok(concept.History.OrderBy(h => h.DateTime));
+        }
+
+        [HttpPost("{conceptId}/restore/{historyId}")]
+        public async Task<IActionResult> Restore(Guid conceptId, Guid historyId)
+        {
+            var concept = await _context.Concepts
+                .Where(c => c.Id == conceptId)
+                    .Include(c => c.ConceptType)
+                        .ThenInclude(ct => ct.Campaign)
+                .FirstOrDefaultAsync();
+
+            if (concept == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, concept.ConceptType.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            var history = await _context.ConceptHistories
+                .Where(h => h.Id == historyId)
+                .FirstOrDefaultAsync();
+
+            if (history == null)
+            {
+                return NotFound();
+            }
+
+            if (history.ConceptId != concept.Id)
+            {
+                return BadRequest("mismatched history and concept ids");
+            }
+
+            // Copy restore values over
+            concept.Name = history.Name;
+            concept.ContentJson = history.ContentJson;
+            concept.ImageId = history.ImageId;
+            concept.FieldsJson = history.FieldsJson;
+            concept.Tags = history.Tags;
+            concept.ConceptTypeId = history.ConceptTypeId;
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            _context.ConceptHistories.Add(new ConceptHistory(concept)
+            {
+                UserId = userId,
+                ActionType = ActionType.Restore,
+                ActionSource = ActionSource.User,
+            });
+
+            _context.Entry(concept).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return Ok(concept);
         }
 
         // PUT: api/Concepts/5

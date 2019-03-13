@@ -30,7 +30,7 @@ namespace net_api.Models
 
     public enum ActionType
     {
-        Create, Update, Delete
+        Create, Update, Delete, Restore
     }
 
     public enum ActionSource

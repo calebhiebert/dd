@@ -1,40 +1,53 @@
-<!-- Loading -->
-<div class="loading" *ngIf="loading"></div>
+<div class="container grid-sm">
+  <!-- Loading -->
+  <div class="loading loading-lg" *ngIf="loading"></div>
 
-<!-- Error Display -->
-<dd-http-errors [error]="loadErr" *ngIf="loadErr"></dd-http-errors>
+  <!-- Error Display -->
+  <dd-http-errors [error]="loadErr" *ngIf="loadErr"></dd-http-errors>
 
-<!-- Timeline -->
-<div class="timeline" *ngIf="conceptHistory">
-  <div
-    class="timeline-item"
-    *ngFor="let history of conceptHistory; let first = first"
-  >
-    <!-- Icon -->
-    <div class="timeline-left">
-      <a class="timeline-icon" [ngClass]="{ 'icon-lg': !first }"></a>
-    </div>
+  <!-- Timeline -->
+  <div class="timeline" *ngIf="conceptHistory">
+    <div
+      class="timeline-item"
+      *ngFor="let history of conceptHistory; let first = first; let last = last"
+    >
+      <!-- Icon -->
+      <div class="timeline-left">
+        <a
+          class="timeline-icon"
+          [ngClass]="{ 'icon-lg': !first }"
+          [ngSwitch]="history.actionType"
+        >
+          <i class="icon icon-edit" *ngSwitchCase="1"></i>
+          <i class="icon icon-delete" *ngSwitchCase="2"></i>
+          <i class="icon icon-refresh" *ngSwitchCase="3"></i>
+        </a>
+      </div>
 
-    <!-- Content -->
-    <div class="timeline-content">
-      <strong>{{ history.name }}</strong> {{ getEntryActionText(history) }}
-
-      <div>{{ history.dateTime }}</div>
-
-      <dd-user-view-nano [user]="getUser(history.userId)"></dd-user-view-nano>
-    </div>
-  </div>
-
-  <!-- Now -->
-  <div class="timeline-item">
-    <div class="timeline-left">
-      <a class="timeline-icon icon-lg">
-        <i class="icon icon-check"></i>
-      </a>
-    </div>
-
-    <div class="timeline-content">
-      Now!
+      <!-- Content -->
+      <div class="timeline-content">
+        <div class="tile">
+          <div class="tile-content">
+            <strong>{{ history.name }}</strong>
+            {{ getEntryActionText(history) }}.
+            <div>{{ getDate(history) | date: 'short' }}</div>
+            <dd-user-view-nano
+              [user]="getUser(history.userId)"
+            ></dd-user-view-nano>
+          </div>
+          <div class="tile-action">
+            <button
+              class="btn btn-sm"
+              *ngIf="!last && editable"
+              [ngClass]="{ loading: restoringId === history.id }"
+              (click)="restore(history)"
+            >
+              <i class="icon icon-refresh"></i
+              ><span class="hide-sm"> Restore</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -14,6 +14,8 @@ export class ConceptHistoryComponent implements OnInit {
   public loadErr: any;
   public loading = false;
 
+  public restoringId: string;
+
   public conceptHistory: IConceptHistory[];
 
   constructor(
@@ -44,6 +46,19 @@ export class ConceptHistoryComponent implements OnInit {
     this.loading = false;
   }
 
+  public async restore(history: IConceptHistory) {
+    this.restoringId = history.id;
+
+    try {
+      await this.conceptService.restoreConcept(history.conceptId, history.id);
+      this.load(history.conceptId);
+    } catch (err) {
+      throw err;
+    }
+
+    this.restoringId = null;
+  }
+
   public getUser(id: string): IUser {
     const member = this.campaignService.campaign.members.find(
       (m) => m.userId === id
@@ -54,6 +69,10 @@ export class ConceptHistoryComponent implements OnInit {
     }
 
     return null;
+  }
+
+  public getDate(history: IConceptHistory) {
+    return new Date(history.dateTime);
   }
 
   public getEntryActionText(history: IConceptHistory) {
@@ -67,5 +86,9 @@ export class ConceptHistoryComponent implements OnInit {
       case ActionType.RESTORE:
         return 'restored';
     }
+  }
+
+  public get editable() {
+    return this.campaignService.canEdit;
   }
 }
