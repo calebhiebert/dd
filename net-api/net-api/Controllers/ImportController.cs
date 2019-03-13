@@ -140,6 +140,13 @@ namespace net_api.Controllers
             foreach (var concept in conceptList)
             {
                 concept.ConceptTypeId = idDict[concept.ConceptTypeId];
+
+                _context.ConceptHistories.Add(new ConceptHistory(concept)
+                {
+                    UserId = userId,
+                    ActionType = ActionType.Create,
+                    ActionSource = ActionSource.Import,
+                });
             }
 
             // Update all id values in all content to new id values

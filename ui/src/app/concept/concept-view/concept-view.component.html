@@ -9,7 +9,9 @@
       <img
         class="s-rounded"
         width="64"
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ concept.imageId }}"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+          concept.imageId
+        }}"
         *ngIf="concept.imageId"
         alt="Item Picture"
       />
@@ -30,6 +32,13 @@
       <dd-user-view-nano [user]="user" *ngIf="user"></dd-user-view-nano>
     </div>
     <div class="column col-auto">
+      <!-- History Button -->
+      <button class="btn btn-sm mr-1" (click)="history()">
+        <i class="icon icon-time"></i>
+        <span class="hide-sm"> History</span>
+      </button>
+
+      <!-- Edit Button -->
       <button class="btn btn-sm" (click)="edit()" *ngIf="editable">
         <i class="icon icon-edit"></i> <span class="hide-sm"> Edit</span>
       </button>
@@ -41,7 +50,9 @@
     <div class="column col-4 hide-md" *ngIf="concept.imageId">
       <img
         class="img-responsive s-rounded"
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{ concept.imageId }}"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
+          concept.imageId
+        }}"
         [alt]="'picture of' + concept.name"
       />
     </div>
@@ -53,8 +64,14 @@
       }"
     >
       <!-- Description -->
-      <dd-quill [value]="concept.content" readOnly="true" *ngIf="concept.content"></dd-quill>
-      <p *ngIf="!concept.content" class="text-italic text-center">There is nothing here...</p>
+      <dd-quill
+        [value]="concept.content"
+        readOnly="true"
+        *ngIf="concept.content"
+      ></dd-quill>
+      <p *ngIf="!concept.content" class="text-italic text-center">
+        There is nothing here...
+      </p>
 
       <!-- Formatted Text Fields -->
       <div class="mt-2" *ngFor="let ftf of formattedTextFields">
@@ -64,7 +81,10 @@
 
       <!-- Tags -->
       <div class="big-space" *ngIf="concept.tags">
-        <div class="label label-rounded mr-1 mb-1" *ngFor="let t of concept.tags">
+        <div
+          class="label label-rounded mr-1 mb-1"
+          *ngFor="let t of concept.tags"
+        >
           {{ t }}
         </div>
       </div>
@@ -81,7 +101,9 @@
             <td [ngSwitch]="fld.config.type">
               <!-- Currency Display -->
               <span *ngSwitchCase="6">
-                <dd-currency-view [currency]="fld.field.value"></dd-currency-view>
+                <dd-currency-view
+                  [currency]="fld.field.value"
+                ></dd-currency-view>
               </span>
               <span *ngSwitchDefault>
                 {{ fld.field.value }}
@@ -93,10 +115,15 @@
     </div>
 
     <!-- Lower full size image -->
-    <div class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2" *ngIf="concept.imageId">
+    <div
+      class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2"
+      *ngIf="concept.imageId"
+    >
       <img
         class="img-responsive s-rounded"
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{ concept.imageId }}"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
+          concept.imageId
+        }}"
         [alt]="'picture of' + concept.name"
       />
     </div>

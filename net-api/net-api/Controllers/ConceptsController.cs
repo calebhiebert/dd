@@ -111,6 +111,33 @@ namespace net_api.Controllers
             return concept;
         }
 
+        // GET: api/Concepts/5
+        [HttpGet("{id}/history")]
+        public async Task<IActionResult> GetConceptHistory(Guid id)
+        {
+            var concept = await _context.Concepts
+                .Where(c => c.Id == id)
+                .Include(c => c.ConceptType)
+                    .ThenInclude(ct => ct.Campaign)
+                        .ThenInclude(c => c.Members)
+                .Include(c => c.History)
+                .FirstOrDefaultAsync();
+
+            if (concept == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, concept.ConceptType.Campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            return Ok(concept.History);
+        }
+
         // PUT: api/Concepts/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutConcept(Guid id, Concept concept)
@@ -144,6 +171,14 @@ namespace net_api.Controllers
             concept.UserId = existingConcept.UserId;
 
             _context.Entry(concept).State = EntityState.Modified;
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            _context.ConceptHistories.Add(new ConceptHistory(concept)
+            {
+                UserId = userId,
+                ActionType = ActionType.Update,
+                ActionSource = ActionSource.User,
+            });
 
             try
             {
@@ -192,6 +227,14 @@ namespace net_api.Controllers
             concept.UserId = userId;
 
             _context.Concepts.Add(concept);
+
+            _context.ConceptHistories.Add(new ConceptHistory(concept)
+            {
+                UserId = userId,
+                ActionType = ActionType.Create,
+                ActionSource = ActionSource.User,
+            });
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetConcept", new { id = concept.Id }, concept);
@@ -221,6 +264,15 @@ namespace net_api.Controllers
             }
 
             _context.Concepts.Remove(concept);
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            _context.ConceptHistories.Add(new ConceptHistory(concept)
+            {
+                UserId = userId,
+                ActionType = ActionType.Delete,
+                ActionSource = ActionSource.User,
+            });
+
             await _context.SaveChangesAsync();
 
             return concept;

@@ -33,6 +33,7 @@ import { ConceptTypeEditorComponent } from './concept/concept-type-editor/concep
 import { ConceptManagerComponent } from './concept/concept-manager/concept-manager.component';
 import { ConceptEditorComponent } from './concept/concept-editor/concept-editor.component';
 import { ConceptViewComponent } from './concept/concept-view/concept-view.component';
+import { ConceptHistoryComponent } from './concept/concept-history/concept-history.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -168,6 +169,10 @@ const routes: Routes = [
       {
         path: 'concepts/:ct_id/:c_id/view',
         component: ConceptViewComponent,
+      },
+      {
+        path: 'concepts/:ct_id/:c_id/history',
+        component: ConceptHistoryComponent,
       },
       {
         path: 'entitytypes/create',

@@ -4,12 +4,13 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ICampaign } from './campaign.service';
 import { IEntity } from './entity.service';
+import { ActionType, ActionSource } from './history';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConceptService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public getConceptType(id: string): Promise<IConceptType> {
     return this.http.get<IConceptType>(`${environment.apiURL}/concepttypes/${id}`).toPromise();
@@ -51,6 +52,10 @@ export class ConceptService {
     return this.http
       .get<IConceptsQueryResult>(`${environment.apiURL}/concepts?type=${typeId}&limit=${limit}&offset=${offset}${searchQuery}`)
       .toPromise();
+  }
+
+  public getConceptHistory(id: string): Promise<IConceptHistory[]> {
+    return this.http.get<IConceptHistory[]>(`${environment.apiURL}/concepts/${id}/history`).toPromise();
   }
 
   public createConcept(Concept: IConcept): Promise<IConcept> {
@@ -106,8 +111,23 @@ export interface IConcept {
   conceptType?: IConceptType;
 }
 
-export interface IConceptField extends IDynamicFieldConfig {}
-export interface IConceptEntityFieldConfig extends IDynamicFieldConfig {}
+export interface IConceptHistory {
+  id: string;
+  userId: string;
+  dateTime: Date;
+  actionType: ActionType;
+  actionSource: ActionSource;
+  conceptId: string;
+  name: string;
+  content?: any;
+  imageId?: string;
+  fields: IField[];
+  tags: string[];
+  conceptTypeId: string;
+}
+
+export interface IConceptField extends IDynamicFieldConfig { }
+export interface IConceptEntityFieldConfig extends IDynamicFieldConfig { }
 
 export interface IField {
   name: string;

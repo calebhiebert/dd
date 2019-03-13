@@ -1,0 +1,40 @@
+<!-- Loading -->
+<div class="loading" *ngIf="loading"></div>
+
+<!-- Error Display -->
+<dd-http-errors [error]="loadErr" *ngIf="loadErr"></dd-http-errors>
+
+<!-- Timeline -->
+<div class="timeline" *ngIf="conceptHistory">
+  <div
+    class="timeline-item"
+    *ngFor="let history of conceptHistory; let first = first"
+  >
+    <!-- Icon -->
+    <div class="timeline-left">
+      <a class="timeline-icon" [ngClass]="{ 'icon-lg': !first }"></a>
+    </div>
+
+    <!-- Content -->
+    <div class="timeline-content">
+      <strong>{{ history.name }}</strong> {{ getEntryActionText(history) }}
+
+      <div>{{ history.dateTime }}</div>
+
+      <dd-user-view-nano [user]="getUser(history.userId)"></dd-user-view-nano>
+    </div>
+  </div>
+
+  <!-- Now -->
+  <div class="timeline-item">
+    <div class="timeline-left">
+      <a class="timeline-icon icon-lg">
+        <i class="icon icon-check"></i>
+      </a>
+    </div>
+
+    <div class="timeline-content">
+      Now!
+    </div>
+  </div>
+</div>

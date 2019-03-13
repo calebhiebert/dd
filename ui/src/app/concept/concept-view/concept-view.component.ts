@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { IConcept, ConceptService, IConceptType, IField, IConceptField } from 'src/app/concept.service';
+import {
+  IConcept,
+  ConceptService,
+  IConceptType,
+  IField,
+  IConceptField,
+} from 'src/app/concept.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
 import { DynamicFieldType } from 'src/app/dynform/form-types';
@@ -38,7 +44,9 @@ export class ConceptViewComponent implements OnInit {
   }
 
   private getConceptType(id: string): IConceptType {
-    return this.campaignService.campaign.conceptTypes.find((ct) => ct.id === id);
+    return this.campaignService.campaign.conceptTypes.find(
+      (ct) => ct.id === id
+    );
   }
 
   private async load(id: string) {
@@ -54,7 +62,25 @@ export class ConceptViewComponent implements OnInit {
   }
 
   public edit() {
-    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepts', this.conceptType.id, this.concept.id, 'edit']);
+    this.router.navigate([
+      'campaigns',
+      this.campaignService.campaign.id,
+      'concepts',
+      this.conceptType.id,
+      this.concept.id,
+      'edit',
+    ]);
+  }
+
+  public history() {
+    this.router.navigate([
+      'campaigns',
+      this.campaignService.campaign.id,
+      'concepts',
+      this.conceptType.id,
+      this.concept.id,
+      'history',
+    ]);
   }
 
   public getFieldConfig(field: IField) {
@@ -104,12 +130,17 @@ export class ConceptViewComponent implements OnInit {
   }
 
   public get editable() {
-    return this.campaignService.canEdit || (this.conceptType && this.conceptType.playerEditable);
+    return (
+      this.campaignService.canEdit ||
+      (this.conceptType && this.conceptType.playerEditable)
+    );
   }
 
   public get user() {
     if (this.concept) {
-      const member = this.campaignService.campaign.members.find((m) => m.userId === this.concept.userId);
+      const member = this.campaignService.campaign.members.find(
+        (m) => m.userId === this.concept.userId
+      );
 
       if (member) {
         return member.user;

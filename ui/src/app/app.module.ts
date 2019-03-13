@@ -99,6 +99,7 @@ import { HttpErrorsComponent } from './http-errors/http-errors.component';
 import { HttpErrorInterceptor } from './http-error.interceptor';
 import { ErrorPageComponent } from './http-errors/error-page/error-page.component';
 import { UserViewNanoComponent } from './account/user-view-nano/user-view-nano.component';
+import { ConceptHistoryComponent } from './concept/concept-history/concept-history.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -193,6 +194,7 @@ import { UserViewNanoComponent } from './account/user-view-nano/user-view-nano.c
     HttpErrorsComponent,
     ErrorPageComponent,
     UserViewNanoComponent,
+    ConceptHistoryComponent,
   ],
   imports: [
     BrowserModule,
