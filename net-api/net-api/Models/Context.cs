@@ -47,9 +47,11 @@ namespace net_api.Models
                 connectionString += ";SSL Mode=Prefer;Trust Server Certificate=true";
             }
 
-            optionsBuilder.UseNpgsql(connectionString, opt => opt.EnableRetryOnFailure(10));
-            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseNpgsql(connectionString, opt => opt
+                .EnableRetryOnFailure(10)
+                .CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds));
 
+            base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
