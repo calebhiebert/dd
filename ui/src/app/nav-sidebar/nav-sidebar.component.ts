@@ -10,11 +10,7 @@ import { UpdateHubService } from '../update-hub.service';
   styleUrls: ['./nav-sidebar.component.css'],
 })
 export class NavSidebarComponent implements OnInit {
-  constructor(
-    private campaignService: CampaignService,
-    private login: LoginService,
-    private router: Router
-  ) {}
+  constructor(private campaignService: CampaignService, private login: LoginService, private router: Router) {}
 
   ngOnInit() {}
 
@@ -42,6 +38,12 @@ export class NavSidebarComponent implements OnInit {
 
   public get campaign() {
     return this.campaignService.campaign;
+  }
+
+  public get navEntities() {
+    return this.campaignService.campaign.entities.filter((e) => {
+      return !e.spawnable && e.spawnedFromId === null;
+    });
   }
 
   public get loggedIn() {

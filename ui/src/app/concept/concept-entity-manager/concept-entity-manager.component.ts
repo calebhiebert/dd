@@ -23,7 +23,14 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   public conceptType: IConceptType;
 
   @Input()
-  public entity: IEntity;
+  public set entity(value: IEntity) {
+    this._entity = value;
+    this.load();
+  }
+
+  public get entity() {
+    return this._entity;
+  }
 
   @Input()
   public editable: boolean;
@@ -47,6 +54,8 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
   private _updateSubscription: Subscription;
   private _deleteSubscription: Subscription;
+
+  private _entity: IEntity;
 
   constructor(private conceptService: ConceptService, private campaignService: CampaignService, private updateHub: UpdateHubService) {}
 
@@ -99,8 +108,6 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
         });
       }
     });
-
-    this.load();
   }
 
   ngOnDestroy() {

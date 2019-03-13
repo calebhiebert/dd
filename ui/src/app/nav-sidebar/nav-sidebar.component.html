@@ -26,6 +26,9 @@
       {{ campaign.name | truncate: 20 }}
     </a>
     <ul class="nav">
+      <li class="nav-item" *ngFor="let e of navEntities">
+        <a [routerLink]="['campaigns', campaign.id, 'entities', e.id]">{{ e.name }}</a>
+      </li>
       <li class="nav-item">
         <a [routerLink]="['campaigns', campaign.id, 'quests']">Quests</a>
       </li>
