@@ -169,6 +169,8 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
           });
 
           patchValue.health.textDamageLevels = healthLevels;
+        } else if (patchValue.health) {
+          patchValue.health.textDamageLevels = [];
         }
 
         if (ent.health === null) {

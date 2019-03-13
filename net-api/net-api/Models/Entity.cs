@@ -15,6 +15,7 @@ namespace net_api.Models
         [StringLength(20, MinimumLength = 3)]
         public string Name { get; set; }
 
+        [JsonIgnore]
         [Column("Content", TypeName = "JSONB")]
         public string ContentJson { get; set; }
 
