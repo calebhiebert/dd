@@ -1,20 +1,9 @@
-import {
-  Component,
-  ElementRef,
-  ViewChild,
-  AfterViewInit,
-  ComponentRef,
-  OnDestroy,
-} from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, ComponentRef, OnDestroy } from '@angular/core';
 import L from 'leaflet';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { MapService, IMap, MapShapeType, IMapShape } from '../map.service';
-import {
-  MapEditorMenuComponent,
-  IMapEditorOperation,
-  MapEditorOperationType,
-} from './map-editor-menu/map-editor-menu.component';
+import { MapEditorMenuComponent, IMapEditorOperation, MapEditorOperationType } from './map-editor-menu/map-editor-menu.component';
 import { CampaignService } from '../campaign.service';
 import { NoteService, NoteType, INote } from '../note.service';
 import { filter } from 'rxjs/operators';
@@ -73,10 +62,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   private _map: IMap;
   private _notesLayerGroup: any;
+  private _shapelyNotesLayerGroup: any;
   private _articlesLayerGroup: any;
   private _entityLayerGroups: { [key: string]: any } = {};
   private _mapLayerControl: any;
-  private _shapeLayers: any;
   private _drawControls: any;
   private _notes: INote[];
   private _articles: IArticle[];
@@ -107,108 +96,72 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     private toast: ToastrService,
     private articleService: ArticleService,
     private iconService: IconService
-  ) { }
+  ) {}
 
   ngAfterViewInit() {
     // The note service emits an event every time a note is created
-    this._noteCreateSubscription = this.noteService.noteCreate
-      .pipe(filter((n) => n.mapId === this._map.id))
-      .subscribe((n) => {
-        this.addNoteToMap(n);
-      });
+    this._noteCreateSubscription = this.noteService.noteCreate.pipe(filter((n) => n.mapId === this._map.id)).subscribe((n) => {
+      this.addNoteToMap(n);
+    });
 
     // The note service emits an event every time a note is deleted
-    this._noteDeleteSubscription = this.noteService.noteDelete
-      .pipe(filter((n) => n.mapId === this._map.id))
-      .subscribe((n) => {
-        for (const layer of this._notesLayerGroup.getLayers()) {
-          if (layer['_noteId'] === n.id) {
-            const popupComponent: ComponentRef<NoteViewMiniComponent> =
-              layer['_noteComponent'];
+    this._noteDeleteSubscription = this.noteService.noteDelete.pipe(filter((n) => n.mapId === this._map.id)).subscribe((n) => {
+      for (const layer of [...this._notesLayerGroup.getLayers(), ...this._shapelyNotesLayerGroup.getLayers()]) {
+        if (layer['_noteId'] === n.id) {
+          const popupComponent: ComponentRef<NoteViewMiniComponent> = layer['_noteComponent'];
 
-            this._noteComponents = this._noteComponents.filter(
-              (nc) => nc !== popupComponent
-            );
+          this._noteComponents = this._noteComponents.filter((nc) => nc !== popupComponent);
 
-            popupComponent.destroy();
-            this._notesLayerGroup.removeLayer(layer);
-          }
+          popupComponent.destroy();
+          this._notesLayerGroup.removeLayer(layer);
+          this._shapelyNotesLayerGroup.removeLayer(layer);
         }
-
-        for (const layer of this._shapeLayers.getLayers()) {
-          if (layer['_noteId'] === n.id) {
-            const popupComponent: ComponentRef<NoteViewMiniComponent> =
-              layer['_noteComponent'];
-
-            this._noteComponents = this._noteComponents.filter(
-              (nc) => nc !== popupComponent
-            );
-
-            popupComponent.destroy();
-            this._shapeLayers.removeLayer(layer);
-          }
-        }
-      });
+      }
+    });
 
     // The note service emits an event every time a note is updated
-    this._noteUpdateSubscription = this.noteService.noteUpdate
-      .pipe(filter((n) => n.mapId === this._map.id))
-      .subscribe((n) => {
-        let noteLayer = this._notesLayerGroup
-          .getLayers()
-          .find((l) => l['_noteId'] === n.id);
+    this._noteUpdateSubscription = this.noteService.noteUpdate.pipe(filter((n) => n.mapId === this._map.id)).subscribe((n) => {
+      const noteLayer = [...this._notesLayerGroup.getLayers(), ...this._shapelyNotesLayerGroup.getLayers()].find(
+        (l) => l['_noteId'] === n.id
+      );
 
-        if (noteLayer === undefined) {
-          noteLayer = this._shapeLayers
-            .getLayers()
-            .find((l) => l['_noteId'] === n.id);
-        }
-
-        if (noteLayer === undefined) {
-          this.addNoteToMap(n);
-        }
-      });
+      if (noteLayer === undefined) {
+        this.addNoteToMap(n);
+      }
+    });
 
     // The updatehub service emits an event every time an entity is updated
-    this._entityUpdateSubscription = this.updateHub.entityUpdated.subscribe(
-      (e: IEntity) => {
-        if (e.mapId === this._map.id) {
-          if (!this._entityLayerGroups[e.preset.name]) {
-            this.addEntityToMap(e);
-            return;
-          }
-
-          const marker = this._entityLayerGroups[e.preset.name]
-            .getLayers()
-            .find((l) => l['_entity'].id === e.id);
-
-          if (!marker) {
-            this.addEntityToMap(e);
-          } else {
-            marker.setLatLng([e.lat, e.lng]);
-            marker['_entityComponent'].instance.entity = e;
-          }
-        } else {
-          this.removeEntityFromMap(e);
+    this._entityUpdateSubscription = this.updateHub.entityUpdated.subscribe((e: IEntity) => {
+      if (e.mapId === this._map.id) {
+        if (!this._entityLayerGroups[e.preset.name]) {
+          this.addEntityToMap(e);
+          return;
         }
-      }
-    );
 
-    this._articleUpdateSubscription = this.updateHub.articleUpdated.subscribe(
-      (article) => {
-        if (article.mapId === this._map.id) {
-          this.addArticleToMap(article);
+        const marker = this._entityLayerGroups[e.preset.name].getLayers().find((l) => l['_entity'].id === e.id);
+
+        if (!marker) {
+          this.addEntityToMap(e);
         } else {
-          this.removeArticleFromMap(article);
+          marker.setLatLng([e.lat, e.lng]);
+          marker['_entityComponent'].instance.entity = e;
         }
+      } else {
+        this.removeEntityFromMap(e);
       }
-    );
+    });
 
-    this._articleDeleteSubscription = this.updateHub.articleDeleted
-      .pipe(filter((a) => a.mapId === this._map.id))
-      .subscribe((article) => {
+    this._articleUpdateSubscription = this.updateHub.articleUpdated.subscribe((article) => {
+      if (article.mapId === this._map.id) {
+        this.addArticleToMap(article);
+      } else {
         this.removeArticleFromMap(article);
-      });
+      }
+    });
+
+    this._articleDeleteSubscription = this.updateHub.articleDeleted.pipe(filter((a) => a.mapId === this._map.id)).subscribe((article) => {
+      this.removeArticleFromMap(article);
+    });
 
     this.route.paramMap.subscribe((params) => {
       this.loadMap(params.get('m_id'));
@@ -216,10 +169,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this.route.queryParamMap.subscribe((params) => {
       if (params.has('lat') && params.has('lng')) {
-        this._queryLatLng = [
-          parseFloat(params.get('lat')),
-          parseFloat(params.get('lng')),
-        ];
+        this._queryLatLng = [parseFloat(params.get('lat')), parseFloat(params.get('lng'))];
 
         // Clear the query parameters
         this.router.navigate([], { replaceUrl: true });
@@ -308,12 +258,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   private async loadNotes(mapId: string) {
     try {
-      this._notes = await this.noteService.getNotes(
-        this.campaignService.campaign.id,
-        {
-          mapId: mapId,
-        }
-      );
+      this._notes = await this.noteService.getNotes(this.campaignService.campaign.id, {
+        mapId: mapId,
+      });
     } catch (err) {
       throw err;
     }
@@ -334,65 +281,23 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       });
     });
 
-    const tileLayer = L.tileLayer(
-      `${environment.tileURL}/maps/{id}/tile/{z}/{x}/{y}`,
-      {
-        maxZoom: this._map.maxZoom + 2,
-        minZoom: this._map.minZoom,
-        minNativeZoom: 1,
-        maxNativeZoom: this._map.maxZoom,
-        bounds: [[0, 0], [-256, 256]],
-        id: this._map.id,
-      }
-    ).addTo(map);
+    const tileLayer = L.tileLayer(`${environment.tileURL}/maps/{id}/tile/{z}/{x}/{y}`, {
+      maxZoom: this._map.maxZoom + 2,
+      minZoom: this._map.minZoom,
+      minNativeZoom: 1,
+      maxNativeZoom: this._map.maxZoom,
+      bounds: [[0, 0], [-256, 256]],
+      id: this._map.id,
+    }).addTo(map);
 
     this._mapLayerControl = L.control.layers().addTo(map);
     this._mapLayerControl.addBaseLayer(tileLayer, 'Base');
 
     map.fitBounds([[-10, 10], [-246, 246]]);
 
-    this._shapeLayers = new L.FeatureGroup();
-    map.addLayer(this._shapeLayers);
-
     // Scroll to the place that was queried
     if (this._queryLatLng) {
       map.flyTo(this._queryLatLng, this._map.maxZoom - 1);
-    }
-
-    this.redrawShapes();
-  }
-
-  private redrawShapes() {
-    const shapes = null;
-
-    if (shapes === null) {
-      return;
-    }
-
-    this._shapeLayers.clearLayers();
-
-    for (const s of shapes) {
-      let layerToAdd;
-
-      switch (s.type) {
-        case MapShapeType.MARKER:
-          layerToAdd = L.marker([s.lat, s.lng]);
-          break;
-        case MapShapeType.CIRCLE:
-          layerToAdd = L.circle([s.lat, s.lng], { radius: s.radius });
-          break;
-        case MapShapeType.POLYGON:
-          layerToAdd = L.polygon(s.points);
-          break;
-        case MapShapeType.POLYLINE:
-          layerToAdd = L.polyline(s.points);
-          break;
-        case MapShapeType.RECTANGLE:
-          layerToAdd = L.rectangle(s.points);
-          break;
-      }
-
-      this._shapeLayers.addLayer(layerToAdd);
     }
   }
 
@@ -427,9 +332,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this._articlesLayerGroup.addLayer(marker);
 
       // Create component for popup
-      const component = this.componentService.getComponent(
-        ArticleViewMiniComponent
-      );
+      const component = this.componentService.getComponent(ArticleViewMiniComponent);
       component.instance.article = article;
 
       this._articleComponents.push(component);
@@ -452,12 +355,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       if (l['_article'] && l['_article'].id === article.id) {
         this._articlesLayerGroup.removeLayer(l);
 
-        const component: ComponentRef<ArticleViewMiniComponent> =
-          l['_articleComponent'];
+        const component: ComponentRef<ArticleViewMiniComponent> = l['_articleComponent'];
 
-        this._articleComponents = this._articleComponents.filter(
-          (ac) => ac !== component
-        );
+        this._articleComponents = this._articleComponents.filter((ac) => ac !== component);
 
         component.destroy();
       }
@@ -483,10 +383,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           circlemarker: false,
           marker: false,
         },
-        edit: {
-          featureGroup: this._shapeLayers, // REQUIRED!!
-          remove: false,
-        },
+        edit: false,
       };
 
       this._drawControls = new L.Control.Draw(options);
@@ -499,7 +396,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       // });
 
       map.on('draw:created', (e) => {
-        this._shapeLayers.addLayer(e.layer);
         if (this._drawControls) {
           map.removeControl(this._drawControls);
           this._drawControls = undefined;
@@ -540,6 +436,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this._notesLayerGroup = L.layerGroup();
     this._notesLayerGroup.addTo(map);
     this._mapLayerControl.addOverlay(this._notesLayerGroup, 'Notes');
+
+    this._shapelyNotesLayerGroup = L.layerGroup();
+    this._shapelyNotesLayerGroup.addTo(map);
+    this._mapLayerControl.addOverlay(this._shapelyNotesLayerGroup, 'Shapely Notes');
   }
 
   private createArticlesLayer() {
@@ -577,9 +477,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       layerToAdd['_noteId'] = note.id;
 
-      const component = this.componentService.getComponent(
-        NoteViewMiniComponent
-      );
+      const component = this.componentService.getComponent(NoteViewMiniComponent);
       component.instance.note = note;
 
       this._noteComponents.push(component);
@@ -593,7 +491,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       layerToAdd.bindPopup(popup);
 
-      this._shapeLayers.addLayer(layerToAdd);
+      this._shapelyNotesLayerGroup.addLayer(layerToAdd);
     } else if (note.lat && note.lng) {
       const isNoteMine = note.userId === this.login.id;
 
@@ -603,9 +501,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       marker['_noteId'] = note.id;
 
-      const component = this.componentService.getComponent(
-        NoteViewMiniComponent
-      );
+      const component = this.componentService.getComponent(NoteViewMiniComponent);
       component.instance.note = note;
 
       this._noteComponents.push(component);
@@ -638,9 +534,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       marker['_entity'] = entity;
 
-      const component = this.componentService.getComponent(
-        EntityViewMiniComponent
-      );
+      const component = this.componentService.getComponent(EntityViewMiniComponent);
 
       component.instance.entity = entity;
       this._entityComponents.push(component);
@@ -665,15 +559,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private removeEntityFromMap(e: IEntity) {
     if (this._entityLayerGroups[e.preset.name]) {
       // Remove them from this map if neccecary
-      const marker = this._entityLayerGroups[e.preset.name]
-        .getLayers()
-        .find((l) => l['_entity'].id === e.id);
+      const marker = this._entityLayerGroups[e.preset.name].getLayers().find((l) => l['_entity'].id === e.id);
 
       if (marker) {
         this._entityLayerGroups[e.preset.name].removeLayer(marker);
-        this._entityComponents = this._entityComponents.filter(
-          (ec) => ec !== marker['_entityComponent']
-        );
+        this._entityComponents = this._entityComponents.filter((ec) => ec !== marker['_entityComponent']);
         marker['_entityComponent'].destroy();
       }
     }

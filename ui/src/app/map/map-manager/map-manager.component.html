@@ -7,9 +7,7 @@
 
     <!-- New Map button -->
     <div class="column col-auto" *ngIf="editable">
-      <button class="btn btn-sm" (click)="newMap()">
-        <i class="icon icon-plus"></i><span class="hide-sm"> New Map</span>
-      </button>
+      <button class="btn btn-sm" (click)="newMap()"><i class="icon icon-plus"></i><span class="hide-sm"> New Map</span></button>
     </div>
   </div>
 
@@ -33,10 +31,14 @@
   <!-- Map List -->
   <div *ngIf="maps">
     <div class="card p-2 mb-2" *ngFor="let m of maps" [ngClass]="{ hoverable: m.status === 1 }">
-      <div class="columns" (click)="selectMap(m)">
-        <div class="column col-auto">
-          <img class="s-rounded" width="32" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/map-default"
-            alt="Map Fallback Picture" />
+      <div class="columns">
+        <div class="column col-auto" (click)="selectMap(m)">
+          <img
+            class="s-rounded"
+            width="32"
+            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/map-default"
+            alt="Map Fallback Picture"
+          />
         </div>
 
         <!-- Displayed if the map is processing -->
@@ -45,24 +47,26 @@
         </div>
 
         <!-- Displayed for normal maps -->
-        <div class="column" *ngIf="m.status === 1">
+        <div class="column" *ngIf="m.status === 1" (click)="selectMap(m)">
           <h5>{{ m.name }}</h5>
         </div>
-      </div>
 
-      <!-- Controls -->
-      <div *ngIf="editable">
-        <button class="btn btn-sm mr-2" (click)="delete(m)">
-          <i class="icon icon-delete"></i><span class="hide-sm"> Delete</span>
-        </button>
-        <button class="btn btn-sm" disabled>
-          <i class="icon icon-edit"></i><span class="hide-sm"> Edit</span>
-        </button>
+        <!-- Controls -->
+        <div class="column col-auto" *ngIf="editable">
+          <button class="btn btn-sm mr-2" (click)="delete(m)"><i class="icon icon-delete"></i><span class="hide-sm"> Delete</span></button>
+          <button class="btn btn-sm" disabled><i class="icon icon-edit"></i><span class="hide-sm"> Edit</span></button>
+        </div>
       </div>
     </div>
 
     <!-- Pagination -->
-    <dd-paginator [totalItems]="totalMaps" itemsPerPage="10" [autoHide]="false" [page]="page"
-      (pageChange)="page = $event" *ngIf="maps && maps.length > 0"></dd-paginator>
+    <dd-paginator
+      [totalItems]="totalMaps"
+      itemsPerPage="10"
+      [autoHide]="false"
+      [page]="page"
+      (pageChange)="page = $event"
+      *ngIf="maps && maps.length > 0"
+    ></dd-paginator>
   </div>
 </div>
