@@ -3,32 +3,57 @@
   <div modal-body>
     <!-- Search Bar -->
     <div class="has-icon-right">
-      <input type="text" [formControl]="searchControl" class="form-input" placeholder="Search {{ conceptType.pluralForm }}" #searchbar />
+      <input
+        type="text"
+        [formControl]="searchControl"
+        class="form-input"
+        placeholder="Search {{ conceptType.pluralForm }}"
+        #searchbar
+      />
       <i class="icon icon-search form-icon" *ngIf="!searchLoading"></i>
       <div class="loading form-icon" *ngIf="searchLoading"></div>
     </div>
 
     <!-- Search Results -->
     <div>
-      <div class="card p-1 my-1 hoverable" *ngFor="let sr of searchResults; trackBy: trackConcept" (click)="picker.close(sr)">
-        <dd-concept-list-item [concept]="sr" [imageSize]="25"></dd-concept-list-item>
+      <div
+        class="card p-1 my-1 hoverable"
+        *ngFor="let sr of searchResults; trackBy: trackConcept"
+        (click)="picker.close(sr)"
+      >
+        <dd-concept-list-item
+          [concept]="sr"
+          [imageSize]="25"
+        ></dd-concept-list-item>
       </div>
     </div>
   </div>
 </dd-modal>
 
 <dd-modal #viewandedit>
-  <h4 modal-header class="mb-0" *ngIf="selectedConceptEntity">{{ selectedConceptEntity.concept.name }}</h4>
+  <h4 modal-header class="mb-0" *ngIf="selectedConceptEntity">
+    {{ selectedConceptEntity.concept.name }}
+  </h4>
 
   <!-- View For Edit Mode -->
-  <div modal-body *ngIf="editable && selectedConceptEntity" [formGroup]="editGroup">
+  <div
+    modal-body
+    *ngIf="editable && selectedConceptEntity"
+    [formGroup]="editGroup"
+  >
     <!-- Quantity Control -->
-    <dd-dynamic-field [control]="quantityControl" [config]="quantityFieldConfig" *ngIf="quantityEnabled"> </dd-dynamic-field>
+    <dd-dynamic-field
+      [control]="quantityControl"
+      [config]="quantityFieldConfig"
+      *ngIf="quantityEnabled"
+    >
+    </dd-dynamic-field>
 
     <div class="my-2"></div>
 
     <!-- Notes Control -->
-    <dd-dynamic-field [control]="contentControl" [config]="notesFieldConfig"> </dd-dynamic-field>
+    <dd-dynamic-field [control]="contentControl" [config]="notesFieldConfig">
+    </dd-dynamic-field>
   </div>
 
   <!-- View For View Mode -->
@@ -39,12 +64,17 @@
     </h6>
 
     <!-- Notes -->
-    <dd-quill [value]="selectedConceptEntity.content" readOnly="true"></dd-quill>
+    <dd-quill
+      [value]="selectedConceptEntity.content"
+      readOnly="true"
+    ></dd-quill>
   </div>
 
   <div modal-footer *ngIf="editable">
-    <button class="btn btn-error mr-2" (click)="remove(selectedConceptEntity)">Remove</button>
-    <button class="btn mr-2" (click)="viewandedit.close(null)">Cancel</button>
+    <button class="btn btn-error mr-1" (click)="remove(selectedConceptEntity)">
+      Remove
+    </button>
+    <button class="btn mr-1" (click)="viewandedit.close(null)">Cancel</button>
     <button class="btn btn-primary" (click)="save()">Save</button>
   </div>
 </dd-modal>
@@ -59,8 +89,18 @@
 
     <!-- Controls -->
     <div class="column col-auto" *ngIf="editable">
+      <!-- Re-Order Button -->
+      <button
+        class="btn btn-sm mr-1"
+        (click)="dragDropEnabled = !dragDropEnabled"
+      >
+        <i class="icon icon-resize-vert"></i>
+      </button>
+
+      <!-- Add Button -->
       <button class="btn btn-sm" (click)="add()">
-        <i class="icon icon-plus"></i><span class="hide-sm"> Add {{ conceptType.name }}</span>
+        <i class="icon icon-plus"></i
+        ><span class="hide-sm"> Add {{ conceptType.name }}</span>
       </button>
     </div>
   </div>
@@ -69,21 +109,45 @@
   <div class="loading" *ngIf="loading"></div>
 
   <!-- Empty state -->
-  <div class="empty p-2" *ngIf="conceptEntities && conceptEntities.length === 0">
+  <div
+    class="empty p-2"
+    *ngIf="conceptEntities && conceptEntities.length === 0"
+  >
     <p class="empty-subtitle">No {{ conceptType.pluralForm }} here!</p>
   </div>
 
   <!-- Concepts -->
-  <div>
-    <div class="card px-1 pt-1 mb-1" *ngFor="let ce of conceptEntities">
+  <div cdkDropList (cdkDropListDropped)="conceptDropped($event)">
+    <div
+      class="card px-1 pt-1 mb-1"
+      *ngFor="let ce of conceptEntities"
+      cdkDrag
+      [cdkDragDisabled]="!dragDropEnabled"
+    >
+      <div class="drag-placeholder" *cdkDragPlaceholder></div>
       <div class="columns col-gapless">
+        <!-- Drag Handle -->
+        <div
+          class="column col-auto pl-1 pr-2 c-move"
+          cdkDragHandle
+          *ngIf="dragDropEnabled"
+        >
+          <i class="icon icon-resize-vert"></i>
+        </div>
+
         <!-- Image -->
-        <div class="column col-auto mr-2 c-hand" [ngClass]="{ faded: ce.quantity === 0 }" (click)="select(ce)">
+        <div
+          class="column col-auto mr-2 c-hand"
+          [ngClass]="{ faded: ce.quantity === 0 }"
+          (click)="select(ce)"
+        >
           <!-- Actual Image -->
           <img
             class="s-rounded"
             width="30"
-            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ ce.concept.imageId }}"
+            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+              ce.concept.imageId
+            }}"
             *ngIf="ce.concept.imageId"
             style="margin-bottom: -0.075rem"
           />
@@ -99,11 +163,19 @@
         </div>
 
         <!-- Name -->
-        <div class="column c-hand" [ngClass]="{ faded: quantityEnabled && ce.quantity === 0 }" (click)="select(ce)">
+        <div
+          class="column c-hand"
+          [ngClass]="{ faded: quantityEnabled && ce.quantity === 0 }"
+          (click)="select(ce)"
+        >
           {{ ce.concept.name }}
 
           <!-- Quantity -->
-          <sup class="text-bold text-small" *ngIf="quantityEnabled && ce.quantity !== 1 && ce.quantity !== null">x{{ ce.quantity }}</sup>
+          <sup
+            class="text-bold text-small"
+            *ngIf="quantityEnabled && ce.quantity !== 1 && ce.quantity !== null"
+            >x{{ ce.quantity }}</sup
+          >
         </div>
 
         <!-- Controls -->
@@ -111,7 +183,17 @@
           <button class="btn btn-sm mr-1" (click)="select(ce)" *ngIf="editable">
             <i class="icon icon-edit"></i>
           </button>
-          <button class="btn btn-sm ml-1" [routerLink]="['/campaigns', campaign.id, 'concepts', conceptType.id, ce.concept.id, 'view']">
+          <button
+            class="btn btn-sm"
+            [routerLink]="[
+              '/campaigns',
+              campaign.id,
+              'concepts',
+              conceptType.id,
+              ce.concept.id,
+              'view'
+            ]"
+          >
             <i class="icon icon-arrow-right"></i>
           </button>
         </div>
