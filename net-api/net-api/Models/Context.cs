@@ -41,9 +41,10 @@ namespace net_api.Models
 
             if (dbCreds != null)
             {
-                var reg = new Regex("postgres://(?<Username>[a-z]+):(?<Password>[a-z0-9]+)@(?<Host>[a-z0-9-.]+):(?<Port>[0-9]+)/(?<Database>[a-z0-9]+)");
+                var reg = new Regex("postgres://(?<Username>[a-z]+):(?<Password>[a-zA-Z0-9]+)@(?<Host>[a-z0-9-.]+):(?<Port>[0-9]+)/(?<Database>[a-z0-9]+)");
                 var matches = reg.Match(dbCreds.Trim());
                 connectionString = $"Host={matches.Groups["Host"]};Port={matches.Groups["Port"]};Database={matches.Groups["Database"]};Password={matches.Groups["Password"]};User ID={matches.Groups["Username"]}";
+                connectionString += ";SSL Mode=Prefer;Trust Server Certificate=true";
             }
 
             optionsBuilder.UseNpgsql(connectionString, opt => opt.EnableRetryOnFailure(10));
