@@ -33,7 +33,7 @@ export class CurrencyMapEditorComponent implements OnInit {
     }
 
     this.formGroup.addControl('currencyMap', this.items);
-    this.formGroup.addControl('trackCoins', new FormControl(this.campaign.trackCoins));
+    this.formGroup.addControl('trackCoins', new FormControl(this.campaign.trackCoins || false));
 
     this.items.controls[0].get('value').disable();
     this.items.controls[0].get('useInConversions').disable();

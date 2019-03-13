@@ -7,17 +7,10 @@
 
   <!-- Timeline -->
   <div class="timeline" *ngIf="conceptHistory">
-    <div
-      class="timeline-item"
-      *ngFor="let history of conceptHistory; let first = first; let last = last"
-    >
+    <div class="timeline-item" *ngFor="let history of conceptHistory; let first = first; let last = last">
       <!-- Icon -->
       <div class="timeline-left">
-        <a
-          class="timeline-icon"
-          [ngClass]="{ 'icon-lg': !first }"
-          [ngSwitch]="history.actionType"
-        >
+        <a class="timeline-icon" [ngClass]="{ 'icon-lg': !first }" [ngSwitch]="history.actionType">
           <i class="icon icon-edit" *ngSwitchCase="1"></i>
           <i class="icon icon-delete" *ngSwitchCase="2"></i>
           <i class="icon icon-refresh" *ngSwitchCase="3"></i>
@@ -29,11 +22,9 @@
         <div class="tile">
           <div class="tile-content">
             <strong>{{ history.name }}</strong>
-            {{ getEntryActionText(history) }}.
+            {{ history.actionSource === 1 ? 'imported' : getEntryActionText(history) }}.
             <div>{{ getDate(history) | date: 'short' }}</div>
-            <dd-user-view-nano
-              [user]="getUser(history.userId)"
-            ></dd-user-view-nano>
+            <dd-user-view-nano [user]="getUser(history.userId)"></dd-user-view-nano>
           </div>
           <div class="tile-action">
             <button
@@ -42,8 +33,7 @@
               [ngClass]="{ loading: restoringId === history.id }"
               (click)="restore(history)"
             >
-              <i class="icon icon-refresh"></i
-              ><span class="hide-sm"> Restore</span>
+              <i class="icon icon-refresh"></i><span class="hide-sm"> Restore</span>
             </button>
           </div>
         </div>
