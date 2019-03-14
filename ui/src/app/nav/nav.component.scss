@@ -1,0 +1,26 @@
+@import '../../variables.scss';
+
+.entity-hover {
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  -webkit-tap-highlight-color: transparent; // i.e. Nexus5/Chrome and Kindle Fire HD 7''
+}
+
+.entity-hover > img {
+  border: 1px solid $primary-color-light;
+}
+
+.entity-hover:hover,
+.entity-hover:active {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.entity-hover:hover > img,
+.entity-hover:active > img {
+  border: 2px solid $primary-color;
+}
+
+.entity-hover.active > img {
+  border: 2px dashed $primary-color;
+}

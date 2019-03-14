@@ -1,23 +1,40 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { IConceptType, IConceptsQueryResult, ConceptService, IConceptEntity, IConcept } from 'src/app/concept.service';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+} from '@angular/core';
+import {
+  IConceptType,
+  ConceptService,
+  IConceptEntity,
+  IConcept,
+} from 'src/app/concept.service';
 import { IEntity } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CampaignService } from 'src/app/campaign.service';
-import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
+import {
+  IDynamicFieldConfig,
+  DynamicFieldType,
+} from 'src/app/dynform/form-types';
 import { Subscription } from 'rxjs';
 import { UpdateHubService } from 'src/app/update-hub.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'dd-concept-entity-manager',
   templateUrl: './concept-entity-manager.component.html',
-  styleUrls: ['./concept-entity-manager.component.css'],
+  styleUrls: ['./concept-entity-manager.component.scss'],
 })
 export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   public loading = false;
   public searchLoading = false;
   public working = false;
+  public dragDropEnabled = false;
 
   @Input()
   public conceptType: IConceptType;
@@ -57,7 +74,11 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
   private _entity: IEntity;
 
-  constructor(private conceptService: ConceptService, private campaignService: CampaignService, private updateHub: UpdateHubService) {}
+  constructor(
+    private conceptService: ConceptService,
+    private campaignService: CampaignService,
+    private updateHub: UpdateHubService
+  ) {}
 
   ngOnInit() {
     this.searchControl = new FormControl(null);
@@ -80,34 +101,45 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
         }
       });
 
-    this._updateSubscription = this.updateHub.conceptEntityUpdate.subscribe((ce: IConceptEntity) => {
-      if (!this.conceptEntities || !this.entity || !this.conceptType) {
-        return;
-      }
+    this._updateSubscription = this.updateHub.conceptEntityUpdate.subscribe(
+      (ce: IConceptEntity) => {
+        if (!this.conceptEntities || !this.entity || !this.conceptType) {
+          return;
+        }
 
-      if (ce.concept.conceptTypeId === this.conceptType.id && ce.entityId === this.entity.id) {
-        const index = this.conceptEntities.findIndex((ece) => ece.conceptId === ce.conceptId && ece.entityId === ce.entityId);
+        if (
+          ce.concept.conceptTypeId === this.conceptType.id &&
+          ce.entityId === this.entity.id
+        ) {
+          const index = this.conceptEntities.findIndex(
+            (ece) =>
+              ece.conceptId === ce.conceptId && ece.entityId === ce.entityId
+          );
 
-        if (index !== -1) {
-          this.conceptEntities[index] = ce;
-        } else {
-          this.conceptEntities.push(ce);
+          if (index !== -1) {
+            this.conceptEntities[index] = ce;
+          } else {
+            this.conceptEntities.push(ce);
+          }
         }
       }
-    });
+    );
 
-    this._deleteSubscription = this.updateHub.conceptEntityDelete.subscribe((ce: IConceptEntity) => {
-      if (!this.conceptEntities || !this.entity || !this.conceptType) {
-        return;
-      }
+    this._deleteSubscription = this.updateHub.conceptEntityDelete.subscribe(
+      (ce: IConceptEntity) => {
+        if (!this.conceptEntities || !this.entity || !this.conceptType) {
+          return;
+        }
 
-      if (ce.entityId === this.entity.id) {
-        this.conceptEntities = this.conceptEntities.filter((ece) => {
-          const match = ece.conceptId === ce.conceptId && ece.entityId === ce.entityId;
-          return !match;
-        });
+        if (ce.entityId === this.entity.id) {
+          this.conceptEntities = this.conceptEntities.filter((ece) => {
+            const match =
+              ece.conceptId === ce.conceptId && ece.entityId === ce.entityId;
+            return !match;
+          });
+        }
       }
-    });
+    );
   }
 
   ngOnDestroy() {
@@ -124,7 +156,10 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     try {
-      this.conceptEntities = await this.conceptService.getConceptEntities(this.entity.id, this.conceptType.id);
+      this.conceptEntities = await this.conceptService.getConceptEntities(
+        this.entity.id,
+        this.conceptType.id
+      );
     } catch (err) {
       throw err;
     }
@@ -136,7 +171,12 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     this.searchLoading = true;
 
     try {
-      const result = await this.conceptService.getConcepts(this.conceptType.id, 10, 0, search);
+      const result = await this.conceptService.getConcepts(
+        this.conceptType.id,
+        10,
+        0,
+        search
+      );
       this.searchResults = result.concepts;
     } catch (err) {
       throw err;
@@ -166,7 +206,9 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
       };
 
       const existingConceptEntity = this.conceptEntities.find(
-        (ce) => ce.conceptId === conceptEntity.conceptId && ce.entityId === conceptEntity.entityId
+        (ce) =>
+          ce.conceptId === conceptEntity.conceptId &&
+          ce.entityId === conceptEntity.entityId
       );
 
       if (existingConceptEntity === undefined) {
@@ -202,11 +244,18 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     this.working = true;
 
     try {
-      const toSave = { ...this.selectedConceptEntity, quantity: this.quantityControl.value, content: this.contentControl.value };
+      const toSave = {
+        ...this.selectedConceptEntity,
+        quantity: this.quantityControl.value,
+        content: this.contentControl.value,
+      };
 
       // Patch value
       for (const ce of this.conceptEntities) {
-        if (ce.conceptId === toSave.conceptId && ce.entityId === toSave.entityId) {
+        if (
+          ce.conceptId === toSave.conceptId &&
+          ce.entityId === toSave.entityId
+        ) {
           Object.assign(ce, toSave);
         }
       }
@@ -226,14 +275,19 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
     try {
       this.conceptEntities = this.conceptEntities.filter((ce) => {
-        const match = ce.conceptId === conceptEntity.conceptId && ce.entityId === conceptEntity.entityId;
+        const match =
+          ce.conceptId === conceptEntity.conceptId &&
+          ce.entityId === conceptEntity.entityId;
 
         return !match;
       });
 
       this.viewAndEditModal.close(null);
 
-      await this.conceptService.deleteConceptEntity(conceptEntity.entityId, conceptEntity.conceptId);
+      await this.conceptService.deleteConceptEntity(
+        conceptEntity.entityId,
+        conceptEntity.conceptId
+      );
     } catch (err) {
       throw err;
     }
@@ -249,8 +303,16 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     return conceptEntity.conceptId + conceptEntity.entityId;
   }
 
+  // Called when a drag and drop event has finished
+  public conceptDropped(e: CdkDragDrop<IConceptEntity[]>) {
+    moveItemInArray(this.conceptEntities, e.previousIndex, e.currentIndex);
+  }
+
   public get quantityEnabled() {
-    return this.conceptType.entityConfig.enabled && this.conceptType.entityConfig.enableQuantity;
+    return (
+      this.conceptType.entityConfig.enabled &&
+      this.conceptType.entityConfig.enableQuantity
+    );
   }
 
   public get campaign() {
@@ -283,7 +345,9 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
     return {
       name: 'Quantity',
-      description: `How many ${this.selectedConceptEntity.concept.name} does ${this.entity.name} have?`,
+      description: `How many ${this.selectedConceptEntity.concept.name} does ${
+        this.entity.name
+      } have?`,
       type: DynamicFieldType.INT,
       options: {
         min: 0,

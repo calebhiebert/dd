@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NavComponent } from './nav/nav.component';
 import { CampaignComponent } from './campaign/campaign.component';
 import { PaginatorComponent } from './paginator/paginator.component';
@@ -104,7 +105,12 @@ import { MemberManagerComponent } from './campaign/member-manager/member-manager
 /* tslint:enable:max-line-length */
 
 @NgModule({
-  entryComponents: [NoteViewMiniComponent, EntityViewMiniComponent, ArticleViewMiniComponent, UserViewMiniComponent],
+  entryComponents: [
+    NoteViewMiniComponent,
+    EntityViewMiniComponent,
+    ArticleViewMiniComponent,
+    UserViewMiniComponent,
+  ],
   declarations: [
     AppComponent,
     ImageUploadComponent,
@@ -209,6 +215,7 @@ import { MemberManagerComponent } from './campaign/member-manager/member-manager
     }),
     TruncateModule,
     HttpClientModule,
+    DragDropModule,
   ],
   providers: [
     {
