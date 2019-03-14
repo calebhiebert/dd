@@ -4,6 +4,7 @@ import { LoginService } from '../login.service';
 import { Router } from '@angular/router';
 import { SidebarService } from '../sidebar.service';
 import { NotificationService } from '../notification.service';
+import { EntityService, IEntity } from '../entity.service';
 
 @Component({
   selector: 'dd-nav',
@@ -15,13 +16,18 @@ export class NavComponent implements OnInit {
     private campaignService: CampaignService,
     private login: LoginService,
     private sidebar: SidebarService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private entityService: EntityService
   ) {}
 
   ngOnInit() {}
 
   public toggle() {
     this.sidebar.toggle();
+  }
+
+  public trackEntity(idx: number, entity: IEntity) {
+    return entity.id;
   }
 
   public get loadingCampaign() {
@@ -39,11 +45,17 @@ export class NavComponent implements OnInit {
   public get navEntities() {
     if (this.loggedIn && this.campaign) {
       return this.campaign.entities.filter((e) => {
-        return !e.spawnable && e.spawnedFromId === null && e.userId === this.login.id;
+        return (
+          !e.spawnable && e.spawnedFromId === null && e.userId === this.login.id
+        );
       });
     } else {
       return null;
     }
+  }
+
+  public get currentEntity() {
+    return this.entityService.currentViewEntity;
   }
 
   public get loginInProgress() {

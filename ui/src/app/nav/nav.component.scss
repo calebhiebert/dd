@@ -2,6 +2,8 @@
 
 .entity-hover {
   transition: all 0.2s;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  -webkit-tap-highlight-color: transparent; // i.e. Nexus5/Chrome and Kindle Fire HD 7''
 }
 
 .entity-hover > img {
@@ -17,4 +19,8 @@
 .entity-hover:hover > img,
 .entity-hover:active > img {
   border: 2px solid $primary-color;
+}
+
+.entity-hover.active > img {
+  border: 2px dashed $primary-color;
 }

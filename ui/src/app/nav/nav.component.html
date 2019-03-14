@@ -1,7 +1,10 @@
 <!-- Notifications Modal -->
 <dd-modal #notifmodal>
   <h4 modal-header class="mb-0">Notifications</h4>
-  <dd-notifications modal-body (done)="notifmodal.close(null)"></dd-notifications>
+  <dd-notifications
+    modal-body
+    (done)="notifmodal.close(null)"
+  ></dd-notifications>
 </dd-modal>
 
 <div class="bg-light">
@@ -20,13 +23,23 @@
           <figure
             class="avatar mx-1 entity-hover"
             [routerLink]="['/campaigns', campaign.id, 'entities', e.id]"
-            *ngFor="let e of navEntities"
+            [ngClass]="{ active: currentEntity && e.id === currentEntity.id }"
+            *ngFor="let e of navEntities; trackBy: trackEntity"
           >
-            <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}" alt="Avatar" />
+            <img
+              src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
+                e.imageId
+              }}"
+              alt="Avatar"
+            />
           </figure>
         </div>
 
-        <button class="btn badge" [attr.data-badge]="notificationText" (click)="notifmodal.open()">
+        <button
+          class="btn badge"
+          [attr.data-badge]="notificationText"
+          (click)="notifmodal.open()"
+        >
           <i class="icon icon-flag"></i>
         </button>
       </section>
