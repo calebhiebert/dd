@@ -52,12 +52,12 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var editableAuthResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
 
             var query = _context.Articles
                 .Where(a => a.CampaignId == campaign.Id);
 
-            if (userId != campaign.UserId)
+            if (!editableAuthResult.Succeeded)
             {
                 query = query.Where(a => a.Published == true);
             }
