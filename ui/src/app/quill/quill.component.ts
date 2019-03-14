@@ -14,6 +14,7 @@ import { SearchService, SearchObjectType } from '../search.service';
 import { DynComponentService } from '../dyn-component.service';
 import { Chance } from 'chance';
 import { UserViewMiniComponent } from '../account/user-view-mini/user-view-mini.component';
+import { IconService } from '../icon.service';
 
 @Component({
   selector: 'dd-quill',
@@ -74,7 +75,8 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
     private router: Router,
     private http: HttpClient,
     private searchService: SearchService,
-    private componentService: DynComponentService
+    private componentService: DynComponentService,
+    private iconService: IconService
   ) {}
 
   ngOnInit() {}
@@ -183,6 +185,10 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
 
   setDisabledState?(isDisabled: boolean): void {}
 
+  private getEntityPreset(id) {
+    return this.campaignService.campaign.entityPresets.find((ep) => ep.id === id);
+  }
+
   private getQuillSettings() {
     const base: any = {
       placeholder: this.placeholder,
@@ -208,7 +214,6 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
           allowedChars: /^[A-Za-z0-9\s'_\-"]*$/,
           source: async (search, renderList, mentionChar) => {
             const newSearch = await this.searchService.search(search);
-
             const mappedResults: any[] = newSearch.map((sr) => {
               switch (sr.type) {
                 case SearchObjectType.ARTICLE:
@@ -246,6 +251,14 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
                     obj: sr.user,
                     type: sr.type,
                   };
+                case SearchObjectType.CONCEPT:
+                  return {
+                    id: sr.concept.id,
+                    value: sr.concept.name,
+                    concepttypeid: sr.concept.conceptTypeId,
+                    obj: sr.concept,
+                    type: sr.type,
+                  };
               }
             });
 
@@ -274,7 +287,16 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
                 }</span>`;
                 break;
               case SearchObjectType.ENTITY:
-                html += `<span><i class="icon icon-emoji"></i> ${item.obj.name}</span>`;
+                const preset = this.getEntityPreset(item.obj.entityPresetId);
+
+                if (preset && preset.imageId) {
+                  html += `<span><img width="16" src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/${preset.imageId}"> ${
+                    item.obj.name
+                  }</span>`;
+                } else {
+                  html += `<span><i class="icon icon-emoji"></i> ${item.obj.name}</span>`;
+                }
+
                 break;
               case SearchObjectType.MAP:
                 html += `<span><i class="icon icon-location"></i> ${item.obj.name} ${
@@ -288,6 +310,13 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
                 break;
               case SearchObjectType.USER:
                 html += `<span><i class="icon icon-people"></i> ${item.obj.username}</span>`;
+                break;
+              case SearchObjectType.CONCEPT:
+                if (item.obj.conceptType && item.obj.conceptType.icon) {
+                  html += `<span><img width="16" src="${this.iconService.getIconSrc(item.obj.conceptType.icon)}"> ${item.obj.name}</span>`;
+                } else {
+                  html += `<span>${item.obj.name}</span>`;
+                }
                 break;
               case 'create-article':
                 html += `<span><i class="icon icon-plus"></i> ${item.value}</span>`;
@@ -314,6 +343,10 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
                 break;
               case SearchObjectType.USER:
                 item.value = item.value.username;
+                break;
+              case SearchObjectType.CONCEPT:
+                item.value = item.value.name;
+                item.concepttypeid = item.value.concepttypeid;
                 break;
               case 'create-article':
                 if (
@@ -347,7 +380,7 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
 
           listItemClass: 'menu-item',
           mentionListClass: 'menu',
-          dataAttributes: ['id', 'value', 'type'],
+          dataAttributes: ['id', 'value', 'type', 'concepttypeid'],
         },
       },
       readOnly: this.readOnly,
@@ -392,13 +425,6 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
   }
 
   private setupMentions() {
-    const getIconEl = (icon: string) => {
-      const el = document.createElement('i');
-      el.classList.add('icon');
-      el.classList.add(icon);
-      return el;
-    };
-
     this._container.nativeElement.querySelectorAll(`[data-type="${SearchObjectType.ARTICLE}"]`).forEach((node: HTMLSpanElement) => {
       const id = node.dataset.id;
 
@@ -412,6 +438,15 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
 
       node.addEventListener('click', () => {
         this.router.navigate(['campaigns', this.campaignService.campaign.id, 'entities', id]);
+      });
+    });
+
+    this._container.nativeElement.querySelectorAll(`[data-type="${SearchObjectType.CONCEPT}"]`).forEach((node: HTMLSpanElement) => {
+      const id = node.dataset.id;
+      const concepttypeid = node.dataset.concepttypeid;
+
+      node.addEventListener('click', () => {
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepts', concepttypeid, id, 'view']);
       });
     });
 

@@ -72,6 +72,11 @@ namespace net_api.Controllers
                 .Where(m => m.CampaignId == campaign.Id)
                 .Where(m => m.Name.ToLower().Contains(search));
 
+            var conceptQuery = _context.Concepts
+                .Include(c => c.ConceptType)
+                .Where(c => c.ConceptType.CampaignId == campaign.Id)
+                .Where(c => c.Name.ToLower().Contains(search));
+
             // Hide items that normal players should not be able to see
             if (!campaignEditableAuthResult.Succeeded)
             {
@@ -91,8 +96,9 @@ namespace net_api.Controllers
             var questTask = questQuery.Take(2).ToListAsync();
             var entityTask = entityQuery.Take(2).ToListAsync();
             var mapTask = finalMapQuery.Take(2).ToListAsync();
+            var conceptTask = conceptQuery.Take(3).ToListAsync();
 
-            await Task.WhenAll(articleTask, questTask, entityTask, mapTask);
+            await Task.WhenAll(articleTask, questTask, entityTask, mapTask, conceptTask);
 
             var searchResults = new List<SearchResult>();
 
@@ -100,6 +106,7 @@ namespace net_api.Controllers
             questTask.Result.ForEach(q => searchResults.Add(new QuestSearchResult(q)));
             entityTask.Result.ForEach(e => searchResults.Add(new EntitySearchResult(e)));
             mapTask.Result.ForEach(m => searchResults.Add(new MapSearchResult(m)));
+            conceptTask.Result.ForEach(c => searchResults.Add(new ConceptSearchResult(c)));
             campaign.Members
                 .Where(m => m.User.Username.ToLower().Contains(search))
                 .Take(2).ToList()

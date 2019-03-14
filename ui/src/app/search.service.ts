@@ -6,6 +6,7 @@ import { IUser } from './user.service';
 import { CampaignService } from './campaign.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { IConcept } from './concept.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,7 @@ export interface ISearchResult {
   map?: IMapMini;
   quest?: IQuest;
   user?: IUser;
+  concept?: IConcept;
 }
 
 export interface IMapMini {
@@ -44,4 +46,5 @@ export enum SearchObjectType {
   MAP,
   QUEST,
   USER,
+  CONCEPT,
 }

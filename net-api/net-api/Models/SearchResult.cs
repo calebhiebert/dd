@@ -65,8 +65,19 @@ namespace net_api.Models
         }
     }
 
+    public class ConceptSearchResult : SearchResult
+    {
+        public Concept Concept { get; set; }
+
+        public ConceptSearchResult(Concept concept)
+        {
+            Concept = concept;
+            Type = ObjectType.Concept;
+        }
+    }
+
     public enum ObjectType
     {
-        Entity, LegacyItems, LegacySpells, Article, Map, Quest, User
+        Entity, LegacyItems, LegacySpells, Article, Map, Quest, User, Concept
     }
 }
