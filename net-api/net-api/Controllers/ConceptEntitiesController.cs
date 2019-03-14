@@ -52,7 +52,9 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
-            return Ok(entity.EntityConcepts.Where(ec => ec.Concept.ConceptTypeId == conceptTypeId));
+            return Ok(entity.EntityConcepts
+                .Where(ec => ec.Concept.ConceptTypeId == conceptTypeId)
+                .OrderBy(ec => ec.SortValue));
         }
 
         // PUT: api/ConceptEntities/5
@@ -64,6 +66,7 @@ namespace net_api.Controllers
             var entity = await _context.Entities
                 .Where(e => e.Id == conceptEntity.EntityId)
                 .Include(e => e.Campaign)
+                .Include(e => e.EntityConcepts)
                 .FirstOrDefaultAsync();
 
             if (entity == null)
@@ -85,6 +88,7 @@ namespace net_api.Controllers
             if (!ConceptEntityExists(conceptEntity.EntityId, conceptEntity.ConceptId))
             {
                 _context.ConceptEntities.Add(conceptEntity);
+                conceptEntity.SortValue = entity.EntityConcepts.Count;
             }
             else
             {

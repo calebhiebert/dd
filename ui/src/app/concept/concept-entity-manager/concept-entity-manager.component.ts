@@ -154,12 +154,15 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     const picked = await this.pickerModal.open();
 
     if (picked !== null) {
+      const nextSortValue = this.conceptEntities.length;
+
       const conceptEntity: IConceptEntity = {
         conceptId: picked.id,
         concept: picked,
         entityId: this.entity.id,
         quantity: this.quantityEnabled ? 1 : null,
         fields: [],
+        sortValue: nextSortValue,
       };
 
       const existingConceptEntity = this.conceptEntities.find(

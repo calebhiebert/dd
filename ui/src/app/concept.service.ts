@@ -213,4 +213,5 @@ export interface IConceptEntity {
   fields: IField[];
   quantity?: number;
   content?: any;
+  sortValue: number;
 }

@@ -69,5 +69,8 @@ namespace net_api.Models
                 ContentJson = JsonConvert.SerializeObject(value);
             }
         }
+
+        [Required]
+        public int SortValue { get; set; }
     }
 }
