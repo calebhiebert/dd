@@ -63,7 +63,11 @@
     <div class="d-flex justify-content-center align-items-center p-1" *ngIf="hpPercent <= 50 && !mini && amountVisible">
       <h5 class="mb-1 text-bold">{{ bar.current }} / {{ bar.max }}</h5>
     </div>
-    <div class="d-flex justify-content-center align-items-center pl-1" *ngIf="hpPercent <= 50 && mini && amountVisible">
+    <div
+      class="d-flex justify-content-center align-items-center pl-1"
+      *ngIf="hpPercent <= 50 && mini && amountVisible"
+      style="line-height: 0.8rem"
+    >
       <div>{{ bar.current }} / {{ bar.max }}</div>
     </div>
   </div>
@@ -71,6 +75,6 @@
   <!-- Text Display -->
   <div class="form-input-hint text-center">{{ hpText }}</div>
 </div>
-<div *ngIf="textOnly" class="text-center" style="margin-top: -0.45rem;">
+<div *ngIf="textOnly" class="text-center">
   <h5 class="mb-2">{{ hpText }}</h5>
 </div>

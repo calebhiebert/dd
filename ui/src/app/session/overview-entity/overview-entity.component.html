@@ -2,50 +2,62 @@
   <div class="columns">
     <!-- Image -->
     <div class="column col-auto" *ngIf="entity.imageId">
-      <figure class="avatar avatar-lg hide-md">
-        <img
-          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-            entity.imageId
-          }}"
-        />
-      </figure>
-      <figure class="avatar show-md hide-sm">
-        <img
-          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-            entity.imageId
-          }}"
-        />
+      <figure class="avatar hide-sm">
+        <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ entity.imageId }}" />
       </figure>
       <figure class="avatar avatar-sm show-sm">
-        <img
-          src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-            entity.imageId
-          }}"
-        />
+        <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ entity.imageId }}" />
       </figure>
     </div>
 
     <!-- Misc -->
     <div class="column">
-      <div>
-        <h6>{{ entity.name }} <span *ngIf="saving">(Saving...)</span></h6>
-        <dd-health-display
-          [health]="entity.health"
-          [editable]="editable"
-          [preset]="preset.health"
-          (healthChange)="onHealthChange($event)"
-          *ngIf="entity.health"
-        ></dd-health-display>
+      <div class="columns">
+        <div class="column col-2 col-md-3 col-sm-12">
+          <h6>{{ entity.name }}</h6>
+        </div>
+        <div class="column col-10 col-md-9 col-sm-12">
+          <dd-health-display
+            [health]="entity.health"
+            [editable]="editable"
+            [mini]="true"
+            [preset]="preset.health"
+            (healthChange)="onHealthChange($event)"
+            *ngIf="entity.health"
+          ></dd-health-display>
+        </div>
       </div>
     </div>
 
     <!-- Controls -->
     <div class="column col-auto d-flex align-items-center">
+      <div class="dropdown dropdown-right">
+        <button class="btn btn-sm dropdown-toggle" tabindex="0">
+          <i class="icon icon-menu"></i>
+        </button>
+        <ul class="menu p-1 pt-2">
+          <li class="menu-item">
+            <section class="tile tile-centered">
+              <div class="tile-icon">
+                <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ entity.imageId }}" alt="avatar" class="avatar" />
+              </div>
+              <div class="tile-content">
+                {{ entity.name }}
+              </div>
+            </section>
+          </li>
+
+          <li class="divider"></li>
+
+          <!-- Kill Action -->
+          <li class="menu-item" (click)="kill()">
+            <div><i class="icon icon-cross"></i> Kill</div>
+          </li>
+        </ul>
+      </div>
+
       <!-- View Button -->
-      <button
-        class="btn"
-        [routerLink]="['/campaigns', entity.campaignId, 'entities', entity.id]"
-      >
+      <button class="btn btn-sm ml-1" [routerLink]="['/campaigns', entity.campaignId, 'entities', entity.id]">
         <i class="icon icon-arrow-right"></i>
       </button>
     </div>

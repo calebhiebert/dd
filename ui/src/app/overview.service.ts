@@ -17,6 +17,7 @@ export enum SortDirection {
 export interface IOverviewPreferences {
   sortMode: SortMode;
   sortDirection: SortDirection;
+  viewMode: 'full' | 'spectate';
 }
 
 @Injectable({
@@ -25,6 +26,7 @@ export interface IOverviewPreferences {
 export class OverviewService {
   private _sortMode: SortMode;
   private _sortDirection: SortDirection;
+  private _viewMode: 'full' | 'spectate' = 'spectate';
 
   constructor(private campaignService: CampaignService) {}
 
@@ -32,12 +34,14 @@ export class OverviewService {
     return {
       sortDirection: this._sortDirection,
       sortMode: this._sortMode,
+      viewMode: this._viewMode,
     };
   }
 
   private applyPrefs(prefs: IOverviewPreferences) {
     if (prefs !== null && prefs !== undefined) {
       this.setSorting(prefs.sortMode, prefs.sortDirection);
+      this.setViewMode(prefs.viewMode || 'full');
     }
   }
 
@@ -54,11 +58,7 @@ export class OverviewService {
     }
   }
 
-  private compareNumber(
-    a: number,
-    b: number,
-    direction: SortDirection
-  ): number {
+  private compareNumber(a: number, b: number, direction: SortDirection): number {
     if (direction === SortDirection.ASC) {
       return a - b;
     } else if (direction === SortDirection.DESC) {
@@ -91,10 +91,15 @@ export class OverviewService {
     // Parameters are parsed because angular reactive forms submit number
     // values as strings
     this._sortMode = typeof mode === 'string' ? parseInt(mode, 10) : mode;
-    this._sortDirection =
-      typeof direction === 'string' ? parseInt(direction, 10) : direction;
+    this._sortDirection = typeof direction === 'string' ? parseInt(direction, 10) : direction;
 
     // Save new sorting preferences
+    this.savePrefs(this.getPrefsFromState());
+  }
+
+  public setViewMode(viewMode: 'full' | 'spectate') {
+    this._viewMode = viewMode;
+
     this.savePrefs(this.getPrefsFromState());
   }
 
@@ -120,11 +125,7 @@ export class OverviewService {
             return -1;
           }
 
-          return this.compareNumber(
-            a.health.current,
-            b.health.current,
-            this._sortDirection
-          );
+          return this.compareNumber(a.health.current, b.health.current, this._sortDirection);
         });
       case SortMode.HP_MAX:
         return this.entities.sort((a, b) => {
@@ -134,11 +135,7 @@ export class OverviewService {
             return -1;
           }
 
-          return this.compareNumber(
-            a.health.max,
-            b.health.max,
-            this._sortDirection
-          );
+          return this.compareNumber(a.health.max, b.health.max, this._sortDirection);
         });
       case SortMode.HP_PERCENT:
         return this.entities.sort((a, b) => {
@@ -148,11 +145,7 @@ export class OverviewService {
             return -1;
           }
 
-          return this.compareNumber(
-            a.health.current / a.health.max,
-            b.health.current / b.health.max,
-            this._sortDirection
-          );
+          return this.compareNumber(a.health.current / a.health.max, b.health.current / b.health.max, this._sortDirection);
         });
     }
 

@@ -135,6 +135,12 @@
               </button>
             </div>
           </div>
+
+          <!-- Empty State -->
+          <div class="empty p-2" *ngIf="hpTextLevels.length === 0">
+            <p class="empty-subtitle">This {{ preset.name }} has no health text yet, (players will see nothing)</p>
+          </div>
+
           <!-- Single Input -->
           <div *ngFor="let lvl of hpTextLevels.controls; let idx = index" [formGroup]="lvl">
             <div class="columns">
