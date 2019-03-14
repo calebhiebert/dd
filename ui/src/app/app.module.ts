@@ -102,15 +102,11 @@ import { ErrorPageComponent } from './http-errors/error-page/error-page.componen
 import { UserViewNanoComponent } from './account/user-view-nano/user-view-nano.component';
 import { ConceptHistoryComponent } from './concept/concept-history/concept-history.component';
 import { MemberManagerComponent } from './campaign/member-manager/member-manager.component';
+import { LongPressDirective } from './long-press.directive';
 /* tslint:enable:max-line-length */
 
 @NgModule({
-  entryComponents: [
-    NoteViewMiniComponent,
-    EntityViewMiniComponent,
-    ArticleViewMiniComponent,
-    UserViewMiniComponent,
-  ],
+  entryComponents: [NoteViewMiniComponent, EntityViewMiniComponent, ArticleViewMiniComponent, UserViewMiniComponent],
   declarations: [
     AppComponent,
     ImageUploadComponent,
@@ -203,6 +199,7 @@ import { MemberManagerComponent } from './campaign/member-manager/member-manager
     UserViewNanoComponent,
     ConceptHistoryComponent,
     MemberManagerComponent,
+    LongPressDirective,
   ],
   imports: [
     BrowserModule,

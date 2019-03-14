@@ -3,28 +3,15 @@
   <div modal-body>
     <!-- Search Bar -->
     <div class="has-icon-right">
-      <input
-        type="text"
-        [formControl]="searchControl"
-        class="form-input"
-        placeholder="Search {{ conceptType.pluralForm }}"
-        #searchbar
-      />
+      <input type="text" [formControl]="searchControl" class="form-input" placeholder="Search {{ conceptType.pluralForm }}" #searchbar />
       <i class="icon icon-search form-icon" *ngIf="!searchLoading"></i>
       <div class="loading form-icon" *ngIf="searchLoading"></div>
     </div>
 
     <!-- Search Results -->
     <div>
-      <div
-        class="card p-1 my-1 hoverable"
-        *ngFor="let sr of searchResults; trackBy: trackConcept"
-        (click)="picker.close(sr)"
-      >
-        <dd-concept-list-item
-          [concept]="sr"
-          [imageSize]="25"
-        ></dd-concept-list-item>
+      <div class="card p-1 my-1 hoverable" *ngFor="let sr of searchResults; trackBy: trackConcept" (click)="picker.close(sr)">
+        <dd-concept-list-item [concept]="sr" [imageSize]="25"></dd-concept-list-item>
       </div>
     </div>
   </div>
@@ -36,24 +23,14 @@
   </h4>
 
   <!-- View For Edit Mode -->
-  <div
-    modal-body
-    *ngIf="editable && selectedConceptEntity"
-    [formGroup]="editGroup"
-  >
+  <div modal-body *ngIf="editable && selectedConceptEntity" [formGroup]="editGroup">
     <!-- Quantity Control -->
-    <dd-dynamic-field
-      [control]="quantityControl"
-      [config]="quantityFieldConfig"
-      *ngIf="quantityEnabled"
-    >
-    </dd-dynamic-field>
+    <dd-dynamic-field [control]="quantityControl" [config]="quantityFieldConfig" *ngIf="quantityEnabled"> </dd-dynamic-field>
 
     <div class="my-2"></div>
 
     <!-- Notes Control -->
-    <dd-dynamic-field [control]="contentControl" [config]="notesFieldConfig">
-    </dd-dynamic-field>
+    <dd-dynamic-field [control]="contentControl" [config]="notesFieldConfig"> </dd-dynamic-field>
   </div>
 
   <!-- View For View Mode -->
@@ -64,10 +41,7 @@
     </h6>
 
     <!-- Notes -->
-    <dd-quill
-      [value]="selectedConceptEntity.content"
-      readOnly="true"
-    ></dd-quill>
+    <dd-quill [value]="selectedConceptEntity.content" readOnly="true"></dd-quill>
   </div>
 
   <div modal-footer *ngIf="editable">
@@ -89,18 +63,9 @@
 
     <!-- Controls -->
     <div class="column col-auto" *ngIf="editable">
-      <!-- Re-Order Button -->
-      <button
-        class="btn btn-sm mr-1"
-        (click)="dragDropEnabled = !dragDropEnabled"
-      >
-        <i class="icon icon-resize-vert"></i>
-      </button>
-
       <!-- Add Button -->
       <button class="btn btn-sm" (click)="add()">
-        <i class="icon icon-plus"></i
-        ><span class="hide-sm"> Add {{ conceptType.name }}</span>
+        <i class="icon icon-plus"></i><span class="hide-sm"> Add {{ conceptType.name }}</span>
       </button>
     </div>
   </div>
@@ -109,45 +74,35 @@
   <div class="loading" *ngIf="loading"></div>
 
   <!-- Empty state -->
-  <div
-    class="empty p-2"
-    *ngIf="conceptEntities && conceptEntities.length === 0"
-  >
+  <div class="empty p-2" *ngIf="conceptEntities && conceptEntities.length === 0">
     <p class="empty-subtitle">No {{ conceptType.pluralForm }} here!</p>
   </div>
 
   <!-- Concepts -->
   <div cdkDropList (cdkDropListDropped)="conceptDropped($event)">
     <div
+      [longPress]="250"
+      (onLongPress)="longPress(ce)"
       class="card px-1 pt-1 mb-1"
-      *ngFor="let ce of conceptEntities"
+      *ngFor="let ce of conceptEntities; trackBy: trackConceptEntity"
       cdkDrag
-      [cdkDragDisabled]="!dragDropEnabled"
+      [cdkDragDisabled]="ce !== dragEnabledItem"
+      [ngClass]="{ 'c-move': ce === dragEnabledItem }"
     >
       <div class="drag-placeholder" *cdkDragPlaceholder></div>
       <div class="columns col-gapless">
         <!-- Drag Handle -->
-        <div
-          class="column col-auto pl-1 pr-2 c-move"
-          cdkDragHandle
-          *ngIf="dragDropEnabled"
-        >
+        <div class="column col-auto pl-1 pr-2" *ngIf="ce === dragEnabledItem">
           <i class="icon icon-resize-vert"></i>
         </div>
 
         <!-- Image -->
-        <div
-          class="column col-auto mr-2 c-hand"
-          [ngClass]="{ faded: ce.quantity === 0 }"
-          (click)="select(ce)"
-        >
+        <div class="column col-auto mr-2" [ngClass]="{ faded: ce.quantity === 0, 'c-hand': ce !== dragEnabledItem }" (click)="select(ce)">
           <!-- Actual Image -->
           <img
             class="s-rounded"
             width="30"
-            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-              ce.concept.imageId
-            }}"
+            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ ce.concept.imageId }}"
             *ngIf="ce.concept.imageId"
             style="margin-bottom: -0.075rem"
           />
@@ -164,33 +119,19 @@
 
         <!-- Name -->
         <div
-          class="column c-hand"
-          [ngClass]="{ faded: quantityEnabled && ce.quantity === 0 }"
+          class="column"
+          [ngClass]="{ faded: quantityEnabled && ce.quantity === 0, 'c-hand': ce !== dragEnabledItem }"
           (click)="select(ce)"
         >
           {{ ce.concept.name }}
 
           <!-- Quantity -->
-          <sup
-            class="text-bold text-small"
-            *ngIf="quantityEnabled && ce.quantity !== 1 && ce.quantity !== null"
-            >x{{ ce.quantity }}</sup
-          >
+          <sup class="text-bold text-small" *ngIf="quantityEnabled && ce.quantity !== 1 && ce.quantity !== null">x{{ ce.quantity }}</sup>
         </div>
 
         <!-- Controls -->
         <div class="column col-auto">
-          <button
-            class="btn btn-sm"
-            [routerLink]="[
-              '/campaigns',
-              campaign.id,
-              'concepts',
-              conceptType.id,
-              ce.concept.id,
-              'view'
-            ]"
-          >
+          <button class="btn btn-sm" [routerLink]="['/campaigns', campaign.id, 'concepts', conceptType.id, ce.concept.id, 'view']">
             <i class="icon icon-arrow-right"></i>
           </button>
         </div>

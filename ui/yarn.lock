@@ -4687,6 +4687,11 @@ ng2-truncate@^1.3.17:
   version "1.3.17"
   resolved "https://registry.yarnpkg.com/ng2-truncate/-/ng2-truncate-1.3.17.tgz#9ccbadc048f77fd7f4239e51e818a0937a3880ac"
 
+ngx-long-press@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/ngx-long-press/-/ngx-long-press-0.0.1.tgz#2bc0a42595825b55895cb9461617d6a475a3550a"
+  integrity sha1-K8CkJZWCW1WJXLlGFhfWpHWjVQo=
+
 ngx-toastr@^9.1.1:
   version "9.1.2"
   resolved "https://registry.yarnpkg.com/ngx-toastr/-/ngx-toastr-9.1.2.tgz#2e59cfc02255f94556cfe3690a36c57a6a209796"

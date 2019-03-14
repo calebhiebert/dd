@@ -1,29 +1,14 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewChild,
-  ElementRef,
-  OnDestroy,
-} from '@angular/core';
-import {
-  IConceptType,
-  ConceptService,
-  IConceptEntity,
-  IConcept,
-} from 'src/app/concept.service';
+import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { IConceptType, ConceptService, IConceptEntity, IConcept } from 'src/app/concept.service';
 import { IEntity } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CampaignService } from 'src/app/campaign.service';
-import {
-  IDynamicFieldConfig,
-  DynamicFieldType,
-} from 'src/app/dynform/form-types';
+import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
 import { Subscription } from 'rxjs';
 import { UpdateHubService } from 'src/app/update-hub.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, CdkDropList } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'dd-concept-entity-manager',
@@ -34,7 +19,8 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   public loading = false;
   public searchLoading = false;
   public working = false;
-  public dragDropEnabled = false;
+
+  public dragEnabledItem: IConceptEntity = null;
 
   @Input()
   public conceptType: IConceptType;
@@ -74,11 +60,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
   private _entity: IEntity;
 
-  constructor(
-    private conceptService: ConceptService,
-    private campaignService: CampaignService,
-    private updateHub: UpdateHubService
-  ) {}
+  constructor(private conceptService: ConceptService, private campaignService: CampaignService, private updateHub: UpdateHubService) {}
 
   ngOnInit() {
     this.searchControl = new FormControl(null);
@@ -101,45 +83,38 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
         }
       });
 
-    this._updateSubscription = this.updateHub.conceptEntityUpdate.subscribe(
-      (ce: IConceptEntity) => {
-        if (!this.conceptEntities || !this.entity || !this.conceptType) {
-          return;
-        }
-
-        if (
-          ce.concept.conceptTypeId === this.conceptType.id &&
-          ce.entityId === this.entity.id
-        ) {
-          const index = this.conceptEntities.findIndex(
-            (ece) =>
-              ece.conceptId === ce.conceptId && ece.entityId === ce.entityId
-          );
-
-          if (index !== -1) {
-            this.conceptEntities[index] = ce;
-          } else {
-            this.conceptEntities.push(ce);
-          }
-        }
+    this._updateSubscription = this.updateHub.conceptEntityUpdate.subscribe((ce: IConceptEntity) => {
+      if (!this.conceptEntities || !this.entity || !this.conceptType) {
+        return;
       }
-    );
 
-    this._deleteSubscription = this.updateHub.conceptEntityDelete.subscribe(
-      (ce: IConceptEntity) => {
-        if (!this.conceptEntities || !this.entity || !this.conceptType) {
-          return;
+      if (ce.concept.conceptTypeId === this.conceptType.id && ce.entityId === this.entity.id) {
+        const index = this.conceptEntities.findIndex((ece) => ece.conceptId === ce.conceptId && ece.entityId === ce.entityId);
+
+        if (index !== -1) {
+          this.conceptEntities[index] = ce;
+        } else {
+          this.conceptEntities.push(ce);
         }
 
-        if (ce.entityId === this.entity.id) {
-          this.conceptEntities = this.conceptEntities.filter((ece) => {
-            const match =
-              ece.conceptId === ce.conceptId && ece.entityId === ce.entityId;
-            return !match;
-          });
-        }
+        this.conceptEntities = this.conceptEntities.slice().sort((a, b) => {
+          return a.sortValue - b.sortValue;
+        });
       }
-    );
+    });
+
+    this._deleteSubscription = this.updateHub.conceptEntityDelete.subscribe((ce: IConceptEntity) => {
+      if (!this.conceptEntities || !this.entity || !this.conceptType) {
+        return;
+      }
+
+      if (ce.entityId === this.entity.id) {
+        this.conceptEntities = this.conceptEntities.filter((ece) => {
+          const match = ece.conceptId === ce.conceptId && ece.entityId === ce.entityId;
+          return !match;
+        });
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -156,10 +131,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     try {
-      this.conceptEntities = await this.conceptService.getConceptEntities(
-        this.entity.id,
-        this.conceptType.id
-      );
+      this.conceptEntities = await this.conceptService.getConceptEntities(this.entity.id, this.conceptType.id);
     } catch (err) {
       throw err;
     }
@@ -171,12 +143,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     this.searchLoading = true;
 
     try {
-      const result = await this.conceptService.getConcepts(
-        this.conceptType.id,
-        10,
-        0,
-        search
-      );
+      const result = await this.conceptService.getConcepts(this.conceptType.id, 10, 0, search);
       this.searchResults = result.concepts;
     } catch (err) {
       throw err;
@@ -206,9 +173,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
       };
 
       const existingConceptEntity = this.conceptEntities.find(
-        (ce) =>
-          ce.conceptId === conceptEntity.conceptId &&
-          ce.entityId === conceptEntity.entityId
+        (ce) => ce.conceptId === conceptEntity.conceptId && ce.entityId === conceptEntity.entityId
       );
 
       if (existingConceptEntity === undefined) {
@@ -228,6 +193,11 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   }
 
   public async select(conceptEntity: IConceptEntity) {
+    // A click was received on a item that is currently being dragged
+    if (conceptEntity === this.dragEnabledItem) {
+      return;
+    }
+
     this.selectedConceptEntity = conceptEntity;
 
     this.editGroup.patchValue({
@@ -252,10 +222,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
       // Patch value
       for (const ce of this.conceptEntities) {
-        if (
-          ce.conceptId === toSave.conceptId &&
-          ce.entityId === toSave.entityId
-        ) {
+        if (ce.conceptId === toSave.conceptId && ce.entityId === toSave.entityId) {
           Object.assign(ce, toSave);
         }
       }
@@ -275,19 +242,14 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
     try {
       this.conceptEntities = this.conceptEntities.filter((ce) => {
-        const match =
-          ce.conceptId === conceptEntity.conceptId &&
-          ce.entityId === conceptEntity.entityId;
+        const match = ce.conceptId === conceptEntity.conceptId && ce.entityId === conceptEntity.entityId;
 
         return !match;
       });
 
       this.viewAndEditModal.close(null);
 
-      await this.conceptService.deleteConceptEntity(
-        conceptEntity.entityId,
-        conceptEntity.conceptId
-      );
+      await this.conceptService.deleteConceptEntity(conceptEntity.entityId, conceptEntity.conceptId);
     } catch (err) {
       throw err;
     }
@@ -304,15 +266,29 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   }
 
   // Called when a drag and drop event has finished
-  public conceptDropped(e: CdkDragDrop<IConceptEntity[]>) {
+  public async conceptDropped(e: CdkDragDrop<IConceptEntity[]>) {
+    this.dragEnabledItem = null;
+
     moveItemInArray(this.conceptEntities, e.previousIndex, e.currentIndex);
+
+    this.conceptEntities.forEach((ce, idx) => {
+      ce.sortValue = idx;
+    });
+
+    await this.conceptService.updateConceptEntities(this.conceptEntities, this.entity.id);
+  }
+
+  public longPress(ce: IConceptEntity) {
+    // Can't drag things around unless this entity is editable
+    if (!this.editable) {
+      return;
+    }
+
+    this.dragEnabledItem = ce;
   }
 
   public get quantityEnabled() {
-    return (
-      this.conceptType.entityConfig.enabled &&
-      this.conceptType.entityConfig.enableQuantity
-    );
+    return this.conceptType.entityConfig.enabled && this.conceptType.entityConfig.enableQuantity;
   }
 
   public get campaign() {
@@ -345,9 +321,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
     return {
       name: 'Quantity',
-      description: `How many ${this.selectedConceptEntity.concept.name} does ${
-        this.entity.name
-      } have?`,
+      description: `How many ${this.selectedConceptEntity.concept.name} does ${this.entity.name} have?`,
       type: DynamicFieldType.INT,
       options: {
         min: 0,

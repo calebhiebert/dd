@@ -57,7 +57,7 @@ namespace net_api.Controllers
                 .OrderBy(ec => ec.SortValue));
         }
 
-        // PUT: api/ConceptEntities/5
+        // PUT: api/ConceptEntities
         [HttpPut]
         public async Task<IActionResult> PutConceptEntity(ConceptEntity conceptEntity)
         {
@@ -67,6 +67,7 @@ namespace net_api.Controllers
                 .Where(e => e.Id == conceptEntity.EntityId)
                 .Include(e => e.Campaign)
                 .Include(e => e.EntityConcepts)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             if (entity == null)
@@ -124,6 +125,77 @@ namespace net_api.Controllers
             return Ok(conceptEntity);
         }
 
+        // PUT: api/ConceptEntities
+        [HttpPut("multi")]
+        public async Task<IActionResult> PutConceptEntities(ConceptEntityMulti conceptEntities)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var entity = await _context.Entities
+                .Where(e => e.Id == conceptEntities.EntityId)
+                .Include(e => e.Campaign)
+                .Include(e => e.EntityConcepts)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, entity, "EntityEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            foreach (var conceptEntity in conceptEntities.ConceptEntities)
+            {
+                // It's possible that the client could submit the concept field
+                // this is not ideal (because entity framework will track it), so we just clear it
+                conceptEntity.Concept = null;
+
+                if (!ConceptEntityExists(conceptEntity.EntityId, conceptEntity.ConceptId))
+                {
+                    _context.ConceptEntities.Add(conceptEntity);
+                    conceptEntity.SortValue = entity.EntityConcepts.Count;
+                }
+                else
+                {
+                    _context.Entry(conceptEntity).State = EntityState.Modified;
+                }
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ConceptEntityExists(conceptEntity.EntityId, conceptEntity.ConceptId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                // Because the concept field was cleared above, but we want to send it in the response
+                // we need to re populate it
+                await _context.Entry(conceptEntity)
+                    .Reference(i => i.Concept)
+                    .LoadAsync();
+
+                await _hub.Clients
+                    .Group($"entity-{conceptEntity.EntityId}")
+                    .SendAsync("ConceptEntityUpdate", conceptEntity);
+            }
+
+            return NoContent();
+        }
+
         // DELETE: api/ConceptEntities/5
         [HttpDelete("{entId}/Concept/{cId}")]
         public async Task<ActionResult<ConceptEntity>> DeleteConceptEntity([FromRoute] Guid entId, [FromRoute] Guid cId)
@@ -155,5 +227,11 @@ namespace net_api.Controllers
         {
             return _context.ConceptEntities.Any(ce => ce.EntityId == entityId && ce.ConceptId == conceptId);
         }
+    }
+
+    public class ConceptEntityMulti
+    {
+        public ConceptEntity[] ConceptEntities { get; set; }
+        public Guid EntityId { get; set; }
     }
 }

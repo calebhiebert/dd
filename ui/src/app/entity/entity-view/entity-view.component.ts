@@ -6,9 +6,9 @@ import { CampaignService } from 'src/app/campaign.service';
 import { AttributeType } from 'src/app/attributes';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoginService } from 'src/app/login.service';
-import { CurrencyService } from 'src/app/currency.service';
 import { DynamicFieldType } from 'src/app/dynform/form-types';
-import { UpdateHubService } from 'src/app/update-hub.service';
+import { UpdateHubService, ConnectionState } from 'src/app/update-hub.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'dd-entity-view',
@@ -22,6 +22,8 @@ export class EntityViewComponent implements OnInit, OnDestroy {
   public loading = false;
 
   public saving = false;
+
+  private _updateHubStatus$: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,6 +39,12 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     this.route.paramMap.subscribe((params) => {
       this.loadEntity(params.get('ent_id'));
     });
+
+    this._updateHubStatus$ = this.update.stateUpdate.subscribe((state) => {
+      if (state === ConnectionState.CONNECTED && this.entity) {
+        this.update.subscribeEntities([this.entity.id]);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -44,6 +52,10 @@ export class EntityViewComponent implements OnInit, OnDestroy {
 
     if (this.entity) {
       this.update.unsubscribeEntities([this.entity.id]);
+    }
+
+    if (this._updateHubStatus$) {
+      this._updateHubStatus$.unsubscribe();
     }
   }
 
