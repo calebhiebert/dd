@@ -175,3 +175,7 @@ $hover-scale: 1.005;
 [hidden] {
   display: none !important;
 }
+
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
