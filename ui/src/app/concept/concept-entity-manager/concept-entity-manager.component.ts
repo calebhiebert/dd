@@ -9,6 +9,7 @@ import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-type
 import { Subscription } from 'rxjs';
 import { UpdateHubService } from 'src/app/update-hub.service';
 import { CdkDragDrop, moveItemInArray, CdkDropList } from '@angular/cdk/drag-drop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'dd-concept-entity-manager',
@@ -48,6 +49,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   public searchInput: ElementRef<HTMLInputElement>;
 
   public searchResults: IConcept[];
+  public totalResults: number;
   public selectedConceptEntity: IConceptEntity = null;
 
   public searchControl: FormControl;
@@ -60,7 +62,12 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
   private _entity: IEntity;
 
-  constructor(private conceptService: ConceptService, private campaignService: CampaignService, private updateHub: UpdateHubService) {}
+  constructor(
+    private conceptService: ConceptService,
+    private campaignService: CampaignService,
+    private updateHub: UpdateHubService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.searchControl = new FormControl(null);
@@ -145,11 +152,20 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     try {
       const result = await this.conceptService.getConcepts(this.conceptType.id, 10, 0, search);
       this.searchResults = result.concepts;
+      this.totalResults = result.total;
     } catch (err) {
       throw err;
     }
 
     this.searchLoading = false;
+  }
+
+  public createConcept() {
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepts', this.conceptType.id, 'create'], {
+      queryParams: {
+        name: this.searchControl.value,
+      },
+    });
   }
 
   public async add() {
@@ -335,5 +351,16 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
       description: `All players will be able to see these notes`,
       type: DynamicFieldType.TEXT_FORMATTED,
     };
+  }
+
+  /**
+   * Whether or not the user can manage this type of concepts
+   */
+  public get conceptTypeEditable() {
+    if (this.conceptType) {
+      return this.conceptType.playerEditable || this.campaignService.canEdit;
+    } else {
+      return false;
+    }
   }
 }
