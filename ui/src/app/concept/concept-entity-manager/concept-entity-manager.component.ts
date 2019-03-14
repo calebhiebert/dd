@@ -21,8 +21,6 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   public searchLoading = false;
   public working = false;
 
-  public dragEnabledItem: IConceptEntity = null;
-
   @Input()
   public conceptType: IConceptType;
 
@@ -209,11 +207,6 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   }
 
   public async select(conceptEntity: IConceptEntity) {
-    // A click was received on a item that is currently being dragged
-    if (conceptEntity === this.dragEnabledItem) {
-      return;
-    }
-
     this.selectedConceptEntity = conceptEntity;
 
     this.editGroup.patchValue({
@@ -283,8 +276,6 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
   // Called when a drag and drop event has finished
   public async conceptDropped(e: CdkDragDrop<IConceptEntity[]>) {
-    this.dragEnabledItem = null;
-
     moveItemInArray(this.conceptEntities, e.previousIndex, e.currentIndex);
 
     this.conceptEntities.forEach((ce, idx) => {
@@ -292,15 +283,6 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     });
 
     await this.conceptService.updateConceptEntities(this.conceptEntities, this.entity.id);
-  }
-
-  public longPress(ce: IConceptEntity) {
-    // Can't drag things around unless this entity is editable
-    if (!this.editable) {
-      return;
-    }
-
-    this.dragEnabledItem = ce;
   }
 
   public get quantityEnabled() {

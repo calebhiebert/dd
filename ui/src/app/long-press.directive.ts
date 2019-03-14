@@ -43,6 +43,11 @@ export class LongPressDirective {
     this.loop(event);
   }
 
+  @HostListener('touchdown', ['$event'])
+  onTouchDown(event) {
+    console.log(event);
+  }
+
   @HostListener('mousemove', ['$event'])
   onMouseMove(event) {
     if (this.pressing && !this.longPressing) {

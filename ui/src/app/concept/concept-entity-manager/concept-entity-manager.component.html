@@ -92,24 +92,11 @@
 
   <!-- Concepts -->
   <div cdkDropList (cdkDropListDropped)="conceptDropped($event)">
-    <div
-      [longPress]="250"
-      (onLongPress)="longPress(ce)"
-      class="card px-1 pt-1 mb-1"
-      *ngFor="let ce of conceptEntities; trackBy: trackConceptEntity"
-      cdkDrag
-      [cdkDragDisabled]="ce !== dragEnabledItem"
-      [ngClass]="{ 'c-move': ce === dragEnabledItem }"
-    >
+    <div class="card px-1 pt-1 mb-1" *ngFor="let ce of conceptEntities; trackBy: trackConceptEntity" cdkDrag>
       <div class="drag-placeholder" *cdkDragPlaceholder></div>
       <div class="columns col-gapless">
-        <!-- Drag Handle -->
-        <div class="column col-auto pl-1 pr-2" *ngIf="ce === dragEnabledItem">
-          <i class="icon icon-resize-vert"></i>
-        </div>
-
         <!-- Image -->
-        <div class="column col-auto mr-2" [ngClass]="{ faded: ce.quantity === 0, 'c-hand': ce !== dragEnabledItem }" (click)="select(ce)">
+        <div class="column col-auto mr-2" [ngClass]="{ faded: ce.quantity === 0 }" (click)="select(ce)">
           <!-- Actual Image -->
           <img
             class="s-rounded"
@@ -130,11 +117,7 @@
         </div>
 
         <!-- Name -->
-        <div
-          class="column"
-          [ngClass]="{ faded: quantityEnabled && ce.quantity === 0, 'c-hand': ce !== dragEnabledItem }"
-          (click)="select(ce)"
-        >
+        <div class="column c-hand" [ngClass]="{ faded: quantityEnabled && ce.quantity === 0 }" (click)="select(ce)">
           {{ ce.concept.name }}
 
           <!-- Quantity -->
