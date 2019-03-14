@@ -161,14 +161,12 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
 
         setTimeout(() => {
           this.setupMentions();
+          this.setupImages();
         }, 1);
       });
     } else {
       if (obj !== null && obj !== undefined) {
         this._quill.setContents(obj.ops, 'form');
-
-        this.setupImages(this._container.nativeElement.querySelectorAll('img'));
-        this.setupTables(this._container.nativeElement.querySelectorAll('table'));
       } else {
         this._quill.setContents([], 'form');
       }
@@ -499,13 +497,9 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
     });
   }
 
-  private setupTables(nodes: NodeListOf<HTMLTableElement>) {
-    nodes.forEach((n) => n.classList.add('table', 'table-striped'));
-  }
-
-  private setupImages(nodes: NodeListOf<HTMLImageElement>) {
-    nodes.forEach((n) => {
-      n.classList.add('img-responsive');
+  private setupImages() {
+    this._container.nativeElement.querySelectorAll('img').forEach((node: HTMLSpanElement) => {
+      node.classList.add('img-responsive');
     });
   }
 }
