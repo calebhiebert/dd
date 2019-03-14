@@ -103,6 +103,7 @@ import { UserViewNanoComponent } from './account/user-view-nano/user-view-nano.c
 import { ConceptHistoryComponent } from './concept/concept-history/concept-history.component';
 import { MemberManagerComponent } from './campaign/member-manager/member-manager.component';
 import { LongPressDirective } from './long-press.directive';
+import { LoginStatusComponent } from './login/login-status/login-status.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -200,6 +201,7 @@ import { LongPressDirective } from './long-press.directive';
     ConceptHistoryComponent,
     MemberManagerComponent,
     LongPressDirective,
+    LoginStatusComponent,
   ],
   imports: [
     BrowserModule,

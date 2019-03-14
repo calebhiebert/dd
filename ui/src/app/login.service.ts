@@ -16,16 +16,13 @@ export class LoginService {
 
   public onLogin = new EventEmitter<boolean>();
   public loginCompleted = false;
-  public loginInProgress = false;
   public authData: Auth0UserProfile;
+  public loginStatus = new EventEmitter<boolean>();
 
   private loginPromise: Promise<boolean>;
+  private _loginInProgress: boolean;
 
-  constructor(
-    private userService: UserService,
-    private router: Router,
-    private actions: ActionQueueService
-  ) { }
+  constructor(private userService: UserService, private router: Router, private actions: ActionQueueService) {}
 
   private getAuth(): WebAuth {
     if (this.auth === undefined) {
@@ -213,6 +210,15 @@ export class LoginService {
         }
       );
     });
+  }
+
+  public get loginInProgress() {
+    return this._loginInProgress;
+  }
+
+  public set loginInProgress(value: boolean) {
+    this._loginInProgress = value;
+    this.loginStatus.emit(value);
   }
 
   public setUserData(userData: IUser) {

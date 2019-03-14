@@ -10,6 +10,10 @@ export class ModalComponent<T> implements OnInit {
   @Input()
   public size = 'normal';
 
+  // If true, the user will not be able to close the modal
+  @Input()
+  public codeOnly = false;
+
   protected openPromise: Promise<T>;
 
   protected resolve: any;
@@ -28,6 +32,14 @@ export class ModalComponent<T> implements OnInit {
     });
 
     return this.openPromise;
+  }
+
+  public userClose(val: T): Promise<T> {
+    if (this.codeOnly === true) {
+      return;
+    }
+
+    return this.close(val);
   }
 
   public close(val: T): Promise<T> {

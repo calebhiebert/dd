@@ -6,14 +6,10 @@
     'modal-lg': size === 'large'
   }"
 >
-  <a (click)="close(null)" class="modal-overlay" aria-label="Close"></a>
+  <a (click)="userClose(null)" class="modal-overlay" aria-label="Close"></a>
   <div class="modal-container">
     <div class="modal-header p-2">
-      <a
-        (click)="close(null)"
-        class="btn btn-clear float-right"
-        aria-label="Close"
-      ></a>
+      <a (click)="userClose(null)" class="btn btn-clear float-right" aria-label="Close" *ngIf="!codeOnly"></a>
       <ng-content select="[modal-header]"></ng-content>
     </div>
     <div class="modal-body p-2">
