@@ -202,17 +202,8 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     return attribute.name;
   }
 
-  public get processedAttributes(): IViewField[] {
-    return this.entity.fields.map((f) => {
-      return {
-        field: f,
-        config: this.getEntityField(f.name),
-      };
-    });
-  }
-
   public get majorAttributes(): IViewField[] {
-    return this.entity.fields
+    return (this.entity.fields || [])
       .map((f) => {
         return {
           field: f,
@@ -229,7 +220,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
   }
 
   public get normalAttributes(): IViewField[] {
-    return this.entity.fields
+    return (this.entity.fields || [])
       .map((f) => {
         return {
           field: f,
@@ -246,7 +237,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
   }
 
   public get bigTextAttributes(): IViewField[] {
-    return this.entity.fields
+    return (this.entity.fields || [])
       .map((f) => {
         return {
           field: f,
@@ -257,7 +248,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
   }
 
   public get minorAttributes(): IViewField[] {
-    return this.entity.fields
+    return (this.entity.fields || [])
       .map((f) => {
         return {
           field: f,
@@ -268,7 +259,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
   }
 
   public get unimportantAttributes(): IViewField[] {
-    return this.entity.fields
+    return (this.entity.fields || [])
       .map((f) => {
         return {
           field: f,

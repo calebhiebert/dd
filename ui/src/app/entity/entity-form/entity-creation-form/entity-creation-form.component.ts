@@ -160,7 +160,7 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
       setTimeout(() => {
         const patchValue: any = { ...ent };
 
-        patchValue.fields = this.preset.fields.map((f) => {
+        patchValue.fields = (this.preset.fields || []).map((f) => {
           const val = (this.entity.fields || []).find((fld) => fld.name === f.name);
 
           if (val) {
