@@ -6,6 +6,16 @@
   <div modal-body *ngIf="config && control">
     <form (ngSubmit)="ok()" #attrForm="ngForm">
       <dd-dynamic-field [control]="control" [config]="config" showLabel="false"></dd-dynamic-field>
+
+      <!-- Modifiers -->
+      <div *ngIf="modifiers && modifiersGroup">
+        <dd-dynamic-field
+          [control]="modifiersGroup.get(m.config.name)"
+          [config]="m.config"
+          showLabel="false"
+          *ngFor="let m of modifiers; trackBy: trackModifier"
+        ></dd-dynamic-field>
+      </div>
     </form>
   </div>
 

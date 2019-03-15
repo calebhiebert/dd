@@ -104,13 +104,18 @@ export class EntityViewComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const fieldValue = await this.attributeModal.editAttribute(field.config, field.field.value);
+    const modifiers = this.modifiers.filter((m) => (m.config && m.config.options && m.config.options.modifierFor) === field.config.name);
+
+    const fieldValue = await this.attributeModal.editAttribute(field.config, field.field.value, modifiers);
 
     if (fieldValue !== null && fieldValue !== undefined) {
       for (const entityField of this.entity.fields) {
         if (entityField.name === field.field.name) {
-          entityField.value = fieldValue;
-          break;
+          entityField.value = fieldValue.value;
+        }
+
+        if (fieldValue.mods && fieldValue.mods[entityField.name] !== undefined) {
+          entityField.value = fieldValue.mods[entityField.name];
         }
       }
 
@@ -163,7 +168,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     );
 
     if (attrValue !== null && attrValue !== undefined) {
-      this.entity.name = attrValue;
+      this.entity.name = attrValue.value;
       this.updateEntity();
     }
   }
@@ -184,7 +189,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     );
 
     if (attrValue !== null && attrValue !== undefined) {
-      this.entity.xp = parseInt(attrValue, 10);
+      this.entity.xp = parseInt(attrValue.value, 10);
       this.updateEntity();
     }
   }

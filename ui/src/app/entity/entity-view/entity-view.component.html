@@ -48,7 +48,7 @@
             </div>
 
             <!-- Additional XP Things -->
-            <div class="text-right tooltip" data-tooltip="XP / Next Level">
+            <div class="text-right tooltip" data-tooltip="XP / Next Level" *ngIf="preset.isXPEnabled">
               <span>{{ entity.xp }} / {{ xpToNextLevel }}</span>
             </div>
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ModalComponent } from 'src/app/modal/modal.component';
-import { FormControl, Validators, ValidatorFn } from '@angular/forms';
-import { IEntityAttribute } from 'src/app/entity.service';
+import { FormControl, Validators, ValidatorFn, FormGroup } from '@angular/forms';
+import { IEntityAttribute, IViewField } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { IDynamicFieldConfig } from 'src/app/dynform/form-types';
 
@@ -15,22 +15,43 @@ export class EntityAttributeEditorModalComponent implements OnInit {
   public modal: ModalComponent<any>;
 
   public config: IDynamicFieldConfig;
+  public modifiers: IViewField[];
 
   public control: FormControl;
+  public modifiersGroup: FormGroup;
 
   constructor(private campaignService: CampaignService) {}
 
   ngOnInit() {}
 
-  public async editAttribute(config?: IDynamicFieldConfig, currentValue?: any): Promise<any> {
+  public async editAttribute(
+    config?: IDynamicFieldConfig,
+    currentValue?: any,
+    modifiers?: IViewField[]
+  ): Promise<{ value: any; mods: any }> {
     this.config = config;
+    this.modifiers = modifiers;
 
     this.control = new FormControl(currentValue);
 
+    if (this.modifiers) {
+      this.modifiersGroup = new FormGroup({});
+
+      for (const m of this.modifiers) {
+        this.modifiersGroup.addControl(m.config.name, new FormControl(m.field.value));
+      }
+    }
+
     return this.modal.open().then((res) => {
       this.config = undefined;
+      this.modifiers = undefined;
+      this.modifiersGroup = undefined;
       return res;
     });
+  }
+
+  public trackModifier(idx: number) {
+    return idx;
   }
 
   public ok() {
@@ -38,7 +59,10 @@ export class EntityAttributeEditorModalComponent implements OnInit {
       return;
     }
 
-    this.modal.close(this.control.value);
+    this.modal.close({
+      value: this.control.value,
+      mods: this.modifiersGroup ? this.modifiersGroup.value : null,
+    });
   }
 
   public cancel() {

@@ -35,7 +35,9 @@ export class AttributeRowViewComponent implements OnInit {
   }
 
   public getModifiers(id: string) {
-    return this.modifiers.filter((m) => m.config && m.config.options && m.config.options.modifierFor === id);
+    return this.modifiers.filter(
+      (m) => m.config && m.config.options && m.config.options.modifierFor === id && m.field.value !== null && m.field.value !== undefined
+    );
   }
 
   public getModifierString(modifiers: IViewField[]) {
