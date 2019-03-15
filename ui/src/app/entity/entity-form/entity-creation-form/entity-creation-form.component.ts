@@ -67,10 +67,11 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
       if (this.editing) {
         this.loadEntity(id);
       }
-    });
 
-    this.preset.fields.forEach(() => {
-      this.fields.push(new FormControl(null));
+      this.fields.reset();
+      (this.preset.fields || []).forEach(() => {
+        this.fields.push(new FormControl(null));
+      });
     });
 
     if (!this.editing) {
@@ -177,7 +178,7 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
         const patchValue: any = { ...ent };
 
         patchValue.fields = this.preset.fields.map((f) => {
-          const val = this.entity.fields.find((fld) => fld.name === f.name);
+          const val = (this.entity.fields || []).find((fld) => fld.name === f.name);
 
           if (val) {
             return val.value;
