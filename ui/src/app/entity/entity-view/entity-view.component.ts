@@ -152,27 +152,6 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public async editName() {
-    if (!this.editable) {
-      return;
-    }
-
-    const attrValue = await this.attributeModal.editAttribute(
-      {
-        name: 'Name',
-        description: `What the ${this.entity.preset.name} is called`,
-        type: DynamicFieldType.STRING,
-        options: { required: true, minLength: 2, maxLength: 3 },
-      },
-      this.entity.name
-    );
-
-    if (attrValue !== null && attrValue !== undefined) {
-      this.entity.name = attrValue.value;
-      this.updateEntity();
-    }
-  }
-
   public async editXP() {
     if (!this.editable) {
       return;
