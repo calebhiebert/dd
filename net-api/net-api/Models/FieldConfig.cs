@@ -35,6 +35,7 @@ namespace net_api.Models
         public bool? Simple { get; set; }
         public CurrencyLevel[] CurrencyLevels { get; set; }
         public bool? TrackCoins { get; set; }
+        public string ModifierFor { get; set; }
     }
 
     public class FieldValue

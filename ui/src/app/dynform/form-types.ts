@@ -11,6 +11,7 @@ export interface IDynamicFieldConfig {
 
 export interface IFieldOptions {
   required?: boolean;
+  modifierFor?: string;
 }
 
 export interface IStringFieldOptions extends IFieldOptions {
@@ -64,5 +65,5 @@ export enum DynamicFieldType {
   ENUM_MULTI,
   TEXT_FORMATTED,
   CURRENCY,
-  BOOLEAN
+  BOOLEAN,
 }

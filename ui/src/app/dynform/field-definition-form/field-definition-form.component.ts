@@ -13,6 +13,9 @@ export class FieldDefinitionFormComponent implements OnInit {
   @Input()
   public formGroup: FormGroup;
 
+  @Input()
+  public otherFields: string[];
+
   public options: FormGroup;
   public hideExtra = true;
   public uniqueFieldId: string;
@@ -51,6 +54,7 @@ export class FieldDefinitionFormComponent implements OnInit {
           maxLength: new FormControl(opt.maxLength),
           minLength: new FormControl(opt.minLength),
           required: new FormControl(opt.required),
+          modifierFor: new FormControl(opt.modifierFor),
         });
 
       case DynamicFieldType.INT:
@@ -61,6 +65,7 @@ export class FieldDefinitionFormComponent implements OnInit {
           min: new FormControl(opt.min),
           max: new FormControl(opt.max),
           required: new FormControl(opt.required),
+          modifierFor: new FormControl(opt.modifierFor),
         });
 
       case DynamicFieldType.ENUM:
@@ -69,10 +74,12 @@ export class FieldDefinitionFormComponent implements OnInit {
         return new FormGroup({
           choices: new FormArray(opt.choices ? opt.choices.map((c) => new FormControl(c)) : []),
           required: new FormControl(opt.required),
+          modifierFor: new FormControl(opt.modifierFor),
         });
       default:
         return new FormGroup({
           required: new FormControl(options.required),
+          modifierFor: new FormControl(options.modifierFor),
         });
     }
   }

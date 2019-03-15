@@ -234,6 +234,10 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
     return this.formGroup.get('fields') as FormArray;
   }
 
+  public get otherFieldNames(): string[] {
+    return this.fields.value.map((v) => v.name);
+  }
+
   public get editing() {
     return this.route.snapshot.data.editing;
   }

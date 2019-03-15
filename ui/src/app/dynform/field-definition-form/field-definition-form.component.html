@@ -4,7 +4,7 @@
     <dd-image-upload formControlName="imageId" [eleId]="uniqueFieldId"></dd-image-upload>
   </div>
 
-  <div class="column" [ngClass]="{ 'col-9': !hideExtra, 'col-12': hideExtra }">
+  <div class="column col-9" [ngClass]="{ 'col-9': !hideExtra, 'col-12': hideExtra }">
     <!-- Name -->
     <div class="form-group" [ngClass]="{ 'has-error': name.invalid && (name.dirty || name.touched) }">
       <input type="text" name="name" class="form-input input-sm" placeholder="Name" formControlName="name" />
@@ -35,8 +35,6 @@
         A type is required
       </p>
     </div>
-
-    <!-- Validation -->
 
     <!-- Specific Validation -->
     <div [ngSwitch]="true" [formGroup]="options" *ngIf="options" [hidden]="hideExtra">
@@ -72,14 +70,24 @@
         </div>
       </div>
     </div>
+  </div>
 
+  <div class="column col-auto mt-1" [hidden]="hideExtra">
     <!-- Required -->
-    <div class="form-group" [formGroup]="options" *ngIf="options" [hidden]="hideExtra">
+    <div class="form-group" [formGroup]="options" *ngIf="options">
       <label class="form-checkbox">
         <input type="checkbox" formControlName="required" />
         <i class="form-icon"></i> Required
       </label>
     </div>
+  </div>
+
+  <!-- Modifier For -->
+  <div class="column mt-1" [formGroup]="options" [hidden]="hideExtra">
+    <select class="form-select" formControlName="modifierFor">
+      <option [value]="null">Modifier For</option>
+      <option *ngFor="let f of otherFields" [value]="f">{{ f }}</option>
+    </select>
   </div>
 </div>
 <span class="fake-link" *ngIf="hideExtra" (click)="hideExtra = false">Show More</span>
