@@ -86,7 +86,7 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
       this.entityPreset = preset;
 
       setTimeout(() => {
-        preset.fields.forEach((f) => {
+        (preset.fields || []).forEach((f) => {
           const formGroup = FieldDefinitionFormComponent.createFormGroup(f);
           formGroup.addControl('class', new FormControl(0));
           this.fields.push(formGroup);
