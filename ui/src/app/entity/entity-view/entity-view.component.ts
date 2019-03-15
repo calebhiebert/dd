@@ -104,7 +104,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const fieldValue = await this.attributeModal.editAttribute(null, field.config, field.field.value);
+    const fieldValue = await this.attributeModal.editAttribute(field.config, field.field.value);
 
     if (fieldValue !== null && fieldValue !== undefined) {
       for (const entityField of this.entity.fields) {
@@ -129,7 +129,6 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     }
 
     const attrValue = await this.attributeModal.editAttribute(
-      null,
       {
         name: 'Money',
         type: DynamicFieldType.CURRENCY,
@@ -157,13 +156,9 @@ export class EntityViewComponent implements OnInit, OnDestroy {
       {
         name: 'Name',
         description: `What the ${this.entity.preset.name} is called`,
-        type: AttributeType.STRING,
-        required: true,
-        min: 2,
-        max: 30,
-        class: EntityAttributeClass.NORMAL,
+        type: DynamicFieldType.STRING,
+        options: { required: true, minLength: 2, maxLength: 3 },
       },
-      null,
       this.entity.name
     );
 
@@ -182,13 +177,9 @@ export class EntityViewComponent implements OnInit, OnDestroy {
       {
         name: 'XP',
         description: `Experience points that this ${this.entity.preset.name} has`,
-        type: AttributeType.NUMBER,
-        required: true,
-        min: 0,
-        max: 2147483647,
-        class: EntityAttributeClass.NORMAL,
+        type: DynamicFieldType.INT,
+        options: { required: true, min: 0 },
       },
-      null,
       this.entity.xp.toString()
     );
 

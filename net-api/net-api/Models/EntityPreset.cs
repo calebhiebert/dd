@@ -31,30 +31,6 @@ namespace net_api.Models
         [Required]
         public bool PlayerCreatable { get; set; }
 
-        [Column("Attributes", TypeName = "jsonb")]
-        [JsonIgnore]
-        public string AttributeJson { get; set; }
-
-        [NotMapped]
-        [Required]
-        public List<EntityAttribute> Attributes
-        {
-            get
-            {
-                if (AttributeJson == null)
-                {
-                    return null;
-                }
-
-                return JsonConvert.DeserializeObject<List<EntityAttribute>>(AttributeJson);
-            }
-
-            set
-            {
-                AttributeJson = JsonConvert.SerializeObject(value);
-            }
-        }
-
         [Required]
         public bool IsCurrencyEnabled { get; set; }
 

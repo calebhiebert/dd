@@ -1,25 +1,11 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import {
-  FormGroup,
-  FormArray,
-  FormControl,
-  ValidatorFn,
-  ValidationErrors,
-  Validators,
-  AbstractControl
-} from '@angular/forms';
-import { numberValidator } from 'src/app/entity/dynamic-attribute-form/dynamic-attribute-form.component';
+import { FormGroup, FormArray, FormControl, ValidatorFn, ValidationErrors, Validators, AbstractControl } from '@angular/forms';
 import { ICampaign } from 'src/app/campaign.service';
-import {
-  XpTablePresetsService,
-  IXPTablePreset
-} from 'src/app/xp-table-presets.service';
+import { XpTablePresetsService, IXPTablePreset } from 'src/app/xp-table-presets.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 
 // TODO move this to a validators file or something
-export const xpTest: ValidatorFn = (
-  control: FormArray
-): ValidationErrors | null => {
+export const xpTest: ValidatorFn = (control: FormArray): ValidationErrors | null => {
   let lastXP = 0;
   const errObj = {};
 
@@ -45,7 +31,7 @@ export const xpTest: ValidatorFn = (
 @Component({
   selector: 'dd-experience-table-editor',
   templateUrl: './experience-table-editor.component.html',
-  styleUrls: ['./experience-table-editor.component.css']
+  styleUrls: ['./experience-table-editor.component.css'],
 })
 export class ExperienceTableEditorComponent implements OnInit {
   @Input()
@@ -66,27 +52,17 @@ export class ExperienceTableEditorComponent implements OnInit {
       throw new Error('The param campaign is required!');
     }
 
-    this.presets.getPresets().then(p => (this.presetList = p));
+    this.presets.getPresets().then((p) => (this.presetList = p));
 
-    this.formGroup.addControl(
-      'experienceTable',
-      new FormArray(
-        this.campaign.experienceTable.map(xp => this.createRow(xp)),
-        xpTest
-      )
-    );
+    this.formGroup.addControl('experienceTable', new FormArray(this.campaign.experienceTable.map((xp) => this.createRow(xp)), xpTest));
   }
 
   private createRow(xp?: number): AbstractControl {
-    return new FormControl(xp ? xp : 0, [
-      Validators.required,
-      Validators.min(0),
-      numberValidator
-    ]);
+    return new FormControl(xp ? xp : 0, [Validators.required, Validators.min(0)]);
   }
 
   public usePreset(preset: IXPTablePreset) {
-    this.formArray.controls = preset.xpTable.map(xp => this.createRow(xp));
+    this.formArray.controls = preset.xpTable.map((xp) => this.createRow(xp));
     this.presetsModal.close(null);
   }
 

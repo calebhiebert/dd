@@ -199,7 +199,6 @@ namespace net_api.Models
         [StringLength(30)]
         public string Name { get; set; }
 
-        [Required]
         public Object Value { get; set; }
     }
 }

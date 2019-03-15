@@ -49,17 +49,17 @@
 
           <li class="divider"></li>
 
+          <!-- View Action -->
+          <li class="menu-item" [routerLink]="['/campaigns', entity.campaignId, 'entities', entity.id]">
+            <div><i class="icon icon-arrow-right"></i> View</div>
+          </li>
+
           <!-- Kill Action -->
-          <li class="menu-item" (click)="kill()">
+          <li class="menu-item" (click)="kill()" *ngIf="editable">
             <div><i class="icon icon-cross"></i> Kill</div>
           </li>
         </ul>
       </div>
-
-      <!-- View Button -->
-      <button class="btn btn-sm ml-1" [routerLink]="['/campaigns', entity.campaignId, 'entities', entity.id]">
-        <i class="icon icon-arrow-right"></i>
-      </button>
     </div>
   </div>
 </div>

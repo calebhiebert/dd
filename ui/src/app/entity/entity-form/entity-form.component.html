@@ -197,7 +197,7 @@
         </div>
 
         <!-- Class -->
-        <div class="column col-auto">
+        <div class="column col-auto" *ngIf="field.get('class')">
           <select [formControl]="field.get('class')" class="form-input input-sm">
             <option value="0">Major</option>
             <option value="1">Normal</option>
@@ -214,16 +214,6 @@
         </div>
       </div>
       <dd-field-definition-form [formGroup]="field"></dd-field-definition-form>
-    </div>
-
-    <!-- Attribute Array -->
-    <div>
-      <dd-entity-attribute-row-editor
-        *ngFor="let attr of attributeControls; let i = index"
-        (remove)="removeAttribute(i)"
-        [formGroup]="attr"
-        #atteditor
-      ></dd-entity-attribute-row-editor>
     </div>
   </div>
 

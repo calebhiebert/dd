@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { numberValidator } from '../entity/dynamic-attribute-form/dynamic-attribute-form.component';
 
 @Component({
   selector: 'dd-number-quick-select',
@@ -33,12 +32,7 @@ export class NumberQuickSelectComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.inputControl = new FormControl(1, [
-      Validators.required,
-      numberValidator,
-      Validators.min(this.min),
-      Validators.max(this.max),
-    ]);
+    this.inputControl = new FormControl(1, [Validators.required, Validators.min(this.min), Validators.max(this.max)]);
   }
 
   public submit() {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IEntityAttribute } from './entity.service';
+import { IEntityAttribute, IEntityFieldConfig } from './entity.service';
 import { DND_5E } from './entity-attributes.presets';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class EntityAttributePresetsService {
       {
         name: 'DnD 5e',
         description: 'Attributes from the 5th edition of DnD',
-        attributes: DND_5E,
+        fields: DND_5E,
       },
     ];
   }
@@ -22,5 +22,5 @@ export class EntityAttributePresetsService {
 export interface IEntityAttributePreset {
   name: string;
   description: string;
-  attributes: IEntityAttribute[];
+  fields: IEntityFieldConfig[];
 }

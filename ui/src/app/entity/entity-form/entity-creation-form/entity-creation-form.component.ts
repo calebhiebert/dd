@@ -3,13 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { EntityService, IEntity, HealthType, IEntityFieldConfig } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
-import { numberValidator } from '../../dynamic-attribute-form/dynamic-attribute-form.component';
 import { LoginService } from 'src/app/login.service';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
-import { IConceptField } from 'src/app/concept.service';
 
 @Component({
   selector: 'dd-entity-creation-form',
@@ -22,8 +20,6 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
   public saving = false;
 
   public formGroup: FormGroup;
-
-  public attributesFormGroup: FormGroup;
 
   public entity: IEntity;
 
@@ -45,11 +41,11 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
       name: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]),
       content: new FormControl(null),
       spawnable: new FormControl(false),
-      xp: new FormControl(0, [numberValidator, Validators.min(0)]),
-      currency: new FormControl(null, [numberValidator, Validators.min(0)]),
+      xp: new FormControl(0, [Validators.min(0)]),
+      currency: new FormControl(null, [Validators.min(0)]),
       health: new FormGroup({
-        max: new FormControl(null, [numberValidator, Validators.min(1)]),
-        current: new FormControl(null, [numberValidator, Validators.min(0)]),
+        max: new FormControl(null, [Validators.min(1)]),
+        current: new FormControl(null, [Validators.min(0)]),
         textDamageLevels: new FormArray([]),
       }),
       fields: new FormArray([]),
@@ -57,8 +53,6 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
       imageColor1: new FormControl('#fff'),
       imageColor2: new FormControl('#000'),
     });
-
-    this.attributesFormGroup = new FormGroup({});
 
     this.route.paramMap.subscribe((params) => {
       const id = params.get('ent_id');
@@ -90,13 +84,13 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
 
   private setFormValidators() {
     if (this.preset.isXPEnabled) {
-      this.formGroup.get('xp').setValidators([numberValidator, Validators.min(0), Validators.required]);
+      this.formGroup.get('xp').setValidators([Validators.min(0), Validators.required]);
     }
 
     if (this.preset.isHealthEnabled) {
-      this.formGroup.get('health.max').setValidators([numberValidator, Validators.min(1), Validators.required]);
+      this.formGroup.get('health.max').setValidators([Validators.min(1), Validators.required]);
 
-      this.formGroup.get('health.current').setValidators([numberValidator, Validators.min(0), Validators.required]);
+      this.formGroup.get('health.current').setValidators([Validators.min(0), Validators.required]);
     }
   }
 
@@ -139,21 +133,10 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
       userId: this.editing ? this.entity.userId : this.login.id,
       campaignId: this.campaignService.campaign.id,
       entityPresetId: this.preset.id,
-      attributes: [],
     };
 
     if (!this.preset.isHealthEnabled) {
       ent.health = null;
-    }
-
-    for (const [k, attrData] of Object.entries(this.attributesFormGroup.value)) {
-      const preset = this.preset.attributes.find((p) => p.name === k);
-
-      ent.attributes.push({
-        name: preset.name,
-        data: attrData as string,
-        type: preset.type,
-      });
     }
 
     return ent;
@@ -205,12 +188,6 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
         }
 
         this.formGroup.patchValue(patchValue);
-
-        for (const attr of ent.attributes) {
-          if (this.attributesFormGroup.get(attr.name)) {
-            this.attributesFormGroup.get(attr.name).setValue(attr.data);
-          }
-        }
       }, 1);
     } catch (err) {
       throw err;
@@ -225,7 +202,6 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
 
     this.saving = true;
     this.formGroup.disable();
-    this.attributesFormGroup.disable();
 
     if (this.editing) {
       try {
@@ -250,7 +226,6 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
     }
 
     this.formGroup.enable();
-    this.attributesFormGroup.enable();
     this.saving = false;
   }
 

@@ -7,7 +7,6 @@ import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 import { IEntityAttributePreset, EntityAttributePresetsService } from 'src/app/entity-attribute-presets.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
-import { EntityAttributeRowEditorComponent } from '../entity-attribute-row-editor/entity-attribute-row-editor.component';
 import { AttributeType } from 'src/app/attributes';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { FieldDefinitionFormComponent } from 'src/app/dynform/field-definition-form/field-definition-form.component';
@@ -33,9 +32,6 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
 
   @ViewChild('confirmmodal')
   public confirmModal: ConfirmationModalComponent;
-
-  @ViewChildren('atteditor')
-  public attributeEditors: QueryList<EntityAttributeRowEditorComponent>;
 
   constructor(
     private entityService: EntityService,
@@ -89,16 +85,6 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
       const preset = await this.entityService.getEntityPreset(id);
       this.entityPreset = preset;
 
-      (this.formGroup.get('attributes') as FormArray).controls = preset.attributes.map((attr) => {
-        if (attr.options) {
-          return new FormGroup({
-            options: new FormArray(attr.options.map((o) => new FormControl(o))),
-          });
-        } else {
-          return new FormGroup({});
-        }
-      });
-
       setTimeout(() => {
         preset.fields.forEach((f) => {
           const formGroup = FieldDefinitionFormComponent.createFormGroup(f);
@@ -140,7 +126,6 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
       isHealthEnabled: v.isHealthEnabled,
       conceptTypesEnabled: v.conceptTypesEnabled,
       playerCreatable: v.playerCreatable,
-      attributes: v.attributes,
     };
 
     if (this.editing) {
@@ -152,22 +137,7 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
     return entityPreset;
   }
 
-  public usePreset(p: IEntityAttributePreset) {
-    (this.formGroup.get('attributes') as FormArray).controls = p.attributes.map((attr) => {
-      if (attr.type === AttributeType.ENUM) {
-        return new FormGroup({
-          options: new FormArray(attr.options.map((o) => new FormControl(o))),
-        });
-      } else {
-        return new FormGroup({});
-      }
-    });
-
-    setTimeout(() => {
-      this.formGroup.patchValue({ attributes: p.attributes });
-      this.presetsModal.close(null);
-    }, 1);
-  }
+  public usePreset(p: IEntityAttributePreset) {}
 
   public removeAttribute(i: number) {
     (this.formGroup.get('attributes') as FormArray).removeAt(i);
@@ -213,21 +183,6 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
       this.formGroup.enable();
       this.deleting = false;
     }
-  }
-
-  public addAttribute() {
-    (this.formGroup.get('attributes') as FormArray).push(new FormGroup({}));
-
-    // Wait for the dom to be updated
-    setTimeout(() => {
-      this.attributeEditors.last.collapsed = false;
-
-      // Wait for the dom to update again
-      setTimeout(() => {
-        // Scroll to the bottom of the page, where the attribute is
-        document.getElementById('app-content').scrollTo(0, document.getElementById('app-content').scrollHeight);
-      }, 1);
-    }, 1);
   }
 
   public addField() {

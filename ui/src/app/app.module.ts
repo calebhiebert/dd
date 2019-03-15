@@ -14,7 +14,6 @@ import { ModalComponent } from './modal/modal.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-import { EntityAttributeRowEditorComponent } from './entity/entity-attribute-row-editor/entity-attribute-row-editor.component';
 import { EntityFormComponent } from './entity/entity-form/entity-form.component';
 import { EntityTypeSelectorComponent } from './entity/entity-form/entity-type-selector/entity-type-selector.component';
 import { EntityCreationFormComponent } from './entity/entity-form/entity-creation-form/entity-creation-form.component';
@@ -22,8 +21,6 @@ import { EntityViewComponent } from './entity/entity-view/entity-view.component'
 import { CampaignListComponent } from './campaign/campaign-list/campaign-list.component';
 import { CampaignLandingComponent } from './campaign/campaign-landing/campaign-landing.component';
 import { CampaignSettingsComponent } from './campaign/campaign-settings/campaign-settings.component';
-import { EntityTypesComponent } from './campaign/campaign-settings/entity-types/entity-types.component';
-import { DynamicAttributeFormComponent } from './entity/dynamic-attribute-form/dynamic-attribute-form.component';
 import { ExperienceTableEditorComponent } from './campaign/campaign-settings/experience-table-editor/experience-table-editor.component';
 import { QuestManagerComponent } from './quest/quest-manager/quest-manager.component';
 import { QuestFormComponent } from './quest/quest-form/quest-form.component';
@@ -117,9 +114,6 @@ import { LoginStatusComponent } from './login/login-status/login-status.componen
     CampaignLandingComponent,
     PaginatorComponent,
     CampaignSettingsComponent,
-    EntityTypesComponent,
-    EntityAttributeRowEditorComponent,
-    DynamicAttributeFormComponent,
     EntityFormComponent,
     ModalComponent,
     ConfirmationModalComponent,
@@ -157,7 +151,6 @@ import { LoginStatusComponent } from './login/login-status/login-status.componen
     NoteListComponent,
     NumberQuickSelectComponent,
     SpawnableListItemComponent,
-    AttributeRowViewComponent,
     AttributeTableViewComponent,
     MapComponent,
     MapUploadComponent,
@@ -186,6 +179,7 @@ import { LoginStatusComponent } from './login/login-status/login-status.componen
     DynamicFieldComponent,
     DynamicInputComponent,
     DynamicValidationErrorsComponent,
+    AttributeRowViewComponent,
     CurrencyInputComponent,
     FieldDefinitionFormComponent,
     ConceptEditorComponent,

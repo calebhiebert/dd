@@ -86,29 +86,6 @@ namespace net_api.Models
         public Guid? SpawnedFromId { get; set; }
         public Entity SpawnedFrom { get; set; }
 
-        [Column("Attributes", TypeName = "jsonb")]
-        [JsonIgnore]
-        public string AttributesJson { get; set; }
-
-        [NotMapped]
-        public List<Attribute> Attributes
-        {
-            get
-            {
-                if (AttributesJson == null)
-                {
-                    return null;
-                }
-
-                return JsonConvert.DeserializeObject<List<Attribute>>(AttributesJson);
-            }
-
-            set
-            {
-                AttributesJson = JsonConvert.SerializeObject(value);
-            }
-        }
-
         [Column("Fields", TypeName = "JSONB")]
         [JsonIgnore]
         public string FieldsJson { get; set; }

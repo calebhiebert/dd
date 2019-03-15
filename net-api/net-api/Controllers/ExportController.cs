@@ -66,7 +66,7 @@ namespace net_api.Controllers
                                 ep.Id,
                                 ep.Name,
                                 ep.ImageId,
-                                ep.Attributes,
+                                ep.Fields,
                                 ep.Description,
                                 ep.Health,
                                 ep.IsCurrencyEnabled,

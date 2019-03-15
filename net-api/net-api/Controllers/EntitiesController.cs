@@ -302,7 +302,7 @@ namespace net_api.Controllers
                 var entity = new Entity
                 {
                     Name = preset.Name,
-                    Content = preset.Content,
+                    ContentJson = preset.ContentJson,
                     UserId = preset.UserId,
                     CampaignId = preset.CampaignId,
                     Currency = preset.Currency,
@@ -310,7 +310,7 @@ namespace net_api.Controllers
                     ImageColor1 = preset.ImageColor1,
                     ImageColor2 = preset.ImageColor2,
                     Spawnable = false,
-                    Attributes = preset.Attributes,
+                    FieldsJson = preset.FieldsJson,
                     Health = preset.Health,
                     XP = preset.XP,
                     EntityPresetId = preset.EntityPresetId,

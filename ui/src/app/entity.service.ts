@@ -85,7 +85,6 @@ export interface IEntityPreset {
   isXPEnabled: boolean;
   isHealthEnabled: boolean;
   conceptTypesEnabled: string[];
-  attributes?: IEntityAttribute[];
   fields?: IEntityFieldConfig[];
   health: IHealthPreset;
   campaignId: string;
@@ -116,7 +115,6 @@ export interface IEntity {
   user?: IUser;
   campaignId: string;
   campaign?: ICampaign;
-  attributes: IAttribute[];
   fields: IField[];
   spawnable: boolean;
   spawnedFromId?: string;

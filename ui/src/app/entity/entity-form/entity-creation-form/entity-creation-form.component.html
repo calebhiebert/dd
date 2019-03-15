@@ -14,12 +14,7 @@
         Delete
       </button>
 
-      <button
-        class="btn btn-primary"
-        (click)="save()"
-        [ngClass]="{ loading: saving }"
-        [disabled]="formGroup.invalid || attributesFormGroup.invalid"
-      >
+      <button class="btn btn-primary" (click)="save()" [ngClass]="{ loading: saving }" [disabled]="formGroup.invalid">
         Save
       </button>
     </div>
@@ -171,8 +166,7 @@
       </div>
     </div>
 
-    <h3 class="mt-2">Custom Attributes</h3>
-    <dd-dynamic-attribute-form [formGroup]="attributesFormGroup" [attributes]="preset.attributes"></dd-dynamic-attribute-form>
+    <h3 class="mt-2" *ngIf="preset.fields.length > 0">Custom Attributes</h3>
 
     <!-- Dynamic Form controls -->
     <div class="form-horizontal">
