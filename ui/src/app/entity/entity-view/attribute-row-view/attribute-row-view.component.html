@@ -12,7 +12,9 @@
       </figure>
       {{ f.config.name }}
     </div>
-    <div class="h4 text-bold">{{ f.field.value }}</div>
+    <div class="h4 text-bold">
+      {{ f.field.value }} <sup *ngIf="getModifiers(f.field.name).length > 0">{{ getModifierString(getModifiers(f)) }}</sup>
+    </div>
   </div>
 </div>
 
@@ -32,6 +34,8 @@
       </div>
       {{ f.config.name }}
     </div>
-    <div class="h5">{{ f.field.value }}</div>
+    <div class="h5">
+      {{ f.field.value }} <sup *ngIf="getModifiers(f.field.name).length > 0">({{ getModifierString(getModifiers(f.field.name)) }})</sup>
+    </div>
   </div>
 </div>

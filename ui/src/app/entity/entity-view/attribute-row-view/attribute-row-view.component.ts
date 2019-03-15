@@ -11,6 +11,9 @@ export class AttributeRowViewComponent implements OnInit {
   public fields: IViewField[];
 
   @Input()
+  public modifiers: IViewField[] = [];
+
+  @Input()
   public mode = 'major';
 
   @Input()
@@ -29,5 +32,13 @@ export class AttributeRowViewComponent implements OnInit {
 
   public trackField(idx: number, field: IViewField) {
     return field.field.name;
+  }
+
+  public getModifiers(id: string) {
+    return this.modifiers.filter((m) => m.config && m.config.options && m.config.options.modifierFor === id);
+  }
+
+  public getModifierString(modifiers: IViewField[]) {
+    return modifiers.map((m) => m.field.value).join(' ');
   }
 }

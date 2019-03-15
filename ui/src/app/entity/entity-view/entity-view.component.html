@@ -68,6 +68,7 @@
   <dd-attribute-row-view
     *ngIf="majorAttributes.length > 0"
     [fields]="majorAttributes"
+    [modifiers]="modifiers"
     [editable]="editable"
     (edit)="editAttribute($event)"
   ></dd-attribute-row-view>
@@ -79,6 +80,7 @@
     *ngIf="normalAttributes.length > 0"
     [fields]="normalAttributes"
     [editable]="editable"
+    [modifiers]="modifiers"
     (edit)="editAttribute($event)"
     mode="normal"
   ></dd-attribute-row-view>

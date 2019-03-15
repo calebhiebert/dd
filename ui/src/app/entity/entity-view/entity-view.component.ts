@@ -269,6 +269,17 @@ export class EntityViewComponent implements OnInit, OnDestroy {
       .filter((f) => f.config && f.config.class === EntityAttributeClass.UNIMPORTANT && f.config.type !== DynamicFieldType.TEXT_FORMATTED);
   }
 
+  public get modifiers(): IViewField[] {
+    return (this.entity.fields || [])
+      .map((f) => {
+        return {
+          field: f,
+          config: this.getEntityField(f.name),
+        };
+      })
+      .filter((f) => f.config && f.config.options && f.config.options.modifierFor !== null && f.config.options.modifierFor !== undefined);
+  }
+
   public get level() {
     return this.campaignService.calculateLevel(this.entity.xp);
   }
