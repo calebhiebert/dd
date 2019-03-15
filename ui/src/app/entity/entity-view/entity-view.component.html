@@ -67,7 +67,7 @@
   <!-- Major attributes -->
   <dd-attribute-row-view
     *ngIf="majorAttributes.length > 0"
-    [attributes]="majorAttributes"
+    [fields]="majorAttributes"
     [editable]="editable"
     (edit)="editAttribute($event)"
   ></dd-attribute-row-view>
@@ -77,7 +77,7 @@
   <!-- Normal Attributes -->
   <dd-attribute-row-view
     *ngIf="normalAttributes.length > 0"
-    [attributes]="normalAttributes"
+    [fields]="normalAttributes"
     [editable]="editable"
     (edit)="editAttribute($event)"
     mode="normal"
@@ -148,8 +148,8 @@
       <div class="divider" *ngIf="bigTextAttributes.length > 0"></div>
 
       <div *ngFor="let bta of bigTextAttributes; trackBy: trackAttribute">
-        <h3>{{ bta.attr.name }}</h3>
-        <dd-quill readOnly="true" [value]="bta.attr.data"></dd-quill>
+        <h3>{{ bta.field.name }}</h3>
+        <dd-quill readOnly="true" [value]="bta.field.value"></dd-quill>
       </div>
     </div>
 
@@ -157,7 +157,7 @@
     <div class="column col-4 col-md-6 col-sm-12 col-ml-auto" *ngIf="minorAttributes.length > 0">
       <dd-attribute-table-view
         *ngIf="minorAttributes.length > 0"
-        [attributes]="minorAttributes"
+        [fields]="minorAttributes"
         [editable]="editable"
         (edit)="editAttribute($event)"
       ></dd-attribute-table-view>
@@ -176,8 +176,8 @@
       <div class="divider" *ngIf="bigTextAttributes.length > 0"></div>
 
       <div *ngFor="let bta of bigTextAttributes; trackBy: trackAttribute">
-        <h3>{{ bta.attr.name }}</h3>
-        <dd-quill readOnly="true" [value]="bta.attr.data"></dd-quill>
+        <h3>{{ bta.field.name }}</h3>
+        <dd-quill readOnly="true" [value]="bta.field.value"></dd-quill>
       </div>
     </div>
   </div>

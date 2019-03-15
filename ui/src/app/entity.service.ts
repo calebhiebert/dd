@@ -149,9 +149,9 @@ export interface IHealth {
   textDamageLevels?: { [key: number]: string };
 }
 
-export interface IViewAttribute {
-  attr: IAttribute;
-  pattr: IEntityAttribute;
+export interface IViewField {
+  field: IField;
+  config: IEntityFieldConfig;
 }
 
 export interface ICurrency {

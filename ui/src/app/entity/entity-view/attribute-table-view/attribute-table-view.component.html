@@ -6,25 +6,14 @@
     </tr>
   </thead>
   <tbody>
-    <tr
-      [ngClass]="{ 'c-hand': editable }"
-      *ngFor="let attr of attributes; trackBy: trackAttribute"
-      (click)="editAttribute(attr)"
-    >
+    <tr [ngClass]="{ 'c-hand': editable }" *ngFor="let f of fields; trackBy: trackField" (click)="editField(f)">
       <td class="no-select py-0">
-        <figure
-          class="avatar avatar-xs"
-          *ngIf="attr.pattr && attr.pattr.imageId"
-        >
-          <img
-            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-              attr.pattr.imageId
-            }}"
-          />
+        <figure class="avatar avatar-xs" *ngIf="f.config && f.config.imageId">
+          <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ f.config.imageId }}" />
         </figure>
-        {{ attr.attr.name }}
+        {{ f.field.name }}
       </td>
-      <td class="text-bold py-0 text-right">{{ attr.attr.data }}</td>
+      <td class="text-bold py-0 text-right">{{ f.field.value }}</td>
     </tr>
   </tbody>
 </div>

@@ -1,7 +1,15 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityAttributeEditorModalComponent } from './entity-attribute-editor-modal/entity-attribute-editor-modal.component';
-import { EntityService, IEntityAttribute, EntityAttributeClass, IHealth, IViewAttribute, IAttribute } from 'src/app/entity.service';
+import {
+  EntityService,
+  IEntityAttribute,
+  EntityAttributeClass,
+  IHealth,
+  IViewField,
+  IAttribute,
+  IEntityFieldConfig,
+} from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { AttributeType } from 'src/app/attributes';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -59,8 +67,8 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getEntityAttribute(name: string): IEntityAttribute {
-    return this.entity.preset.attributes.find((e) => e.name === name);
+  private getEntityField(name: string): IEntityFieldConfig {
+    return this.entity.preset.fields.find((f) => f.name === name);
   }
 
   private async updateEntity() {
@@ -91,17 +99,17 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     this.loading = false;
   }
 
-  public async editAttribute(attr: IViewAttribute) {
+  public async editAttribute(field: IViewField) {
     if (!this.editable) {
       return;
     }
 
-    const attrValue = await this.attributeModal.editAttribute({ ...attr.pattr }, null, attr.attr.data);
+    const fieldValue = await this.attributeModal.editAttribute(null, field.config, field.field.value);
 
-    if (attrValue !== null && attrValue !== undefined) {
-      for (const attribute of this.entity.attributes) {
-        if (attribute.name === attr.attr.name) {
-          attribute.data = attrValue;
+    if (fieldValue !== null && fieldValue !== undefined) {
+      for (const entityField of this.entity.fields) {
+        if (entityField.name === field.field.name) {
+          entityField.value = fieldValue;
           break;
         }
       }
@@ -203,68 +211,68 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     return attribute.name;
   }
 
-  public get processedAttributes(): IViewAttribute[] {
-    return this.entity.attributes.map((a) => {
+  public get processedAttributes(): IViewField[] {
+    return this.entity.fields.map((f) => {
       return {
-        attr: a,
-        pattr: this.getEntityAttribute(a.name),
+        field: f,
+        config: this.getEntityField(f.name),
       };
     });
   }
 
-  public get majorAttributes(): IViewAttribute[] {
-    return this.entity.attributes
-      .map((a) => {
+  public get majorAttributes(): IViewField[] {
+    return this.entity.fields
+      .map((f) => {
         return {
-          attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          field: f,
+          config: this.getEntityField(f.name),
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 0 && a.pattr.type !== AttributeType.BIG_TEXT);
+      .filter((f) => f.config && f.config.class === EntityAttributeClass.MAJOR && f.config.type !== DynamicFieldType.TEXT_FORMATTED);
   }
 
-  public get normalAttributes(): IViewAttribute[] {
-    return this.entity.attributes
-      .map((a) => {
+  public get normalAttributes(): IViewField[] {
+    return this.entity.fields
+      .map((f) => {
         return {
-          attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          field: f,
+          config: this.getEntityField(f.name),
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 1 && a.pattr.type !== AttributeType.BIG_TEXT);
+      .filter((f) => f.config && f.config.class === EntityAttributeClass.NORMAL && f.config.type !== DynamicFieldType.TEXT_FORMATTED);
   }
 
-  public get bigTextAttributes(): IViewAttribute[] {
-    return this.entity.attributes
-      .map((a) => {
+  public get bigTextAttributes(): IViewField[] {
+    return this.entity.fields
+      .map((f) => {
         return {
-          attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          field: f,
+          config: this.getEntityField(f.name),
         };
       })
-      .filter((a) => a.pattr && a.pattr.class !== 3 && a.pattr.type === AttributeType.BIG_TEXT && a.attr.data);
+      .filter((f) => f.config && f.config.type === DynamicFieldType.TEXT_FORMATTED && f.field.value);
   }
 
-  public get minorAttributes(): IViewAttribute[] {
-    return this.entity.attributes
-      .map((a) => {
+  public get minorAttributes(): IViewField[] {
+    return this.entity.fields
+      .map((f) => {
         return {
-          attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          field: f,
+          config: this.getEntityField(f.name),
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 2 && a.pattr.type !== AttributeType.BIG_TEXT);
+      .filter((f) => f.config && f.config.class === EntityAttributeClass.MINOR && f.config.type !== DynamicFieldType.TEXT_FORMATTED);
   }
 
-  public get unimportantAttributes(): IViewAttribute[] {
-    return this.entity.attributes
-      .map((a) => {
+  public get unimportantAttributes(): IViewField[] {
+    return this.entity.fields
+      .map((f) => {
         return {
-          attr: a,
-          pattr: this.getEntityAttribute(a.name),
+          field: f,
+          config: this.getEntityField(f.name),
         };
       })
-      .filter((a) => a.pattr && a.pattr.class === 3);
+      .filter((f) => f.config && f.config.class === EntityAttributeClass.UNIMPORTANT && f.config.type !== DynamicFieldType.TEXT_FORMATTED);
   }
 
   public get level() {

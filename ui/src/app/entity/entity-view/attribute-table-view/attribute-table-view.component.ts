@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { IViewAttribute } from 'src/app/entity.service';
+import { IViewField } from 'src/app/entity.service';
 
 @Component({
   selector: 'dd-attribute-table-view',
@@ -8,23 +8,23 @@ import { IViewAttribute } from 'src/app/entity.service';
 })
 export class AttributeTableViewComponent implements OnInit {
   @Input()
-  public attributes: IViewAttribute[];
+  public fields: IViewField[];
 
   @Input()
   public editable = false;
 
   @Output()
-  public edit = new EventEmitter<IViewAttribute>();
+  public edit = new EventEmitter<IViewField>();
 
   constructor() {}
 
   ngOnInit() {}
 
-  public editAttribute(attribute: IViewAttribute) {
-    this.edit.emit(attribute);
+  public editField(field: IViewField) {
+    this.edit.emit(field);
   }
 
-  public trackAttribute(idx: number, attribute: IViewAttribute) {
-    return attribute.attr.name;
+  public trackField(idx: number, field: IViewField) {
+    return field.field.name;
   }
 }
