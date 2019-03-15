@@ -1,15 +1,15 @@
 <dd-modal #modal>
-  <div modal-header *ngIf="(attribute || config) && control">
-    <div class="modal-title">Edit {{ (attribute || config).name }}</div>
+  <div modal-header *ngIf="config && control">
+    <div class="modal-title">Edit {{ config.name }}</div>
   </div>
 
-  <div modal-body *ngIf="(attribute || config) && control">
+  <div modal-body *ngIf="config && control">
     <form (ngSubmit)="ok()" #attrForm="ngForm">
-      <dd-dynamic-field [control]="control" [attribute]="attribute" [config]="config" showLabel="false"></dd-dynamic-field>
+      <dd-dynamic-field [control]="control" [config]="config" showLabel="false"></dd-dynamic-field>
     </form>
   </div>
 
-  <div modal-footer *ngIf="(attribute || config) && control">
+  <div modal-footer *ngIf="config && control">
     <button class="btn btn-primary mr-2" (click)="cancel()">Cancel</button>
     <button class="btn" (click)="ok()" [disabled]="control.invalid">
       Save

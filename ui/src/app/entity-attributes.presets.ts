@@ -77,13 +77,6 @@ export const DND_5E: IEntityFieldConfig[] = [
     options: { required: true },
   },
   {
-    name: 'Perception',
-    description: 'Perception',
-    type: DynamicFieldType.INT,
-    class: EntityAttributeClass.NORMAL,
-    options: { required: false },
-  },
-  {
     name: 'Acrobatics',
     description: 'Acrobatics',
     type: DynamicFieldType.INT,
