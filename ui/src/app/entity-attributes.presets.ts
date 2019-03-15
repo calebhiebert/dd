@@ -42,11 +42,25 @@ export const DND_5E: IEntityFieldConfig[] = [
     options: { required: true },
   },
   {
+    name: 'Strength Mod',
+    description: 'Strength',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.NORMAL,
+    options: { required: false, modifierFor: 'Strength' },
+  },
+  {
     name: 'Dexterity',
     description: 'Dexterity',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.NORMAL,
     options: { required: true },
+  },
+  {
+    name: 'Dex Mod',
+    description: 'Strength',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.NORMAL,
+    options: { required: false, modifierFor: 'Dexterity' },
   },
   {
     name: 'Constitution',
@@ -56,11 +70,25 @@ export const DND_5E: IEntityFieldConfig[] = [
     options: { required: true },
   },
   {
+    name: 'Con Mod',
+    description: 'Strength',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.NORMAL,
+    options: { required: false, modifierFor: 'Constitution' },
+  },
+  {
     name: 'Intelligence',
     description: 'Intelligence',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.NORMAL,
     options: { required: true },
+  },
+  {
+    name: 'Int Mod',
+    description: 'Strength',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.NORMAL,
+    options: { required: false, modifierFor: 'Intelligence' },
   },
   {
     name: 'Wisdom',
@@ -70,11 +98,25 @@ export const DND_5E: IEntityFieldConfig[] = [
     options: { required: true },
   },
   {
+    name: 'Wis Mod',
+    description: 'Strength',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.NORMAL,
+    options: { required: false, modifierFor: 'Wisdom' },
+  },
+  {
     name: 'Charisma',
     description: 'Charisma',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.NORMAL,
     options: { required: true },
+  },
+  {
+    name: 'Cha Mod',
+    description: 'Strength',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.NORMAL,
+    options: { required: false, modifierFor: 'Charisma' },
   },
   {
     name: 'Acrobatics',

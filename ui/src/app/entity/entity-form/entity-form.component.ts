@@ -137,7 +137,18 @@ export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
     return entityPreset;
   }
 
-  public usePreset(p: IEntityAttributePreset) {}
+  public usePreset(p: IEntityAttributePreset) {
+    this.fields.reset();
+
+    setTimeout(() => {
+      p.fields.forEach((f) => {
+        const formGroup = FieldDefinitionFormComponent.createFormGroup(f);
+        formGroup.addControl('class', new FormControl(f.class));
+        this.fields.push(formGroup);
+      });
+      this.presetsModal.close();
+    }, 1);
+  }
 
   public removeAttribute(i: number) {
     (this.formGroup.get('attributes') as FormArray).removeAt(i);

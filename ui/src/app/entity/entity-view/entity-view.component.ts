@@ -219,7 +219,13 @@ export class EntityViewComponent implements OnInit, OnDestroy {
           config: this.getEntityField(f.name),
         };
       })
-      .filter((f) => f.config && f.config.class === EntityAttributeClass.MAJOR && f.config.type !== DynamicFieldType.TEXT_FORMATTED);
+      .filter(
+        (f) =>
+          f.config &&
+          f.config.class === EntityAttributeClass.MAJOR &&
+          f.config.type !== DynamicFieldType.TEXT_FORMATTED &&
+          (f.config.options.modifierFor === null || f.config.options.modifierFor === undefined)
+      );
   }
 
   public get normalAttributes(): IViewField[] {
@@ -230,7 +236,13 @@ export class EntityViewComponent implements OnInit, OnDestroy {
           config: this.getEntityField(f.name),
         };
       })
-      .filter((f) => f.config && f.config.class === EntityAttributeClass.NORMAL && f.config.type !== DynamicFieldType.TEXT_FORMATTED);
+      .filter(
+        (f) =>
+          f.config &&
+          f.config.class === EntityAttributeClass.NORMAL &&
+          f.config.type !== DynamicFieldType.TEXT_FORMATTED &&
+          (f.config.options.modifierFor === null || f.config.options.modifierFor === undefined)
+      );
   }
 
   public get bigTextAttributes(): IViewField[] {
