@@ -123,7 +123,7 @@ const routes: Routes = [
             },
           },
           {
-            path: ':ent_id/edit',
+            path: ':ent_type_id/:ent_id/edit',
             component: EntityCreationFormComponent,
             canDeactivate: [UnsavedChangesGuard],
             data: {

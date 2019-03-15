@@ -109,6 +109,30 @@ namespace net_api.Models
             }
         }
 
+        [Column("Fields", TypeName = "JSONB")]
+        [JsonIgnore]
+        public string FieldsJson { get; set; }
+
+        [NotMapped]
+        [Required]
+        public List<Field> Fields
+        {
+            get
+            {
+                if (FieldsJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<List<Field>>(FieldsJson);
+            }
+
+            set
+            {
+                FieldsJson = JsonConvert.SerializeObject(value);
+            }
+        }
+
         [Column("Health", TypeName = "jsonb")]
         [JsonIgnore]
         public string HealthJson { get; set; }

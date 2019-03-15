@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { IUser } from './user.service';
 import { ICampaign } from './campaign.service';
 import { environment } from 'src/environments/environment';
+import { IDynamicFieldConfig } from './dynform/form-types';
+import { IField } from './concept.service';
 
 @Injectable({
   providedIn: 'root',
@@ -72,7 +74,7 @@ export class EntityService {
 }
 
 export interface IEntityPreset {
-  id: string;
+  id?: string;
   name: string;
   description: string;
   userId: string;
@@ -84,6 +86,7 @@ export interface IEntityPreset {
   isHealthEnabled: boolean;
   conceptTypesEnabled: string[];
   attributes?: IEntityAttribute[];
+  fields?: IEntityFieldConfig[];
   health: IHealthPreset;
   campaignId: string;
   campaign?: ICampaign;
@@ -114,6 +117,7 @@ export interface IEntity {
   campaignId: string;
   campaign?: ICampaign;
   attributes: IAttribute[];
+  fields: IField[];
   spawnable: boolean;
   spawnedFromId?: string;
   health?: IHealth;
@@ -153,6 +157,10 @@ export interface IViewAttribute {
 export interface ICurrency {
   values: { [key: string]: number };
   value: number;
+}
+
+export interface IEntityFieldConfig extends IDynamicFieldConfig {
+  class: EntityAttributeClass;
 }
 
 export enum EntityAttributeClass {

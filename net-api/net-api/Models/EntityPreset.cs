@@ -65,6 +65,30 @@ namespace net_api.Models
         [Column("ConceptTypesEnabled", TypeName = "UUID[]")]
         public Guid[] ConceptTypesEnabled { get; set; }
 
+        [Column("Fields", TypeName = "JSONB")]
+        [JsonIgnore]
+        public string FieldJson { get; set; }
+
+        [NotMapped]
+        [Required]
+        public List<EntityFieldConfig> Fields
+        {
+            get
+            {
+                if (FieldJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<List<EntityFieldConfig>>(FieldJson);
+            }
+
+            set
+            {
+                FieldJson = JsonConvert.SerializeObject(value);
+            }
+        }
+
         [Required]
         public bool IsHealthEnabled { get; set; }
 
@@ -131,6 +155,12 @@ namespace net_api.Models
         public double? Max { get; set; }
 
         public double? Min { get; set; }
+    }
+
+    public class EntityFieldConfig : FieldConfig
+    {
+        [Required]
+        public AttributeClass Class { get; set; }
     }
 
     public class HealthPreset

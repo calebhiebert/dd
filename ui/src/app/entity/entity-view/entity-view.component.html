@@ -19,7 +19,12 @@
           <div>
             <h3 class="mb-0 text-bold" [ngClass]="{ 'c-hand': editable }" (click)="editName()">
               {{ entity.name }}
-              <a class="text-light" *ngIf="editable" [routerLink]="['edit']"><i class="icon icon-edit"></i></a>
+              <a
+                class="text-light"
+                *ngIf="editable"
+                [routerLink]="['/campaigns', campaign.id, 'entities', entity.preset.id, entity.id, 'edit']"
+                ><i class="icon icon-edit"></i
+              ></a>
             </h3>
 
             <div class="columns col-gapless">

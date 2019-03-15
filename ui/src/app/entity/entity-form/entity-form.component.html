@@ -35,9 +35,12 @@
 
     <div class="column col-9 col-md-12">
       <!-- Name -->
-      <div class="form-group" [ngClass]="{
+      <div
+        class="form-group"
+        [ngClass]="{
           'has-error': name.invalid && (name.dirty || name.touched)
-        }">
+        }"
+      >
         <label for="name" class="form-label">Name</label>
         <input type="text" name="name" id="name" formControlName="name" class="form-input" placeholder="Name" />
         <p class="form-input-hint" *ngIf="name.invalid && name.dirty && name.errors.required">
@@ -52,25 +55,25 @@
       </div>
 
       <!-- Description -->
-      <div class="form-group" [ngClass]="{
-          'has-error':
-            description.invalid && (description.dirty || description.touched)
-        }">
+      <div
+        class="form-group"
+        [ngClass]="{
+          'has-error': description.invalid && (description.dirty || description.touched)
+        }"
+      >
         <label for="description" class="form-label">Description</label>
-        <textarea class="form-input" name="description" id="description" rows="4" formControlName="description"
-          placeholder="Description"></textarea>
-        <p class="form-input-hint" *ngIf="
-            description.invalid &&
-            description.dirty &&
-            description.errors.required
-          ">
+        <textarea
+          class="form-input"
+          name="description"
+          id="description"
+          rows="4"
+          formControlName="description"
+          placeholder="Description"
+        ></textarea>
+        <p class="form-input-hint" *ngIf="description.invalid && description.dirty && description.errors.required">
           A description is required
         </p>
-        <p class="form-input-hint" *ngIf="
-            description.invalid &&
-            description.dirty &&
-            description.errors.minlength
-          ">
+        <p class="form-input-hint" *ngIf="description.invalid && description.dirty && description.errors.minlength">
           The description should not have less than 3 characters
         </p>
       </div>
@@ -116,8 +119,7 @@
           <!-- Concept Types Enabled -->
           <div class="form-group">
             <label for="conceptTypesEnabled" class="form-label">Concept Types</label>
-            <select name="conceptTypesEnabled" id="conceptTypesEnabled" class="form-select"
-              formControlName="conceptTypesEnabled" multiple>
+            <select name="conceptTypesEnabled" id="conceptTypesEnabled" class="form-select" formControlName="conceptTypesEnabled" multiple>
               <option *ngFor="let ct of conceptTypeList" [value]="ct.id">{{ ct.name }}</option>
             </select>
             <div class="form-input-hint">The entity will have these concept types enabled</div>
@@ -149,8 +151,11 @@
         </div>
 
         <!-- Static Bar Color -->
-        <div class="column" *ngIf="hpColorType.value === '1' || hpColorType.value === 1"
-          [hidden]="hpType.value !== '0' && hpType.value !== 0">
+        <div
+          class="column"
+          *ngIf="hpColorType.value === '1' || hpColorType.value === 1"
+          [hidden]="hpType.value !== '0' && hpType.value !== 0"
+        >
           <div class="form-group">
             <label for="bar-color" class="form-label">Bar Color</label>
             <input formControlName="staticColor" type="color" name="bar-color" id="bar-color" class="form-input" />
@@ -175,22 +180,50 @@
   <div>
     <div class="columns">
       <div class="column">
-        <h5 class="mt-2">Attributes</h5>
+        <h3 class="mt-2">Fields</h3>
       </div>
       <div class="column col-auto">
         <button class="btn btn-sm mr-2" (click)="presets.open()">
           Use Preset
         </button>
-        <button class="btn btn-sm" (click)="addAttribute()">
-          <i class="icon icon-plus"></i> Add Attribute
-        </button>
+        <button class="btn btn-sm" (click)="addField()"><i class="icon icon-plus"></i> Add Field</button>
       </div>
+    </div>
+
+    <div *ngFor="let field of fields.controls; let idx = index; trackBy: trackField" class="mt-2">
+      <div class="columns mb-1">
+        <div class="column">
+          <h6 class="mb-0">{{ field.value.name }}</h6>
+        </div>
+
+        <!-- Class -->
+        <div class="column col-auto">
+          <select [formControl]="field.get('class')" class="form-input input-sm">
+            <option value="0">Major</option>
+            <option value="1">Normal</option>
+            <option value="2">Minor</option>
+            <option value="3">Unimportant</option>
+          </select>
+        </div>
+
+        <!-- Remove Button -->
+        <div class="column col-auto">
+          <button class="btn btn-sm btn-error" (click)="removeField(idx)">
+            <i class="icon icon-cross"></i><span class="hide-sm"> Remove</span>
+          </button>
+        </div>
+      </div>
+      <dd-field-definition-form [formGroup]="field"></dd-field-definition-form>
     </div>
 
     <!-- Attribute Array -->
     <div>
-      <dd-entity-attribute-row-editor *ngFor="let attr of attributeControls; let i = index"
-        (remove)="removeAttribute(i)" [formGroup]="attr" #atteditor></dd-entity-attribute-row-editor>
+      <dd-entity-attribute-row-editor
+        *ngFor="let attr of attributeControls; let i = index"
+        (remove)="removeAttribute(i)"
+        [formGroup]="attr"
+        #atteditor
+      ></dd-entity-attribute-row-editor>
     </div>
   </div>
 

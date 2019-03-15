@@ -1,18 +1,7 @@
-import { Component, OnInit, forwardRef, Input } from '@angular/core';
-import {
-  FormGroup,
-  FormControl,
-  FormArray,
-  Validators,
-} from '@angular/forms';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
-import {
-  DynamicFieldType,
-  IDynamicFieldConfig,
-  DynamicFieldOptions,
-  IStringFieldOptions,
-  IEnumFieldOptions,
-} from '../form-types';
+import { DynamicFieldType, IDynamicFieldConfig, DynamicFieldOptions, IStringFieldOptions, IEnumFieldOptions } from '../form-types';
 import { Chance } from 'chance';
 
 @Component({
@@ -23,8 +12,9 @@ import { Chance } from 'chance';
 export class FieldDefinitionFormComponent implements OnInit {
   @Input()
   public formGroup: FormGroup;
-  public options: FormGroup;
 
+  public options: FormGroup;
+  public hideExtra = true;
   public uniqueFieldId: string;
 
   constructor(private campaignService: CampaignService) {
@@ -35,15 +25,12 @@ export class FieldDefinitionFormComponent implements OnInit {
     if (config === null || config === undefined) {
       config = {
         name: null,
-        type: null
+        type: null,
       };
     }
 
     return new FormGroup({
-      name: new FormControl(config.name, [
-        Validators.required,
-        Validators.maxLength(30),
-      ]),
+      name: new FormControl(config.name, [Validators.required, Validators.maxLength(30)]),
       description: new FormControl(config.description),
       type: new FormControl(config.type, [Validators.required]),
       imageId: new FormControl(config.imageId),
@@ -51,10 +38,7 @@ export class FieldDefinitionFormComponent implements OnInit {
     });
   }
 
-  private static createOptionsFormGroup(
-    type: DynamicFieldType,
-    options: DynamicFieldOptions
-  ) {
+  private static createOptionsFormGroup(type: DynamicFieldType, options: DynamicFieldOptions) {
     if (options === undefined || options === null) {
       options = {};
     }
@@ -83,9 +67,7 @@ export class FieldDefinitionFormComponent implements OnInit {
       case DynamicFieldType.ENUM_MULTI:
         opt = options as IEnumFieldOptions;
         return new FormGroup({
-          choices: new FormArray(
-            opt.choices ? opt.choices.map((c) => new FormControl(c)) : []
-          ),
+          choices: new FormArray(opt.choices ? opt.choices.map((c) => new FormControl(c)) : []),
           required: new FormControl(opt.required),
         });
       default:
@@ -99,17 +81,11 @@ export class FieldDefinitionFormComponent implements OnInit {
     this.formGroup.get('type').valueChanges.subscribe((type) => {
       type = parseInt(type, 10);
 
-      this.options = FieldDefinitionFormComponent.createOptionsFormGroup(
-        type,
-        this.formGroup.value.options
-      );
+      this.options = FieldDefinitionFormComponent.createOptionsFormGroup(type, this.formGroup.value.options);
       this.formGroup.setControl('options', this.options);
     });
 
-    this.options = FieldDefinitionFormComponent.createOptionsFormGroup(
-      this.type.value,
-      this.formGroup.value.options
-    );
+    this.options = FieldDefinitionFormComponent.createOptionsFormGroup(this.type.value, this.formGroup.value.options);
     this.formGroup.setControl('options', this.options);
   }
 

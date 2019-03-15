@@ -173,5 +173,15 @@
 
     <h3 class="mt-2">Custom Attributes</h3>
     <dd-dynamic-attribute-form [formGroup]="attributesFormGroup" [attributes]="preset.attributes"></dd-dynamic-attribute-form>
+
+    <!-- Dynamic Form controls -->
+    <div class="form-horizontal">
+      <dd-dynamic-field-horizontal
+        class="col-12 mb-2"
+        [config]="getFieldConfig(field)"
+        [control]="fields.controls[idx]"
+        *ngFor="let field of preset.fields; let idx = index; trackBy: trackField"
+      ></dd-dynamic-field-horizontal>
+    </div>
   </div>
 </div>

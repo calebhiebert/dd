@@ -12,11 +12,7 @@ export class SpawnableManagerComponent implements OnInit {
   public loading = false;
   public spawnables: IEntity[] = null;
 
-  constructor(
-    private router: Router,
-    private entityService: EntityService,
-    private campaignService: CampaignService
-  ) {}
+  constructor(private router: Router, private entityService: EntityService, private campaignService: CampaignService) {}
 
   ngOnInit() {
     this.load();
@@ -26,10 +22,7 @@ export class SpawnableManagerComponent implements OnInit {
     this.loading = true;
 
     try {
-      this.spawnables = await this.entityService.getEntities(
-        this.campaignService.campaign.id,
-        true
-      );
+      this.spawnables = await this.entityService.getEntities(this.campaignService.campaign.id, true);
     } catch (err) {
       throw err;
     }
@@ -38,30 +31,15 @@ export class SpawnableManagerComponent implements OnInit {
   }
 
   public addSpawnable(entityPreset: IEntityPreset) {
-    this.router.navigate(
-      [
-        'campaigns',
-        this.campaignService.campaign.id,
-        'entities',
-        entityPreset.id,
-        'create',
-      ],
-      {
-        queryParams: {
-          spawnable: true,
-        },
-      }
-    );
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'entities', entityPreset.id, 'create'], {
+      queryParams: {
+        spawnable: true,
+      },
+    });
   }
 
   public selectSpawnable(spawnable: IEntity) {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'entities',
-      spawnable.id,
-      'edit',
-    ]);
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'entities', spawnable.entityPresetId, spawnable.id, 'edit']);
   }
 
   public get campaign() {

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using net_api.Models;
@@ -9,9 +10,10 @@ using net_api.Models;
 namespace netapi.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20190315124358_EntityPresetFields")]
+    partial class EntityPresetFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -324,10 +326,6 @@ namespace netapi.Migrations
                         .HasColumnType("JSONB");
 
                     b.Property<Guid>("EntityPresetId");
-
-                    b.Property<string>("FieldsJson")
-                        .HasColumnName("Fields")
-                        .HasColumnType("JSONB");
 
                     b.Property<string>("HealthJson")
                         .HasColumnName("Health")

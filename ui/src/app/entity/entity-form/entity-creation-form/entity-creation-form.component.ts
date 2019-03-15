@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { EntityService, IEntity, HealthType } from 'src/app/entity.service';
+import { EntityService, IEntity, HealthType, IEntityFieldConfig } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { numberValidator } from '../../dynamic-attribute-form/dynamic-attribute-form.component';
 import { LoginService } from 'src/app/login.service';
@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
+import { IConceptField } from 'src/app/concept.service';
 
 @Component({
   selector: 'dd-entity-creation-form',
@@ -38,6 +39,8 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
   ) {}
 
   ngOnInit() {
+    this._entTypeId = this.route.snapshot.paramMap.get('ent_type_id');
+
     this.formGroup = new FormGroup({
       name: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(20)]),
       content: new FormControl(null),
@@ -49,10 +52,13 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
         current: new FormControl(null, [numberValidator, Validators.min(0)]),
         textDamageLevels: new FormArray([]),
       }),
+      fields: new FormArray([]),
       imageId: new FormControl('uncertainty'),
       imageColor1: new FormControl('#fff'),
       imageColor2: new FormControl('#000'),
     });
+
+    this.attributesFormGroup = new FormGroup({});
 
     this.route.paramMap.subscribe((params) => {
       const id = params.get('ent_id');
@@ -63,7 +69,9 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
       }
     });
 
-    this.attributesFormGroup = new FormGroup({});
+    this.preset.fields.forEach(() => {
+      this.fields.push(new FormControl(null));
+    });
 
     if (!this.editing) {
       this.setFormValidators();
@@ -114,6 +122,14 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
       imageColor2: v.imageColor2,
       currency: v.currency,
       spawnable: v.spawnable,
+      fields: this.fields.value
+        .map((fv, idx) => {
+          return {
+            name: this.preset.fields[idx].name,
+            value: fv,
+          };
+        })
+        .filter((fv) => fv.value !== null && fv.value !== undefined && fv.value !== ''),
       health: {
         max: v.health.max,
         current: v.health.current,
@@ -159,6 +175,16 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
 
       setTimeout(() => {
         const patchValue: any = { ...ent };
+
+        patchValue.fields = this.preset.fields.map((f) => {
+          const val = this.entity.fields.find((fld) => fld.name === f.name);
+
+          if (val) {
+            return val.value;
+          } else {
+            return null;
+          }
+        });
 
         if (patchValue.health && patchValue.health.textDamageLevels) {
           const healthLevels = Object.keys(patchValue.health.textDamageLevels).map((percent) => {
@@ -259,18 +285,30 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
     this.hpTextLevels.removeAt(idx);
   }
 
+  public trackField(idx: number) {
+    return idx;
+  }
+
+  public getFieldConfig(field: IEntityFieldConfig) {
+    if (field.type === DynamicFieldType.CURRENCY) {
+      field.options = {
+        levels: this.campaignService.campaign.currencyMap,
+        trackCoins: this.campaignService.campaign.trackCoins,
+      };
+    }
+
+    return field;
+  }
+
   public cancel() {
     this.location.back();
   }
 
   public get preset() {
-    if (this.editing) {
-      return this.entity.preset;
-    } else {
-      const epreset = this.campaignService.campaign.entityPresets.find((ep) => ep.id === this._entTypeId);
-
-      return epreset;
-    }
+    const epreset = this.campaignService.campaign.entityPresets.find(
+      (ep) => ep.id === (this._entTypeId || this.route.snapshot.paramMap.get('ent_type_id'))
+    );
+    return epreset;
   }
 
   public get name() {
@@ -322,5 +360,9 @@ export class EntityCreationFormComponent implements OnInit, ComponentCanDeactiva
         trackCoins: this.campaignService.campaign.trackCoins,
       },
     };
+  }
+
+  public get fields(): FormArray {
+    return this.formGroup.get('fields') as FormArray;
   }
 }
