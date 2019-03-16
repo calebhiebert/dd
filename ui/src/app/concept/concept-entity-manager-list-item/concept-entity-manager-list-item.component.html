@@ -1,3 +1,46 @@
-<p>
-  concept-entity-manager-list-item works!
-</p>
+<div class="card px-1 pt-1 my-1">
+  <div class="columns col-gapless">
+    <!-- Reorder Column -->
+    <div class="column col-auto mr-2 c-move" *ngIf="draggable">
+      <i class="icon icon-resize-vert"></i>
+    </div>
+
+    <!-- Image -->
+    <div class="column col-auto mr-2" [ngClass]="{ faded: conceptEntity.quantity === 0 }" (click)="select(conceptEntity)">
+      <!-- Actual Image -->
+      <img
+        class="s-rounded"
+        width="30"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ conceptEntity.concept.imageId }}"
+        *ngIf="conceptEntity.concept.imageId"
+        style="margin-bottom: -0.075rem"
+      />
+
+      <!-- Placeholder Image -->
+      <img
+        class="s-rounded"
+        width="30"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/winged-sword"
+        *ngIf="!conceptEntity.concept.imageId"
+        style="margin-bottom: -0.075rem"
+      />
+    </div>
+
+    <!-- Name -->
+    <div class="column c-hand" [ngClass]="{ faded: quantityEnabled && conceptEntity.quantity === 0 }" (click)="select(conceptEntity)">
+      {{ conceptEntity.concept.name }}
+
+      <!-- Quantity -->
+      <sup class="text-bold text-small" *ngIf="quantityEnabled && conceptEntity.quantity !== 1 && conceptEntity.quantity !== null"
+        >x{{ conceptEntity.quantity }}</sup
+      >
+    </div>
+
+    <!-- Controls -->
+    <div class="column col-auto">
+      <button class="btn btn-sm" [routerLink]="['/campaigns', campaign.id, 'concepts', conceptType.id, conceptEntity.concept.id, 'view']">
+        <i class="icon icon-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</div>

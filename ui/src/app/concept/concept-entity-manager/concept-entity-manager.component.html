@@ -106,54 +106,18 @@
   <!-- Concepts -->
   <div cdkDropList (cdkDropListDropped)="conceptDropped($event)">
     <div
-      class="card px-1 pt-1 my-1"
       *ngFor="let ce of conceptEntities; trackBy: trackConceptEntity"
       [cdkDragDisabled]="!this.editable || !this.draggingEnabled"
       cdkDrag
     >
       <div class="drag-placeholder" *cdkDragPlaceholder></div>
-      <div class="columns col-gapless">
-        <!-- Reorder Column -->
-        <div class="column col-auto mr-2 c-move" cdkDragHandle *ngIf="draggingEnabled">
-          <i class="icon icon-resize-vert"></i>
-        </div>
 
-        <!-- Image -->
-        <div class="column col-auto mr-2" [ngClass]="{ faded: ce.quantity === 0 }" (click)="select(ce)">
-          <!-- Actual Image -->
-          <img
-            class="s-rounded"
-            width="30"
-            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ ce.concept.imageId }}"
-            *ngIf="ce.concept.imageId"
-            style="margin-bottom: -0.075rem"
-          />
-
-          <!-- Placeholder Image -->
-          <img
-            class="s-rounded"
-            width="30"
-            src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/winged-sword"
-            *ngIf="!ce.concept.imageId"
-            style="margin-bottom: -0.075rem"
-          />
-        </div>
-
-        <!-- Name -->
-        <div class="column c-hand" [ngClass]="{ faded: quantityEnabled && ce.quantity === 0 }" (click)="select(ce)">
-          {{ ce.concept.name }}
-
-          <!-- Quantity -->
-          <sup class="text-bold text-small" *ngIf="quantityEnabled && ce.quantity !== 1 && ce.quantity !== null">x{{ ce.quantity }}</sup>
-        </div>
-
-        <!-- Controls -->
-        <div class="column col-auto">
-          <button class="btn btn-sm" [routerLink]="['/campaigns', campaign.id, 'concepts', conceptType.id, ce.concept.id, 'view']">
-            <i class="icon icon-arrow-right"></i>
-          </button>
-        </div>
-      </div>
+      <dd-concept-entity-manager-list-item
+        [conceptEntity]="ce"
+        [conceptType]="conceptType"
+        [draggable]="this.editable && this.draggingEnabled"
+        (selected)="select($event)"
+      ></dd-concept-entity-manager-list-item>
     </div>
   </div>
 </div>
