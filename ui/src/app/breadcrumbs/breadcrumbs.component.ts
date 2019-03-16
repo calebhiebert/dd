@@ -15,11 +15,7 @@ export class BreadcrumbsComponent implements OnInit {
 
   public breadcrumbs: IBreadcrumb[];
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private campaignService: CampaignService
-  ) { }
+  constructor(private router: Router, private route: ActivatedRoute, private campaignService: CampaignService) {}
 
   ngOnInit() {
     this.breadcrumbs$ = this.router.events

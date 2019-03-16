@@ -132,7 +132,8 @@
   <!-- Concept Managers -->
   <div class="columns">
     <div class="column col-6 col-sm-12" *ngFor="let ct of conceptTypeList">
-      <dd-concept-entity-manager [conceptType]="ct" [entity]="entity" [editable]="editable"></dd-concept-entity-manager>
+      <button class="btn btn-sm" (click)="openConceptEntities(ct.id)"><i class="icon icon-arrow-right"></i> {{ ct.pluralForm }}</button>
+      <dd-concept-entity-manager [conceptType]="ct" [entity]="entity"></dd-concept-entity-manager>
     </div>
   </div>
 

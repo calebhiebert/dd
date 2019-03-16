@@ -7,7 +7,6 @@ import { LoggedInGuard } from './logged-in.guard';
 import { EntityFormComponent } from './entity/entity-form/entity-form.component';
 import { EntityViewComponent } from './entity/entity-view/entity-view.component';
 import { EntityCreationFormComponent } from './entity/entity-form/entity-creation-form/entity-creation-form.component';
-import { EntityTypeSelectorComponent } from './entity/entity-form/entity-type-selector/entity-type-selector.component';
 import { CampaignListComponent } from './campaign/campaign-list/campaign-list.component';
 import { CampaignSettingsComponent } from './campaign/campaign-settings/campaign-settings.component';
 import { QuestManagerComponent } from './quest/quest-manager/quest-manager.component';
@@ -35,6 +34,7 @@ import { ConceptEditorComponent } from './concept/concept-editor/concept-editor.
 import { ConceptViewComponent } from './concept/concept-view/concept-view.component';
 import { ConceptHistoryComponent } from './concept/concept-history/concept-history.component';
 import { MemberManagerComponent } from './campaign/member-manager/member-manager.component';
+import { ConceptEntityManagerComponent } from './concept/concept-entity-manager/concept-entity-manager.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -103,14 +103,17 @@ const routes: Routes = [
         component: EntityComponent,
         children: [
           {
-            path: 'selecttype',
-            component: EntityTypeSelectorComponent,
-          },
-          {
             path: ':ent_id',
             component: EntityViewComponent,
             data: {
               breadcrumb: 'Entity',
+            },
+          },
+          {
+            path: ':ent_id/ct/:ct_id',
+            component: ConceptEntityManagerComponent,
+            data: {
+              breadcrumb: 'CE',
             },
           },
           {

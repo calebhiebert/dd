@@ -1,4 +1,4 @@
-<dd-modal #picker>
+<dd-modal #picker *ngIf="conceptType">
   <h4 modal-header class="mb-0">Pick {{ conceptType.name }}</h4>
   <div modal-body>
     <!-- Search Bar -->
@@ -65,9 +65,9 @@
   </div>
 </dd-modal>
 
-<div>
+<div class="container grid-xl">
   <!-- Title Controls -->
-  <div class="columns">
+  <div class="columns" *ngIf="conceptType">
     <!-- Title -->
     <div class="column">
       <h5>{{ conceptType.pluralForm }}</h5>
@@ -75,15 +75,22 @@
 
     <!-- Controls -->
     <div class="column col-auto" *ngIf="editable">
+      <!-- Re-Order button -->
+      <button class="btn btn-sm" (click)="toggleReorder()" *ngIf="editable">
+        <i class="icon" [ngClass]="{ 'icon-resize-vert': !draggingEnabled, 'icon-check': draggingEnabled }"></i>
+        <span class="hide-xs" *ngIf="!draggingEnabled"> Reorder {{ conceptType.pluralForm }}</span>
+        <span class="hide-xs" *ngIf="draggingEnabled"> Save Order</span>
+      </button>
+
       <!-- Add Button -->
-      <button class="btn btn-sm" (click)="add()">
-        <i class="icon icon-plus"></i><span class="hide-sm"> Add {{ conceptType.name }}</span>
+      <button class="btn btn-sm ml-1" (click)="add()">
+        <i class="icon icon-plus"></i><span class="hide-xs"> Add {{ conceptType.name }}</span>
       </button>
     </div>
   </div>
 
   <!-- Loading -->
-  <div class="loading" *ngIf="loading"></div>
+  <div class="loading loading-lg" *ngIf="loading"></div>
 
   <!-- Empty state -->
   <div class="empty p-2" *ngIf="conceptEntities && conceptEntities.length === 0">
@@ -92,9 +99,19 @@
 
   <!-- Concepts -->
   <div cdkDropList (cdkDropListDropped)="conceptDropped($event)">
-    <div class="card px-1 pt-1 mb-1" *ngFor="let ce of conceptEntities; trackBy: trackConceptEntity" cdkDrag>
+    <div
+      class="card px-1 pt-1 my-1"
+      *ngFor="let ce of conceptEntities; trackBy: trackConceptEntity"
+      [cdkDragDisabled]="!this.editable || !this.draggingEnabled"
+      cdkDrag
+    >
       <div class="drag-placeholder" *cdkDragPlaceholder></div>
       <div class="columns col-gapless">
+        <!-- Reorder Column -->
+        <div class="column col-auto mr-2 c-move" cdkDragHandle *ngIf="draggingEnabled">
+          <i class="icon icon-resize-vert"></i>
+        </div>
+
         <!-- Image -->
         <div class="column col-auto mr-2" [ngClass]="{ faded: ce.quantity === 0 }" (click)="select(ce)">
           <!-- Actual Image -->

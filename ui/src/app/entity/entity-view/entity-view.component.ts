@@ -182,6 +182,10 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  public openConceptEntities(conceptTypeId: string) {
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'entities', this.entity.id, 'ct', conceptTypeId]);
+  }
+
   public trackAttribute(idx: number, attribute: IAttribute) {
     return attribute.name;
   }

@@ -15,7 +15,6 @@ import { ConfirmationModalComponent } from './confirmation-modal/confirmation-mo
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { EntityFormComponent } from './entity/entity-form/entity-form.component';
-import { EntityTypeSelectorComponent } from './entity/entity-form/entity-type-selector/entity-type-selector.component';
 import { EntityCreationFormComponent } from './entity/entity-form/entity-creation-form/entity-creation-form.component';
 import { EntityViewComponent } from './entity/entity-view/entity-view.component';
 import { CampaignListComponent } from './campaign/campaign-list/campaign-list.component';
@@ -119,7 +118,6 @@ import { LoginStatusComponent } from './login/login-status/login-status.componen
     ConfirmationModalComponent,
     LoginComponent,
     HomeComponent,
-    EntityTypeSelectorComponent,
     EntityCreationFormComponent,
     ExperienceTableEditorComponent,
     QuestManagerComponent,

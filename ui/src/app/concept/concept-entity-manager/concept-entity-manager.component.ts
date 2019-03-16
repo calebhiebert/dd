@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { IConceptType, ConceptService, IConceptEntity, IConcept } from 'src/app/concept.service';
-import { IEntity } from 'src/app/entity.service';
+import { IEntity, EntityService } from 'src/app/entity.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -9,7 +9,8 @@ import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-type
 import { Subscription } from 'rxjs';
 import { UpdateHubService } from 'src/app/update-hub.service';
 import { CdkDragDrop, moveItemInArray, CdkDropList } from '@angular/cdk/drag-drop';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { LoginService } from 'src/app/login.service';
 
 @Component({
   selector: 'dd-concept-entity-manager',
@@ -20,6 +21,8 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   public loading = false;
   public searchLoading = false;
   public working = false;
+  public draggingEnabled = false;
+  public loadErr: any;
 
   @Input()
   public conceptType: IConceptType;
@@ -33,9 +36,6 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   public get entity() {
     return this._entity;
   }
-
-  @Input()
-  public editable: boolean;
 
   @ViewChild('picker')
   public pickerModal: ModalComponent<IConcept>;
@@ -54,7 +54,6 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   public editGroup: FormGroup;
 
   private _conceptEntities: IConceptEntity[];
-
   private _updateSubscription: Subscription;
   private _deleteSubscription: Subscription;
 
@@ -63,8 +62,11 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   constructor(
     private conceptService: ConceptService,
     private campaignService: CampaignService,
+    private entityService: EntityService,
     private updateHub: UpdateHubService,
-    private router: Router
+    private login: LoginService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -87,6 +89,15 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
           this.searchConcepts('');
         }
       });
+
+    this.route.paramMap.subscribe((params) => {
+      const conceptTypeId = params.get('ct_id');
+      const entityId = params.get('ent_id');
+
+      if (conceptTypeId && entityId) {
+        this.loadInitial(entityId, conceptTypeId);
+      }
+    });
 
     this._updateSubscription = this.updateHub.conceptEntityUpdate.subscribe((ce: IConceptEntity) => {
       if (!this.conceptEntities || !this.entity || !this.conceptType) {
@@ -130,6 +141,30 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     if (this._deleteSubscription) {
       this._deleteSubscription.unsubscribe();
     }
+  }
+
+  private async loadInitial(entityId: string, conceptTypeId: string) {
+    this.loading = true;
+
+    try {
+      const [conceptType, entity] = await Promise.all([
+        this.conceptService.getConceptType(conceptTypeId),
+        this.entityService.getEntity(entityId),
+      ]);
+
+      this.conceptType = conceptType;
+      this.entity = entity;
+
+      if (this.entity) {
+        await this.updateHub.unsubscribeEntities([this.entity.id]);
+      }
+
+      await this.updateHub.subscribeEntities([this.entity.id]);
+    } catch (err) {
+      this.loadErr = err;
+    }
+
+    this.loading = false;
   }
 
   private async load() {
@@ -275,14 +310,28 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   }
 
   // Called when a drag and drop event has finished
-  public async conceptDropped(e: CdkDragDrop<IConceptEntity[]>) {
+  public conceptDropped(e: CdkDragDrop<IConceptEntity[]>) {
     moveItemInArray(this.conceptEntities, e.previousIndex, e.currentIndex);
+  }
 
-    this.conceptEntities.forEach((ce, idx) => {
-      ce.sortValue = idx;
-    });
+  public async toggleReorder() {
+    this.draggingEnabled = !this.draggingEnabled;
 
-    await this.conceptService.updateConceptEntities(this.conceptEntities, this.entity.id);
+    // This means the order should be saved
+    if (this.draggingEnabled === false) {
+      let shouldSave = false;
+
+      this.conceptEntities.forEach((ce, idx) => {
+        if (ce.sortValue !== idx) {
+          ce.sortValue = idx;
+          shouldSave = true;
+        }
+      });
+
+      if (shouldSave) {
+        await this.conceptService.updateConceptEntities(this.conceptEntities, this.entity.id);
+      }
+    }
   }
 
   public get quantityEnabled() {
@@ -303,6 +352,14 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
   public get conceptEntities() {
     return this._conceptEntities;
+  }
+
+  public get editable() {
+    if (this.entity) {
+      return this.entity.userId === this.login.id || this.campaignService.canEdit;
+    } else {
+      return false;
+    }
   }
 
   public set conceptEntities(value: IConceptEntity[]) {
