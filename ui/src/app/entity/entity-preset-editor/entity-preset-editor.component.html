@@ -190,30 +190,39 @@
       </div>
     </div>
 
-    <div *ngFor="let field of fields.controls; let idx = index; trackBy: trackField" class="mt-2">
-      <div class="columns mb-1">
-        <div class="column">
-          <h6 class="mb-0">{{ field.value.name }}</h6>
-        </div>
+    <div (cdkDropListDropped)="drop($event)" cdkDropList>
+      <div *ngFor="let field of fields.controls; let idx = index" class="mt-2" cdkDrag>
+        <div class="drag-placeholder" *cdkDragPlaceholder></div>
+        <div class="columns mb-1">
+          <!-- Drag Handle -->
+          <div class="column col-auto c-move" cdkDragHandle>
+            <i class="icon icon-resize-vert"></i>
+          </div>
 
-        <!-- Class -->
-        <div class="column col-auto" *ngIf="field.get('class')">
-          <select [formControl]="field.get('class')" class="form-input input-sm">
-            <option value="0">Major</option>
-            <option value="1">Normal</option>
-            <option value="2">Minor</option>
-            <option value="3">Unimportant</option>
-          </select>
-        </div>
+          <!-- Title -->
+          <div class="column d-flex align-items-center">
+            <h6 class="mb-0">{{ field.value.name }}</h6>
+          </div>
 
-        <!-- Remove Button -->
-        <div class="column col-auto">
-          <button class="btn btn-sm btn-error" (click)="removeField(idx)">
-            <i class="icon icon-cross"></i><span class="hide-sm"> Remove</span>
-          </button>
+          <!-- Class -->
+          <div class="column col-auto" *ngIf="field.get('class')">
+            <select [formControl]="field.get('class')" class="form-input input-sm">
+              <option value="0">Major</option>
+              <option value="1">Normal</option>
+              <option value="2">Minor</option>
+              <option value="3">Unimportant</option>
+            </select>
+          </div>
+
+          <!-- Remove Button -->
+          <div class="column col-auto">
+            <button class="btn btn-sm btn-error" (click)="removeField(idx)">
+              <i class="icon icon-cross"></i><span class="hide-sm"> Remove</span>
+            </button>
+          </div>
         </div>
+        <dd-field-definition-form [formGroup]="field" [otherFields]="otherFieldNames"></dd-field-definition-form>
       </div>
-      <dd-field-definition-form [formGroup]="field" [otherFields]="otherFieldNames"></dd-field-definition-form>
     </div>
   </div>
 

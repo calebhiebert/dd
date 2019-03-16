@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationModalComponent } from 'src/app/confirmation-modal/confirmation-modal.component';
 import { EntityService, IEntityPreset } from 'src/app/entity.service';
@@ -9,11 +9,12 @@ import { IEntityAttributePreset, EntityAttributePresetsService } from 'src/app/e
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { FieldDefinitionFormComponent } from 'src/app/dynform/field-definition-form/field-definition-form.component';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'dd-entity-preset-editor',
   templateUrl: './entity-preset-editor.component.html',
-  styleUrls: ['./entity-preset-editor.component.css'],
+  styleUrls: ['./entity-preset-editor.component.scss'],
 })
 export class EntityPresetEditorComponent implements OnInit, ComponentCanDeactivate {
   public saving = false;
@@ -203,13 +204,16 @@ export class EntityPresetEditorComponent implements OnInit, ComponentCanDeactiva
     document.getElementById('app-content').scrollTo(0, 0);
   }
 
-  public trackField(idx: number) {
-    return idx;
-  }
-
   public removeField(idx: number) {
     this.fields.removeAt(idx);
     this.formGroup.markAsDirty();
+  }
+
+  public drop(event: CdkDragDrop<AbstractControl>) {
+    const field = this.fields.at(event.previousIndex);
+
+    this.fields.removeAt(event.previousIndex);
+    this.fields.insert(event.currentIndex, field);
   }
 
   public get attributeControls() {
