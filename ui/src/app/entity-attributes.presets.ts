@@ -43,7 +43,7 @@ export const DND_5E: IEntityFieldConfig[] = [
   },
   {
     name: 'Strength Mod',
-    description: 'Strength',
+    description: 'Strength Modifier',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.NORMAL,
     options: { required: false, modifierFor: 'Strength' },
@@ -57,7 +57,7 @@ export const DND_5E: IEntityFieldConfig[] = [
   },
   {
     name: 'Dex Mod',
-    description: 'Strength',
+    description: 'Dexterity Modifier',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.NORMAL,
     options: { required: false, modifierFor: 'Dexterity' },
@@ -71,7 +71,7 @@ export const DND_5E: IEntityFieldConfig[] = [
   },
   {
     name: 'Con Mod',
-    description: 'Strength',
+    description: 'Constitution Modifier',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.NORMAL,
     options: { required: false, modifierFor: 'Constitution' },
@@ -85,7 +85,7 @@ export const DND_5E: IEntityFieldConfig[] = [
   },
   {
     name: 'Int Mod',
-    description: 'Strength',
+    description: 'Intelligence Modifier',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.NORMAL,
     options: { required: false, modifierFor: 'Intelligence' },
@@ -99,7 +99,7 @@ export const DND_5E: IEntityFieldConfig[] = [
   },
   {
     name: 'Wis Mod',
-    description: 'Strength',
+    description: 'Wisdom Modifier',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.NORMAL,
     options: { required: false, modifierFor: 'Wisdom' },
@@ -113,7 +113,7 @@ export const DND_5E: IEntityFieldConfig[] = [
   },
   {
     name: 'Cha Mod',
-    description: 'Strength',
+    description: 'Charisma Modifier',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.NORMAL,
     options: { required: false, modifierFor: 'Charisma' },
