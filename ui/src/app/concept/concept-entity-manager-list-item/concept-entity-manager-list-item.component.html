@@ -1,8 +1,16 @@
-<div class="card px-1 pt-1 my-1">
+<div class="card px-1 pt-1 my-1" [ngClass]="{ 'bg-secondary': conceptEntity.concept.isContainer }">
   <div class="columns col-gapless">
     <!-- Reorder Column -->
     <div class="column col-auto mr-2 c-move" *ngIf="draggable">
       <i class="icon icon-resize-vert"></i>
+    </div>
+
+    <!-- Expand -->
+    <div class="column col-auto mr-1" *ngIf="conceptEntity.concept.isContainer">
+      <button class="btn btn-sm" (click)="childrenCollapsed = !childrenCollapsed">
+        <i class="icon icon-arrow-down" *ngIf="childrenCollapsed"></i>
+        <i class="icon icon-arrow-up" *ngIf="!childrenCollapsed"></i>
+      </button>
     </div>
 
     <!-- Image -->
@@ -38,9 +46,46 @@
 
     <!-- Controls -->
     <div class="column col-auto">
+      <!-- Remove From Parent Button -->
+      <button class="btn btn-sm btn-error mr-1" *ngIf="isChild" (click)="doRemoveFromParent()">
+        <i class="icon icon-cross"></i> <span class="hide-sm"></span>
+      </button>
+
+      <!-- Add Children Button -->
+      <button class="btn btn-sm mr-1" *ngIf="conceptEntity.concept.isContainer" (click)="doAddChild()">
+        <i class="icon icon-plus"></i> <span class="hide-sm"> Add to {{ conceptEntity.concept.name }}</span>
+      </button>
+
+      <!-- View Concept Button -->
       <button class="btn btn-sm" [routerLink]="['/campaigns', campaign.id, 'concepts', conceptType.id, conceptEntity.concept.id, 'view']">
         <i class="icon icon-arrow-right"></i>
       </button>
+    </div>
+
+    <!-- Container Related Things -->
+    <div
+      class="column col-12"
+      *ngIf="conceptEntity.concept.isContainer && !childrenCollapsed"
+      cdkDropList
+      (cdkDropListDropped)="conceptDropped($event)"
+    >
+      <!-- Empty State -->
+      <div class="empty p-1 mb-1" *ngIf="children.length === 0">
+        <div class="empty-subtitle text-italic m-0">This {{ conceptEntity.concept.name }} is empty</div>
+      </div>
+
+      <div *ngFor="let child of children" cdkDrag>
+        <div class="drag-placeholder" *cdkDragPlaceholder></div>
+
+        <!-- Items -->
+        <dd-concept-entity-manager-list-item
+          [conceptEntity]="child"
+          [conceptType]="conceptType"
+          [allConceptEntities]="allConceptEntities"
+          (selected)="select($event)"
+          [isChild]="true"
+        ></dd-concept-entity-manager-list-item>
+      </div>
     </div>
   </div>
 </div>

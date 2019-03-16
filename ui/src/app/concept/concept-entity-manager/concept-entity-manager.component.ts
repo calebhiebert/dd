@@ -43,12 +43,16 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   @ViewChild('viewandedit')
   public viewAndEditModal: ModalComponent<any>;
 
+  @ViewChild('nestselector')
+  public nestSelector: ModalComponent<IConcept>;
+
   @ViewChild('searchbar')
   public searchInput: ElementRef<HTMLInputElement>;
 
   public searchResults: IConcept[];
   public totalResults: number;
   public selectedConceptEntity: IConceptEntity = null;
+  public nestSelectorParent: IConceptEntity;
 
   public searchControl: FormControl;
   public editGroup: FormGroup;
@@ -311,7 +315,31 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
   // Called when a drag and drop event has finished
   public conceptDropped(e: CdkDragDrop<IConceptEntity[]>) {
-    moveItemInArray(this.conceptEntities, e.previousIndex, e.currentIndex);
+    const tlCE = this.topLevelConceptEntities;
+
+    moveItemInArray(tlCE, e.previousIndex, e.currentIndex);
+
+    tlCE.forEach((tlce, idx) => {
+      tlce.sortValue = idx;
+    });
+  }
+
+  public async selectChildToNest(parent: IConceptEntity) {
+    this.nestSelectorParent = parent;
+    const concept = await this.nestSelector.open();
+
+    if (concept !== null) {
+      const conceptEntity = this.conceptEntities.find((ce) => ce.conceptId === concept.id);
+
+      conceptEntity.parentConceptId = parent.conceptId;
+      conceptEntity.parentEntityId = parent.entityId;
+
+      try {
+        await this.conceptService.updateConceptEntity(conceptEntity);
+      } catch (err) {
+        throw err;
+      }
+    }
   }
 
   public async toggleReorder() {
@@ -319,18 +347,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
 
     // This means the order should be saved
     if (this.draggingEnabled === false) {
-      let shouldSave = false;
-
-      this.conceptEntities.forEach((ce, idx) => {
-        if (ce.sortValue !== idx) {
-          ce.sortValue = idx;
-          shouldSave = true;
-        }
-      });
-
-      if (shouldSave) {
-        await this.conceptService.updateConceptEntities(this.conceptEntities, this.entity.id);
-      }
+      await this.conceptService.updateConceptEntities(this.topLevelConceptEntities, this.entity.id);
     }
   }
 
@@ -354,16 +371,26 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     return this._conceptEntities;
   }
 
+  public set conceptEntities(value: IConceptEntity[]) {
+    this._conceptEntities = value;
+  }
+
+  public get topLevelConceptEntities() {
+    if (!this.conceptEntities) {
+      return;
+    }
+
+    return this.conceptEntities
+      .filter((ce) => ce.parentConceptId === null || ce.parentConceptId === undefined)
+      .sort((a, b) => a.sortValue - b.sortValue);
+  }
+
   public get editable() {
     if (this.entity) {
       return this.entity.userId === this.login.id || this.campaignService.canEdit;
     } else {
       return false;
     }
-  }
-
-  public set conceptEntities(value: IConceptEntity[]) {
-    this._conceptEntities = value;
   }
 
   public get quantityFieldConfig(): IDynamicFieldConfig {
@@ -401,5 +428,13 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     } else {
       return false;
     }
+  }
+
+  public get nestableConcepts() {
+    return this.conceptEntities
+      .filter(
+        (ce) => ce.conceptId !== this.nestSelectorParent.conceptId && (ce.parentConceptId === null || ce.parentConceptId === undefined)
+      )
+      .map((ce) => ce.concept);
   }
 }

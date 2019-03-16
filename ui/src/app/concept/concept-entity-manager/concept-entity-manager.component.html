@@ -65,6 +65,14 @@
   </div>
 </dd-modal>
 
+<dd-modal #nestselector>
+  <div modal-body *ngIf="nestSelectorParent">
+    <div class="card p-1 my-1 hoverable" *ngFor="let nc of nestableConcepts; trackBy: trackConcept" (click)="nestselector.close(nc)">
+      <dd-concept-list-item [concept]="nc" [imageSize]="25"></dd-concept-list-item>
+    </div>
+  </div>
+</dd-modal>
+
 <div class="container grid-xl">
   <!-- Title Controls -->
   <div class="columns" *ngIf="conceptType && entity">
@@ -106,7 +114,7 @@
   <!-- Concepts -->
   <div cdkDropList (cdkDropListDropped)="conceptDropped($event)">
     <div
-      *ngFor="let ce of conceptEntities; trackBy: trackConceptEntity"
+      *ngFor="let ce of topLevelConceptEntities; trackBy: trackConceptEntity"
       [cdkDragDisabled]="!this.editable || !this.draggingEnabled"
       cdkDrag
     >
@@ -116,7 +124,9 @@
         [conceptEntity]="ce"
         [conceptType]="conceptType"
         [draggable]="this.editable && this.draggingEnabled"
+        [allConceptEntities]="conceptEntities"
         (selected)="select($event)"
+        (addChild)="selectChildToNest(ce)"
       ></dd-concept-entity-manager-list-item>
     </div>
   </div>
