@@ -14,4 +14,4 @@ echo dd.panchem.io > CNAME
 git add -A
 git commit -m "Automated deployment to GitHub Pages" --allow-empty
 git push https://github.com/calebhiebert/dd.git $TARGET_BRANCH -q
-rm -rf out && rm -rf dist
+cd .. && rm -rf out && rm -rf dist
