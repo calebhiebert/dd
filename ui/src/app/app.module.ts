@@ -100,6 +100,7 @@ import { MemberManagerComponent } from './campaign/member-manager/member-manager
 import { LongPressDirective } from './long-press.directive';
 import { LoginStatusComponent } from './login/login-status/login-status.component';
 import { EntityPresetEditorComponent } from './entity/entity-preset-editor/entity-preset-editor.component';
+import { ConceptEntityManagerListItemComponent } from './concept/concept-entity-manager-list-item/concept-entity-manager-list-item.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -194,6 +195,7 @@ import { EntityPresetEditorComponent } from './entity/entity-preset-editor/entit
     LongPressDirective,
     LoginStatusComponent,
     EntityPresetEditorComponent,
+    ConceptEntityManagerListItemComponent,
   ],
   imports: [
     BrowserModule,

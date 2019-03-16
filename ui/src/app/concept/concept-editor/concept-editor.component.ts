@@ -50,6 +50,7 @@ export class ConceptEditorComponent implements OnInit {
       name: new FormControl(null, [Validators.required, Validators.maxLength(30)]),
       imageId: new FormControl(null),
       content: new FormControl(null),
+      isContainer: new FormControl(false),
       fields: new FormArray([]),
       tags: new FormArray([]),
     });
@@ -88,6 +89,7 @@ export class ConceptEditorComponent implements OnInit {
       name: this.name.value,
       content: this.description.value,
       userId: 'dmmy',
+      isContainer: this.isContainer.value,
       fields: this.fields.value
         .map((fv, idx) => {
           return {
@@ -221,6 +223,10 @@ export class ConceptEditorComponent implements OnInit {
 
   public get imageId() {
     return this.formGroup.get('imageId');
+  }
+
+  public get isContainer() {
+    return this.formGroup.get('isContainer');
   }
 
   public get fields(): FormArray {

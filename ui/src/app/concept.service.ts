@@ -119,6 +119,7 @@ export interface IConcept {
   userId: string;
   fields: IField[];
   tags: string[];
+  isContainer: boolean;
   imageId?: string;
   conceptTypeId: string;
   conceptType?: IConceptType;
@@ -165,6 +166,8 @@ export interface IConceptEntity {
   entity?: IEntity;
   fields: IField[];
   quantity?: number;
+  parentEntityId?: string;
+  parentConceptId?: string;
   content?: any;
   sortValue: number;
 }

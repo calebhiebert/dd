@@ -21,6 +21,12 @@ namespace net_api.Models
         [JsonIgnore]
         public Entity Entity { get; set; }
 
+        public Guid? ParentConceptId { get; set; }
+        public Guid? ParentEntityId { get; set; }
+
+        [JsonIgnore]
+        public ConceptEntity Parent { get; set; }
+
         [Column("Fields", TypeName = "JSONB")]
         [JsonIgnore]
         public string FieldsJson { get; set; }

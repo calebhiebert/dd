@@ -75,6 +75,9 @@ namespace net_api.Models
         public string[] Tags { get; set; }
 
         [Required]
+        public bool IsContainer { get; set; }
+
+        [Required]
         public Guid ConceptTypeId { get; set; }
 
         public ConceptType ConceptType { get; set; }
