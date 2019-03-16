@@ -14,8 +14,6 @@ import { ModalComponent } from './modal/modal.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-import { EntityFormComponent } from './entity/entity-form/entity-form.component';
-import { EntityCreationFormComponent } from './entity/entity-form/entity-creation-form/entity-creation-form.component';
 import { EntityViewComponent } from './entity/entity-view/entity-view.component';
 import { CampaignListComponent } from './campaign/campaign-list/campaign-list.component';
 import { CampaignLandingComponent } from './campaign/campaign-landing/campaign-landing.component';
@@ -31,6 +29,7 @@ import { InviteManagerComponent } from './campaign/invite-manager/invite-manager
 import { InviteComponent } from './invite/invite.component';
 import { NavSidebarComponent } from './nav-sidebar/nav-sidebar.component';
 import { TagEditorComponent } from './tag-editor/tag-editor.component';
+import { EntityEditorComponent } from './entity/entity-editor/entity-editor.component';
 import { AboutComponent } from './about/about.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -100,6 +99,7 @@ import { ConceptHistoryComponent } from './concept/concept-history/concept-histo
 import { MemberManagerComponent } from './campaign/member-manager/member-manager.component';
 import { LongPressDirective } from './long-press.directive';
 import { LoginStatusComponent } from './login/login-status/login-status.component';
+import { EntityPresetEditorComponent } from './entity/entity-preset-editor/entity-preset-editor.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -113,12 +113,11 @@ import { LoginStatusComponent } from './login/login-status/login-status.componen
     CampaignLandingComponent,
     PaginatorComponent,
     CampaignSettingsComponent,
-    EntityFormComponent,
+    EntityEditorComponent,
     ModalComponent,
     ConfirmationModalComponent,
     LoginComponent,
     HomeComponent,
-    EntityCreationFormComponent,
     ExperienceTableEditorComponent,
     QuestManagerComponent,
     EntityViewComponent,
@@ -194,6 +193,7 @@ import { LoginStatusComponent } from './login/login-status/login-status.componen
     MemberManagerComponent,
     LongPressDirective,
     LoginStatusComponent,
+    EntityPresetEditorComponent,
   ],
   imports: [
     BrowserModule,

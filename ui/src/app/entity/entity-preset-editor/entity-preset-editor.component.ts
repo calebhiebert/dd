@@ -7,16 +7,15 @@ import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 import { IEntityAttributePreset, EntityAttributePresetsService } from 'src/app/entity-attribute-presets.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
-import { AttributeType } from 'src/app/attributes';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { FieldDefinitionFormComponent } from 'src/app/dynform/field-definition-form/field-definition-form.component';
 
 @Component({
-  selector: 'dd-entity-form',
-  templateUrl: './entity-form.component.html',
-  styleUrls: ['./entity-form.component.css'],
+  selector: 'dd-entity-preset-editor',
+  templateUrl: './entity-preset-editor.component.html',
+  styleUrls: ['./entity-preset-editor.component.css'],
 })
-export class EntityFormComponent implements OnInit, ComponentCanDeactivate {
+export class EntityPresetEditorComponent implements OnInit, ComponentCanDeactivate {
   public saving = false;
   public deleting = false;
   public loading = false;

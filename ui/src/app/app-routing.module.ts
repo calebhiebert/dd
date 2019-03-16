@@ -4,9 +4,7 @@ import { CampaignComponent } from './campaign/campaign.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { LoggedInGuard } from './logged-in.guard';
-import { EntityFormComponent } from './entity/entity-form/entity-form.component';
 import { EntityViewComponent } from './entity/entity-view/entity-view.component';
-import { EntityCreationFormComponent } from './entity/entity-form/entity-creation-form/entity-creation-form.component';
 import { CampaignListComponent } from './campaign/campaign-list/campaign-list.component';
 import { CampaignSettingsComponent } from './campaign/campaign-settings/campaign-settings.component';
 import { QuestManagerComponent } from './quest/quest-manager/quest-manager.component';
@@ -35,6 +33,8 @@ import { ConceptViewComponent } from './concept/concept-view/concept-view.compon
 import { ConceptHistoryComponent } from './concept/concept-history/concept-history.component';
 import { MemberManagerComponent } from './campaign/member-manager/member-manager.component';
 import { ConceptEntityManagerComponent } from './concept/concept-entity-manager/concept-entity-manager.component';
+import { EntityPresetEditorComponent } from './entity/entity-preset-editor/entity-preset-editor.component';
+import { EntityEditorComponent } from './entity/entity-editor/entity-editor.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -118,7 +118,7 @@ const routes: Routes = [
           },
           {
             path: ':ent_type_id/create',
-            component: EntityCreationFormComponent,
+            component: EntityEditorComponent,
             canDeactivate: [UnsavedChangesGuard],
             data: {
               editing: false,
@@ -127,7 +127,7 @@ const routes: Routes = [
           },
           {
             path: ':ent_type_id/:ent_id/edit',
-            component: EntityCreationFormComponent,
+            component: EntityEditorComponent,
             canDeactivate: [UnsavedChangesGuard],
             data: {
               editing: true,
@@ -180,14 +180,14 @@ const routes: Routes = [
       },
       {
         path: 'entitytypes/create',
-        component: EntityFormComponent,
+        component: EntityPresetEditorComponent,
         data: {
           editing: false,
         },
       },
       {
         path: 'entitytypes/:ent_id/edit',
-        component: EntityFormComponent,
+        component: EntityPresetEditorComponent,
         data: {
           editing: true,
           breadcrumb: 'Edit Preset',

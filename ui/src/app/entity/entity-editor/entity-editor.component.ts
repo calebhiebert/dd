@@ -10,11 +10,11 @@ import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
 
 @Component({
-  selector: 'dd-entity-creation-form',
-  templateUrl: './entity-creation-form.component.html',
-  styleUrls: ['./entity-creation-form.component.css'],
+  selector: 'dd-entity-editor',
+  templateUrl: './entity-editor.component.html',
+  styleUrls: ['./entity-editor.component.css'],
 })
-export class EntityCreationFormComponent implements OnInit, ComponentCanDeactivate {
+export class EntityEditorComponent implements OnInit, ComponentCanDeactivate {
   public loading = false;
 
   public saving = false;
