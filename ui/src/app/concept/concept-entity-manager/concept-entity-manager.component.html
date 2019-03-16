@@ -67,10 +67,16 @@
 
 <div class="container grid-xl">
   <!-- Title Controls -->
-  <div class="columns" *ngIf="conceptType">
+  <div class="columns" *ngIf="conceptType && entity">
+    <div class="column col-auto">
+      <button class="btn btn-sm" [routerLink]="['/campaigns', campaign.id, 'entities', entity.id]">
+        <i class="icon icon-arrow-left"></i>
+      </button>
+    </div>
+
     <!-- Title -->
     <div class="column">
-      <h5>{{ conceptType.pluralForm }}</h5>
+      <h5>{{ conceptType.pluralForm }} for {{ entity.name }}</h5>
     </div>
 
     <!-- Controls -->
