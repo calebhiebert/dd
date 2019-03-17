@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
@@ -37,14 +31,11 @@ export class ArticleEditorComponent implements OnInit, ComponentCanDeactivate {
     private router: Router,
     private location: Location,
     private http: HttpClient
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      name: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(30),
-      ]),
+      name: new FormControl(null, [Validators.required, Validators.maxLength(30)]),
       content: new FormControl(null),
       published: new FormControl(false),
       tags: new FormArray([]),
@@ -104,11 +95,7 @@ export class ArticleEditorComponent implements OnInit, ComponentCanDeactivate {
     this.formGroup.patchValue(this._article);
 
     if (this._article.tags) {
-      (this.formGroup.get(
-        'tags'
-      ) as FormArray).controls = this._article.tags.map(
-        (t) => new FormControl(t)
-      );
+      (this.formGroup.get('tags') as FormArray).controls = this._article.tags.map((t) => new FormControl(t));
     }
 
     this.formGroup.enable();
@@ -134,25 +121,14 @@ export class ArticleEditorComponent implements OnInit, ComponentCanDeactivate {
     this.saving = false;
     this.formGroup.enable();
     this.formGroup.markAsPristine();
-    this.router.navigate([
-      'campaigns',
-      this.campaignSerivce.campaign.id,
-      'articles',
-    ]);
+    this.router.navigate(['campaigns', this.campaignSerivce.campaign.id, 'articles']);
   }
 
   public async delete() {
-    if (
-      (await Swal.fire({ title: 'Are you sure?', showCancelButton: true }))
-        .value === true
-    ) {
+    if ((await Swal.fire({ title: 'Are you sure?', showCancelButton: true })).value === true) {
       try {
         await this.articleService.deleteArticle(this._article.id);
-        this.router.navigate([
-          'campaigns',
-          this.campaignSerivce.campaign.id,
-          'articles',
-        ]);
+        this.router.navigate(['campaigns', this.campaignSerivce.campaign.id, 'articles']);
       } catch (err) {
         throw err;
       }
@@ -177,5 +153,9 @@ export class ArticleEditorComponent implements OnInit, ComponentCanDeactivate {
 
   public get article() {
     return this._article;
+  }
+
+  public get conceptTypes() {
+    return this.campaignSerivce.campaign.conceptTypes;
   }
 }

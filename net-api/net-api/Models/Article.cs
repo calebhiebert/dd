@@ -67,6 +67,7 @@ namespace net_api.Models
         public string Icon { get; set; }
 
         public List<ArticleQuest> ArticleQuests { get; set; }
+        public List<ArticleConcept> ArticleConcepts { get; set; }
 
         public Article()
         {

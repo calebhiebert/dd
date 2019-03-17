@@ -59,4 +59,12 @@
     <label class="form-label">Quests</label>
     <dd-article-quest-manager [article]="article" [viewOnly]="false"></dd-article-quest-manager>
   </div>
+
+  <!-- Concepts -->
+  <div *ngIf="editing && article">
+    <div class="form-group" *ngFor="let ct of conceptTypes">
+      <label class="form-label">{{ ct.pluralForm }}</label>
+      <dd-article-concept-manager [conceptType]="ct" [article]="article" [viewOnly]="false"></dd-article-concept-manager>
+    </div>
+  </div>
 </div>

@@ -20,7 +20,10 @@ namespace net_api.Models
         public DbSet<Quest> Quests { get; set; }
         public DbSet<Map> Maps { get; set; }
         public DbSet<Note> Notes { get; set; }
+
         public DbSet<Article> Articles { get; set; }
+        public DbSet<ArticleQuest> ArticleQuests { get; set; }
+        public DbSet<ArticleConcept> ArticleConcepts { get; set; }
 
         public DbSet<ConceptType> ConceptTypes { get; set; }
         public DbSet<Concept> Concepts { get; set; }
@@ -32,7 +35,6 @@ namespace net_api.Models
         public DbSet<MapNotification> MapNotifications { get; set; }
         public DbSet<QuestNotification> QuestNotifications { get; set; }
 
-        public DbSet<ArticleQuest> ArticleQuests { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -59,6 +61,7 @@ namespace net_api.Models
         {
             modelBuilder.Entity<CampaignUser>().HasKey(tbl => new { tbl.CampaignId, tbl.UserId });
             modelBuilder.Entity<ArticleQuest>().HasKey(tbl => new { tbl.ArticleId, tbl.QuestId });
+            modelBuilder.Entity<ArticleConcept>().HasKey(tbl => new { tbl.ArticleId, tbl.ConceptId });
             modelBuilder.Entity<ConceptEntity>().HasKey(tbl => new { tbl.ConceptId, tbl.EntityId });
 
             modelBuilder.Query<MapBytePosition>();
