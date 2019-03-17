@@ -75,8 +75,6 @@ namespace net_api.Controllers
                 offset = 0;
             }
 
-            query = query.Skip(offset).Take(limit);
-
             if (search != null)
             {
                 search = search.ToLower();
@@ -84,6 +82,8 @@ namespace net_api.Controllers
                 query = query
                     .Where(a => a.Name.ToLower().Contains(search));
             }
+
+            query = query.Skip(offset).Take(limit);
 
             // TODO filter out article quests that should not be shown
             var articles = await query
@@ -138,6 +138,13 @@ namespace net_api.Controllers
             if (!authResult.Succeeded)
             {
                 return Forbid();
+            }
+
+            var campaignEditableAuthResult = await _auth.AuthorizeAsync(User, article.Campaign, "CampaignEditPolicy");
+
+            if (!campaignEditableAuthResult.Succeeded)
+            {
+                article.ArticleQuests = article.ArticleQuests.Where(aq => aq.Quest.Visible == true).ToList();
             }
 
             return article;
