@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
 
@@ -18,11 +19,13 @@ namespace net_api.Controllers
     {
         private readonly Context _context;
         private readonly IAuthorizationService _auth;
+        private readonly IHubContext<UpdateHub> _hub;
 
-        public EntityPresetsController(Context context, IAuthorizationService auth)
+        public EntityPresetsController(Context context, IAuthorizationService auth, IHubContext<UpdateHub> hub)
         {
             _context = context;
             _auth = auth;
+            _hub = hub;
         }
 
         // GET: api/EntityPresets
@@ -128,6 +131,8 @@ namespace net_api.Controllers
                 }
             }
 
+            await _hub.Clients.Group($"campaign-{campaign.Id}").SendAsync("RefreshCurrentCampaign");
+
             return NoContent();
         }
 
@@ -159,6 +164,8 @@ namespace net_api.Controllers
             _context.EntityPresets.Add(entityPreset);
             await _context.SaveChangesAsync();
 
+            await _hub.Clients.Group($"campaign-{campaign.Id}").SendAsync("RefreshCurrentCampaign");
+
             return CreatedAtAction("GetEntityPreset", new { id = entityPreset.Id }, entityPreset);
         }
 
@@ -170,8 +177,6 @@ namespace net_api.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            // TODO authenticate requests
 
             var entityPreset = await _context.EntityPresets.FindAsync(id);
             if (entityPreset == null)
@@ -192,6 +197,8 @@ namespace net_api.Controllers
 
             _context.EntityPresets.Remove(entityPreset);
             await _context.SaveChangesAsync();
+
+            await _hub.Clients.Group($"campaign-{campaign.Id}").SendAsync("RefreshCurrentCampaign");
 
             return Ok(entityPreset);
         }

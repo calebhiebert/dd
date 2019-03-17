@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
 
@@ -18,11 +19,13 @@ namespace net_api.Controllers
     {
         private readonly Context _context;
         private readonly IAuthorizationService _auth;
+        private readonly IHubContext<UpdateHub> _hub;
 
-        public ConceptTypesController(Context context, IAuthorizationService auth)
+        public ConceptTypesController(Context context, IAuthorizationService auth, IHubContext<UpdateHub> hub)
         {
             _context = context;
             _auth = auth;
+            _hub = hub;
         }
 
         // GET: api/ConceptTypes/5
@@ -89,6 +92,8 @@ namespace net_api.Controllers
                 }
             }
 
+            await _hub.Clients.Group($"campaign-{campaign.Id}").SendAsync("RefreshCurrentCampaign");
+
             return NoContent();
         }
 
@@ -114,6 +119,8 @@ namespace net_api.Controllers
 
             _context.ConceptTypes.Add(conceptType);
             await _context.SaveChangesAsync();
+
+            await _hub.Clients.Group($"campaign-{campaign.Id}").SendAsync("RefreshCurrentCampaign");
 
             return CreatedAtAction("GetConceptType", new { id = conceptType.Id }, conceptType);
         }
@@ -141,6 +148,8 @@ namespace net_api.Controllers
 
             _context.ConceptTypes.Remove(conceptType);
             await _context.SaveChangesAsync();
+
+            await _hub.Clients.Group($"campaign-{conceptType.CampaignId}").SendAsync("RefreshCurrentCampaign");
 
             return conceptType;
         }

@@ -148,6 +148,8 @@ namespace net_api.Controllers
                 .Groups(campaignMembers.Select(m => $"notifications-{m.UserId}").ToList())
                 .SendAsync("Notify");
 
+            await _hub.Clients.Group($"campaign-{campaign.Id}").SendAsync("RefreshCurrentCampaign");
+
             return NoContent();
         }
 

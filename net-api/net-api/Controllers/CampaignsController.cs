@@ -260,6 +260,8 @@ namespace net_api.Controllers
 
             await _context.SaveChangesAsync();
 
+            await _hub.Clients.Group($"campaign-{campaign.Id}").SendAsync("RefreshCurrentCampaign");
+
             return NoContent();
         }
 

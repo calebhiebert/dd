@@ -70,9 +70,7 @@ export class UpdateHubService {
 
     this.connection.on('AuthenticateComplete', () => this.authComplete());
 
-    this.connection.on('CampaignUpdate', (campaign: ICampaign) =>
-      this.campaignUpdate(campaign)
-    );
+    this.connection.on('CampaignUpdate', (campaign: ICampaign) => this.campaignUpdate(campaign));
 
     this.connection.on('Notify', () => {
       this.notificationService.loadNotifications();
@@ -134,6 +132,10 @@ export class UpdateHubService {
       this.conceptEntityDelete.emit(ce);
     });
 
+    this.connection.on('RefreshCurrentCampaign', () => {
+      this.campaignService.refreshCurrentCampaign();
+    });
+
     await this.authenticate();
   }
 
@@ -149,11 +151,7 @@ export class UpdateHubService {
   }
 
   public async start() {
-    if (
-      [ConnectionState.CLOSED, ConnectionState.NOT_CONNECTED].indexOf(
-        this.state
-      ) === -1
-    ) {
+    if ([ConnectionState.CLOSED, ConnectionState.NOT_CONNECTED].indexOf(this.state) === -1) {
       return;
     }
 
@@ -201,10 +199,7 @@ export class UpdateHubService {
   }
 
   private campaignUpdate(campaign: ICampaign) {
-    if (
-      this.campaignService.campaign &&
-      this.campaignService.campaign.id === campaign.id
-    ) {
+    if (this.campaignService.campaign && this.campaignService.campaign.id === campaign.id) {
       // TODO, do this automatically somehow
       const c = this.campaignService.campaign;
 
@@ -224,13 +219,9 @@ export class UpdateHubService {
     }
 
     // populate properties from the campaign object
-    entity.preset = this.campaignService.campaign.entityPresets.find(
-      (ep) => ep.id === entity.entityPresetId
-    );
+    entity.preset = this.campaignService.campaign.entityPresets.find((ep) => ep.id === entity.entityPresetId);
 
-    entity.user = this.campaignService.campaign.members.find(
-      (m) => m.userId === entity.userId
-    ).user;
+    entity.user = this.campaignService.campaign.members.find((m) => m.userId === entity.userId).user;
 
     this.campaignService.campaign.entities.forEach((ent, idx) => {
       if (ent.id === entity.id) {
@@ -241,10 +232,7 @@ export class UpdateHubService {
       }
     });
 
-    if (
-      this.entityService.currentViewEntity !== null &&
-      this.entityService.currentViewEntity.id === entity.id
-    ) {
+    if (this.entityService.currentViewEntity !== null && this.entityService.currentViewEntity.id === entity.id) {
       this.entityService.currentViewEntity = {
         ...this.entityService.currentViewEntity,
         ...entity,
@@ -261,21 +249,15 @@ export class UpdateHubService {
     }
 
     // populate properties from the campaign object
-    entity.preset = this.campaignService.campaign.entityPresets.find(
-      (ep) => ep.id === entity.entityPresetId
-    );
+    entity.preset = this.campaignService.campaign.entityPresets.find((ep) => ep.id === entity.entityPresetId);
 
-    entity.user = this.campaignService.campaign.members.find(
-      (m) => m.userId === entity.userId
-    ).user;
+    entity.user = this.campaignService.campaign.members.find((m) => m.userId === entity.userId).user;
 
     this.campaignService.campaign.entities.push(entity);
   }
 
   private entityDelete(id: string) {
-    this.campaignService.campaign.entities = this.campaignService.campaign.entities.filter(
-      (e) => e.id !== id
-    );
+    this.campaignService.campaign.entities = this.campaignService.campaign.entities.filter((e) => e.id !== id);
   }
 
   public async subscribeCampaign(campaignId: string) {
@@ -299,10 +281,7 @@ export class UpdateHubService {
     }
 
     try {
-      const res = await this.connection.invoke(
-        'UnsubscribeCampaign',
-        campaignId
-      );
+      const res = await this.connection.invoke('UnsubscribeCampaign', campaignId);
       this._isCampaignSubscribed = false;
     } catch (err) {
       throw err;
@@ -361,10 +340,7 @@ export class UpdateHubService {
     }
   }
 
-  public async sendNoteCursorUpdate(
-    noteId: string,
-    range: { index: number; length: number }
-  ) {
+  public async sendNoteCursorUpdate(noteId: string, range: { index: number; length: number }) {
     if (this.state !== ConnectionState.CONNECTED) {
       console.warn('Not in connected state');
       return;
