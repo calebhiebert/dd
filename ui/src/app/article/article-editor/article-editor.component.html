@@ -12,8 +12,7 @@
       <button class="btn mr-2" (click)="cancel()" [disabled]="loading || saving">
         Cancel
       </button>
-      <button class="btn" [ngClass]="{ loading: saving }" (click)="save()"
-        [disabled]="loading || saving || formGroup.invalid">
+      <button class="btn" [ngClass]="{ loading: saving }" (click)="save()" [disabled]="loading || saving || formGroup.invalid">
         Save
       </button>
     </div>
@@ -23,14 +22,10 @@
   <div class="form-group" [ngClass]="{ 'has-error': name.invalid && (name.dirty || name.touched) }">
     <label class="form-label" for="name">Name</label>
     <input type="text" name="name" class="form-input" id="name" placeholder="Name" formControlName="name" />
-    <p class="form-input-hint" *ngIf="
-        name.invalid && (name.dirty || name.touched) && name.errors.required
-      ">
+    <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.required">
       A name is required
     </p>
-    <p class="form-input-hint" *ngIf="
-        name.invalid && (name.dirty || name.touched) && name.errors.maxlength
-      ">
+    <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.maxlength">
       The name cannot be more than 30 characters long
     </p>
   </div>
@@ -62,6 +57,6 @@
   <!-- Quests -->
   <div class="form-group" *ngIf="editing && article">
     <label class="form-label">Quests</label>
-    <dd-article-quest-manager [article]="article"></dd-article-quest-manager>
+    <dd-article-quest-manager [article]="article" [viewOnly]="false"></dd-article-quest-manager>
   </div>
 </div>
