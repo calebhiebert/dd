@@ -32,6 +32,7 @@ export class TagEditorComponent implements OnInit {
 
     if (index !== -1) {
       this.formArray.removeAt(index);
+      this.formGroup.markAsDirty();
     }
   }
 
@@ -40,6 +41,7 @@ export class TagEditorComponent implements OnInit {
       case 'Enter':
         if (this._currentValue.trim().length > 0 && this.formArray.value.indexOf(this._currentValue.trim()) === -1) {
           this.formArray.push(new FormControl(this._currentValue.trim()));
+          this.formGroup.markAsDirty();
 
           this.input.nativeElement.value = '';
           this._previousValue = this._currentValue.trim();
@@ -51,6 +53,7 @@ export class TagEditorComponent implements OnInit {
           console.log(this._previousValue);
           const control = this.formArray.controls[this.formArray.controls.length - 1];
           this.formArray.removeAt(this.formArray.length - 1);
+          this.formGroup.markAsDirty();
 
           this.input.nativeElement.value = control.value;
           this._previousValue = this._currentValue.trim();

@@ -6,8 +6,8 @@
   <dd-http-errors [error]="loadErr" *ngIf="loadErr"></dd-http-errors>
 
   <!-- Timeline -->
-  <div class="timeline" *ngIf="conceptHistory">
-    <div class="timeline-item" *ngFor="let history of conceptHistory; let first = first; let last = last">
+  <div class="timeline" *ngIf="diffedHistory">
+    <div class="timeline-item" *ngFor="let history of diffedHistory; let first = first; let last = last">
       <!-- Icon -->
       <div class="timeline-left">
         <a class="timeline-icon" [ngClass]="{ 'icon-lg': !first }" [ngSwitch]="history.actionType">
@@ -24,6 +24,7 @@
             <strong>{{ history.name }}</strong>
             {{ history.actionSource === 1 ? 'imported' : getEntryActionText(history) }}.
             <div>{{ getDate(history) | date: 'short' }}</div>
+
             <dd-user-view-nano [user]="getUser(history.userId)"></dd-user-view-nano>
           </div>
           <div class="tile-action">

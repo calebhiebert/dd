@@ -140,6 +140,10 @@ export interface IConceptHistory {
   conceptTypeId: string;
 }
 
+export interface IConceptHistoryDiff extends IConceptHistory {
+  diff: any;
+}
+
 export interface IConceptField extends IDynamicFieldConfig {}
 export interface IConceptEntityFieldConfig extends IDynamicFieldConfig {}
 
