@@ -120,19 +120,20 @@ namespace net_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Article>> GetArticle(Guid id)
         {
-            var article = await _context.Articles.FindAsync(id);
+            var article = await _context.Articles
+                .Where(a => a.Id == id)
+                .Include(a => a.Campaign)
+                    .ThenInclude(c => c.Members)
+                .Include(a => a.ArticleQuests)
+                    .ThenInclude(aq => aq.Quest)
+                .FirstOrDefaultAsync();
 
             if (article == null)
             {
                 return NotFound();
             }
 
-            var campaign = await _context.Campaigns
-                .Where(c => c.Id == article.CampaignId)
-                .Include(c => c.Members)
-                .FirstOrDefaultAsync();
-
-            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
+            var authResult = await _auth.AuthorizeAsync(User, article.Campaign, "CampaignViewPolicy");
 
             if (!authResult.Succeeded)
             {

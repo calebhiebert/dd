@@ -1,15 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {
-  IArticle,
-  ArticleService,
-  IArticleQuest,
-} from 'src/app/article.service';
+import { IArticle, ArticleService, IArticleQuest } from 'src/app/article.service';
 import { QuestService, IQuest, QuestStatus } from 'src/app/quest.service';
 import { CampaignService } from 'src/app/campaign.service';
-import {
-  SearchFunction,
-  DropdownItemGenerationFunction,
-} from 'src/app/autocomplete/autocomplete.component';
+import { SearchFunction, DropdownItemGenerationFunction } from 'src/app/autocomplete/autocomplete.component';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
@@ -22,9 +15,15 @@ export class ArticleQuestManagerComponent implements OnInit {
   @Input()
   public article: IArticle;
 
+  @Input()
+  public viewOnly = true;
+
+  @Input()
   public articleQuests: IArticleQuest[];
+
   public doQuestSearch: SearchFunction;
   public onQuestSelected: DropdownItemGenerationFunction;
+  public expandedQuest: string;
 
   public loading = false;
 
@@ -36,20 +35,21 @@ export class ArticleQuestManagerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // This will be called by the autocomplete module
     this.doQuestSearch = (search: string) => {
       return this.searchQuests(search);
     };
 
-    this.load();
+    if (!this.articleQuests) {
+      this.load();
+    }
   }
 
   private async load() {
     this.loading = true;
 
     try {
-      this.articleQuests = await this.articleService.getArticleQuests(
-        this.article.id
-      );
+      this.articleQuests = await this.articleService.getArticleQuests(this.article.id);
     } catch (err) {
       throw err;
     }
@@ -92,22 +92,14 @@ export class ArticleQuestManagerComponent implements OnInit {
   }
 
   public async edit(articleQuest: IArticleQuest) {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'quests',
-      articleQuest.questId,
-      'edit',
-    ]);
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'quests', articleQuest.questId, 'edit']);
   }
 
   public async questSelected(quest: IQuest | any) {
     if (quest.id === 'create-new-quest') {
       const confirmation = await Swal.fire({
         title: 'Create new quest?',
-        text: `This will create a new blank quest and attach it to ${
-          this.article.name
-        }`,
+        text: `This will create a new blank quest and attach it to ${this.article.name}`,
         showCancelButton: true,
       });
 
@@ -128,9 +120,7 @@ export class ArticleQuestManagerComponent implements OnInit {
 
       await this.questSelected(newQuest);
     } else {
-      const existingArticleQuest = this.articleQuests.find(
-        (aq) => aq.questId === quest.id
-      );
+      const existingArticleQuest = this.articleQuests.find((aq) => aq.questId === quest.id);
 
       if (existingArticleQuest !== undefined) {
         return;
@@ -150,11 +140,22 @@ export class ArticleQuestManagerComponent implements OnInit {
   }
 
   public async viewQuest(questId: string) {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'quests',
-      questId,
-    ]);
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'quests', questId]);
+  }
+
+  public trackArticleQuest(idx: number, articleQuest: IArticleQuest) {
+    return articleQuest.questId + articleQuest.articleId;
+  }
+
+  public expandArticleQuest(articleQuest: IArticleQuest) {
+    if (this.expandedQuest === articleQuest.questId) {
+      this.expandedQuest = null;
+    } else {
+      this.expandedQuest = articleQuest.questId;
+    }
+  }
+
+  public get editable() {
+    return this.campaignService.canEdit && !this.viewOnly;
   }
 }

@@ -2,7 +2,7 @@
   <div class="loading" *ngIf="loading"></div>
 
   <!-- Notifications -->
-  <div class="big-space" *ngIf="notifications">
+  <div [ngClass]="{ 'big-space': notifications && notifications.length > 0 }" *ngIf="notifications">
     <button class="btn btn-sm mb-2" (click)="clearAll()"><i class="icon icon-delete"></i><span class="hide-sm"> Clear All</span></button>
 
     <!-- Empty -->

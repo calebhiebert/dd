@@ -7,6 +7,7 @@
     [doSearch]="doQuestSearch"
     [createItem]="createAutocompleteItem"
     (selection)="questSelected($event)"
+    *ngIf="editable"
   ></dd-autocomplete>
 
   <!-- Empty State -->
@@ -16,24 +17,35 @@
 
   <!-- Quest List -->
   <div>
-    <div class="card p-1 pl-2 mt-1" *ngFor="let aq of articleQuests">
-      <div class="columns">
-        <div class="column">
-          {{ aq.quest.name }}
+    <div class="card p-1 pl-2 mt-1" *ngFor="let aq of articleQuests; trackBy: trackArticleQuest">
+      <div class="columns col-gapless">
+        <!-- Expand Control -->
+        <div class="column col-auto mr-2">
+          <button class="btn btn-sm" (click)="expandArticleQuest(aq)">
+            <i class="icon icon-arrow-down" *ngIf="aq.questId !== expandedQuest"></i>
+            <i class="icon icon-arrow-up" *ngIf="aq.questId === expandedQuest"></i>
+          </button>
         </div>
+
+        <!-- Name Column -->
+        <div class="column"><i class="icon icon-flag" *ngIf="aq.quest.accepted"></i> {{ aq.quest.name }}</div>
+
+        <!-- Controls Column -->
         <div class="column col-auto">
-          <button class="btn btn-sm btn-link" (click)="remove(aq)">
+          <button class="btn btn-sm btn-link" (click)="remove(aq)" *ngIf="editable">
             <i class="icon icon-cross"></i>
           </button>
-          <button class="btn btn-sm btn-link" (click)="edit(aq)">
+          <button class="btn btn-sm btn-link" (click)="edit(aq)" *ngIf="editable">
             <i class="icon icon-edit"></i>
           </button>
-          <button
-            class="btn btn-sm btn-link ml-1"
-            (click)="viewQuest(aq.questId)"
-          >
+          <button class="btn btn-sm btn-link ml-1" (click)="viewQuest(aq.questId)">
             <i class="icon icon-arrow-right"></i>
           </button>
+        </div>
+
+        <!-- Expanded Content Column -->
+        <div class="column col-12" *ngIf="aq.questId === expandedQuest">
+          <dd-quill [value]="aq.quest.content" readOnly="true"></dd-quill>
         </div>
       </div>
     </div>

@@ -30,4 +30,16 @@
   <div class="empty" *ngIf="article !== undefined && (!article.content || !article.content.ops)">
     <p class="empty-subtitle">This article has no content</p>
   </div>
+
+  <!-- Quest View -->
+  <h4 *ngIf="article && article.articleQuests.length > 0">Quests</h4>
+  <span class="fake-link" *ngIf="article && article.articleQuests.length > 0 && !questsExpanded" (click)="questsExpanded = true"
+    >Show Quests</span
+  >
+  <div *ngIf="article && article.articleQuests.length > 0 && questsExpanded">
+    <dd-article-quest-manager [article]="article" [articleQuests]="article.articleQuests" *ngIf="article"></dd-article-quest-manager>
+  </div>
+  <span class="fake-link" *ngIf="article && article.articleQuests.length > 0 && questsExpanded" (click)="questsExpanded = false"
+    >Hide Quests</span
+  >
 </div>

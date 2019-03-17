@@ -15,6 +15,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
   public loading = false;
   public loadError: any;
   public article: IArticle;
+  public questsExpanded = false;
 
   private _updateSubscription: Subscription;
 

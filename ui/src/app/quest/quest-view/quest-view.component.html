@@ -1,4 +1,4 @@
-<div class="container grid-xl">
+<div class="container grid-lg">
   <!-- Loading -->
   <div class="loading loading-lg" *ngIf="loading"></div>
 
@@ -8,7 +8,7 @@
   <div *ngIf="quest">
     <div class="columns">
       <div class="column">
-        <h3>{{ quest.name }}</h3>
+        <h3><i class="icon icon-flag" *ngIf="quest.accepted"></i> {{ quest.name }}</h3>
       </div>
       <div class="column col-auto col-ml-auto">
         <button class="btn btn-sm mr-2" (click)="addNote()"><i class="icon icon-link"></i> <span class="hide-sm"> Add Note</span></button>

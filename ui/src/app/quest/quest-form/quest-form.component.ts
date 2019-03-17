@@ -30,11 +30,7 @@ export class QuestFormComponent implements OnInit, ComponentCanDeactivate {
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      name: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(30),
-      ]),
+      name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
       accepted: new FormControl(false),
       available: new FormControl(false),
       visible: new FormControl(false),
@@ -145,12 +141,7 @@ export class QuestFormComponent implements OnInit, ComponentCanDeactivate {
       try {
         await this.questService.updateQuest(quest);
         this.formGroup.markAsPristine();
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'quests',
-          this.quest.id,
-        ]);
+        this.cancel();
       } catch (err) {
         throw err;
       }
@@ -158,12 +149,7 @@ export class QuestFormComponent implements OnInit, ComponentCanDeactivate {
       try {
         const createdQuest = await this.questService.createQuest(quest);
         this.formGroup.markAsPristine();
-        this.router.navigate([
-          'campaigns',
-          this.campaignService.campaign.id,
-          'quests',
-          createdQuest.id,
-        ]);
+        this.router.navigate(['campaigns', this.campaignService.campaign.id, 'quests', createdQuest.id]);
       } catch (err) {
         throw err;
       }
