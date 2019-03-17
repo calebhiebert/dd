@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
 
@@ -17,11 +18,14 @@ namespace net_api.Controllers
     {
         private readonly Context _context;
         private readonly IAuthorizationService _auth;
+        private readonly IHubContext<UpdateHub> _hub;
 
-        public QuestsController(Context context, IAuthorizationService auth)
+
+        public QuestsController(Context context, IAuthorizationService auth, IHubContext<UpdateHub> hub)
         {
             _context = context;
             _auth = auth;
+            _hub = hub;
         }
 
         // GET: api/Quests
@@ -149,11 +153,19 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
-            var campaign = await _context.Campaigns
-                .Where(c => c.Id == quest.CampaignId)
+            var originalQuest = await _context.Quests
+                .Where(q => q.Id == id)
+                .Include(q => q.Campaign)
+                    .ThenInclude(c => c.Members)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+            if (originalQuest == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, originalQuest.Campaign, "CampaignEditPolicy");
 
             if (!authResult.Succeeded)
             {
@@ -176,6 +188,21 @@ namespace net_api.Controllers
             }
 
             _context.Entry(quest).State = EntityState.Modified;
+
+            // The quest was just accepted
+            if (!originalQuest.Accepted && quest.Accepted)
+            {
+                // Create a notification for all members
+                foreach (var member in originalQuest.Campaign.Members)
+                {
+                    var notification = new QuestNotification(member.UserId, $"Quest {quest.Name} has been accepted!", originalQuest.CampaignId, originalQuest.Id);
+                    _context.Notifications.Add(notification);
+                }
+
+                await _hub.Clients
+                    .Groups(originalQuest.Campaign.Members.Select(m => $"notifications-{m.UserId}").ToList())
+                    .SendAsync("Notify");
+            }
 
             try
             {

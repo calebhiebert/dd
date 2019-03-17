@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { IMap } from './map.service';
 import { ToastrService } from 'ngx-toastr';
+import { IQuest } from './quest.service';
 
 @Injectable({
   providedIn: 'root',
@@ -84,7 +85,7 @@ export class NotificationService {
   }
 }
 
-export type Notification = INotification | ICampaignNotification | IMapNotification;
+export type Notification = INotification | ICampaignNotification | IMapNotification | IQuestNotification;
 
 export interface INotification {
   id: string;
@@ -102,4 +103,9 @@ export interface ICampaignNotification extends INotification {
 export interface IMapNotification extends ICampaignNotification {
   mapId: string;
   map?: IMap;
+}
+
+export interface IQuestNotification extends ICampaignNotification {
+  questId: string;
+  quest?: IQuest;
 }

@@ -2,7 +2,7 @@
   <div class="loading" *ngIf="loading"></div>
 
   <!-- Notifications -->
-  <div *ngIf="notifications">
+  <div class="big-space" *ngIf="notifications">
     <button class="btn btn-sm mb-2" (click)="clearAll()"><i class="icon icon-delete"></i><span class="hide-sm"> Clear All</span></button>
 
     <!-- Empty -->
@@ -23,22 +23,29 @@
         </div>
 
         <!-- Message -->
-        <div class="column d-flex align-items-center col-8 col-sm-11">
+        <div class="column">
           {{ n.message }}
         </div>
 
         <!-- Controls Column -->
-        <div class="column col-sm-12 col-md-auto col-lg-auto col-xl-auto col-auto col-ml-auto">
-          <!-- Campaign Related Notification Things -->
-          <div *ngIf="n.campaign !== null && n.campaign !== undefined">
-            <button class="btn btn-sm btn-primary" (click)="viewCampaign(n)">
-              {{ n.campaign.name }} <i class="icon icon-arrow-right"></i>
+        <div class="column col-auto">
+          <div class="dropdown dropdown-right">
+            <button class="btn btn-sm dropdown-toggle" tabindex="0">
+              <i class="icon icon-menu"></i>
             </button>
-          </div>
+            <ul class="menu">
+              <li class="menu-item" *ngIf="n.campaign !== null && n.campaign !== undefined" (click)="viewCampaign(n)">
+                <div>{{ n.campaign.name }} <i class="icon icon-arrow-right"></i></div>
+              </li>
 
-          <!-- Map related notifications -->
-          <div *ngIf="n.mapId !== null && n.mapId !== undefined">
-            <button class="btn btn-sm btn-primary" (click)="viewMap(n)">View Map <i class="icon icon-arrow-right"></i></button>
+              <li class="menu-item" *ngIf="n.mapId !== null && n.mapId !== undefined" (click)="viewMap(n)">
+                <div>View Map <i class="icon icon-arrow-right"></i></div>
+              </li>
+
+              <li class="menu-item" *ngIf="n.questId !== null && n.questId !== undefined" (click)="viewQuest(n)">
+                <div>View Quest <i class="icon icon-arrow-right"></i></div>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

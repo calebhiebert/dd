@@ -25,6 +25,12 @@ namespace net_api.Models
             Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
         }
+
+        public Notification(string userId, string message)
+        {
+            UserId = userId;
+            Message = message;
+        }
     }
 
     public class CampaignNotification : Notification
@@ -32,6 +38,13 @@ namespace net_api.Models
         [Required]
         public Guid CampaignId { get; set; }
         public Campaign Campaign { get; set; }
+
+        public CampaignNotification() : base() { }
+
+        public CampaignNotification(string userId, string message, Guid campaignId) : base(userId, message)
+        {
+            CampaignId = campaignId;
+        }
     }
 
     public class MapNotification : CampaignNotification
@@ -39,5 +52,19 @@ namespace net_api.Models
         [Required]
         public Guid MapId { get; set; }
         public Map Map { get; set; }
+    }
+
+    public class QuestNotification : CampaignNotification
+    {
+        [Required]
+        public Guid QuestId { get; set; }
+        public Quest Quest { get; set; }
+
+        public QuestNotification() : base() { }
+
+        public QuestNotification(string userId, string message, Guid campaignId, Guid questId) : base(userId, message, campaignId)
+        {
+            QuestId = questId;
+        } 
     }
 }
