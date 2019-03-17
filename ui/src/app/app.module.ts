@@ -102,6 +102,7 @@ import { LoginStatusComponent } from './login/login-status/login-status.componen
 import { EntityPresetEditorComponent } from './entity/entity-preset-editor/entity-preset-editor.component';
 import { ConceptEntityManagerListItemComponent } from './concept/concept-entity-manager-list-item/concept-entity-manager-list-item.component';
 import { ArticleConceptManagerComponent } from './concept/article-concept-manager/article-concept-manager.component';
+import { ArticleConceptManagerListItemComponent } from './concept/article-concept-manager-list-item/article-concept-manager-list-item.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -198,6 +199,7 @@ import { ArticleConceptManagerComponent } from './concept/article-concept-manage
     EntityPresetEditorComponent,
     ConceptEntityManagerListItemComponent,
     ArticleConceptManagerComponent,
+    ArticleConceptManagerListItemComponent,
   ],
   imports: [
     BrowserModule,

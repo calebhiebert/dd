@@ -147,7 +147,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     );
 
     if (attrValue !== null && attrValue !== undefined) {
-      this.entity.currency = attrValue;
+      this.entity.currency = attrValue.value;
       this.updateEntity();
     }
   }

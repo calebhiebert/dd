@@ -17,37 +17,11 @@
 
   <!-- Concept List -->
   <div>
-    <div class="card p-1 pl-2 mt-1" *ngFor="let ac of articleConcepts; trackBy: trackArticleConcept">
-      <div class="columns col-gapless">
-        <!-- Expand Control -->
-        <div class="column col-auto mr-2">
-          <button class="btn btn-sm" (click)="expandArticleConcept(ac)">
-            <i class="icon icon-arrow-down" *ngIf="ac.conceptId !== expandedConcept"></i>
-            <i class="icon icon-arrow-up" *ngIf="ac.conceptId === expandedConcept"></i>
-          </button>
-        </div>
-
-        <!-- Name Column -->
-        <div class="column">{{ ac.concept.name }}</div>
-
-        <!-- Controls Column -->
-        <div class="column col-auto">
-          <button class="btn btn-sm btn-link" (click)="remove(ac)" *ngIf="editable">
-            <i class="icon icon-cross"></i>
-          </button>
-          <button class="btn btn-sm btn-link" (click)="edit(ac)" *ngIf="editable">
-            <i class="icon icon-edit"></i>
-          </button>
-          <button class="btn btn-sm btn-link ml-1" (click)="viewConcept(ac.conceptId, ac.concept.conceptTypeId)">
-            <i class="icon icon-arrow-right"></i>
-          </button>
-        </div>
-
-        <!-- Expanded Content Column -->
-        <div class="column col-12" *ngIf="ac.conceptId === expandedConcept">
-          <dd-quill [value]="ac.concept.content" readOnly="true"></dd-quill>
-        </div>
-      </div>
-    </div>
+    <dd-article-concept-manager-list-item
+      [articleConcept]="ac"
+      [editable]="editable"
+      (remove)="remove(ac)"
+      *ngFor="let ac of articleConcepts; trackBy: trackArticleConcept"
+    ></dd-article-concept-manager-list-item>
   </div>
 </div>

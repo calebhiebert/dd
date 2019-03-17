@@ -51,6 +51,10 @@ export class CurrencyService {
   }
 
   public mapCoinValues(currencyMap?: ICurrencyLevel[], values?: { [key: string]: number }) {
+    if (!values) {
+      values = {};
+    }
+
     if (currencyMap === null || currencyMap === undefined) {
       currencyMap = [{ value: 1, name: 'gp', useInConversions: true }];
     }

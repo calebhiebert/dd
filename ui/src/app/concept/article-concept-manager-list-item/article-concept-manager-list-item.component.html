@@ -1,0 +1,49 @@
+<div class="card p-1 pl-2 mt-1">
+  <div class="columns col-gapless">
+    <!-- Expand Control -->
+    <div class="column col-auto mr-2">
+      <button class="btn btn-sm" (click)="expanded = !expanded">
+        <i class="icon icon-arrow-down" *ngIf="!expanded"></i>
+        <i class="icon icon-arrow-up" *ngIf="expanded"></i>
+      </button>
+    </div>
+
+    <!-- Name Column -->
+    <div class="column">
+      {{ articleConcept.concept.name }}
+      <div class="d-inline-block ml-2" *ngIf="saving">
+        <div class="loading"></div>
+      </div>
+    </div>
+
+    <!-- Controls Column -->
+    <div class="column col-auto">
+      <button class="btn btn-sm btn-link" (click)="doRemove()" *ngIf="editable">
+        <i class="icon icon-cross"></i>
+      </button>
+      <button class="btn btn-sm btn-link" (click)="edit()" *ngIf="editable">
+        <i class="icon icon-edit"></i>
+      </button>
+      <button class="btn btn-sm btn-link ml-1" (click)="viewConcept()">
+        <i class="icon icon-arrow-right"></i>
+      </button>
+    </div>
+
+    <!-- Data Input Column -->
+    <div class="column col-12" *ngIf="expanded">
+      <!-- Cost -->
+      <dd-dynamic-field [config]="currencyFieldConfig" [control]="currencyCost"></dd-dynamic-field>
+
+      <!-- Quantity -->
+      <dd-dynamic-field [config]="quantityFieldConfig" [control]="quantity"></dd-dynamic-field>
+
+      <!-- Is Purchasable -->
+      <dd-dynamic-field [config]="isPurchasableFieldConfig" [control]="isPurchasable"></dd-dynamic-field>
+    </div>
+
+    <!-- Expanded Content Column -->
+    <div class="column col-12" *ngIf="expanded">
+      <dd-quill [value]="articleConcept.concept.content" readOnly="true"></dd-quill>
+    </div>
+  </div>
+</div>

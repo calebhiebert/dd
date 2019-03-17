@@ -27,7 +27,6 @@ export class ArticleConceptManagerComponent implements OnInit {
   public loading = false;
   public doConceptSearch: SearchFunction;
   public onConceptSelected: DropdownItemGenerationFunction;
-  public expandedConcept: string;
 
   constructor(
     private articleService: ArticleService,
@@ -73,19 +72,7 @@ export class ArticleConceptManagerComponent implements OnInit {
 
   public async remove(articleConcept: IArticleConcept) {
     this.articleConcepts = this.articleConcepts.filter((aq) => aq !== articleConcept);
-
     await this.articleService.deleteArticleConcept(articleConcept);
-  }
-
-  public async edit(articleConcept: IArticleConcept) {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'concepts',
-      articleConcept.concept.conceptTypeId,
-      articleConcept.conceptId,
-      'edit',
-    ]);
   }
 
   public async conceptSelected(concept: IConcept | any) {
@@ -109,20 +96,8 @@ export class ArticleConceptManagerComponent implements OnInit {
     });
   }
 
-  public async viewConcept(conceptId: string, conceptTypeId: string) {
-    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'concepts', conceptTypeId, conceptId, 'view']);
-  }
-
   public trackArticleConcept(idx: number, articleConcept: IArticleConcept) {
     return articleConcept.conceptId + articleConcept.articleId;
-  }
-
-  public expandArticleConcept(articleConcept: IArticleConcept) {
-    if (this.expandedConcept === articleConcept.conceptId) {
-      this.expandedConcept = null;
-    } else {
-      this.expandedConcept = articleConcept.conceptId;
-    }
   }
 
   public get editable() {
