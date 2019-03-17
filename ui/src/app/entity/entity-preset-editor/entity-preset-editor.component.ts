@@ -171,7 +171,11 @@ export class EntityPresetEditorComponent implements OnInit, ComponentCanDeactiva
         await this.entityService.createEntityPreset(preset);
       }
 
-      await this.router.navigate(['campaigns', this.campaignService.campaign.id, 'settings']);
+      await this.router.navigate(['campaigns', this.campaignService.campaign.id, 'settings'], {
+        queryParams: {
+          refresh: true,
+        },
+      });
     } catch (err) {
       throw err;
     }

@@ -51,6 +51,11 @@ export class CampaignSettingsComponent implements OnInit, ComponentCanDeactivate
     if (this.campaign.experienceTable === undefined || this.campaign.experienceTable === null) {
       this.campaign.experienceTable = [];
     }
+
+    if (this.route.snapshot.queryParamMap.get('refresh') === 'true') {
+      this.campaignService.refreshCurrentCampaign();
+      this.router.navigate([], { replaceUrl: true });
+    }
   }
 
   public canDeactivate() {

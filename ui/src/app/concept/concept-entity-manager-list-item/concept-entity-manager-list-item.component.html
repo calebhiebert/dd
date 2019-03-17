@@ -35,7 +35,11 @@
     </div>
 
     <!-- Name -->
-    <div class="column c-hand" [ngClass]="{ faded: quantityEnabled && conceptEntity.quantity === 0 }" (click)="select(conceptEntity)">
+    <div
+      class="column c-hand no-select"
+      [ngClass]="{ faded: quantityEnabled && conceptEntity.quantity === 0 }"
+      (click)="select(conceptEntity)"
+    >
       {{ conceptEntity.concept.name }}
 
       <!-- Quantity -->
