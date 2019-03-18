@@ -7,6 +7,7 @@ import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-type
 import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { LoginService } from 'src/app/login.service';
 import { CurrencyService } from 'src/app/currency.service';
+import { IEntity } from 'src/app/entity.service';
 
 @Component({
   selector: 'dd-article-concept-manager-list-item',
@@ -120,6 +121,14 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
     ]);
   }
 
+  public canAfford(entity: IEntity) {
+    if (this.isPurchasable) {
+      return this.currencyService.hasResources(entity.currency, this.articleConcept.currencyCost, this.campaignService.campaign.trackCoins);
+    } else {
+      return false;
+    }
+  }
+
   public get currencyCost() {
     return this.formGroup.get('currencyCost');
   }
@@ -132,22 +141,12 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
     return this.formGroup.get('isPurchasable');
   }
 
-  public get canAfford() {
-    if (this.isPurchasable) {
-      return this.entities.some((e) => {
-        return (
-          e.preset.isCurrencyEnabled &&
-          this.currencyService.hasResources(e.currency, this.articleConcept.currencyCost, this.campaignService.campaign.trackCoins)
-        );
-      });
-    } else {
-      return false;
-    }
-  }
-
+  /**
+   * a list of entities that have currency
+   */
   public get entities() {
     return this.campaignService.campaign.entities.filter((e) => {
-      return !e.spawnable && e.spawnedFromId === null && e.userId === this.login.id;
+      return !e.spawnable && e.spawnedFromId === null && e.userId === this.login.id && e.preset.isCurrencyEnabled;
     });
   }
 }

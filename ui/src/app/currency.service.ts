@@ -85,6 +85,10 @@ export class CurrencyService {
    * Checks to see if the currency a satisfies the requirements of currency b
    */
   public hasResources(a: ICurrency, b: ICurrency, trackCoins: boolean): boolean {
+    if (a === null || a === undefined || b === undefined || b === null) {
+      return false;
+    }
+
     // Using simple currency mode
     if (!trackCoins) {
       return a.value !== null && a.value !== undefined && a.value >= b.value;

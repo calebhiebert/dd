@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormArray, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ICurrencyLevel, ICampaign } from 'src/app/campaign.service';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'dd-currency-map-editor',
@@ -34,9 +35,6 @@ export class CurrencyMapEditorComponent implements OnInit {
 
     this.formGroup.addControl('currencyMap', this.items);
     this.formGroup.addControl('trackCoins', new FormControl(this.campaign.trackCoins || false));
-
-    this.items.controls[0].get('value').disable();
-    this.items.controls[0].get('useInConversions').disable();
   }
 
   private getFormGroup(cl: ICurrencyLevel) {
@@ -49,10 +47,24 @@ export class CurrencyMapEditorComponent implements OnInit {
 
   public removeCurrencyLevel(idx: number) {
     this.items.removeAt(idx);
+
+    if (this.items.length === 0) {
+      this.items.push(this.getFormGroup({ name: 'gp', value: 1.0, useInConversions: true }));
+    }
+
+    this.formGroup.markAsDirty();
   }
 
   public addCurrencyLevel() {
     this.items.push(this.getFormGroup({ name: null, value: null, useInConversions: true }));
+    this.formGroup.markAsDirty();
+  }
+
+  public drop(e: CdkDragDrop<any>) {
+    const formControl = this.items.at(e.previousIndex);
+
+    this.items.removeAt(e.previousIndex);
+    this.items.insert(e.currentIndex, formControl);
   }
 
   public get controls() {

@@ -55,6 +55,7 @@
       <dd-dynamic-field [config]="currencyFieldConfig" [control]="currencyCost"></dd-dynamic-field>
 
       <!-- Quantity -->
+      <div class="mt-2"></div>
       <dd-dynamic-field [config]="quantityFieldConfig" [control]="quantity"></dd-dynamic-field>
 
       <!-- Is Purchasable -->
@@ -69,7 +70,12 @@
     <!-- Purchase Column -->
     <div class="column col-auto col-ml-auto mt-2" *ngIf="articleConcept.isPurchasable && expanded">
       <span class="mr-2" [ddCurrency]="articleConcept.currencyCost"></span>
-      <button class="btn btn-primary">Buy</button>
+      <button class="btn mr-2" *ngFor="let e of entities" style="line-height: 0" [disabled]="!canAfford(e)" (click)="buy(e)">
+        <figure class="avatar avatar-sm">
+          <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}" alt="" />
+        </figure>
+        Buy for {{ e.name }}
+      </button>
     </div>
   </div>
 </div>

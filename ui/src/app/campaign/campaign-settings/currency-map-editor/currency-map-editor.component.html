@@ -1,17 +1,15 @@
-<div>
-  <div *ngFor="let i of controls; let idx = index" [formGroup]="i">
+<div cdkDropList (cdkDropListDropped)="drop($event)">
+  <div *ngFor="let i of controls; let idx = index" [formGroup]="i" cdkDrag>
     <div class="columns">
+      <div class="drag-placeholder" *cdkDragPlaceholder></div>
+      <div class="column col-auto c-move" cdkDragHandle>
+        <i class="icon icon-resize-vert"></i>
+      </div>
       <!-- Name -->
       <div class="column">
         <div class="form-group">
           <label for="cm-name-{{ idx }}" class="form-label">Name</label>
-          <input
-            type="text"
-            name="name"
-            id="cm-name-{{ idx }}"
-            formControlName="name"
-            class="form-input"
-          />
+          <input type="text" name="name" id="cm-name-{{ idx }}" formControlName="name" class="form-input" />
         </div>
       </div>
 
@@ -19,14 +17,7 @@
       <div class="column">
         <div class="form-group">
           <label for="cm-value-{{ idx }}" class="form-label">Value</label>
-          <input
-            class="form-input"
-            type="number"
-            name="name"
-            id="cm-value-{{ idx }}"
-            formControlName="value"
-            step="0.01"
-          />
+          <input class="form-input" type="number" name="name" id="cm-value-{{ idx }}" formControlName="value" step="0.01" />
         </div>
       </div>
 
@@ -42,11 +33,7 @@
 
       <div class="column col-auto">
         <label class="form-label">Remove</label>
-        <button
-          class="btn btn-sm btn-error"
-          (click)="removeCurrencyLevel(idx)"
-          [disabled]="idx === 0"
-        >
+        <button class="btn btn-sm btn-error" (click)="removeCurrencyLevel(idx)">
           <i class="icon icon-cross"></i>
         </button>
       </div>

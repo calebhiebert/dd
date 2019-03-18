@@ -72,10 +72,6 @@ namespace net_api.Controllers
             if (campaign.CurrencyMap == null || campaign.CurrencyMap.Count == 0)
             {
                 campaign.CurrencyMap = new List<CurrencyLevel> { new CurrencyLevel { Name = "gp", UseInConversions = true, Value = 1 } };
-            } else if (campaign.CurrencyMap[0].Value != 1 || campaign.CurrencyMap[0].UseInConversions == false)
-            {
-                campaign.CurrencyMap[0].Value = 1;
-                campaign.CurrencyMap[0].UseInConversions = true;
             }
 
             return Ok(campaign);
@@ -122,13 +118,6 @@ namespace net_api.Controllers
             if (cmap == null || cmap.Count == 0)
             {
                 campaign.CurrencyMap = new List<CurrencyLevel> { new CurrencyLevel { Name = "gp", UseInConversions = true, Value = 1 } };
-            }
-            else if (campaign.CurrencyMap[0].Value != 1 || campaign.CurrencyMap[0].UseInConversions == false)
-            {
-                cmap[0].Value = 1;
-                cmap[0].UseInConversions = true;
-
-                campaign.CurrencyMap = cmap;
             }
 
             _context.Entry(campaign).State = EntityState.Modified;
@@ -182,13 +171,6 @@ namespace net_api.Controllers
             if (cmap == null || cmap.Count == 0)
             {
                 campaign.CurrencyMap = new List<CurrencyLevel> { new CurrencyLevel { Name = "gp", UseInConversions = true, Value = 1 } };
-            }
-            else if (campaign.CurrencyMap[0].Value != 1 || campaign.CurrencyMap[0].UseInConversions == false)
-            {
-                cmap[0].Value = 1;
-                cmap[0].UseInConversions = true;
-
-                campaign.CurrencyMap = cmap;
             }
 
             return CreatedAtAction("GetCampaign", new { id = campaign.Id }, campaign);
