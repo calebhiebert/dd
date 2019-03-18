@@ -3,7 +3,8 @@ import { ModalComponent } from 'src/app/modal/modal.component';
 import { CampaignService } from 'src/app/campaign.service';
 import { ArticleService, IArticle, ISearchedArticle } from 'src/app/article.service';
 import { FormControl } from '@angular/forms';
-import { debounce, debounceTime } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'dd-article-select',
@@ -47,7 +48,7 @@ export class ArticleSelectComponent implements OnInit {
     this.loading = false;
   }
 
-  public selectArticle(article: IArticle) {
+  public selectArticle(article: ISearchedArticle) {
     if (this._selectResolver) {
       this._selectResolver(article);
     } else {
@@ -61,7 +62,7 @@ export class ArticleSelectComponent implements OnInit {
     }
   }
 
-  public openArticleSelector(): Promise<IArticle> {
+  public openArticleSelector(): Promise<ISearchedArticle> {
     this.modal.open().then(() => {
       if (this._selectResolver) {
         this._selectResolver(null);
@@ -72,5 +73,34 @@ export class ArticleSelectComponent implements OnInit {
     return new Promise((resolve) => {
       this._selectResolver = resolve;
     });
+  }
+
+  public async createFromSearch() {
+    const confirmation = await Swal.fire({
+      titleText: 'Create a new article?',
+      text: `A new article with the name ${this.search.trim()} will be created`,
+    });
+
+    if (confirmation.value === true) {
+      try {
+        const newArticle = await this.articleService.createArticle({
+          name: this.search.trim(),
+          content: null,
+          userId: 'fake',
+          published: false,
+          tags: ['TODO'],
+          campaignId: this.campaignService.campaign.id,
+        });
+
+        this.search = newArticle.name;
+        this.load();
+      } catch (err) {
+        throw err;
+      }
+    }
+  }
+
+  public get editable() {
+    return this.campaignService.canEdit;
   }
 }

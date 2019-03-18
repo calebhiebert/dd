@@ -17,7 +17,7 @@ import { ToastrService } from 'ngx-toastr';
 import 'leaflet-draw';
 import { EntityViewMiniComponent } from '../entity/entity-view-mini/entity-view-mini.component';
 import { ArticleSelectComponent } from '../article/article-select/article-select.component';
-import { ArticleService, IArticle } from '../article.service';
+import { ArticleService, IArticle, ISearchedArticle } from '../article.service';
 import { ArticleViewMiniComponent } from '../article/article-view-mini/article-view-mini.component';
 import { IconService } from '../icon.service';
 import { DynComponentService } from '../dyn-component.service';
@@ -601,11 +601,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         }
         break;
       case MapEditorOperationType.LINK_ARTICLE:
-        const article = await this.articleSelect.openArticleSelector();
+        const article: ISearchedArticle = await this.articleSelect.openArticleSelector();
+
+        const fullArticle = await this.articleService.getArticle(article.id);
 
         if (article !== null) {
           await this.articleService.updateArticle({
-            ...article,
+            ...fullArticle,
             mapId: this._map.id,
             lat: event.latlng.lat,
             lng: event.latlng.lng,
