@@ -30,6 +30,7 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
   public currencyFieldConfig: IDynamicFieldConfig;
   public quantityFieldConfig: IDynamicFieldConfig;
   public isPurchasableFieldConfig: IDynamicFieldConfig;
+  public trackOnEntityFieldConfig: IDynamicFieldConfig;
 
   constructor(
     private router: Router,
@@ -44,6 +45,7 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
       quantity: new FormControl(this.articleConcept.quantity),
       currencyCost: new FormControl(this.articleConcept.currencyCost),
       isPurchasable: new FormControl(this.articleConcept.isPurchasable),
+      trackOnEntity: new FormControl(this.articleConcept.trackOnEntity),
     });
 
     this.formGroup.valueChanges
@@ -56,7 +58,9 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
           this.articleConcept.isPurchasable = val.isPurchasable;
           this.articleConcept.quantity = val.quantity;
           this.articleConcept.currencyCost = val.currencyCost;
+          this.articleConcept.trackOnEntity = val.trackOnEntity;
           this.save();
+          this.formGroup.markAsPristine();
         }
       });
 
@@ -79,6 +83,11 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
 
     this.isPurchasableFieldConfig = {
       name: 'Is Purchasable',
+      type: DynamicFieldType.BOOLEAN,
+    };
+
+    this.trackOnEntityFieldConfig = {
+      name: 'Track on entity',
       type: DynamicFieldType.BOOLEAN,
     };
   }
@@ -147,6 +156,10 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
 
   public get isPurchasable() {
     return this.formGroup.get('isPurchasable');
+  }
+
+  public get trackOnEntity() {
+    return this.formGroup.get('trackOnEntity');
   }
 
   /**

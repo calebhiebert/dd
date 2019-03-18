@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
 
@@ -16,11 +17,13 @@ namespace net_api.Controllers
     {
         private readonly Context _context;
         private readonly IAuthorizationService _auth;
+        private readonly IHubContext<UpdateHub> _hub;
 
-        public ArticleConceptsController(Context context, IAuthorizationService auth)
+        public ArticleConceptsController(Context context, IAuthorizationService auth, IHubContext<UpdateHub> hub)
         {
             _context = context;
             _auth = auth;
+            _hub = hub;
         }
 
         // GET: api/ArticleConcepts
@@ -114,7 +117,7 @@ namespace net_api.Controllers
             }
 
             // Check that the seller has enough of the concept
-            if (existingArticleConcept.Quantity != null && existingArticleConcept.Quantity - quantity <= 0)
+            if (existingArticleConcept.Quantity != null && existingArticleConcept.Quantity - quantity < 0)
             {
                 return BadRequest("not enough quantity to satisfy order");
             }
@@ -163,6 +166,9 @@ namespace net_api.Controllers
             _context.Entry(entity).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
+
+            await _hub.Clients.Group($"campaign-{entity.CampaignId}")
+                .SendAsync("EntityUpdate", entity);
 
             return NoContent();
         }

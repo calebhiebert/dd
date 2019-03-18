@@ -124,6 +124,7 @@ export interface IArticleConcept {
   conceptId: string;
   concept?: IConcept;
   isPurchasable: boolean;
+  trackOnEntity: boolean;
   currencyCost?: ICurrency;
   quantity?: number;
 }

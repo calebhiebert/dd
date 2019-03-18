@@ -99,7 +99,7 @@ export class CurrencyService {
       return false;
     }
 
-    for (const rct of Object.keys(b.values)) {
+    for (const rct of Object.keys(b.values).filter((k) => b.values[k] !== null && b.values[k] !== undefined)) {
       const requiredAmount = b.values[rct];
       const availableAmount = a.values[rct];
 

@@ -8,7 +8,7 @@
       </button>
     </div>
 
-    <div class="column col-auto mr-2">
+    <div class="column col-auto mr-2" [ngClass]="{ faded: articleConcept.quantity === 0 }">
       <!-- Actual Image -->
       <img
         class="s-rounded"
@@ -29,8 +29,9 @@
     </div>
 
     <!-- Name Column -->
-    <div class="column">
+    <div class="column" [ngClass]="{ faded: articleConcept.quantity === 0 }">
       {{ articleConcept.concept.name }}
+      <sup class="bold" *ngIf="articleConcept.quantity !== null">x{{ articleConcept.quantity }}</sup>
       <div class="d-inline-block ml-2" *ngIf="saving">
         <div class="loading"></div>
       </div>
@@ -58,8 +59,16 @@
       <div class="mt-2"></div>
       <dd-dynamic-field [config]="quantityFieldConfig" [control]="quantity"></dd-dynamic-field>
 
-      <!-- Is Purchasable -->
-      <dd-dynamic-field [config]="isPurchasableFieldConfig" [control]="isPurchasable"></dd-dynamic-field>
+      <div class="columns">
+        <div class="column">
+          <!-- Is Purchasable -->
+          <dd-dynamic-field [config]="isPurchasableFieldConfig" [control]="isPurchasable"></dd-dynamic-field>
+        </div>
+        <div class="column">
+          <!-- Track on entity -->
+          <dd-dynamic-field [config]="trackOnEntityFieldConfig" [control]="trackOnEntity"></dd-dynamic-field>
+        </div>
+      </div>
     </div>
 
     <!-- Expanded Content Column -->
@@ -69,13 +78,23 @@
 
     <!-- Purchase Column -->
     <div class="column col-auto col-ml-auto mt-2" *ngIf="articleConcept.isPurchasable && expanded">
-      <span class="mr-2" [ddCurrency]="articleConcept.currencyCost"></span>
-      <button class="btn mr-2" *ngFor="let e of entities" style="line-height: 0" [disabled]="!canAfford(e)" (click)="buy(e)">
-        <figure class="avatar avatar-sm">
-          <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}" alt="" />
-        </figure>
-        Buy for {{ e.name }}
-      </button>
+      <div class="columns col-gapless">
+        <div class="column col-auto mr-2">
+          <span class="mr-2" [ddCurrency]="articleConcept.currencyCost"></span>
+        </div>
+        <div class="column">
+          <div *ngFor="let e of entities">
+            <button class="btn mr-2" style="line-height: 0" [disabled]="!canAfford(e) || articleConcept.quantity === 0" (click)="buy(e)">
+              <figure class="avatar avatar-sm">
+                <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}" alt="" />
+              </figure>
+              Buy for {{ e.name }}
+            </button>
+            <p class="mb-0 form-input-hint" *ngIf="!canAfford(e)">{{ e.name }} cannot afford 1x {{ articleConcept.concept.name }}</p>
+            <p class="mb-0 form-input-hint" *ngIf="articleConcept.quantity === 0">{{ articleConcept.concept.name }} is out of stock</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

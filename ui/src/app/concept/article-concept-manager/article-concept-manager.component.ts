@@ -112,12 +112,14 @@ export class ArticleConceptManagerComponent implements OnInit {
         conceptId: concept.id,
         concept: concept,
         isPurchasable: false,
+        trackOnEntity: true,
       });
 
       await this.articleService.updateArticleConcept({
         articleId: this.article.id,
         conceptId: concept.id,
         isPurchasable: false,
+        trackOnEntity: true,
       });
     }
   }

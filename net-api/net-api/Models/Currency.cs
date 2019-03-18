@@ -31,12 +31,12 @@ namespace net_api.Models
         /// </summary>
         public static bool HasResources(CurrencyStore a, CurrencyStore b, bool trackCoins)
         {
-            if (trackCoins)
+            if (!trackCoins)
             {
                 return a.Value != null && b.Value != null && a.Value >= b.Value;
             }
 
-            foreach (var coinType in b.Values.Keys)
+            foreach (var coinType in b.Values.Keys.Where(k => b.Values[k] != null))
             {
                 var requirement = b.Values[coinType];
                 var available = a.Values[coinType];
