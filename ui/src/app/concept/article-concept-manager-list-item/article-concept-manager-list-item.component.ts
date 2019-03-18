@@ -129,6 +129,14 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
     }
   }
 
+  public async buy(entity: IEntity) {
+    try {
+      await this.articleService.buyArticleConcept(this.articleConcept, 1, entity.id);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   public get currencyCost() {
     return this.formGroup.get('currencyCost');
   }

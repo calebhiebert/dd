@@ -71,6 +71,12 @@ export class ArticleService {
       )
       .toPromise();
   }
+
+  public async buyArticleConcept(articleConcept: IArticleConcept, quantity: number, entityId: string): Promise<void> {
+    return this.http
+      .post<void>(`${environment.apiURL}/articleconcepts/buy?quantity=${quantity}&entityId=${entityId}`, articleConcept)
+      .toPromise();
+  }
 }
 
 export interface IArticle {

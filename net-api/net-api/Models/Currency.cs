@@ -59,7 +59,7 @@ namespace net_api.Models
         {
             var newCurrencyStore = new CurrencyStore();
 
-            if (trackCoins)
+            if (!trackCoins)
             {
                 if (a.Value == null)
                 {

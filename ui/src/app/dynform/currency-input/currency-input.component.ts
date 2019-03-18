@@ -88,6 +88,10 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
   }
 
   private mapCurrencyValuesToConfig(values: { [key: string]: number }, levels: ICurrencyLevel[]) {
+    if (values === null || values === undefined) {
+      values = {};
+    }
+
     return levels.map((lvl) => {
       const val = values[lvl.name];
 

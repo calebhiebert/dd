@@ -56,7 +56,7 @@ namespace net_api.Controllers
             return Ok(article.ArticleConcepts.Where(ac => ac.Concept.ConceptTypeId == conceptTypeId));
         }
 
-        [HttpPost("/buy")]
+        [HttpPost("buy")]
         public async Task<IActionResult> BuyArticleConcept(ArticleConcept articleConcept, [FromQuery] int? quantity, [FromQuery] Guid entityId)
         {
             if (quantity == null)
