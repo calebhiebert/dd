@@ -105,12 +105,19 @@ namespace net_api.Models
                         }
 
                         newCurrencyStore.Values[coinType] = v - subValue;
-                    } else
+                    } else if (subValue != 0)
                     {
                         newCurrencyStore.Values[coinType] = -subValue;
                     }
+                }
 
-                    var value = a.Values[coinType];
+                // Preserve unaffected values
+                foreach (var coinType in a.Values.Keys)
+                {
+                    if (!newCurrencyStore.Values.ContainsKey(coinType) && a.Values[coinType] != null)
+                    {
+                        newCurrencyStore.Values.Add(coinType, a.Values[coinType]);
+                    }
                 }
             }
 

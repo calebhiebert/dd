@@ -8,6 +8,7 @@ import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { LoginService } from 'src/app/login.service';
 import { CurrencyService } from 'src/app/currency.service';
 import { IEntity } from 'src/app/entity.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'dd-article-concept-manager-list-item',
@@ -37,7 +38,8 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
     private campaignService: CampaignService,
     private articleService: ArticleService,
     private login: LoginService,
-    private currencyService: CurrencyService
+    private currencyService: CurrencyService,
+    private toastrService: ToastrService
   ) {}
 
   ngOnInit() {
@@ -141,6 +143,18 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
   public async buy(entity: IEntity) {
     try {
       await this.articleService.buyArticleConcept(this.articleConcept, 1, entity.id);
+      const toast = this.toastrService.info(`${entity.name} purchased 1x ${this.articleConcept.concept.name}`);
+
+      toast.onTap.subscribe(() => {
+        this.router.navigate([
+          'campaigns',
+          this.campaignService.campaign.id,
+          'entities',
+          entity.id,
+          'ct',
+          this.articleConcept.concept.conceptTypeId,
+        ]);
+      });
     } catch (err) {
       throw err;
     }
