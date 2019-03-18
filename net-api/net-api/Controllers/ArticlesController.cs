@@ -88,6 +88,8 @@ namespace net_api.Controllers
             // TODO filter out article quests that should not be shown
             var articles = await query
                 .Include(a => a.ArticleQuests)
+                .Include(a => a.ArticleConcepts)
+                    .ThenInclude(ac => ac.Concept)
                 .ToListAsync();
 
             return Ok(articles.Select(a => new SearchedArticle(a, null)));
@@ -126,6 +128,8 @@ namespace net_api.Controllers
                     .ThenInclude(c => c.Members)
                 .Include(a => a.ArticleQuests)
                     .ThenInclude(aq => aq.Quest)
+                .Include(a => a.ArticleConcepts)
+                    .ThenInclude(ac => ac.Concept)
                 .FirstOrDefaultAsync();
 
             if (article == null)

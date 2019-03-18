@@ -92,7 +92,17 @@ export interface IArticle {
   icon?: string;
 }
 
-export interface ISearchedArticle extends IArticle {
+export interface ISearchedArticle {
+  id: string;
+  mapId?: string;
+  name: string;
+  published: boolean;
+  userId: string;
+  tags?: string[];
+  icon?: string;
+  questCount: number;
+  conceptTypeIds: string[];
+  hasQuests: boolean;
   imageURLs?: string[];
 }
 

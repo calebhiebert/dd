@@ -90,7 +90,6 @@ import { ConceptManagerComponent } from './concept/concept-manager/concept-manag
 import { ConceptListItemComponent } from './concept/concept-list-item/concept-list-item.component';
 import { ConceptViewComponent } from './concept/concept-view/concept-view.component';
 import { ConceptEntityManagerComponent } from './concept/concept-entity-manager/concept-entity-manager.component';
-import { CurrencyViewComponent } from './dynform/currency-view/currency-view.component';
 import { HttpErrorsComponent } from './http-errors/http-errors.component';
 import { HttpErrorInterceptor } from './http-error.interceptor';
 import { ErrorPageComponent } from './http-errors/error-page/error-page.component';
@@ -103,6 +102,7 @@ import { EntityPresetEditorComponent } from './entity/entity-preset-editor/entit
 import { ConceptEntityManagerListItemComponent } from './concept/concept-entity-manager-list-item/concept-entity-manager-list-item.component';
 import { ArticleConceptManagerComponent } from './concept/article-concept-manager/article-concept-manager.component';
 import { ArticleConceptManagerListItemComponent } from './concept/article-concept-manager-list-item/article-concept-manager-list-item.component';
+import { CurrencyDirective } from './currency.directive';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -188,7 +188,6 @@ import { ArticleConceptManagerListItemComponent } from './concept/article-concep
     ConceptListItemComponent,
     ConceptViewComponent,
     ConceptEntityManagerComponent,
-    CurrencyViewComponent,
     HttpErrorsComponent,
     ErrorPageComponent,
     UserViewNanoComponent,
@@ -200,6 +199,7 @@ import { ArticleConceptManagerListItemComponent } from './concept/article-concep
     ConceptEntityManagerListItemComponent,
     ArticleConceptManagerComponent,
     ArticleConceptManagerListItemComponent,
+    CurrencyDirective,
   ],
   imports: [
     BrowserModule,

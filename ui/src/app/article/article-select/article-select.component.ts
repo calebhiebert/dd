@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { CampaignService } from 'src/app/campaign.service';
-import { ArticleService, IArticle } from 'src/app/article.service';
+import { ArticleService, IArticle, ISearchedArticle } from 'src/app/article.service';
 import { FormControl } from '@angular/forms';
 import { debounce, debounceTime } from 'rxjs/operators';
 
@@ -12,7 +12,7 @@ import { debounce, debounceTime } from 'rxjs/operators';
 })
 export class ArticleSelectComponent implements OnInit {
   public loading = false;
-  public articles: IArticle[];
+  public articles: ISearchedArticle[];
 
   public searchControl: FormControl;
   public search: string;
@@ -22,20 +22,15 @@ export class ArticleSelectComponent implements OnInit {
 
   private _selectResolver: any;
 
-  constructor(
-    private campaignService: CampaignService,
-    private articleService: ArticleService
-  ) {}
+  constructor(private campaignService: CampaignService, private articleService: ArticleService) {}
 
   ngOnInit() {
     this.searchControl = new FormControl(null);
 
-    this.searchControl.valueChanges
-      .pipe(debounceTime(250))
-      .subscribe((search) => {
-        this.search = search;
-        this.load();
-      });
+    this.searchControl.valueChanges.pipe(debounceTime(250)).subscribe((search) => {
+      this.search = search;
+      this.load();
+    });
 
     this.load();
   }
@@ -44,12 +39,7 @@ export class ArticleSelectComponent implements OnInit {
     this.loading = true;
 
     try {
-      this.articles = await this.articleService.getArticles(
-        this.campaignService.campaign.id,
-        10,
-        0,
-        this.search ? this.search : null
-      );
+      this.articles = await this.articleService.getArticles(this.campaignService.campaign.id, 10, 0, this.search ? this.search : null);
     } catch (err) {
       throw err;
     }

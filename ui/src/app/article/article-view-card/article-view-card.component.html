@@ -7,14 +7,21 @@
       <div class="column">
         <div class="card-title h5">
           {{ article.name }}
-          <span class="label label-secondary" *ngIf="!article.published"
-            >Hidden</span
-          >
+          <span class="label label-secondary" *ngIf="!article.published">Hidden</span>
         </div>
       </div>
-      <div class="column col-auto" *ngIf="article.articleQuests.length > 0">
+
+      <!-- Concpt Icons -->
+      <div class="column col-auto d-flex align-items-center" *ngFor="let ics of iconSources">
+        <img [src]="ics" width="20" />
+      </div>
+
+      <!-- Quest Flag -->
+      <div class="column col-auto" *ngIf="article.hasQuests">
         <i class="icon icon-flag"></i>
       </div>
+
+      <!-- Location Icon -->
       <div class="column col-auto" *ngIf="article.mapId !== null">
         <i class="icon icon-location"></i>
       </div>

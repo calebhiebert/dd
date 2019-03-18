@@ -8,6 +8,26 @@
       </button>
     </div>
 
+    <div class="column col-auto mr-2">
+      <!-- Actual Image -->
+      <img
+        class="s-rounded"
+        width="30"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ articleConcept.concept.imageId }}"
+        *ngIf="articleConcept.concept.imageId"
+        style="margin-bottom: -0.075rem"
+      />
+
+      <!-- Placeholder Image -->
+      <img
+        class="s-rounded"
+        width="30"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/winged-sword"
+        *ngIf="!articleConcept.concept.imageId"
+        style="margin-bottom: -0.075rem"
+      />
+    </div>
+
     <!-- Name Column -->
     <div class="column">
       {{ articleConcept.concept.name }}
@@ -30,7 +50,7 @@
     </div>
 
     <!-- Data Input Column -->
-    <div class="column col-12" *ngIf="expanded">
+    <div class="column col-12" *ngIf="expanded && editable">
       <!-- Cost -->
       <dd-dynamic-field [config]="currencyFieldConfig" [control]="currencyCost"></dd-dynamic-field>
 
@@ -44,6 +64,12 @@
     <!-- Expanded Content Column -->
     <div class="column col-12" *ngIf="expanded">
       <dd-quill [value]="articleConcept.concept.content" readOnly="true"></dd-quill>
+    </div>
+
+    <!-- Purchase Column -->
+    <div class="column col-auto col-ml-auto mt-2" *ngIf="articleConcept.isPurchasable && expanded">
+      <span class="mr-2" [ddCurrency]="articleConcept.currencyCost"></span>
+      <button class="btn btn-primary">Buy</button>
     </div>
   </div>
 </div>

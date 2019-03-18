@@ -4,7 +4,6 @@ import { ArticleService, IArticleConcept, IArticle } from 'src/app/article.servi
 import { SearchFunction, DropdownItemGenerationFunction } from 'src/app/autocomplete/autocomplete.component';
 import { Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'dd-article-concept-manager',

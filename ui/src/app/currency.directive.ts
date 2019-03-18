@@ -1,26 +1,18 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ICurrencyLevel, CampaignService } from 'src/app/campaign.service';
-import { CurrencyService, IMappedCurrency } from 'src/app/currency.service';
+import { Directive, Input, HostBinding } from '@angular/core';
+import { CurrencyService, IMappedCurrency } from './currency.service';
+import { CampaignService } from './campaign.service';
 
-@Component({
-  selector: 'dd-currency-view',
-  templateUrl: './currency-view.component.html',
-  styleUrls: ['./currency-view.component.css'],
+@Directive({
+  selector: '[ddCurrency]',
 })
-export class CurrencyViewComponent implements OnInit {
-  @Input()
+export class CurrencyDirective {
+  @Input('ddCurrency')
   public currency: { value: number; values: { [key: string]: number } };
 
   @Input()
   public blankValue = 'nothing';
 
   constructor(private currencyService: CurrencyService, private campaignService: CampaignService) {}
-
-  ngOnInit() {
-    if (!this.levels) {
-      throw new Error('Missing levels!');
-    }
-  }
 
   public get sortedLevels() {
     if (this.levels) {
@@ -32,6 +24,7 @@ export class CurrencyViewComponent implements OnInit {
     }
   }
 
+  @HostBinding('innerHTML')
   public get text() {
     if (!this.currency) {
       return `<span class="currency-text">${this.blankValue}</span>`;

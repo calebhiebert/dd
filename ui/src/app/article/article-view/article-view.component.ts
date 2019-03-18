@@ -5,6 +5,7 @@ import { CampaignService } from 'src/app/campaign.service';
 import { Subscription } from 'rxjs';
 import { UpdateHubService } from 'src/app/update-hub.service';
 import { filter } from 'rxjs/operators';
+import { IConceptType } from 'src/app/concept.service';
 
 @Component({
   selector: 'dd-article-view',
@@ -16,6 +17,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
   public loadError: any;
   public article: IArticle;
   public questsExpanded = false;
+  public conceptTypesExpanded = {};
 
   private _updateSubscription: Subscription;
 
@@ -76,5 +78,23 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
 
   public get editable() {
     return this.campaignService.canEdit;
+  }
+
+  public get conceptTypes(): IConceptType[] {
+    if (this.article) {
+      const conceptTypes = {};
+
+      this.article.articleConcepts.forEach((ac) => {
+        if (!conceptTypes[ac.concept.conceptTypeId]) {
+          conceptTypes[ac.concept.conceptTypeId] = this.campaignService.campaign.conceptTypes.find(
+            (ct) => ct.id === ac.concept.conceptTypeId
+          );
+        }
+      });
+
+      return Object.values(conceptTypes);
+    } else {
+      return [];
+    }
   }
 }

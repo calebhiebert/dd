@@ -9,9 +9,7 @@
       <img
         class="s-rounded"
         width="64"
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{
-          concept.imageId
-        }}"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ concept.imageId }}"
         *ngIf="concept.imageId"
         alt="Item Picture"
       />
@@ -50,9 +48,7 @@
     <div class="column col-4 hide-md" *ngIf="concept.imageId">
       <img
         class="img-responsive s-rounded"
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
-          concept.imageId
-        }}"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{ concept.imageId }}"
         [alt]="'picture of' + concept.name"
       />
     </div>
@@ -64,11 +60,7 @@
       }"
     >
       <!-- Description -->
-      <dd-quill
-        [value]="concept.content"
-        readOnly="true"
-        *ngIf="concept.content"
-      ></dd-quill>
+      <dd-quill [value]="concept.content" readOnly="true" *ngIf="concept.content"></dd-quill>
       <p *ngIf="!concept.content" class="text-italic text-center">
         There is nothing here...
       </p>
@@ -81,10 +73,7 @@
 
       <!-- Tags -->
       <div class="big-space" *ngIf="concept.tags">
-        <div
-          class="label label-rounded mr-1 mb-1"
-          *ngFor="let t of concept.tags"
-        >
+        <div class="label label-rounded mr-1 mb-1" *ngFor="let t of concept.tags">
           {{ t }}
         </div>
       </div>
@@ -100,11 +89,7 @@
             <td>{{ fld.field.name }}</td>
             <td [ngSwitch]="fld.config.type">
               <!-- Currency Display -->
-              <span *ngSwitchCase="6">
-                <dd-currency-view
-                  [currency]="fld.field.value"
-                ></dd-currency-view>
-              </span>
+              <span *ngSwitchCase="6" [ddCurrency]="fld.field.value"></span>
               <span *ngSwitchDefault>
                 {{ fld.field.value }}
               </span>
@@ -115,15 +100,10 @@
     </div>
 
     <!-- Lower full size image -->
-    <div
-      class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2"
-      *ngIf="concept.imageId"
-    >
+    <div class="column col-md-8 col-xs-11 col-mx-auto show-md mt-2" *ngIf="concept.imageId">
       <img
         class="img-responsive s-rounded"
-        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{
-          concept.imageId
-        }}"
+        src="https://res.cloudinary.com/dqhk8k6iv/image/upload/w_500,q_auto:good,f_auto/{{ concept.imageId }}"
         [alt]="'picture of' + concept.name"
       />
     </div>

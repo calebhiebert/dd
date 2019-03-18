@@ -42,4 +42,20 @@
   <span class="fake-link" *ngIf="article && article.articleQuests.length > 0 && questsExpanded" (click)="questsExpanded = false"
     >Hide Quests</span
   >
+
+  <!-- Concept View -->
+  <div *ngFor="let ct of conceptTypes">
+    <h4>{{ ct.pluralForm }}</h4>
+    <span class="fake-link" *ngIf="!conceptTypesExpanded[ct.id]" (click)="conceptTypesExpanded[ct.id] = true"
+      >Show {{ ct.pluralForm }}</span
+    >
+    <dd-article-concept-manager
+      [conceptType]="ct"
+      [article]="article"
+      *ngIf="conceptTypesExpanded[ct.id] === true"
+    ></dd-article-concept-manager>
+    <span class="fake-link" *ngIf="conceptTypesExpanded[ct.id] === true" (click)="conceptTypesExpanded[ct.id] = false"
+      >Hide {{ ct.pluralForm }}</span
+    >
+  </div>
 </div>

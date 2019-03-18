@@ -3,7 +3,7 @@
   <div class="loading" *ngIf="loading"></div>
 
   <dd-autocomplete
-    placeholder="Add Concept"
+    placeholder="Add {{ conceptType.name }}"
     [doSearch]="doConceptSearch"
     [createItem]="createAutocompleteItem"
     (selection)="conceptSelected($event)"

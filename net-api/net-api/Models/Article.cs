@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace net_api.Models
 {
@@ -104,24 +105,44 @@ namespace net_api.Models
         }
     }
 
-    public class SearchedArticle : Article
+    public class SearchedArticle
     {
         public List<string> ImageURLs { get; set; }
 
+        public Guid Id { get; set; }
+        public Guid? MapId { get; set; }
+        public string Name { get; set; }
+        public bool Published { get; set; }
+        public string UserId { get; set; }
+        public string[] Tags { get; set; }
+        public string Icon { get; set; }
+        public int QuestCount { get; set; }
+        public Guid[] ConceptTypeIds { get; set; }
+        public bool HasQuests { get; set; }
+
         public SearchedArticle(Article article)
         {
-            this.CampaignId = article.CampaignId;
-            this.CreatedAt = article.CreatedAt;
             this.Id = article.Id;
-            this.Lat = article.Lat;
-            this.Lng = article.Lng;
             this.MapId = article.MapId;
             this.Name = article.Name;
             this.Published = article.Published;
             this.UserId = article.UserId;
             this.Tags = article.Tags;
-            this.ArticleQuests = article.ArticleQuests;
             this.Icon = article.Icon;
+
+            HasQuests = article.ArticleQuests != null && article.ArticleQuests.Count > 0;
+            
+            if (article.ArticleConcepts != null && article.ArticleConcepts.Count > 0)
+            {
+                ConceptTypeIds = article.ArticleConcepts
+                    .Where(ac => ac.Concept != null)
+                    .GroupBy(ac => ac.Concept.ConceptTypeId)
+                    .Select(ac => ac.Key)
+                    .ToArray();
+            } else
+            {
+                ConceptTypeIds = new Guid[0];
+            }
         }
 
         public SearchedArticle(Article article, string imgId) : this(article)
