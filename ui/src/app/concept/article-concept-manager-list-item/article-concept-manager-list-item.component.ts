@@ -5,6 +5,8 @@ import { CampaignService } from 'src/app/campaign.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
 import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { LoginService } from 'src/app/login.service';
+import { CurrencyService } from 'src/app/currency.service';
 
 @Component({
   selector: 'dd-article-concept-manager-list-item',
@@ -28,7 +30,13 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
   public quantityFieldConfig: IDynamicFieldConfig;
   public isPurchasableFieldConfig: IDynamicFieldConfig;
 
-  constructor(private router: Router, private campaignService: CampaignService, private articleService: ArticleService) {}
+  constructor(
+    private router: Router,
+    private campaignService: CampaignService,
+    private articleService: ArticleService,
+    private login: LoginService,
+    private currencyService: CurrencyService
+  ) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
@@ -122,5 +130,24 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
 
   public get isPurchasable() {
     return this.formGroup.get('isPurchasable');
+  }
+
+  public get canAfford() {
+    if (this.isPurchasable) {
+      return this.entities.some((e) => {
+        return (
+          e.preset.isCurrencyEnabled &&
+          this.currencyService.hasResources(e.currency, this.articleConcept.currencyCost, this.campaignService.campaign.trackCoins)
+        );
+      });
+    } else {
+      return false;
+    }
+  }
+
+  public get entities() {
+    return this.campaignService.campaign.entities.filter((e) => {
+      return !e.spawnable && e.spawnedFromId === null && e.userId === this.login.id;
+    });
   }
 }

@@ -120,7 +120,7 @@ export interface IEntity {
   spawnedFromId?: string;
   health?: IHealth;
   xp?: number;
-  currency?: { value?: number; values?: { [key: string]: number } };
+  currency?: ICurrency;
   entityPresetId: string;
   preset?: IEntityPreset;
   mapId?: string;

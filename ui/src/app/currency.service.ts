@@ -81,6 +81,75 @@ export class CurrencyService {
     return results;
   }
 
+  /**
+   * Checks to see if the currency a satisfies the requirements of currency b
+   */
+  public hasResources(a: ICurrency, b: ICurrency, trackCoins: boolean): boolean {
+    // Using simple currency mode
+    if (!trackCoins) {
+      return a.value !== null && a.value !== undefined && a.value >= b.value;
+    }
+
+    // Make sure a has values set
+    if (a.values === null || a.values === undefined || b.values === null || b.values === undefined) {
+      return false;
+    }
+
+    for (const rct of Object.keys(b.values)) {
+      const requiredAmount = b.values[rct];
+      const availableAmount = a.values[rct];
+
+      let satisfiesRequirements;
+
+      if (availableAmount === null || availableAmount === undefined) {
+        satisfiesRequirements = false;
+      } else {
+        satisfiesRequirements = availableAmount >= requiredAmount;
+      }
+
+      if (!satisfiesRequirements) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Returns a new currency that is the result of b subtracted from a
+   */
+  public subtract(a: ICurrency, b: ICurrency, trackCoins: boolean): ICurrency {
+    if (!trackCoins) {
+      return {
+        value: a.value - b.value,
+        values: null,
+      };
+    } else {
+      if (!a.values) {
+        a.values = {};
+      }
+
+      if (!b.values) {
+        b.values = {};
+      }
+
+      const currency: ICurrency = {
+        value: null,
+        values: {},
+      };
+
+      for (const coinType of Object.keys(b)) {
+        if (a.values[coinType]) {
+          currency.values[coinType] = a.values[coinType] - b.values[coinType];
+        } else {
+          currency.values[coinType] = -b.values[coinType];
+        }
+      }
+
+      return currency;
+    }
+  }
+
   public getCurrencyString(mappedValues: IMappedCurrency[]): string {
     return mappedValues.map((mv) => `${mv.amount}${mv.name}`).join(' ');
   }
