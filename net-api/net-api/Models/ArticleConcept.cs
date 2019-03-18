@@ -48,5 +48,10 @@ namespace net_api.Models
         }
 
         public int? Quantity { get; set; }
+
+        // If true, when purchased this concept will be tracked on the entity
+        // If false, currency will be deducted, but that's it
+        [Required]
+        public bool TrackOnEntity { get; set; }
     }
 }

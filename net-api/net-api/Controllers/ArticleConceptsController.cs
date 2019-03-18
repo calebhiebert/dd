@@ -56,6 +56,117 @@ namespace net_api.Controllers
             return Ok(article.ArticleConcepts.Where(ac => ac.Concept.ConceptTypeId == conceptTypeId));
         }
 
+        [HttpPost("/buy")]
+        public async Task<IActionResult> BuyArticleConcept(ArticleConcept articleConcept, [FromQuery] int? quantity, [FromQuery] Guid entityId)
+        {
+            if (quantity == null)
+            {
+                quantity = 1;
+            } else if (quantity <= 0)
+            {
+                return NoContent();
+            }
+
+            var existingArticleConcept = await _context.ArticleConcepts
+                .Where(ac => ac.ConceptId == articleConcept.ConceptId && ac.ArticleId == articleConcept.ArticleId)
+                .Include(ac => ac.Concept)
+                .FirstOrDefaultAsync();
+
+            if (existingArticleConcept == null)
+            {
+                return NotFound();
+            }
+
+            var entity = await _context.Entities
+                .Where(e => e.Id == entityId)
+                .Include(e => e.Preset)
+                .Include(e => e.Campaign)
+                .FirstOrDefaultAsync();
+
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, entity, "EntityEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            // Check that the concept can be bought
+            if (!existingArticleConcept.IsPurchasable)
+            {
+                return BadRequest("concept is not for purchase");
+            }
+
+            // Check that he seller has currency enabled
+            if (!entity.Preset.IsCurrencyEnabled)
+            {
+                return BadRequest("entity does not have currency enabled");
+            }
+
+            // Check that the buyer can afford this
+            if (!CurrencyStore.HasResources(entity.Currency, CurrencyStore.Multiply(existingArticleConcept.CurrencyCost, (int)quantity), entity.Campaign.TrackCoins))
+            {
+                return BadRequest("not enough currency");
+            }
+
+            // Check that the seller has enough of the concept
+            if (existingArticleConcept.Quantity != null && existingArticleConcept.Quantity - quantity <= 0)
+            {
+                return BadRequest("not enough quantity to satisfy order");
+            }
+
+            if (existingArticleConcept.TrackOnEntity && !entity.Preset.ConceptTypesEnabled.Contains(existingArticleConcept.Concept.ConceptTypeId))
+            {
+                return BadRequest("entity cannot have this concept type");
+            }
+
+            if (existingArticleConcept.Quantity != null)
+            {
+                // Make Updates
+                existingArticleConcept.Quantity -= quantity;
+                _context.Entry(existingArticleConcept).State = EntityState.Modified;
+            }
+
+            if (existingArticleConcept.TrackOnEntity)
+            {
+                var existingEntityConcept = await _context.ConceptEntities
+                    .Where(ce => ce.ConceptId == existingArticleConcept.ConceptId && ce.EntityId == entity.Id)
+                    .FirstOrDefaultAsync();
+
+                if (existingEntityConcept == null)
+                {
+                    var newEntityConcept = new ConceptEntity
+                    {
+                        ConceptId = articleConcept.ConceptId,
+                        EntityId = entity.Id,
+                        Quantity = quantity,
+                        SortValue = -1,
+                        Fields = new List<Field>(),
+                    };
+
+                    _context.ConceptEntities.Add(newEntityConcept);
+                } else
+                {
+                    existingEntityConcept.Quantity += quantity;
+                    _context.Entry(existingEntityConcept).State = EntityState.Modified;
+                }
+            }
+
+            entity.Currency = CurrencyStore.Subtract(
+                entity.Currency,
+                CurrencyStore.Multiply(existingArticleConcept.CurrencyCost, (int)quantity),
+                entity.Campaign.TrackCoins);
+            _context.Entry(entity).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         // PUT: api/ArticleConcepts
         [HttpPut]
         public async Task<IActionResult> PutArticleConcept(ArticleConcept articleConcept)
