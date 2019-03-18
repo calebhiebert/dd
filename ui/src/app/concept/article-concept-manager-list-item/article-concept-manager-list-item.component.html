@@ -1,4 +1,4 @@
-<div class="card p-1 pl-2 mt-1">
+<div class="card p-1 mt-1">
   <div class="columns col-gapless">
     <!-- Expand Control -->
     <div class="column col-auto mr-2">
@@ -77,27 +77,23 @@
 
     <!-- Expanded Content Column -->
     <div class="column col-12" *ngIf="expanded">
-      <dd-quill [value]="articleConcept.concept.content" readOnly="true"></dd-quill>
+      <dd-quill [value]="articleConcept.concept.content" readOnly="true" *ngIf="articleConcept.concept.content"></dd-quill>
+      <div class="text-center text-italic" *ngIf="!articleConcept.concept.content">
+        There is nothing here...
+      </div>
     </div>
 
     <!-- Purchase Column -->
     <div class="column col-auto col-ml-auto mt-2" *ngIf="articleConcept.isPurchasable && expanded">
-      <div class="columns col-gapless">
-        <div class="column col-auto mr-2 d-flex align-items-center" style="line-height: 0">
-          <span class="mr-2" [ddCurrency]="articleConcept.currencyCost"></span>
-        </div>
-        <div class="column">
-          <div *ngFor="let e of entities">
-            <button class="btn mr-2" style="line-height: 0" [disabled]="!canAfford(e) || articleConcept.quantity === 0" (click)="buy(e)">
-              <figure class="avatar avatar-sm">
-                <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}" alt="" />
-              </figure>
-              Buy for {{ e.name }}
-            </button>
-            <p class="mb-0 form-input-hint" *ngIf="!canAfford(e)">{{ e.name }} cannot afford 1x {{ articleConcept.concept.name }}</p>
-            <p class="mb-0 form-input-hint" *ngIf="articleConcept.quantity === 0">{{ articleConcept.concept.name }} is out of stock</p>
-          </div>
-        </div>
+      <div *ngFor="let e of entities">
+        <button class="btn ml-2" style="line-height: 0" [disabled]="!canAfford(e) || articleConcept.quantity === 0" (click)="buy(e)">
+          <figure class="avatar avatar-sm">
+            <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}" alt="" />
+          </figure>
+          Buy for {{ e.name }}
+        </button>
+        <!-- <p class="mb-0 form-input-hint" *ngIf="!canAfford(e)">{{ e.name }} cannot afford 1x {{ articleConcept.concept.name }}</p> -->
+        <!-- <p class="mb-0 form-input-hint" *ngIf="articleConcept.quantity === 0">{{ articleConcept.concept.name }} is out of stock</p> -->
       </div>
     </div>
   </div>
