@@ -170,6 +170,10 @@ namespace net_api.Controllers
             await _hub.Clients.Group($"campaign-{entity.CampaignId}")
                 .SendAsync("EntityUpdate", entity);
 
+            await _hub.Clients
+                .Group($"article-{articleConcept.ArticleId}")
+                .SendAsync("ConceptArticleUpdate", articleConcept);
+
             return NoContent();
         }
 
@@ -222,6 +226,10 @@ namespace net_api.Controllers
                 .Reference(aq => aq.Concept)
                 .LoadAsync();
 
+            await _hub.Clients
+                .Group($"article-{articleConcept.ArticleId}")
+                .SendAsync("ConceptArticleUpdate", articleConcept);
+
             return Ok(articleConcept);
         }
 
@@ -249,6 +257,10 @@ namespace net_api.Controllers
 
             _context.ArticleConcepts.Remove(articleConcept);
             await _context.SaveChangesAsync();
+
+            await _hub.Clients
+                .Group($"article-{articleConcept.ArticleId}")
+                .SendAsync("ConceptArticleDelete", articleConcept);
 
             return Ok(articleConcept);
         }

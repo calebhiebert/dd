@@ -3,7 +3,7 @@ import { IArticle, ArticleService } from 'src/app/article.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
 import { Subscription } from 'rxjs';
-import { UpdateHubService } from 'src/app/update-hub.service';
+import { UpdateHubService, ConnectionState } from 'src/app/update-hub.service';
 import { filter } from 'rxjs/operators';
 import { IConceptType } from 'src/app/concept.service';
 
@@ -32,6 +32,11 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       if (params.has('a_id')) {
+        if (this.article) {
+          this.updateHub.unsubscribeArticles([this.article.id]);
+        }
+
+        this.updateHub.subscribeArticles([params.get('a_id')]);
         this.article = undefined;
         this.load(params.get('a_id'));
       }
@@ -42,6 +47,10 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
       .subscribe((article) => {
         this.article = article;
       });
+
+    this.updateHub.stateUpdate.pipe(filter((s) => s === ConnectionState.CONNECTED)).subscribe(() => {
+      this.updateHub.subscribeArticles([this.route.snapshot.paramMap.get('a_id')]);
+    });
   }
 
   ngOnDestroy() {

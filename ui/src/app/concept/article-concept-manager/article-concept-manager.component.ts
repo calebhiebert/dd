@@ -1,16 +1,19 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { IConceptType, ConceptService, IConcept } from 'src/app/concept.service';
 import { ArticleService, IArticleConcept, IArticle } from 'src/app/article.service';
 import { SearchFunction, DropdownItemGenerationFunction } from 'src/app/autocomplete/autocomplete.component';
 import { Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
+import { UpdateHubService, ConnectionState } from 'src/app/update-hub.service';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'dd-article-concept-manager',
   templateUrl: './article-concept-manager.component.html',
   styleUrls: ['./article-concept-manager.component.css'],
 })
-export class ArticleConceptManagerComponent implements OnInit {
+export class ArticleConceptManagerComponent implements OnInit, OnDestroy {
   @Input()
   public conceptType: IConceptType;
 
@@ -27,11 +30,15 @@ export class ArticleConceptManagerComponent implements OnInit {
   public doConceptSearch: SearchFunction;
   public onConceptSelected: DropdownItemGenerationFunction;
 
+  private _conceptArticleUpdateSubscription: Subscription;
+  private _conceptArticleDeleteSubscription: Subscription;
+
   constructor(
     private articleService: ArticleService,
     private conceptService: ConceptService,
     private router: Router,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private update: UpdateHubService
   ) {}
 
   ngOnInit() {
@@ -40,7 +47,44 @@ export class ArticleConceptManagerComponent implements OnInit {
       return this.searchConcepts(search);
     };
 
+    this._conceptArticleDeleteSubscription = this.update.conceptArticleDelete.subscribe((ca: IArticleConcept) => {
+      if (this.articleConcepts) {
+        this.articleConcepts = this.articleConcepts.filter((ac) => {
+          const match = ac.articleId === ca.articleId && ac.conceptId === ca.conceptId;
+          return !match;
+        });
+      }
+    });
+
+    this._conceptArticleUpdateSubscription = this.update.conceptArticleUpdate
+      .pipe(
+        filter((cau) => {
+          return cau.articleId === this.article.id && cau.concept.conceptTypeId === this.conceptType.id;
+        })
+      )
+      .subscribe((ca: IArticleConcept) => {
+        if (this.articleConcepts) {
+          const existing = this.articleConcepts.find((eac) => eac.conceptId === ca.conceptId && eac.articleId === ca.articleId);
+
+          if (existing !== undefined) {
+            Object.assign(existing, ca);
+          } else {
+            this.articleConcepts.push(ca);
+          }
+        }
+      });
+
     this.load(this.conceptType.id);
+  }
+
+  ngOnDestroy() {
+    if (this._conceptArticleDeleteSubscription) {
+      this._conceptArticleDeleteSubscription.unsubscribe();
+    }
+
+    if (this._conceptArticleUpdateSubscription) {
+      this._conceptArticleUpdateSubscription.unsubscribe();
+    }
   }
 
   private async load(conceptTypeId: string) {

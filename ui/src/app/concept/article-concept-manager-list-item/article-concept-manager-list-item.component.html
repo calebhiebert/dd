@@ -37,6 +37,10 @@
       </div>
     </div>
 
+    <div class="column col-auto mr-2 d-flex align-items-center" *ngIf="articleConcept.isPurchasable" style="line-height: 0">
+      <span [ddCurrency]="articleConcept.currencyCost"></span>
+    </div>
+
     <!-- Controls Column -->
     <div class="column col-auto">
       <button class="btn btn-sm btn-link" (click)="doRemove()" *ngIf="editable">
@@ -79,7 +83,7 @@
     <!-- Purchase Column -->
     <div class="column col-auto col-ml-auto mt-2" *ngIf="articleConcept.isPurchasable && expanded">
       <div class="columns col-gapless">
-        <div class="column col-auto mr-2">
+        <div class="column col-auto mr-2 d-flex align-items-center" style="line-height: 0">
           <span class="mr-2" [ddCurrency]="articleConcept.currencyCost"></span>
         </div>
         <div class="column">

@@ -7,7 +7,7 @@ import { NotificationService } from './notification.service';
 import { IEntity, EntityService } from './entity.service';
 import { NoteService } from './note.service';
 import { ToastrService } from 'ngx-toastr';
-import { IArticle } from './article.service';
+import { IArticle, IArticleConcept } from './article.service';
 import { ICursorUpdate } from './quill/quill.component';
 import { IConceptEntity } from './concept.service';
 
@@ -40,6 +40,8 @@ export class UpdateHubService {
   public stateUpdate = new EventEmitter<ConnectionState>();
   public conceptEntityUpdate = new EventEmitter<IConceptEntity>();
   public conceptEntityDelete = new EventEmitter<IConceptEntity>();
+  public conceptArticleUpdate = new EventEmitter<IArticleConcept>();
+  public conceptArticleDelete = new EventEmitter<IArticleConcept>();
 
   constructor(
     private login: LoginService,
@@ -134,6 +136,14 @@ export class UpdateHubService {
 
     this.connection.on('RefreshCurrentCampaign', () => {
       this.campaignService.refreshCurrentCampaign();
+    });
+
+    this.connection.on('ConceptArticleUpdate', (ca) => {
+      this.conceptArticleUpdate.emit(ca);
+    });
+
+    this.connection.on('ConceptArticleDelete', (ca) => {
+      this.conceptArticleDelete.emit(ca);
     });
 
     await this.authenticate();
@@ -356,6 +366,24 @@ export class UpdateHubService {
     }
 
     await this.connection.invoke('NoteDeltaUpdate', noteId, delta);
+  }
+
+  public async subscribeArticles(articleIds: string[]) {
+    if (this.state !== ConnectionState.CONNECTED) {
+      console.warn('Not in connected state');
+      return;
+    }
+
+    await this.connection.invoke('SubscribeArticles', articleIds);
+  }
+
+  public async unsubscribeArticles(articleIds: string[]) {
+    if (this.state !== ConnectionState.CONNECTED) {
+      console.warn('Not in connected state');
+      return;
+    }
+
+    await this.connection.invoke('UnsubscribeArticles', articleIds);
   }
 
   public get state() {

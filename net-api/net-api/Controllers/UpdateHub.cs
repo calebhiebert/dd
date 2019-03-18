@@ -131,5 +131,21 @@ namespace net_api.Controllers
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"entity-{entityId.ToString()}");
             }
         }
+
+        public async Task SubscribeArticles(Guid[] articleIds)
+        {
+            foreach (var articleId in articleIds)
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, $"article-{articleId}");
+            }
+        }
+
+        public async Task UnsubscribeArticles(Guid[] articleIds)
+        {
+            foreach (var articleId in articleIds)
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"article-{articleId}");
+            }
+        }
     }
 }
