@@ -55,6 +55,17 @@ export class ArticleConceptManagerComponent implements OnInit {
     this.loading = false;
   }
 
+  private async createNewConcept(name: string) {
+    return this.conceptService.createConcept({
+      name: name,
+      userId: 'fake',
+      fields: [],
+      tags: ['TODO'],
+      isContainer: false,
+      conceptTypeId: this.conceptType.id,
+    });
+  }
+
   public async searchConcepts(search: string): Promise<any[]> {
     const concepts = await this.conceptService.getConcepts(this.conceptType.id, 5, 0, search);
 
@@ -62,11 +73,22 @@ export class ArticleConceptManagerComponent implements OnInit {
       return { ...c, value: c.name };
     });
 
+    if (search.trim().length > 0) {
+      mappedConcepts.push({
+        value: search,
+        id: 'create-new-concept',
+      });
+    }
+
     return mappedConcepts;
   }
 
   public createAutocompleteItem(item: any) {
-    return item.name;
+    if (item.id === 'create-new-concept') {
+      return `<span><i class="icon icon-plus"></i> ${item.value}</span>`;
+    } else {
+      return item.name;
+    }
   }
 
   public async remove(articleConcept: IArticleConcept) {
@@ -75,24 +97,29 @@ export class ArticleConceptManagerComponent implements OnInit {
   }
 
   public async conceptSelected(concept: IConcept | any) {
-    const existingArticleConcept = this.articleConcepts.find((ac) => ac.conceptId === concept.id);
+    if (concept.id === 'create-new-concept') {
+      const createdConcept = await this.createNewConcept(concept.value);
+      await this.conceptSelected(createdConcept);
+    } else {
+      const existingArticleConcept = this.articleConcepts.find((ac) => ac.conceptId === concept.id);
 
-    if (existingArticleConcept !== undefined) {
-      return;
+      if (existingArticleConcept !== undefined) {
+        return;
+      }
+
+      this.articleConcepts.push({
+        articleId: this.article.id,
+        conceptId: concept.id,
+        concept: concept,
+        isPurchasable: false,
+      });
+
+      await this.articleService.updateArticleConcept({
+        articleId: this.article.id,
+        conceptId: concept.id,
+        isPurchasable: false,
+      });
     }
-
-    this.articleConcepts.push({
-      articleId: this.article.id,
-      conceptId: concept.id,
-      concept: concept,
-      isPurchasable: false,
-    });
-
-    await this.articleService.updateArticleConcept({
-      articleId: this.article.id,
-      conceptId: concept.id,
-      isPurchasable: false,
-    });
   }
 
   public trackArticleConcept(idx: number, articleConcept: IArticleConcept) {
