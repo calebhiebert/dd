@@ -12,19 +12,19 @@
       <!-- Actual Image -->
       <img
         class="s-rounded"
-        width="30"
+        width="28"
         src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ articleConcept.concept.imageId }}"
         *ngIf="articleConcept.concept.imageId"
-        style="margin-bottom: -0.075rem"
+        style="margin-bottom: -0.26rem; margin-top: 0.04rem"
       />
 
       <!-- Placeholder Image -->
       <img
         class="s-rounded"
-        width="30"
+        width="28"
         src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/winged-sword"
         *ngIf="!articleConcept.concept.imageId"
-        style="margin-bottom: -0.075rem"
+        style="margin-bottom: -0.26rem; margin-top: 0.04rem"
       />
     </div>
 
@@ -86,8 +86,8 @@
     <!-- Purchase Column -->
     <div class="column col-auto col-ml-auto mt-2" *ngIf="articleConcept.isPurchasable && expanded">
       <div *ngFor="let e of entities">
-        <button class="btn ml-2" style="line-height: 0" [disabled]="!canAfford(e) || articleConcept.quantity === 0" (click)="buy(e)">
-          <figure class="avatar avatar-sm">
+        <button class="btn btn-sm ml-2" style="line-height: 1" [disabled]="!canAfford(e) || articleConcept.quantity === 0" (click)="buy(e)">
+          <figure class="avatar avatar-xs">
             <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}" alt="" />
           </figure>
           Buy for {{ e.name }}
