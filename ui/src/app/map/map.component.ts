@@ -323,7 +323,16 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             iconUrl: this.iconService.getIconSrc(article.icon),
             iconSize: [40, 40],
             iconAnchor: [20, 20],
-            popupAnchor: [0, -23],
+            popupAnchor: [0, -20],
+          })
+        );
+      } else {
+        marker.setIcon(
+          L.icon({
+            iconUrl: '/assets/position-marker.png',
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            popupAnchor: [0, -40],
           })
         );
       }

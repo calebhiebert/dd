@@ -92,8 +92,15 @@ export class ArticleSelectComponent implements OnInit {
           campaignId: this.campaignService.campaign.id,
         });
 
-        this.search = newArticle.name;
-        this.load();
+        this.selectArticle({
+          id: newArticle.id,
+          name: newArticle.name,
+          published: newArticle.published,
+          userId: newArticle.userId,
+          questCount: 0,
+          conceptTypeIds: [],
+          hasQuests: false,
+        });
       } catch (err) {
         throw err;
       }
@@ -102,5 +109,9 @@ export class ArticleSelectComponent implements OnInit {
 
   public get editable() {
     return this.campaignService.canEdit;
+  }
+
+  public get showCreateSuggestion() {
+    return this.articles && this.search && this.articles.length > 0 && this.search.trim().length > 2;
   }
 }

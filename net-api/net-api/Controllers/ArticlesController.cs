@@ -113,7 +113,7 @@ namespace net_api.Controllers
                 articleQuery = articleQuery.Where(a => a.Published == true);
             }
 
-            var articles = await articleQuery.Select(a => new SearchedArticle(a)).ToListAsync();
+            var articles = await articleQuery.ToListAsync();
 
             return Ok(articles);
         }

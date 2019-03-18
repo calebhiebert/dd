@@ -13,6 +13,9 @@
     <div class="card p-1 hoverable mb-1" *ngFor="let a of articles" (click)="selectArticle(a)">
       {{ a.name }}
     </div>
+    <div class="card p-1 hoverable" (click)="createFromSearch()" *ngIf="showCreateSuggestion">
+      <span><i class="icon icon-plus"></i> {{ search }}</span>
+    </div>
 
     <!-- Empty Search -->
     <div class="empty" *ngIf="articles && articles.length === 0">
