@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Input, Output, ViewChild, forwardRef } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild, forwardRef } from '@angular/core';
 import { IconService, IIcon } from '../icon.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ModalComponent } from '../custom-controls/modal/modal.component';
@@ -68,6 +68,21 @@ export class IconPickerComponent implements OnInit, ControlValueAccessor {
     }
 
     this._icon = icon.id;
+
+    try {
+      this._modal.close(null);
+    } catch (err) {
+      // Ignore modal close errors
+    }
+  }
+
+  public clear() {
+    this.selected.emit(null);
+    this._icon = null;
+
+    if (this._onChange) {
+      this._onChange(null);
+    }
 
     try {
       this._modal.close(null);

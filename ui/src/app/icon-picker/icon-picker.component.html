@@ -1,21 +1,16 @@
 <dd-modal #modal size="small">
+  <div modal-header>
+    <span class="fake-link" (click)="clear()">Clear Icon</span>
+  </div>
   <div modal-body>
     <div class="columns">
-      <div
-        class="column col-3 hoverable text-center"
-        *ngFor="let i of icons; trackBy: trackIcon"
-        (click)="selectIcon(i)"
-      >
+      <div class="column col-3 hoverable text-center" *ngFor="let i of icons; trackBy: trackIcon" (click)="selectIcon(i)">
         <img [src]="i.src" />
       </div>
     </div>
   </div>
 </dd-modal>
 
-<div
-  class="picker-box"
-  [ngClass]="{ disabled: isDisabled }"
-  (click)="openPicker()"
->
+<div class="picker-box" [ngClass]="{ disabled: isDisabled }" (click)="openPicker()">
   <img *ngIf="selectedIconSrc" [src]="selectedIconSrc" />
 </div>

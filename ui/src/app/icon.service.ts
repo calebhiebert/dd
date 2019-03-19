@@ -23,6 +23,11 @@ export class IconService {
     'sharp-shuriken',
     'swap-bag',
     'radar-sweep',
+    'ship-wheel',
+    'coffee-cup',
+    'cheese-wedge',
+    'cancel',
+    'donut',
   ];
 
   constructor() {}
