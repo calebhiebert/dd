@@ -13,6 +13,9 @@
       <div class="card p-1 my-1 hoverable" *ngFor="let sr of searchResults; trackBy: trackConcept" (click)="picker.close(sr)">
         <dd-concept-list-item [concept]="sr" [imageSize]="25"></dd-concept-list-item>
       </div>
+      <div class="card p-1 my-1 hoverable" *ngIf="searchControl.value && searchControl.value.trim().length > 2" (click)="createConcept()">
+        <span><i class="icon icon-plus"></i> {{ searchControl.value }}</span>
+      </div>
     </div>
 
     <!-- Empty State -->
