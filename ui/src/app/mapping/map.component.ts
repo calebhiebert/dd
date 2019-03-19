@@ -622,20 +622,39 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         }
         break;
       case MapEditorOperationType.LINK_ARTICLE:
-        const article: ISearchedArticle = await this.articleSelect.openSelector();
+        const article: ISelectOption = await this.articleSelect.openSelector();
 
-        const fullArticle = await this.articleService.getArticle(article.id);
-
-        if (article !== null) {
-          await this.articleService.updateArticle({
-            ...fullArticle,
+        if (article.value.id === 'create-new-article') {
+          const createdArticle = await this.articleService.createArticle({
+            name: article.value.name,
+            content: null,
+            campaignId: this.campaignService.campaign.id,
+            userId: 'fake',
+            published: false,
+            tags: ['TODO'],
             mapId: this._map.id,
             lat: event.latlng.lat,
             lng: event.latlng.lng,
           });
 
-          this.toast.info(`Linked article ${article.name}`);
+          this.addArticleToMap(createdArticle);
+
+          this.toast.info(`Created and linked article ${createdArticle.name}`);
+        } else {
+          const fullArticle = await this.articleService.getArticle(article.value.id);
+
+          if (article !== null) {
+            await this.articleService.updateArticle({
+              ...fullArticle,
+              mapId: this._map.id,
+              lat: event.latlng.lat,
+              lng: event.latlng.lng,
+            });
+
+            this.toast.info(`Linked article ${article.value.name}`);
+          }
         }
+
         break;
       case MapEditorOperationType.PLACE_SHAPELY_NOTE:
         const shape = await this.getDrawnShape();
@@ -656,11 +675,39 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   public async getArticleSelectionList(search: string): Promise<ISelectOption[]> {
     const articles = await this.articleService.getArticles(this.campaignService.campaign.id, 6, 0, search);
 
-    return articles.map((a) => {
+    const mappedArticles: ISelectOption[] = articles.map((a) => {
       return {
         value: a,
         displayHtml: a.name,
       };
+    });
+
+    if (search && search.trim().length > 2 && mappedArticles.length > 0) {
+      mappedArticles.push({
+        displayHtml: `<span><i class="icon icon-plus"></i> ${search}</span>`,
+        value: {
+          id: 'create-new-article',
+          name: search,
+        },
+      });
+    }
+
+    return mappedArticles;
+  }
+
+  public async createNewArticle(name: string) {
+    const article = await this.articleService.createArticle({
+      name: name,
+      content: null,
+      campaignId: this.campaignService.campaign.id,
+      userId: 'fake',
+      published: false,
+      tags: ['TODO'],
+    });
+
+    this.articleSelect.select({
+      displayHtml: '',
+      value: article,
     });
   }
 

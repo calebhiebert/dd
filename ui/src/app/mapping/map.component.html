@@ -1,4 +1,17 @@
-<dd-selector-popup #articleselect [searchable]="true" [loadSelectItems]="loadSelectItems"></dd-selector-popup>
+<dd-selector-popup #articleselect [searchable]="true" [loadSelectItems]="loadSelectItems">
+  <div empty>
+    <div class="empty-icon">
+      <i class="icon icon-search icon-4x"></i>
+    </div>
+    <div class="empty-title h5">There's nothing here</div>
+    <div class="empty-subtitle" *ngIf="editable">
+      Click the button below to create a new article
+    </div>
+    <div class="empty-action">
+      <button class="btn btn-primary" (click)="createNewArticle(articleselect.search)">Create {{ articleselect.search }}</button>
+    </div>
+  </div>
+</dd-selector-popup>
 <dd-selector-popup #entityselect></dd-selector-popup>
 
 <div class="map-container">
