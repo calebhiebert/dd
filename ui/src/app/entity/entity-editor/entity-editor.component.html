@@ -86,7 +86,7 @@
         </div>
 
         <!-- Currency -->
-        <dd-dynamic-field [config]="currencyConfig" [control]="currency"></dd-dynamic-field>
+        <dd-dynamic-field [config]="currencyConfig" [control]="currency" *ngIf="preset.isCurrencyEnabled"></dd-dynamic-field>
 
         <!-- Health -->
         <div

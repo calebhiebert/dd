@@ -6,11 +6,11 @@ const PHRASE_VERB: string[] = [
   'Ripening',
   'Planting',
   'Cooking',
-  'Generating',
   'Loading',
-  'Spinning up',
   'Computing',
-  'Slurping'
+  'Slurping',
+  'Destroying',
+  'Demolishing',
 ];
 
 const PHRASE_NOUN: string[] = [
@@ -19,18 +19,18 @@ const PHRASE_NOUN: string[] = [
   'pumpkins',
   'dank memes',
   'characters',
-  'the meaning of life',
   'dinner',
   'a smoothie',
   'chocolate cake',
   'gloves',
-  'a water bottle'
+  'a water bottle',
+  'an absolute unit',
 ];
 
 @Component({
   selector: 'dd-phraser',
   templateUrl: './phraser.component.html',
-  styleUrls: ['./phraser.component.css']
+  styleUrls: ['./phraser.component.css'],
 })
 export class PhraserComponent implements OnInit {
   public phrase: string;
@@ -46,9 +46,7 @@ export class PhraserComponent implements OnInit {
   }
 
   private generatePhrase() {
-    this.phrase = `${
-      PHRASE_VERB[this.chance.integer({ min: 0, max: PHRASE_VERB.length - 1 })]
-    } ${
+    this.phrase = `${PHRASE_VERB[this.chance.integer({ min: 0, max: PHRASE_VERB.length - 1 })]} ${
       PHRASE_NOUN[this.chance.integer({ min: 0, max: PHRASE_NOUN.length - 1 })]
     }`;
 
