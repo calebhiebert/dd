@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalComponent } from 'src/app/modal/modal.component';
 import { CampaignService } from 'src/app/campaign.service';
 import { ArticleService, IArticle, ISearchedArticle } from 'src/app/article.service';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 
 @Component({
   selector: 'dd-article-select',

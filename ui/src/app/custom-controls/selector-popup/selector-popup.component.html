@@ -1,0 +1,20 @@
+<dd-modal #modal>
+  <h5 modal-header>
+    {{ title }}
+  </h5>
+  <div modal-body>
+    <!-- Search Search -->
+    <div class="has-icon-right mb-1" *ngIf="searchable">
+      <input type="text" class="form-input" placeholder="Search" [formControl]="searchControl" />
+      <i class="form-icon loading" *ngIf="loading"></i>
+    </div>
+
+    <!-- List -->
+    <div class="card p-1 hoverable mb-1" *ngFor="let si of selectItems" (click)="select(si)" [innerHTML]="si.displayHtml"></div>
+
+    <!-- Empty Search -->
+    <div class="empty" *ngIf="selectItems && selectItems.length === 0">
+      <ng-content select="[empty]"></ng-content>
+    </div>
+  </div>
+</dd-modal>

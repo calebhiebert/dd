@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalComponent } from 'src/app/modal/modal.component';
 import { LoginService } from 'src/app/login.service';
+import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 
 @Component({
   selector: 'dd-login-status',

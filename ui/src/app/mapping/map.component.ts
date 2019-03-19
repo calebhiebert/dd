@@ -11,16 +11,15 @@ import { LoginService } from '../login.service';
 import { NoteViewMiniComponent } from '../note/note-view-mini/note-view-mini.component';
 import { Subscription } from 'rxjs';
 import { IEntity, EntityService } from '../entity.service';
-import { EditableEntitySelectorComponent } from '../entity/editable-entity-selector/editable-entity-selector.component';
 import { UpdateHubService } from '../update-hub.service';
 import { ToastrService } from 'ngx-toastr';
 import 'leaflet-draw';
 import { EntityViewMiniComponent } from '../entity/entity-view-mini/entity-view-mini.component';
-import { ArticleSelectComponent } from '../article/article-select/article-select.component';
 import { ArticleService, IArticle, ISearchedArticle } from '../article.service';
 import { ArticleViewMiniComponent } from '../article/article-view-mini/article-view-mini.component';
 import { IconService } from '../icon.service';
 import { DynComponentService } from '../dyn-component.service';
+import { SelectorPopupComponent, ISelectOption } from '../custom-controls/selector-popup/selector-popup.component';
 
 const ownNoteIcon = L.icon({
   iconUrl: '/assets/note-icon.png',
@@ -55,10 +54,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private editor: MapEditorMenuComponent;
 
   @ViewChild('entityselect')
-  private entitySelect: EditableEntitySelectorComponent;
+  private entitySelect: SelectorPopupComponent;
 
   @ViewChild('articleselect')
-  private articleSelect: ArticleSelectComponent;
+  private articleSelect: SelectorPopupComponent;
 
   private _map: IMap;
   private _notesLayerGroup: any;
@@ -82,6 +81,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private _queryLatLng: any[];
 
   public loading = false;
+  public loadSelectItems: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -96,7 +96,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     private toast: ToastrService,
     private articleService: ArticleService,
     private iconService: IconService
-  ) {}
+  ) {
+    this.loadSelectItems = (search) => {
+      return this.getArticleSelectionList(search);
+    };
+  }
 
   ngAfterViewInit() {
     // The note service emits an event every time a note is created
@@ -595,7 +599,15 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         if (entities.length === 1) {
           entity = entities[0];
         } else {
-          entity = await this.entitySelect.selectEntity();
+          const entityList = this.campaignService.editableEntities.slice().filter((e) => e.spawnable === false);
+          entity = await this.entitySelect.openSelector(
+            entityList.map((e) => {
+              return {
+                value: e,
+                displayHtml: e.name,
+              };
+            })
+          );
         }
 
         if (entity) {
@@ -610,7 +622,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         }
         break;
       case MapEditorOperationType.LINK_ARTICLE:
-        const article: ISearchedArticle = await this.articleSelect.openArticleSelector();
+        const article: ISearchedArticle = await this.articleSelect.openSelector();
 
         const fullArticle = await this.articleService.getArticle(article.id);
 
@@ -639,6 +651,17 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         }
         break;
     }
+  }
+
+  public async getArticleSelectionList(search: string): Promise<ISelectOption[]> {
+    const articles = await this.articleService.getArticles(this.campaignService.campaign.id, 6, 0, search);
+
+    return articles.map((a) => {
+      return {
+        value: a,
+        displayHtml: a.name,
+      };
+    });
   }
 
   public get notes() {

@@ -6,10 +6,10 @@ import { EntityService, IEntityPreset } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 import { IEntityAttributePreset, EntityAttributePresetsService } from 'src/app/entity-attribute-presets.service';
-import { ModalComponent } from 'src/app/modal/modal.component';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { FieldDefinitionFormComponent } from 'src/app/dynform/field-definition-form/field-definition-form.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 
 @Component({
   selector: 'dd-entity-preset-editor',

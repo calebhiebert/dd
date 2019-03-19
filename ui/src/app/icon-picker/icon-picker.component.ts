@@ -1,15 +1,7 @@
-import {
-  Component,
-  OnInit,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-  forwardRef,
-} from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, ViewChild, forwardRef } from '@angular/core';
 import { IconService, IIcon } from '../icon.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ModalComponent } from '../modal/modal.component';
+import { ModalComponent } from '../custom-controls/modal/modal.component';
 
 @Component({
   selector: 'dd-icon-picker',

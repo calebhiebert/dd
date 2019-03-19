@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { IConceptType, ConceptService, IConceptEntity, IConcept } from 'src/app/concept.service';
 import { IEntity, EntityService } from 'src/app/entity.service';
-import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CampaignService } from 'src/app/campaign.service';
@@ -11,6 +10,7 @@ import { UpdateHubService } from 'src/app/update-hub.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoginService } from 'src/app/login.service';
+import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 
 @Component({
   selector: 'dd-concept-entity-manager',

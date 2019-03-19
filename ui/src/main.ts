@@ -5,18 +5,6 @@ import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import * as Sentry from '@sentry/browser';
 
-import Quill from 'quill';
-
-import BlotFormatter from 'quill-blot-formatter';
-import Mention from 'quill-mention';
-import ImageUploader from 'quill-image-uploader';
-import QuillCursors from 'quill-cursors';
-
-Quill.register('modules/blotFormatter', BlotFormatter);
-Quill.register('modules/mention', Mention);
-Quill.register('modules/imageUploader', ImageUploader);
-Quill.register('modules/cursors', QuillCursors);
-
 if (environment.production) {
   enableProdMode();
 

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup, FormArray, FormControl, ValidatorFn, ValidationErrors, Validators, AbstractControl } from '@angular/forms';
 import { ICampaign } from 'src/app/campaign.service';
 import { XpTablePresetsService, IXPTablePreset } from 'src/app/xp-table-presets.service';
-import { ModalComponent } from 'src/app/modal/modal.component';
+import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 
 // TODO move this to a validators file or something
 export const xpTest: ValidatorFn = (control: FormArray): ValidationErrors | null => {

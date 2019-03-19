@@ -1,17 +1,10 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  EventEmitter,
-  Output,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { INote } from 'src/app/note.service';
-import { ICursorUpdate } from 'src/app/quill/quill.component';
 import { LoginService } from 'src/app/login.service';
 import { UpdateHubService, ConnectionState } from 'src/app/update-hub.service';
 import { filter } from 'rxjs/operators';
+import { ICursorUpdate } from 'src/app/custom-controls/quill/quill.component';
 
 @Component({
   selector: 'dd-note-form',
@@ -51,10 +44,7 @@ export class NoteFormComponent implements OnInit, OnDestroy {
   @Input()
   public advancedEditable = false;
 
-  constructor(
-    private login: LoginService,
-    private updateHub: UpdateHubService
-  ) {}
+  constructor(private login: LoginService, private updateHub: UpdateHubService) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
@@ -81,17 +71,13 @@ export class NoteFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.updateHub.cursorUpdate
-      .pipe(filter((cu) => cu.noteId === this.note.id))
-      .subscribe((cu) => {
-        this.cursorUpdates.emit(cu);
-      });
+    this.updateHub.cursorUpdate.pipe(filter((cu) => cu.noteId === this.note.id)).subscribe((cu) => {
+      this.cursorUpdates.emit(cu);
+    });
 
-    this.updateHub.noteDeltaUpdate
-      .pipe(filter((ndu) => ndu.id === this.note.id))
-      .subscribe((ndu) => {
-        this.deltaUpdates.emit(ndu.delta);
-      });
+    this.updateHub.noteDeltaUpdate.pipe(filter((ndu) => ndu.id === this.note.id)).subscribe((ndu) => {
+      this.deltaUpdates.emit(ndu.delta);
+    });
   }
 
   ngOnDestroy() {

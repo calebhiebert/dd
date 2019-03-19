@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CampaignService } from 'src/app/campaign.service';
-import { ModalComponent } from 'src/app/modal/modal.component';
 import { IEntity } from 'src/app/entity.service';
+import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 
 @Component({
   selector: 'dd-editable-entity-selector',
@@ -35,9 +35,7 @@ export class EditableEntitySelectorComponent implements OnInit {
     if (this._entityOverride) {
       return this._entityOverride;
     } else {
-      return this.campaignService.editableEntities
-        .slice()
-        .filter((e) => e.spawnable === false);
+      return this.campaignService.editableEntities.slice().filter((e) => e.spawnable === false);
     }
   }
 }

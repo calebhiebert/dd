@@ -18,9 +18,6 @@ import { QuestFormComponent } from './quest/quest-form/quest-form.component';
 import { QuestViewComponent } from './quest/quest-view/quest-view.component';
 import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-manager.component';
 import { OverviewComponent } from './session/overview/overview.component';
-import { MapComponent } from './map/map.component';
-import { MapUploadComponent } from './map/map-upload/map-upload.component';
-import { MapManagerComponent } from './map/map-manager/map-manager.component';
 import { ArticleEditorComponent } from './article/article-editor/article-editor.component';
 import { ArticleViewComponent } from './article/article-view/article-view.component';
 import { ArticleManagerComponent } from './article/article-manager/article-manager.component';
@@ -249,24 +246,7 @@ const routes: Routes = [
       },
       {
         path: 'maps',
-        component: MapManagerComponent,
-        data: {
-          breadcrumb: 'Maps',
-        },
-      },
-      {
-        path: 'maps/upload',
-        component: MapUploadComponent,
-        data: {
-          breadcrumb: 'Upload Map',
-        },
-      },
-      {
-        path: 'maps/:m_id',
-        component: MapComponent,
-        data: {
-          breadcrumb: 'Map View',
-        },
+        loadChildren: './mapping/mapping.module#MappingModule',
       },
       {
         path: 'articles',

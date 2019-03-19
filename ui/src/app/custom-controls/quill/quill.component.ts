@@ -1,20 +1,30 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterContentInit, Input, forwardRef, EventEmitter, Output } from '@angular/core';
 import Quill from 'quill';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { CampaignService } from '../campaign.service';
 import { Router } from '@angular/router';
-import { ArticleService } from '../article.service';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import Tooltip from 'tooltip.js';
 
-import { LoginService } from '../login.service';
 import { environment } from 'src/environments/environment';
-import { SearchService, SearchObjectType } from '../search.service';
-import { DynComponentService } from '../dyn-component.service';
 import { Chance } from 'chance';
-import { UserViewMiniComponent } from '../account/user-view-mini/user-view-mini.component';
-import { IconService } from '../icon.service';
+import { CampaignService } from 'src/app/campaign.service';
+import { ArticleService } from 'src/app/article.service';
+import { LoginService } from 'src/app/login.service';
+import { SearchService, SearchObjectType } from 'src/app/search.service';
+import { DynComponentService } from 'src/app/dyn-component.service';
+import { IconService } from 'src/app/icon.service';
+import { UserViewMiniComponent } from 'src/app/account/user-view-mini/user-view-mini.component';
+
+import BlotFormatter from 'quill-blot-formatter';
+import Mention from 'quill-mention';
+import ImageUploader from 'quill-image-uploader';
+import QuillCursors from 'quill-cursors';
+
+Quill.register('modules/blotFormatter', BlotFormatter);
+Quill.register('modules/mention', Mention);
+Quill.register('modules/imageUploader', ImageUploader);
+Quill.register('modules/cursors', QuillCursors);
 
 @Component({
   selector: 'dd-quill',

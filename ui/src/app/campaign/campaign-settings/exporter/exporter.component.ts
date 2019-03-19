@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormGroup, FormControl } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { CampaignService } from 'src/app/campaign.service';
 import { IConceptType } from 'src/app/concept.service';
+import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 
 @Component({
   selector: 'dd-exporter',
@@ -24,7 +24,7 @@ export class ExporterComponent implements OnInit {
 
   private _conceptTypes: IConceptType[];
 
-  constructor(private campaignService: CampaignService) { }
+  constructor(private campaignService: CampaignService) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
@@ -43,9 +43,7 @@ export class ExporterComponent implements OnInit {
   }
 
   public get exportLink() {
-    let link = `${environment.apiURL}/export?campaignId=${
-      this.campaignService.campaign.id
-      }`;
+    let link = `${environment.apiURL}/export?campaignId=${this.campaignService.campaign.id}`;
 
     const v = this.formGroup.value;
 

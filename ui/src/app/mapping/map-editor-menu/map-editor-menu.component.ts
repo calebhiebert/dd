@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalComponent } from 'src/app/modal/modal.component';
 import { CampaignService } from 'src/app/campaign.service';
+import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 
 export interface IMapEditorOperation {
   type: MapEditorOperationType;

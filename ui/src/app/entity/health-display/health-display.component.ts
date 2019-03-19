@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 import { IHealth, IHealthPreset, HealthColorType, HealthType } from 'src/app/entity.service';
-import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
+import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 
 interface IBarStats {
   max: number;

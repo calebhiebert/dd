@@ -1,16 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {
-  NoteService,
-  INote,
-  NoteType,
-  INoteOptions,
-} from 'src/app/note.service';
-import { ModalComponent } from 'src/app/modal/modal.component';
+import { NoteService, INote, NoteType, INoteOptions } from 'src/app/note.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 import { filter } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { NoteFormComponent } from '../note-form/note-form.component';
+import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 
 @Component({
   selector: 'dd-note-editor',
@@ -33,27 +28,21 @@ export class NoteEditorComponent implements OnInit {
   @ViewChild('noteform')
   private _noteForm: NoteFormComponent;
 
-  constructor(
-    private noteService: NoteService,
-    private campaignService: CampaignService,
-    private loginService: LoginService
-  ) {
+  constructor(private noteService: NoteService, private campaignService: CampaignService, private loginService: LoginService) {
     noteService.setNoteEditor(this);
   }
 
   ngOnInit() {
-    this.noteService.noteUpdate
-      .pipe(filter((note) => this.note && note.id === this.note.id))
-      .subscribe((note) => {
-        if (!this.editable) {
-          this.note = note;
+    this.noteService.noteUpdate.pipe(filter((note) => this.note && note.id === this.note.id)).subscribe((note) => {
+      if (!this.editable) {
+        this.note = note;
 
-          // For some reason the note form will not trigger updates unless explicitly set
-          if (this._noteForm) {
-            this._noteForm.note = note;
-          }
+        // For some reason the note form will not trigger updates unless explicitly set
+        if (this._noteForm) {
+          this._noteForm.note = note;
         }
-      });
+      }
+    });
   }
 
   private async createNote(opts: INoteOptions) {
@@ -164,11 +153,7 @@ export class NoteEditorComponent implements OnInit {
   }
 
   public async delete() {
-    if (
-      this.note &&
-      (await Swal.fire({ text: 'Are you sure?', showCancelButton: true }))
-        .value === true
-    ) {
+    if (this.note && (await Swal.fire({ text: 'Are you sure?', showCancelButton: true })).value === true) {
       try {
         await this.noteService.deleteNote(this.note.id);
         this.modal.close(null);
@@ -199,9 +184,7 @@ export class NoteEditorComponent implements OnInit {
       return this.note.user;
     }
 
-    const userFromMembers = this.campaignService.campaign.members.find(
-      (m) => m.userId === this.note.userId
-    );
+    const userFromMembers = this.campaignService.campaign.members.find((m) => m.userId === this.note.userId);
 
     if (userFromMembers && userFromMembers.user) {
       return userFromMembers.user;

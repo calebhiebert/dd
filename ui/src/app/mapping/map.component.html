@@ -1,0 +1,11 @@
+<dd-selector-popup #articleselect [searchable]="true" [loadSelectItems]="loadSelectItems"></dd-selector-popup>
+<dd-selector-popup #entityselect></dd-selector-popup>
+
+<div class="map-container">
+  <dd-map-toolbar *ngIf="mapObj" [title]="mapObj.name" [loading]="loading"></dd-map-toolbar>
+
+  <div class="loading loading-lg" *ngIf="!map"></div>
+
+  <dd-map-editor-menu #editor></dd-map-editor-menu>
+  <div class="map" #map></div>
+</div>

@@ -9,8 +9,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NavComponent } from './nav/nav.component';
 import { CampaignComponent } from './campaign/campaign.component';
-import { PaginatorComponent } from './paginator/paginator.component';
-import { ModalComponent } from './modal/modal.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
@@ -55,16 +53,11 @@ import { NumberQuickSelectComponent } from './number-quick-select/number-quick-s
 import { SpawnableListItemComponent } from './entity/spawnable-list-item/spawnable-list-item.component';
 import { AttributeRowViewComponent } from './entity/entity-view/attribute-row-view/attribute-row-view.component';
 import { AttributeTableViewComponent } from './entity/entity-view/attribute-table-view/attribute-table-view.component';
-import { MapComponent } from './map/map.component';
-import { MapUploadComponent } from './map/map-upload/map-upload.component';
-import { MapManagerComponent } from './map/map-manager/map-manager.component';
-import { MapEditorMenuComponent } from './map/map-editor-menu/map-editor-menu.component';
 import { NoteViewMiniComponent } from './note/note-view-mini/note-view-mini.component';
 import { EntityViewMiniComponent } from './entity/entity-view-mini/entity-view-mini.component';
 import { ArticleEditorComponent } from './article/article-editor/article-editor.component';
 import { ArticleViewComponent } from './article/article-view/article-view.component';
 import { ArticleSelectComponent } from './article/article-select/article-select.component';
-import { MapToolbarComponent } from './map/map-toolbar/map-toolbar.component';
 import { ArticleManagerComponent } from './article/article-manager/article-manager.component';
 import { ArticleViewMiniComponent } from './article/article-view-mini/article-view-mini.component';
 import { ArticleViewCardComponent } from './article/article-view-card/article-view-card.component';
@@ -73,7 +66,6 @@ import { IconPickerComponent } from './icon-picker/icon-picker.component';
 import { AccountSettingsComponent } from './account/account-settings/account-settings.component';
 import { ArticleQuestManagerComponent } from './quest/article-quest-manager/article-quest-manager.component';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
-import { QuillComponent } from './quill/quill.component';
 import { UserViewMiniComponent } from './account/user-view-mini/user-view-mini.component';
 import { CurrencyMapEditorComponent } from './campaign/campaign-settings/currency-map-editor/currency-map-editor.component';
 import { ExporterComponent } from './campaign/campaign-settings/exporter/exporter.component';
@@ -103,6 +95,8 @@ import { ConceptEntityManagerListItemComponent } from './concept/concept-entity-
 import { ArticleConceptManagerComponent } from './concept/article-concept-manager/article-concept-manager.component';
 import { ArticleConceptManagerListItemComponent } from './concept/article-concept-manager-list-item/article-concept-manager-list-item.component';
 import { CurrencyDirective } from './currency.directive';
+import { MappingModule } from './mapping/mapping.module';
+import { CustomControlsModule } from './custom-controls/custom-controls.module';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -114,10 +108,8 @@ import { CurrencyDirective } from './currency.directive';
     CampaignComponent,
     CampaignListComponent,
     CampaignLandingComponent,
-    PaginatorComponent,
     CampaignSettingsComponent,
     EntityEditorComponent,
-    ModalComponent,
     ConfirmationModalComponent,
     LoginComponent,
     HomeComponent,
@@ -152,16 +144,11 @@ import { CurrencyDirective } from './currency.directive';
     NumberQuickSelectComponent,
     SpawnableListItemComponent,
     AttributeTableViewComponent,
-    MapComponent,
-    MapUploadComponent,
-    MapManagerComponent,
-    MapEditorMenuComponent,
     NoteViewMiniComponent,
     EntityViewMiniComponent,
     ArticleEditorComponent,
     ArticleViewComponent,
     ArticleSelectComponent,
-    MapToolbarComponent,
     ArticleManagerComponent,
     ArticleViewMiniComponent,
     ArticleViewCardComponent,
@@ -170,7 +157,6 @@ import { CurrencyDirective } from './currency.directive';
     AccountSettingsComponent,
     ArticleQuestManagerComponent,
     AutocompleteComponent,
-    QuillComponent,
     UserViewMiniComponent,
     CurrencyMapEditorComponent,
     ExporterComponent,
@@ -213,7 +199,10 @@ import { CurrencyDirective } from './currency.directive';
     TruncateModule,
     HttpClientModule,
     DragDropModule,
+    MappingModule,
+    CustomControlsModule,
   ],
+  exports: [EditableEntitySelectorComponent, ArticleSelectComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

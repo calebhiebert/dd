@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { ModalComponent } from 'src/app/modal/modal.component';
 import { FormControl, Validators, ValidatorFn, FormGroup } from '@angular/forms';
 import { IEntityAttribute, IViewField } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { IDynamicFieldConfig } from 'src/app/dynform/form-types';
+import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 
 @Component({
   selector: 'dd-entity-attribute-editor-modal',

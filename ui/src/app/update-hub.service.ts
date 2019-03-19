@@ -8,8 +8,8 @@ import { IEntity, EntityService } from './entity.service';
 import { NoteService } from './note.service';
 import { ToastrService } from 'ngx-toastr';
 import { IArticle, IArticleConcept } from './article.service';
-import { ICursorUpdate } from './quill/quill.component';
 import { IConceptEntity } from './concept.service';
+import { ICursorUpdate } from './custom-controls/quill/quill.component';
 
 export enum ConnectionState {
   NOT_CONNECTED,

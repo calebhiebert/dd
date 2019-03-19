@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { ModalComponent } from '../modal/modal.component';
+import { ModalComponent } from '../custom-controls/modal/modal.component';
 
 @Component({
   selector: 'dd-confirmation-modal',
@@ -30,10 +30,7 @@ export class ConfirmationModalComponent implements OnInit {
     return this.modal.close(false);
   }
 
-  public getConfirmation(
-    question: string = 'Are you sure?',
-    title: string = 'Confirm'
-  ): Promise<boolean> {
+  public getConfirmation(question: string = 'Are you sure?', title: string = 'Confirm'): Promise<boolean> {
     this.title = title;
     this.question = question;
 

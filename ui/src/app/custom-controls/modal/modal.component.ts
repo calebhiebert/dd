@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PlatformLocation } from '@angular/common';
 
 @Component({
   selector: 'dd-modal',
