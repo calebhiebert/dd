@@ -67,18 +67,26 @@ namespace net_api.Controllers
 
             if (questId != null)
             {
-                query = query.Where(q => q.QuestId == questId);
+                query = query
+                    .Where(q => q.QuestId == questId);
             }
 
             if (mapId != null)
             {
-                query = query.Where(q => q.MapId == mapId);
+                query = query
+                    .Where(q => q.MapId == mapId);
             }
 
             if (articleId != null)
             {
-                query = query.Where(q => q.ArticleId == articleId);
+                query = query
+                    .Where(q => q.ArticleId == articleId);
             }
+
+            query = query
+                .Include(q => q.Article)
+                .Include(q => q.Quest)
+                .Include(q => q.Map);
 
             return await query.ToListAsync();
         }
@@ -91,6 +99,9 @@ namespace net_api.Controllers
                 .Where(n => n.Id == id)
                 .Include(n => n.Campaign)
                     .ThenInclude(c => c.Members)
+                .Include(n => n.Map)
+                .Include(n => n.Quest)
+                .Include(n => n.Article)
                 .FirstOrDefaultAsync();
 
             if (note == null)

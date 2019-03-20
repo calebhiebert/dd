@@ -4,8 +4,8 @@ import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 import { filter } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { NoteFormComponent } from '../note-form/note-form.component';
 import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
+import { NoteFormComponent } from '../note-form/note-form.component';
 
 @Component({
   selector: 'dd-note-editor',
@@ -189,5 +189,9 @@ export class NoteEditorComponent implements OnInit {
     if (userFromMembers && userFromMembers.user) {
       return userFromMembers.user;
     }
+  }
+
+  public get campaign() {
+    return this.campaignService.campaign;
   }
 }

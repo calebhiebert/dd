@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { INote, NoteService } from 'src/app/note.service';
-import { NoteEditorComponent } from '../note-editor/note-editor.component';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 

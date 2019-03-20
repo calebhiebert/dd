@@ -1,0 +1,14 @@
+<div class="card p-1 hoverable" (click)="doSelect()">
+  <div class="columns col-gapless">
+    <div class="column">{{ note.title }}</div>
+    <div class="column col-auto d-flex align-items-center ml-1">
+      <i class="icon icon-edit ml-1" *ngIf="note.publicEdit"></i>
+      <i class="icon icon-bookmark ml-1" *ngIf="note.articleId"></i>
+      <i class="icon icon-flag ml-1" *ngIf="note.questId"></i>
+      <i class="icon icon-location ml-1" *ngIf="note.mapId"></i>
+    </div>
+    <div class="column col-auto text-gray text-italic text-right ml-1">
+      <div [ddUser]="user"></div>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 <dd-modal #modal>
-  <div modal-header *ngIf="note">
+  <div modal-header *ngIf="note && editable">
     <div class="d-inline-block ml-2" *ngIf="loading">
       <div class="loading"></div>
     </div>
@@ -19,15 +19,24 @@
   <div modal-footer *ngIf="note">
     <!-- User Display -->
     <div class="columns col-gapless mt-2">
-      <!-- Image -->
-      <div class="column col-auto pr-1 d-flex align-items-center" *ngIf="!editable && user">
-        <figure class="avatar avatar-sm">
-          <img [src]="user.pictureURL" alt="User Image" />
-        </figure>
-      </div>
-      <div class="column d-flex align-items-center" *ngIf="!editable && user">
+      <!-- User Display -->
+      <div class="column col-auto d-flex align-items-center mr-2" *ngIf="user">
         <div [ddUser]="user"></div>
       </div>
+
+      <!-- Linked Item Display -->
+      <div class="column col-auto d-flex align-items-center">
+        <button class="btn btn-sm" *ngIf="note.article !== null" [routerLink]="['/campaigns', campaign.id, 'articles', note.articleId]">
+          <i class="icon icon-bookmark"></i> {{ note.article.name }}
+        </button>
+        <button class="btn btn-sm" *ngIf="note.quest !== null" [routerLink]="['/campaigns', campaign.id, 'quests', note.questId]">
+          <i class="icon icon-flag"></i> {{ note.quest.name }}
+        </button>
+        <button class="btn btn-sm" *ngIf="note.map !== null" [routerLink]="['/campaigns', campaign.id, 'maps', note.mapId]">
+          <i class="icon icon-location"></i> {{ note.map.name }}
+        </button>
+      </div>
+
       <div class="column col-auto col-ml-auto">
         <button class="btn btn-error mr-2" (click)="delete()" *ngIf="note && editable">
           Delete

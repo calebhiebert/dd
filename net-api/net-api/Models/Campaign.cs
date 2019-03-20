@@ -17,6 +17,7 @@ namespace net_api.Models
         [Column("Content", TypeName = "JSONB")]
         public string ContentJson { get; set; }
 
+        [JsonIgnore]
         [NotMapped]
         public Object Content
         {

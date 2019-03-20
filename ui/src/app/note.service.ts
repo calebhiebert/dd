@@ -3,8 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { IUser } from './user.service';
 import { LoginService } from './login.service';
-import { IMapShape } from './map.service';
-import { NoteEditorComponent } from './notes/note-editor/note-editor.component';
+import { IMapShape, IMap } from './map.service';
+import { NoteEditorComponent } from './custom-controls/note-editor/note-editor.component';
+import { IQuest } from './quest.service';
+import { IArticle } from './article.service';
 
 @Injectable({
   providedIn: 'root',
@@ -187,7 +189,9 @@ export interface INote {
   content: any;
   campaignId: string;
   questId?: string;
+  quest?: IQuest;
   articleId?: string;
+  article?: IArticle;
   publicEdit: boolean;
   publicView: boolean;
   userId?: string;
@@ -195,6 +199,7 @@ export interface INote {
   createdAt?: Date;
   updatedAt?: Date;
   mapId?: string;
+  map?: IMap;
   lat?: number;
   lng?: number;
   mapShape?: IMapShape;

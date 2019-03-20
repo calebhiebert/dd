@@ -47,12 +47,10 @@ namespace net_api.Models
 
         public Guid? QuestId { get; set; }
 
-        [JsonIgnore]
         public Quest Quest { get; set; }
 
         public Guid? ArticleId { get; set; }
 
-        [JsonIgnore]
         public Article Article { get; set; }
 
         [Required]
@@ -73,7 +71,6 @@ namespace net_api.Models
         // Data for if a note is positioned on a map
         public Guid? MapId { get; set; }
 
-        [JsonIgnore]
         public Map Map { get; set; }
 
         public double? Lat { get; set; }

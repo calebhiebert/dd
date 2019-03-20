@@ -18,6 +18,10 @@ import { FieldDefinitionFormComponent } from './dynform/field-definition-form/fi
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { HealthDisplayComponent } from './health-display/health-display.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { NoteEditorComponent } from './note-editor/note-editor.component';
+import { NoteFormComponent } from './note-form/note-form.component';
+import { CustomViewsModule } from '../custom-views/custom-views.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -37,8 +41,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     FieldDefinitionFormComponent,
     ImageUploadComponent,
     HealthDisplayComponent,
+    NoteEditorComponent,
+    NoteFormComponent,
   ],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, DragDropModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, DragDropModule, CustomViewsModule, RouterModule],
   exports: [
     ModalComponent,
     PaginatorComponent,
@@ -52,6 +58,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     DynamicFieldComponent,
     FieldDefinitionFormComponent,
     HealthDisplayComponent,
+    NoteEditorComponent,
   ],
 })
 export class CustomControlsModule {}

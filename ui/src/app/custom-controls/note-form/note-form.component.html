@@ -1,5 +1,5 @@
 <form [formGroup]="formGroup">
-  <div class="form-group">
+  <div class="form-group" *ngIf="editable">
     <input type="text" formControlName="title" placeholder="Title" class="form-input input-sm" />
   </div>
 

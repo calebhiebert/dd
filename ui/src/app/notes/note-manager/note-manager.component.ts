@@ -35,9 +35,14 @@ export class NoteManagerComponent implements OnInit {
   }
 
   public get sortedNotes() {
+    if (!this.notes) {
+      return null;
+    }
+
     const sortedNotes = {
       quest: [],
       article: [],
+      map: [],
       other: [],
     };
 
@@ -46,6 +51,8 @@ export class NoteManagerComponent implements OnInit {
         sortedNotes.quest.push(n);
       } else if (n.articleId !== null && n.articleId !== undefined) {
         sortedNotes.article.push(n);
+      } else if (n.mapId !== null && n.mapId !== undefined) {
+        sortedNotes.map.push(n);
       } else {
         sortedNotes.other.push(n);
       }

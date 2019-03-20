@@ -17,11 +17,33 @@
   <dd-http-errors [error]="loadErr" *ngIf="loadErr"></dd-http-errors>
 
   <!-- Notes -->
-  <div class="columns" *ngIf="notes">
-    <div class="column col-3 col-md-4 col-sm-6 mb-2" (click)="selectNote(n)" *ngFor="let n of notes">
-      <div class="card p-1 hoverable">
-        {{ n.title }}
-      </div>
+  <div class="columns col-gapless" *ngIf="sortedNotes">
+    <div class="column col-3 col-md-4 col-sm-6 p-1 col-xs-12" *ngFor="let n of sortedNotes.other">
+      <dd-note-list-item [note]="n" (select)="selectNote($event)"></dd-note-list-item>
+    </div>
+  </div>
+
+  <!-- Quest Notes -->
+  <div class="divider text-center" data-content="Quest Notes"></div>
+  <div class="columns col-gapless" *ngIf="sortedNotes">
+    <div class="column col-3 col-md-4 col-sm-6 p-1 col-xs-12" *ngFor="let n of sortedNotes.quest">
+      <dd-note-list-item [note]="n" (select)="selectNote($event)"></dd-note-list-item>
+    </div>
+  </div>
+
+  <!-- Article Notes -->
+  <div class="divider text-center" data-content="Article Notes"></div>
+  <div class="columns col-gapless" *ngIf="sortedNotes">
+    <div class="column col-3 col-md-4 col-sm-6 p-1 col-xs-12" *ngFor="let n of sortedNotes.article">
+      <dd-note-list-item [note]="n" (select)="selectNote($event)"></dd-note-list-item>
+    </div>
+  </div>
+
+  <!-- Map Notes -->
+  <div class="divider text-center" data-content="Map Notes"></div>
+  <div class="columns col-gapless" *ngIf="sortedNotes">
+    <div class="column col-3 col-md-4 col-sm-6 p-1 col-xs-12" *ngFor="let n of sortedNotes.map">
+      <dd-note-list-item [note]="n" (select)="selectNote($event)"></dd-note-list-item>
     </div>
   </div>
 </div>
