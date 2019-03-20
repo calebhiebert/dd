@@ -17,7 +17,6 @@ import { EntityComponent } from './entity/entity.component';
 import { QuestFormComponent } from './quest/quest-form/quest-form.component';
 import { QuestViewComponent } from './quest/quest-view/quest-view.component';
 import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-manager.component';
-import { OverviewComponent } from './session/overview/overview.component';
 import { UnsavedChangesGuard } from './unsaved-changes.guard';
 import { ConceptTypeEditorComponent } from './concept/concept-type-editor/concept-type-editor.component';
 import { ConceptManagerComponent } from './concept/concept-manager/concept-manager.component';
@@ -204,11 +203,7 @@ const routes: Routes = [
       },
       {
         path: 'overview',
-        component: OverviewComponent,
-        data: {
-          breadcrumb: 'Overview',
-          footer: false,
-        },
+        loadChildren: './overview/overview.module#OverviewModule',
       },
       {
         path: 'quests',

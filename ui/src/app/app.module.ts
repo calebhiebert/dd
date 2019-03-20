@@ -43,7 +43,6 @@ import { AttributeTableViewComponent } from './entity/entity-view/attribute-tabl
 import { EntityAttributeEditorModalComponent } from './entity/entity-view/entity-attribute-editor-modal/entity-attribute-editor-modal.component';
 import { EntityViewComponent } from './entity/entity-view/entity-view.component';
 import { EntityComponent } from './entity/entity.component';
-import { HealthDisplayComponent } from './entity/health-display/health-display.component';
 import { SpawnableListItemComponent } from './entity/spawnable-list-item/spawnable-list-item.component';
 import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-manager.component';
 import { FooterComponent } from './footer/footer.component';
@@ -67,9 +66,6 @@ import { QuestViewComponent } from './quest/quest-view/quest-view.component';
 import { QuickViewComponent } from './quest/quick-view/quick-view.component';
 import { QuickDiceComponent } from './quick-dice/quick-dice.component';
 import { SentryErrorHandler } from './sentry.errorhandler';
-import { OverviewEntityComponent } from './session/overview-entity/overview-entity.component';
-import { OverviewToolbarComponent } from './session/overview-toolbar/overview-toolbar.component';
-import { OverviewComponent } from './session/overview/overview.component';
 import { UsersModule } from './users/users.module';
 /* tslint:enable:max-line-length */
 
@@ -101,13 +97,9 @@ import { UsersModule } from './users/users.module';
     EntityComponent,
     PhraserComponent,
     EditableEntitySelectorComponent,
-    HealthDisplayComponent,
     QuestViewComponent,
     QuickViewComponent,
     SpawnableManagerComponent,
-    OverviewComponent,
-    OverviewEntityComponent,
-    OverviewToolbarComponent,
     FooterComponent,
     NumberQuickSelectComponent,
     SpawnableListItemComponent,

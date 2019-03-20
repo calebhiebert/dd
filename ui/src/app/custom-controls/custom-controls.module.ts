@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ModalComponent } from './modal/modal.component';
 import { PaginatorComponent } from './paginator/paginator.component';
 import { SelectorPopupComponent } from './selector-popup/selector-popup.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { QuillComponent } from './quill/quill.component';
 import { IconPickerComponent } from './icon-picker/icon-picker.component';
 import { TagEditorComponent } from './tag-editor/tag-editor.component';
@@ -16,6 +16,7 @@ import { DynamicValidationErrorsComponent } from './dynform/dynamic-validation-e
 import { FieldBaseComponent } from './dynform/field-base/field-base.component';
 import { FieldDefinitionFormComponent } from './dynform/field-definition-form/field-definition-form.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
+import { HealthDisplayComponent } from './health-display/health-display.component';
 
 @NgModule({
   declarations: [
@@ -34,8 +35,9 @@ import { ImageUploadComponent } from './image-upload/image-upload.component';
     FieldBaseComponent,
     FieldDefinitionFormComponent,
     ImageUploadComponent,
+    HealthDisplayComponent,
   ],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   exports: [
     ModalComponent,
     PaginatorComponent,
@@ -48,6 +50,7 @@ import { ImageUploadComponent } from './image-upload/image-upload.component';
     DynamicFieldHorizontalComponent,
     DynamicFieldComponent,
     FieldDefinitionFormComponent,
+    HealthDisplayComponent,
   ],
 })
 export class CustomControlsModule {}
