@@ -166,15 +166,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
 
     this.route.paramMap.subscribe((params) => {
-      this.loadMap(params.get('m_id'));
-    });
-
-    this.route.queryParamMap.subscribe((params) => {
-      if (params.has('lat') && params.has('lng')) {
-        this._queryLatLng = [parseFloat(params.get('lat')), parseFloat(params.get('lng'))];
-
-        // Clear the query parameters
-        this.router.navigate([], { replaceUrl: true });
+      if ((this._map && this._map.id !== params.get('m_id')) || !this._map) {
+        this.loadMap(params.get('m_id'));
       }
     });
   }
@@ -271,12 +264,32 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       zoomSnap: 0.25,
     });
 
+    const paramSnapshot = this.route.snapshot.queryParamMap;
+
+    if (paramSnapshot.has('zoom')) {
+      map.setZoom(paramSnapshot.get('zoom'));
+    }
+
+    if (paramSnapshot.has('lat') && paramSnapshot.has('lng')) {
+      map.setView({ lat: paramSnapshot.get('lat'), lng: paramSnapshot.get('lng') });
+    } else {
+      map.fitBounds([[-10, 10], [-246, 246]]);
+    }
+
     map.on('contextmenu', (e) => {
       this.editor.showMenu().then((operation) => {
         if (operation != null) {
           this.handleEditorOperation(operation, e);
         }
       });
+    });
+
+    map.on('zoomend', () => {
+      this.writeMapStateToURL(map);
+    });
+
+    map.on('moveend', () => {
+      this.writeMapStateToURL(map);
     });
 
     const tileLayer = L.tileLayer(`${environment.tileURL}/maps/{id}/tile/{z}/{x}/{y}`, {
@@ -290,13 +303,17 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this._mapLayerControl = L.control.layers().addTo(map);
     this._mapLayerControl.addBaseLayer(tileLayer, 'Base');
+  }
 
-    map.fitBounds([[-10, 10], [-246, 246]]);
-
-    // Scroll to the place that was queried
-    if (this._queryLatLng) {
-      map.flyTo(this._queryLatLng, this._map.maxZoom - 1);
-    }
+  private writeMapStateToURL(map) {
+    this.router.navigate([], {
+      replaceUrl: true,
+      queryParams: {
+        zoom: map.getZoom(),
+        lat: map.getCenter().lat,
+        lng: map.getCenter().lng,
+      },
+    });
   }
 
   private addArticleToMap(article: IArticle) {

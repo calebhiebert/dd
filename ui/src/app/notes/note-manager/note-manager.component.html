@@ -1,1 +1,27 @@
-<div class="container grid-xl"></div>
+<div class="container grid-xl">
+  <!-- Title Controls -->
+  <div class="columns">
+    <!-- Title -->
+    <div class="column">
+      <h3>Notebook</h3>
+    </div>
+
+    <!-- Controls -->
+    <div class="column col-auto"></div>
+  </div>
+
+  <!-- Loader -->
+  <div class="loading loading-lg" *ngIf="loading"></div>
+
+  <!-- Error Display -->
+  <dd-http-errors [error]="loadErr" *ngIf="loadErr"></dd-http-errors>
+
+  <!-- Notes -->
+  <div class="columns" *ngIf="notes">
+    <div class="column col-3 col-md-4 col-sm-6 mb-2" (click)="selectNote(n)" *ngFor="let n of notes">
+      <div class="card p-1 hoverable">
+        {{ n.title }}
+      </div>
+    </div>
+  </div>
+</div>
