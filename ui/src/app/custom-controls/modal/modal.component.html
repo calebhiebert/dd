@@ -7,8 +7,9 @@
   }"
 >
   <a (click)="userClose(null)" class="modal-overlay" aria-label="Close"></a>
-  <div class="modal-container">
+  <div class="modal-container" cdkDrag>
     <div class="modal-header p-2">
+      <i class="icon icon-resize-vert c-move float-left mt-1" style="margin-left: -1rem;" cdkDragHandle></i>
       <a (click)="userClose(null)" class="btn btn-clear float-right" aria-label="Close" *ngIf="!codeOnly"></a>
       <ng-content select="[modal-header]"></ng-content>
     </div>

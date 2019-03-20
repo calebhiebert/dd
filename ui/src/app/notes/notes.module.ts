@@ -7,11 +7,13 @@ import { NoteViewMiniComponent } from './note-view-mini/note-view-mini.component
 import { CustomControlsModule } from '../custom-controls/custom-controls.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CustomViewsModule } from '../custom-views/custom-views.module';
+import { NoteManagerComponent } from './note-manager/note-manager.component';
+import { NotesRoutingModule } from './notes-routing.module';
 
 @NgModule({
   entryComponents: [NoteViewMiniComponent],
-  declarations: [NoteEditorComponent, NoteFormComponent, NoteListComponent, NoteViewMiniComponent],
+  declarations: [NoteEditorComponent, NoteFormComponent, NoteListComponent, NoteViewMiniComponent, NoteManagerComponent],
   exports: [NoteViewMiniComponent, NoteListComponent, NoteEditorComponent],
-  imports: [CommonModule, CustomControlsModule, ReactiveFormsModule, CustomViewsModule],
+  imports: [NotesRoutingModule, CommonModule, CustomControlsModule, ReactiveFormsModule, CustomViewsModule],
 })
 export class NotesModule {}

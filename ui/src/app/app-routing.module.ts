@@ -48,17 +48,11 @@ const routes: Routes = [
     path: 'account',
     canActivate: [LoggedInGuard, ActionGuard],
     loadChildren: './users/users.module#UsersModule',
-    data: {
-      breadcrumb: 'Account',
-    },
   },
   {
     path: 'campaigns/list',
     component: CampaignListComponent,
     canActivate: [LoggedInGuard, ActionGuard],
-    data: {
-      breadcrumb: 'Campaigns',
-    },
   },
   {
     path: 'home',
@@ -77,9 +71,6 @@ const routes: Routes = [
     path: 'campaigns/:id',
     component: CampaignComponent,
     canActivate: [LoggedInGuard, ActionGuard],
-    data: {
-      breadcrumb: 'Campaign',
-    },
     children: [
       {
         path: '',
@@ -97,16 +88,10 @@ const routes: Routes = [
           {
             path: ':ent_id',
             component: EntityViewComponent,
-            data: {
-              breadcrumb: 'Entity',
-            },
           },
           {
             path: ':ent_id/ct/:ct_id',
             component: ConceptEntityManagerComponent,
-            data: {
-              breadcrumb: 'CE',
-            },
           },
           {
             path: ':ent_type_id/create',
@@ -114,7 +99,6 @@ const routes: Routes = [
             canDeactivate: [UnsavedChangesGuard],
             data: {
               editing: false,
-              breadcrumb: 'Create Entity',
             },
           },
           {
@@ -123,10 +107,13 @@ const routes: Routes = [
             canDeactivate: [UnsavedChangesGuard],
             data: {
               editing: true,
-              breadcrumb: 'Edit Entity',
             },
           },
         ],
+      },
+      {
+        path: 'notes',
+        loadChildren: './notes/notes.module#NotesModule',
       },
       {
         path: 'concepttypes/create',
@@ -182,15 +169,11 @@ const routes: Routes = [
         component: EntityPresetEditorComponent,
         data: {
           editing: true,
-          breadcrumb: 'Edit Preset',
         },
       },
       {
         path: 'spawnables',
         component: SpawnableManagerComponent,
-        data: {
-          breadcrumb: 'Spawnables',
-        },
       },
       {
         path: 'settings',
@@ -198,7 +181,6 @@ const routes: Routes = [
         canDeactivate: [UnsavedChangesGuard],
         data: {
           editing: true,
-          breadcrumb: 'Settings',
         },
       },
       {
@@ -208,9 +190,6 @@ const routes: Routes = [
       {
         path: 'quests',
         component: QuestManagerComponent,
-        data: {
-          breadcrumb: 'Quests',
-        },
       },
       {
         path: 'quests/create',
@@ -231,9 +210,6 @@ const routes: Routes = [
       {
         path: 'quests/:q_id',
         component: QuestViewComponent,
-        data: {
-          breadcrumb: 'Quest View',
-        },
       },
       {
         path: 'maps',
@@ -246,9 +222,6 @@ const routes: Routes = [
       {
         path: 'members',
         component: MemberManagerComponent,
-        data: {
-          breadcrumb: 'Members',
-        },
       },
     ],
   },

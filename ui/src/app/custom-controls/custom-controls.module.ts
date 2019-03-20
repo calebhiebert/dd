@@ -17,6 +17,7 @@ import { FieldBaseComponent } from './dynform/field-base/field-base.component';
 import { FieldDefinitionFormComponent } from './dynform/field-definition-form/field-definition-form.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { HealthDisplayComponent } from './health-display/health-display.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,7 @@ import { HealthDisplayComponent } from './health-display/health-display.componen
     ImageUploadComponent,
     HealthDisplayComponent,
   ],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, DragDropModule],
   exports: [
     ModalComponent,
     PaginatorComponent,

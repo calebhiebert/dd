@@ -26,18 +26,13 @@
       {{ campaign.name | truncate: 20 }}
     </a>
     <ul class="nav">
-      <li class="nav-item" *ngFor="let e of navEntities">
-        <a [routerLink]="['campaigns', campaign.id, 'entities', e.id]">{{ e.name }}</a>
+      <li class="nav-item">
+        <a [routerLink]="['campaigns', campaign.id, 'articles']">Articles</a>
       </li>
       <li class="nav-item">
         <a [routerLink]="['campaigns', campaign.id, 'quests']">Quests</a>
       </li>
-      <li class="nav-item" *ngIf="campaignEditable">
-        <a [routerLink]="['campaigns', campaign.id, 'spawnables']">Spawnables</a>
-      </li>
-      <li class="nav-item">
-        <a [routerLink]="['campaigns', campaign.id, 'articles']">Articles</a>
-      </li>
+
       <li class="nav-item">
         <a [routerLink]="['campaigns', campaign.id, 'overview']">Overview</a>
       </li>
@@ -47,6 +42,10 @@
       <li class="nav-item" *ngFor="let ct of campaign.conceptTypes">
         <a [routerLink]="['campaigns', campaign.id, 'concepts', ct.id, 'manage']">{{ ct.pluralForm }}</a>
       </li>
+      <li class="nav-item" *ngIf="campaignEditable">
+        <a [routerLink]="['campaigns', campaign.id, 'spawnables']">Spawnables</a>
+      </li>
+
       <li class="nav-item" *ngFor="let ep of entityPresets">
         <a [routerLink]="['campaigns', campaign.id, 'entities', ep.id, 'create']">Create {{ ep.name }}</a>
       </li>
