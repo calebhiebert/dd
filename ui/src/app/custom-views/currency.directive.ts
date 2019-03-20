@@ -6,6 +6,7 @@ import { CampaignService } from '../campaign.service';
   selector: '[ddCurrency]',
 })
 export class CurrencyDirective {
+  // tslint:disable-next-line: no-input-rename
   @Input('ddCurrency')
   public currency: { value: number; values: { [key: string]: number } };
 

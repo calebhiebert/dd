@@ -484,7 +484,8 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
           html: true,
           title: 'Top',
           placement: 'top-end',
-          template: `<div class="tooltip-on-top card" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>`,
+          template: `<div class="tooltip-on-top card" role="tooltip">
+          <div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>`,
           popperOptions: {
             placement: 'top-end',
             modifiers: {

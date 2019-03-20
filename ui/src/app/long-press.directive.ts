@@ -1,11 +1,13 @@
 import { Directive, EventEmitter, HostListener, Input, Output, HostBinding } from '@angular/core';
 
 @Directive({
+  // tslint:disable-next-line: directive-selector
   selector: '[longPress]',
 })
 export class LongPressDirective {
   @Input() longPress = 500;
 
+  // tslint:disable: no-output-on-prefix
   @Output() onLongPress: EventEmitter<any> = new EventEmitter();
   @Output() onLongPressing: EventEmitter<any> = new EventEmitter();
   @Output() onLongPressEnd: EventEmitter<any> = new EventEmitter();

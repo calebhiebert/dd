@@ -6,6 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   selector: '[ddUser]',
 })
 export class UserDirective {
+  // tslint:disable-next-line: no-input-rename
   @Input('ddUser')
   public user: IUser;
 

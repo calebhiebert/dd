@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FieldBaseComponent } from '../field-base/field-base.component';
 
 @Component({
@@ -6,7 +6,7 @@ import { FieldBaseComponent } from '../field-base/field-base.component';
   templateUrl: './dynamic-field-horizontal.component.html',
   styleUrls: ['./dynamic-field-horizontal.component.css'],
 })
-export class DynamicFieldHorizontalComponent extends FieldBaseComponent {
+export class DynamicFieldHorizontalComponent extends FieldBaseComponent implements OnInit {
   constructor() {
     super();
   }
