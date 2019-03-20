@@ -34,7 +34,7 @@
           <div class="columns">
             <div class="column">
               <h4 class="mb-1">{{ c.name }}</h4>
-              <dd-user-view-nano [user]="c.user"></dd-user-view-nano>
+              <div [ddUser]="c.user"></div>
             </div>
             <div class="column col-md-12 hide-md col-auto">
               <span class="text-gray text-italic">{{ c.members.length }} Member{{ c.members.length === 1 ? '' : 's' }}</span>

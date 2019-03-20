@@ -1,6 +1,5 @@
 import { EntityAttributeClass, IEntityFieldConfig } from './entity.service';
-import { AttributeType } from './attributes';
-import { DynamicFieldType } from './dynform/form-types';
+import { DynamicFieldType } from './custom-controls/dynform/form-types';
 
 export const DND_5E: IEntityFieldConfig[] = [
   {

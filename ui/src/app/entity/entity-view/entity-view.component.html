@@ -30,7 +30,7 @@
             <div class="columns col-gapless">
               <!-- Username -->
               <div class="column col-auto mr-1" *ngIf="user">
-                <dd-user-view-nano [user]="user"></dd-user-view-nano>
+                <div [ddUser]="user"></div>
               </div>
 
               <div class="column text-italic no-select">({{ entity.preset.name }})</div>

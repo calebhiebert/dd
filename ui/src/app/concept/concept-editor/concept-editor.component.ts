@@ -3,9 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConceptService, IConceptType, IConcept, IConceptField } from 'src/app/concept.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
-import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
+import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/custom-controls/dynform/form-types';
 
 @Component({
   selector: 'dd-concept-editor',

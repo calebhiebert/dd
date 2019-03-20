@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { IUser } from './user.service';
 import { ICampaign } from './campaign.service';
 import { environment } from 'src/environments/environment';
-import { IDynamicFieldConfig } from './dynform/form-types';
 import { IField } from './concept.service';
+import { IDynamicFieldConfig } from './custom-controls/dynform/form-types';
 
 @Injectable({
   providedIn: 'root',

@@ -1,22 +1,13 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityAttributeEditorModalComponent } from './entity-attribute-editor-modal/entity-attribute-editor-modal.component';
-import {
-  EntityService,
-  IEntityAttribute,
-  EntityAttributeClass,
-  IHealth,
-  IViewField,
-  IAttribute,
-  IEntityFieldConfig,
-} from 'src/app/entity.service';
+import { EntityService, EntityAttributeClass, IHealth, IViewField, IAttribute, IEntityFieldConfig } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
-import { AttributeType } from 'src/app/attributes';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoginService } from 'src/app/login.service';
-import { DynamicFieldType } from 'src/app/dynform/form-types';
 import { UpdateHubService, ConnectionState } from 'src/app/update-hub.service';
 import { Subscription } from 'rxjs';
+import { DynamicFieldType } from 'src/app/custom-controls/dynform/form-types';
 
 @Component({
   selector: 'dd-entity-view',

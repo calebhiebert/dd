@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { IDynamicFieldConfig } from './dynform/form-types';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ICampaign } from './campaign.service';
 import { IEntity } from './entity.service';
 import { ActionType, ActionSource } from './history';
+import { IDynamicFieldConfig } from './custom-controls/dynform/form-types';
 
 @Injectable({
   providedIn: 'root',

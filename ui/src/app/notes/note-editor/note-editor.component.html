@@ -1,0 +1,39 @@
+<dd-modal #modal>
+  <div modal-header *ngIf="note">
+    <div class="d-inline-block ml-2" *ngIf="loading">
+      <div class="loading"></div>
+    </div>
+    <i class="icon icon-check" *ngIf="!loading && !unsaved"></i>
+    <i class="icon icon-cross" *ngIf="!loading && unsaved"></i>
+  </div>
+  <div modal-body *ngIf="note">
+    <dd-note-form
+      *ngIf="note"
+      [note]="note"
+      [editable]="editable"
+      [advancedEditable]="advancedEditable"
+      (noteChange)="onNoteChange($event)"
+      #noteform
+    ></dd-note-form>
+  </div>
+  <div modal-footer *ngIf="note">
+    <!-- User Display -->
+    <div class="columns col-gapless mt-2">
+      <!-- Image -->
+      <div class="column col-auto pr-1 d-flex align-items-center" *ngIf="!editable && user">
+        <figure class="avatar avatar-sm">
+          <img [src]="user.pictureURL" alt="User Image" />
+        </figure>
+      </div>
+      <div class="column d-flex align-items-center" *ngIf="!editable && user">
+        <div [ddUser]="user"></div>
+      </div>
+      <div class="column col-auto col-ml-auto">
+        <button class="btn btn-error mr-2" (click)="delete()" *ngIf="note && editable">
+          Delete
+        </button>
+        <button class="btn" (click)="modal.close(null)">Close</button>
+      </div>
+    </div>
+  </div>
+</dd-modal>

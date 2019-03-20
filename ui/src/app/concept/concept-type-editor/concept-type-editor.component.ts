@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 import { IConceptType, ConceptService } from 'src/app/concept.service';
 import { Location } from '@angular/common';
 import { LoginService } from 'src/app/login.service';
-import { FieldDefinitionFormComponent } from 'src/app/dynform/field-definition-form/field-definition-form.component';
+import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/custom-controls/dynform/form-types';
+import { FieldDefinitionFormComponent } from 'src/app/custom-controls/dynform/field-definition-form/field-definition-form.component';
 
 @Component({
   selector: 'dd-concept-type-editor',

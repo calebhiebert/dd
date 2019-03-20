@@ -45,7 +45,7 @@
           <span *ngSwitchCase="3">Declined</span>
         </td>
         <td>
-          <dd-user-view-nano [user]="i.user" *ngIf="i.user"></dd-user-view-nano>
+          <div [ddUser]="i.user"></div>
           <span *ngIf="!i.user">N/A</span>
         </td>
         <td>

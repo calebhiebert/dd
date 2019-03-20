@@ -8,18 +8,17 @@ import { CampaignService } from '../campaign.service';
 import { NoteService, NoteType, INote } from '../note.service';
 import { filter } from 'rxjs/operators';
 import { LoginService } from '../login.service';
-import { NoteViewMiniComponent } from '../note/note-view-mini/note-view-mini.component';
 import { Subscription } from 'rxjs';
 import { IEntity, EntityService } from '../entity.service';
 import { UpdateHubService } from '../update-hub.service';
 import { ToastrService } from 'ngx-toastr';
 import 'leaflet-draw';
 import { EntityViewMiniComponent } from '../entity/entity-view-mini/entity-view-mini.component';
-import { ArticleService, IArticle, ISearchedArticle } from '../article.service';
-import { ArticleViewMiniComponent } from '../article/article-view-mini/article-view-mini.component';
+import { ArticleService, IArticle } from '../article.service';
 import { IconService } from '../icon.service';
 import { DynComponentService } from '../dyn-component.service';
 import { SelectorPopupComponent, ISelectOption } from '../custom-controls/selector-popup/selector-popup.component';
+import { NoteViewMiniComponent } from '../notes/note-view-mini/note-view-mini.component';
 
 const ownNoteIcon = L.icon({
   iconUrl: '/assets/note-icon.png',
@@ -70,7 +69,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private _articles: IArticle[];
   private _entityComponents: ComponentRef<EntityViewMiniComponent>[] = [];
   private _noteComponents: ComponentRef<NoteViewMiniComponent>[] = [];
-  private _articleComponents: ComponentRef<ArticleViewMiniComponent>[] = [];
   private _noteCreateSubscription: Subscription;
   private _noteDeleteSubscription: Subscription;
   private _noteUpdateSubscription: Subscription;
@@ -188,10 +186,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     for (const ec of this._entityComponents) {
       ec.destroy();
-    }
-
-    for (const ac of this._articleComponents) {
-      ac.destroy();
     }
 
     if (this._noteCreateSubscription) {
@@ -344,21 +338,31 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       marker['_article'] = article;
       this._articlesLayerGroup.addLayer(marker);
 
-      // Create component for popup
-      const component = this.componentService.getComponent(ArticleViewMiniComponent);
-      component.instance.article = article;
-
-      this._articleComponents.push(component);
-      marker['_articleComponent'] = component;
-
       // Create popup
       const popup = L.popup({
         minWidth: 150,
       });
 
-      popup.setContent(this.componentService.getRootNode(component));
+      popup.setContent(this.createArticlePopupContent(article));
       marker.bindPopup(popup);
     }
+  }
+
+  private createArticlePopupContent(article: IArticle) {
+    const root = document.createElement('div');
+    const title = document.createElement('h5');
+    title.innerText = article.name;
+    root.appendChild(title);
+
+    const moreButton = document.createElement('button');
+    moreButton.classList.add('btn', 'btn-sm');
+    moreButton.innerText = 'More';
+    moreButton.addEventListener('click', () => {
+      this.router.navigate(['campaigns', this.campaignService.campaign.id, 'articles', article.id]);
+    });
+
+    root.appendChild(moreButton);
+    return root;
   }
 
   private removeArticleFromMap(article: IArticle) {
@@ -367,12 +371,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     for (const l of layers) {
       if (l['_article'] && l['_article'].id === article.id) {
         this._articlesLayerGroup.removeLayer(l);
-
-        const component: ComponentRef<ArticleViewMiniComponent> = l['_articleComponent'];
-
-        this._articleComponents = this._articleComponents.filter((ac) => ac !== component);
-
-        component.destroy();
       }
     }
   }

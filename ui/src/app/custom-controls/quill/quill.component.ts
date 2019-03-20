@@ -14,7 +14,6 @@ import { LoginService } from 'src/app/login.service';
 import { SearchService, SearchObjectType } from 'src/app/search.service';
 import { DynComponentService } from 'src/app/dyn-component.service';
 import { IconService } from 'src/app/icon.service';
-import { UserViewMiniComponent } from 'src/app/account/user-view-mini/user-view-mini.component';
 
 import BlotFormatter from 'quill-blot-formatter';
 import Mention from 'quill-mention';
@@ -499,10 +498,7 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
           },
         });
 
-        const component = this.componentService.getComponent(UserViewMiniComponent);
-        component.instance.user = user.user;
-
-        tooltip.updateTitleContent(this.componentService.getRootNode(component));
+        tooltip.updateTitleContent(`<div class="p-1"><h5>${user.user.username}</h5></div>`);
       }
     });
   }

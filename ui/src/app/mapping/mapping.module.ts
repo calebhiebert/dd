@@ -9,9 +9,10 @@ import { MapToolbarComponent } from './map-toolbar/map-toolbar.component';
 import { CustomControlsModule } from '../custom-controls/custom-controls.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MapComponent } from './map.component';
+import { UsersModule } from '../users/users.module';
 
 @NgModule({
   declarations: [MapEditorMenuComponent, MapManagerComponent, MapToolbarComponent, MapUploadComponent, MapComponent],
-  imports: [CommonModule, MappingRoutingModule, CustomControlsModule, ReactiveFormsModule],
+  imports: [CommonModule, MappingRoutingModule, CustomControlsModule, ReactiveFormsModule, UsersModule],
 })
 export class MappingModule {}

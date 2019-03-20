@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationModalComponent } from 'src/app/confirmation-modal/confirmation-modal.component';
@@ -7,9 +7,9 @@ import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 import { IEntityAttributePreset, EntityAttributePresetsService } from 'src/app/entity-attribute-presets.service';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
-import { FieldDefinitionFormComponent } from 'src/app/dynform/field-definition-form/field-definition-form.component';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
+import { FieldDefinitionFormComponent } from 'src/app/custom-controls/dynform/field-definition-form/field-definition-form.component';
 
 @Component({
   selector: 'dd-entity-preset-editor',

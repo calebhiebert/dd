@@ -1,10 +1,10 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { NoteEditorComponent } from './note/note-editor/note-editor.component';
 import { IUser } from './user.service';
 import { LoginService } from './login.service';
 import { IMapShape } from './map.service';
+import { NoteEditorComponent } from './notes/note-editor/note-editor.component';
 
 @Injectable({
   providedIn: 'root',

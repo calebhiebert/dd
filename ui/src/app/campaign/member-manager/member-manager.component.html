@@ -16,7 +16,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let m of members" [ngClass]="{ faded: m.userId === campaign.userId }">
-        <td><dd-user-view-nano [user]="m.user"></dd-user-view-nano></td>
+        <td [ddUser]="m.user"></td>
         <td>A Date</td>
         <td>
           <span *ngIf="m.userId !== campaign.userId" class="fake-link" (click)="remove(m)">Remove</span>

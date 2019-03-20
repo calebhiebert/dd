@@ -18,10 +18,6 @@ import { QuestFormComponent } from './quest/quest-form/quest-form.component';
 import { QuestViewComponent } from './quest/quest-view/quest-view.component';
 import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-manager.component';
 import { OverviewComponent } from './session/overview/overview.component';
-import { ArticleEditorComponent } from './article/article-editor/article-editor.component';
-import { ArticleViewComponent } from './article/article-view/article-view.component';
-import { ArticleManagerComponent } from './article/article-manager/article-manager.component';
-import { AccountSettingsComponent } from './account/account-settings/account-settings.component';
 import { UnsavedChangesGuard } from './unsaved-changes.guard';
 import { ConceptTypeEditorComponent } from './concept/concept-type-editor/concept-type-editor.component';
 import { ConceptManagerComponent } from './concept/concept-manager/concept-manager.component';
@@ -51,8 +47,8 @@ const routes: Routes = [
   },
   {
     path: 'account',
-    component: AccountSettingsComponent,
     canActivate: [LoggedInGuard, ActionGuard],
+    loadChildren: './users/users.module#UsersModule',
     data: {
       breadcrumb: 'Account',
     },
@@ -250,35 +246,7 @@ const routes: Routes = [
       },
       {
         path: 'articles',
-        component: ArticleManagerComponent,
-        data: {
-          breadcrumb: 'Articles',
-        },
-      },
-      {
-        path: 'articles/create',
-        component: ArticleEditorComponent,
-        canDeactivate: [UnsavedChangesGuard],
-        data: {
-          editing: false,
-          breadcrumb: 'Create Article',
-        },
-      },
-      {
-        path: 'articles/:a_id/edit',
-        component: ArticleEditorComponent,
-        canDeactivate: [UnsavedChangesGuard],
-        data: {
-          editing: true,
-          breadcrumb: 'Edit Article',
-        },
-      },
-      {
-        path: 'articles/:a_id',
-        component: ArticleViewComponent,
-        data: {
-          breadcrumb: 'Article View',
-        },
+        loadChildren: './articles/articles.module#ArticlesModule',
       },
       {
         path: 'members',

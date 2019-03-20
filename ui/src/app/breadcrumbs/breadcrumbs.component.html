@@ -1,8 +1,0 @@
-<div class="container grid-xl">
-  <ul class="breadcrumb">
-    <li class="breadcrumb-item"><a [routerLink]="['home']">Home</a></li>
-    <li class="breadcrumb-item" *ngFor="let bc of breadcrumbs">
-      <a [routerLink]="bc.navigate">{{ bc.display }}</a>
-    </li>
-  </ul>
-</div>

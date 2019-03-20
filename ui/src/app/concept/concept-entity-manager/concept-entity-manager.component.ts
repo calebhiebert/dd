@@ -4,13 +4,13 @@ import { IEntity, EntityService } from 'src/app/entity.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CampaignService } from 'src/app/campaign.service';
-import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
 import { Subscription } from 'rxjs';
 import { UpdateHubService } from 'src/app/update-hub.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoginService } from 'src/app/login.service';
 import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
+import { DynamicFieldType, IDynamicFieldConfig } from 'src/app/custom-controls/dynform/form-types';
 
 @Component({
   selector: 'dd-concept-entity-manager',

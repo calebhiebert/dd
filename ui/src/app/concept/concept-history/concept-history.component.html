@@ -24,8 +24,7 @@
             <strong>{{ history.name }}</strong>
             {{ history.actionSource === 1 ? 'imported' : getEntryActionText(history) }}.
             <div>{{ getDate(history) | date: 'short' }}</div>
-
-            <dd-user-view-nano [user]="getUser(history.userId)"></dd-user-view-nano>
+            <div [ddUser]="getUser(history.userId)"></div>
           </div>
           <div class="tile-action">
             <button

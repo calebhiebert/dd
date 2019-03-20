@@ -7,7 +7,7 @@ import { LoginService } from 'src/app/login.service';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
-import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/dynform/form-types';
+import { DynamicFieldType, IDynamicFieldConfig } from 'src/app/custom-controls/dynform/form-types';
 
 @Component({
   selector: 'dd-entity-editor',
