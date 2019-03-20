@@ -97,6 +97,8 @@ import { ArticleConceptManagerListItemComponent } from './concept/article-concep
 import { CurrencyDirective } from './currency.directive';
 import { MappingModule } from './mapping/mapping.module';
 import { CustomControlsModule } from './custom-controls/custom-controls.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -201,6 +203,7 @@ import { CustomControlsModule } from './custom-controls/custom-controls.module';
     DragDropModule,
     MappingModule,
     CustomControlsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   exports: [EditableEntitySelectorComponent, ArticleSelectComponent],
   providers: [
