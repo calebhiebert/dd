@@ -33,7 +33,8 @@ namespace net_api.Controllers
         public async Task<ActionResult<IEnumerable<Note>>> GetNotes(
             [FromQuery] Guid? campaignId,
             [FromQuery] Guid? questId,
-            [FromQuery] Guid? mapId
+            [FromQuery] Guid? mapId,
+            [FromQuery] Guid? articleId
             )
         {
             if (campaignId == null)
@@ -72,6 +73,11 @@ namespace net_api.Controllers
             if (mapId != null)
             {
                 query = query.Where(q => q.MapId == mapId);
+            }
+
+            if (articleId != null)
+            {
+                query = query.Where(q => q.ArticleId == articleId);
             }
 
             return await query.ToListAsync();

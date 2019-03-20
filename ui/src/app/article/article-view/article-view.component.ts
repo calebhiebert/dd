@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { UpdateHubService, ConnectionState } from 'src/app/update-hub.service';
 import { filter } from 'rxjs/operators';
 import { IConceptType } from 'src/app/concept.service';
+import { NoteService, NoteType } from 'src/app/note.service';
 
 @Component({
   selector: 'dd-article-view',
@@ -17,6 +18,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
   public loadError: any;
   public article: IArticle;
   public questsExpanded = false;
+  public notesExpanded = false;
   public conceptTypesExpanded = {};
 
   private _updateSubscription: Subscription;
@@ -26,7 +28,8 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private campaignService: CampaignService,
-    private updateHub: UpdateHubService
+    private updateHub: UpdateHubService,
+    private noteService: NoteService
   ) {}
 
   ngOnInit() {
@@ -64,6 +67,10 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
 
     try {
       this.article = await this.articleService.getArticle(id);
+
+      this.noteService.getNotes(this.campaignService.campaign.id, {
+        articleId: this.article.id,
+      });
     } catch (err) {
       this.loadError = err;
       console.log(err);
@@ -85,6 +92,13 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  public addNote() {
+    this.noteService.addNote({
+      type: NoteType.ARTICLE,
+      articleId: this.article.id,
+    });
+  }
+
   public get editable() {
     return this.campaignService.canEdit;
   }
@@ -102,6 +116,14 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
       });
 
       return Object.values(conceptTypes);
+    } else {
+      return [];
+    }
+  }
+
+  public get notes() {
+    if (this.article) {
+      return this.noteService.getArticleNotes(this.article.id);
     } else {
       return [];
     }

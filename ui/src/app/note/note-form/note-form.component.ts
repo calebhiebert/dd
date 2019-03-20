@@ -49,6 +49,7 @@ export class NoteFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.formGroup = new FormGroup({
       content: new FormControl(this.note.content),
+      title: new FormControl(this.note.title),
       publicView: new FormControl(this.note.publicView),
       publicEdit: new FormControl(this.note.publicEdit),
     });
@@ -56,7 +57,7 @@ export class NoteFormComponent implements OnInit, OnDestroy {
     this.note.title = 'Placeholder';
 
     this.formGroup.valueChanges.subscribe((v) => {
-      this.note.title = 'Placeholder';
+      this.note.title = v.title || 'Placeholder';
       this.note.publicEdit = v.publicEdit;
       this.note.publicView = v.publicView;
       this.note.content = v.content;

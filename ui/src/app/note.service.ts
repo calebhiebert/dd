@@ -51,6 +51,10 @@ export class NoteService {
     return this._noteCache.filter((n) => n.mapId === mapId);
   }
 
+  public getArticleNotes(articleId: string) {
+    return this._noteCache.filter((n) => n.articleId === articleId);
+  }
+
   public getNotes(campaignId: string, query: INoteQuery): Promise<INote[]> {
     let queryString = `?campaignId=${campaignId}`;
 
@@ -60,6 +64,10 @@ export class NoteService {
 
     if (query.mapId) {
       queryString += `&mapId=${query.mapId}`;
+    }
+
+    if (query.articleId) {
+      queryString += `&articleId=${query.articleId}`;
     }
 
     return this.http
@@ -162,11 +170,15 @@ export interface INoteOptions {
   lat?: number;
   lng?: number;
   mapShape?: IMapShape;
+
+  // Article
+  articleId?: string;
 }
 
 export enum NoteType {
   QUEST,
   MAP,
+  ARTICLE,
 }
 
 export interface INote {
@@ -175,6 +187,7 @@ export interface INote {
   content: any;
   campaignId: string;
   questId?: string;
+  articleId?: string;
   publicEdit: boolean;
   publicView: boolean;
   userId?: string;
@@ -190,4 +203,5 @@ export interface INote {
 export interface INoteQuery {
   questId?: string;
   mapId?: string;
+  articleId?: string;
 }

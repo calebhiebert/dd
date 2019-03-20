@@ -12,12 +12,14 @@
 
       <div class="column col-auto">
         <!-- View On Map -->
-        <button class="btn btn-sm mr-2" *ngIf="article.mapId !== null" (click)="viewOnMap()">
+        <button class="btn btn-sm" *ngIf="article.mapId !== null" (click)="viewOnMap()">
           <i class="icon icon-location"></i>
           <span class="hide-sm"> Map</span>
         </button>
 
-        <button class="btn btn-sm" (click)="edit()" *ngIf="editable">
+        <button class="btn btn-sm ml-2" (click)="addNote()"><i class="icon icon-link"></i> <span class="hide-sm"> Add Note</span></button>
+
+        <button class="btn btn-sm ml-2" (click)="edit()" *ngIf="editable">
           <i class="icon icon-edit"></i><span class="hide-sm"> Edit</span>
         </button>
       </div>
@@ -57,5 +59,13 @@
     <span class="fake-link" *ngIf="conceptTypesExpanded[ct.id] === true" (click)="conceptTypesExpanded[ct.id] = false"
       >Hide {{ ct.pluralForm }}</span
     >
+  </div>
+
+  <!-- Notes -->
+  <div *ngIf="notes.length > 0">
+    <h4>Notes</h4>
+    <span class="fake-link" *ngIf="notesExpanded !== true" (click)="notesExpanded = true">Show Notes</span>
+    <dd-note-list [notes]="notes" *ngIf="notesExpanded"></dd-note-list>
+    <span class="fake-link" *ngIf="notesExpanded === true" (click)="notesExpanded = false">Hide Notes</span>
   </div>
 </div>

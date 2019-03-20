@@ -110,7 +110,12 @@
     <!-- Currency -->
     <!-- Currency Desktop -->
     <div class="column col-3 col-md-5 hide-sm" *ngIf="preset.isCurrencyEnabled">
-      <div class="card h-100 p-1 currency-box text-center" (click)="editCurrency()" [ngClass]="{ 'c-hand': editable }">
+      <div
+        class="s-rounded h-100 p-1 currency-box text-center"
+        style="height: 36px"
+        (click)="editCurrency()"
+        [ngClass]="{ 'c-hand': editable }"
+      >
         <h5 class="mb-0" [ddCurrency]="entity.currency"></h5>
       </div>
     </div>

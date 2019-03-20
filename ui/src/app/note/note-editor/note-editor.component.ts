@@ -15,8 +15,8 @@ import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 export class NoteEditorComponent implements OnInit {
   @ViewChild('modal')
   private modal: ModalComponent<any>;
-  public statusText = '';
   public loading = false;
+  public unsaved = false;
 
   public note: INote;
 
@@ -47,7 +47,6 @@ export class NoteEditorComponent implements OnInit {
 
   private async createNote(opts: INoteOptions) {
     this.loading = true;
-    this.statusText = 'Creating new note...';
 
     const noteCreation: INote = {
       title: 'UNNAMED_NOTE',
@@ -68,6 +67,9 @@ export class NoteEditorComponent implements OnInit {
         noteCreation.lng = opts.lng;
         noteCreation.mapShape = opts.mapShape;
         break;
+      case NoteType.ARTICLE:
+        noteCreation.articleId = opts.articleId;
+        break;
     }
 
     try {
@@ -77,7 +79,6 @@ export class NoteEditorComponent implements OnInit {
       throw err;
     }
 
-    this.statusText = '';
     this.loading = false;
   }
 
@@ -86,7 +87,7 @@ export class NoteEditorComponent implements OnInit {
       await this._autosavePromise;
     }
 
-    this.statusText = 'Saving...';
+    this.loading = true;
 
     try {
       this._autosavePromise = this.noteService.updateNote(this.note);
@@ -97,7 +98,8 @@ export class NoteEditorComponent implements OnInit {
     }
 
     this._lastAutosave = Date.now();
-    this.statusText = 'Saved';
+    this.loading = false;
+    this.unsaved = false;
   }
 
   public onNoteChange(note: INote) {
@@ -105,12 +107,11 @@ export class NoteEditorComponent implements OnInit {
       return;
     }
 
-    this.statusText = 'Unsaved';
-
     if (Date.now() > this._lastAutosave + this._autosaveInterval) {
       this.note = note;
       this.saveNote();
     } else {
+      this.unsaved = true;
       if (this._saveTimeout !== undefined) {
         clearTimeout(this._saveTimeout);
       }
@@ -136,7 +137,6 @@ export class NoteEditorComponent implements OnInit {
   }
 
   public async editNote(note: INote) {
-    this.statusText = '';
     this.modal.open().then(() => {
       this.note = undefined;
     });

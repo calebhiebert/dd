@@ -50,6 +50,11 @@ namespace net_api.Models
         [JsonIgnore]
         public Quest Quest { get; set; }
 
+        public Guid? ArticleId { get; set; }
+
+        [JsonIgnore]
+        public Article Article { get; set; }
+
         [Required]
         public bool PublicEdit { get; set; }
 
