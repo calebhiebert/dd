@@ -266,12 +266,25 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     const paramSnapshot = this.route.snapshot.queryParamMap;
 
-    if (paramSnapshot.has('zoom')) {
-      map.setZoom(paramSnapshot.get('zoom'));
+    const presetZoom = paramSnapshot.get('zoom');
+    const presetLat = paramSnapshot.get('lat');
+    const presetLng = paramSnapshot.get('lng');
+
+    if (presetZoom !== undefined && presetZoom !== null && !isNaN(presetZoom as any)) {
+      map.setZoom(presetZoom);
+    } else {
+      map.setZoom(1);
     }
 
-    if (paramSnapshot.has('lat') && paramSnapshot.has('lng')) {
-      map.setView({ lat: paramSnapshot.get('lat'), lng: paramSnapshot.get('lng') });
+    if (
+      presetLat !== null &&
+      presetLng !== null &&
+      presetLat !== undefined &&
+      presetLng !== undefined &&
+      !isNaN(presetLat as any) &&
+      !isNaN(presetLng as any)
+    ) {
+      map.setView({ lat: presetLat, lng: presetLng });
     } else {
       map.fitBounds([[-10, 10], [-246, 246]]);
     }
