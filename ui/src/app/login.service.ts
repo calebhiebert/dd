@@ -226,7 +226,7 @@ export class LoginService {
           // User needs to setup their account
           this.actions.queue.push({ type: ActionType.ACCOUNT_SETUP, data: null });
           this.actions.save();
-          this.router.navigate(['register']);
+          this.router.navigate(['register'], { replaceUrl: true });
           return;
         } else {
           console.log(err);
@@ -254,7 +254,7 @@ export class LoginService {
       this.checkSession();
     }, 1000 * 60 * 15);
 
-    this.router.navigate(['home']);
+    this.router.navigate(['home'], { replaceUrl: true });
     this.busy = false;
   }
 

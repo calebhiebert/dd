@@ -8,13 +8,15 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  constructor(private login: LoginService, private route: ActivatedRoute) {}
+  constructor(private login: LoginService, private route: ActivatedRoute, private router: Router) {}
 
   public async ngOnInit() {
     const mode = this.route.snapshot.url[0].path;
 
-    if (mode === 'callback') {
-      this.login.processLoginCallback(window.location.hash);
+    if (mode === 'callback' && window.location.hash) {
+      const hash = window.location.hash;
+      this.router.navigate([], { replaceUrl: true });
+      this.login.processLoginCallback(hash);
     }
   }
 

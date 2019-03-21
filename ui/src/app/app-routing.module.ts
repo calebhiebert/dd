@@ -27,6 +27,7 @@ import { MemberManagerComponent } from './campaign/member-manager/member-manager
 import { ConceptEntityManagerComponent } from './concept/concept-entity-manager/concept-entity-manager.component';
 import { EntityPresetEditorComponent } from './entity/entity-preset-editor/entity-preset-editor.component';
 import { EntityEditorComponent } from './entity/entity-editor/entity-editor.component';
+import { LoginPageGuard } from './login-page.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -35,6 +36,7 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+    canActivate: [LoginPageGuard],
   },
   {
     path: 'register',
