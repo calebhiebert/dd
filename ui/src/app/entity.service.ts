@@ -11,8 +11,6 @@ import { IDynamicFieldConfig } from './custom-controls/dynform/form-types';
   providedIn: 'root',
 })
 export class EntityService {
-  private _currentViewEntity: IEntity = null;
-
   constructor(private http: HttpClient) {}
 
   public async updateEntityPreset(entityPreset: IEntityPreset): Promise<void> {
@@ -62,14 +60,6 @@ export class EntityService {
 
   public async spawnSpawnable(spawnableId: string, count: number): Promise<void> {
     return this.http.post<void>(`${environment.apiURL}/entities/spawn/${spawnableId}?count=${count}`, null).toPromise();
-  }
-
-  public get currentViewEntity() {
-    return this._currentViewEntity;
-  }
-
-  public set currentViewEntity(entity: IEntity) {
-    this._currentViewEntity = entity;
   }
 }
 

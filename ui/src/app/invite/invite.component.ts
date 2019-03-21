@@ -35,7 +35,7 @@ export class InviteComponent implements OnInit {
     });
     this.actions.save();
 
-    const isLoggedIn = await this.login.isLoggedIn();
+    const isLoggedIn = await this.login.isLoggedIn;
 
     if (!isLoggedIn) {
       this.router.navigate(['login']);
@@ -92,9 +92,7 @@ export class InviteComponent implements OnInit {
 
   private async loadInvite() {
     try {
-      const invite = await this.campaignService.getInvite(
-        this.route.snapshot.paramMap.get('invite_id')
-      );
+      const invite = await this.campaignService.getInvite(this.route.snapshot.paramMap.get('invite_id'));
       this.invite = invite;
     } catch (err) {
       throw err;

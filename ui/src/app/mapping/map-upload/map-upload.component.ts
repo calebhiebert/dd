@@ -19,11 +19,7 @@ export class MapUploadComponent implements OnInit {
 
   public formGroup: FormGroup;
 
-  constructor(
-    private campaignService: CampaignService,
-    private loginService: LoginService,
-    private router: Router
-  ) {}
+  constructor(private campaignService: CampaignService, private loginService: LoginService, private router: Router) {}
 
   ngOnInit() {
     this.formGroup = new FormGroup({
@@ -33,12 +29,7 @@ export class MapUploadComponent implements OnInit {
   }
 
   public viewMap() {
-    this.router.navigate([
-      'campaigns',
-      this.campaignService.campaign.id,
-      'maps',
-      this.mapId,
-    ]);
+    this.router.navigate(['campaigns', this.campaignService.campaign.id, 'maps', this.mapId]);
   }
 
   public onFileChange(event: Event) {
@@ -50,9 +41,7 @@ export class MapUploadComponent implements OnInit {
 
       if (this.file.size > 50000000) {
         this.fileError = 'Size cannot exceed 50mb';
-      } else if (
-        ['image/png', 'image/jpg', 'image/jpeg'].indexOf(this.file.type) === -1
-      ) {
+      } else if (['image/png', 'image/jpg', 'image/jpeg'].indexOf(this.file.type) === -1) {
         this.fileError = 'Image file must be a .png or a .jpg';
       }
     }
@@ -87,10 +76,7 @@ export class MapUploadComponent implements OnInit {
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `${environment.apiURL}/maps`, true);
-    xhr.setRequestHeader(
-      'Authorization',
-      `Bearer ${this.loginService.loadToken()}`
-    );
+    xhr.setRequestHeader('Authorization', `Bearer ${this.loginService.token}`);
 
     xhr.onload = (e) => {
       const result = JSON.parse(xhr.responseText);

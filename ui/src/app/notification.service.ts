@@ -6,6 +6,8 @@ import { environment } from 'src/environments/environment';
 import { IMap } from './map.service';
 import { ToastrService } from 'ngx-toastr';
 import { IQuest } from './quest.service';
+import { LoginService, LoginStatus } from './login.service';
+import { UpdateHubService } from './update-hub.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +16,21 @@ export class NotificationService {
   private _loading = false;
   private _notifications: Notification[];
 
-  constructor(private http: HttpClient, private toast: ToastrService) {}
+  constructor(private http: HttpClient, private toast: ToastrService, login: LoginService, updateHub: UpdateHubService) {
+    login.loginStatus.subscribe((status) => {
+      if (status === LoginStatus.LOGGED_IN) {
+        this.loadNotifications();
+      }
+    });
+
+    updateHub.notificationUpdate.subscribe(() => {
+      this.loadNotifications();
+    });
+
+    if (login.isLoggedIn) {
+      this.loadNotifications();
+    }
+  }
 
   private getNewNotifications(oldList: Notification[], newList: Notification[]) {
     let newNotifications: Notification[] = [];
@@ -40,7 +56,7 @@ export class NotificationService {
     }
   }
 
-  public async loadNotifications() {
+  private async loadNotifications() {
     this._loading = true;
     try {
       const notifications = await this.getNotifications();

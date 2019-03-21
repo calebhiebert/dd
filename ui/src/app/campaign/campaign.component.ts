@@ -8,17 +8,12 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./campaign.component.css'],
 })
 export class CampaignComponent implements OnInit, OnDestroy {
-  constructor(
-    private campaignService: CampaignService,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private campaignService: CampaignService, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    if (!this.loading && !this.campaign) {
-      this.route.params.subscribe((params) => {
-        this.campaignService.setSelection(params.id);
-      });
-    }
+    this.route.paramMap.subscribe((params) => {
+      this.campaignService.setSelection(params.get('id'));
+    });
   }
 
   ngOnDestroy(): void {

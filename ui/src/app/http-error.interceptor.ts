@@ -1,26 +1,18 @@
-import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpErrorResponse,
-} from '@angular/common/http';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { tap, finalize } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { LoginService } from './login.service';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
   private silenceErrors = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private login: LoginService) {}
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let responseError;
 
     return next.handle(req).pipe(
@@ -36,13 +28,13 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               case 401:
                 await Swal.fire({
                   title: 'Session Expired',
-                  text:
-                    'Your login session has expired, you will be redirected to the login page',
+                  text: 'Your login session has expired, you will be redirected to the login page',
                   type: 'warning',
                   confirmButtonText: 'Okay',
                 });
 
                 this.silenceErrors = true;
+                this.login.logout();
 
                 await this.router.navigate(['login']);
                 break;
@@ -51,8 +43,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                 } else {
                   await Swal.fire({
                     title: 'Not Found',
-                    text:
-                      'The resource you requested could not be found! Sorry about that.',
+                    text: 'The resource you requested could not be found! Sorry about that.',
                     type: 'error',
                     confirmButtonText: 'Okay',
                   });
@@ -72,8 +63,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               case 0:
                 await Swal.fire({
                   title: 'Could Not Connect',
-                  text:
-                    'A connection to the server could not be established. Please make sure you are connected to the internet',
+                  text: 'A connection to the server could not be established. Please make sure you are connected to the internet',
                   type: 'error',
                   confirmButtonText: 'Okay',
                 });
@@ -81,9 +71,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               default:
                 await Swal.fire({
                   title: 'Unknown Error!',
-                  text:
-                    'An unknown error occured. Maybe this will help: ' +
-                    responseError.message,
+                  text: 'An unknown error occured. Maybe this will help: ' + responseError.message,
                   type: 'error',
                   confirmButtonText: 'Okay',
                 });

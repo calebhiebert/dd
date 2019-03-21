@@ -1,8 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { environment } from 'src/environments/environment';
-import { LoginService } from './login.service';
-import { ICampaign, CampaignService } from './campaign.service';
+import { LoginService, LoginStatus } from './login.service';
+import { ICampaign } from './campaign.service';
 import { NotificationService } from './notification.service';
 import { IEntity, EntityService } from './entity.service';
 import { NoteService } from './note.service';
@@ -31,7 +31,10 @@ export class UpdateHubService {
 
   // Events
   public entityUpdated = new EventEmitter<IEntity>();
-
+  public entityCreated = new EventEmitter<IEntity>();
+  public entityDeleted = new EventEmitter<string>();
+  public campaignUpdated = new EventEmitter<ICampaign>();
+  public campaignRefresh = new EventEmitter<boolean>();
   public articleCreated = new EventEmitter<IArticle>();
   public articleUpdated = new EventEmitter<IArticle>();
   public articleDeleted = new EventEmitter<IArticle>();
@@ -42,25 +45,23 @@ export class UpdateHubService {
   public conceptEntityDelete = new EventEmitter<IConceptEntity>();
   public conceptArticleUpdate = new EventEmitter<IArticleConcept>();
   public conceptArticleDelete = new EventEmitter<IArticleConcept>();
+  public notificationUpdate = new EventEmitter<boolean>();
 
-  constructor(
-    private login: LoginService,
-    private campaignService: CampaignService,
-    private notificationService: NotificationService,
-    private entityService: EntityService,
-    private noteService: NoteService,
-    private toastr: ToastrService
-  ) {
+  constructor(private login: LoginService, private noteService: NoteService, private toastr: ToastrService) {
     this._state = ConnectionState.NOT_CONNECTED;
     this.stateUpdate.emit(this._state);
 
-    campaignService.events.subscribe((campaign) => {
-      if (campaign === null && campaignService.previousCampaignId) {
-        this.unsubscribeCampaign(campaignService.previousCampaignId);
-      } else if (campaign !== null) {
-        this.subscribeCampaign(campaignService.campaign.id);
+    this.login.loginStatus.subscribe((loginStatus) => {
+      if (loginStatus === LoginStatus.LOGGED_IN) {
+        this.start();
+      } else if (loginStatus === LoginStatus.NOT_LOGGED_IN) {
+        this.stop();
       }
     });
+
+    if (this.login.isLoggedIn) {
+      this.start();
+    }
   }
 
   private async setup() {
@@ -72,10 +73,10 @@ export class UpdateHubService {
 
     this.connection.on('AuthenticateComplete', () => this.authComplete());
 
-    this.connection.on('CampaignUpdate', (campaign: ICampaign) => this.campaignUpdate(campaign));
+    this.connection.on('CampaignUpdate', (campaign: ICampaign) => this.campaignUpdated.emit(campaign));
 
     this.connection.on('Notify', () => {
-      this.notificationService.loadNotifications();
+      this.notificationUpdate.emit(true);
     });
 
     this.connection.on('EventNotify', (event) => {
@@ -83,15 +84,15 @@ export class UpdateHubService {
     });
 
     this.connection.on('EntityUpdate', (entity) => {
-      this.entityUpdate(entity);
+      this.entityUpdated.emit(entity);
     });
 
     this.connection.on('EntityCreate', (entity) => {
-      this.entityCreate(entity);
+      this.entityCreated.emit(entity);
     });
 
     this.connection.on('EntityDelete', (entityId) => {
-      this.entityDelete(entityId);
+      this.entityDeleted.emit(entityId);
     });
 
     this.connection.on('NoteCreate', (note) => {
@@ -135,7 +136,7 @@ export class UpdateHubService {
     });
 
     this.connection.on('RefreshCurrentCampaign', () => {
-      this.campaignService.refreshCurrentCampaign();
+      this.campaignRefresh.emit(true);
     });
 
     this.connection.on('ConceptArticleUpdate', (ca) => {
@@ -160,23 +161,14 @@ export class UpdateHubService {
     }
   }
 
-  public async start() {
+  private async start() {
     if ([ConnectionState.CLOSED, ConnectionState.NOT_CONNECTED].indexOf(this.state) === -1) {
-      return;
-    }
-
-    const isLoggedIn = await this.login.isLoggedIn();
-
-    if (!isLoggedIn) {
-      setTimeout(() => {
-        this.start();
-      }, 1000);
       return;
     }
 
     this.connection = new HubConnectionBuilder()
       .withUrl(`${environment.hubURL}`, {
-        accessTokenFactory: this.login.loadToken,
+        accessTokenFactory: () => this.login.token,
       })
       .build();
 
@@ -192,6 +184,7 @@ export class UpdateHubService {
     } catch (err) {
       this._state = ConnectionState.CLOSED;
       this.stateUpdate.emit(this._state);
+      console.log('ERROR', err);
 
       setTimeout(() => {
         this.start();
@@ -199,75 +192,17 @@ export class UpdateHubService {
     }
   }
 
+  private async stop() {
+    if (this.connection) {
+      await this.connection.stop();
+      this._state = ConnectionState.NOT_CONNECTED;
+      this.stateUpdate.emit(this._state);
+    }
+  }
+
   private authComplete() {
     this._state = ConnectionState.CONNECTED;
     this.stateUpdate.emit(this._state);
-
-    if (this.campaignService.campaign) {
-      this.subscribeCampaign(this.campaignService.campaign.id);
-    }
-  }
-
-  private campaignUpdate(campaign: ICampaign) {
-    if (this.campaignService.campaign && this.campaignService.campaign.id === campaign.id) {
-      // TODO, do this automatically somehow
-      const c = this.campaignService.campaign;
-
-      c.name = campaign.name;
-      c.content = campaign.content;
-      c.imageId = campaign.imageId;
-      c.experienceTable = campaign.experienceTable;
-      c.itemTypes = campaign.itemTypes;
-      c.currencyMap = campaign.currencyMap;
-    }
-  }
-
-  private entityUpdate(entity: IEntity) {
-    if (!this.campaignService.campaign) {
-      console.warn('Received entity update but no campaign was present');
-      return;
-    }
-
-    // populate properties from the campaign object
-    entity.preset = this.campaignService.campaign.entityPresets.find((ep) => ep.id === entity.entityPresetId);
-
-    entity.user = this.campaignService.campaign.members.find((m) => m.userId === entity.userId).user;
-
-    this.campaignService.campaign.entities.forEach((ent, idx) => {
-      if (ent.id === entity.id) {
-        this.campaignService.campaign.entities[idx] = {
-          ...ent,
-          ...entity,
-        };
-      }
-    });
-
-    if (this.entityService.currentViewEntity !== null && this.entityService.currentViewEntity.id === entity.id) {
-      this.entityService.currentViewEntity = {
-        ...this.entityService.currentViewEntity,
-        ...entity,
-      };
-    }
-
-    this.entityUpdated.emit(entity);
-  }
-
-  private entityCreate(entity: IEntity) {
-    if (!this.campaignService.campaign) {
-      console.warn('Received entity create but no campaign was present');
-      return;
-    }
-
-    // populate properties from the campaign object
-    entity.preset = this.campaignService.campaign.entityPresets.find((ep) => ep.id === entity.entityPresetId);
-
-    entity.user = this.campaignService.campaign.members.find((m) => m.userId === entity.userId).user;
-
-    this.campaignService.campaign.entities.push(entity);
-  }
-
-  private entityDelete(id: string) {
-    this.campaignService.campaign.entities = this.campaignService.campaign.entities.filter((e) => e.id !== id);
   }
 
   public async subscribeCampaign(campaignId: string) {

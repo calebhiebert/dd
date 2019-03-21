@@ -14,19 +14,14 @@ export class RegisterComponent implements OnInit {
   public loading = false;
   public usernameControl: FormControl;
 
-  constructor(
-    private login: LoginService,
-    public userService: UserService,
-    private router: Router,
-    private action: ActionQueueService
-  ) { }
+  constructor(private login: LoginService, public userService: UserService, private router: Router, private action: ActionQueueService) {}
 
   ngOnInit() {
-    if (!this.login.authData) {
+    if (!this.login.userProfile) {
       this.router.navigate(['login']);
     }
 
-    this.usernameControl = new FormControl(null, [
+    this.usernameControl = new FormControl(this.login.userProfile.nickname, [
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(30),
@@ -40,11 +35,10 @@ export class RegisterComponent implements OnInit {
         const newUser = await this.userService.createUser({
           id: this.login.id,
           username: this.usernameControl.value,
-          pictureURL: this.login.authData.picture,
+          pictureURL: this.login.userProfile.picture,
         });
 
-        this.login.setUserData(newUser);
-        this.login.resetLoginStatus();
+        this.login.setUser(newUser);
 
         this.action.queue.pop();
         this.action.save();

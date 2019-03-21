@@ -39,27 +39,17 @@ export class NavComponent implements OnInit {
   }
 
   public get loggedIn() {
-    return this.login.loggedIn;
+    return this.login.isLoggedIn;
   }
 
   public get navEntities() {
     if (this.loggedIn && this.campaign) {
       return this.campaign.entities.filter((e) => {
-        return (
-          !e.spawnable && e.spawnedFromId === null && e.userId === this.login.id
-        );
+        return !e.spawnable && e.spawnedFromId === null && e.userId === this.login.id;
       });
     } else {
       return null;
     }
-  }
-
-  public get currentEntity() {
-    return this.entityService.currentViewEntity;
-  }
-
-  public get loginInProgress() {
-    return this.login.loginInProgress;
   }
 
   public get notificationText() {

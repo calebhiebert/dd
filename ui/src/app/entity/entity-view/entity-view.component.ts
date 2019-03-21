@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityAttributeEditorModalComponent } from './entity-attribute-editor-modal/entity-attribute-editor-modal.component';
-import { EntityService, EntityAttributeClass, IHealth, IViewField, IAttribute, IEntityFieldConfig } from 'src/app/entity.service';
+import { EntityService, EntityAttributeClass, IHealth, IViewField, IAttribute, IEntityFieldConfig, IEntity } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoginService } from 'src/app/login.service';
@@ -19,8 +19,8 @@ export class EntityViewComponent implements OnInit, OnDestroy {
   public attributeModal: EntityAttributeEditorModalComponent;
 
   public loading = false;
-
   public saving = false;
+  public entity: IEntity;
 
   private _updateHubStatus$: Subscription;
 
@@ -36,6 +36,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
+      this.update.subscribeEntities([params.get('ent_id')]);
       this.loadEntity(params.get('ent_id'));
     });
 
@@ -47,8 +48,6 @@ export class EntityViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.entityService.currentViewEntity = null;
-
     if (this.entity) {
       this.update.unsubscribeEntities([this.entity.id]);
     }
@@ -80,9 +79,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     try {
-      const ent = await this.entityService.getEntity(id);
-      this.entityService.currentViewEntity = ent;
-      this.update.subscribeEntities([ent.id]);
+      this.entity = await this.entityService.getEntity(id);
     } catch (err) {
       throw err;
     }
@@ -303,10 +300,6 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     }
 
     return this.campaignService.campaign.conceptTypes.filter((ct) => this.preset.conceptTypesEnabled.indexOf(ct.id) !== -1);
-  }
-
-  public get entity() {
-    return this.entityService.currentViewEntity;
   }
 
   public backgroundCSS(imageId: string) {

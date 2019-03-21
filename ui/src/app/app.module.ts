@@ -49,7 +49,6 @@ import { FooterComponent } from './footer/footer.component';
 import { HomeComponent } from './home/home.component';
 import { HttpErrorInterceptor } from './http-error.interceptor';
 import { InviteComponent } from './invite/invite.component';
-import { LoginStatusComponent } from './login/login-status/login-status.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './login/register/register.component';
 import { LongPressDirective } from './long-press.directive';
@@ -118,7 +117,6 @@ import { UsersModule } from './users/users.module';
     ConceptHistoryComponent,
     MemberManagerComponent,
     LongPressDirective,
-    LoginStatusComponent,
     EntityPresetEditorComponent,
     ConceptEntityManagerListItemComponent,
   ],

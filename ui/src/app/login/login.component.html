@@ -2,7 +2,7 @@
   <div class="columns">
     <div class="column col-5 col-md-8 col-sm-11 col-mx-auto">
       <!-- Login Buttons -->
-      <div class="card text-center" *ngIf="!processing">
+      <div class="card text-center" *ngIf="!busy">
         <div class="card-header"><h2>Login</h2></div>
         <div class="card-body">
           <button class="btn btn-lg btn-primary wide" (click)="authGoog()">
@@ -16,7 +16,7 @@
       </div>
 
       <!-- Loading Indicator -->
-      <div class="card text-center" *ngIf="processing">
+      <div class="card text-center" *ngIf="busy">
         <div class="card-body">
           <h6 class="mb-1">Processing Information...</h6>
         </div>

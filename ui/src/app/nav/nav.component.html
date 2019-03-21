@@ -21,7 +21,6 @@
             class="avatar mx-1 entity-hover tooltip tooltip-bottom"
             [attr.data-tooltip]="e.name"
             [routerLink]="['/campaigns', campaign.id, 'entities', e.id]"
-            [ngClass]="{ active: currentEntity && e.id === currentEntity.id }"
             *ngFor="let e of navEntities; trackBy: trackEntity"
           >
             <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ e.imageId }}" alt="Avatar" />

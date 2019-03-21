@@ -20,11 +20,7 @@ export class AccountSettingsComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      username: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(30),
-      ]),
+      username: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
     });
 
     this.load();
@@ -34,7 +30,7 @@ export class AccountSettingsComponent implements OnInit {
     this.loading = true;
 
     try {
-      this.user = await this.userService.getUser(this.login.user.id);
+      this.user = await this.userService.getUser(this.login.currentUser.id);
       this.patchForm();
     } catch (err) {
       throw err;

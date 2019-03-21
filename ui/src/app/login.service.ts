@@ -6,27 +6,41 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ActionQueueService, ActionType } from './action-queue.service';
 import * as Sentry from '@sentry/browser';
+import Swal from 'sweetalert2';
+
+export interface ILoginData {
+  token: string;
+  expiresAt: number;
+  profile?: Auth0UserProfile;
+  user?: IUser;
+}
+
+export enum LoginStatus {
+  LOGGED_IN,
+  LOGGING_IN,
+  NOT_LOGGED_IN,
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
-  private auth: WebAuth;
-  private userData: IUser;
+  public busy = false;
+  public loginStatus = new EventEmitter<LoginStatus>();
 
-  public onLogin = new EventEmitter<boolean>();
-  public loginCompleted = false;
-  public authData: Auth0UserProfile;
-  public loginStatus = new EventEmitter<boolean>();
+  private _auth: WebAuth;
+  private _loginData: ILoginData;
 
-  private loginPromise: Promise<boolean>;
-  private _loginInProgress: boolean;
+  constructor(private userService: UserService, private router: Router, private actions: ActionQueueService) {
+    this._loginData = this.loadLoginData();
+  }
 
-  constructor(private userService: UserService, private router: Router, private actions: ActionQueueService) {}
-
+  /**
+   * returns an auth instance
+   */
   private getAuth(): WebAuth {
-    if (this.auth === undefined) {
-      this.auth = new WebAuth({
+    if (this._auth === undefined) {
+      this._auth = new WebAuth({
         domain: environment.auth0Domain,
         clientID: environment.auth0ClientId,
         responseType: 'token',
@@ -36,9 +50,12 @@ export class LoginService {
       });
     }
 
-    return this.auth;
+    return this._auth;
   }
 
+  /**
+   * Gets user info from auth0
+   */
   private getUserInfo(token: string): Promise<Auth0UserProfile> {
     const auth = this.getAuth();
 
@@ -53,91 +70,10 @@ export class LoginService {
     });
   }
 
-  public resetLoginStatus() {
-    this.loginPromise = undefined;
-    this.loginInProgress = false;
-    this.loginCompleted = false;
-  }
-
-  public async isLoggedIn(): Promise<boolean> {
-    if (this.loginPromise === undefined) {
-      this.loginPromise = new Promise<boolean>(async (resolve, reject) => {
-        this.loginInProgress = true;
-        const token = this.loadToken();
-
-        if (token === null) {
-          resolve(false);
-          this.loginInProgress = false;
-          return;
-        }
-
-        try {
-          const userInfo = await this.getUserInfo(token);
-          this.authData = userInfo;
-          let user;
-
-          try {
-            user = await this.userService.getUser(this.authData.sub);
-          } catch (err) {
-            if (err instanceof HttpErrorResponse) {
-              if (err.status === 404) {
-                this.loginInProgress = false;
-                this.actions.queue.push({
-                  type: ActionType.ACCOUNT_SETUP,
-                  data: {},
-                });
-                this.actions.save();
-                this.router.navigate(['register']);
-                resolve(false);
-                return;
-              } else {
-                throw err;
-              }
-            } else {
-              throw err;
-            }
-          }
-
-          this.userData = user;
-
-          Sentry.configureScope((scope) => {
-            scope.setUser({
-              id: userInfo.sub,
-              email: userInfo.email,
-              email_verified: userInfo.email_verified,
-              username: this.userData.username || userInfo.name,
-              locale: userInfo.locale,
-            });
-          });
-
-          this.loginCompleted = true;
-          resolve(true);
-          this.onLogin.emit();
-
-          // Get a new token right away, this is done because authentication could have succeeded with an old token
-          this.checkSession();
-        } catch (err) {
-          localStorage.removeItem('auth-token');
-          resolve(false);
-        }
-
-        this.loginInProgress = false;
-      });
-    }
-
-    return this.loginPromise;
-  }
-
-  public saveToken(token: string) {
-    localStorage.setItem('auth-token', token);
-  }
-
-  public loadToken(): string | null {
-    const token = localStorage.getItem('auth-token');
-    return token;
-  }
-
-  public checkSession() {
+  /**
+   * Attempts to obtain a new auth0 token based on existing details
+   */
+  private checkSession() {
     const auth = this.getAuth();
 
     auth.checkSession(
@@ -156,10 +92,7 @@ export class LoginService {
           console.log('Refreshed Access Token');
 
           this.getUserInfo(res.accessToken)
-            .then((userInfo) => {
-              this.saveToken(res.accessToken);
-              this.authData = userInfo;
-            })
+            .then((userInfo) => {})
             .catch((uinfoErr) => {
               console.log('Error when updating access token', uinfoErr);
             });
@@ -173,26 +106,32 @@ export class LoginService {
     }, 1000 * 60 * 15);
   }
 
-  public authorize(connection: string) {
-    const auth = this.getAuth();
-
-    auth.authorize({
-      connection,
-    });
+  /**
+   * Sets the local login data
+   */
+  private saveLoginData(loginData: ILoginData) {
+    this._loginData = loginData;
+    localStorage.setItem('login-data', JSON.stringify(loginData));
   }
 
-  public async logout(): Promise<void> {
-    localStorage.removeItem('auth-token');
-    this.loginCompleted = false;
-    this.loginInProgress = false;
-    this.loginPromise = undefined;
-
-    Sentry.configureScope((scope) => {
-      scope.setUser(null);
-    });
+  private clearLoginData() {
+    localStorage.removeItem('login-data');
   }
 
-  public process(hash: string, state: string): Promise<Auth0DecodedHash> {
+  private loadLoginData(): ILoginData | null {
+    const loginData = localStorage.getItem('login-data');
+
+    if (loginData) {
+      return JSON.parse(loginData);
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Processes an auth0 hash response
+   */
+  public parseHash(hash: string, state: string): Promise<Auth0DecodedHash> {
     const auth = this.getAuth();
 
     return new Promise((resolve, reject) => {
@@ -212,32 +151,146 @@ export class LoginService {
     });
   }
 
-  public get loginInProgress() {
-    return this._loginInProgress;
+  /**
+   * Starts the authorization process with auth0
+   */
+  public authorize(connection: string) {
+    const auth = this.getAuth();
+
+    auth.authorize({
+      connection,
+    });
   }
 
-  public set loginInProgress(value: boolean) {
-    this._loginInProgress = value;
-    this.loginStatus.emit(value);
+  /**
+   * Clears all user authentication data
+   */
+  public async logout() {
+    this.clearLoginData();
+    Sentry.configureScope((scope) => {
+      scope.setUser(null);
+    });
+    this._loginData = null;
+    this.loginStatus.emit(LoginStatus.NOT_LOGGED_IN);
   }
 
-  public setUserData(userData: IUser) {
-    this.userData = userData;
-  }
+  public async processLoginCallback(hash: string) {
+    this.busy = true;
+    this.loginStatus.emit(LoginStatus.LOGGING_IN);
 
-  public get user(): IUser {
-    return this.userData;
-  }
+    try {
+      // Parse the hash
+      try {
+        const auth = await this.parseHash(hash, null);
+        const expiresAt = Math.floor(new Date().getTime() / 1000) + auth.expiresIn;
+        this.saveLoginData({
+          token: auth.accessToken,
+          expiresAt: expiresAt,
+        });
+      } catch (err) {
+        // Handle invalid state
+        if (err && err.error === 'invalid_token') {
+          // Make sure there is no leftover login data
+          this.logout();
+          this.router.navigate(['login']);
+        } else {
+          Swal.fire({
+            title: 'Oh dear.',
+            text: 'Something went wrong while logging you in, please try again.',
+          }).then(() => {
+            this.logout();
+            this.router.navigate(['login']);
+          });
+        }
+      }
 
-  public get loggedIn() {
-    return this.loginCompleted;
-  }
+      const userInfo = await this.getUserInfo(this._loginData.token);
+      this._loginData.profile = userInfo;
+      this.saveLoginData(this._loginData);
 
-  public get id() {
-    if (this.authData) {
-      return this.authData.sub;
+      // Check to see if a user is in the database
+      try {
+        const user = await this.userService.getUser(userInfo.sub);
+        this._loginData.user = user;
+        this.saveLoginData(this._loginData);
+        this.loginStatus.emit(LoginStatus.LOGGED_IN);
+      } catch (err) {
+        if (err instanceof HttpErrorResponse && err.status === 404) {
+          // User needs to setup their account
+          this.actions.queue.push({ type: ActionType.ACCOUNT_SETUP, data: null });
+          this.actions.save();
+          this.router.navigate(['register']);
+        } else {
+          console.log(err);
+          throw err;
+        }
+      }
+    } catch (err) {
+      // Handle invalid state
+      if (err && err.error === 'invalid_token') {
+        // Make sure there is no leftover login data
+        await this.logout();
+        this.router.navigate(['login']);
+      } else {
+        Swal.fire({
+          title: 'Whoops',
+          text: 'Something went wrong while logging you in, please try again.',
+        }).then(() => {
+          this.router.navigate(['login']);
+        });
+      }
     }
 
-    return null;
+    this.router.navigate(['home']);
+    this.busy = false;
+  }
+
+  public setUser(user: IUser) {
+    if (!this._loginData) {
+      throw new Error('Cannot set user when login data missing');
+    }
+
+    this._loginData.user = user;
+    this.saveLoginData(this._loginData);
+  }
+
+  public get id(): string | null {
+    if (this._loginData && this._loginData.profile) {
+      return this._loginData.profile.sub;
+    } else {
+      return null;
+    }
+  }
+
+  public get userProfile(): Auth0UserProfile | null {
+    if (this._loginData && this._loginData.profile) {
+      return this._loginData.profile;
+    } else {
+      return null;
+    }
+  }
+
+  public get currentUser(): IUser | null {
+    if (this._loginData && this._loginData.user) {
+      return this._loginData.user;
+    } else {
+      return null;
+    }
+  }
+
+  public get token(): string | null {
+    if (this._loginData && this._loginData.token) {
+      return this._loginData.token;
+    } else {
+      return null;
+    }
+  }
+
+  public get isLoggedIn(): boolean {
+    if (!this._loginData || !this._loginData.user) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

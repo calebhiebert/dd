@@ -47,11 +47,7 @@ export class NavSidebarComponent implements OnInit {
   }
 
   public get loggedIn() {
-    return this.login.loggedIn;
-  }
-
-  public get loginInProgress() {
-    return this.login.loginInProgress;
+    return this.login.isLoggedIn;
   }
 
   public get campaignEditable() {

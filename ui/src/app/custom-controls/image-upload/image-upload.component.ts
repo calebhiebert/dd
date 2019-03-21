@@ -123,7 +123,7 @@ export class ImageUploadComponent implements OnInit, AfterViewInit, ControlValue
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `${environment.apiURL}/upload`, true);
-    xhr.setRequestHeader('Authorization', `Bearer ${this.loginService.loadToken()}`);
+    xhr.setRequestHeader('Authorization', `Bearer ${this.loginService.token}`);
 
     xhr.onload = (e) => {
       const image = JSON.parse(xhr.responseText);

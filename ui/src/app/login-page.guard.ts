@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
-} from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { LoginService } from './login.service';
 
@@ -14,11 +9,8 @@ import { LoginService } from './login.service';
 export class LoginPageGuard implements CanActivate {
   constructor(private login: LoginService, private router: Router) {}
 
-  public async canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Promise<boolean> {
-    const isLoggedIn = await this.login.isLoggedIn();
+  public async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    const isLoggedIn = await this.login.isLoggedIn;
 
     if (isLoggedIn) {
       this.router.navigate(['home']);

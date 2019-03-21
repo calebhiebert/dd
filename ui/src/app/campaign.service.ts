@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { IUser } from './user.service';
 import { LoginService } from './login.service';
 import { IConceptType } from './concept.service';
+import { UpdateHubService, ConnectionState } from './update-hub.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,33 +15,92 @@ export class CampaignService {
 
   public loadingCampaign = false;
   public previousCampaignId: string;
-  public events = new EventEmitter<ICampaign>();
 
-  constructor(private http: HttpClient, private login: LoginService) {}
+  constructor(private http: HttpClient, private login: LoginService, private updateHub: UpdateHubService) {
+    this.updateHub.stateUpdate.subscribe((state) => {
+      if (state === ConnectionState.CONNECTED && this._campaign) {
+        this.updateHub.subscribeCampaign(this._campaign.id);
+      }
+    });
+
+    this.updateHub.campaignUpdated.subscribe((campaign: ICampaign) => {
+      if (this._campaign && this._campaign.id === campaign.id) {
+        // TODO, do this automatically somehow
+        this._campaign.name = campaign.name;
+        this._campaign.content = campaign.content;
+        this._campaign.imageId = campaign.imageId;
+        this._campaign.experienceTable = campaign.experienceTable;
+        this._campaign.itemTypes = campaign.itemTypes;
+        this._campaign.currencyMap = campaign.currencyMap;
+      }
+    });
+
+    this.updateHub.campaignRefresh.subscribe(() => {
+      this.refreshCurrentCampaign();
+    });
+
+    this.updateHub.entityUpdated.subscribe((entity: IEntity) => {
+      if (!this._campaign) {
+        return;
+      }
+
+      // populate properties from the campaign object
+      entity.preset = this._campaign.entityPresets.find((ep) => ep.id === entity.entityPresetId);
+      entity.user = this._campaign.members.find((m) => m.userId === entity.userId).user;
+
+      this._campaign.entities.forEach((ent, idx) => {
+        if (ent.id === entity.id) {
+          this._campaign.entities[idx] = {
+            ...ent,
+            ...entity,
+          };
+        }
+      });
+    });
+
+    this.updateHub.entityDeleted.subscribe((id: string) => {
+      if (!this._campaign) {
+        return;
+      }
+
+      this._campaign.entities = this._campaign.entities.filter((e) => e.id !== id);
+    });
+
+    this.updateHub.entityCreated.subscribe((entity: IEntity) => {
+      if (!this._campaign) {
+        return;
+      }
+
+      // populate properties from the campaign object
+      entity.preset = this._campaign.entityPresets.find((ep) => ep.id === entity.entityPresetId);
+      entity.user = this._campaign.members.find((m) => m.userId === entity.userId).user;
+      this._campaign.entities.push(entity);
+    });
+  }
 
   public async setSelection(campaignId?: string) {
     if (campaignId === null) {
       if (this.campaign !== null) {
         this.previousCampaignId = this.campaign.id;
+        this.updateHub.unsubscribeCampaign(this.previousCampaignId);
       }
 
       this.campaign = null;
-
-      this.events.emit(null);
       return;
     }
 
+    this.updateHub.subscribeCampaign(campaignId);
     this.campaign = null;
-
     this.loadingCampaign = true;
+
     try {
       const campaign = await this.getCampaign(campaignId);
       this.campaign = campaign;
       document.title = this.campaign.name;
-      this.events.emit(campaign);
     } catch (err) {
       throw err;
     }
+
     this.loadingCampaign = false;
   }
 
@@ -53,7 +113,6 @@ export class CampaignService {
       const campaign = await this.getCampaign(this.campaign.id);
       Object.assign(this.campaign, campaign);
       document.title = this.campaign.name;
-      this.events.emit(campaign);
     } catch (err) {
       throw err;
     }
