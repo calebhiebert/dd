@@ -79,8 +79,8 @@ export class CampaignService {
   }
 
   public async setSelection(campaignId?: string) {
-    if (campaignId === null) {
-      if (this.campaign !== null) {
+    if (campaignId === null || campaignId === undefined) {
+      if (this.campaign !== null && this.campaign !== undefined) {
         this.previousCampaignId = this.campaign.id;
         this.updateHub.unsubscribeCampaign(this.previousCampaignId);
       }
