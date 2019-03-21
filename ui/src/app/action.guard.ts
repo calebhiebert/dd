@@ -1,23 +1,20 @@
 import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
-} from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ActionQueueService, ActionType } from './action-queue.service';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ActionGuard implements CanActivate {
-  constructor(private actions: ActionQueueService, private router: Router) {}
+  constructor(private actions: ActionQueueService, private router: Router, private login: LoginService) {}
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> | Promise<boolean> | boolean {
+  public async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    if (!this.login.isLoggedIn) {
+      return false;
+    }
+
     const queue = this.actions.queue;
 
     if (queue.length === 0) {
@@ -32,6 +29,9 @@ export class ActionGuard implements CanActivate {
           break;
         case ActionType.INVITE:
           this.router.navigate(['invite', action.data.inviteId]);
+          break;
+        case ActionType.REDIRECT:
+          await this.router.navigateByUrl(action.data.url);
           break;
       }
     }

@@ -227,6 +227,7 @@ export class LoginService {
           this.actions.queue.push({ type: ActionType.ACCOUNT_SETUP, data: null });
           this.actions.save();
           this.router.navigate(['register']);
+          return;
         } else {
           console.log(err);
           throw err;

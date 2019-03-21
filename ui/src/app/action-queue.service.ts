@@ -35,11 +35,6 @@ export class ActionQueueService {
     }
   }
 
-  public clear() {
-    localStorage.removeItem('action-queue');
-    this._queue = undefined;
-  }
-
   public get queue() {
     this.load();
     return this._queue;
@@ -54,4 +49,5 @@ export interface IAction {
 export enum ActionType {
   ACCOUNT_SETUP,
   INVITE,
+  REDIRECT,
 }

@@ -26,15 +26,16 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           if (responseError instanceof HttpErrorResponse) {
             switch (responseError.status) {
               case 401:
+                this.silenceErrors = true;
+                this.login.logout();
+                console.log('REDIR TO', this.router.url);
+
                 await Swal.fire({
                   title: 'Session Expired',
                   text: 'Your login session has expired, you will be redirected to the login page',
                   type: 'warning',
                   confirmButtonText: 'Okay',
                 });
-
-                this.silenceErrors = true;
-                this.login.logout();
 
                 await this.router.navigate(['login']);
                 break;
