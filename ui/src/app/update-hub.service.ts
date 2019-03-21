@@ -1,10 +1,9 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
+import { HubConnectionBuilder, HubConnection, LogLevel } from '@aspnet/signalr';
 import { environment } from 'src/environments/environment';
 import { LoginService, LoginStatus } from './login.service';
 import { ICampaign } from './campaign.service';
-import { NotificationService } from './notification.service';
-import { IEntity, EntityService } from './entity.service';
+import { IEntity } from './entity.service';
 import { NoteService } from './note.service';
 import { ToastrService } from 'ngx-toastr';
 import { IArticle, IArticleConcept } from './article.service';
@@ -24,10 +23,8 @@ export enum ConnectionState {
 })
 export class UpdateHubService {
   private _state: ConnectionState;
-
   private connection: HubConnection;
-
-  private _isCampaignSubscribed = false;
+  private _retryTimeout: number;
 
   // Events
   public entityUpdated = new EventEmitter<IEntity>();
@@ -66,9 +63,11 @@ export class UpdateHubService {
 
   private async setup() {
     this.connection.onclose((e) => {
-      this._state = ConnectionState.CLOSED;
-      this.stateUpdate.emit(this._state);
-      this.start();
+      if (this._state !== ConnectionState.NOT_CONNECTED) {
+        this._state = ConnectionState.CLOSED;
+        this.stateUpdate.emit(this._state);
+        this.start();
+      }
     });
 
     this.connection.on('AuthenticateComplete', () => this.authComplete());
@@ -162,6 +161,7 @@ export class UpdateHubService {
   }
 
   private async start() {
+    // Make sure we aren't starting the connection while it's already connected/connecting
     if ([ConnectionState.CLOSED, ConnectionState.NOT_CONNECTED].indexOf(this.state) === -1) {
       return;
     }
@@ -170,6 +170,7 @@ export class UpdateHubService {
       .withUrl(`${environment.hubURL}`, {
         accessTokenFactory: () => this.login.token,
       })
+      .configureLogging(environment.production ? LogLevel.Critical : LogLevel.Information)
       .build();
 
     try {
@@ -184,9 +185,8 @@ export class UpdateHubService {
     } catch (err) {
       this._state = ConnectionState.CLOSED;
       this.stateUpdate.emit(this._state);
-      console.log('ERROR', err);
 
-      setTimeout(() => {
+      this._retryTimeout = window.setTimeout(() => {
         this.start();
       }, 5000);
     }
@@ -194,9 +194,10 @@ export class UpdateHubService {
 
   private async stop() {
     if (this.connection) {
-      await this.connection.stop();
+      clearTimeout(this._retryTimeout);
       this._state = ConnectionState.NOT_CONNECTED;
       this.stateUpdate.emit(this._state);
+      await this.connection.stop();
     }
   }
 
@@ -213,7 +214,6 @@ export class UpdateHubService {
 
     try {
       const res = await this.connection.invoke('SubscribeCampaign', campaignId);
-      this._isCampaignSubscribed = true;
     } catch (err) {
       throw err;
     }
@@ -227,7 +227,6 @@ export class UpdateHubService {
 
     try {
       const res = await this.connection.invoke('UnsubscribeCampaign', campaignId);
-      this._isCampaignSubscribed = false;
     } catch (err) {
       throw err;
     }

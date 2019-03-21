@@ -33,6 +33,17 @@ export class LoginService {
 
   constructor(private userService: UserService, private router: Router, private actions: ActionQueueService) {
     this._loginData = this.loadLoginData();
+
+    if (this.isLoggedIn) {
+      // Check if the token is expired, will make sure there are at least 60 seconds of valid token left
+      const isExpired = this._loginData.expiresAt - Math.floor(new Date().getTime() / 1000) < 60;
+
+      if (isExpired) {
+        this.logout();
+      } else {
+        this.checkSession();
+      }
+    }
   }
 
   /**
@@ -89,13 +100,9 @@ export class LoginService {
         if (err) {
           Sentry.captureException(err);
         } else {
-          console.log('Refreshed Access Token');
-
-          this.getUserInfo(res.accessToken)
-            .then((userInfo) => {})
-            .catch((uinfoErr) => {
-              console.log('Error when updating access token', uinfoErr);
-            });
+          this._loginData.token = res.accessToken;
+          this._loginData.expiresAt = Math.floor(new Date().getTime() / 1000) + res.expiresIn;
+          this.saveLoginData(this._loginData);
         }
       }
     );
@@ -240,6 +247,11 @@ export class LoginService {
         });
       }
     }
+
+    // Refresh the token every 15 minutes as long as the user is on the page
+    setTimeout(() => {
+      this.checkSession();
+    }, 1000 * 60 * 15);
 
     this.router.navigate(['home']);
     this.busy = false;
