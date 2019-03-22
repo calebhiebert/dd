@@ -69,6 +69,9 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
+            _context.AssetViews.Add(new AssetView(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, campaign.Id));
+            await _context.SaveChangesAsync();
+
             if (campaign.CurrencyMap == null || campaign.CurrencyMap.Count == 0)
             {
                 campaign.CurrencyMap = new List<CurrencyLevel> { new CurrencyLevel { Name = "gp", UseInConversions = true, Value = 1 } };

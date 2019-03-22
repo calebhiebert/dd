@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using net_api.Models;
@@ -9,9 +10,10 @@ using net_api.Models;
 namespace netapi.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20190322132147_AssetViews")]
+    partial class AssetViews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,7 +109,7 @@ namespace netapi.Migrations
 
                     b.Property<Guid?>("ArticleId");
 
-                    b.Property<Guid>("CampaignId");
+                    b.Property<Guid?>("CampaignId");
 
                     b.Property<Guid?>("ConceptId");
 
@@ -747,8 +749,7 @@ namespace netapi.Migrations
 
                     b.HasOne("net_api.Models.Campaign", "Campaign")
                         .WithMany()
-                        .HasForeignKey("CampaignId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CampaignId");
 
                     b.HasOne("net_api.Models.Concept", "Concept")
                         .WithMany()

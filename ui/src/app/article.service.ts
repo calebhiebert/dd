@@ -77,6 +77,10 @@ export class ArticleService {
       .post<void>(`${environment.apiURL}/articleconcepts/buy?quantity=${quantity}&entityId=${entityId}`, articleConcept)
       .toPromise();
   }
+
+  public async getPopular(campaignId: string): Promise<any> {
+    return this.http.get(`${environment.apiURL}/articles/popular?campaignId=${campaignId}`).toPromise();
+  }
 }
 
 export interface IArticle {

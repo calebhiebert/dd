@@ -3,7 +3,6 @@ import { ISearchedArticle } from 'src/app/article.service';
 import { Router } from '@angular/router';
 import { CampaignService } from 'src/app/campaign.service';
 import { IconService } from 'src/app/icon.service';
-import { IConceptType } from 'src/app/concept.service';
 
 @Component({
   selector: 'dd-article-view-card',
@@ -13,6 +12,9 @@ import { IConceptType } from 'src/app/concept.service';
 export class ArticleViewCardComponent implements OnInit {
   @Input()
   public article: ISearchedArticle;
+
+  @Input()
+  public mini = false;
 
   constructor(private router: Router, private campaignService: CampaignService, private iconService: IconService) {}
 

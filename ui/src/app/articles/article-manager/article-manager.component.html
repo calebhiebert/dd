@@ -8,9 +8,7 @@
 
     <!-- Controls -->
     <div class="column col-auto" *ngIf="editable">
-      <button class="btn btn-sm" (click)="createArticle()">
-        <i class="icon icon-plus"></i><span class="hide-sm"> New Article</span>
-      </button>
+      <button class="btn btn-sm" (click)="createArticle()"><i class="icon icon-plus"></i><span class="hide-sm"> New Article</span></button>
     </div>
   </div>
 
@@ -19,36 +17,31 @@
 
   <!-- Search -->
   <div class="has-icon-right" *ngIf="articles">
-    <input
-      type="text"
-      class="form-input"
-      placeholder="Search"
-      [formControl]="searchControl"
-    />
+    <input type="text" class="form-input" placeholder="Search" [formControl]="searchControl" />
     <i class="form-icon loading" *ngIf="loading"></i>
     <i class="form-icon icon icon-search" *ngIf="!loading"></i>
   </div>
 
+  <!-- Popular Article Cards -->
+  <div class="columns" *ngIf="popularArticles && !search">
+    <div class="column col-2 col-md-3 col-sm-4 col-xs-6" *ngFor="let pa of popularArticles; trackBy: trackArticle">
+      <div class="py-1">
+        <dd-article-view-card (click)="viewArticle(pa)" [article]="pa" mini="true"></dd-article-view-card>
+      </div>
+    </div>
+  </div>
+
   <!-- Article Cards -->
   <div class="columns">
-    <div
-      class="column col-sm-12"
-      *ngFor="let sa of splitArticles; trackBy: trackIdx"
-    >
+    <div class="column col-sm-12" *ngFor="let sa of splitArticles; trackBy: trackIdx">
       <div class="py-2" *ngFor="let a of sa; trackBy: trackArticle">
-        <dd-article-view-card
-          (click)="viewArticle(a)"
-          [article]="a"
-        ></dd-article-view-card>
+        <dd-article-view-card (click)="viewArticle(a)" [article]="a"></dd-article-view-card>
       </div>
     </div>
   </div>
 
   <!-- Empty State (No Articles) -->
-  <div
-    class="empty mt-2"
-    *ngIf="articles && articles.length === 0 && search === null"
-  >
+  <div class="empty mt-2" *ngIf="articles && articles.length === 0 && search === null">
     <div class="empty-icon">
       <i class="icon icon-search icon-4x"></i>
     </div>
@@ -64,10 +57,7 @@
   </div>
 
   <!-- Empty State (No Search Results) -->
-  <div
-    class="empty mt-2"
-    *ngIf="articles && articles.length === 0 && search !== null"
-  >
+  <div class="empty mt-2" *ngIf="articles && articles.length === 0 && search !== null">
     <div class="empty-icon">
       <i class="icon icon-search icon-4x"></i>
     </div>

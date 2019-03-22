@@ -90,9 +90,47 @@ namespace net_api.Controllers
                 .Include(a => a.ArticleQuests)
                 .Include(a => a.ArticleConcepts)
                     .ThenInclude(ac => ac.Concept)
+                .OrderBy(a => a.CreatedAt)
                 .ToListAsync();
 
             return Ok(articles.Select(a => new SearchedArticle(a, null)));
+        }
+        
+        [HttpGet("popular")]
+        public async Task<IActionResult> GetPopularArticles(Guid campaignId)
+        {
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == campaignId)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            var editableAuthResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
+
+            var query = _context
+                .Query<ArticlePopularity>()
+                .FromSql(@"SELECT COUNT(""ArticleId"") AS ""Views"", ""ArticleId""
+                             FROM ""AssetViews""
+                             WHERE ""ArticleId"" IS NOT NULL AND ""CampaignId""={0}
+                             GROUP BY ""ArticleId""
+                             ORDER BY ""Views"" DESC
+                             LIMIT 6", campaign.Id)
+                .Include(ap => ap.Article);
+
+            var results = await query.ToListAsync();
+
+            return Ok(results.Select(r => new SearchedArticle(r.Article)));
         }
 
         [HttpGet("map/{id}")]
@@ -143,6 +181,12 @@ namespace net_api.Controllers
             {
                 return Forbid();
             }
+
+            _context.AssetViews.Add(new AssetView(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, article.CampaignId)
+            {
+                ArticleId = article.Id,
+            });
+            await _context.SaveChangesAsync();
 
             var campaignEditableAuthResult = await _auth.AuthorizeAsync(User, article.Campaign, "CampaignEditPolicy");
 

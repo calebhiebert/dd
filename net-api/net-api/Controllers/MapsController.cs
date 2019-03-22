@@ -231,6 +231,12 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
+            _context.AssetViews.Add(new AssetView(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, map.CampaignId)
+            {
+                MapId = map.Id,
+            });
+            await _context.SaveChangesAsync();
+
             return Ok(map);
         }
 

@@ -1,13 +1,13 @@
-<div class="card hoverable">
-  <div class="card-image" *ngIf="imgSrc !== null">
+<div class="card hoverable" [ngClass]="{ 'bg-gray': mini && !article.published }">
+  <div class="card-image" *ngIf="imgSrc !== null && !mini">
     <img [src]="imgSrc" width="500" class="img-responsive" />
   </div>
-  <div class="card-header">
+  <div class="card-header" [ngClass]="{ 'p-2': mini }">
     <div class="columns">
       <div class="column">
-        <div class="card-title h5">
+        <div class="card-title" [ngClass]="{ h5: !mini, h6: mini }">
           {{ article.name }}
-          <span class="label label-secondary" *ngIf="!article.published">Hidden</span>
+          <span class="label label-secondary" *ngIf="!article.published && !mini">Hidden</span>
         </div>
       </div>
 
@@ -26,6 +26,6 @@
         <i class="icon icon-location"></i>
       </div>
     </div>
-    <div class="card-subtitle text-gray">{{ subtitleText }}</div>
+    <div class="card-subtitle text-gray" *ngIf="!mini">{{ subtitleText }}</div>
   </div>
 </div>

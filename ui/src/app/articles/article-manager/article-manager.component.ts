@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IArticle, ArticleService, ISearchedArticle } from 'src/app/article.service';
 import { CampaignService } from 'src/app/campaign.service';
-import { Router, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
@@ -13,6 +13,7 @@ import { debounceTime } from 'rxjs/operators';
 export class ArticleManagerComponent implements OnInit {
   public loading = false;
   public articles: ISearchedArticle[];
+  public popularArticles: ISearchedArticle[];
 
   public searchControl: FormControl;
   public search: string = null;
@@ -25,7 +26,8 @@ export class ArticleManagerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.load();
+    this.loadPopular();
+    this.loadFromSearch();
 
     this.searchControl = new FormControl(
       this.route.snapshot.queryParamMap.has('search') ? this.route.snapshot.queryParamMap.get('search') : null
@@ -43,11 +45,11 @@ export class ArticleManagerComponent implements OnInit {
         }
       }
 
-      this.load();
+      this.loadFromSearch();
     });
   }
 
-  private async load() {
+  private async loadFromSearch() {
     this.loading = true;
 
     try {
@@ -59,12 +61,24 @@ export class ArticleManagerComponent implements OnInit {
     this.loading = false;
   }
 
+  private async loadPopular() {
+    this.loading = true;
+
+    try {
+      this.popularArticles = await this.articleService.getPopular(this.campaignService.campaign.id);
+    } catch (err) {
+      throw err;
+    }
+
+    this.loading = false;
+  }
+
   public createArticle() {
     this.router.navigate(['campaigns', this.campaignService.campaign.id, 'articles', 'create']);
   }
 
-  public trackArticle(idx: number, article: IArticle): string {
-    return article.name;
+  public trackArticle(idx: number, article: ISearchedArticle): string {
+    return article.id;
   }
 
   public trackIdx(idx: number) {

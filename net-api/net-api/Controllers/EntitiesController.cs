@@ -115,6 +115,12 @@ namespace net_api.Controllers
                 };
             }
 
+            _context.AssetViews.Add(new AssetView(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, entity.CampaignId)
+            {
+                EntityId = entity.Id,
+            });
+            await _context.SaveChangesAsync();
+
             return Ok(entity);
         }
 

@@ -108,6 +108,12 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
+            _context.AssetViews.Add(new AssetView(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, concept.ConceptType.CampaignId)
+            {
+                ConceptId = concept.Id,
+            });
+            await _context.SaveChangesAsync();
+
             return concept;
         }
 

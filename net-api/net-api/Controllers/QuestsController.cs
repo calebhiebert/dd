@@ -141,6 +141,12 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
+            _context.AssetViews.Add(new AssetView(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, quest.CampaignId)
+            {
+                QuestId = quest.Id,
+            });
+            await _context.SaveChangesAsync();
+
             return quest;
         }
 

@@ -20,6 +20,8 @@ namespace net_api.Models
         public DbSet<Quest> Quests { get; set; }
         public DbSet<Map> Maps { get; set; }
         public DbSet<Note> Notes { get; set; }
+        public DbSet<AssetView> AssetViews { get; set; }
+
 
         public DbSet<Article> Articles { get; set; }
         public DbSet<ArticleQuest> ArticleQuests { get; set; }
@@ -63,7 +65,11 @@ namespace net_api.Models
             modelBuilder.Entity<ArticleQuest>().HasKey(tbl => new { tbl.ArticleId, tbl.QuestId });
             modelBuilder.Entity<ArticleConcept>().HasKey(tbl => new { tbl.ArticleId, tbl.ConceptId });
             modelBuilder.Entity<ConceptEntity>().HasKey(tbl => new { tbl.ConceptId, tbl.EntityId });
+            modelBuilder.Entity<AssetView>()
+                .Property(av => av.Id)
+                .ValueGeneratedOnAdd();
 
+            modelBuilder.Query<ArticlePopularity>();
             modelBuilder.Query<MapBytePosition>();
             modelBuilder.Query<Tags>();
         }
