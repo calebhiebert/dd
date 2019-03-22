@@ -59,6 +59,47 @@ namespace net_api.Controllers
             return Ok(article.ArticleConcepts.Where(ac => ac.Concept.ConceptTypeId == conceptTypeId));
         }
 
+        [HttpGet("articles/{conceptId}")]
+        public async Task<IActionResult> GetArticlesForConcept([FromRoute] Guid conceptId)
+        {
+            var concept = await _context.Concepts
+                .Where(c => c.Id == conceptId)
+                .AsNoTracking()
+                .Include(c => c.ConceptType)
+                    .ThenInclude(c => c.Campaign)
+                .FirstOrDefaultAsync();
+
+            if (concept == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, concept.ConceptType.Campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            var campaignEditableAuthResult = await _auth.AuthorizeAsync(User, concept.ConceptType.Campaign, "CampaignEditPolicy");
+
+            var articleConceptQuery = _context.ArticleConcepts
+                .Where(ac => ac.ConceptId == concept.Id);
+
+            if (!campaignEditableAuthResult.Succeeded)
+            {
+                articleConceptQuery = articleConceptQuery
+                    .Where(ac => ac.Article.Published == true);
+            }
+
+            articleConceptQuery = articleConceptQuery
+                .Include(ac => ac.Article);
+
+            var articleConcepts = await articleConceptQuery.ToListAsync();
+
+            return Ok(articleConcepts);
+        }
+
         [HttpPost("buy")]
         public async Task<IActionResult> BuyArticleConcept(ArticleConcept articleConcept, [FromQuery] int? quantity, [FromQuery] Guid entityId)
         {

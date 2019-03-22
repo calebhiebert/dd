@@ -122,7 +122,10 @@ namespace net_api.Controllers
                 .Query<ArticlePopularity>()
                 .FromSql(@"SELECT COUNT(""ArticleId"") AS ""Views"", ""ArticleId""
                              FROM ""AssetViews""
-                             WHERE ""ArticleId"" IS NOT NULL AND ""CampaignId""={0}
+                               JOIN ""Articles"" ON ""AssetViews"".""ArticleId"" = ""Articles"".""Id""
+                             WHERE ""ArticleId"" IS NOT NULL AND ""AssetViews"".""CampaignId""={0}
+                               AND ""DateTime"" > ((now() at time zone 'utc') - interval '8 hours')
+                               AND ""Articles"".""Published"" = true
                              GROUP BY ""ArticleId""
                              ORDER BY ""Views"" DESC
                              LIMIT 6", campaign.Id)

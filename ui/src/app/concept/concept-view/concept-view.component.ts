@@ -28,6 +28,8 @@ export class ConceptViewComponent implements OnInit {
       const id = params.get('c_id');
       const typeId = params.get('ct_id');
 
+      // this.conceptService.getArticlesForConcept(id).then(console.log);
+
       this.conceptType = this.getConceptType(typeId);
       if (this.conceptType === undefined || this.conceptType === null) {
         this.loadError = { status: 404 };

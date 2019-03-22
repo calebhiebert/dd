@@ -5,6 +5,7 @@ import { ICampaign } from './campaign.service';
 import { IEntity } from './entity.service';
 import { ActionType, ActionSource } from './history';
 import { IDynamicFieldConfig } from './custom-controls/dynform/form-types';
+import { IArticleConcept } from './article.service';
 
 @Injectable({
   providedIn: 'root',
@@ -95,6 +96,10 @@ export class ConceptService {
 
   public async deleteConceptEntity(entId: string, conceptId: string): Promise<void> {
     return this.http.delete<void>(`${environment.apiURL}/conceptentities/${entId}/concept/${conceptId}`).toPromise();
+  }
+
+  public async getArticlesForConcept(conceptId: string): Promise<IArticleConcept[]> {
+    return this.http.get<IArticleConcept[]>(`${environment.apiURL}/articleconcepts/articles/${conceptId}`).toPromise();
   }
 }
 

@@ -13,7 +13,6 @@ namespace net_api.Models
         [Required]
         public Guid ArticleId { get; set; }
 
-        [JsonIgnore]
         public Article Article { get; set; }
 
         [Required]
