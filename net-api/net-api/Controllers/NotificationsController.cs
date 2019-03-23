@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using net_api.Models;
 
@@ -18,11 +19,15 @@ namespace net_api.Controllers
     {
         private readonly Context _context;
         private readonly IAuthorizationService _auth;
+        private readonly IHubContext<UpdateHub> _hub;
 
-        public NotificationsController(Context context, IAuthorizationService auth)
+        public IHubContext<UpdateHub> Hub => _hub;
+
+        public NotificationsController(Context context, IAuthorizationService auth, IHubContext<UpdateHub> hub)
         {
             _context = context;
             _auth = auth;
+            _hub = hub;
         }
 
         // GET: api/Notifications
@@ -90,6 +95,46 @@ namespace net_api.Controllers
             await _context.SaveChangesAsync();
 
             return notification;
+        }
+
+        [HttpPost("suggest")]
+        public async Task<IActionResult> MakeSuggestion([FromBody] Suggestion suggestion)
+        {
+            var campaign = await _context.Campaigns
+                .Where(c => c.Id == suggestion.CampaignId)
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync();
+
+            var authResult = await _auth.AuthorizeAsync(User, campaign, "CampaignViewPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            foreach (var member in campaign.Members)
+            {
+                var notification = new SuggestionNotification()
+                {
+                    CampaignId = campaign.Id,
+                    Message = suggestion.Message,
+                    SuggestionURL = suggestion.URL,
+                    SuggestedById = userId,
+                    UserId = member.UserId
+                };
+
+                _context.SuggestionNotifications.Add(notification);
+            }
+
+            await _context.SaveChangesAsync();
+
+            await _hub.Clients
+                .Groups(campaign.Members.Select(m => $"notifications-{m.UserId}").ToList())
+                .SendAsync("Notify");
+
+            return NoContent();
         }
 
         private bool NotificationExists(Guid id)

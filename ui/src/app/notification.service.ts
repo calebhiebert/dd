@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IUser } from './user.service';
-import { ICampaign } from './campaign.service';
+import { ICampaign, CampaignService } from './campaign.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { IMap } from './map.service';
@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { IQuest } from './quest.service';
 import { LoginService, LoginStatus } from './login.service';
 import { UpdateHubService } from './update-hub.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,14 @@ export class NotificationService {
   private _loading = false;
   private _notifications: Notification[];
 
-  constructor(private http: HttpClient, private toast: ToastrService, login: LoginService, updateHub: UpdateHubService) {
+  constructor(
+    private http: HttpClient,
+    private toast: ToastrService,
+    login: LoginService,
+    updateHub: UpdateHubService,
+    private router: Router,
+    private campignService: CampaignService
+  ) {
     login.loginStatus.subscribe((status) => {
       if (status === LoginStatus.LOGGED_IN) {
         this.loadNotifications();
@@ -52,7 +60,16 @@ export class NotificationService {
 
   private makeNotificationToasts(notifications: Notification[]) {
     for (const n of notifications) {
-      this.toast.info(n.message);
+      if ((n as ISuggestionNotification).suggestionURL) {
+        const toast = this.toast.info(`${n.user.username} suggested something! ${n.message}`);
+
+        toast.onTap.subscribe(() => {
+          this.router.navigateByUrl((n as ISuggestionNotification).suggestionURL);
+          this.removeNotification(n);
+        });
+      } else {
+        this.toast.info(n.message);
+      }
     }
   }
 
@@ -92,6 +109,22 @@ export class NotificationService {
     return this.http.delete<void>(`${environment.apiURL}/notifications/${id}`).toPromise();
   }
 
+  public makeSuggestion(suggestion: ISuggestion): Promise<void> {
+    return this.http.post<void>(`${environment.apiURL}/notifications/suggest`, suggestion).toPromise();
+  }
+
+  public suggestCurrentURL() {
+    if (!this.campignService.campaign) {
+      return;
+    }
+
+    return this.makeSuggestion({
+      url: this.router.url,
+      message: 'Look!',
+      campaignId: this.campignService.campaign.id,
+    });
+  }
+
   public get notifications() {
     return this._notifications;
   }
@@ -124,4 +157,16 @@ export interface IMapNotification extends ICampaignNotification {
 export interface IQuestNotification extends ICampaignNotification {
   questId: string;
   quest?: IQuest;
+}
+
+export interface ISuggestionNotification extends ICampaignNotification {
+  suggestedById: string;
+  suggestedBy?: IUser;
+  suggestionURL: string;
+}
+
+export interface ISuggestion {
+  url: string;
+  message: string;
+  campaignId: string;
 }

@@ -3,7 +3,11 @@
     <button class="btn btn-link btn-sm" (click)="back()">
       <i class="icon icon-arrow-left"></i>
     </button>
+    <button class="btn btn-sm btn-link" (click)="suggest()">
+      <i class="icon icon-share"></i>
+    </button>
     {{ title }}
+
     <div class="loading" *ngIf="loading"></div>
   </div>
 </div>

@@ -25,6 +25,7 @@
         <!-- Message -->
         <div class="column">
           {{ n.message }}
+          <div *ngIf="n.suggestedBy" [ddUser]="n.suggestedBy"></div>
         </div>
 
         <!-- Controls Column -->
@@ -34,6 +35,10 @@
               <i class="icon icon-menu"></i>
             </button>
             <ul class="menu">
+              <li class="menu-item" *ngIf="n.suggestionURL !== null && n.suggestionURL !== undefined" (click)="viewSuggestion(n)">
+                <div>View Suggestion <i class="icon icon-arrow-right"></i></div>
+              </li>
+
               <li class="menu-item" *ngIf="n.campaign !== null && n.campaign !== undefined" (click)="viewCampaign(n)">
                 <div>{{ n.campaign.name }} <i class="icon icon-arrow-right"></i></div>
               </li>

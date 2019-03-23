@@ -36,6 +36,7 @@ namespace net_api.Models
         public DbSet<CampaignNotification> CampaignInviteNotifications { get; set; }
         public DbSet<MapNotification> MapNotifications { get; set; }
         public DbSet<QuestNotification> QuestNotifications { get; set; }
+        public DbSet<SuggestionNotification> SuggestionNotifications { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -1,5 +1,12 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { NotificationService, Notification, ICampaignNotification, IMapNotification, IQuestNotification } from '../notification.service';
+import {
+  NotificationService,
+  Notification,
+  ICampaignNotification,
+  IMapNotification,
+  IQuestNotification,
+  ISuggestionNotification,
+} from '../notification.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -34,6 +41,12 @@ export class NotificationsComponent implements OnInit {
   public viewQuest(q: IQuestNotification) {
     this.notificationService.removeNotification(q);
     this.router.navigate(['campaigns', q.campaignId, 'quests', q.questId]);
+    this.done.emit(true);
+  }
+
+  public viewSuggestion(s: ISuggestionNotification) {
+    this.notificationService.removeNotification(s);
+    this.router.navigateByUrl(s.suggestionURL);
     this.done.emit(true);
   }
 

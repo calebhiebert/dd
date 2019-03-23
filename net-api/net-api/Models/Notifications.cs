@@ -26,7 +26,7 @@ namespace net_api.Models
             CreatedAt = DateTime.UtcNow;
         }
 
-        public Notification(string userId, string message)
+        public Notification(string userId, string message) : this()
         {
             UserId = userId;
             Message = message;
@@ -66,5 +66,27 @@ namespace net_api.Models
         {
             QuestId = questId;
         } 
+    }
+
+    public class SuggestionNotification : CampaignNotification
+    {
+        [Required]
+        public string SuggestedById { get; set; }
+        public User SuggestedBy { get; set; }
+
+        [Required]
+        public string SuggestionURL { get; set; }
+    }
+
+    public class Suggestion
+    {
+        [Required]
+        public string URL { get; set; }
+
+        [Required]
+        public string Message { get; set; }
+
+        [Required]
+        public Guid CampaignId { get; set; }
     }
 }

@@ -17,7 +17,7 @@ export class NavComponent implements OnInit {
     private login: LoginService,
     private sidebar: SidebarService,
     private notificationService: NotificationService,
-    private entityService: EntityService
+    private router: Router
   ) {}
 
   ngOnInit() {}
@@ -28,6 +28,18 @@ export class NavComponent implements OnInit {
 
   public trackEntity(idx: number, entity: IEntity) {
     return entity.id;
+  }
+
+  public async suggest() {
+    if (!this.campaign) {
+      return;
+    }
+
+    try {
+      await this.notificationService.suggestCurrentURL();
+    } catch (err) {
+      throw err;
+    }
   }
 
   public get loadingCampaign() {

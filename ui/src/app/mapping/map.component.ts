@@ -285,6 +285,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       !isNaN(presetLng as any)
     ) {
       map.setView({ lat: presetLat, lng: presetLng });
+
+      if (!presetZoom) {
+        map.setZoom(this._map.maxZoom);
+      }
     } else {
       map.fitBounds([[-10, 10], [-246, 246]]);
     }

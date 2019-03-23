@@ -12,6 +12,21 @@ export class UserDirective {
 
   constructor(private sanitize: DomSanitizer) {}
 
+  public static buildHTML(user: IUser) {
+    if (user) {
+      return `<div class="columns col-gapless">
+      <div class="column col-auto mr-1 d-flex align-items-center">
+        <figure class="avatar avatar-xs">
+          <img src="${user.pictureURL}" alt="avatar" />
+        </figure>
+      </div>
+      <div class="column col-auto">${user.username}</div>
+    </div>`;
+    } else {
+      return '';
+    }
+  }
+
   @HostBinding('innerHTML')
   public get html() {
     if (this.user) {
