@@ -23,6 +23,9 @@
           <div class="tile-content">
             <strong>{{ history.name }}</strong>
             {{ history.actionSource === 1 ? 'imported' : getEntryActionText(history) }}.
+            <ul class="my-0" *ngIf="history.changes.length > 0">
+              <li *ngFor="let change of history.changes" [innerHTML]="change"></li>
+            </ul>
             <div>{{ getDate(history) | date: 'short' }}</div>
             <div [ddUser]="getUser(history.userId)"></div>
           </div>

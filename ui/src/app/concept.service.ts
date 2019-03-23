@@ -147,6 +147,7 @@ export interface IConceptHistory {
 
 export interface IConceptHistoryDiff extends IConceptHistory {
   diff: any;
+  changes: string[];
 }
 
 export interface IConceptField extends IDynamicFieldConfig {}
