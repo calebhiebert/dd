@@ -82,6 +82,9 @@ const routes: Routes = [
       {
         path: 'landing',
         component: CampaignLandingComponent,
+        data: {
+          suggestable: true,
+        },
       },
       {
         path: 'entities',
@@ -90,6 +93,9 @@ const routes: Routes = [
           {
             path: ':ent_id',
             component: EntityViewComponent,
+            data: {
+              suggestable: true,
+            },
           },
           {
             path: ':ent_id/ct/:ct_id',
@@ -136,6 +142,9 @@ const routes: Routes = [
       {
         path: 'concepts/:ct_id/manage',
         component: ConceptManagerComponent,
+        data: {
+          suggestable: true,
+        },
       },
       {
         path: 'concepts/:ct_id/create',
@@ -154,10 +163,16 @@ const routes: Routes = [
       {
         path: 'concepts/:ct_id/:c_id/view',
         component: ConceptViewComponent,
+        data: {
+          suggestable: true,
+        },
       },
       {
         path: 'concepts/:ct_id/:c_id/history',
         component: ConceptHistoryComponent,
+        data: {
+          suggestable: true,
+        },
       },
       {
         path: 'entitytypes/create',
@@ -192,6 +207,9 @@ const routes: Routes = [
       {
         path: 'quests',
         component: QuestManagerComponent,
+        data: {
+          suggestable: true,
+        },
       },
       {
         path: 'quests/create',
@@ -212,6 +230,9 @@ const routes: Routes = [
       {
         path: 'quests/:q_id',
         component: QuestViewComponent,
+        data: {
+          suggestable: true,
+        },
       },
       {
         path: 'maps',

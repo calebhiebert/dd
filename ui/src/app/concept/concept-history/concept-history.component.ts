@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ConceptService, IConceptHistory, IConceptHistoryDiff, IConceptType } from 'src/app/concept.service';
+import { ConceptService, IConceptHistory, IConceptHistoryDiff } from 'src/app/concept.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IUser } from 'src/app/user.service';
 import { ActionType } from 'src/app/history';
 import * as DeepDiff from 'deep-diff';
-import { diPublicInInjector } from '@angular/core/src/render3/di';
 
 @Component({
   selector: 'dd-concept-history',
@@ -21,12 +20,7 @@ export class ConceptHistoryComponent implements OnInit {
   public conceptHistory: IConceptHistory[];
   public diffedHistory: IConceptHistoryDiff[];
 
-  constructor(
-    private conceptService: ConceptService,
-    private campaignService: CampaignService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private conceptService: ConceptService, private campaignService: CampaignService, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -122,7 +116,8 @@ export class ConceptHistoryComponent implements OnInit {
               changes.push(`<b>${history.fields[d.path[1]].name}:</b> ${d.lhs} ➡️ ${d.rhs}`);
               break;
             case 'tags':
-              changes.push(`<b>Tag:</b> ${d.lhs} ➡️ ️${d.rhs}`);
+              changes.push(`<b>Removed Tag</b>: ${d.lhs}`);
+              changes.push(`<b>Added Tag</b>: ${d.rhs}`);
               break;
             case 'imageId':
               changes.push('<b>Changed Image</b>');
@@ -131,8 +126,6 @@ export class ConceptHistoryComponent implements OnInit {
         case 'N':
           break;
       }
-
-      console.log(d);
     }
 
     return changes;

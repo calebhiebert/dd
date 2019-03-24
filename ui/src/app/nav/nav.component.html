@@ -17,7 +17,7 @@
       <!-- Notification Area -->
       <section class="navbar-section p-1" *ngIf="loggedIn">
         <!-- Suggest -->
-        <div class="mr-2" *ngIf="campaign">
+        <div class="mr-2" *ngIf="campaign && suggestable">
           <button class="btn s-circle tooltip tooltip-bottom" data-tooltip="Suggest this" (click)="suggest()">
             <i class="icon icon-share"></i>
           </button>
