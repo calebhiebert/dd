@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1553381685722,
+  "timestamp": 1553436275702,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -8,18 +8,18 @@
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "urls": [
-        "/4.2fe03d3289ac421adbe6.js",
-        "/5.5b1a8a70476c6a7f0082.js",
-        "/6.178cc820f543a0c69d7b.js",
-        "/7.e41f9e280c71f6e6c020.js",
-        "/8.5db302ab8414dfa1052b.js",
+        "/4.45f2aa37753bc909833e.js",
+        "/5.be0acacd265172528446.js",
+        "/6.4900553d3c0bf03a9de9.js",
+        "/7.38663ead67b9915f312c.js",
+        "/8.ff9e5e5658e2efb7ae83.js",
         "/favicon.ico",
         "/index.html",
-        "/main.26dc5d73695ccbb437e4.js",
+        "/main.fb4653c09f0de8767d9f.js",
         "/polyfills.88283b0c3fbc2fef915a.js",
-        "/runtime.aa4ff181c2bf2122b451.js",
+        "/runtime.954f1757bd69cf1548f9.js",
         "/styles.cebae88694d780ddb069.css",
-        "/vendor.f8904fd0bb560a1230f5.js"
+        "/vendor.5eaf3c2cd02ad5a8d6c9.js"
       ],
       "patterns": []
     },
@@ -91,11 +91,11 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/4.2fe03d3289ac421adbe6.js": "10ceb314a784ad9c006a0fac0446ede56eb72cef",
-    "/5.5b1a8a70476c6a7f0082.js": "93c61a60538f1f3b98637ff2f370fc256739f35a",
-    "/6.178cc820f543a0c69d7b.js": "3c05123b0c6f313f57a7d0fff09577d8e4c0886b",
-    "/7.e41f9e280c71f6e6c020.js": "7bfbb0cb6600a4fd77f56abedb423806aa5d19bb",
-    "/8.5db302ab8414dfa1052b.js": "77e1f1321886855799dac8b33219a42f46c4d6b5",
+    "/4.45f2aa37753bc909833e.js": "fd199206fb004a12d827d32de951e1733c386b73",
+    "/5.be0acacd265172528446.js": "eece7c5f3a37498e8e80753104909f74eeee137f",
+    "/6.4900553d3c0bf03a9de9.js": "f9a41373895c493627a3b8a7e769ae4594538324",
+    "/7.38663ead67b9915f312c.js": "cecbeb336fc6b04babae4279673ac2e412f14937",
+    "/8.ff9e5e5658e2efb7ae83.js": "d61de3c9d1228c59141b94c4ef72f36c7f2032a6",
     "/assets/article-icons/brutal-helm.png": "d022422a611e9c521433cfde502c00c80334b2e1",
     "/assets/article-icons/cancel.png": "8bc5ee0db922fa9ddf8f67f45706d644d376e9da",
     "/assets/article-icons/cheese-wedge.png": "065dbb9e42409b1da3ce78e6bd2cb1372a8f923e",
@@ -148,18 +148,18 @@
     "/assets/note-icon.png": "4292f7a850d6979ccf3f37c182759cd33c89bd53",
     "/assets/position-marker.png": "552da0c660e4625c541968340ded0b9a0a985b12",
     "/favicon.ico": "168f858c5cce8470430eb527254abc3f895f2058",
-    "/index.html": "04dcef576f6d3269cbf9f0ea3fab75b740192045",
+    "/index.html": "f71fa753ea9665f44acac43a8af247f6df0d53ba",
     "/layers-2x.4f0283c6ce28e888000e.png": "152a162333e46d24f9d89f566312fc0c64011dee",
     "/layers.a6137456ed160d760698.png": "c9e7528e491a39232ba24a2706c6c739d6fb0f06",
-    "/main.26dc5d73695ccbb437e4.js": "021abf5bded064b68b9c9e0c3f873b29ea393b04",
+    "/main.fb4653c09f0de8767d9f.js": "811cbc19de00731ce38032ef23892f740ce56569",
     "/marker-icon.2273e3d8ad9264b7daa5.png": "60a90bcbb2b42b7ddb4556db94eb7c1084b0e5da",
     "/polyfills.88283b0c3fbc2fef915a.js": "c3decd818df21a265536af7c852134837edf2840",
-    "/runtime.aa4ff181c2bf2122b451.js": "757ea7b991b31a43a85df168c5c010eac6cb0c1e",
+    "/runtime.954f1757bd69cf1548f9.js": "195af49da9562391ffdd4a136393d40abf961424",
     "/spritesheet-2x.6a1e950d14904d4b6fb5.png": "4625eac5b01eb0e5227467558ee02053d06efe37",
     "/spritesheet.deac1d4aa2ccf7ed832e.png": "d9e8c56f483ef0f1e94f47a725c13fd029daeeae",
     "/spritesheet.fd5728f2cf777b06b966.svg": "47e6aa6d64f8e6f6e7a7067cb0d41652135c9222",
     "/styles.cebae88694d780ddb069.css": "e19cd1945e67c858a87686cf2269afcde40dd48d",
-    "/vendor.f8904fd0bb560a1230f5.js": "879c3bebf270fd9d9cbbb37c80f9d768d9e68ce0"
+    "/vendor.5eaf3c2cd02ad5a8d6c9.js": "24d184a9778f416e88608f66889e2c62e052cb05"
   },
   "navigationUrls": [
     {
