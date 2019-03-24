@@ -246,6 +246,10 @@ const routes: Routes = [
         path: 'members',
         component: MemberManagerComponent,
       },
+      {
+        path: 'sketchpad',
+        loadChildren: './sketchpad/sketchpad.module#SketchpadModule',
+      },
     ],
   },
 ];
