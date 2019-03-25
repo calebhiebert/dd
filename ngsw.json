@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1553436275702,
+  "timestamp": 1553530986036,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -12,14 +12,15 @@
         "/5.be0acacd265172528446.js",
         "/6.4900553d3c0bf03a9de9.js",
         "/7.38663ead67b9915f312c.js",
-        "/8.ff9e5e5658e2efb7ae83.js",
+        "/8.87f1d33810cf5236241e.js",
+        "/9.f5e5d886d65b4b9d4500.js",
         "/favicon.ico",
         "/index.html",
-        "/main.fb4653c09f0de8767d9f.js",
+        "/main.27db09594092598050db.js",
         "/polyfills.88283b0c3fbc2fef915a.js",
-        "/runtime.954f1757bd69cf1548f9.js",
-        "/styles.cebae88694d780ddb069.css",
-        "/vendor.5eaf3c2cd02ad5a8d6c9.js"
+        "/runtime.40453392873ac38a65fa.js",
+        "/styles.b12028b4f3a402e1592f.css",
+        "/vendor.a92e8e87e0554e397036.js"
       ],
       "patterns": []
     },
@@ -95,7 +96,8 @@
     "/5.be0acacd265172528446.js": "eece7c5f3a37498e8e80753104909f74eeee137f",
     "/6.4900553d3c0bf03a9de9.js": "f9a41373895c493627a3b8a7e769ae4594538324",
     "/7.38663ead67b9915f312c.js": "cecbeb336fc6b04babae4279673ac2e412f14937",
-    "/8.ff9e5e5658e2efb7ae83.js": "d61de3c9d1228c59141b94c4ef72f36c7f2032a6",
+    "/8.87f1d33810cf5236241e.js": "0fdd76c4ab0c4425efb5dccfec292814348969f3",
+    "/9.f5e5d886d65b4b9d4500.js": "b9451c7f4ee384f7e3c58a2e6ee1265e65334132",
     "/assets/article-icons/brutal-helm.png": "d022422a611e9c521433cfde502c00c80334b2e1",
     "/assets/article-icons/cancel.png": "8bc5ee0db922fa9ddf8f67f45706d644d376e9da",
     "/assets/article-icons/cheese-wedge.png": "065dbb9e42409b1da3ce78e6bd2cb1372a8f923e",
@@ -148,18 +150,18 @@
     "/assets/note-icon.png": "4292f7a850d6979ccf3f37c182759cd33c89bd53",
     "/assets/position-marker.png": "552da0c660e4625c541968340ded0b9a0a985b12",
     "/favicon.ico": "168f858c5cce8470430eb527254abc3f895f2058",
-    "/index.html": "f71fa753ea9665f44acac43a8af247f6df0d53ba",
+    "/index.html": "a81e0cd79a586e4d38668187c80286cab5936f0a",
     "/layers-2x.4f0283c6ce28e888000e.png": "152a162333e46d24f9d89f566312fc0c64011dee",
     "/layers.a6137456ed160d760698.png": "c9e7528e491a39232ba24a2706c6c739d6fb0f06",
-    "/main.fb4653c09f0de8767d9f.js": "811cbc19de00731ce38032ef23892f740ce56569",
+    "/main.27db09594092598050db.js": "c5f0be617fa5cbe30280c925e82e0b15e10e1d97",
     "/marker-icon.2273e3d8ad9264b7daa5.png": "60a90bcbb2b42b7ddb4556db94eb7c1084b0e5da",
     "/polyfills.88283b0c3fbc2fef915a.js": "c3decd818df21a265536af7c852134837edf2840",
-    "/runtime.954f1757bd69cf1548f9.js": "195af49da9562391ffdd4a136393d40abf961424",
+    "/runtime.40453392873ac38a65fa.js": "7b005a3fe5fa24440b553553716085703e9d77ed",
     "/spritesheet-2x.6a1e950d14904d4b6fb5.png": "4625eac5b01eb0e5227467558ee02053d06efe37",
     "/spritesheet.deac1d4aa2ccf7ed832e.png": "d9e8c56f483ef0f1e94f47a725c13fd029daeeae",
     "/spritesheet.fd5728f2cf777b06b966.svg": "47e6aa6d64f8e6f6e7a7067cb0d41652135c9222",
-    "/styles.cebae88694d780ddb069.css": "e19cd1945e67c858a87686cf2269afcde40dd48d",
-    "/vendor.5eaf3c2cd02ad5a8d6c9.js": "24d184a9778f416e88608f66889e2c62e052cb05"
+    "/styles.b12028b4f3a402e1592f.css": "2aed1342cd7f27250b074b755cfaca23a71d9b3c",
+    "/vendor.a92e8e87e0554e397036.js": "ad5c9cb9113f7209ee96377a1c480fccea4891b6"
   },
   "navigationUrls": [
     {
