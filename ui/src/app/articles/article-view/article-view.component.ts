@@ -88,6 +88,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
       queryParams: {
         lat: this.article.lat,
         lng: this.article.lng,
+        article: this.article.id,
       },
     });
   }

@@ -166,6 +166,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
       queryParams: {
         lat: this.entity.lat,
         lng: this.entity.lng,
+        entity: this.entity.id,
       },
     });
   }

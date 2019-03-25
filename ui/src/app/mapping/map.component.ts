@@ -76,8 +76,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private _articleUpdateSubscription: Subscription;
   private _articleDeleteSubscription: Subscription;
 
-  private _queryLatLng: any[];
-
   public loading = false;
   public loadSelectItems: any;
 
@@ -220,7 +218,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     // TODO move this into it's own function
     for (const entity of this.campaignService.campaign.entities) {
       if (entity.mapId === this._map.id && entity.lat && entity.lng) {
-        this.addEntityToMap(entity);
+        const focusedEntityId = this.route.snapshot.queryParamMap.get('entity');
+        this.addEntityToMap(entity, entity.id === focusedEntityId);
       }
     }
   }
@@ -233,8 +232,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
 
     if (this._articles) {
+      const focusedArticleId = this.route.snapshot.queryParamMap.get('article');
+
       for (const a of this._articles) {
-        this.addArticleToMap(a);
+        this.addArticleToMap(a, a.id === focusedArticleId);
       }
     }
   }
@@ -284,10 +285,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       !isNaN(presetLat as any) &&
       !isNaN(presetLng as any)
     ) {
-      map.setView({ lat: presetLat, lng: presetLng });
-
       if (!presetZoom) {
-        map.setZoom(this._map.maxZoom);
+        map.setView({ lat: presetLat, lng: presetLng }, this._map.maxZoom);
+      } else {
+        map.setView({ lat: presetLat, lng: presetLng }, presetZoom);
       }
     } else {
       map.fitBounds([[-10, 10], [-246, 246]]);
@@ -333,7 +334,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  private addArticleToMap(article: IArticle) {
+  private addArticleToMap(article: IArticle, showPopup = false) {
     // Check to see if this article already exists on the map
     const layers = this._articlesLayerGroup.getLayers();
 
@@ -379,6 +380,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       popup.setContent(this.createArticlePopupContent(article));
       marker.bindPopup(popup);
+
+      if (showPopup) {
+        marker.openPopup();
+      }
     }
   }
 
@@ -564,7 +569,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private addEntityToMap(entity: IEntity) {
+  private addEntityToMap(entity: IEntity, showPopup = false) {
     if (entity.lat && entity.lng) {
       const marker = L.marker([entity.lat, entity.lng], {
         icon: L.icon({
@@ -596,8 +601,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       });
 
       popup.setContent(this.componentService.getRootNode(component));
-
       marker.bindPopup(popup);
+
+      if (showPopup) {
+        marker.openPopup();
+      }
     }
   }
 
