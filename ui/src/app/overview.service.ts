@@ -47,7 +47,7 @@ export class OverviewService {
   }
 
   public async loadOverviewState() {
-    if (!this.campaignService.campaign.overviewStateId) {
+    if (!this.campaignService.campaign.overviewStateId && this.campaignService.canEdit) {
       this._loading = true;
 
       try {
