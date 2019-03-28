@@ -6,6 +6,7 @@
   <!-- Entity list -->
   <div cdkDropList (cdkDropListDropped)="entityDropped($event)">
     <div class="mb-2" *ngFor="let e of sortedEntities; trackBy: trackEntityElement" cdkDrag [cdkDragDisabled]="!reorderable">
+      <div class="drag-placeholder" *cdkDragPlaceholder></div>
       <dd-overview-entity [entity]="e" [showMoveIcon]="reorderable"></dd-overview-entity>
     </div>
   </div>
