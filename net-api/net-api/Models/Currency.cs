@@ -29,33 +29,23 @@ namespace net_api.Models
         /// <summary>
         /// Checks to see if the currency a satisfies the requirements of b
         /// </summary>
-        public static bool HasResources(CurrencyStore a, CurrencyStore b, bool trackCoins)
+        public static bool HasResources(CurrencyStore a, CurrencyStore b, CurrencyLevel[] levels, bool trackCoins)
         {
             if (!trackCoins)
             {
                 return a.Value != null && b.Value != null && a.Value >= b.Value;
             }
 
-            foreach (var coinType in b.Values.Keys.Where(k => b.Values[k] != null))
-            {
-                var requirement = b.Values[coinType];
-                var available = a.Values[coinType];
+            var requiredAmount = TotalValue(b, levels, trackCoins);
+            var availableAmount = TotalValue(a, levels, trackCoins);
 
-                var satisfiesRequirement = (requirement == available) || (requirement != null && available != null && available >= requirement);
-
-                if (!satisfiesRequirement)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return availableAmount >= requiredAmount;
         }
 
         /// <summary>
         /// Returns a new CurrencyStore that is the result of b subtracted from a
         /// </summary>
-        public static CurrencyStore Subtract(CurrencyStore a, CurrencyStore b, bool trackCoins)
+        public static CurrencyStore Subtract(CurrencyStore a, CurrencyStore b, CurrencyLevel[] levels, bool trackCoins)
         {
             var newCurrencyStore = new CurrencyStore();
 
@@ -86,39 +76,12 @@ namespace net_api.Models
                     a.Values = new Dictionary<string, int?>();
                 }
 
-                foreach (var coinType in b.Values.Keys)
-                {
-                    var subValue = b.Values[coinType];
+                var cost = TotalValue(b, levels, trackCoins);
+                var availableCurrency = TotalValue(a, levels, trackCoins);
 
-                    if (subValue == null)
-                    {
-                        subValue = 0;
-                    }
+                var remainingCurrency = availableCurrency - cost;
 
-                    if (a.Values.ContainsKey(coinType))
-                    {
-                        var v = a.Values[coinType];
-
-                        if (v == null)
-                        {
-                            v = 0;
-                        }
-
-                        newCurrencyStore.Values[coinType] = v - subValue;
-                    } else if (subValue != 0)
-                    {
-                        newCurrencyStore.Values[coinType] = -subValue;
-                    }
-                }
-
-                // Preserve unaffected values
-                foreach (var coinType in a.Values.Keys)
-                {
-                    if (!newCurrencyStore.Values.ContainsKey(coinType) && a.Values[coinType] != null)
-                    {
-                        newCurrencyStore.Values.Add(coinType, a.Values[coinType]);
-                    }
-                }
+                newCurrencyStore = ValueToCoins(remainingCurrency, levels);
             }
 
             return newCurrencyStore;
@@ -149,9 +112,73 @@ namespace net_api.Models
             return newCurrencyStore;
         }
 
-        internal static CurrencyStore Multiply(CurrencyStore currencyCost)
+        public static double TotalValue(CurrencyStore currency, CurrencyLevel[] levels, bool trackCoins)
         {
-            throw new NotImplementedException();
+            if (trackCoins)
+            {
+                if (currency.Values == null)
+                {
+                    return 0;
+                }
+
+                double value = 0;
+
+                foreach (var cl in levels)
+                {
+                    if (currency.Values.ContainsKey(cl.Name))
+                    {
+                        value += (double)currency.Values[cl.Name] * cl.Value;
+                    }
+                }
+
+                return value;
+            }
+            else
+            {
+                if (currency.Value == null)
+                {
+                    return 0;
+                } else
+                {
+                    return (double)currency.Value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Converts a single currency value into it's coin representation
+        /// </summary>
+        /// <param name="value">the value to convert</param>
+        /// <param name="levels">the types of coins that this value can be converted to</param>
+        /// <returns></returns>
+        public static CurrencyStore ValueToCoins(double value, CurrencyLevel[] levels)
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException("value cannot be lower than 0");
+            } else if (value == 0)
+            {
+                return new CurrencyStore();
+            }
+
+            var output = new CurrencyStore
+            {
+                Values = new Dictionary<string, int?>()
+            };
+
+            levels = levels.OrderByDescending(l => l.Value).ToArray();
+
+            foreach (var lvl in levels)
+            {
+                if (value >= lvl.Value)
+                {
+                    int coinAmount = (int)((value - (value % lvl.Value)) / lvl.Value);
+                    output.Values[lvl.Name] = coinAmount;
+                    value -= (double)coinAmount * lvl.Value;
+                }
+            }
+
+            return output;
         }
     }
 }

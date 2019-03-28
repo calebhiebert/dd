@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -152,7 +151,12 @@ namespace net_api.Controllers
             }
 
             // Check that the buyer can afford this
-            if (!CurrencyStore.HasResources(entity.Currency, CurrencyStore.Multiply(existingArticleConcept.CurrencyCost, (int)quantity), entity.Campaign.TrackCoins))
+            if (!CurrencyStore.HasResources(
+                entity.Currency,
+                CurrencyStore.Multiply(existingArticleConcept.CurrencyCost,
+                (int)quantity),
+                entity.Campaign.CurrencyMap.ToArray(),
+                entity.Campaign.TrackCoins))
             {
                 return BadRequest("not enough currency");
             }
@@ -203,12 +207,13 @@ namespace net_api.Controllers
             entity.Currency = CurrencyStore.Subtract(
                 entity.Currency,
                 CurrencyStore.Multiply(existingArticleConcept.CurrencyCost, (int)quantity),
+                entity.Campaign.CurrencyMap.ToArray(),
                 entity.Campaign.TrackCoins);
             _context.Entry(entity).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
-            await _hub.Clients.Group($"campaign-{entity.CampaignId}")
+            await _hub.Clients.Group($"entity-{entity.Id}")
                 .SendAsync("EntityUpdate", entity);
 
             await _hub.Clients

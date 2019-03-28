@@ -8,6 +8,11 @@ import { ICurrency } from './entity.service';
 export class CurrencyService {
   constructor() {}
 
+  /**
+   * Maps a single currency value to individual coin values
+   * @param currencyMap a coin defenition for a campaign
+   * @param amount a set amount to be mapped
+   */
   public mapCurrencyValues(currencyMap?: ICurrencyLevel[], amount?: number) {
     if (currencyMap === null || currencyMap === undefined) {
       currencyMap = [{ value: 1, name: 'gp', useInConversions: true }];
@@ -50,6 +55,11 @@ export class CurrencyService {
     return results;
   }
 
+  /**
+   * Converts an object based coin store format to an array based one
+   * @param currencyMap the coin defenition for this a campaign
+   * @param values an object based coin store format
+   */
   public mapCoinValues(currencyMap?: ICurrencyLevel[], values?: { [key: string]: number }) {
     if (!values) {
       values = {};
@@ -84,7 +94,7 @@ export class CurrencyService {
   /**
    * Checks to see if the currency a satisfies the requirements of currency b
    */
-  public hasResources(a: ICurrency, b: ICurrency, trackCoins: boolean): boolean {
+  public hasResources(a: ICurrency, b: ICurrency, currencyMap: ICurrencyLevel[], trackCoins: boolean): boolean {
     if (a === null || a === undefined || b === undefined || b === null) {
       return false;
     }
@@ -99,24 +109,33 @@ export class CurrencyService {
       return false;
     }
 
-    for (const rct of Object.keys(b.values).filter((k) => b.values[k] !== null && b.values[k] !== undefined)) {
-      const requiredAmount = b.values[rct];
-      const availableAmount = a.values[rct];
+    const requiredAmount = this.getTotalValue(currencyMap, b, trackCoins);
+    const availableAmount = this.getTotalValue(currencyMap, a, trackCoins);
 
-      let satisfiesRequirements;
+    return availableAmount >= requiredAmount;
+  }
 
-      if (availableAmount === null || availableAmount === undefined) {
-        satisfiesRequirements = false;
-      } else {
-        satisfiesRequirements = availableAmount >= requiredAmount;
+  /**
+   * Gets the total value of a currency object
+   */
+  public getTotalValue(currencyMap: ICurrencyLevel[], currency: ICurrency, trackCoins: boolean): number {
+    if (trackCoins) {
+      let value = 0;
+
+      if (!currency.values) {
+        currency.values = {};
       }
 
-      if (!satisfiesRequirements) {
-        return false;
+      for (const cl of currencyMap) {
+        if (currency.values[cl.name]) {
+          value += currency.values[cl.name] * cl.value;
+        }
       }
+
+      return value;
+    } else {
+      return currency.value;
     }
-
-    return true;
   }
 
   /**
@@ -160,6 +179,10 @@ export class CurrencyService {
 
   public getCurrencyHTMLString(mappedValues: IMappedCurrency[]): string {
     return mappedValues.map((mv) => `${mv.amount}<span class="currency-text">${mv.name}</span>`).join(' ');
+  }
+
+  public get defaultCurrencyMap(): ICurrencyLevel[] {
+    return [{ name: 'gp', value: 1, useInConversions: true }];
   }
 }
 

@@ -23,6 +23,7 @@ export class EntityViewComponent implements OnInit, OnDestroy {
   public entity: IEntity;
 
   private _updateHubStatus$: Subscription;
+  private _entityUpdate$: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -43,6 +44,12 @@ export class EntityViewComponent implements OnInit, OnDestroy {
     this._updateHubStatus$ = this.update.stateUpdate.subscribe((state) => {
       if (state === ConnectionState.CONNECTED && this.entity) {
         this.update.subscribeEntities([this.entity.id]);
+      }
+    });
+
+    this._entityUpdate$ = this.update.entityUpdated.subscribe((entity: IEntity) => {
+      if (this.entity && entity.id === this.entity.id) {
+        this.entity = entity;
       }
     });
   }

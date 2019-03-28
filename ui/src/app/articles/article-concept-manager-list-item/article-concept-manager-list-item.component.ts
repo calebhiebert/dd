@@ -134,7 +134,12 @@ export class ArticleConceptManagerListItemComponent implements OnInit {
 
   public canAfford(entity: IEntity) {
     if (this.isPurchasable) {
-      return this.currencyService.hasResources(entity.currency, this.articleConcept.currencyCost, this.campaignService.campaign.trackCoins);
+      return this.currencyService.hasResources(
+        entity.currency,
+        this.articleConcept.currencyCost,
+        this.campaignService.campaign.currencyMap || this.currencyService.defaultCurrencyMap,
+        this.campaignService.campaign.trackCoins
+      );
     } else {
       return false;
     }
