@@ -78,6 +78,9 @@ namespace net_api.Models
             }
         }
 
+        public Guid? OverviewStateId { get; set; }
+        public OverviewState OverviewState { get; set; }
+
         public bool TrackCoins { get; set; }
 
         public DateTime CreatedAt { get; set; }

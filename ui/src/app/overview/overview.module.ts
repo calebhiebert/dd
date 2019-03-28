@@ -7,9 +7,10 @@ import { OverviewEntityComponent } from './overview-entity/overview-entity.compo
 import { OverviewToolbarComponent } from './overview-toolbar/overview-toolbar.component';
 import { CustomControlsModule } from '../custom-controls/custom-controls.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [OverviewComponent, OverviewEntityComponent, OverviewToolbarComponent],
-  imports: [CommonModule, OverviewRoutingModule, CustomControlsModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, OverviewRoutingModule, CustomControlsModule, ReactiveFormsModule, FormsModule, DragDropModule],
 })
 export class OverviewModule {}

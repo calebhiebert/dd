@@ -1,154 +1,126 @@
 import { Injectable } from '@angular/core';
 import { IEntity } from './entity.service';
 import { CampaignService } from './campaign.service';
-
-export enum SortMode {
-  NAME,
-  HP_PERCENT,
-  HP_MAX,
-  HP_CURRENT,
-}
-
-export enum SortDirection {
-  ASC,
-  DESC,
-}
-
-export interface IOverviewPreferences {
-  sortMode: SortMode;
-  sortDirection: SortDirection;
-  viewMode: 'full' | 'spectate';
-}
+import { EntitySortOrder, IOverviewState, OverviewStateService } from './overview-state.service';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
+import { UpdateHubService } from './update-hub.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OverviewService {
-  private _sortMode: SortMode;
-  private _sortDirection: SortDirection;
-  private _viewMode: 'full' | 'spectate' = 'spectate';
+  private _viewMode: 'full' | 'spectate' = 'full';
+  private _reorderable = false;
+  private _overviewState: IOverviewState;
+  private _loading = false;
 
-  constructor(private campaignService: CampaignService) {}
-
-  private getPrefsFromState(): IOverviewPreferences {
-    return {
-      sortDirection: this._sortDirection,
-      sortMode: this._sortMode,
-      viewMode: this._viewMode,
-    };
+  constructor(
+    private campaignService: CampaignService,
+    private stateService: OverviewStateService,
+    private updateService: UpdateHubService
+  ) {
+    updateService.overviewStateUpdate.subscribe((os: IOverviewState) => {
+      this._overviewState = os;
+    });
   }
 
-  private applyPrefs(prefs: IOverviewPreferences) {
-    if (prefs !== null && prefs !== undefined) {
-      this.setSorting(prefs.sortMode, prefs.sortDirection);
-      this.setViewMode(prefs.viewMode || 'full');
+  private getSortOrder(entities: IEntity[]): EntitySortOrder {
+    const sortOrder: EntitySortOrder = {};
+
+    entities.forEach((ent, idx) => {
+      sortOrder[ent.id] = idx;
+    });
+
+    return sortOrder;
+  }
+
+  private async updateState() {
+    this._loading = true;
+
+    try {
+      this.stateService.updateOverviewState(this._overviewState, this.campaignService.campaign.id);
+    } catch (err) {
+      throw err;
     }
+
+    this._loading = false;
   }
 
-  private reset() {
-    this._sortDirection = SortDirection.DESC;
-    this._sortMode = SortMode.NAME;
-  }
+  public async loadOverviewState() {
+    if (!this.campaignService.campaign.overviewStateId) {
+      this._loading = true;
 
-  private compareText(a: string, b: string, direction: SortDirection): number {
-    if (direction === SortDirection.ASC) {
-      return b.localeCompare(a);
-    } else if (direction === SortDirection.DESC) {
-      return a.localeCompare(b);
+      try {
+        this._overviewState = await this.stateService.updateOverviewState(
+          {
+            entitySortOrder: {},
+          },
+          this.campaignService.campaign.id
+        );
+      } catch (err) {
+        throw err;
+      }
+
+      this._loading = false;
+      return;
     }
-  }
 
-  private compareNumber(a: number, b: number, direction: SortDirection): number {
-    if (direction === SortDirection.ASC) {
-      return a - b;
-    } else if (direction === SortDirection.DESC) {
-      return b - a;
+    this._loading = true;
+
+    try {
+      this._overviewState = await this.stateService.getOverviewState(this.campaignService.campaign.overviewStateId);
+    } catch (err) {
+      throw err;
     }
-  }
 
-  private savePrefs(prefs: IOverviewPreferences) {
-    localStorage.setItem('overview-preferences', JSON.stringify(prefs));
-  }
-
-  private loadPrefs(): IOverviewPreferences {
-    // TODO optimize localstorage calls by using a variable
-    if (localStorage.getItem('overview-preferences') !== null) {
-      return JSON.parse(localStorage.getItem('overview-preferences'));
-    } else {
-      return null;
-    }
-  }
-
-  public savePreferences() {
-    this.savePrefs(this.getPrefsFromState());
-  }
-
-  public loadPreferences() {
-    this.applyPrefs(this.loadPrefs());
-  }
-
-  public setSorting(mode: SortMode, direction: SortDirection) {
-    // Parameters are parsed because angular reactive forms submit number
-    // values as strings
-    this._sortMode = typeof mode === 'string' ? parseInt(mode, 10) : mode;
-    this._sortDirection = typeof direction === 'string' ? parseInt(direction, 10) : direction;
-
-    // Save new sorting preferences
-    this.savePrefs(this.getPrefsFromState());
+    this._loading = false;
   }
 
   public setViewMode(viewMode: 'full' | 'spectate') {
     this._viewMode = viewMode;
+  }
 
-    this.savePrefs(this.getPrefsFromState());
+  public toggleReorderable() {
+    this._reorderable = !this._reorderable;
+  }
+
+  public swapEntities(oldIdx: number, newIdx: number) {
+    const entities = [...this.sortedEntities];
+
+    moveItemInArray(entities, oldIdx, newIdx);
+
+    if (this._overviewState) {
+      this._overviewState.entitySortOrder = this.getSortOrder(entities);
+      this.updateState();
+    }
   }
 
   public get entities() {
     return this.campaignService.campaign.entities.filter((e) => !e.spawnable);
   }
 
-  public get preferences() {
-    return this.getPrefsFromState();
-  }
-
   public get sortedEntities(): IEntity[] {
-    switch (this._sortMode) {
-      case SortMode.NAME:
-        return this.entities.sort((a, b) => {
-          return this.compareText(a.name, b.name, this._sortDirection);
-        });
-      case SortMode.HP_CURRENT:
-        return this.entities.sort((a, b) => {
-          if (a.health === null) {
-            return 1;
-          } else if (b.health === null) {
-            return -1;
-          }
+    if (this._overviewState) {
+      return [...this.entities].sort((a, b) => {
+        const aSortValue = this._overviewState.entitySortOrder[a.id] || 0;
+        const bSortValue = this._overviewState.entitySortOrder[b.id] || 0;
 
-          return this.compareNumber(a.health.current, b.health.current, this._sortDirection);
-        });
-      case SortMode.HP_MAX:
-        return this.entities.sort((a, b) => {
-          if (a.health === null) {
-            return 1;
-          } else if (b.health === null) {
-            return -1;
-          }
-
-          return this.compareNumber(a.health.max, b.health.max, this._sortDirection);
-        });
-      case SortMode.HP_PERCENT:
-        return this.entities.sort((a, b) => {
-          if (a.health === null) {
-            return 1;
-          } else if (b.health === null) {
-            return -1;
-          }
-
-          return this.compareNumber(a.health.current / a.health.max, b.health.current / b.health.max, this._sortDirection);
-        });
+        return aSortValue - bSortValue;
+      });
     }
 
     return this.entities;
+  }
+
+  public get reorderable(): boolean {
+    return this._reorderable;
+  }
+
+  public get state() {
+    return this._overviewState;
+  }
+
+  public get viewMode() {
+    return this._viewMode;
   }
 }

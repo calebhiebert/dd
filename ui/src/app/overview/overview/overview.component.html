@@ -4,11 +4,10 @@
   </div>
 
   <!-- Entity list -->
-  <div
-    class="mb-2"
-    *ngFor="let e of sortedEntities; trackBy: trackEntityElement"
-  >
-    <dd-overview-entity [entity]="e"></dd-overview-entity>
+  <div cdkDropList (cdkDropListDropped)="entityDropped($event)">
+    <div class="mb-2" *ngFor="let e of sortedEntities; trackBy: trackEntityElement" cdkDrag [cdkDragDisabled]="!reorderable">
+      <dd-overview-entity [entity]="e" [showMoveIcon]="reorderable"></dd-overview-entity>
+    </div>
   </div>
 
   <!-- Empty State -->
@@ -19,5 +18,5 @@
   </div>
 
   <!-- Toolbar -->
-  <dd-overview-toolbar *ngIf="sortedEntities.length > 0"></dd-overview-toolbar>
+  <dd-overview-toolbar *ngIf="sortedEntities.length > 0 && editable" [state]="state"></dd-overview-toolbar>
 </div>

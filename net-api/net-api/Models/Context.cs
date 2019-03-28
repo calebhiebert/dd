@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Text.RegularExpressions;
+using net_api.Models;
 
 namespace net_api.Models
 {
@@ -74,5 +75,7 @@ namespace net_api.Models
             modelBuilder.Query<MapBytePosition>();
             modelBuilder.Query<Tags>();
         }
+
+        public DbSet<net_api.Models.OverviewState> OverviewState { get; set; }
     }
 }

@@ -1,6 +1,7 @@
-import { Component, OnInit, AfterViewInit, AfterContentInit, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { OverviewService } from 'src/app/overview.service';
+import { IOverviewState } from 'src/app/overview-state.service';
 
 @Component({
   selector: 'dd-overview-toolbar',
@@ -11,6 +12,9 @@ export class OverviewToolbarComponent implements OnInit {
   public sortGroup: FormGroup;
   public viewModeControl: FormControl;
 
+  @Input()
+  public state?: IOverviewState;
+
   constructor(private overviewService: OverviewService) {}
 
   ngOnInit() {
@@ -19,24 +23,18 @@ export class OverviewToolbarComponent implements OnInit {
       direction: new FormControl(0),
     });
 
-    this.viewModeControl = new FormControl(null);
-
-    // Subscribe to changes in sorting params
-    this.sortGroup.valueChanges.subscribe((sortVal) => {
-      this.overviewService.setSorting(sortVal.mode, sortVal.direction);
-    });
+    this.viewModeControl = new FormControl(this.overviewService.viewMode);
 
     this.viewModeControl.valueChanges.subscribe((vm) => {
       this.overviewService.setViewMode(vm);
     });
+  }
 
-    setTimeout(() => {
-      this.overviewService.loadPreferences();
-      this.sortGroup.patchValue({
-        mode: this.overviewService.preferences.sortMode || 0,
-        direction: this.overviewService.preferences.sortDirection || 0,
-      });
-      this.viewModeControl.setValue(this.overviewService.preferences.viewMode);
-    }, 1);
+  public toggleReorderable() {
+    this.overviewService.toggleReorderable();
+  }
+
+  public get reorderable() {
+    return this.overviewService.reorderable;
   }
 }

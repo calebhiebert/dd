@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { IEntity, IHealth, EntityService } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { OverviewService } from 'src/app/overview.service';
 import Swal from 'sweetalert2';
 
@@ -16,6 +15,9 @@ export class OverviewEntityComponent implements OnInit {
 
   @Input()
   public entity: IEntity;
+
+  @Input()
+  public showMoveIcon: boolean;
 
   constructor(
     private campaignService: CampaignService,
@@ -58,8 +60,6 @@ export class OverviewEntityComponent implements OnInit {
   }
 
   public get editable() {
-    return (
-      (this.campaignService.canEdit || this.entity.userId === this.loginService.id) && this.overviewService.preferences.viewMode === 'full'
-    );
+    return (this.campaignService.canEdit || this.entity.userId === this.loginService.id) && this.overviewService.viewMode === 'full';
   }
 }

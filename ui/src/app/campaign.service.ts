@@ -6,6 +6,7 @@ import { IUser } from './user.service';
 import { LoginService } from './login.service';
 import { IConceptType } from './concept.service';
 import { UpdateHubService, ConnectionState } from './update-hub.service';
+import { IOverviewState } from './overview-state.service';
 
 @Injectable({
   providedIn: 'root',
@@ -285,6 +286,8 @@ export interface ICampaign {
   members?: ICampaignUser[];
   conceptTypes?: IConceptType[];
   trackCoins?: boolean;
+  overviewStateId?: string;
+  overviewState?: IOverviewState;
   createdAt?: Date;
 }
 

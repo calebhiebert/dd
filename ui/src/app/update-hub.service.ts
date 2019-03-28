@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { IArticle, IArticleConcept } from './article.service';
 import { IConceptEntity } from './concept.service';
 import { ICursorUpdate } from './custom-controls/quill/quill.component';
+import { IOverviewState } from './overview-state.service';
 
 export enum ConnectionState {
   NOT_CONNECTED,
@@ -42,6 +43,7 @@ export class UpdateHubService {
   public conceptEntityDelete = new EventEmitter<IConceptEntity>();
   public conceptArticleUpdate = new EventEmitter<IArticleConcept>();
   public conceptArticleDelete = new EventEmitter<IArticleConcept>();
+  public overviewStateUpdate = new EventEmitter<IOverviewState>();
   public notificationUpdate = new EventEmitter<boolean>();
 
   constructor(private login: LoginService, private noteService: NoteService, private toastr: ToastrService) {
@@ -144,6 +146,10 @@ export class UpdateHubService {
 
     this.connection.on('ConceptArticleDelete', (ca) => {
       this.conceptArticleDelete.emit(ca);
+    });
+
+    this.connection.on('OverviewStateUpdate', (os) => {
+      this.overviewStateUpdate.emit(os);
     });
 
     await this.authenticate();

@@ -1,5 +1,9 @@
 <div class="card p-2">
   <div class="columns">
+    <div *ngIf="showMoveIcon" cdkDragHandle>
+      <i class="icon icon-resize-vert c-move"></i>
+    </div>
+
     <!-- Image -->
     <div class="column col-auto" *ngIf="entity.imageId">
       <figure class="avatar hide-sm">
@@ -13,7 +17,7 @@
     <!-- Misc -->
     <div class="column">
       <div class="columns">
-        <div class="column col-2 col-md-3 col-sm-12">
+        <div class="column col-2 col-md-3 col-sm-12 fake-link" [routerLink]="['/campaigns', entity.campaignId, 'entities', entity.id]">
           <h6>{{ entity.name }}</h6>
         </div>
         <div class="column col-10 col-md-9 col-sm-12">

@@ -1,21 +1,9 @@
 <!-- Sorting -->
 <div class="columns" [formGroup]="sortGroup">
-  <!-- Sort Mode -->
-  <div class="column">
-    <select name="sort-mode" id="sort-mode" formControlName="mode" class="form-input">
-      <option value="0">Name</option>
-      <option value="1">HP Percent</option>
-      <option value="2">HP Max</option>
-      <option value="3">HP Current</option>
-    </select>
-  </div>
-
-  <!-- Sort Direction -->
-  <div class="column">
-    <select name="sort-direction" id="sort-direction" formControlName="direction" class="form-input">
-      <option value="0">Ascending</option>
-      <option value="1">Descending</option>
-    </select>
+  <div class="column col-auto">
+    <button class="btn" [ngClass]="{ 'btn-primary': reorderable }" (click)="toggleReorderable()">
+      <i class="icon icon-resize-vert"></i>
+    </button>
   </div>
 
   <!-- View Mode -->
