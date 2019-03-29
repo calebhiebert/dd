@@ -265,11 +265,6 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
-            var assetViews = await _context.AssetViews
-                .Where(av => av.EntityId == entity.Id)
-                .ToListAsync();
-
-            _context.AssetViews.RemoveRange(assetViews);
             _context.Entities.Remove(entity);
             await _context.SaveChangesAsync();
 

@@ -68,4 +68,8 @@ export class OverviewEntityComponent implements OnInit {
   public get editable() {
     return (this.campaignService.canEdit || this.entity.userId === this.loginService.id) && this.overviewService.viewMode === 'full';
   }
+
+  public get conceptTypes() {
+    return this.campaignService.campaign.conceptTypes.filter((ct) => ct.isUsableInOverviewScreen === true);
+  }
 }

@@ -299,7 +299,10 @@ namespace net_api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Article>> DeleteArticle(Guid id)
         {
-            var article = await _context.Articles.Where(a => a.Id == id).Include(a => a.Campaign).FirstOrDefaultAsync();
+            var article = await _context.Articles
+                .Where(a => a.Id == id)
+                .Include(a => a.Campaign)
+                .FirstOrDefaultAsync();
             if (article == null)
             {
                 return NotFound();
