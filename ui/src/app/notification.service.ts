@@ -61,7 +61,21 @@ export class NotificationService {
   private makeNotificationToasts(notifications: Notification[]) {
     for (const n of notifications) {
       if ((n as ISuggestionNotification).suggestionURL) {
-        const toast = this.toast.info(`${n.user.username} suggested something! ${n.message}`);
+        let suggestedBy;
+
+        if (this.campignService.campaign) {
+          suggestedBy = this.campignService.campaign.members.find((m) => m.userId === (n as ISuggestionNotification).suggestedById);
+        }
+
+        let toastText;
+
+        if (suggestedBy && suggestedBy.user) {
+          toastText = `${suggestedBy.user.username} suggested something! ${n.message}`;
+        } else {
+          toastText = `A suggestion was made. ${n.message}`;
+        }
+
+        const toast = this.toast.info(toastText);
 
         toast.onTap.subscribe(() => {
           this.router.navigateByUrl((n as ISuggestionNotification).suggestionURL);
