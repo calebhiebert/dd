@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
@@ -6,9 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IArticle, ArticleService } from 'src/app/article.service';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
-import Quill from 'quill';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { ComponentCanDeactivate } from 'src/app/unsaved-changes.guard';
 
 @Component({
@@ -156,6 +154,6 @@ export class ArticleEditorComponent implements OnInit, ComponentCanDeactivate {
   }
 
   public get conceptTypes() {
-    return this.campaignSerivce.campaign.conceptTypes;
+    return this.campaignSerivce.campaign.conceptTypes.filter((ct) => ct.isLinkableToArticles === true);
   }
 }

@@ -115,6 +115,9 @@ export interface IConceptType {
   campaignId: string;
   campaign?: ICampaign;
   playerEditable: boolean;
+  isShownInNavigationMenu: boolean;
+  isLinkableToArticles: boolean;
+  isUsableInOverviewScreen: boolean;
 }
 
 export interface IConcept {

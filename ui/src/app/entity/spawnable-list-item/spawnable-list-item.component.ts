@@ -16,11 +16,7 @@ export class SpawnableListItemComponent implements OnInit {
   @Input()
   public spawnable: IEntity;
 
-  constructor(
-    private entityService: EntityService,
-    private router: Router,
-    private campaignService: CampaignService
-  ) {}
+  constructor(private entityService: EntityService, private router: Router, private campaignService: CampaignService) {}
 
   ngOnInit() {}
 
@@ -29,7 +25,9 @@ export class SpawnableListItemComponent implements OnInit {
       'campaigns',
       this.campaignService.campaign.id,
       'entities',
+      this.spawnable.entityPresetId,
       this.spawnable.id,
+      'edit',
     ]);
   }
 
@@ -38,11 +36,7 @@ export class SpawnableListItemComponent implements OnInit {
 
     try {
       await this.entityService.spawnSpawnable(this.spawnable.id, count);
-      await this.router.navigate([
-        'campaigns',
-        this.campaignService.campaign.id,
-        'overview',
-      ]);
+      await this.router.navigate(['campaigns', this.campaignService.campaign.id, 'overview']);
     } catch (err) {
       throw err;
     }

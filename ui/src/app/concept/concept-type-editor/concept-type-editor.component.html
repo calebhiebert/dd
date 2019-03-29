@@ -43,6 +43,30 @@
       </label>
     </div>
 
+    <!-- Shown In Navigation Menu -->
+    <div class="form-group">
+      <label class="form-checkbox mb-0">
+        <input type="checkbox" [formControl]="isLinkableToArticles" />
+        <i class="form-icon"></i> This concept can be linked to articles <i>(ie. items in a shop)</i>
+      </label>
+    </div>
+
+    <!-- Linkable To Articles -->
+    <div class="form-group">
+      <label class="form-checkbox mb-0">
+        <input type="checkbox" [formControl]="isShownInNavigationMenu" />
+        <i class="form-icon"></i> Show this concept in the sidebar
+      </label>
+    </div>
+
+    <!-- Usable In Overview -->
+    <div class="form-group">
+      <label class="form-checkbox mb-0">
+        <input type="checkbox" [formControl]="isUsableInOverviewScreen" />
+        <i class="form-icon"></i> This concept can be used in the overview screen <i>(ie. character statuses)</i>
+      </label>
+    </div>
+
     <!-- Entity Config -->
     <div [formGroup]="entityConfig" class="big-space">
       <h3 class="my-2">Entity Settings</h3>

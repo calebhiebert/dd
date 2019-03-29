@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IEntity, EntityService, IEntityPreset } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
-import { Route, Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'dd-spawnable-manager',

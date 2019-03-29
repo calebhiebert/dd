@@ -314,7 +314,7 @@ namespace netapi.Migrations
                         column: x => x.SpawnedFromId,
                         principalTable: "Entities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Entities_Users_UserId",
                         column: x => x.UserId,

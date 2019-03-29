@@ -68,6 +68,9 @@ export class ConceptTypeEditorComponent implements OnInit, ComponentCanDeactivat
       icon: new FormControl(null),
       fields: new FormArray([]),
       playerEditable: new FormControl(false),
+      isShownInNavigationMenu: new FormControl(true),
+      isLinkableToArticles: new FormControl(false),
+      isUsableInOverviewScreen: new FormControl(false),
       entityConfig: new FormGroup({
         enabled: new FormControl(false),
         enableQuantity: new FormControl(false),
@@ -96,6 +99,9 @@ export class ConceptTypeEditorComponent implements OnInit, ComponentCanDeactivat
       campaignId: this.campaignService.campaign.id,
       fields: this.fields.value || [],
       entityConfig: this.entityConfig.value,
+      isShownInNavigationMenu: this.isShownInNavigationMenu.value,
+      isLinkableToArticles: this.isLinkableToArticles.value,
+      isUsableInOverviewScreen: this.isUsableInOverviewScreen.value,
     };
 
     if (this.editing) {
@@ -217,5 +223,17 @@ export class ConceptTypeEditorComponent implements OnInit, ComponentCanDeactivat
 
   public get fields() {
     return this.formGroup.get('fields') as FormArray;
+  }
+
+  public get isShownInNavigationMenu() {
+    return this.formGroup.get('isShownInNavigationMenu');
+  }
+
+  public get isLinkableToArticles() {
+    return this.formGroup.get('isLinkableToArticles');
+  }
+
+  public get isUsableInOverviewScreen() {
+    return this.formGroup.get('isUsableInOverviewScreen');
   }
 }

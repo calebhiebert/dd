@@ -41,7 +41,7 @@
       <li class="nav-item">
         <a [routerLink]="['campaigns', campaign.id, 'maps']">Maps</a>
       </li>
-      <li class="nav-item" *ngFor="let ct of campaign.conceptTypes">
+      <li class="nav-item" *ngFor="let ct of conceptTypes">
         <a [routerLink]="['campaigns', campaign.id, 'concepts', ct.id, 'manage']">{{ ct.pluralForm }}</a>
       </li>
       <li class="nav-item" *ngIf="campaignEditable">

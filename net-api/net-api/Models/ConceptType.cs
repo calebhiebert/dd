@@ -34,6 +34,15 @@ namespace net_api.Models
         [Required]
         public bool PlayerEditable { get; set; }
 
+        [Required]
+        public bool IsShownInNavigationMenu { get; set; }
+
+        [Required]
+        public bool IsLinkableToArticles { get; set; }
+
+        [Required]
+        public bool IsUsableInOverviewScreen { get; set; }
+
         [Column("Fields", TypeName = "JSONB")]
         [JsonIgnore]
         public string FieldJson { get; set; }

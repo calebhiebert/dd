@@ -41,9 +41,13 @@ export class NavSidebarComponent implements OnInit {
   }
 
   public get navEntities() {
-    return this.campaignService.campaign.entities.filter((e) => {
+    return this.campaign.entities.filter((e) => {
       return !e.spawnable && e.spawnedFromId === null && e.userId === this.login.id;
     });
+  }
+
+  public get conceptTypes() {
+    return this.campaign.conceptTypes.filter((ct) => ct.isShownInNavigationMenu === true);
   }
 
   public get loggedIn() {
