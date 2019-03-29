@@ -262,7 +262,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     map = L.map(this.map.nativeElement, {
       crs: L.CRS.Simple,
       maxBounds: [[0, 0], [-256, 256]],
-      zoomSnap: 0.25,
+      zoomSnap: 0.5,
     });
 
     const paramSnapshot = this.route.snapshot.queryParamMap;

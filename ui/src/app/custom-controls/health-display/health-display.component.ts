@@ -262,7 +262,7 @@ export class HealthDisplayComponent implements OnInit {
   }
 
   public get amountVisible() {
-    return !this.preset.amountHidden || this.editable;
+    return !this.preset.amountHidden || this.editable || this.forceShowBar;
   }
 
   public get textOnly() {
