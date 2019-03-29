@@ -262,7 +262,7 @@ export class HealthDisplayComponent implements OnInit {
   }
 
   public get amountVisible() {
-    return !this.preset.amountHidden || this.campaignService.canEdit;
+    return !this.preset.amountHidden || this.editable;
   }
 
   public get textOnly() {
@@ -270,7 +270,7 @@ export class HealthDisplayComponent implements OnInit {
   }
 
   public get hpText() {
-    if (this.health && this.preset && this.preset.type === HealthType.TEXT_BASED) {
+    if (this.health && this.preset && this.preset.type === HealthType.TEXT_BASED && this.health.textDamageLevels) {
       const hpTextLevels = Object.keys(this.health.textDamageLevels)
         .map((tdl) => {
           return {
