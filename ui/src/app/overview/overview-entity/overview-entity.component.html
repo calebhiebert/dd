@@ -58,8 +58,13 @@
             <div><i class="icon icon-arrow-right"></i> View</div>
           </li>
 
+          <!-- Label Action -->
           <li class="menu-item" (click)="editLabel.emit(true)" *ngIf="editable">
             <div><i class="icon icon-edit"></i> Label</div>
+          </li>
+
+          <li class="menu-item" (click)="editConceptRelations(ct)" *ngFor="let ct of conceptTypes">
+            <div><i class="icon icon-plus"></i> Add {{ ct.name }}</div>
           </li>
 
           <!-- Kill Action -->

@@ -4,6 +4,7 @@ import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 import { OverviewService } from 'src/app/overview.service';
 import Swal from 'sweetalert2';
+import { IConceptType } from 'src/app/concept.service';
 
 @Component({
   selector: 'dd-overview-entity',
@@ -59,6 +60,10 @@ export class OverviewEntityComponent implements OnInit {
     if (confirmation.value === true) {
       await this.entityService.deleteEntity(this.entity.id);
     }
+  }
+
+  public editConceptRelations(conceptType: IConceptType) {
+    // TODO
   }
 
   public get preset() {
