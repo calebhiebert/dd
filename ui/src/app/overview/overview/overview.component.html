@@ -1,14 +1,21 @@
+<!-- Label Editor Modal -->
 <dd-modal size="small" #labelmodal>
   <h5 modal-header>Edit Label</h5>
   <div modal-body>
     <dd-dynamic-field [config]="labelFieldConfig" [control]="labelControl"></dd-dynamic-field>
   </div>
   <div modal-footer>
+    <!-- Clear Label Button -->
+    <button class="btn btn-sm btn-error mr-2" (click)="labelmodal.close('clear-label')"><i class="icon icon-cross"></i> Clear Label</button>
+
+    <!-- Save Button -->
     <button class="btn btn-sm" [disabled]="labelControl.invalid" (click)="labelmodal.close(labelControl.value)">
       Save
     </button>
   </div>
 </dd-modal>
+
+<!-- Page Content -->
 <div class="container">
   <div class="columns">
     <div class="column"><h3>Overview</h3></div>

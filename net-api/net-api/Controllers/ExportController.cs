@@ -144,15 +144,19 @@ namespace net_api.Controllers
                         var conceptTypes = await _context.ConceptTypes
                             .Where(ct => ct.CampaignId == campaignId)
                             .Where(ct => conceptType.Contains(ct.Id))
-                            .Select(q => new
+                            .Select(ct => new
                             {
-                                q.Id,
-                                q.Name,
-                                q.PluralForm,
-                                q.Description,
-                                q.Icon,
-                                q.Fields,
-                                q.EntityConfig
+                                ct.Id,
+                                ct.Name,
+                                ct.PluralForm,
+                                ct.Description,
+                                ct.Icon,
+                                ct.Fields,
+                                ct.EntityConfig,
+                                ct.IsLinkableToArticles,
+                                ct.IsShownInNavigationMenu,
+                                ct.IsUsableInOverviewScreen,
+                                ct.PlayerEditable,
                             }).ToListAsync();
 
                         var jtw = new JsonTextWriter(new StreamWriter(strm));
@@ -170,15 +174,16 @@ namespace net_api.Controllers
                     {
                         var concepts = await _context.Concepts
                             .Where(ct => conceptType.Contains(ct.ConceptTypeId))
-                            .Select(q => new
+                            .Select(c => new
                             {
-                                q.Id,
-                                q.Name,
-                                q.Content,
-                                q.ImageId,
-                                q.Fields,
-                                q.Tags,
-                                q.ConceptTypeId
+                                c.Id,
+                                c.Name,
+                                c.Content,
+                                c.ImageId,
+                                c.Fields,
+                                c.Tags,
+                                c.ConceptTypeId,
+                                c.IsContainer
                             }).ToListAsync();
 
                         var jtw = new JsonTextWriter(new StreamWriter(strm));

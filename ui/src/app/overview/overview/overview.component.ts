@@ -44,6 +44,11 @@ export class OverviewComponent implements OnInit {
     const label = await this._labelModal.open();
     this.labelControl.setValue(null);
 
+    if (label === 'clear-label') {
+      this.overviewService.setLabel(entity, null);
+      return;
+    }
+
     if (label) {
       this.overviewService.setLabel(entity, label);
     }
