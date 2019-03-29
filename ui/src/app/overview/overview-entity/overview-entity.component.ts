@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { IEntity, IHealth, EntityService } from 'src/app/entity.service';
 import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
@@ -17,7 +17,13 @@ export class OverviewEntityComponent implements OnInit {
   public entity: IEntity;
 
   @Input()
+  public label: string;
+
+  @Input()
   public showMoveIcon: boolean;
+
+  @Output()
+  public editLabel = new EventEmitter<boolean>();
 
   constructor(
     private campaignService: CampaignService,

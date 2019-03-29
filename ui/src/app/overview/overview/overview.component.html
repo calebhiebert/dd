@@ -1,3 +1,14 @@
+<dd-modal size="small" #labelmodal>
+  <h5 modal-header>Edit Label</h5>
+  <div modal-body>
+    <dd-dynamic-field [config]="labelFieldConfig" [control]="labelControl"></dd-dynamic-field>
+  </div>
+  <div modal-footer>
+    <button class="btn btn-sm" [disabled]="labelControl.invalid" (click)="labelmodal.close(labelControl.value)">
+      Save
+    </button>
+  </div>
+</dd-modal>
 <div class="container">
   <div class="columns">
     <div class="column"><h3>Overview</h3></div>
@@ -7,7 +18,12 @@
   <div cdkDropList (cdkDropListDropped)="entityDropped($event)">
     <div class="mb-2" *ngFor="let e of sortedEntities; trackBy: trackEntityElement" cdkDrag [cdkDragDisabled]="!reorderable">
       <div class="drag-placeholder" *cdkDragPlaceholder></div>
-      <dd-overview-entity [entity]="e" [showMoveIcon]="reorderable"></dd-overview-entity>
+      <dd-overview-entity
+        [entity]="e"
+        [showMoveIcon]="reorderable"
+        (editLabel)="editLabel(e)"
+        [label]="labels && labels[e.id]"
+      ></dd-overview-entity>
     </div>
   </div>
 

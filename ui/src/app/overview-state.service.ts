@@ -21,7 +21,12 @@ export interface EntitySortOrder {
   [key: string]: number;
 }
 
+export interface IEntityLabels {
+  [key: string]: string;
+}
+
 export interface IOverviewState {
   id?: string;
   entitySortOrder: EntitySortOrder;
+  entityLabels: IEntityLabels;
 }

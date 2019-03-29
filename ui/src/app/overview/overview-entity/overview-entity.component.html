@@ -6,10 +6,10 @@
 
     <!-- Image -->
     <div class="column col-auto" *ngIf="entity.imageId">
-      <figure class="avatar hide-sm">
+      <figure class="avatar hide-sm" [ngClass]="{ badge: label }" [attr.data-badge]="label">
         <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ entity.imageId }}" />
       </figure>
-      <figure class="avatar avatar-sm show-sm">
+      <figure class="avatar avatar-sm show-sm" [ngClass]="{ badge: label }" [attr.data-badge]="label">
         <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ entity.imageId }}" />
       </figure>
     </div>
@@ -56,6 +56,10 @@
           <!-- View Action -->
           <li class="menu-item" [routerLink]="['/campaigns', entity.campaignId, 'entities', entity.id]">
             <div><i class="icon icon-arrow-right"></i> View</div>
+          </li>
+
+          <li class="menu-item" (click)="editLabel.emit(true)" *ngIf="editable">
+            <div><i class="icon icon-edit"></i> Label</div>
           </li>
 
           <!-- Kill Action -->

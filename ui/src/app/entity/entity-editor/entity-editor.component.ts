@@ -133,6 +133,10 @@ export class EntityEditorComponent implements OnInit, ComponentCanDeactivate {
       userId: this.editing ? this.entity.userId : this.login.id,
       campaignId: this.campaignService.campaign.id,
       entityPresetId: this.preset.id,
+      mapId: this.entity ? this.entity.mapId : undefined,
+      lat: this.entity ? this.entity.lat : undefined,
+      lng: this.entity ? this.entity.lng : undefined,
+      spawnedFromId: this.entity ? this.entity.spawnedFromId : undefined,
     };
 
     if (!this.preset.isHealthEnabled) {

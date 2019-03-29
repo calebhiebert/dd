@@ -54,6 +54,7 @@ export class OverviewService {
         this._overviewState = await this.stateService.updateOverviewState(
           {
             entitySortOrder: {},
+            entityLabels: {},
           },
           this.campaignService.campaign.id
         );
@@ -92,6 +93,13 @@ export class OverviewService {
     if (this._overviewState) {
       this._overviewState.entitySortOrder = this.getSortOrder(entities);
       this.updateState();
+    }
+  }
+
+  public async setLabel(entity: IEntity, label: string) {
+    if (this._overviewState) {
+      this._overviewState.entityLabels[entity.id] = label;
+      await this.updateState();
     }
   }
 
