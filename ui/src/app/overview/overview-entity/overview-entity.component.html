@@ -17,8 +17,20 @@
     <!-- Misc -->
     <div class="column">
       <div class="columns">
-        <div class="column col-2 col-md-3 col-sm-12 fake-link" [routerLink]="['/campaigns', entity.campaignId, 'entities', entity.id]">
-          <h6>{{ entity.name }}</h6>
+        <div class="column col-2 col-md-3 col-sm-12">
+          <h6 class="fake-link d-inline" [routerLink]="['/campaigns', entity.campaignId, 'entities', entity.id]">{{ entity.name }}</h6>
+
+          <!-- Concepts -->
+          <div class="d-inline-block mb-2">
+            <figure
+              class="avatar avatar-sm tooltip c-hand ml-2"
+              [attr.data-tooltip]="concept.name"
+              *ngFor="let concept of concepts; trackBy: trackConcept"
+              [routerLink]="['/campaigns', entity.campaignId, 'concepts', concept.conceptTypeId, concept.id, 'view']"
+            >
+              <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ concept.imageId }}" alt="" />
+            </figure>
+          </div>
         </div>
         <div class="column col-10 col-md-9 col-sm-12">
           <dd-health-display

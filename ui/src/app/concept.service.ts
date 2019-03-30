@@ -33,7 +33,14 @@ export class ConceptService {
     return this.http.get<IConcept>(`${environment.apiURL}/concepts/${id}`).toPromise();
   }
 
-  public getConcepts(typeId: string, limit?: number, offset?: number, search?: string): Promise<IConceptsQueryResult> {
+  public getConcepts(
+    typeId: string,
+    limit?: number,
+    offset?: number,
+    search?: string,
+    except?: string[],
+    only?: string[]
+  ): Promise<IConceptsQueryResult> {
     if (limit === undefined || limit === null || limit <= 0) {
       limit = 10;
     } else if (limit > 50) {
@@ -50,8 +57,26 @@ export class ConceptService {
       searchQuery = `&search=${encodeURIComponent(search)}`;
     }
 
+    let onlyQuery = '';
+
+    if (only) {
+      only.forEach((id) => {
+        onlyQuery += `&only=${id}`;
+      });
+    }
+
+    let exceptQuery = '';
+
+    if (except) {
+      except.forEach((id) => {
+        exceptQuery += `&except=${id}`;
+      });
+    }
+
     return this.http
-      .get<IConceptsQueryResult>(`${environment.apiURL}/concepts?type=${typeId}&limit=${limit}&offset=${offset}${searchQuery}`)
+      .get<IConceptsQueryResult>(
+        `${environment.apiURL}/concepts?type=${typeId}&limit=${limit}&offset=${offset}${searchQuery}${onlyQuery}${exceptQuery}`
+      )
       .toPromise();
   }
 

@@ -4,7 +4,7 @@ import { CampaignService } from 'src/app/campaign.service';
 import { LoginService } from 'src/app/login.service';
 import { OverviewService } from 'src/app/overview.service';
 import Swal from 'sweetalert2';
-import { IConceptType } from 'src/app/concept.service';
+import { IConceptType, IConcept } from 'src/app/concept.service';
 
 @Component({
   selector: 'dd-overview-entity',
@@ -22,6 +22,9 @@ export class OverviewEntityComponent implements OnInit {
 
   @Input()
   public showMoveIcon: boolean;
+
+  @Input()
+  public conceptEntities: { [key: string]: string[] };
 
   @Output()
   public editLabel = new EventEmitter<boolean>();
@@ -69,6 +72,10 @@ export class OverviewEntityComponent implements OnInit {
     this.addConcept.emit(conceptType);
   }
 
+  public trackConcept(idx: number, concept: IConcept) {
+    return concept.id;
+  }
+
   public get preset() {
     return this.campaignService.campaign.entityPresets.find((preset) => preset.id === this.entity.entityPresetId);
   }
@@ -79,5 +86,27 @@ export class OverviewEntityComponent implements OnInit {
 
   public get conceptTypes() {
     return this.campaignService.campaign.conceptTypes.filter((ct) => ct.isUsableInOverviewScreen === true);
+  }
+
+  public get concepts(): IConcept[] {
+    if (!this.conceptEntities || !this.overviewService.concepts) {
+      return [];
+    }
+
+    const concepts: IConcept[] = [];
+
+    for (const [conceptTypeId, conceptIds] of Object.entries(this.conceptEntities)) {
+      conceptIds.forEach((id) => {
+        const concept = this.overviewService.concepts[id];
+
+        if (concept) {
+          concepts.push(concept);
+        }
+      });
+    }
+
+    console.log(concepts);
+
+    return concepts;
   }
 }

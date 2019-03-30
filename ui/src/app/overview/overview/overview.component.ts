@@ -28,6 +28,8 @@ export class OverviewComponent implements OnInit {
   private _conceptSelector: SelectorPopupComponent;
   private _addingConceptType: IConceptType;
 
+  private _concepts: IConcept[];
+
   constructor(private campaignService: CampaignService, private overviewService: OverviewService, private conceptService: ConceptService) {}
 
   ngOnInit() {
@@ -77,9 +79,20 @@ export class OverviewComponent implements OnInit {
   public async addConceptTypeToEntity(conceptType: IConceptType, entity: IEntity) {
     this._addingConceptType = conceptType;
 
-    const concept: IConcept = await this._conceptSelector.openSelector();
-
+    const concept = await this._conceptSelector.openSelector();
     this._addingConceptType = null;
+
+    if (concept && concept.value) {
+      this.overviewService.addConceptEntity(entity, concept.value, conceptType);
+    }
+  }
+
+  public getConceptsForEntity(id: string) {
+    if (!this.state) {
+      return null;
+    }
+
+    return this.state.entityConcepts[id];
   }
 
   public get campaign(): ICampaign {

@@ -66,7 +66,7 @@ namespace net_api.Models
         public string EntityConceptsJson { get; set; }
 
         [NotMapped]
-        public Dictionary<Guid, Guid[]> EntityConcepts
+        public Dictionary<Guid, Dictionary<Guid, Guid[]>> EntityConcepts
         {
             get
             {
@@ -75,7 +75,7 @@ namespace net_api.Models
                     return null;
                 }
 
-                return JsonConvert.DeserializeObject<Dictionary<Guid, Guid[]>>(EntityConceptsJson);
+                return JsonConvert.DeserializeObject<Dictionary<Guid, Dictionary<Guid, Guid[]>>>(EntityConceptsJson);
             }
 
             set

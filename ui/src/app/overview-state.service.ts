@@ -26,7 +26,12 @@ export interface IEntityLabels {
 }
 
 export interface IEntityConcepts {
-  [key: string]: string[];
+  // First key is the entity id
+  [key: string]: {
+    // Second key is the concept type id
+    // Array is a list of concept ids
+    [key: string]: string[];
+  };
 }
 
 export interface IOverviewState {

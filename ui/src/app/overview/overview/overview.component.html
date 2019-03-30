@@ -33,6 +33,7 @@
         (editLabel)="editLabel(e)"
         (addConcept)="addConceptTypeToEntity($event, e)"
         [label]="labels && labels[e.id]"
+        [conceptEntities]="getConceptsForEntity(e.id)"
       ></dd-overview-entity>
     </div>
   </div>

@@ -31,7 +31,9 @@ namespace net_api.Controllers
             [FromQuery] Guid type,
             [FromQuery] int limit,
             [FromQuery] int offset,
-            [FromQuery] string search
+            [FromQuery] string search,
+            [FromQuery] Guid[] only,
+            [FromQuery] Guid[] except
             )
         {
             var conceptType = await _context.ConceptTypes
@@ -54,6 +56,18 @@ namespace net_api.Controllers
 
             var conceptQuery = _context.Concepts
                 .Where(c => c.ConceptTypeId == type);
+
+            if (only != null && only.Length > 0)
+            {
+                conceptQuery = conceptQuery
+                    .Where(c => only.Contains(c.Id));
+            }
+
+            if (except != null && except.Length > 0)
+            {
+                conceptQuery = conceptQuery
+                    .Where(c => !except.Contains(c.Id));
+            }
 
             if (search != null)
             {
