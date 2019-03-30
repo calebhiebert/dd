@@ -69,6 +69,10 @@ export class ConceptHistoryComponent implements OnInit {
   private getHumanReadableListOfDiffChanges(diffs: DeepDiff.Diff<any>[], history: IConceptHistory) {
     const changes: string[] = [];
 
+    if (diffs === null || diffs === undefined) {
+      return changes;
+    }
+
     for (const d of diffs) {
       if (!d) {
         continue;
