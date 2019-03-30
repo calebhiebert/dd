@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { WebAuth, Auth0DecodedHash, Auth0UserProfile } from 'auth0-js';
+import { WebAuth, Auth0DecodedHash, Auth0UserProfile, AuthorizeOptions } from 'auth0-js';
 import { environment } from 'src/environments/environment';
 import { UserService, IUser } from './user.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -25,12 +25,6 @@ export enum LoginStatus {
   providedIn: 'root',
 })
 export class LoginService {
-  public busy = false;
-  public loginStatus = new EventEmitter<LoginStatus>();
-
-  private _auth: WebAuth;
-  private _loginData: ILoginData;
-
   constructor(private userService: UserService, private router: Router, private actions: ActionQueueService) {
     this._loginData = this.loadLoginData();
 
@@ -39,12 +33,62 @@ export class LoginService {
       const isExpired = this._loginData.expiresAt - Math.floor(new Date().getTime() / 1000) < 60;
 
       if (isExpired) {
+        if (this._loginData.profile) {
+          this.saveLastUsedLogin(this._loginData.profile);
+        }
+
         this.logout();
       } else {
         this.checkSession();
       }
     }
   }
+
+  public get id(): string | null {
+    if (this._loginData && this._loginData.profile) {
+      return this._loginData.profile.sub;
+    } else {
+      return null;
+    }
+  }
+
+  public get userProfile(): Auth0UserProfile | null {
+    if (this._loginData && this._loginData.profile) {
+      return this._loginData.profile;
+    } else {
+      return null;
+    }
+  }
+
+  public get currentUser(): IUser | null {
+    if (this._loginData && this._loginData.user) {
+      return this._loginData.user;
+    } else {
+      return null;
+    }
+  }
+
+  public get token(): string | null {
+    if (this._loginData && this._loginData.token) {
+      return this._loginData.token;
+    } else {
+      return null;
+    }
+  }
+
+  public get isLoggedIn(): boolean {
+    if (!this._loginData || !this._loginData.user) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  public busy = false;
+  public loginStatus = new EventEmitter<LoginStatus>();
+
+  private _auth: WebAuth;
+  private _loginData: ILoginData;
+  0;
 
   /**
    * returns an auth instance
@@ -135,6 +179,17 @@ export class LoginService {
     }
   }
 
+  private saveLastUsedLogin(profile: Auth0UserProfile) {
+    localStorage.setItem('last-used-login', JSON.stringify(profile));
+  }
+
+  private loadLastUsedLogin(): Auth0UserProfile | null {
+    if (localStorage.getItem('last-used-login')) {
+      return JSON.parse(localStorage.getItem('last-used-login'));
+    } else {
+      return null;
+    }
+  }
   /**
    * Processes an auth0 hash response
    */
@@ -161,12 +216,18 @@ export class LoginService {
   /**
    * Starts the authorization process with auth0
    */
-  public authorize(connection: string) {
+  public authorize(connection: string, loginHint?: string) {
     const auth = this.getAuth();
 
-    auth.authorize({
+    const authOptions: AuthorizeOptions = {
       connection,
-    });
+    };
+
+    if (loginHint) {
+      authOptions.login_hint = loginHint;
+    }
+
+    auth.authorize(authOptions);
   }
 
   /**
@@ -189,6 +250,7 @@ export class LoginService {
       // Parse the hash
       try {
         const auth = await this.parseHash(hash, null);
+
         const expiresAt = Math.floor(new Date().getTime() / 1000) + auth.expiresIn;
         this.saveLoginData({
           token: auth.accessToken,
@@ -214,6 +276,7 @@ export class LoginService {
       const userInfo = await this.getUserInfo(this._loginData.token);
       this._loginData.profile = userInfo;
       this.saveLoginData(this._loginData);
+      this.saveLastUsedLogin(userInfo);
 
       // Check to see if a user is in the database
       try {
@@ -267,43 +330,7 @@ export class LoginService {
     this.saveLoginData(this._loginData);
   }
 
-  public get id(): string | null {
-    if (this._loginData && this._loginData.profile) {
-      return this._loginData.profile.sub;
-    } else {
-      return null;
-    }
-  }
-
-  public get userProfile(): Auth0UserProfile | null {
-    if (this._loginData && this._loginData.profile) {
-      return this._loginData.profile;
-    } else {
-      return null;
-    }
-  }
-
-  public get currentUser(): IUser | null {
-    if (this._loginData && this._loginData.user) {
-      return this._loginData.user;
-    } else {
-      return null;
-    }
-  }
-
-  public get token(): string | null {
-    if (this._loginData && this._loginData.token) {
-      return this._loginData.token;
-    } else {
-      return null;
-    }
-  }
-
-  public get isLoggedIn(): boolean {
-    if (!this._loginData || !this._loginData.user) {
-      return false;
-    } else {
-      return true;
-    }
+  public get lastUsedLogin(): Auth0UserProfile | null {
+    return this.loadLastUsedLogin();
   }
 }

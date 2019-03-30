@@ -25,8 +25,13 @@ export interface IEntityLabels {
   [key: string]: string;
 }
 
+export interface IEntityConcepts {
+  [key: string]: string[];
+}
+
 export interface IOverviewState {
   id?: string;
   entitySortOrder: EntitySortOrder;
   entityLabels: IEntityLabels;
+  entityConcepts: IEntityConcepts;
 }

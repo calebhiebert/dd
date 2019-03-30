@@ -55,6 +55,7 @@ export class OverviewService {
           {
             entitySortOrder: {},
             entityLabels: {},
+            entityConcepts: {},
           },
           this.campaignService.campaign.id
         );

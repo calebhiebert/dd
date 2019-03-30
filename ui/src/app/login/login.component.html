@@ -1,6 +1,35 @@
 <div class="container grid-xl">
   <div class="columns">
     <div class="column col-5 col-md-8 col-sm-11 col-mx-auto">
+      <!-- Last Used Login -->
+      <div class="card mb-2" *ngIf="lastUsedLogin && !busy">
+        <div class="card-header">
+          <h5 class="mb-0">Last time you logged in with...</h5>
+        </div>
+
+        <div class="card-body">
+          <!-- User Info -->
+          <div class="columns">
+            <!-- Image Column -->
+            <div class="column col-auto">
+              <figure class="avatar avatar-lg">
+                <img [src]="lastUsedLogin.picture" alt="User Avatar" />
+                <img class="avatar-icon" src="/assets/g-logo.png" alt="Google Logo" *ngIf="lastLoginWasGoogle" />
+                <img class="avatar-icon" src="/assets/fb-logo.png" alt="Facebook Logo" *ngIf="lastLoginWasFacebook" />
+              </figure>
+            </div>
+
+            <!-- Name Column -->
+            <div class="column mb-2">
+              <h5 class="text-bold mb-0">{{ lastUsedLogin.name }}</h5>
+              <span>{{ lastUsedLogin.email }}</span>
+            </div>
+          </div>
+
+          <button class="btn mt-2 wide" (click)="useLastLogin()">Use This Login <i class="icon icon-arrow-right"></i></button>
+        </div>
+      </div>
+
       <!-- Login Buttons -->
       <div class="card text-center" *ngIf="!busy">
         <div class="card-header"><h2>Login</h2></div>
@@ -19,6 +48,7 @@
       <div class="card text-center" *ngIf="busy">
         <div class="card-body">
           <h6 class="mb-1">Processing Information...</h6>
+          <dd-phraser></dd-phraser>
         </div>
       </div>
     </div>

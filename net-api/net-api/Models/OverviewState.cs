@@ -61,6 +61,30 @@ namespace net_api.Models
         }
 
         [JsonIgnore]
+        [Required]
+        [Column("EntityConcepts", TypeName = "JSONB")]
+        public string EntityConceptsJson { get; set; }
+
+        [NotMapped]
+        public Dictionary<Guid, Guid[]> EntityConcepts
+        {
+            get
+            {
+                if (EntityConceptsJson == null)
+                {
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<Dictionary<Guid, Guid[]>>(EntityConceptsJson);
+            }
+
+            set
+            {
+                EntityConceptsJson = JsonConvert.SerializeObject(value);
+            }
+        }
+
+        [JsonIgnore]
         public Campaign Campaign { get; set; }
 
         public OverviewState()

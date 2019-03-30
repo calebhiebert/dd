@@ -21,11 +21,19 @@ export class LoginComponent implements OnInit {
   }
 
   public authGoog() {
-    this.login.authorize('google-oauth2');
+    this.login.authorize('google-oauth2', this.lastLoginWasGoogle ? this.lastUsedLogin.email : undefined);
   }
 
   public authFb() {
     this.login.authorize('facebook');
+  }
+
+  public useLastLogin() {
+    if (this.lastLoginWasFacebook) {
+      this.authFb();
+    } else if (this.lastLoginWasGoogle) {
+      this.authGoog();
+    }
   }
 
   public get id() {
@@ -34,5 +42,17 @@ export class LoginComponent implements OnInit {
 
   public get busy() {
     return this.login.busy;
+  }
+
+  public get lastUsedLogin() {
+    return this.login.lastUsedLogin;
+  }
+
+  public get lastLoginWasGoogle() {
+    return this.lastUsedLogin && this.lastUsedLogin.sub.startsWith('google');
+  }
+
+  public get lastLoginWasFacebook() {
+    return this.lastUsedLogin && this.lastUsedLogin.sub.startsWith('facebook');
   }
 }
