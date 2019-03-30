@@ -6,6 +6,8 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/custom-controls/dynform/form-types';
 import { FormControl } from '@angular/forms';
+import { ISelectOption, SelectorPopupComponent } from 'src/app/custom-controls/selector-popup/selector-popup.component';
+import { ConceptService, IConceptType, IConcept } from 'src/app/concept.service';
 
 @Component({
   selector: 'dd-overview',
@@ -17,15 +19,33 @@ export class OverviewComponent implements OnInit {
 
   public labelControl: FormControl;
 
+  public loadConcepts: (search: string) => Promise<ISelectOption[]>;
+
   @ViewChild('labelmodal')
   private _labelModal: ModalComponent<string>;
 
-  constructor(private campaignService: CampaignService, private overviewService: OverviewService) {}
+  @ViewChild('conceptselector')
+  private _conceptSelector: SelectorPopupComponent;
+  private _addingConceptType: IConceptType;
+
+  constructor(private campaignService: CampaignService, private overviewService: OverviewService, private conceptService: ConceptService) {}
 
   ngOnInit() {
     this.labelControl = new FormControl(null);
 
     this.overviewService.loadOverviewState();
+
+    this.loadConcepts = async (search: string) => {
+      if (!this._addingConceptType) {
+        return;
+      }
+
+      const concepts = await this.conceptService.getConcepts(this._addingConceptType.id, 6, 0, search);
+      return concepts.concepts.map((c) => ({
+        displayHtml: c.name,
+        value: c,
+      }));
+    };
   }
 
   public trackEntityElement(idx: number, ent: IEntity) {
@@ -52,6 +72,14 @@ export class OverviewComponent implements OnInit {
     if (label) {
       this.overviewService.setLabel(entity, label);
     }
+  }
+
+  public async addConceptTypeToEntity(conceptType: IConceptType, entity: IEntity) {
+    this._addingConceptType = conceptType;
+
+    const concept: IConcept = await this._conceptSelector.openSelector();
+
+    this._addingConceptType = null;
   }
 
   public get campaign(): ICampaign {

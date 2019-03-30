@@ -26,6 +26,9 @@ export class OverviewEntityComponent implements OnInit {
   @Output()
   public editLabel = new EventEmitter<boolean>();
 
+  @Output()
+  public addConcept = new EventEmitter<IConceptType>();
+
   constructor(
     private campaignService: CampaignService,
     private loginService: LoginService,
@@ -63,7 +66,7 @@ export class OverviewEntityComponent implements OnInit {
   }
 
   public editConceptRelations(conceptType: IConceptType) {
-    // TODO
+    this.addConcept.emit(conceptType);
   }
 
   public get preset() {

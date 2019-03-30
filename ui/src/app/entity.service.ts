@@ -108,6 +108,7 @@ export interface IEntity {
   fields: IField[];
   spawnable: boolean;
   spawnedFromId?: string;
+  spawnedFrom?: IEntity;
   health?: IHealth;
   xp?: number;
   currency?: ICurrency;

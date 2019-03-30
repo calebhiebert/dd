@@ -640,7 +640,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           entity = entities[0];
         } else {
           const entityList = this.campaignService.editableEntities.slice().filter((e) => e.spawnable === false);
-          entity = await this.entitySelect.openSelector(
+          const selectResult = await this.entitySelect.openSelector(
             entityList.map((e) => {
               return {
                 value: e,
@@ -648,11 +648,18 @@ export class MapComponent implements AfterViewInit, OnDestroy {
               };
             })
           );
+
+          if (selectResult) {
+            entity = selectResult.value;
+          }
         }
 
         if (entity) {
           await this.entityService.updateEntity({
             ...entity,
+            user: undefined,
+            preset: undefined,
+            spawnedFrom: undefined,
             mapId: this._map.id,
             lat: event.latlng.lat,
             lng: event.latlng.lng,

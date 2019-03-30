@@ -80,6 +80,13 @@ export class SelectorPopupComponent implements OnInit {
   }
 
   public openSelector(options?: ISelectOption[]): Promise<any> {
+    this.selectItems = options;
+
+    if (!this.selectItems) {
+      this.search = '';
+      this.load();
+    }
+
     this.modal.open().then(() => {
       if (this._selectResolver) {
         this._selectResolver(null);

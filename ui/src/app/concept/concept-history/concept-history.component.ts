@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConceptService, IConceptHistory, IConceptHistoryDiff } from 'src/app/concept.service';
 import { CampaignService } from 'src/app/campaign.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { IUser } from 'src/app/user.service';
 import { ActionType } from 'src/app/history';
 import * as DeepDiff from 'deep-diff';
