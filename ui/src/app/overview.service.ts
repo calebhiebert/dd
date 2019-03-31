@@ -5,6 +5,7 @@ import { EntitySortOrder, IOverviewState, OverviewStateService } from './overvie
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { UpdateHubService } from './update-hub.service';
 import { IConcept, IConceptType, ConceptService } from './concept.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +50,20 @@ export class OverviewService {
     this._loading = false;
   }
 
+  private cleanseEntityConceptTypes(conceptTypeId: string) {
+    if (!this._overviewState) {
+      return;
+    }
+
+    Object.entries(this._overviewState.entityConcepts).forEach(([entityId, conceptTypes]) => {
+      if (conceptTypes[conceptTypeId]) {
+        delete conceptTypes[conceptTypeId];
+      }
+    });
+
+    this.updateState();
+  }
+
   private async getConceptsForEntities() {
     if (!this._overviewState) {
       return;
@@ -59,6 +74,10 @@ export class OverviewService {
 
     for (const [entId, conceptTypes] of Object.entries(this._overviewState.entityConcepts)) {
       for (const [conceptTypeId, conceptIds] of Object.entries(conceptTypes)) {
+        if (!conceptIds) {
+          continue;
+        }
+
         if (!idsToLoad[conceptTypeId]) {
           idsToLoad[conceptTypeId] = [];
         }
@@ -67,8 +86,20 @@ export class OverviewService {
       }
     }
 
-    const loadPromises = Object.entries(idsToLoad).map(([conceptTypeId, conceptIds]) => {
-      return this.conceptService.getConcepts(conceptTypeId, 50, 0, null, null, conceptIds);
+    const loadPromises = Object.entries(idsToLoad).map(async ([conceptTypeId, conceptIds]) => {
+      try {
+        const loadResult = await this.conceptService.getConcepts(conceptTypeId, 50, 0, null, null, conceptIds);
+        return loadResult;
+      } catch (err) {
+        if (err instanceof HttpErrorResponse && err.status === 404) {
+          this.cleanseEntityConceptTypes(conceptTypeId);
+        }
+
+        return {
+          concepts: [],
+          total: 0,
+        };
+      }
     });
 
     const results = await Promise.all(loadPromises);
@@ -162,6 +193,17 @@ export class OverviewService {
 
     this.getConceptsForEntities();
     await this.updateState();
+  }
+
+  public async clearConceptEntities(entity: IEntity, conceptType: IConceptType) {
+    if (!this._overviewState) {
+      return;
+    }
+
+    if (this._overviewState.entityConcepts[entity.id] && this._overviewState.entityConcepts[entity.id][conceptType.id]) {
+      delete this._overviewState.entityConcepts[entity.id][conceptType.id];
+      await this.updateState();
+    }
   }
 
   public get entities() {

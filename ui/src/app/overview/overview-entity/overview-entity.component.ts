@@ -32,6 +32,9 @@ export class OverviewEntityComponent implements OnInit {
   @Output()
   public addConcept = new EventEmitter<IConceptType>();
 
+  @Output()
+  public clearConcepts = new EventEmitter<IConceptType>();
+
   constructor(
     private campaignService: CampaignService,
     private loginService: LoginService,
@@ -104,8 +107,6 @@ export class OverviewEntityComponent implements OnInit {
         }
       });
     }
-
-    console.log(concepts);
 
     return concepts;
   }

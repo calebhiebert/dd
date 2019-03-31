@@ -8,6 +8,7 @@ import { IDynamicFieldConfig, DynamicFieldType } from 'src/app/custom-controls/d
 import { FormControl } from '@angular/forms';
 import { ISelectOption, SelectorPopupComponent } from 'src/app/custom-controls/selector-popup/selector-popup.component';
 import { ConceptService, IConceptType, IConcept } from 'src/app/concept.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'dd-overview',
@@ -30,7 +31,12 @@ export class OverviewComponent implements OnInit {
 
   private _concepts: IConcept[];
 
-  constructor(private campaignService: CampaignService, private overviewService: OverviewService, private conceptService: ConceptService) {}
+  constructor(
+    private campaignService: CampaignService,
+    private overviewService: OverviewService,
+    private conceptService: ConceptService,
+    private toast: ToastrService
+  ) {}
 
   ngOnInit() {
     this.labelControl = new FormControl(null);
@@ -85,6 +91,11 @@ export class OverviewComponent implements OnInit {
     if (concept && concept.value) {
       this.overviewService.addConceptEntity(entity, concept.value, conceptType);
     }
+  }
+
+  public async clearConcepts(conceptType: IConceptType, entity: IEntity) {
+    await this.overviewService.clearConceptEntities(entity, conceptType);
+    this.toast.info(`Removed all ${conceptType.pluralForm} from ${entity.name}`);
   }
 
   public getConceptsForEntity(id: string) {

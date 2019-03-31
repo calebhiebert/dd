@@ -32,6 +32,7 @@
         [showMoveIcon]="reorderable"
         (editLabel)="editLabel(e)"
         (addConcept)="addConceptTypeToEntity($event, e)"
+        (clearConcepts)="clearConcepts($event, e)"
         [label]="labels && labels[e.id]"
         [conceptEntities]="getConceptsForEntity(e.id)"
       ></dd-overview-entity>

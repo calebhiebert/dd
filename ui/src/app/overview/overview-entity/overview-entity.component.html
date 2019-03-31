@@ -79,6 +79,10 @@
             <div><i class="icon icon-plus"></i> Add {{ ct.name }}</div>
           </li>
 
+          <li class="menu-item" (click)="clearConcepts.emit(ct)" *ngFor="let ct of conceptTypes">
+            <div><i class="icon icon-delete"></i> Clear {{ ct.pluralForm }}</div>
+          </li>
+
           <!-- Kill Action -->
           <li class="menu-item" (click)="kill()" *ngIf="editable">
             <div><i class="icon icon-cross"></i> Kill</div>
