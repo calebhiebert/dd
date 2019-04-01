@@ -26,14 +26,19 @@
 
   <!-- Quest List -->
   <div *ngIf="quests">
-    <div
-      class="card p-2 mb-2 hoverable"
-      *ngFor="let quest of quests"
-      (click)="viewQuest(quest)"
-    >
+    <div class="card p-2 mb-2 hoverable" *ngFor="let quest of quests" (click)="viewQuest(quest)">
       <div class="columns col-gapless">
-        <div class="column col-auto mr-1" *ngIf="quest.active">
+        <div class="column col-auto mr-1" *ngIf="quest.status === 1">
+          <i class="icon icon-stop"></i>
+        </div>
+        <div class="column col-auto mr-1" *ngIf="quest.status === 2">
           <i class="icon icon-flag"></i>
+        </div>
+        <div class="column col-auto mr-1" *ngIf="quest.status === 3">
+          <i class="icon icon-time"></i>
+        </div>
+        <div class="column col-auto mr-1" *ngIf="quest.status === 4">
+          <i class="icon icon-check"></i>
         </div>
         <div class="column">
           <span [ngClass]="{ 'text-gray': !quest.visible }">
@@ -41,14 +46,10 @@
           </span>
 
           <!-- Label if unavailable -->
-          <span class="label label-rounded" *ngIf="!quest.available"
-            >Unavailable</span
-          >
+          <span class="label label-rounded" *ngIf="!quest.available">Unavailable</span>
 
           <!-- Label if hidden -->
-          <span class="label label-rounded ml-1" *ngIf="!quest.visible"
-            >Hidden</span
-          >
+          <span class="label label-rounded ml-1" *ngIf="!quest.visible">Hidden</span>
         </div>
       </div>
     </div>

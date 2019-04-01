@@ -8,7 +8,12 @@
   <div *ngIf="quest">
     <div class="columns">
       <div class="column">
-        <h3><i class="icon icon-flag" *ngIf="quest.accepted"></i> {{ quest.name }}</h3>
+        <h3>
+          <i class="icon icon-stop" *ngIf="quest.status === 1"></i>
+          <i class="icon icon-flag" *ngIf="quest.status === 2"></i>
+          <i class="icon icon-time" *ngIf="quest.status === 3"></i>
+          <i class="icon icon-check" *ngIf="quest.status === 4"></i> {{ quest.name }}
+        </h3>
       </div>
       <div class="column col-auto col-ml-auto">
         <button class="btn btn-sm mr-2" (click)="addNote()"><i class="icon icon-link"></i> <span class="hide-sm"> Add Note</span></button>

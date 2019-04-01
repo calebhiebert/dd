@@ -74,6 +74,6 @@ namespace net_api.Models
 
     public enum QuestStatus
     {
-        None, OnHold, InProgress, ToDo
+        None, OnHold, InProgress, ToDo, Completed
     }
 }

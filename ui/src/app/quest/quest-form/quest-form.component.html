@@ -9,13 +9,7 @@
         <button class="btn mr-2" type="button" (click)="cancel()">
           Cancel
         </button>
-        <button
-          class="btn btn-error mr-2"
-          [ngClass]="{ loading: deleting }"
-          type="button"
-          *ngIf="editing"
-          (click)="delete()"
-        >
+        <button class="btn btn-error mr-2" [ngClass]="{ loading: deleting }" type="button" *ngIf="editing" (click)="delete()">
           Delete
         </button>
         <button class="btn btn-primary" [disabled]="formGroup.invalid">
@@ -32,35 +26,14 @@
       }"
     >
       <label class="form-label label-lg" for="name">Name</label>
-      <input
-        class="form-input input-lg"
-        formControlName="name"
-        type="text"
-        id="name"
-        placeholder="Name"
-      />
-      <p
-        class="form-input-hint"
-        *ngIf="
-          name.invalid && (name.dirty || name.touched) && name.errors.required
-        "
-      >
+      <input class="form-input input-lg" formControlName="name" type="text" id="name" placeholder="Name" />
+      <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.required">
         The quest needs a name
       </p>
-      <p
-        class="form-input-hint"
-        *ngIf="
-          name.invalid && (name.dirty || name.touched) && name.errors.minlength
-        "
-      >
+      <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.minlength">
         The name is too short
       </p>
-      <p
-        class="form-input-hint"
-        *ngIf="
-          name.invalid && (name.dirty || name.touched) && name.errors.maxlength
-        "
-      >
+      <p class="form-input-hint" *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.maxlength">
         The name can't be more than 30 characters long
       </p>
     </div>
@@ -74,12 +47,7 @@
     <!-- Accepted -->
     <div class="form-group">
       <label for="accepted" class="form-switch">
-        <input
-          type="checkbox"
-          name="accepted"
-          id="accepted"
-          formControlName="accepted"
-        />
+        <input type="checkbox" name="accepted" id="accepted" formControlName="accepted" />
         <i class="form-icon"></i> The players have accepted this quest
       </label>
     </div>
@@ -87,12 +55,7 @@
     <!-- Available -->
     <div class="form-group">
       <label for="available" class="form-switch">
-        <input
-          type="checkbox"
-          name="available"
-          id="available"
-          formControlName="available"
-        />
+        <input type="checkbox" name="available" id="available" formControlName="available" />
         <i class="form-icon"></i> This quest is available for players to accept
       </label>
     </div>
@@ -100,12 +63,7 @@
     <!-- Visible -->
     <div class="form-group">
       <label for="visible" class="form-switch">
-        <input
-          type="checkbox"
-          name="visible"
-          id="visible"
-          formControlName="visible"
-        />
+        <input type="checkbox" name="visible" id="visible" formControlName="visible" />
         <i class="form-icon"></i> Players can see this quest
       </label>
     </div>
@@ -115,16 +73,12 @@
       <label for="status" class="form-label">
         Status
       </label>
-      <select
-        name="status"
-        id="status"
-        class="form-input"
-        formControlName="status"
-      >
+      <select name="status" id="status" class="form-input" formControlName="status">
         <option value="0">None</option>
         <option value="1">On Hold</option>
         <option value="2">In Progress</option>
         <option value="3">To Do</option>
+        <option value="4">Completed</option>
       </select>
     </div>
   </form>

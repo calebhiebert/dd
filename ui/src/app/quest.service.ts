@@ -114,4 +114,5 @@ export enum QuestStatus {
   ON_HOLD,
   IN_PROGRESS,
   TO_DO,
+  COMPLETED
 }
