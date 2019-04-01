@@ -23,7 +23,7 @@ namespace net_api.Models
         public string ContentJson { get; set; }
 
         [NotMapped]
-        public Object Content {
+        public Delta Content {
             get
             {
                 if (ContentJson == null)
@@ -31,7 +31,7 @@ namespace net_api.Models
                     return null;
                 }
 
-                return JsonConvert.DeserializeObject(ContentJson);
+                return JsonConvert.DeserializeObject<Delta>(ContentJson);
             }
 
             set
@@ -82,21 +82,16 @@ namespace net_api.Models
 
             if (ContentJson != null && ContentJson != "null")
             {
-                var jobject = JObject.Parse(ContentJson);
+                var content = Content;
 
-                var ops = jobject["ops"];
-
-                if (ops != null && ops.Type == JTokenType.Array)
+                if (content.Ops != null && content.Ops.Length > 0)
                 {
-                    foreach (var op in ops)
+                    foreach (var op in content.Ops)
                     {
-                        if (op["insert"] != null && op["insert"].Type == JTokenType.Object)
+                        if (op.Insert.InsertClass != null && op.Insert.InsertClass.Image != null)
                         {
-                            if (op["insert"]["image"] != null)
-                            {
-                                imageURLs.Add(op["insert"]["image"].ToString());
-                            }
-                        }
+                            imageURLs.Add(op.Insert.InsertClass.Image);
+                        } 
                     }
                 }
             }

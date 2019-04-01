@@ -19,7 +19,7 @@ namespace net_api.Models
 
         [JsonIgnore]
         [NotMapped]
-        public Object Content
+        public Delta Content
         {
             get
             {
@@ -28,7 +28,7 @@ namespace net_api.Models
                     return null;
                 }
 
-                return JsonConvert.DeserializeObject(ContentJson);
+                return JsonConvert.DeserializeObject<Delta>(ContentJson);
             }
 
             set
