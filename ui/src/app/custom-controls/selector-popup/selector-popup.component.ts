@@ -81,6 +81,7 @@ export class SelectorPopupComponent implements OnInit {
 
   public openSelector(options?: ISelectOption[]): Promise<any> {
     this.selectItems = options;
+    this.searchControl.setValue(null);
 
     if (!this.selectItems) {
       this.search = '';

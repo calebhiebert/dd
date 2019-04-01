@@ -6,10 +6,7 @@
 
     <!-- Image -->
     <div class="column col-auto" *ngIf="entity.imageId">
-      <figure class="avatar hide-sm" [ngClass]="{ badge: label }" [attr.data-badge]="label">
-        <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ entity.imageId }}" />
-      </figure>
-      <figure class="avatar avatar-sm show-sm" [ngClass]="{ badge: label }" [attr.data-badge]="label">
+      <figure class="avatar" [ngClass]="{ badge: label }" [attr.data-badge]="label">
         <img src="https://res.cloudinary.com/dqhk8k6iv/image/upload/t_thumb/{{ entity.imageId }}" />
       </figure>
     </div>
