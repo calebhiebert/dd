@@ -46,12 +46,22 @@ export class EntityService {
       .post<IEntity>(`${environment.apiURL}/entities`, {
         ...entity,
         id: undefined,
+        campign: undefined,
+        spawnedFrom: undefined,
+        preset: undefined,
       })
       .toPromise();
   }
 
   public async updateEntity(entity: IEntity): Promise<void> {
-    return this.http.put<void>(`${environment.apiURL}/entities/${entity.id}`, entity).toPromise();
+    return this.http
+      .put<void>(`${environment.apiURL}/entities/${entity.id}`, {
+        ...entity,
+        campign: undefined,
+        spawnedFrom: undefined,
+        preset: undefined,
+      })
+      .toPromise();
   }
 
   public async deleteEntity(id: string): Promise<void> {

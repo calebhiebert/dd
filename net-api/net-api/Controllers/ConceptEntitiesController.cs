@@ -85,6 +85,8 @@ namespace net_api.Controllers
             // It's possible that the client could submit the concept field
             // this is not ideal (because entity framework will track it), so we just clear it
             conceptEntity.Concept = null;
+            conceptEntity.Entity = null;
+            conceptEntity.Parent = null;
 
             if (!ConceptEntityExists(conceptEntity.EntityId, conceptEntity.ConceptId))
             {
@@ -155,6 +157,8 @@ namespace net_api.Controllers
                 // It's possible that the client could submit the concept field
                 // this is not ideal (because entity framework will track it), so we just clear it
                 conceptEntity.Concept = null;
+                conceptEntity.Entity = null;
+                conceptEntity.Parent = null;
 
                 if (!ConceptEntityExists(conceptEntity.EntityId, conceptEntity.ConceptId))
                 {

@@ -245,8 +245,10 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
-            concept.ConceptType = null;
             concept.UserId = existingConcept.UserId;
+            concept.ConceptType = null;
+            concept.History = null;
+            concept.User = null;
 
             _context.Entry(concept).State = EntityState.Modified;
 
@@ -303,6 +305,10 @@ namespace net_api.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             concept.UserId = userId;
+            concept.ConceptType = null;
+            concept.History = null;
+            concept.User = null;
+            concept.Id = Guid.NewGuid();
 
             _context.Concepts.Add(concept);
 

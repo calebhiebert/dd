@@ -248,6 +248,10 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
+            campaignInvite.Id = Nanoid.Nanoid.Generate(size: 64);
+            campaignInvite.Campaign = null;
+            campaignInvite.User = null;
+
             _context.CampaignInvites.Add(campaignInvite);
             await _context.SaveChangesAsync();
 
@@ -285,6 +289,9 @@ namespace net_api.Controllers
             {
                 return Forbid();
             }
+
+            campaignInvite.Campaign = null;
+            campaignInvite.User = null;
 
             _context.Entry(campaignInvite).State = EntityState.Modified;
 

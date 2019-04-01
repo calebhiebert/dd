@@ -150,6 +150,10 @@ namespace net_api.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             note.UserId = existingNote.UserId;
             note.User = null;
+            note.Article = null;
+            note.Campaign = null;
+            note.Map = null;
+            note.Quest = null;
 
             if (userId != existingNote.UserId)
             {
@@ -213,8 +217,13 @@ namespace net_api.Controllers
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            note.Id = Guid.NewGuid();
             note.UserId = userId;
             note.User = null;
+            note.Article = null;
+            note.Campaign = null;
+            note.Map = null;
+            note.Quest = null;
 
             _context.Notes.Add(note);
             await _context.SaveChangesAsync();

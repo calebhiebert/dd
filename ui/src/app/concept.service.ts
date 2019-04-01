@@ -88,12 +88,22 @@ export class ConceptService {
     return this.http.post<IConcept>(`${environment.apiURL}/concepts/${id}/restore/${historyId}`, null).toPromise();
   }
 
-  public createConcept(Concept: IConcept): Promise<IConcept> {
-    return this.http.post<IConcept>(`${environment.apiURL}/concepts`, Concept).toPromise();
+  public createConcept(concept: IConcept): Promise<IConcept> {
+    return this.http
+      .post<IConcept>(`${environment.apiURL}/concepts`, {
+        ...concept,
+        conceptType: undefined,
+      })
+      .toPromise();
   }
 
-  public updateConcept(Concept: IConcept): Promise<void> {
-    return this.http.put<void>(`${environment.apiURL}/concepts/${Concept.id}`, Concept).toPromise();
+  public updateConcept(concept: IConcept): Promise<void> {
+    return this.http
+      .put<void>(`${environment.apiURL}/concepts/${concept.id}`, {
+        ...concept,
+        conceptType: undefined,
+      })
+      .toPromise();
   }
 
   public deleteConcept(id: string): Promise<IConcept> {

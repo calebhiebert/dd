@@ -138,7 +138,6 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
-
             var existingEntity = await _context.Entities
                 .Where(e => e.Id == entity.Id)
                 .Include(e => e.Campaign)
@@ -163,8 +162,14 @@ namespace net_api.Controllers
                 entity.Spawnable = false;
             }
 
-            entity.UserId = existingEntity.UserId;
+            entity.Campaign = null;
+            entity.EntityConcepts = null;
+            entity.Map = null;
+            entity.SpawnedFrom = null;
+            entity.User = null;
+            entity.Preset = null;
 
+            entity.UserId = existingEntity.UserId;
             _context.Entry(entity).State = EntityState.Modified;
 
             try
@@ -228,6 +233,14 @@ namespace net_api.Controllers
             {
                 entity.Spawnable = false;
             }
+
+            entity.Campaign = null;
+            entity.EntityConcepts = null;
+            entity.Map = null;
+            entity.SpawnedFrom = null;
+            entity.User = null;
+            entity.Preset = null;
+            entity.Id = Guid.NewGuid();
 
             _context.Entities.Add(entity);
 

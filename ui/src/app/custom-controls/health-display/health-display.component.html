@@ -36,7 +36,7 @@
 
 <div *ngIf="!textOnly">
   <!-- Bar Display -->
-  <div class="bar h-100" (click)="editHP()" [ngClass]="{ 'c-hand': editable }" *ngFor="let bar of bars; trackBy: trackBarElement">
+  <div class="bar h-100 no-select" (click)="editHP()" [ngClass]="{ 'c-hand': editable }" *ngFor="let bar of bars; trackBy: trackBarElement">
     <div
       class="bar-item d-flex align-items-center justify-content-center"
       [ngClass]="{ 'bar-animated': !disableAnimation, 'p-1': !mini }"

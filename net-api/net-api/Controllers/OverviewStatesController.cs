@@ -88,6 +88,8 @@ namespace net_api.Controllers
                 _context.Entry(overviewState).State = EntityState.Modified;
             }
 
+            overviewState.Campaign = null;
+
             try
             {
                 await _context.SaveChangesAsync();

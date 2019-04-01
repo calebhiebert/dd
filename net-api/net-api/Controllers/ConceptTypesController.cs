@@ -74,6 +74,9 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
+            conceptType.Campaign = null;
+            conceptType.User = null;
+
             _context.Entry(conceptType).State = EntityState.Modified;
 
             try
@@ -115,7 +118,10 @@ namespace net_api.Controllers
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            conceptType.Id = Guid.NewGuid();
             conceptType.UserId = userId;
+            conceptType.Campaign = null;
+            conceptType.User = null;
 
             _context.ConceptTypes.Add(conceptType);
             await _context.SaveChangesAsync();

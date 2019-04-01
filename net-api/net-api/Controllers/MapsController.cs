@@ -344,6 +344,8 @@ namespace net_api.Controllers
             map.Mapping = originalMap.Mapping;
             map.UserId = originalMap.UserId;
             map.Status = originalMap.Status;
+            map.Campaign = null;
+            map.User = null;
 
             _context.Entry(map).State = EntityState.Modified;
 

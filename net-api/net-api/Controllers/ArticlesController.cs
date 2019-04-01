@@ -233,6 +233,12 @@ namespace net_api.Controllers
                 article.Content = originalArticle.Content;
             }
 
+            article.ArticleConcepts = null;
+            article.ArticleQuests = null;
+            article.Campaign = null;
+            article.Map = null;
+            article.User = null;
+
             _context.Entry(article).State = EntityState.Modified;
 
             try
@@ -282,6 +288,12 @@ namespace net_api.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             article.UserId = userId;
+            article.Id = Guid.NewGuid();
+            article.ArticleConcepts = null;
+            article.ArticleQuests = null;
+            article.Campaign = null;
+            article.Map = null;
+            article.User = null;
 
             _context.Articles.Add(article);
             await _context.SaveChangesAsync();

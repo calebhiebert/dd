@@ -63,6 +63,10 @@ namespace net_api.Controllers
                 return BadRequest();
             }
 
+            user.Campaigns = null;
+            user.Entities = null;
+            user.Notifications = null;
+
             _context.Entry(user).State = EntityState.Modified;
 
             try

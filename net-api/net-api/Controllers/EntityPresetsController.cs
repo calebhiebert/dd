@@ -113,6 +113,9 @@ namespace net_api.Controllers
                 return Forbid();
             }
 
+            entityPreset.Campaign = null;
+            entityPreset.User = null;
+
             _context.Entry(entityPreset).State = EntityState.Modified;
 
             try
@@ -160,6 +163,10 @@ namespace net_api.Controllers
             {
                 return Forbid();
             }
+
+            entityPreset.Id = Guid.NewGuid();
+            entityPreset.Campaign = null;
+            entityPreset.User = null;
 
             _context.EntityPresets.Add(entityPreset);
             await _context.SaveChangesAsync();

@@ -193,6 +193,9 @@ namespace net_api.Controllers
                 quest.Status = QuestStatus.None;
             }
 
+            quest.Campaign = null;
+            quest.Origin = null;
+
             _context.Entry(quest).State = EntityState.Modified;
 
             // The quest was just accepted
@@ -243,6 +246,10 @@ namespace net_api.Controllers
             {
                 return Forbid();
             }
+
+            quest.Campaign = null;
+            quest.Origin = null;
+            quest.Id = Guid.NewGuid();
 
             _context.Quests.Add(quest);
             await _context.SaveChangesAsync();

@@ -115,6 +115,13 @@ namespace net_api.Controllers
             }
 
             campaign.UserId = existingCampaign.UserId;
+            campaign.ConceptTypes = null;
+            campaign.Entities = null;
+            campaign.EntityPresets = null;
+            campaign.Invites = null;
+            campaign.Members = null;
+            campaign.OverviewState = null;
+            campaign.User = null;
 
             var cmap = campaign.CurrencyMap;
 
@@ -155,6 +162,15 @@ namespace net_api.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            campaign.Id = Guid.NewGuid();
+            campaign.ConceptTypes = null;
+            campaign.Entities = null;
+            campaign.EntityPresets = null;
+            campaign.Invites = null;
+            campaign.Members = null;
+            campaign.OverviewState = null;
+            campaign.User = null;
 
             var campaignUser = new CampaignUser
             {
