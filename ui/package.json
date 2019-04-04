@@ -30,6 +30,7 @@
     "chance": "^1.0.18",
     "core-js": "^2.5.4",
     "deep-diff": "^1.0.2",
+    "dropzone": "^5.5.1",
     "leaflet": "^1.4.0",
     "leaflet-draw": "^1.0.4",
     "literallycanvas": "^0.5.2",

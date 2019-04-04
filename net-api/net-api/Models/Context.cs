@@ -39,7 +39,6 @@ namespace net_api.Models
         public DbSet<QuestNotification> QuestNotifications { get; set; }
         public DbSet<SuggestionNotification> SuggestionNotifications { get; set; }
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connectionString = "Host=localhost;Port=5432;Database=dd;Password=dd;User ID=dd";

@@ -13,6 +13,7 @@ import { CustomControlsModule } from '../custom-controls/custom-controls.module'
 import { ReactiveFormsModule } from '@angular/forms';
 import { NotesModule } from '../notes/notes.module';
 import { CustomViewsModule } from '../custom-views/custom-views.module';
+import { DropzoneModule } from '../dropzone/dropzone.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,6 @@ import { CustomViewsModule } from '../custom-views/custom-views.module';
     ArticleConceptManagerListItemComponent,
     ArticleQuestManagerComponent,
   ],
-  imports: [CommonModule, ArticlesRoutingModule, CustomControlsModule, NotesModule, ReactiveFormsModule, CustomViewsModule],
+  imports: [CommonModule, ArticlesRoutingModule, CustomControlsModule, NotesModule, ReactiveFormsModule, CustomViewsModule, DropzoneModule],
 })
 export class ArticlesModule {}
