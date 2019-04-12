@@ -50,22 +50,31 @@ namespace net_api.Controllers
             if (entityId != null)
             {
                 purchaseQuery = purchaseQuery
-                    .Where(p => p.EntityId == entityId);
+                    .Where(p => p.EntityId == entityId)
+                    .Include(p => p.Article)
+                    .Include(p => p.Concept);
             }
 
             if (articleId != null)
             {
                 purchaseQuery = purchaseQuery
-                    .Where(p => p.ArticleId == articleId);
+                    .Where(p => p.ArticleId == articleId)
+                    .Include(p => p.Entity)
+                    .Include(p => p.Concept);
             }
 
             if (conceptId != null)
             {
                 purchaseQuery = purchaseQuery
-                    .Where(p => p.ConceptId == conceptId);
+                    .Where(p => p.ConceptId == conceptId)
+                    .Include(p => p.Entity)
+                    .Include(p => p.Article);
             }
 
             var count = await purchaseQuery.CountAsync();
+
+            purchaseQuery = purchaseQuery
+                .OrderByDescending(p => p.DateTime);
 
             if (limit == null || limit <= 0)
             {

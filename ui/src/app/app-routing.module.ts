@@ -28,6 +28,7 @@ import { ConceptEntityManagerComponent } from './concept/concept-entity-manager/
 import { EntityPresetEditorComponent } from './entity/entity-preset-editor/entity-preset-editor.component';
 import { EntityEditorComponent } from './entity/entity-editor/entity-editor.component';
 import { LoginPageGuard } from './login-page.guard';
+import { EntityPurchaseListComponent } from './entity/entity-purchase-list/entity-purchase-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -93,6 +94,13 @@ const routes: Routes = [
           {
             path: ':ent_id',
             component: EntityViewComponent,
+            data: {
+              suggestable: true,
+            },
+          },
+          {
+            path: ':ent_id/purchases',
+            component: EntityPurchaseListComponent,
             data: {
               suggestable: true,
             },
