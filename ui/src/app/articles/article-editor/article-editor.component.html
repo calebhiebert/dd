@@ -6,6 +6,9 @@
     </div>
 
     <div class="column col-auto">
+      <button class="btn mr-2" [ngClass]="{ loading: copying }" *ngIf="editing" (click)="makeCopy()" [disabled]="loading || saving">
+        Make Copy
+      </button>
       <button class="btn btn-error mr-2" *ngIf="editing" (click)="delete()" [disabled]="loading || saving">
         Delete
       </button>

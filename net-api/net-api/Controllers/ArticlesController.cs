@@ -307,6 +307,54 @@ namespace net_api.Controllers
             return CreatedAtAction("GetArticle", new { id = article.Id }, article);
         }
 
+        // POST: api/Articles/makecopy/5
+        [HttpPost("makecopy/{articleId}")]
+        public async Task<IActionResult> CopyArticle(Guid articleId)
+        {
+            var originalArticle = await _context.Articles
+                .Where(a => a.Id == articleId)
+                .AsNoTracking()
+                .Include(a => a.Campaign)
+                    .ThenInclude(c => c.Members)
+                .Include(a => a.ArticleConcepts)
+                .Include(a => a.ArticleQuests)
+                .FirstOrDefaultAsync();
+
+            if (originalArticle == null)
+            {
+                return NotFound();
+            }
+
+            var authResult = await _auth.AuthorizeAsync(User, originalArticle.Campaign, "CampaignEditPolicy");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            originalArticle.Id = Guid.NewGuid();
+            originalArticle.Name += " (Copy)";
+
+            foreach (var concept in originalArticle.ArticleConcepts)
+            {
+                concept.Article = originalArticle;
+                concept.ArticleId = originalArticle.Id;
+            }
+
+            foreach (var quest in originalArticle.ArticleQuests)
+            {
+                quest.ArticleId = originalArticle.Id;
+                quest.Article = originalArticle;
+            }
+
+            originalArticle.Campaign = null;
+
+            _context.Add(originalArticle);
+            await _context.SaveChangesAsync();
+
+            return Ok(originalArticle);
+        }
+
         // DELETE: api/Articles/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Article>> DeleteArticle(Guid id)

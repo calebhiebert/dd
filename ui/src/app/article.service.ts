@@ -81,6 +81,10 @@ export class ArticleService {
   public async getPopular(campaignId: string): Promise<any> {
     return this.http.get(`${environment.apiURL}/articles/popular?campaignId=${campaignId}`).toPromise();
   }
+
+  public async makeCopy(articleId: string): Promise<IArticle> {
+    return this.http.post<IArticle>(`${environment.apiURL}/articles/makecopy/${articleId}`, null).toPromise();
+  }
 }
 
 export interface IArticle {

@@ -31,7 +31,9 @@
     <!-- Name Column -->
     <div class="column" [ngClass]="{ faded: articleConcept.quantity === 0 }">
       {{ articleConcept.concept.name }}
-      <sup class="bold" *ngIf="articleConcept.quantity !== null">x{{ articleConcept.quantity }}</sup>
+      <sup class="bold" *ngIf="articleConcept.quantity !== null && articleConcept.quantity !== undefined"
+        >x{{ articleConcept.quantity }}</sup
+      >
       <div class="d-inline-block ml-2" *ngIf="saving">
         <div class="loading"></div>
       </div>

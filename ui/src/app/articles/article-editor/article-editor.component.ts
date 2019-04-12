@@ -18,6 +18,7 @@ export class ArticleEditorComponent implements OnInit, ComponentCanDeactivate {
   public formGroup: FormGroup;
   public saving = false;
   public loading = false;
+  public copying = false;
 
   private _article: IArticle;
 
@@ -131,6 +132,27 @@ export class ArticleEditorComponent implements OnInit, ComponentCanDeactivate {
         throw err;
       }
     }
+  }
+
+  public async makeCopy() {
+    if (!this.canDeactivate()) {
+      const result = await Swal.fire({ title: 'Are you sure?', text: 'You have unsaved changes!', showCancelButton: true });
+
+      if (result.value !== true) {
+        return;
+      }
+    }
+
+    this.copying = true;
+
+    try {
+      const newArticle = await this.articleService.makeCopy(this.article.id);
+      this.router.navigate(['campaigns', this.campaignSerivce.campaign.id, 'articles', newArticle.id, 'edit']);
+    } catch (err) {
+      throw err;
+    }
+
+    this.copying = false;
   }
 
   public cancel() {
