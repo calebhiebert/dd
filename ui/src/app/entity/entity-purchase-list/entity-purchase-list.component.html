@@ -1,0 +1,58 @@
+<div class="container grid-lg">
+  <!-- Loading -->
+  <div class="loading loading-lg" *ngIf="loading && !purchases"></div>
+
+  <!-- Title Controls -->
+  <div class="columns" *ngIf="entity && purchases">
+    <div class="column col-auto">
+      <button class="btn btn-sm" [routerLink]="['/campaigns', campaign.id, 'entities', entity.id]">
+        <i class="icon icon-arrow-left"></i>
+      </button>
+    </div>
+
+    <!-- Title -->
+    <div class="column">
+      <h5>Purchases for {{ entity.name }}</h5>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty mt-2" *ngIf="entity && purchases && totalPurchases === 0">
+    <div class="empty-icon">
+      <i class="icon icon-search icon-4x"></i>
+    </div>
+    <p class="empty-title h5">{{ entity.name }} has not made any purchases</p>
+  </div>
+
+  <div class="timeline" *ngIf="entity && purchases">
+    <div class="timeline-item" *ngFor="let purchase of purchases">
+      <div class="timeline-left">
+        <a class="timeline-icon"></a>
+      </div>
+      <div class="timeline-content">
+        <div>
+          <b>{{ entity.name }}</b> purchased <b>{{ purchase.quantity }}x </b>
+          <a [routerLink]="['/campaigns', campaign.id, 'concepts', purchase.concept.conceptTypeId, purchase.concept.id, 'view']">{{
+            purchase.concept.name
+          }}</a>
+          from
+          <a [routerLink]="['/campaigns', campaign.id, 'articles', purchase.article.id]">{{ purchase.article.name }}</a>
+        </div>
+        <div>
+          <div class="label label-warning mt-1 text-dark" [ddCurrency]="purchase.totalCurrencyCost"></div>
+          <div>{{ purchase.dateTime | date: 'short' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <dd-paginator
+    [totalItems]="totalPurchases"
+    itemsPerPage="10"
+    [autoHide]="false"
+    [page]="page"
+    (pageChange)="setPage($event)"
+    *ngIf="entity && purchases && totalPurchases > 0"
+  ></dd-paginator>
+</div>

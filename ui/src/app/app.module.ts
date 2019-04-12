@@ -66,6 +66,7 @@ import { QuickViewComponent } from './quest/quick-view/quick-view.component';
 import { QuickDiceComponent } from './quick-dice/quick-dice.component';
 import { SentryErrorHandler } from './sentry.errorhandler';
 import { UsersModule } from './users/users.module';
+import { EntityPurchaseListComponent } from './entity/entity-purchase-list/entity-purchase-list.component';
 /* tslint:enable:max-line-length */
 
 @NgModule({
@@ -119,6 +120,7 @@ import { UsersModule } from './users/users.module';
     LongPressDirective,
     EntityPresetEditorComponent,
     ConceptEntityManagerListItemComponent,
+    EntityPurchaseListComponent,
   ],
   imports: [
     BrowserModule,

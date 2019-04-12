@@ -125,7 +125,7 @@ namespace net_api.Models
 
                 foreach (var cl in levels)
                 {
-                    if (currency.Values.ContainsKey(cl.Name))
+                    if (currency.Values.ContainsKey(cl.Name) && currency.Values[cl.Name] != null)
                     {
                         value += (double)currency.Values[cl.Name] * cl.Value;
                     }
