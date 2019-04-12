@@ -27,8 +27,6 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
   private _onChange: any;
   private _onTouched: any;
 
-  private _firstChange = true;
-
   constructor() {}
 
   ngOnInit() {
@@ -46,21 +44,17 @@ export class CurrencyInputComponent implements OnInit, ControlValueAccessor {
           })
         )
         .subscribe((val) => {
-          if (this._onChange && !this._firstChange) {
+          if (this._onChange) {
             this._onChange({ values: this.convertCurrencyArrayToObject(val, this.config.levels), value: 0 });
           }
-
-          this._firstChange = false;
         });
     } else {
       this.formControl = new FormControl(null);
 
       this.formControl.valueChanges.pipe(distinctUntilChanged()).subscribe((val) => {
-        if (this._onChange && !this._firstChange) {
+        if (this._onChange) {
           this._onChange({ values: {}, value: val });
         }
-
-        this._firstChange = false;
       });
     }
   }
