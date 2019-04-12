@@ -89,6 +89,7 @@ export class EntityPresetEditorComponent implements OnInit, ComponentCanDeactiva
         (preset.fields || []).forEach((f) => {
           const formGroup = FieldDefinitionFormComponent.createFormGroup(f);
           formGroup.addControl('class', new FormControl(0));
+          formGroup.addControl('redacted', new FormControl(false));
           this.fields.push(formGroup);
         });
         this.formGroup.patchValue({ ...preset, fields: preset.fields || [] }, { emitEvent: false });
@@ -144,6 +145,7 @@ export class EntityPresetEditorComponent implements OnInit, ComponentCanDeactiva
       p.fields.forEach((f) => {
         const formGroup = FieldDefinitionFormComponent.createFormGroup(f);
         formGroup.addControl('class', new FormControl(f.class));
+        formGroup.addControl('redacted', new FormControl(f.redacted));
         this.fields.push(formGroup);
       });
       this.presetsModal.close();
@@ -201,7 +203,10 @@ export class EntityPresetEditorComponent implements OnInit, ComponentCanDeactiva
   }
 
   public addField() {
-    this.fields.push(FieldDefinitionFormComponent.createFormGroup(null));
+    const field = FieldDefinitionFormComponent.createFormGroup(null);
+    field.addControl('class', new FormControl(0));
+    field.addControl('redacted', new FormControl(false));
+    this.fields.push(field);
   }
 
   public backToTop() {

@@ -137,6 +137,9 @@ namespace net_api.Models
     {
         [Required]
         public AttributeClass Class { get; set; }
+
+        [Required]
+        public bool Redacted { get; set; }
     }
 
     public class HealthPreset

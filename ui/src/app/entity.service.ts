@@ -160,6 +160,7 @@ export interface ICurrency {
 
 export interface IEntityFieldConfig extends IDynamicFieldConfig {
   class: EntityAttributeClass;
+  redacted: boolean;
 }
 
 export enum EntityAttributeClass {

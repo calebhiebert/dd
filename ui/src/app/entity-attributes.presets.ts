@@ -7,6 +7,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Armor Class',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MAJOR,
+    redacted: false,
     options: { required: true },
   },
   {
@@ -14,6 +15,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Initiative',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MAJOR,
+    redacted: false,
     options: { required: true },
   },
   {
@@ -21,6 +23,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Speed',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.MAJOR,
+    redacted: false,
     options: { required: true },
   },
   {
@@ -28,6 +31,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Class',
     type: DynamicFieldType.ENUM_MULTI,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: {
       required: true,
       choices: ['Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'],
@@ -38,6 +42,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Strength',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: { required: true },
   },
   {
@@ -45,6 +50,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Strength Modifier',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: { required: false, modifierFor: 'Strength' },
   },
   {
@@ -52,6 +58,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Dexterity',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: { required: true },
   },
   {
@@ -59,6 +66,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Dexterity Modifier',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: { required: false, modifierFor: 'Dexterity' },
   },
   {
@@ -66,6 +74,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Constitution',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: { required: true },
   },
   {
@@ -73,6 +82,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Constitution Modifier',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: { required: false, modifierFor: 'Constitution' },
   },
   {
@@ -80,6 +90,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Intelligence',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: { required: true },
   },
   {
@@ -87,6 +98,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Intelligence Modifier',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: { required: false, modifierFor: 'Intelligence' },
   },
   {
@@ -94,6 +106,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Wisdom',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: { required: true },
   },
   {
@@ -101,6 +114,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Wisdom Modifier',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: { required: false, modifierFor: 'Wisdom' },
   },
   {
@@ -108,6 +122,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Charisma',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: { required: true },
   },
   {
@@ -115,6 +130,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Charisma Modifier',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.NORMAL,
+    redacted: false,
     options: { required: false, modifierFor: 'Charisma' },
   },
   {
@@ -122,6 +138,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Acrobatics',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -129,6 +146,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Animal Handling',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -136,6 +154,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Arcana',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -143,6 +162,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Athletics',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -150,6 +170,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Deception',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -157,6 +178,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'History',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -164,6 +186,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Insight',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -171,6 +194,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Intimidation',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -178,6 +202,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Investigation',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -185,6 +210,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Medicine',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -192,6 +218,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Nature',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -199,6 +226,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Perception',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -206,6 +234,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Performance',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -213,6 +242,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Persuasion',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -220,6 +250,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Religion',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -227,6 +258,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Sleight of Hand',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -234,6 +266,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Stealth',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -241,6 +274,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Survival',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -248,6 +282,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Alignment',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -255,6 +290,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Race',
     type: DynamicFieldType.ENUM,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: {
       required: false,
       choices: ['Dragonborn', 'Dwarf', 'Eladrin', 'Elf', 'Gnome', 'Half-elf', 'Half-orc', 'Halfling', 'Human', 'Tiefling'],
@@ -265,6 +301,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Age',
     type: DynamicFieldType.INT,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -272,6 +309,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Height',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -279,6 +317,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Weight',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -286,6 +325,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Eyes',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -293,6 +333,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Skin',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -300,6 +341,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Hair',
     type: DynamicFieldType.STRING,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -307,6 +349,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Allies & Organizations',
     type: DynamicFieldType.TEXT_FORMATTED,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -314,6 +357,7 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Features & Traits',
     type: DynamicFieldType.TEXT_FORMATTED,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
     options: { required: false },
   },
   {
@@ -321,6 +365,149 @@ export const DND_5E: IEntityFieldConfig[] = [
     description: 'Backstory',
     type: DynamicFieldType.TEXT_FORMATTED,
     class: EntityAttributeClass.MINOR,
+    redacted: false,
+    options: { required: false },
+  },
+];
+
+export const DND_5E_ENEMY: IEntityFieldConfig[] = [
+  {
+    name: 'AC',
+    description: 'Armor Class',
+    type: DynamicFieldType.INT,
+    class: EntityAttributeClass.MAJOR,
+    redacted: true,
+    options: { required: true },
+  },
+  {
+    name: 'Init',
+    description: 'Initiative',
+    type: DynamicFieldType.INT,
+    class: EntityAttributeClass.MAJOR,
+    redacted: true,
+    options: { required: true },
+  },
+  {
+    name: 'Speed',
+    description: 'Speed',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.MAJOR,
+    redacted: true,
+    options: { required: true },
+  },
+  {
+    name: 'Class',
+    description: 'Class',
+    type: DynamicFieldType.ENUM_MULTI,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: {
+      required: true,
+      choices: ['Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'],
+    },
+  },
+  {
+    name: 'Strength',
+    description: 'Strength',
+    type: DynamicFieldType.INT,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: { required: true },
+  },
+  {
+    name: 'Strength Mod',
+    description: 'Strength Modifier',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: { required: false, modifierFor: 'Strength' },
+  },
+  {
+    name: 'Dexterity',
+    description: 'Dexterity',
+    type: DynamicFieldType.INT,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: { required: true },
+  },
+  {
+    name: 'Dex Mod',
+    description: 'Dexterity Modifier',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: { required: false, modifierFor: 'Dexterity' },
+  },
+  {
+    name: 'Constitution',
+    description: 'Constitution',
+    type: DynamicFieldType.INT,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: { required: true },
+  },
+  {
+    name: 'Con Mod',
+    description: 'Constitution Modifier',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: { required: false, modifierFor: 'Constitution' },
+  },
+  {
+    name: 'Intelligence',
+    description: 'Intelligence',
+    type: DynamicFieldType.INT,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: { required: true },
+  },
+  {
+    name: 'Int Mod',
+    description: 'Intelligence Modifier',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: { required: false, modifierFor: 'Intelligence' },
+  },
+  {
+    name: 'Wisdom',
+    description: 'Wisdom',
+    type: DynamicFieldType.INT,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: { required: true },
+  },
+  {
+    name: 'Wis Mod',
+    description: 'Wisdom Modifier',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: { required: false, modifierFor: 'Wisdom' },
+  },
+  {
+    name: 'Charisma',
+    description: 'Charisma',
+    type: DynamicFieldType.INT,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: { required: true },
+  },
+  {
+    name: 'Cha Mod',
+    description: 'Charisma Modifier',
+    type: DynamicFieldType.STRING,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
+    options: { required: false, modifierFor: 'Charisma' },
+  },
+  {
+    name: 'Extra',
+    description: 'Any extra information',
+    type: DynamicFieldType.TEXT_FORMATTED,
+    class: EntityAttributeClass.NORMAL,
+    redacted: true,
     options: { required: false },
   },
 ];

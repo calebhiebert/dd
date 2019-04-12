@@ -91,6 +91,7 @@ namespace net_api.Controllers
                 .Include(e => e.Preset)
                 .Include(e => e.Campaign)
                     .ThenInclude(c => c.Members)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             if (entity == null)
@@ -113,6 +114,32 @@ namespace net_api.Controllers
                     Max = 1,
                     Current = 0
                 };
+            }
+
+            // Don't send redacted fields
+            var canViewRedactedFields = await _auth.AuthorizeAsync(User, entity.Campaign, "CampaignEditPolicy");
+
+            if (!canViewRedactedFields.Succeeded)
+            {
+                var fields = entity.Fields;
+                var presetFields = entity.Preset.Fields;
+                var newEntityFields = new List<Field>();
+
+                if (fields != null && presetFields != null)
+                {
+                    foreach (var field in fields)
+                    {
+                        var presetField = presetFields
+                            .FirstOrDefault(pf => pf.Name == field.Name);
+
+                        if (presetField != null && !presetField.Redacted)
+                        {
+                            newEntityFields.Add(field);
+                        }
+                    }
+                }
+
+                entity.Fields = newEntityFields;
             }
 
             _context.AssetViews.Add(new AssetView(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, entity.CampaignId)
