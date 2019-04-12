@@ -28,6 +28,11 @@ export class IconService {
     'cheese-wedge',
     'cancel',
     'donut',
+    'grave-flowers',
+    'mustache',
+    'imperial-crown',
+    'magick-trick',
+    'barrel',
   ];
 
   constructor() {}
