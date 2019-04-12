@@ -27,6 +27,7 @@ namespace net_api.Models
         public DbSet<Article> Articles { get; set; }
         public DbSet<ArticleQuest> ArticleQuests { get; set; }
         public DbSet<ArticleConcept> ArticleConcepts { get; set; }
+        public DbSet<Purchase> PurchaseHistory { get; set; }
 
         public DbSet<ConceptType> ConceptTypes { get; set; }
         public DbSet<Concept> Concepts { get; set; }

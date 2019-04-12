@@ -211,6 +211,17 @@ namespace net_api.Controllers
                 entity.Campaign.TrackCoins);
             _context.Entry(entity).State = EntityState.Modified;
 
+            var purchaseHistory = new Purchase()
+            {
+                ConceptId = articleConcept.ConceptId,
+                ArticleId = articleConcept.ArticleId,
+                EntityId = entity.Id,
+                Quantity = (int) quantity,
+                CurrencyCostJson = articleConcept.CurrencyCostJson,
+            };
+
+            _context.PurchaseHistory.Add(purchaseHistory);
+
             await _context.SaveChangesAsync();
 
             await _hub.Clients.Group($"entity-{entity.Id}")
