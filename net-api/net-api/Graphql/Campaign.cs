@@ -17,6 +17,7 @@ namespace net_api.Graphql
             Field(c => c.ExperienceTable);
             Field(c => c.TrackCoins);
             Field(c => c.CreatedAt);
+            Field<CurrencyLevelType>(nameof(Campaign.CurrencyMap));
 
             Field<UserType>(nameof(Campaign.User), resolve: ctx =>
             {
@@ -34,6 +35,15 @@ namespace net_api.Graphql
                     .ToList();
 
                 return members;
+            });
+
+            Field<ListGraphType<EntityType>>(nameof(Campaign.Entities), resolve: ctx =>
+            {
+                var entities = context.Entities
+                    .Where(e => e.CampaignId == ctx.Source.Id)
+                    .ToList();
+
+                return entities;
             });
         }
     }
