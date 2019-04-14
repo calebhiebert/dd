@@ -11,6 +11,10 @@ using net_api.Models;
 using dotenv.net;
 using Microsoft.AspNetCore.Authorization;
 using net_api.Authorization;
+using GraphQL;
+using net_api.Graphql;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
 
 namespace net_api
 {
@@ -57,6 +61,11 @@ namespace net_api
             services.AddSingleton<IAuthorizationHandler, NoteEditableHandler>();
             services.AddSingleton<IAuthorizationHandler, NotificationAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, ConceptEditableHandler>();
+
+            services.AddScoped<IDependencyResolver>(x => new FuncDependencyResolver(x.GetRequiredService));
+            services.AddScoped<DDSchema>();
+            services.AddGraphQL(x => x.ExposeExceptions = true)
+                .AddGraphTypes(ServiceLifetime.Scoped);
 
             services.AddAuthorization(options =>
             {
@@ -114,6 +123,9 @@ namespace net_api
             {
                 routes.MapHub<UpdateHub>("/hub");
             });
+
+            app.UseGraphQL<DDSchema>();
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
 
             app.UseMvc();
         }
