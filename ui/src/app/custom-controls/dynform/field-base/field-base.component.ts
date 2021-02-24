@@ -40,7 +40,10 @@ export class FieldBaseComponent implements OnInit {
     if (value !== undefined && value !== null) {
       this._config = value;
       this._fieldConfigCache = undefined;
-      this.control.setValidators(this.getValidators(this.fieldConfig));
+
+      if (this.control) {
+        this.control.setValidators(this.getValidators(this.fieldConfig));
+      }
     }
   }
 

@@ -29,7 +29,7 @@ export class CampaignSettingsComponent implements OnInit, ComponentCanDeactivate
 
   public formGroup: FormGroup;
 
-  @ViewChild('exporter', { static: false })
+  @ViewChild('exporter')
   private exporter: ExporterComponent;
 
   constructor(

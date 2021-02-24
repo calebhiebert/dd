@@ -25,7 +25,7 @@ export class NoteEditorComponent implements OnInit {
   private _autosavePromise: Promise<void> = null;
   private _saveTimeout: number;
 
-  @ViewChild('noteform', { static: false })
+  @ViewChild('noteform')
   private _noteForm: NoteFormComponent;
 
   constructor(private noteService: NoteService, private campaignService: CampaignService, private loginService: LoginService) {

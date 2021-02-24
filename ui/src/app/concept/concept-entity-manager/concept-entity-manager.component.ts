@@ -37,7 +37,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
     return this._entity;
   }
 
-  @ViewChild('picker', { static: false })
+  @ViewChild('picker')
   public pickerModal: ModalComponent<IConcept>;
 
   @ViewChild('viewandedit', { static: true })
@@ -46,7 +46,7 @@ export class ConceptEntityManagerComponent implements OnInit, OnDestroy {
   @ViewChild('nestselector', { static: true })
   public nestSelector: ModalComponent<IConcept>;
 
-  @ViewChild('searchbar', { static: false })
+  @ViewChild('searchbar')
   public searchInput: ElementRef<HTMLInputElement>;
 
   public searchResults: IConcept[];

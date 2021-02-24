@@ -1,4 +1,4 @@
-import { Injectable, HostListener } from '@angular/core';
+import { Injectable, HostListener, Directive } from '@angular/core';
 import {
   CanActivate,
   ActivatedRouteSnapshot,
@@ -8,6 +8,7 @@ import {
 } from '@angular/router';
 import Swal from 'sweetalert2';
 
+@Directive()
 @Injectable({
   providedIn: 'root',
 })
