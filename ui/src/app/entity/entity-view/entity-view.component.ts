@@ -15,7 +15,7 @@ import { DynamicFieldType } from 'src/app/custom-controls/dynform/form-types';
   styleUrls: ['./entity-view.component.scss'],
 })
 export class EntityViewComponent implements OnInit, OnDestroy {
-  @ViewChild('attributemodal')
+  @ViewChild('attributemodal', { static: true })
   public attributeModal: EntityAttributeEditorModalComponent;
 
   public loading = false;

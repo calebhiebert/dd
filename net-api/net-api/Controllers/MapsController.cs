@@ -174,8 +174,8 @@ namespace net_api.Controllers
 
             var tileBytes =
                 await _context
-                .Query<MapBytePosition>()
-                .FromSql("SELECT JSONB_ARRAY_ELEMENTS(JSONB_EXTRACT_PATH(\"Mapping\", {0})) AS \"BytePosition\" FROM \"Maps\" WHERE \"Id\" = {1}", $"{zoom}_{x}_{y}", id)
+                .MapBytePositions
+                .FromSqlRaw("SELECT JSONB_ARRAY_ELEMENTS(JSONB_EXTRACT_PATH(\"Mapping\", {0})) AS \"BytePosition\" FROM \"Maps\" WHERE \"Id\" = {1}", $"{zoom}_{x}_{y}", id)
                 .ToArrayAsync();
 
             if (tileBytes.Length == 0)

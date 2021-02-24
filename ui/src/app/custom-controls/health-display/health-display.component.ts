@@ -56,10 +56,10 @@ export class HealthDisplayComponent implements OnInit {
   @Output()
   public healthChange = new EventEmitter<IHealth>();
 
-  @ViewChild('editmodal')
+  @ViewChild('editmodal', { static: false })
   public editModal: ModalComponent<IHealth>;
 
-  @ViewChild('hpinput')
+  @ViewChild('hpinput', { static: false })
   public hpInput: ElementRef<HTMLInputElement>;
 
   public operationControl: FormControl;

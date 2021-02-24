@@ -40,7 +40,7 @@ export class ExperienceTableEditorComponent implements OnInit {
   @Input()
   public formGroup: FormGroup;
 
-  @ViewChild('presets')
+  @ViewChild('presets', { static: true })
   public presetsModal: ModalComponent<void>;
 
   public presetList: IXPTablePreset[];

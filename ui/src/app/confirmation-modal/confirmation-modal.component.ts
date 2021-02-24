@@ -7,7 +7,7 @@ import { ModalComponent } from '../custom-controls/modal/modal.component';
   styleUrls: ['./confirmation-modal.component.css'],
 })
 export class ConfirmationModalComponent implements OnInit {
-  @ViewChild('modal')
+  @ViewChild('modal', { static: true })
   public modal: ModalComponent<boolean>;
 
   public title: string;

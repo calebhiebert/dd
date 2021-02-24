@@ -13,7 +13,7 @@ import { NoteFormComponent } from '../note-form/note-form.component';
   styleUrls: ['./note-editor.component.css'],
 })
 export class NoteEditorComponent implements OnInit {
-  @ViewChild('modal')
+  @ViewChild('modal', { static: true })
   private modal: ModalComponent<any>;
   public loading = false;
   public unsaved = false;
@@ -25,7 +25,7 @@ export class NoteEditorComponent implements OnInit {
   private _autosavePromise: Promise<void> = null;
   private _saveTimeout: number;
 
-  @ViewChild('noteform')
+  @ViewChild('noteform', { static: false })
   private _noteForm: NoteFormComponent;
 
   constructor(private noteService: NoteService, private campaignService: CampaignService, private loginService: LoginService) {

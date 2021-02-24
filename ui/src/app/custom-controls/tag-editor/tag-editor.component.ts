@@ -13,7 +13,7 @@ export class TagEditorComponent implements OnInit {
   @Input()
   public controlName = 'tags';
 
-  @ViewChild('input')
+  @ViewChild('input', { static: true })
   private input: ElementRef<HTMLInputElement>;
 
   private _currentValue = '';

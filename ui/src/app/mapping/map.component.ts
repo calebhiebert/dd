@@ -46,16 +46,16 @@ const ENTITY_ICON_SIZE = 40;
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('map')
+  @ViewChild('map', { static: true })
   private map: ElementRef<HTMLDivElement>;
 
-  @ViewChild('editor')
+  @ViewChild('editor', { static: true })
   private editor: MapEditorMenuComponent;
 
-  @ViewChild('entityselect')
+  @ViewChild('entityselect', { static: true })
   private entitySelect: SelectorPopupComponent;
 
-  @ViewChild('articleselect')
+  @ViewChild('articleselect', { static: true })
   private articleSelect: SelectorPopupComponent;
 
   private _map: IMap;

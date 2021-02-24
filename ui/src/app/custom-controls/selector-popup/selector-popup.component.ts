@@ -28,7 +28,7 @@ export class SelectorPopupComponent implements OnInit {
   public search: string;
   public selectItems: ISelectOption[];
 
-  @ViewChild('modal')
+  @ViewChild('modal', { static: true })
   private modal: ModalComponent<any>;
 
   private _selectResolver: any;

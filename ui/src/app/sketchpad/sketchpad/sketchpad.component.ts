@@ -8,7 +8,7 @@ import 'literallycanvas/lib/css/literallycanvas.css';
   styleUrls: ['./sketchpad.component.scss'],
 })
 export class SketchpadComponent implements OnInit, AfterContentInit {
-  @ViewChild('drawingContainer')
+  @ViewChild('drawingContainer', { static: true })
   private _drawingContainer: ElementRef<HTMLDivElement>;
 
   constructor() {}

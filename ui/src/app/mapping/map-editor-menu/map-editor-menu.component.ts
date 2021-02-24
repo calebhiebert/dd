@@ -20,7 +20,7 @@ export enum MapEditorOperationType {
   styleUrls: ['./map-editor-menu.component.scss'],
 })
 export class MapEditorMenuComponent implements OnInit {
-  @ViewChild('modal')
+  @ViewChild('modal', { static: true })
   private modal: ModalComponent<any>;
 
   private _opResolver: (op: IMapEditorOperation) => void;

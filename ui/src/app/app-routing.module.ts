@@ -1,39 +1,39 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { CampaignComponent } from './campaign/campaign.component';
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-import { LoggedInGuard } from './logged-in.guard';
-import { EntityViewComponent } from './entity/entity-view/entity-view.component';
-import { CampaignListComponent } from './campaign/campaign-list/campaign-list.component';
-import { CampaignSettingsComponent } from './campaign/campaign-settings/campaign-settings.component';
-import { QuestManagerComponent } from './quest/quest-manager/quest-manager.component';
-import { CampaignLandingComponent } from './campaign/campaign-landing/campaign-landing.component';
-import { RegisterComponent } from './login/register/register.component';
-import { InviteComponent } from './invite/invite.component';
-import { ActionGuard } from './action.guard';
-import { AboutComponent } from './about/about.component';
-import { EntityComponent } from './entity/entity.component';
-import { QuestFormComponent } from './quest/quest-form/quest-form.component';
-import { QuestViewComponent } from './quest/quest-view/quest-view.component';
-import { SpawnableManagerComponent } from './entity/spawnable-manager/spawnable-manager.component';
-import { UnsavedChangesGuard } from './unsaved-changes.guard';
-import { ConceptTypeEditorComponent } from './concept/concept-type-editor/concept-type-editor.component';
-import { ConceptManagerComponent } from './concept/concept-manager/concept-manager.component';
-import { ConceptEditorComponent } from './concept/concept-editor/concept-editor.component';
-import { ConceptViewComponent } from './concept/concept-view/concept-view.component';
-import { ConceptHistoryComponent } from './concept/concept-history/concept-history.component';
-import { MemberManagerComponent } from './campaign/member-manager/member-manager.component';
-import { ConceptEntityManagerComponent } from './concept/concept-entity-manager/concept-entity-manager.component';
-import { EntityPresetEditorComponent } from './entity/entity-preset-editor/entity-preset-editor.component';
-import { EntityEditorComponent } from './entity/entity-editor/entity-editor.component';
-import { LoginPageGuard } from './login-page.guard';
-import { EntityPurchaseListComponent } from './entity/entity-purchase-list/entity-purchase-list.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {CampaignComponent} from './campaign/campaign.component';
+import {LoginComponent} from './login/login.component';
+import {HomeComponent} from './home/home.component';
+import {LoggedInGuard} from './logged-in.guard';
+import {EntityViewComponent} from './entity/entity-view/entity-view.component';
+import {CampaignListComponent} from './campaign/campaign-list/campaign-list.component';
+import {CampaignSettingsComponent} from './campaign/campaign-settings/campaign-settings.component';
+import {QuestManagerComponent} from './quest/quest-manager/quest-manager.component';
+import {CampaignLandingComponent} from './campaign/campaign-landing/campaign-landing.component';
+import {RegisterComponent} from './login/register/register.component';
+import {InviteComponent} from './invite/invite.component';
+import {ActionGuard} from './action.guard';
+import {AboutComponent} from './about/about.component';
+import {EntityComponent} from './entity/entity.component';
+import {QuestFormComponent} from './quest/quest-form/quest-form.component';
+import {QuestViewComponent} from './quest/quest-view/quest-view.component';
+import {SpawnableManagerComponent} from './entity/spawnable-manager/spawnable-manager.component';
+import {UnsavedChangesGuard} from './unsaved-changes.guard';
+import {ConceptTypeEditorComponent} from './concept/concept-type-editor/concept-type-editor.component';
+import {ConceptManagerComponent} from './concept/concept-manager/concept-manager.component';
+import {ConceptEditorComponent} from './concept/concept-editor/concept-editor.component';
+import {ConceptViewComponent} from './concept/concept-view/concept-view.component';
+import {ConceptHistoryComponent} from './concept/concept-history/concept-history.component';
+import {MemberManagerComponent} from './campaign/member-manager/member-manager.component';
+import {ConceptEntityManagerComponent} from './concept/concept-entity-manager/concept-entity-manager.component';
+import {EntityPresetEditorComponent} from './entity/entity-preset-editor/entity-preset-editor.component';
+import {EntityEditorComponent} from './entity/entity-editor/entity-editor.component';
+import {LoginPageGuard} from './login-page.guard';
+import {EntityPurchaseListComponent} from './entity/entity-purchase-list/entity-purchase-list.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'invite/:invite_id', component: InviteComponent },
-  { path: 'about', component: AboutComponent },
+  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: 'invite/:invite_id', component: InviteComponent},
+  {path: 'about', component: AboutComponent},
   {
     path: 'login',
     component: LoginComponent,
@@ -50,7 +50,7 @@ const routes: Routes = [
   {
     path: 'account',
     canActivate: [LoggedInGuard, ActionGuard],
-    loadChildren: './users/users.module#UsersModule',
+    loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
   },
   {
     path: 'campaigns/list',
@@ -129,7 +129,7 @@ const routes: Routes = [
       },
       {
         path: 'notes',
-        loadChildren: './notes/notes.module#NotesModule',
+        loadChildren: () => import('./notes/notes.module').then(m => m.NotesModule)
       },
       {
         path: 'concepttypes/create',
@@ -210,7 +210,7 @@ const routes: Routes = [
       },
       {
         path: 'overview',
-        loadChildren: './overview/overview.module#OverviewModule',
+        loadChildren: () => import('./overview/overview.module').then(m => m.OverviewModule),
       },
       {
         path: 'quests',
@@ -244,11 +244,11 @@ const routes: Routes = [
       },
       {
         path: 'maps',
-        loadChildren: './mapping/mapping.module#MappingModule',
+        loadChildren: () => import('./mapping/mapping.module').then(m => m.MappingModule),
       },
       {
         path: 'articles',
-        loadChildren: './articles/articles.module#ArticlesModule',
+        loadChildren: () => import('./articles/articles.module').then(m => m.ArticlesModule),
       },
       {
         path: 'members',
@@ -256,7 +256,7 @@ const routes: Routes = [
       },
       {
         path: 'sketchpad',
-        loadChildren: './sketchpad/sketchpad.module#SketchpadModule',
+        loadChildren: () => import('./sketchpad/sketchpad.module').then(m => m.SketchpadModule),
       },
     ],
   },
@@ -266,4 +266,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

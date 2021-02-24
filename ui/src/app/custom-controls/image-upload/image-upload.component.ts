@@ -17,7 +17,7 @@ import { CampaignService } from 'src/app/campaign.service';
   ],
 })
 export class ImageUploadComponent implements OnInit, AfterViewInit, ControlValueAccessor {
-  @ViewChild('fupload')
+  @ViewChild('fupload', { static: true })
   public fupload: ElementRef<HTMLElement>;
 
   public file: File = null;

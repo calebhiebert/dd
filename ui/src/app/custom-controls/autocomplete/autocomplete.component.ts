@@ -17,7 +17,7 @@ export class AutocompleteComponent implements OnInit {
   @Input()
   public createItem: DropdownItemGenerationFunction;
 
-  @ViewChild('input')
+  @ViewChild('input', { static: true })
   public input: ElementRef<HTMLInputElement>;
 
   @Output()

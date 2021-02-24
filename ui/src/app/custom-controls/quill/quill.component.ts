@@ -64,7 +64,7 @@ export class QuillComponent implements OnInit, AfterContentInit, ControlValueAcc
   @Output()
   public selectionChange = new EventEmitter<any>();
 
-  @ViewChild('container')
+  @ViewChild('container', { static: true })
   private _container: ElementRef<HTMLDivElement>;
 
   private _quill: Quill;

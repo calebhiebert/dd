@@ -21,7 +21,7 @@ export class IconPickerComponent implements OnInit, ControlValueAccessor {
 
   public isDisabled = false;
 
-  @ViewChild('modal')
+  @ViewChild('modal', { static: true })
   private _modal: ModalComponent<any>;
 
   private _onChange: any;

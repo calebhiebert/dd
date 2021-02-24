@@ -9,7 +9,7 @@ import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
   styleUrls: ['./editable-entity-selector.component.css'],
 })
 export class EditableEntitySelectorComponent implements OnInit {
-  @ViewChild('modal')
+  @ViewChild('modal', { static: true })
   public modal: ModalComponent<IEntity>;
 
   private _entityOverride: IEntity[];

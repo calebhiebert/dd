@@ -22,10 +22,10 @@ export class OverviewComponent implements OnInit {
 
   public loadConcepts: (search: string) => Promise<ISelectOption[]>;
 
-  @ViewChild('labelmodal')
+  @ViewChild('labelmodal', { static: true })
   private _labelModal: ModalComponent<string>;
 
-  @ViewChild('conceptselector')
+  @ViewChild('conceptselector', { static: true })
   private _conceptSelector: SelectorPopupComponent;
   private _addingConceptType: IConceptType;
 

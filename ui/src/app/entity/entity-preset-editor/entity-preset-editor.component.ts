@@ -27,10 +27,10 @@ export class EntityPresetEditorComponent implements OnInit, ComponentCanDeactiva
 
   public presetList: IEntityAttributePreset[];
 
-  @ViewChild('presets')
+  @ViewChild('presets', { static: true })
   public presetsModal: ModalComponent<void>;
 
-  @ViewChild('confirmmodal')
+  @ViewChild('confirmmodal', { static: true })
   public confirmModal: ConfirmationModalComponent;
 
   constructor(

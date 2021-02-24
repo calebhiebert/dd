@@ -11,6 +11,8 @@ using net_api.Models;
 using dotenv.net;
 using Microsoft.AspNetCore.Authorization;
 using net_api.Authorization;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Hosting;
 
 namespace net_api
 {
@@ -32,8 +34,7 @@ namespace net_api
             context.Database.Migrate();
 
             services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(options =>
+                .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -100,22 +101,24 @@ namespace net_api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseRouting();
+
             app.UseCors("AllowAll");
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseSignalR(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapHub<UpdateHub>("/hub");
+                endpoints.MapControllers();
+                endpoints.MapHub<UpdateHub>("/hub");
             });
-
-            app.UseMvc();
         }
     }
 }

@@ -119,8 +119,8 @@ namespace net_api.Controllers
             var editableAuthResult = await _auth.AuthorizeAsync(User, campaign, "CampaignEditPolicy");
 
             var query = _context
-                .Query<ArticlePopularity>()
-                .FromSql(@"SELECT COUNT(""ArticleId"") AS ""Views"", ""ArticleId""
+                .ArticlePopularities
+                .FromSqlRaw(@"SELECT COUNT(""ArticleId"") AS ""Views"", ""ArticleId""
                              FROM ""AssetViews""
                                JOIN ""Articles"" ON ""AssetViews"".""ArticleId"" = ""Articles"".""Id""
                              WHERE ""ArticleId"" IS NOT NULL AND ""AssetViews"".""CampaignId""={0}

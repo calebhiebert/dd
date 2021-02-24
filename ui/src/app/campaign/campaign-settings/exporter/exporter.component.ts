@@ -13,7 +13,7 @@ import { ModalComponent } from 'src/app/custom-controls/modal/modal.component';
 export class ExporterComponent implements OnInit {
   public formGroup: FormGroup;
 
-  @ViewChild('modal')
+  @ViewChild('modal', { static: true })
   private modal: ModalComponent<any>;
 
   @Input()

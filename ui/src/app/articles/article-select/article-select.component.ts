@@ -18,7 +18,7 @@ export class ArticleSelectComponent implements OnInit {
   public searchControl: FormControl;
   public search: string;
 
-  @ViewChild('modal')
+  @ViewChild('modal', { static: true })
   private modal: ModalComponent<any>;
 
   private _selectResolver: any;

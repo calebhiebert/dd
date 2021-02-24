@@ -11,7 +11,7 @@ import { IDynamicFieldConfig } from 'src/app/custom-controls/dynform/form-types'
   styleUrls: ['./entity-attribute-editor-modal.component.css'],
 })
 export class EntityAttributeEditorModalComponent implements OnInit {
-  @ViewChild('modal')
+  @ViewChild('modal', { static: true })
   public modal: ModalComponent<any>;
 
   public config: IDynamicFieldConfig;

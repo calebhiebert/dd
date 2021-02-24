@@ -40,6 +40,10 @@ namespace net_api.Models
         public DbSet<QuestNotification> QuestNotifications { get; set; }
         public DbSet<SuggestionNotification> SuggestionNotifications { get; set; }
 
+        public DbSet<ArticlePopularity> ArticlePopularities { get; set; }
+        public DbSet<MapBytePosition> MapBytePositions { get; set; }
+        public DbSet<Tags> Tags { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -72,9 +76,9 @@ namespace net_api.Models
                 .Property(av => av.Id)
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Query<ArticlePopularity>();
-            modelBuilder.Query<MapBytePosition>();
-            modelBuilder.Query<Tags>();
+            modelBuilder.Entity<ArticlePopularity>().HasNoKey();
+            modelBuilder.Entity<MapBytePosition>().HasNoKey();
+            modelBuilder.Entity<Tags>().HasNoKey();
         }
 
         public DbSet<net_api.Models.OverviewState> OverviewState { get; set; }
