@@ -10,7 +10,7 @@ cp -a dist/ui/. out/.
 cp out/index.html out/404.html
 mkdir -p out/.circleci && cp -a ../.circleci/. out/.circleci/.
 cd out
-echo dd.panchem.io > CNAME
+echo dnd.doofus.club > CNAME
 git add -A
 git commit -m "Automated deployment to GitHub Pages" --allow-empty
 git push https://github.com/calebhiebert/dd.git $TARGET_BRANCH -q

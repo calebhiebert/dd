@@ -1,10 +1,10 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { WebAuth, Auth0DecodedHash, Auth0UserProfile, AuthorizeOptions } from 'auth0-js';
-import { environment } from 'src/environments/environment';
-import { UserService, IUser } from './user.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { ActionQueueService, ActionType } from './action-queue.service';
+import {EventEmitter, Injectable} from '@angular/core';
+import {Auth0DecodedHash, Auth0UserProfile, AuthorizeOptions, WebAuth} from 'auth0-js';
+import {environment} from 'src/environments/environment';
+import {IUser, UserService} from './user.service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {ActionQueueService, ActionType} from './action-queue.service';
 import * as Sentry from '@sentry/browser';
 import Swal from 'sweetalert2';
 
@@ -83,6 +83,7 @@ export class LoginService {
       return true;
     }
   }
+
   public busy = false;
   public loginStatus = new EventEmitter<LoginStatus>();
 
@@ -190,6 +191,7 @@ export class LoginService {
       return null;
     }
   }
+
   /**
    * Processes an auth0 hash response
    */
@@ -263,6 +265,8 @@ export class LoginService {
           this.logout();
           this.router.navigate(['login']);
         } else {
+          console.log(err);
+
           Swal.fire({
             title: 'Oh dear.',
             text: 'Something went wrong while logging you in, please try again.',
@@ -287,9 +291,9 @@ export class LoginService {
       } catch (err) {
         if (err instanceof HttpErrorResponse && err.status === 404) {
           // User needs to setup their account
-          this.actions.queue.push({ type: ActionType.ACCOUNT_SETUP, data: null });
+          this.actions.queue.push({type: ActionType.ACCOUNT_SETUP, data: null});
           this.actions.save();
-          this.router.navigate(['register'], { replaceUrl: true });
+          this.router.navigate(['register'], {replaceUrl: true});
           return;
         } else {
           console.log(err);
@@ -303,6 +307,8 @@ export class LoginService {
         await this.logout();
         this.router.navigate(['login']);
       } else {
+        console.log('ERR', err);
+
         Swal.fire({
           title: 'Whoops',
           text: 'Something went wrong while logging you in, please try again.',
@@ -317,7 +323,7 @@ export class LoginService {
       this.checkSession();
     }, 1000 * 60 * 15);
 
-    this.router.navigate(['home'], { replaceUrl: true });
+    this.router.navigate(['home'], {replaceUrl: true});
     this.busy = false;
   }
 
