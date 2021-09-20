@@ -44,6 +44,7 @@ jobs:
         env:
           GH_EMAIL: calebkhiebert@gmail.com
           GH_NAME: AutoDep
+        working-directory: ui/
         run: |
             export TARGET_BRANCH=gh-pages
             git config --global user.email $GH_EMAIL
