@@ -27,13 +27,13 @@ jobs:
         
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
-      - run: cd ui/
         
       - name: Install yarn packages
+        working-directory: ui/
         run: yarn --ignore-engines
         
       - name: Build
+        working-directory: ui/
         run: yarn build --prod
         
       - uses: actions/checkout@v2
