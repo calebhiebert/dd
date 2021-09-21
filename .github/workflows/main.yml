@@ -40,7 +40,7 @@ jobs:
         env:
           GH_EMAIL: calebkhiebert@gmail.com
           GH_NAME: AutoDep
-          REPO_URL: $GITHUB_SERVER_URL$GITHUB_REPOSITORY
+          REPO_URL: "https://github.com/calebhiebert/dd"
         working-directory: ui/
         run: |
             export TARGET_BRANCH=gh-pages
