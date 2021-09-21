@@ -46,7 +46,7 @@ jobs:
             export TARGET_BRANCH=gh-pages
             git config --global user.email $GH_EMAIL
             git config --global user.name $GH_NAME
-            git clone $REPO_URL out
+            git clone https://{{ $secrets.GITHUB_TOKEN }}@github.com/calebhiebert/dd.git out
             cd out
             git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
             git rm -rf .
