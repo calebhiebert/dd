@@ -40,13 +40,12 @@ jobs:
         env:
           GH_EMAIL: calebkhiebert@gmail.com
           GH_NAME: AutoDep
-          REPO_URL: "https://github.com/calebhiebert/dd"
         working-directory: ui/
         run: |
             export TARGET_BRANCH=gh-pages
             git config --global user.email $GH_EMAIL
             git config --global user.name $GH_NAME
-            git clone https://{{ $secrets.GITHUB_TOKEN }}@github.com/calebhiebert/dd.git out
+            git clone "https://{{ $secrets.GITHUB_TOKEN }}@github.com/calebhiebert/dd.git" out
             cd out
             git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
             git rm -rf .
