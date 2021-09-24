@@ -43,7 +43,7 @@ namespace net_api
             services.AddCors(opt =>
             {
                 opt.AddPolicy("AllowAll", builder => builder
-                .WithOrigins("http://localhost:4200", "https://dd.panchem.io", "http://192.168.1.42:4200")
+                .WithOrigins("http://localhost:4200", "https://dnd.doofus.club", "http://192.168.1.42:4200")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
