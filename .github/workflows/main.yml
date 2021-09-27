@@ -20,6 +20,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build And Deploy
+      env:
+        HEROKU_API_KEY: 48fd24e7-a1d2-4729-9e46-4cdaf2dd2642
       run: |
             echo Running Docker Build
             cd net-api
