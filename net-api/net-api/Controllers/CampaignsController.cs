@@ -168,7 +168,7 @@ namespace net_api.Controllers
             campaign.Entities = null;
             campaign.EntityPresets = null;
             campaign.Invites = null;
-            campaign.Members = null;
+            campaign.Members = new List<CampaignUser>();
             campaign.OverviewState = null;
             campaign.User = null;
 
