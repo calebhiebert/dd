@@ -61,7 +61,7 @@ jobs:
             export TARGET_BRANCH=gh-pages
             git config --global user.email $GH_EMAIL
             git config --global user.name $GH_NAME
-            git clone "https://${{github.token}}@github.com/calebhiebert/dd.git" out
+            git clone "https://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@github.com/calebhiebert/dd.git" out
             cd out
             git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
             git rm -rf .
@@ -72,4 +72,4 @@ jobs:
             echo dnd.doofus.club > CNAME
             git add -A
             git commit -m "Automated deployment to GitHub Pages" --allow-empty
-            git push https://${{github.token}}@github.com/calebhiebert/dd.git $TARGET_BRANCH -q
+            git push https://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@github.com/calebhiebert/dd.git $TARGET_BRANCH -q
