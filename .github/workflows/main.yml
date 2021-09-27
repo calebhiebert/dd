@@ -26,7 +26,7 @@ jobs:
             sed -i "s/REPLACE_GIT_HASH/WOOPDEWOO/g" ./net-api/Controllers/AboutInfoController.cs
             sed -i "s/REPLACE_GIT_TAG/WOOPDEWOO/g" ./net-api/Controllers/AboutInfoController.cs
             docker build -t registry.heroku.com/panch-dd/web -f net-api/Dockerfile .
-            docker login --username=_ --password=48fd24e7-a1d2-4729-9e46-4cdaf2dd2642 registry.heroku.com
+            docker login --username=_ --password="48fd24e7-a1d2-4729-9e46-4cdaf2dd2642" registry.heroku.com
             docker push registry.heroku.com/panch-dd/web
             curl https://cli-assets.heroku.com/install.sh | sh
             heroku container:release web -a panch-dd
@@ -61,7 +61,7 @@ jobs:
             export TARGET_BRANCH=gh-pages
             git config --global user.email $GH_EMAIL
             git config --global user.name $GH_NAME
-            git clone "https://{{ $secrets.GITHUB_TOKEN }}@github.com/calebhiebert/dd.git" out
+            git clone "https://${{github.token}}@github.com/calebhiebert/dd.git" out
             cd out
             git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
             git rm -rf .
@@ -72,4 +72,4 @@ jobs:
             echo dnd.doofus.club > CNAME
             git add -A
             git commit -m "Automated deployment to GitHub Pages" --allow-empty
-            git push https://{{ $secrets.GITHUB_TOKEN }}@github.com/calebhiebert/dd.git $TARGET_BRANCH -q
+            git push https://${{github.token}}@github.com/calebhiebert/dd.git $TARGET_BRANCH -q
